@@ -2,6 +2,25 @@ import { create } from 'zustand';
 import propertyService from '../services/propertyService';
 import { propertyAPIService } from '../services/propertyAPIService';
 
+// Normalize various API error shapes (FastAPI/Pydantic v2 arrays, objects, strings)
+const extractErrorMessage = (err, fallback = 'Something went wrong') => {
+  try {
+    const detail = err?.response?.data?.detail ?? err?.message ?? err?.toString?.();
+    if (Array.isArray(detail)) {
+      const msgs = detail.map((d) => d?.msg || d?.message || (typeof d === 'string' ? d : JSON.stringify(d)));
+      return msgs.filter(Boolean).join(', ') || fallback;
+    }
+    if (detail && typeof detail === 'object') {
+      if (detail?.msg || detail?.message) return detail.msg || detail.message;
+      return JSON.stringify(detail);
+    }
+    if (typeof detail === 'string') return detail;
+    return fallback;
+  } catch (_) {
+    return fallback;
+  }
+};
+
 const usePropertyStore = create((set, get) => ({
   // State
   properties: [],
@@ -121,7 +140,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to fetch properties'
+        error: extractErrorMessage(error, 'Failed to fetch properties')
       });
       return { items: [], properties: [] };
     }
@@ -142,7 +161,7 @@ const usePropertyStore = create((set, get) => ({
       set({ recommendations: Array.isArray(list) ? list : (list.items || []), isLoading: false });
       return list;
     } catch (error) {
-      set({ isLoading: false, error: error.response?.data?.detail || 'Failed to fetch recommendations' });
+      set({ isLoading: false, error: extractErrorMessage(error, 'Failed to fetch recommendations') });
       return [];
     }
   },
@@ -159,7 +178,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to fetch your properties'
+        error: extractErrorMessage(error, 'Failed to fetch your properties')
       });
       return [];
     }
@@ -183,7 +202,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to fetch property details'
+        error: extractErrorMessage(error, 'Failed to fetch property details')
       });
       return null;
     }
@@ -201,7 +220,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to create property'
+        error: extractErrorMessage(error, 'Failed to create property')
       });
       return null;
     }
@@ -228,7 +247,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to update property'
+        error: extractErrorMessage(error, 'Failed to update property')
       });
       return null;
     }
@@ -251,7 +270,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to delete property'
+        error: extractErrorMessage(error, 'Failed to delete property')
       });
       return false;
     }
@@ -274,7 +293,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to upload media'
+        error: extractErrorMessage(error, 'Failed to upload media')
       });
       return null;
     }
@@ -297,7 +316,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to delete media'
+        error: extractErrorMessage(error, 'Failed to delete media')
       });
       return false;
     }

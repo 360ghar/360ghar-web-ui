@@ -6,6 +6,25 @@ import TestimonialItem from './items/TestimonialItem';
 import TestimonialThumb from '/assets/images/thumbs/testimonial-img.png';
 import SectionHeading from '../common/SectionHeading';
 
+// Custom arrows to avoid forwarding non-DOM props (currentSlide, slideCount)
+const PrevArrow = ({ currentSlide, slideCount, ...props }) => {
+    const { className, style, onClick } = props;
+    return (
+        <button type="button" className={className || "slick-prev"} style={style} onClick={onClick}>
+            <i className="fas fa-arrow-left"></i>
+        </button>
+    );
+};
+
+const NextArrow = ({ currentSlide, slideCount, ...props }) => {
+    const { className, style, onClick } = props;
+    return (
+        <button type="button" className={className || "slick-next"} style={style} onClick={onClick}>
+            <i className="fas fa-arrow-right"></i>
+        </button>
+    );
+};
+
 const settings = {
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -18,8 +37,8 @@ const settings = {
     draggable: true,
     speed: 900,
     infinite: true,
-    prevArrow: <button type="button" className="slick-prev"><i className="fas fa-arrow-left"></i></button>,
-    nextArrow: <button type="button" className="slick-next"><i className="fas fa-arrow-right"></i></button>,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
 };
 
 const Testimonial = () => {

@@ -5,6 +5,25 @@ import SectionHeading from '../common/SectionHeading';
 import { testimonialThreeContents } from '../data/HomeThreeData/HomeThreeData';
 import TestimonialThreeItem from './items/TestimonialThreeItem';
 
+// Custom arrows to avoid forwarding non-DOM props (currentSlide, slideCount)
+const PrevArrow = ({ currentSlide, slideCount, ...props }) => {
+    const { className, style, onClick } = props;
+    return (
+        <button type="button" className={className || "slick-prev"} style={style} onClick={onClick}>
+            <i className="fas fa-arrow-left"></i>
+        </button>
+    );
+};
+
+const NextArrow = ({ currentSlide, slideCount, ...props }) => {
+    const { className, style, onClick } = props;
+    return (
+        <button type="button" className={className || "slick-next"} style={style} onClick={onClick}>
+            <i className="fas fa-arrow-right"></i>
+        </button>
+    );
+};
+
 const settings = {
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -15,8 +34,8 @@ const settings = {
     pauseOnHover: true,
     arrows: true,
     centerMode: true,
-    prevArrow: <button type="button" className="slick-prev"><i className="fas fa-arrow-left"></i></button>,
-    nextArrow: <button type="button" className="slick-next"><i className="fas fa-arrow-right"></i></button>,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
 };
 
 const TestimonialThree = () => {

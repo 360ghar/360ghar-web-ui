@@ -1,45 +1,7 @@
-import axios from 'axios';
-
-// Ensure the API URL always uses HTTPS in production
-const getApiBaseUrl = () => {
-  const envUrl = import.meta.env.VITE_API_BASE_URL;
-
-  // If environment variable is set, use it and ensure HTTPS
-  if (envUrl) {
-    // Always force HTTPS in production or if the current page is HTTPS
-    if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
-      return envUrl.startsWith('https://') ? envUrl : envUrl.replace('http://', 'https://');
-    }
-    // For development or non-HTTPS environments, use as-is
-    return envUrl;
-  }
-
-  // Fallback URL with HTTPS
-  return 'https://360ghar.up.railway.app/api/v1';
-};
+import { createAxiosInstance } from './http';
 
 // Create a separate axios instance for public property endpoints (no auth required)
-const publicApi = axios.create({
-  baseURL: getApiBaseUrl(),
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Add HTTPS enforcement interceptor
-publicApi.interceptors.request.use(
-  (config) => {
-    // Ensure HTTPS for all requests
-    if (config.baseURL && config.baseURL.startsWith('http://')) {
-      config.baseURL = config.baseURL.replace('http://', 'https://');
-    }
-    if (config.url && config.url.startsWith('http://')) {
-      config.url = config.url.replace('http://', 'https://');
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+const publicApi = createAxiosInstance({ withAuth: false });
 
 // Simple error handling for public endpoints - no auth redirects
 publicApi.interceptors.response.use(
@@ -157,7 +119,7 @@ const getPropertyById = (propertyId) => {
  * @returns {Promise<array>} A list of recommended properties.
  */
 const getRecommendations = (limit = 6) => {
-  return publicApi.get(`/properties/recommendations?limit=${limit}`);
+  return publicApi.get(`/properties/recommendations/?limit=${limit}`);
 };
 
 export const propertyAPIService = {
