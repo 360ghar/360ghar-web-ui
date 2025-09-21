@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import FooterBottom from './FooterBottom';
 import FooterServiceItem from './footer/FooterServiceItem';
 import FooterLogoDesc from './footer/FooterLogoDesc';
@@ -17,10 +18,19 @@ const FooterTwo = () => {
                             <div className="footer-item">
 
                                 <FooterLogoDesc/>
-                                
+                
                                 <h6 className="footer-item__title mt-4 mt-lg-5">Lets Work Together</h6>
-                                
+                
                                 <FooterInfo/>
+
+                                <div className="mt-4">
+                                    <Link
+                                        to="/policies"
+                                        className="btn btn-main w-100 d-inline-flex justify-content-center align-items-center"
+                                    >
+                                        View Policies
+                                    </Link>
+                                </div>
                                 
                             </div>
                         </div>

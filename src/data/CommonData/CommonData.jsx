@@ -231,6 +231,10 @@ export const footerUsefulLinks = [
         link: '/faq'
     },
     {
+        text: 'Policies',
+        link: '/policies'
+    },
+    {
         text: 'Property',
         link: '/properties'
     },
@@ -286,11 +290,11 @@ export const footerGallery = [
 export const BottomFooterLink = [
     {
         text: 'Terms & Condition',
-        link: '/contact'
+        link: '/policies/terms-of-service'
     },
     {
         text: 'Privacy Policy',
-        link: '/contact'
+        link: '/policies/privacy-policy'
     },
     {
         text: 'Contact Us',

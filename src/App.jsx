@@ -31,6 +31,8 @@ import Contact from './pages/Contact';
 import PostProperty from './pages/PostProperty';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
+import Policies from './pages/Policies';
+import PolicyDetails from './pages/PolicyDetails';
 
 function App() {
   const fetchBrowserLocation = useLocationStore((state) => state.fetchBrowserLocation);
@@ -70,6 +72,8 @@ function App() {
 
           <Route path="/contact" element={<Contact />} />
           <Route path="/post-property" element={<PostProperty />} />
+          <Route path="/policies" element={<Policies />} />
+          <Route path="/policies/:slug" element={<PolicyDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

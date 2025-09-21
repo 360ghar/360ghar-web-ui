@@ -7,11 +7,11 @@ const BottomFooterLinks = () => {
         <>
             <div className="footer-links">
                 {
-                    BottomFooterLink.map((BottomLink, index) => {
-                        return (
-                            <Link to="/contact" className="footer-link" key={index}>{BottomLink.text}</Link>
-                        )
-                    })
+                    BottomFooterLink.map((BottomLink, index) => (
+                        <Link to={BottomLink.link} className="footer-link" key={index}>
+                            {BottomLink.text}
+                        </Link>
+                    ))
                 }
             </div>
         </>
