@@ -1,6 +1,5 @@
 import React from 'react';
 import { bannerContent } from './../data/HomeOneData/HomeOneData';
-import { topHeaderInfos } from '../data/CommonData/CommonData';
 import { Link } from 'react-router-dom';
 
 import TabFilter from '../common/TabFilter';
@@ -20,10 +19,10 @@ const Banner = () => {
                                         <h1 className="banner-content__title">{bannerContent.title} <span className="text-gradient">{bannerContent.gradientTitle}</span> </h1>
                                         <p className="banner-content__desc font-18">{bannerContent.desc}</p>
                                         <div className="contact-info d-flex align-items-center gap-2 mt-4">
-                                            <span className="contact-info__icon text-gradient"><i className="fas fa-phone"></i></span>
+                                            <span className="contact-info__icon text-gradient"><i className="fas fa-envelope"></i></span>
                                             <div className="contact-info__content">
-                                                <span className="contact-info__text fw-500">Call us</span>
-                                                <Link to={`tel:${topHeaderInfos[0].text}`} className="contact-info__address text-gradient">{topHeaderInfos[0].text}</Link>
+                                                <span className="contact-info__text fw-500">Email us</span>
+                                                <Link to={`mailto:info@360ghar.com`} className="contact-info__address text-gradient">info@360ghar.com</Link>
                                             </div>
                                         </div>
                                     </div>

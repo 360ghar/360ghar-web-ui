@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
-import Breadcrumb from '../../common/Breadcrumb';
 import Cta from '../../components/Cta';
 import FaqTwo from '../../components/FaqTwo';
 import FaqContactUs from '../../components/FaqContactUs';
@@ -36,27 +35,17 @@ const FaqPage = () => {
             <PageTitle title="360Ghar - Frequently Ask Question" />
 
             {/* Header */}
-            <Header 
-                headerClass="dark-header has-border" 
-                logoBlack={false}
-                logoWhite={true}
+            <Header
+                headerClass="dark-header has-border"
                 headerMenusClass="mx-auto"
                 btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                 btnLink="/post-property"
                 btnText="Post Property"
-                spanClass="icon-right text-gradient" 
-                showHeaderBtn={true}
-                showOffCanvasBtn={false}
-                offCanvasBtnClass=""
+                spanClass="icon-right text-gradient"
                 showContactNumber={false}
             />
 
-            {/* BreadCrumb */}
-            <Breadcrumb 
-                pageTitle="FAQ"
-                pageName="FAQ"
-            />
-
+        
             {/* Faq Two */}
             <FaqTwo/>
 

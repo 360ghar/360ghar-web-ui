@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CommonSidebar from '../common/CommonSidebar';
+import usePropertyStore from '../store/propertyStore';
+import { useVisitStore } from '../store';
+import { useAuthStore } from '../store';
 
 function formatCurrency(value) {
   if (value === null || value === undefined) return 'Price on request';
@@ -33,6 +36,43 @@ const PropertyDetailsSection = ({ property }) => {
 
   const features = Array.isArray(property.features) ? property.features : [];
 
+  const { recordSwipe } = usePropertyStore();
+  const { scheduleVisit, isLoading: visitLoading } = useVisitStore();
+  const { isAuthenticated } = useAuthStore();
+
+  const [visitDate, setVisitDate] = useState('');
+  const [visitNotes, setVisitNotes] = useState('');
+  const [likeLoading, setLikeLoading] = useState(false);
+
+  const toggleLike = async () => {
+    if (!isAuthenticated) {
+      window.location.href = '/login';
+      return;
+    }
+    setLikeLoading(true);
+    try {
+      await recordSwipe(property.id, !property.liked);
+    } finally {
+      setLikeLoading(false);
+    }
+  };
+
+  const onSchedule = async (e) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      window.location.href = '/login';
+      return;
+    }
+    if (!visitDate) return;
+    const isoDate = new Date(visitDate).toISOString();
+    const res = await scheduleVisit({ property_id: property.id, scheduled_date: isoDate, special_requirements: visitNotes });
+    if (res) {
+      setVisitNotes('');
+      setVisitDate('');
+      if (typeof window !== 'undefined' && window.alert) window.alert('Visit scheduled successfully');
+    }
+  };
+
   return (
     <>
       <section className="property-details padding-y-120">
@@ -46,9 +86,41 @@ const PropertyDetailsSection = ({ property }) => {
               )}
 
               <h3 className="property-details__title mt-lg-5 mb-2">{title}</h3>
-              <h5 className="property-details__price mb-4">
+              <h5 className="property-details__price mb-2">
                 {price} <span className="day">{day}</span>
               </h5>
+              {/* Actions */}
+              <div className="d-flex align-items-center gap-3 mb-4">
+                <button
+                  type="button"
+                  className={`btn ${property.liked ? 'btn-danger' : 'btn-outline-danger'}`}
+                  onClick={toggleLike}
+                  disabled={likeLoading}
+                  title={property.liked ? 'Unlike' : 'Like'}
+                >
+                  <i className={`fas fa-heart${property.liked ? '' : '-o'}`}></i>
+                  <span className="ms-2">{property.liked ? 'Liked' : 'Like'}</span>
+                </button>
+                <form className="d-flex align-items-center gap-2" onSubmit={onSchedule}>
+                  <input
+                    type="datetime-local"
+                    className="form-control"
+                    value={visitDate}
+                    onChange={(e) => setVisitDate(e.target.value)}
+                    required
+                  />
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Special requirements (optional)"
+                    value={visitNotes}
+                    onChange={(e) => setVisitNotes(e.target.value)}
+                  />
+                  <button type="submit" className="btn btn-main" disabled={visitLoading}>
+                    {visitLoading ? 'Scheduling...' : 'Schedule Visit'}
+                  </button>
+                </form>
+              </div>
               {description && <p className="property-details__desc mb-3">{description}</p>}
 
               <div className="property-details-wrapper">

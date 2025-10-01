@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
-import Breadcrumb from '../../common/Breadcrumb';
 import Cta from '../../components/Cta';
 import CheckoutSection from '../../components/CheckoutSection';
 import PageTitle from '../../common/PageTitle';
@@ -27,12 +26,7 @@ const Checkout = () => {
                 showContactNumber={false}
             />
 
-            {/* BreadCrumb */}
-            <Breadcrumb 
-                pageTitle="Checkout"
-                pageName="Checkout"
-            />
-            
+                        
             {/* Checkout Section */}
             <CheckoutSection/>
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useAuthStore } from '../../store';
+import { useUserStore } from '../../store';
 
 const ProfileSchema = Yup.object().shape({
   full_name: Yup.string()
@@ -14,12 +14,16 @@ const ProfileSchema = Yup.object().shape({
 });
 
 const UserProfile = () => {
-  const { user, updateProfile, isLoading, error, clearError } = useAuthStore();
+  const { profile, getProfile, updateProfile, isLoading, error, clearError } = useUserStore();
   const [isEditing, setIsEditing] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
-  if (!user) {
-    return <div className="text-center py-5">Please log in to view your profile.</div>;
+  useEffect(() => {
+    if (!profile) getProfile();
+  }, [profile, getProfile]);
+
+  if (!profile) {
+    return <div className="text-center py-5">Loading profile...</div>;
   }
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -65,8 +69,8 @@ const UserProfile = () => {
           {isEditing ? (
             <Formik
               initialValues={{
-                full_name: user.full_name || '',
-                phone: user.phone || '',
+                full_name: profile.full_name || '',
+                phone: profile.phone || '',
               }}
               validationSchema={ProfileSchema}
               onSubmit={handleSubmit}
@@ -91,7 +95,7 @@ const UserProfile = () => {
                     <input
                       type="email"
                       className="form-control"
-                      value={user.email}
+                      value={profile.email}
                       disabled
                     />
                     <small className="text-muted">
@@ -134,20 +138,20 @@ const UserProfile = () => {
             <div className="profile-info">
               <div className="row mb-3">
                 <div className="col-md-3 fw-bold">Full Name:</div>
-                <div className="col-md-9">{user.full_name}</div>
+                <div className="col-md-9">{profile.full_name}</div>
               </div>
               <div className="row mb-3">
                 <div className="col-md-3 fw-bold">Email:</div>
-                <div className="col-md-9">{user.email}</div>
+                <div className="col-md-9">{profile.email}</div>
               </div>
               <div className="row mb-3">
                 <div className="col-md-3 fw-bold">Phone:</div>
-                <div className="col-md-9">{user.phone}</div>
+                <div className="col-md-9">{profile.phone}</div>
               </div>
               <div className="row mb-3">
                 <div className="col-md-3 fw-bold">Account Created:</div>
                 <div className="col-md-9">
-                  {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
+                  {profile.created_at ? new Date(profile.created_at).toLocaleDateString() : 'N/A'}
                 </div>
               </div>
             </div>

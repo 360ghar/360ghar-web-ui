@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
-import Breadcrumb from '../../common/Breadcrumb';
 import Cta from '../../components/Cta';
 import PageTitle from '../../common/PageTitle';
 import { useForm, ValidationError } from '@formspree/react';
@@ -184,25 +183,16 @@ const PostProperty = () => {
                 {/* Header */}
                 <Header
                     headerClass="dark-header has-border"
-                    logoBlack={false}
-                    logoWhite={true}
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
                     btnText="Post Property"
                     spanClass="icon-right text-gradient"
                     showHeaderBtn={false}
-                    showOffCanvasBtn={false}
-                    offCanvasBtnClass=""
                     showContactNumber={false}
                 />
 
-                {/* BreadCrumb */}
-                <Breadcrumb
-                    pageTitle="Post a Property"
-                    pageName="Post a Property"
-                />
-
+                
                 {/* Post Property Form */}
                 <PostPropertyForm />
 

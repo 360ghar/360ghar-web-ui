@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
-import Breadcrumb from '../../common/Breadcrumb';
 import PageTitle from '../../common/PageTitle';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
@@ -92,21 +91,15 @@ const PolicyDetails = () => {
 
       <Header
         headerClass="dark-header has-border"
-        logoBlack={false}
-        logoWhite={true}
         headerMenusClass="mx-auto"
         btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
         btnLink="/add-new-listing"
         btnText="Add Listing"
         spanClass="icon-right text-gradient"
-        showHeaderBtn
-        showOffCanvasBtn={false}
-        offCanvasBtnClass=""
         showContactNumber={false}
       />
 
-      <Breadcrumb pageTitle={title} pageName={title} />
-
+      
       <section className="policy-wrapper pt-100 pb-120">
         <div className="container px-lg-5">
           {isLoading ? (

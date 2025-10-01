@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { accountTabs } from '../data/OthersPageData/OthersPageData';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import AccountHomeTab from './AccountHomeTab';
 import AccountProfileTab from './AccountProfileTab';
 import AccountAddressTab from './AccountAddressTab';
@@ -9,28 +9,75 @@ import AccountDetailsTab from './AccountDetailsTab';
 import AccountMyPropertyTab from './AccountMyPropertyTab';
 import AccountFavoritePropertyTab from './AccountFavoritePropertyTab';
 import AccountAddPropertyTab from './AccountAddPropertyTab';
-import AccountPaymentTab from './AccountPaymentTab';
 import AccountChangePasswordTab from './AccountChangePasswordTab';
 import { ToastContainer, toast } from 'react-toastify';
+import { useAuthStore } from '../store';
 
 const AccountSection = () => {
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const { logout } = useAuthStore();
 
     const notify = () => toast.success("You have been logged out", {
         theme: "colored", 
     })
 
     const handleRedirectLogin = () => {
+        logout();
         navigate('/login');
     }
+    
+    // Control selected tab via URL param (?tab=...)
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const tabKeys = [
+        'home',
+        'profile',
+        'address',
+        'details',
+        'my-properties',
+        'favorites',
+        'add-property',
+        'change-password',
+    ];
+
+    React.useEffect(() => {
+        const raw = (searchParams.get('tab') || '').toLowerCase();
+        if (!raw) return;
+
+        const aliasToKey = {
+            favourites: 'favorites',
+            favorite: 'favorites',
+            fav: 'favorites',
+            properties: 'my-properties',
+            myproperties: 'my-properties',
+            'account-details': 'details',
+            accountdetails: 'details',
+            addproperty: 'add-property',
+            add: 'add-property',
+            changepassword: 'change-password',
+            password: 'change-password',
+            visits: 'home', // no dedicated visits tab yet; send to home where visits summary lives
+            visit: 'home',
+        };
+
+        const key = aliasToKey[raw] || raw;
+        const idx = tabKeys.indexOf(key);
+        setSelectedIndex(idx >= 0 ? idx : 0);
+    }, [searchParams]);
+
+    const handleSelect = (index) => {
+        setSelectedIndex(index);
+        const key = tabKeys[index] || 'home';
+        navigate(`?tab=${key}`, { replace: true });
+    };
     
     return (
         <>
             <ToastContainer />
             <section className="account padding-y-120">
                 <div className="container container-two">
-                    <Tabs>
+                    <Tabs selectedIndex={selectedIndex} onSelect={handleSelect}>
                         <div className="row gy-4">
                             <div className="col-xl-3 col-lg-4">
                                 <div className="account-sidebar search-sidebar">
@@ -74,9 +121,6 @@ const AccountSection = () => {
                                 </TabPanel>
                                 <TabPanel>
                                     <AccountAddPropertyTab/>
-                                </TabPanel>
-                                <TabPanel>
-                                    <AccountPaymentTab/>
                                 </TabPanel>
                                 <TabPanel>
                                     <AccountChangePasswordTab/>

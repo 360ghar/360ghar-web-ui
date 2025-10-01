@@ -3,10 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from 'react-toastify';
+import { useAuthStore } from '../store';
 
 import LoginRegisterThumb from '/assets/images/thumbs/login-img.avif';
 
-const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, showLastName, passwordCol, showConfirm, btnText, showForgotRemember, showTermCondition, haveAccountText, haveAccountLink, haveAccountLinkText}) => {
+const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, showLastName, passwordCol, showConfirm, btnText, showForgotRemember, showTermCondition, haveAccountText, haveAccountLink, haveAccountLinkText, isLogin = false}) => {
 
     const [showPassword, setShowPassword] = useState(false);
     const handleShowPassword = () => {
@@ -19,53 +20,89 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
     }
 
     // Navigate to Account Page
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const { login, register, isLoading, error, clearError } = useAuthStore();
 
-    // **************************** Form Validation Start ************************ 
+    // **************************** Form Validation Start ************************
+    const validationSchema = yup.object({
+        // Phone number field - accepts Indian 10-digit numbers only
+        phone: yup.string()
+            .matches(/^[6-9]\d{9}$/, 'Please enter a valid Indian mobile number starting with 6-9')
+            .length(10, 'Mobile number must be exactly 10 digits')
+            .required('Mobile number is required'),
+
+        // Registration fields
+        name: !isLogin ? yup.string().min(3, "Too Short! Must be at least 3 characters long").required("First Name is required") : yup.string(),
+        email: !isLogin ? yup.string().email("Your Email is not valid! Provide valid email").required() : yup.string(),
+        lastName: !isLogin && showLastName ? yup.string().min(3, "Too Short! Must be at least 3 characters long").required("Last Name is required") : yup.string(),
+        password: yup.string()
+            .min(6, 'Password must be at least 6 characters')
+            .required('Password is required'),
+        confirm: showConfirm ? yup
+            .string()
+            .oneOf([yup.ref('password'), null], "Confirm password doesn't match with password")
+            .required() : yup.string(),
+    });
+
     const formik = useFormik({
         initialValues: {
-          username: "",
+          phone: "",
+          name: "",
+          lastName: "",
           email: "",
           password: "",
           confirm: "",
-          name: "",
-          lastName: "",
         },
-        // Validate by Yup
-        validationSchema: yup.object({
-            username: yup.string().min(3, "Too Short! Must be at least 3 characters long").required(),
-            email: yup.string().email("Your Email is not valid! Provide valid email").required(),
-            password: yup
-                .string()
-                .min(5, 'Password must be 5 characters long')
-                .matches(/[0-9]/, 'Password requires a number')
-                .matches(/[a-z]/, 'Password requires a lowercase letter')
-                .matches(/[A-Z]/, 'Password requires an uppercase letter')
-                .matches(/[^\w]/, 'Password requires a symbol')
-                .required('Password is required'),
-            confirm: yup
-            .string()
-            .oneOf([yup.ref('password'), null], "Confirm password doesn't match with password")
-            .required(),
+        validationSchema,
 
-            confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
-            name: yup.string().min(3, "Too Short! Must be at least 3 characters long").required("First Name is required"),
-            lastName: yup.string().min(3, "Too Short! Must be at least 3 characters long").required("First Name is required"),
-        }),
-    
-        onSubmit: (values, { resetForm }) => {
-          navigate('/account');
-          resetForm({ values: "" });
-          toast.success("Congratulations! You Have Submitted Successfully.", {
-            theme: "colored",
-          });
+        onSubmit: async (values, { resetForm, setSubmitting }) => {
+          clearError();
 
+          try {
+            let success = false;
+
+            // Format phone number with +91 country code for API
+            const formattedPhone = `+91${values.phone}`;
+
+            if (isLogin) {
+              success = await login(formattedPhone, values.password);
+            } else {
+              const registrationData = {
+                phone: formattedPhone,
+                full_name: `${values.name} ${values.lastName || ''}`.trim(),
+                email: values.email,
+                password: values.password,
+              };
+              success = await register(registrationData);
+            }
+
+            setSubmitting(false);
+
+            if (success) {
+              resetForm({ values: "" });
+              toast.success(`${isLogin ? 'Login' : 'Registration'} successful!`, {
+                theme: "colored",
+              });
+
+              // Navigate after successful auth
+              if (isLogin) {
+                navigate('/');
+              } else {
+                navigate('/account');
+              }
+            }
+          } catch (err) {
+            setSubmitting(false);
+            toast.error(error || `${isLogin ? 'Login' : 'Registration'} failed. Please try again.`, {
+              theme: "colored",
+            });
+          }
         },
     });
 
     // Render Errors Code Start
-    const renderUsernameError = formik.touched.username && formik.errors.username && (
-        <span className="text-danger">{formik.errors.username}</span>
+    const renderPhoneError = formik.touched.phone && formik.errors.phone && (
+        <span className="text-danger">{formik.errors.phone}</span>
     );
     const renderEmailError = formik.touched.email && formik.errors.email && (
         <span className="text-danger">{formik.errors.email}</span>
@@ -81,6 +118,11 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
     );
     const renderLastNameError = formik.touched.lastName && formik.errors.lastName && (
         <span className="text-danger">{formik.errors.lastName}</span>
+    );
+
+    // Global error from auth store
+    const renderGlobalError = error && (
+        <div className="alert alert-danger">{error}</div>
     );
     // Render Errors Code End
     // **************************** Form Validation End ************************ 
@@ -102,15 +144,41 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
                                     <div className="loginRegister-content">
                                         <form onSubmit={formik.handleSubmit} method="POST">
                                             <h3 className="loginRegister__title text-poppins">{titleText} to 360Ghar</h3>
-                                            <p className="loginRegister__desc mb-4 font-18">Join 360Ghar to discover your dream property and connect with trusted real estate professionals.</p>
+                                            <p className="loginRegister__desc mb-4 font-18">{isLogin ? 'Welcome back to 360Ghar! Please login to continue.' : 'Join 360Ghar to discover your dream property and connect with trusted real estate professionals.'}</p>
+
+                                            {renderGlobalError}
 
                                             <div className="row gy-lg-4 gy-3">
+                                                {/* Phone Number Field (Required for both login and registration) */}
+                                                <div className="col-sm-12">
+                                                    <label htmlFor="phone" className="form-label">Mobile Number</label>
+                                                    <input
+                                                        type="tel"
+                                                        placeholder="Enter 10-digit mobile number"
+                                                        name='phone'
+                                                        id='phone'
+                                                        maxLength={10}
+                                                        onChange={(e) => {
+                                                            // Only allow numbers
+                                                            const value = e.target.value.replace(/\D/g, '');
+                                                            formik.setFieldValue('phone', value);
+                                                        }}
+                                                        onBlur={formik.handleBlur}
+                                                        value={formik.values.phone}
+                                                        className={`common-input ${
+                                                            formik.touched.phone && formik.errors.phone ? "is-invalid" : ""
+                                                        }`}
+                                                    />
+                                                    {renderPhoneError}
+                                                    <small className="text-muted">Enter your 10-digit mobile number (e.g., 9876543210)</small>
+                                                </div>
+
                                                 {
-                                                    showFirstName && (
+                                                    !isLogin && showFirstName && (
                                                         <div className={firstNameCol}>
                                                             <label htmlFor="name" className="form-label">First Name</label>
-                                                            <input 
-                                                                type="text" 
+                                                            <input
+                                                                type="text"
                                                                 placeholder="First Name"
                                                                 name='name'
                                                                 id='name'
@@ -127,11 +195,11 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
                                                 }
 
                                                 {
-                                                    showLastName && (
+                                                    !isLogin && showLastName && (
                                                         <div className={lastNameCol}>
                                                             <label htmlFor="lastName" className="form-label">Last Name</label>
-                                                            <input 
-                                                                type="text" 
+                                                            <input
+                                                                type="text"
                                                                 placeholder="Last Name"
                                                                 name='lastName'
                                                                 id='lastName'
@@ -146,44 +214,32 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
                                                         </div>
                                                     )
                                                 }
-                                                <div className="col-sm-6 col-xs-6">
-                                                    <label htmlFor="username" className="form-label">Username</label>
-                                                    <input 
-                                                        type="text" 
-                                                        placeholder="User Name"
-                                                        name='username'
-                                                        id='username'
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}
-                                                        value={formik.values.username}
-                                                        className={`common-input ${
-                                                            formik.touched.username && formik.errors.username ? "is-invalid" : ""
-                                                        }`}
-                                                    />
-                                                    {renderUsernameError}
-                                                </div>
-                                                <div className="col-sm-6 col-xs-6">
-                                                    <label htmlFor="Email" className="form-label">Email</label>
-                                                    <input 
-                                                        type="email" 
-                                                        placeholder="Email"
-                                                        name='email'
-                                                        id='Email'
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}
-                                                        value={formik.values.email}
-                                                        className={`common-input ${
-                                                            formik.touched.email && formik.errors.email ? "is-invalid" : ""
-                                                        }`}
-                                                    />
-                                                    {renderEmailError}
-                                                </div>
+                                                {
+                                                    !isLogin && (
+                                                        <div className="col-sm-6 col-xs-6">
+                                                            <label htmlFor="Email" className="form-label">Email</label>
+                                                            <input
+                                                                type="email"
+                                                                placeholder="Email"
+                                                                name='email'
+                                                                id='Email'
+                                                                onChange={formik.handleChange}
+                                                                onBlur={formik.handleBlur}
+                                                                value={formik.values.email}
+                                                                className={`common-input ${
+                                                                    formik.touched.email && formik.errors.email ? "is-invalid" : ""
+                                                                }`}
+                                                            />
+                                                            {renderEmailError}
+                                                        </div>
+                                                    )
+                                                }
                                                 <div className={passwordCol}>
                                                     <label htmlFor="your-password" className="form-label">Password</label>
                                                     <div className="position-relative">
-                                                        <input 
+                                                        <input
                                                             type={`${showPassword ? 'text': 'password'}`}
-                                                            placeholder="Password"
+                                                            placeholder="Enter your password"
                                                             name='password'
                                                             id='your-password'
                                                             onChange={formik.handleChange}
@@ -241,9 +297,10 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
                                                         <div className="common-check">
                                                             <input className="form-check-input" type="checkbox" value="" id="remember"/>
                                                             <div className="form-check-label">
-                                                                <label className="" htmlFor="remember"> I agree with Licences Info,</label>
-                                                                <a href="#" className="text-decoration-underline text-main">Terms of Service</a>
-                                                                <label className="" htmlFor="remember"> , Privacy Policy </label>
+                                                                <label className="" htmlFor="remember"> I agree with </label>
+                                                                <Link to="/policies/terms-of-service" className="text-decoration-underline text-main">Terms of Service</Link>
+                                                                <label className="" htmlFor="remember"> and </label>
+                                                                <Link to="/policies/privacy-policy" className="text-decoration-underline text-main">Privacy Policy</Link>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -251,9 +308,18 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
                                             }
 
                                                 <div className="col-12">
-                                                    <button type="submit" className="btn btn-main w-100">
-                                                        {btnText} 
-                                                        <span className="icon-right"> <i className="far fa-paper-plane"></i> </span> 
+                                                    <button type="submit" className="btn btn-main w-100" disabled={isLoading || formik.isSubmitting}>
+                                                        {isLoading || formik.isSubmitting ? (
+                                                            <>
+                                                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                                {isLogin ? 'Logging in...' : 'Registering...'}
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                {btnText}
+                                                                <span className="icon-right"> <i className="far fa-paper-plane"></i> </span>
+                                                            </>
+                                                        )}
                                                     </button>
                                                 </div>
 

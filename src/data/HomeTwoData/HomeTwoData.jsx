@@ -8,8 +8,8 @@ export const bannerTwoContent = {
     desc: 'India\'s first 360° Home Walkthrough Platform making property viewing effortless and immersive for buyers and renters across Gurgaon.',
     icon: BannerPhoneIcon,
     text: 'Need help?',
-    number: '8178340031',
-    numberLink: 'tel:'
+    number: 'info@360ghar.com',
+    numberLink: 'mailto:'
 }
 
 

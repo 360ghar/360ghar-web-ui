@@ -8,7 +8,6 @@ const ValidationForm = (props) => {
     const formik = useFormik({
         initialValues: {
           name: "",
-          phone: "",
           email: "",
           address: "",
           message: "",
@@ -16,7 +15,6 @@ const ValidationForm = (props) => {
         // Validate by Yup
         validationSchema: yup.object({
             name: yup.string().min(3, "Too Short! Must be at least 3 characters long").required(),
-            phone: yup.string().required(),
             address: yup.string().min(3, "Too Short! Must be at least 3 characters long").required(),
             email: yup.string().email("Your Email is not valid! Provide valid email").required(),
             message: yup .string().min(5, "Message must have minimum 5 characters"),
@@ -35,10 +33,7 @@ const ValidationForm = (props) => {
     const renderNameError = formik.touched.name && formik.errors.name && (
         <span className="text-danger">{formik.errors.name}</span>
     );
-    const renderPhoneError = formik.touched.phone &&
-        formik.errors.phone && (
-        <span className="text-danger">{formik.errors.phone}</span>
-    );
+    
     const renderEmailError = formik.touched.email && formik.errors.email && (
         <span className="text-danger">{formik.errors.email}</span>
     );
@@ -81,29 +76,7 @@ const ValidationForm = (props) => {
                         {renderNameError}
                     </div>
 
-                    <div className={props.colClass}>
-                        {
-                            props.renderLabel && (
-                                <label htmlFor="phone" className={`form-label ${props.labelClass}`}>Your Phone</label>
-                            )
-                        }
-                        <div className="position-relative">
-                            <input 
-                                type="tel"  
-                                placeholder="Your Phone"
-                                name='phone'
-                                id='phone'
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.phone}
-                                className={`${props.inputClass} ${
-                                    formik.touched.phone && formik.errors.phone ? "is-invalid" : ""
-                                }`}
-                            />
-                            <span className={`input-icon ${props.iconSpanClass}`}><i className="fas fa-phone"></i></span>
-                        </div>
-                        {renderPhoneError}
-                    </div>
+                    
 
                     <div className={props.colClass}>
                         {

@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
-import Breadcrumb from '../../common/Breadcrumb';
 import Cta from '../../components/Cta';
 import CartSection from '../../components/CartSection';
 import PageTitle from '../../common/PageTitle';
@@ -29,12 +28,7 @@ const Cart = () => {
                 showContactNumber={false}
             />
 
-            {/* BreadCrumb */}
-            <Breadcrumb 
-                pageTitle="Cart"
-                pageName="Cart"
-            />
-
+            
             {/* Cart Section */}
             <CartSection/>  
 

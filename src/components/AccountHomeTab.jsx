@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useAuthStore, useVisitStore } from '../store';
 
 const AccountHomeTab = () => {
-    return (
-        <>
-            <p className="account-alert">Hello <strong className="text-heading fw-500 text-poppins">UserName</strong> (not  <strong className="text-heading fw-500 text-poppins">UserName</strong>? Log out )
-            </p>
-            <p className="account-alert">From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.</p>
-        </>
-    );
+  const { user } = useAuthStore();
+  const { upcomingVisits, getUpcomingVisits } = useVisitStore();
+
+  useEffect(() => {
+    getUpcomingVisits();
+  }, [getUpcomingVisits]);
+
+  return (
+    <>
+      <p className="account-alert">
+        Hello <strong className="text-heading fw-500 text-poppins">{user?.full_name || 'Guest'}</strong>
+      </p>
+      <p className="account-alert">
+        Upcoming visits: <strong>{upcomingVisits?.length || 0}</strong>
+      </p>
+    </>
+  );
 };
 
 export default AccountHomeTab;

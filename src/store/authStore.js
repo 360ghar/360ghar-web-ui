@@ -10,18 +10,19 @@ const useAuthStore = create((set, get) => ({
   error: null,
   
   // Actions
-  login: async (email, password) => {
+  login: async (emailOrPhone, password) => {
     try {
       set({ isLoading: true, error: null });
-      const data = await authService.login(email, password);
+      const data = await authService.login(emailOrPhone, password);
       
       if (data.access_token) {
         localStorage.setItem('token', data.access_token);
-        
-        // After getting token, fetch user profile
-        const userProfile = await authService.getCurrentUser();
-        localStorage.setItem('user', JSON.stringify(userProfile));
-        
+        // Prefer user from login response; fallback to profile API
+        const userProfile = data.user || (await authService.getCurrentUser());
+        if (userProfile) {
+          localStorage.setItem('user', JSON.stringify(userProfile));
+        }
+
         set({
           token: data.access_token,
           user: userProfile,
@@ -34,7 +35,7 @@ const useAuthStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Failed to login'
+        error: error.response?.data?.detail?.message || error.response?.data?.detail || 'Failed to login'
       });
       return false;
     }
@@ -47,11 +48,11 @@ const useAuthStore = create((set, get) => ({
       set({ isLoading: false });
       
       // Login after successful registration
-      return get().login(userData.email, userData.password);
+      return get().login(userData.phone, userData.password);
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response?.data?.detail || 'Registration failed'
+        error: error.response?.data?.detail?.message || error.response?.data?.detail || 'Registration failed'
       });
       return false;
     }

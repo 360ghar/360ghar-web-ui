@@ -196,95 +196,13 @@ export const addressContents = [
 ]
 
 // Common Sidebar Data
-export const categoryLists = [
-    {
-        link: '/blog',
-        text: 'Prime Investments',
-        number: '(1)'
-    },
-    {
-        link: '/blog',
-        text: 'ProHome Finders',
-        number: '(8)'
-    },
-    {
-        link: '/blog',
-        text: 'SmartHouse Agency',
-        number: '(3)'
-    },
-    {
-        link: '/blog',
-        text: 'Secure Property Partners',
-        number: '(5)'
-    },
-]
+// Blog categories removed. Use blogService.getCategories() in components.
 
-import SidebarPropertyImg1 from '/assets/images/thumbs/properties-1.png';
-import SidebarPropertyImg2 from '/assets/images/thumbs/properties-2.png';
-import SidebarPropertyImg3 from '/assets/images/thumbs/properties-3.png';
-import SidebarPropertyImg4 from '/assets/images/thumbs/properties-4.png';
-import SidebarPropertyImg5 from '/assets/images/thumbs/properties-5.png';
-import SidebarPropertyImg6 from '/assets/images/thumbs/properties-6.png';
+// Sidebar property image imports removed with static data
 
-export const sidebarProperties = [
-    {
-        link: '/properties',
-        image: SidebarPropertyImg1,
-        text: 'Relax House'
-    },
-    {
-        link: '/properties',
-        image: SidebarPropertyImg2,
-        text: 'Hunting Adventure'
-    },
-    {
-        link: '/properties',
-        image: SidebarPropertyImg3,
-        text: 'Homeownership'
-    },
-    {
-        link: '/properties',
-        image: SidebarPropertyImg4,
-        text: 'Real Dreams'
-    },
-    {
-        link: '/properties',
-        image: SidebarPropertyImg5,
-        text: 'New Doors'
-    },
-    {
-        link: '/properties',
-        image: SidebarPropertyImg6,
-        text: 'The Heart'
-    },
-]
+// Sidebar properties removed. Use propertyAPIService.getRecommendations() in SidebarProperty.
 
-export const sidebarTags = [
-    {
-        text: 'All Project',
-        link: '/blog'
-    },
-    {
-        text: 'Finders',
-        link: '/blog'
-    },
-    {
-        text: 'Home Sales',
-        link: '/blog'
-    },
-    {
-        text: 'Swift',
-        link: '/blog'
-    },
-    {
-        text: 'Reliable Rentals',
-        link: '/blog'
-    },
-    {
-        text: 'Living',
-        link: '/blog'
-    },
-]
+// Sidebar tags removed. Use blogService.getTags() in CommonSidebar.
 // ============================== Property Details Page Data End ==============================
 
 
@@ -916,10 +834,6 @@ export const accountTabs = [
         text: ' Add Property'
     },
     {
-        icon: <i className="fas fa-money-check"></i>,
-        text: ' Payments'
-    },
-    {
         icon: <i className="fas fa-lock"></i>,
         text: ' Change Password'
     },
@@ -929,10 +843,6 @@ export const accountProfileInfos = [
     {
         icon: <i className="fas fa-map-marker-alt"></i>,
         text: 'Gurugram, Haryana, India'
-    },
-    {
-        icon: <i className="fas fa-phone"></i>,
-        text: '012 345 678 9101'
     },
     {
         icon: <i className="fas fa-envelope"></i>,
@@ -950,10 +860,6 @@ export const accountAddress = [
                 text: 'Gurugram, Haryana, India'
             },
             {
-                title: 'Phone:',
-                text: ' 012 345 678 9101'
-            },
-            {
                 title: 'Email:',
                 text: ' info@360ghar.com'
             },
@@ -968,10 +874,6 @@ export const accountAddress = [
                 text: 'Gurugram, Haryana, India'
             },
             {
-                title: 'Phone:',
-                text: ' 012 345 678 9101'
-            },
-            {
                 title: 'Email:',
                 text: ' info@360ghar.com'
             },
@@ -979,53 +881,9 @@ export const accountAddress = [
     },
 ]
 
-import PropertyTableThumb1 from '/assets/images/thumbs/property-1.png';
-import PropertyTableThumb2 from '/assets/images/thumbs/property-2.png';
-import PropertyTableThumb3 from '/assets/images/thumbs/property-3.png';
-import PropertyTableThumb4 from '/assets/images/thumbs/property-4.png';
+// Property table image imports removed with static data
 
-export const propertyTables = [ 
-    {
-        thumb: PropertyTableThumb1,
-        title: '3BHK Luxury Apartment',
-        location: ' 66 Broklyant, New York America ',
-        locationIcon: <i className="fas fa-map-marker-alt"></i>,
-        price: '$85.00',
-        date: '17/02/2024',
-        editIcon: <i className="fas fa-edit"></i>,
-        deleteIcon: <i className="fas fa-trash-alt"></i> 
-    },
-    {
-        thumb: PropertyTableThumb2,
-        title: 'Wheel Bearing Retainer',
-        location: ' 66 Broklyant, New York America ',
-        locationIcon: <i className="fas fa-map-marker-alt"></i>,
-        price: '$85.00',
-        date: '17/02/2024',
-        editIcon: <i className="fas fa-edit"></i>,
-        deleteIcon: <i className="fas fa-trash-alt"></i> 
-    },
-    {
-        thumb: PropertyTableThumb3,
-        title: 'Your journey home owner',
-        location: ' 66 Broklyant, New York America ',
-        locationIcon: <i className="fas fa-map-marker-alt"></i>,
-        price: '$85.00',
-        date: '17/02/2024',
-        editIcon: <i className="fas fa-edit"></i>,
-        deleteIcon: <i className="fas fa-trash-alt"></i> 
-    },
-    {
-        thumb: PropertyTableThumb4,
-        title: 'Turning Dreams into',
-        location: ' 66 Broklyant, New York America ',
-        locationIcon: <i className="fas fa-map-marker-alt"></i>,
-        price: '$85.00',
-        date: '17/02/2024',
-        editIcon: <i className="fas fa-edit"></i>,
-        deleteIcon: <i className="fas fa-trash-alt"></i> 
-    },
-]
+// propertyTables removed. My Properties uses backend via propertyStore.getUserProperties().
 // ========================= Account Page Data End =========================
 
 
@@ -1137,13 +995,6 @@ export const contactTopInfos = [
         icon: <i className="fas fa-map-marker-alt"></i>,
         title: 'Location',
         text: 'Gurugram, Haryana India, 122001',
-    },
-    {
-        icon: <i className="fas fa-phone"></i>,
-        title: 'Contacts ',
-        textOne: '8178340031',
-        textTwo: '',
-        link: 'tel:'
     },
 ]
 // ========================= Project Page Data End =========================

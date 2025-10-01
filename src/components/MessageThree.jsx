@@ -32,7 +32,7 @@ const MessageThree = () => {
                                         </div>
                                         <div className="contact-content__infos">
                                             <span className="contact-content__text">Owners, need help?</span> 
-                                            <a href={`tel:${messageThreeContents.number}`} className="contact-content__contact font-20 fw-semibold text-heading">{messageThreeContents.number}</a>
+                                            <a href={`mailto:info@360ghar.com`} className="contact-content__contact font-20 fw-semibold text-heading">info@360ghar.com</a>
                                         </div>
                                     </div>
                                     <p className="section-heading__desc">{messageThreeContents.desc}</p>
@@ -58,13 +58,7 @@ const MessageThree = () => {
                                                 <span className="input-icon"><i className="fas fa-paper-plane"></i></span>
                                             </div>
                                         </div>
-                                        <div className="col-sm-6 col-xs-6">
-                                            <label htmlFor="phone" className="form-label text-black fw-normal font-14">Phone Number</label>
-                                            <div className="position-relative">
-                                                <input id="phone" name="phone" type="tel" className="common-input common-input--withIcon" placeholder="Phone Number" required />
-                                                <span className="input-icon"><i className="fas fa-phone"></i></span>
-                                            </div>
-                                        </div>
+                                        
                                         <div className="col-sm-6 col-xs-6">
                                             <label htmlFor="address" className="form-label text-black fw-normal font-14">Property Address / Area</label>
                                             <div className="position-relative">

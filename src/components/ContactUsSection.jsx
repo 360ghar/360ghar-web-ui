@@ -60,15 +60,7 @@ const ContactUsSection = () => {
                                         className="text-danger"
                                     />
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
-                                    <input
-                                        id="user_phone"
-                                        type="tel"
-                                        name="user_phone"
-                                        className="common-input"
-                                        placeholder="Phone Number"
-                                    />
-                                </div>
+                                
                                 <div className="col-sm-6 col-xs-6">
                                     <input
                                         id="user_subject"

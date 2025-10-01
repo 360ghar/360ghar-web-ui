@@ -18,10 +18,7 @@ const ListingContactDetails = () => {
                                 <label htmlFor="Email" className="form-label">Your E-mail</label>
                                 <input type="email" id="Email" className="common-input" placeholder="Your E-Mail"/>
                             </div>
-                            <div className="col-md-4 col-sm-6 col-xs-6">
-                                <label htmlFor="Phone" className="form-label">Phone Number</label>
-                                <input type="tel" id="Phone" className="common-input" placeholder="Phone Number"/>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

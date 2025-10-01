@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
-import Breadcrumb from '../../common/Breadcrumb';
+import MobileMenu from '../../common/MobileMenu';
+import OffCanvas from '../../common/OffCanvas';
 import Cta from '../../components/Cta';
 import PropertyDetailsSection from '../../components/PropertyDetailsSection';
 import { useParams } from 'react-router-dom';
@@ -78,28 +79,22 @@ const PropertyDetails = () => {
         />
         <PageTitle title="360Ghar - Property Details" />
 
+        <main className="body-bg">
+            <OffCanvas/>
+            <MobileMenu/>
+
             {/* Header */}
-            <Header 
-                headerClass="dark-header has-border" 
-                logoBlack={false}
-                logoWhite={true}
+            <Header
+                headerClass="dark-header has-border"
                 headerMenusClass="mx-auto"
                 btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                 btnLink="/add-new-listing"
                 btnText="Add Listing"
-                spanClass="icon-right text-gradient" 
-                showHeaderBtn={true}
-                showOffCanvasBtn={false}
-                offCanvasBtnClass=""
+                spanClass="icon-right text-gradient"
                 showContactNumber={false}
             />
 
-            {/* BreadCrumb */}
-            <Breadcrumb 
-                pageTitle="Property Details"
-                pageName={currentProperty?.title || 'Loading...'}
-            />
-
+            
             {/* Loading, Error, or Property Details Section */}
             {isLoading ? (
                 <section className="property-details padding-y-120">
@@ -139,6 +134,8 @@ const PropertyDetails = () => {
 
             {/* Footer */}
             <Footer/>
+
+        </main>
         </>
     );
 };

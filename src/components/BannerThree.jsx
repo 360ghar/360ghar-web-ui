@@ -1,7 +1,6 @@
 import React from 'react';
 import TabFilter from '../common/TabFilter';
 import { bannerThreeContent } from '../data/HomeThreeData/HomeThreeData';
-import { topHeaderInfos } from '../data/CommonData/CommonData';
 import { Link } from 'react-router-dom';
 
 const BannerThree = () => {
@@ -26,10 +25,10 @@ const BannerThree = () => {
                                         </h1>
                                         <p className="banner-content__desc font-18 mb-4 mb-lg-3">{bannerThreeContent.desc}</p>
                                         <div className="contact-info d-flex align-items-center gap-2 mb-4">
-                                            <span className="contact-info__icon text-gradient"><i className="fas fa-phone"></i></span>
+                                            <span className="contact-info__icon text-gradient"><i className="fas fa-envelope"></i></span>
                                             <div className="contact-info__content">
                                                 <span className="contact-info__text fw-500">Need help?</span>
-                                                <Link to={`tel:${topHeaderInfos[0].text}`} className="contact-info__address text-gradient">{topHeaderInfos[0].text}</Link>
+                                                <Link to={`mailto:info@360ghar.com`} className="contact-info__address text-gradient">info@360ghar.com</Link>
                                             </div>
                                         </div>
                                     </div>            

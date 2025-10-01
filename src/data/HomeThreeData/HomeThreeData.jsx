@@ -110,8 +110,8 @@ import messageThreeIcon from '/assets/images/icons/customer-service.svg';
 export const messageThreeContents = {
     icon: messageThreeIcon,
     text: 'Need help?',
-    number: '8178340031',
-    desc: 'Our Gurugram team is available 7 days a week for property search, documentation, and visit scheduling—call us anytime.'
+    number: 'info@360ghar.com',
+    desc: 'Our Gurugram team is available 7 days a week for property search, documentation, and visit scheduling—email us anytime.'
 }
 
 
@@ -142,22 +142,22 @@ import counterThreeIcon4 from '/assets/images/icons/counter-icon4.svg';
 export const counterThreeContents = [
     {
         icon: counterThreeIcon1,
-        number: '3000+',
+        number: '300+',
         text: 'Happy Customers'
     },
     {
         icon: counterThreeIcon2,
-        number: '5000+',
+        number: '500+',
         text: 'Properties Listed'
     },
     {
         icon: counterThreeIcon3,
-        number: '25+',
+        number: '5+',
         text: 'Years Experience'
     },
     {
         icon: counterThreeIcon4,
-        number: '50+',
+        number: '20+',
         text: 'Expert Agents'
     }
 ]

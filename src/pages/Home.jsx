@@ -28,20 +28,7 @@ const Home = () => {
             <main className="body-bg">
 
                 {/* Header */}
-                <Header 
-                    headerClass="bg-transparent" 
-                    logoBlack={true}
-                    logoWhite={false}
-                    headerMenusClass="ms-auto menu-right"
-                    btnClass="btn btn-main  d-lg-block d-none"
-                    btnLink="/post-property"
-                    btnText="Post Property"
-                    spanClass="icon-right" 
-                    showHeaderBtn={true}
-                    showOffCanvasBtn={false}
-                    offCanvasBtnClass=""
-                    showContactNumber={true}
-                />
+                <Header />
 
                 {/* Banner Three */}
                 <BannerThree/>

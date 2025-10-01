@@ -31,11 +31,11 @@ import Policies from './pages/core/Policies';
 import PolicyDetails from './pages/core/PolicyDetails';
 
 function App() {
-  const fetchBrowserLocation = useLocationStore((state) => state.fetchBrowserLocation);
+  const initializeLocation = useLocationStore((state) => state.initializeLocation);
 
   useEffect(() => {
-    fetchBrowserLocation();
-  }, [fetchBrowserLocation]);
+    initializeLocation();
+  }, [initializeLocation]);
 
   return (
     <>

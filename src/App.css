@@ -3,3 +3,107 @@
 .Toastify__toast-container--top-right {
 	top: 120px;
 }
+
+/* Map Location Section Improvements */
+.property-item--map {
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	cursor: pointer;
+}
+
+.property-item--map:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.property-item--map.selected {
+	border: 2px solid var(--primary-color, #4a90e2);
+	box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+}
+
+/* Light card treatment for map page */
+.property-item--map {
+    background: hsl(var(--white));
+    color: hsl(var(--heading-color));
+    border-radius: 6px;
+}
+.property-item--map .property-item__content {
+    color: hsl(var(--heading-color));
+    background: hsl(var(--white));
+}
+.property-item--map .property-item__title,
+.property-item--map .property-item__price {
+    color: hsl(var(--heading-color));
+    font-weight: 600;
+}
+.property-item--map .property-item__location {
+    color: var(--gray-800);
+    opacity: 1;
+}
+.property-item--map .amenities-list__item .text {
+    color: var(--gray-800);
+}
+.property-item--map .simple-btn {
+    color: hsl(var(--main));
+}
+
+.map-container iframe {
+	transition: all 0.3s ease;
+}
+
+.selected-property-info .card {
+	border-left: 4px solid var(--primary-color, #4a90e2);
+}
+
+.location-status-indicator {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.25rem 0.75rem;
+	border-radius: 2rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+.location-status-indicator.locating {
+	background-color: #e3f2fd;
+	color: #1976d2;
+}
+
+.location-status-indicator.error {
+	background-color: #fff3e0;
+	color: #f57c00;
+}
+
+.location-status-indicator.success {
+	background-color: #e8f5e8;
+	color: #2e7d32;
+}
+
+/* Responsive adjustments for map section */
+@media (max-width: 991.98px) {
+	.google-map.position-sticky {
+		position: relative !important;
+		top: 0 !important;
+		margin-bottom: 2rem;
+	}
+}
+
+@media (max-width: 767.98px) {
+	.map-location__item .row > div {
+		margin-bottom: 1.5rem;
+	}
+}
+
+/* Fix: prevent any full-card overlay on property cards */
+.property-item__thumb .link {
+    position: relative;
+    z-index: 0;
+}
+.property-item__content {
+    position: relative;
+    z-index: 1;
+}
+/* Ensure decorative bottom bar doesn't block interactions */
+.property-item::before {
+    pointer-events: none;
+}

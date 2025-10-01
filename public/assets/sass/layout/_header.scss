@@ -249,3 +249,47 @@
 /* Submenu End */
 /* Header Menu and Submenu Css End */
 /* ================================= Header Css End =========================== */
+
+/* User Dropdown */
+.user-dropdown {
+    position: relative;
+    .user-btn {
+        color: hsl(var(--heading-color));
+        &:hover { color: hsl(var(--main)); }
+    }
+    .user-avatar-img,
+    .user-avatar-placeholder {
+        width: 32px;
+        height: 32px;
+        object-fit: cover;
+    }
+}
+
+.user-dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    min-width: 200px;
+    background-color: hsl(var(--white));
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: var(--box-shadow);
+    margin-top: 10px;
+    z-index: 1000;
+
+    .dropdown-item { border-radius: 4px; }
+    .dropdown-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: hsl(var(--heading-color));
+        font-weight: 500;
+        @include font-16;
+        padding: 10px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        width: 100%;
+        &:hover { background-color: var(--gray-200); color: hsl(var(--heading-color)); }
+        &:focus-visible { outline: 2px solid hsl(var(--main)); outline-offset: 2px; }
+    }
+}

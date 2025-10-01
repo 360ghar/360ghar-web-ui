@@ -19,7 +19,7 @@ const TestimonialThreeItem = ({ testimonialThreeItem }) => {
                         </div>
                     </div>
                     
-                    <StarRating oneUnabled="oneUnabled"/>
+                    <StarRating />
                     
                 </div>
                 <p className="testimonial-item__desc mb-0">{desc}</p>

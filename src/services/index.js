@@ -5,6 +5,11 @@ import mediaService from './mediaService';
 import userService from './userService';
 import { propertyAPIService } from './propertyAPIService';
 import pageService from './pageService';
+import swipeService from './swipeService';
+import visitService from './visitService';
+import agentService from './agentService';
+import blogService from './blogService';
+import utilityService from './utilityService';
 
 export {
   api,
@@ -14,4 +19,9 @@ export {
   userService,
   propertyAPIService,
   pageService,
+  swipeService,
+  visitService,
+  agentService,
+  blogService,
+  utilityService,
 };

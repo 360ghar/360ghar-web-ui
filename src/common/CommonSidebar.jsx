@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SidebarCategoryList from './SidebarCategoryList';
 import SidebarRecentPost from './SidebarRecentPost';
 import SidebarProperty from './SidebarProperty';
-import { sidebarTags } from '../data/OthersPageData/OthersPageData';
 import { Link } from 'react-router-dom';
+import { blogService } from '../services/blogService';
 
 const CommonSidebar = ({ renderProperties, renderSearch, renderTags }) => {
+    const [tags, setTags] = useState([]);
+    const [tagsLoading, setTagsLoading] = useState(false);
+    const [tagsError, setTagsError] = useState(null);
+
+    useEffect(() => {
+        if (!renderTags) return;
+        let mounted = true;
+        const fetchTags = async () => {
+            try {
+                setTagsLoading(true);
+                setTagsError(null);
+                const data = await blogService.getTags();
+                const items = Array.isArray(data?.items) ? data.items : (Array.isArray(data) ? data : []);
+                if (mounted) setTags(items);
+            } catch (err) {
+                if (mounted) setTagsError(err?.response?.data?.detail || err?.message || 'Failed to load tags');
+            } finally {
+                if (mounted) setTagsLoading(false);
+            }
+        };
+        fetchTags();
+        return () => { mounted = false; };
+    }, [renderTags]);
     return (
         <>
             <div className="common-sidebar-wrapper">
@@ -46,15 +69,13 @@ const CommonSidebar = ({ renderProperties, renderSearch, renderTags }) => {
                         <div className="common-sidebar">
                             <h6 className="common-sidebar__title"> Tags </h6>
                             <ul className="tag-list">
-                                {
-                                    sidebarTags.map((sidebarTag, sidebarTagIndex) => {
-                                        return (
-                                            <li className="tag-list__item" key={sidebarTagIndex}>
-                                                <Link to={sidebarTag.link} className="tag-list__link">{sidebarTag.text}</Link>
-                                            </li>
-                                        )
-                                    })
-                                }
+                                {tagsLoading && <li className="tag-list__item">Loading...</li>}
+                                {tagsError && !tagsLoading && <li className="tag-list__item text-danger">{tagsError}</li>}
+                                {!tagsLoading && !tagsError && tags.map((tag, i) => (
+                                    <li className="tag-list__item" key={tag.id || i}>
+                                        <Link to={`/blog?tag=${tag.slug || tag.id}`} className="tag-list__link">{tag.name || tag.title}</Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     )

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import propertyService from '../services/propertyService';
 import { propertyAPIService } from '../services/propertyAPIService';
+import swipeService from '../services/swipeService';
 
 // Normalize various API error shapes (FastAPI/Pydantic v2 arrays, objects, strings)
 const extractErrorMessage = (err, fallback = 'Something went wrong') => {
@@ -25,6 +26,7 @@ const usePropertyStore = create((set, get) => ({
   // State
   properties: [],
   recommendations: [],
+  likedProperties: [],
   userProperties: [],
   currentProperty: null,
   propertyMedia: [],
@@ -143,6 +145,62 @@ const usePropertyStore = create((set, get) => ({
         error: extractErrorMessage(error, 'Failed to fetch properties')
       });
       return { items: [], properties: [] };
+    }
+  },
+
+  // Swipe actions (auth required)
+  recordSwipe: async (propertyId, isLiked = true) => {
+    try {
+      set({ isLoading: true, error: null });
+      await swipeService.recordSwipe({ property_id: propertyId, is_liked: isLiked });
+      // Optimistically update liked flag on current lists
+      set((state) => ({
+        properties: state.properties.map((p) => (p.id === propertyId ? { ...p, liked: isLiked } : p)),
+        currentProperty: state.currentProperty?.id === propertyId ? { ...state.currentProperty, liked: isLiked } : state.currentProperty,
+        isLoading: false,
+      }));
+      return true;
+    } catch (error) {
+      set({ isLoading: false, error: extractErrorMessage(error, 'Failed to record swipe') });
+      return false;
+    }
+  },
+
+  fetchLikedProperties: async (filters = {}) => {
+    try {
+      set({ isLoading: true, error: null });
+      const params = { ...filters, is_liked: true };
+      const data = await swipeService.getSwipes(params);
+      const items = data?.properties || [];
+      set({ likedProperties: items, isLoading: false });
+      return items;
+    } catch (error) {
+      set({ isLoading: false, error: extractErrorMessage(error, 'Failed to load liked properties') });
+      return [];
+    }
+  },
+
+  undoLastSwipe: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      await swipeService.undoLast();
+      set({ isLoading: false });
+      return true;
+    } catch (error) {
+      set({ isLoading: false, error: extractErrorMessage(error, 'Failed to undo swipe') });
+      return false;
+    }
+  },
+
+  getSwipeStats: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const data = await swipeService.stats();
+      set({ isLoading: false });
+      return data;
+    } catch (error) {
+      set({ isLoading: false, error: extractErrorMessage(error, 'Failed to fetch swipe stats') });
+      return null;
     }
   },
   

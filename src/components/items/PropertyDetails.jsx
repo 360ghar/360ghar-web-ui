@@ -203,13 +203,7 @@ const PropertyDetails = () => {
                     required
                   />
                 </div>
-                <div className="mb-3">
-                  <input
-                    type="tel"
-                    className="form-control"
-                    placeholder="Your Phone"
-                  />
-                </div>
+                
                 <div className="mb-3">
                   <textarea
                     className="form-control"

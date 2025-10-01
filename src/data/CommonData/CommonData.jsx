@@ -9,14 +9,9 @@ export const offCanvasInfos = [
         link: ''
     },
     {
-        icon: <i className="fas fa-phone"></i>,
-        text: ['8178340031'],
-        link: ['tel:']
-    },
-    {
         icon: <i className="fas fa-envelope"></i>,
-        text: ['info@360ghar.com'],
-        link: ['mailto:']
+        text: 'info@360ghar.com',
+        link: 'mailto:'
     }
 ];
 
@@ -64,11 +59,6 @@ export const starRatings = [
 // Top header Info
 export const topHeaderInfos = [
     {
-        icon: <i className="fas fa-phone"></i>,
-        text: '8178340031',
-        link: 'tel:'
-    },
-    {
         icon: <i className="fas fa-envelope"></i>,
         text: 'info@360ghar.com',
         link: 'mailto:'
@@ -85,91 +75,59 @@ export const topHeaderInfos = [
 export const navMenus = [
     {
       text: "Home",
+      path: "/",
+    },
+    {
+      text: "Properties",
+      path: "/properties",
+    },
+    {
+      text: "Projects",
+      path: "/project",
+    },
+    {
+      text: "Services",
       path: "#",
       submenus: [
         {
-            text: "Home One",
-            path: "/",
+            text: "Post Property",
+            path: "/post-property",
         },
         {
-            text: "Home Two",
-            path: "/home-two",
+            text: "Property Valuation",
+            path: "/post-property",
         },
         {
-            text: "Home Three",
-            path: "/home-three",
+            text: "Virtual Tours",
+            path: "/properties",
         },
         {
-            text: "Home Four",
-            path: "/home-four",
-        },
-        {
-            text: "Home Five",
-            path: "/home-five",
-        },
-        {
-            text: "Home Six",
-            path: "/home-six",
-        },
-        {
-            text: "Home Seven",
-            path: "/home-seven",
+            text: "Map Search",
+            path: "/map-location",
         },
       ],
     },
     {
-      text: "Pages",
+      text: "Resources",
       path: "#",
       submenus: [
         {
-            text: "Property",
-            path: "/properties",
-        },
-        {
-            text: "Property Sidebar",
-            path: "/property-sidebar",
-        },
-        {
-            text: "Post a Property",
-            path: "/post-property",
-        },
-        {
-            text: "Map Location",
-            path: "/map-location",
+            text: "Blog",
+            path: "/blog",
         },
         {
             text: "About Us",
             path: "/about-us",
         },
         {
-            text: "Faq",
+            text: "FAQ",
             path: "/faq",
         },
         {
-            text: "Cart",
-            path: "/cart",
+            text: "Policies",
+            path: "/policies",
         },
-        {
-            text: "Checkout",
-            path: "/checkout",
-        },
-        {
-            text: "Login",
-            path: "/login",
-        },
-        {
-            text: "Account",
-            path: "/account",
-        }
       ],
-    },
-    {
-      text: "Project",
-      path: "/project",
-    },
-    {
-      text: "Blog",
-      path: "/blog"
     },
     {
       text: "Contact",
@@ -187,63 +145,58 @@ export const footerInfos = [
         address: 'Gurugram, Haryana, India'
     },
     {
-        icon: <i className="fas fa-phone"></i>,
-        text: 'Phone Number',
-        address: '8178340031'
-    },
-    {
         icon: <i className="fas fa-envelope"></i>,
         text: 'Email',
         address: 'info@360ghar.com'
     }
 ]
 
-export const footerServiceLinks = [ 
+export const footerServiceLinks = [
     {
-        text: 'Reliable Rentals',
+        text: 'Property Search',
         link: '/properties'
     },
     {
-        text: 'Golden Key Properties',
+        text: '360° Virtual Tours',
         link: '/properties'
     },
     {
-        text: 'Swift Home Sales',
-        link: '/properties'
+        text: 'Post Property',
+        link: '/post-property'
     },
     {
-        text: 'Elite Realty Services',
-        link: '/properties'
+        text: 'Property Management',
+        link: '/contact'
     },
     {
-        text: 'Dream Property Solutions',
-        link: '/properties'
+        text: 'Investment Advisory',
+        link: '/contact'
     },
 ]
 
-export const footerUsefulLinks = [ 
+export const footerUsefulLinks = [
     {
-        text: 'Blog',
-        link: '/blog'
-    },
-    {
-        text: 'FAQ',
-        link: '/faq'
-    },
-    {
-        text: 'Policies',
-        link: '/policies'
-    },
-    {
-        text: 'Property',
+        text: 'Property Listings',
         link: '/properties'
     },
     {
-        text: 'About Us',
+        text: 'About 360Ghar',
         link: '/about-us'
     },
     {
-        text: 'Contact',
+        text: 'Blog & Insights',
+        link: '/blog'
+    },
+    {
+        text: 'Success Stories',
+        link: '/about-us'
+    },
+    {
+        text: 'Help Center',
+        link: '/faq'
+    },
+    {
+        text: 'Contact Us',
         link: '/contact'
     },
 ]
@@ -289,17 +242,13 @@ export const footerGallery = [
 
 export const BottomFooterLink = [
     {
-        text: 'Terms & Condition',
+        text: 'Terms of Service',
         link: '/policies/terms-of-service'
     },
     {
         text: 'Privacy Policy',
         link: '/policies/privacy-policy'
-    },
-    {
-        text: 'Contact Us',
-        link: '/contact'
-    },
+    }
 ]
 
 

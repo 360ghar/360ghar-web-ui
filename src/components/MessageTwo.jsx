@@ -27,11 +27,11 @@ const MessageTwo = () => {
 
                                 <div className="d-flex align-items-center gap-3 mt-4">
                                     <span className="contact-content__icon style-bg font-15">
-                                        <i className="fas fa-phone text-gradient"></i>
+                                        <i className="fas fa-envelope text-gradient"></i>
                                     </span>
                                     <div className="contact-content__infos">
                                         <span className="contact-content__text">Need help?</span> 
-                                        <a href="#" className="contact-content__contact font-16 fw-semibold">(307) 555-0133</a>
+                                        <a href="mailto:info@360ghar.com" className="contact-content__contact font-16 fw-semibold">info@360ghar.com</a>
                                     </div>
                                 </div>
 

@@ -17,7 +17,7 @@ const TestimonialItem = ({ testimonial }) => {
                 </div>
                 <p className="testimonial-item__desc">{desc}</p>
 
-                <StarRating oneUnabled="oneUnabled"/>
+                <StarRating />
 
             </div>   
         </>
