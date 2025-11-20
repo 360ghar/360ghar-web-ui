@@ -4,11 +4,12 @@ import CounterThreeItem from './CounterThreeItem';
 
 import CounterBg from '/assets/images/thumbs/counter-bg.png';
 
+import LazyImage from '../../common/LazyImage';
 const CounterThree = () => {
     return (
         <>
             <section className="counter-three padding-y-120">
-                <img src={CounterBg} alt="" className="counter-three__bg"/>
+                <LazyImage src={CounterBg} alt="" className="counter-three__bg"/>
                 <div className="container container-two">
                     <div className="counter-three-wrapper">
                         {

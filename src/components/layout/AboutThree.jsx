@@ -6,6 +6,7 @@ import CountUp from 'react-countup';
 
 import AboutThreeThumb from '/assets/images/thumbs/about-three-img.png';
 
+import LazyImage from '../../common/LazyImage';
 const AboutThree = () => {
     return (
         <>
@@ -15,7 +16,7 @@ const AboutThree = () => {
                         <div className="col-lg-6">
                             <div className="about-three-thumb">
                                 <div className="about-three-thumb__inner">
-                                    <img src={AboutThreeThumb} alt=""/>
+                                    <LazyImage src={AboutThreeThumb} alt=""/>
                                     <div className="project-content">
                                         <div className="project-content__inner">
                                             <h2 className="project-content__number">

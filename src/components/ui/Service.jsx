@@ -2,6 +2,7 @@ import React from 'react';
 import { services } from '../../data/HomeTwoData/HomeTwoData';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 const Service = () => {
     return (
         <>
@@ -14,7 +15,7 @@ const Service = () => {
                                     <div className="col-lg-4 col-sm-6 col-xs-6" key={index}>
                                         <div className="service-item">
                                             <span className="service-item__icon">
-                                                <img src={service.icon} alt=""/>
+                                                <LazyImage src={service.icon} alt=""/>
                                             </span>
                                             <h6 className="service-item__title">{service.title}</h6>
                                             <span className="service-item__text font-18 d-block">{service.text}</span>

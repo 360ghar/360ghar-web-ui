@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "prebuild": "node scripts/generate-sitemaps.mjs",
+    "build:sitemaps": "node scripts/generate-sitemaps.mjs",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -26,6 +28,7 @@
     "react-tabs": "^6.0.2",
     "react-toastify": "^10.0.5",
     "sass": "^1.71.1",
+    "web-vitals": "^4.2.4",
     "yet-another-react-lightbox": "^3.23.2",
     "yup": "^1.4.0",
     "zustand": "^5.0.5"

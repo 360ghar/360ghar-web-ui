@@ -1,6 +1,7 @@
 import React from 'react';
 import StarRating from '../../common/StarRating';
 
+import LazyImage from '../../common/LazyImage';
 const TestimonialThreeItem = ({ testimonialThreeItem }) => {
 
     const {image, name, designation, desc} = testimonialThreeItem; 
@@ -11,7 +12,7 @@ const TestimonialThreeItem = ({ testimonialThreeItem }) => {
                 <div className="testimonial-item__top flx-between gap-2">
                     <div className="testimonial-item__info flx-align">
                         <div className="testimonial-item__thumb">
-                            <img src={image} alt=""/>
+                            <LazyImage src={image} alt=""/>
                         </div>
                         <div>
                             <h6 className="testimonial-item__name">{name}</h6>

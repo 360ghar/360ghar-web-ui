@@ -3,13 +3,14 @@ import TabFilter from '../../common/TabFilter';
 import { bannerThreeContent } from '../../data/HomeThreeData/HomeThreeData';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 const BannerThree = () => {
     return (
         <>
             {/* ============================ Banner Three Start =============================    */}
             <section className="banner-three">
-                <img src="assets/images/thumbs/dotted-bg.png" alt="" className="banner-three__dotted"/>
-                <img src="assets/images/shapes/banner-shape.png" alt="" className="banner-three__shape"/>
+                <LazyImage src="assets/images/thumbs/dotted-bg.png" alt="" className="banner-three__dotted"/>
+                <LazyImage src="assets/images/shapes/banner-shape.png" alt="" className="banner-three__shape"/>
                 <div className="container container-two">
                     <div className="banner-three__inner position-relative padding-y-120">
                         <div className="row">
@@ -20,7 +21,7 @@ const BannerThree = () => {
                                         <h1 className="banner-content__title">{bannerThreeContent.title}
                                             <span className="position-relative d-inline">
                                             {bannerThreeContent.shapedTitle}
-                                                <img src="assets/images/shapes/curve-shape.png" alt="" className="curve-shape"/> 
+                                                <LazyImage src="assets/images/shapes/curve-shape.png" alt="" className="curve-shape"/> 
                                             </span> 
                                         </h1>
                                         <p className="banner-content__desc font-18 mb-4 mb-lg-3">{bannerThreeContent.desc}</p>
@@ -36,7 +37,7 @@ const BannerThree = () => {
                             </div>
                             <div className="col-lg-6 order-lg-0 order-1">
                                 <div className="banner-thumb">
-                                    <img src={bannerThreeContent.thumb} alt=""/>
+                                    <LazyImage src={bannerThreeContent.thumb} alt="Hero banner" priority />
                                 </div>  
                             </div>
                             

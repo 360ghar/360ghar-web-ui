@@ -4,10 +4,12 @@ import Footer from '../../common/Footer';
 import Cta from '../../components/ui/Cta';
 import LoginRegister from '../../components/forms/LoginRegister';
 import PageTitle from '../../common/PageTitle';
+import SEO from '../../common/SEO';
 
 const Register = () => {
     return (
         <>
+        <SEO title="Register | 360Ghar" description="Create your 360Ghar account." canonical="/register" noindex />
         <PageTitle title="360Ghar - Registration" />
 
         <main className="body-bg">

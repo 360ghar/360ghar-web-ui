@@ -5,6 +5,7 @@ import SectionHeading from '../../common/SectionHeading';
 import FloorImage from '/assets/images/thumbs/floor-plan.png';
 import { floorTabLists, floorTabPanels } from '../../data/HomeTwoData/HomeTwoData';
 
+import LazyImage from '../../common/LazyImage';
 const FloorPlan = () => {
     return (
         <>
@@ -27,7 +28,7 @@ const FloorPlan = () => {
                 <div className="row gy-4 align-items-center">
                     <div className="col-lg-6">
                         <div className="floor-plan__thumb">
-                            <img src={FloorImage} alt="Image"/>
+                            <LazyImage src={FloorImage} alt="Image"/>
                         </div>
                     </div>
                     <div className="col-lg-6">

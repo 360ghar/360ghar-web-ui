@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 function formatCurrency(value) {
   if (value === null || value === undefined) return 'Price on request';
   try {
@@ -83,7 +84,7 @@ const PropertyItem = ({ property, itemClass, iconsClass, btnClass, badgeText, ba
       >
         <div className="property-item__thumb">
           <Link to={propertyURL} className="link">
-            <img src={thumb} alt="" className="cover-img" />
+            <LazyImage src={thumb} alt="" className="cover-img" />
           </Link>
           {renderBadge && <span className={badgeClass}>{badgeText}</span>}
           {showDistance}

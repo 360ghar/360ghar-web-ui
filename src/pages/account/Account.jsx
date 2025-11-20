@@ -4,6 +4,7 @@ import Footer from '../../common/Footer';
 import Cta from '../../components/ui/Cta';
 import AccountSection from '../../components/account/AccountSection';
 import PageTitle from '../../common/PageTitle';
+import SEO from '../../common/SEO';
 import { Navigate } from 'react-router-dom';
 import { useAuthStore } from '../../store';
 
@@ -16,6 +17,7 @@ const Account = () => {
 
     return (
         <>
+        <SEO title="Account | 360Ghar" description="Manage your 360Ghar account." canonical="/account" noindex />
         <PageTitle title="360Ghar - Account Page" />
 
         <main className="body-bg">

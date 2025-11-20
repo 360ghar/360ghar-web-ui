@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 const PortfolioItem = ({ portfolio }) => {
     const {thumb, title, desc, btnIcon} = portfolio; 
 
     return (
         <div className="portfolio-item">
             <div className="portfolio-item__thumb">
-                <img src={thumb} alt="" className="cover-img"/>
+                <LazyImage src={thumb} alt="" className="cover-img"/>
             </div>
             <div className="portfolio-item__content">
                 <Link to="/portfolio-details" className="btn btn-icon"> 

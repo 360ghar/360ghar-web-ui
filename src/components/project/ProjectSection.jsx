@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { projectItems } from '../../data/OthersPageData/OthersPageData';
 
+import LazyImage from '../../common/LazyImage';
 const ProjectSection = () => {
 
     const convertToSlug = (text) => {
@@ -24,7 +25,7 @@ const ProjectSection = () => {
                                 return (
                                     <div className={`col-md-4 col-sm-6 col-xs-6`} key={projectItemIndex}>
                                         <div className="project-page-thumb">
-                                            <img src={thumb} alt="" className="cover-img"/>
+                                            <LazyImage src={thumb} alt="" className="cover-img"/>
                                             <div className="project-page-content">
                                                 <h6 className="project-page-content__title">
                                                     <Link to={projectURL} state={{ id, title, thumb, desc }} className="link">{title}</Link>

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import LazyImage from './LazyImage';
 const BlogShowcase = () => {
     return (
         <>
@@ -8,7 +9,7 @@ const BlogShowcase = () => {
                 <p className="blog-showcase__desc">Aliquam eros justo, posuere loborti viverra laoreet matti ullamcorper posuere viverra .Aliquam eros justo, posuere lobortis, viverra laoreet augue mattis fermentum ullamcorper viverra laoreet Aliquam eros </p>
                 <div className="blog-showcase__content flx-align gap-4">
                     <div className="blog-showcase__thumb">
-                        <img src="assets/images/thumbs/blog-showcase.png" alt=""/>
+                        <LazyImage src="assets/images/thumbs/blog-showcase.png" alt=""/>
                     </div>
                     <ul className="check-list">
                         <li className="check-list__item d-flex align-items-center">

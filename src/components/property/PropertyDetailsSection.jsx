@@ -4,6 +4,7 @@ import usePropertyStore from '../../store/propertyStore';
 import { useVisitStore } from '../../store';
 import { useAuthStore } from '../../store';
 
+import LazyImage from '../../common/LazyImage';
 function formatCurrency(value) {
   if (value === null || value === undefined) return 'Price on request';
   try {
@@ -194,7 +195,7 @@ const PropertyDetailsSection = ({ property }) => {
                 <>
                   {mainImage && (
                     <div className="property-details__thumb media-hero">
-                      <img src={mainImage} alt="Property" className="cover-img" loading="lazy" decoding="async" />
+                      <LazyImage src={mainImage} alt="Property" className="cover-img" priority />
                     </div>
                   )}
                   {galleryImages.length > 1 && (
@@ -202,7 +203,7 @@ const PropertyDetailsSection = ({ property }) => {
                       <div className="row g-2">
                         {galleryImages.slice(0, 8).map((img, idx) => (
                           <div className="col-3 col-md-2" key={idx}>
-                            <img src={img.image_url} alt={img.caption || `Image ${idx + 1}`} className="img-fluid rounded" loading="lazy" decoding="async" />
+                            <LazyImage src={img.image_url} alt={img.caption || `Image ${idx + 1}`} className="img-fluid rounded" loading="lazy" decoding="async" />
                           </div>
                         ))}
                       </div>

@@ -4,6 +4,7 @@ import CommentThumb1 from '/assets/images/thumbs/comment1.png';
 import CommentThumb2 from '/assets/images/thumbs/comment2.png';
 import { Link } from 'react-router-dom';
 
+import LazyImage from './LazyImage';
 const Comment = () => {
     return (
         <>
@@ -12,7 +13,7 @@ const Comment = () => {
                 <ul className="comment-list">
                     <li className="comment-list__item d-flex">
                         <div className="comment-list__thumb">
-                            <img src={CommentThumb1} className="cover-img" alt=""/>
+                            <LazyImage src={CommentThumb1} className="cover-img" alt=""/>
                         </div>
                         <div className="comment-list__content">
                             <div className="flx-align gap-2 gap-sm-4">
@@ -39,7 +40,7 @@ const Comment = () => {
                     </li>
                     <li className="comment-list__item d-flex">
                         <div className="comment-list__thumb">
-                            <img src={CommentThumb2} className="cover-img" alt=""/>
+                            <LazyImage src={CommentThumb2} className="cover-img" alt=""/>
                         </div>
                         <div className="comment-list__content">
                             <div className="flx-align gap-2 gap-sm-4">

@@ -3,6 +3,7 @@ import Header from '../../common/Header';
 import Footer from '../../common/Footer';
 import Cta from '../../components/ui/Cta';
 import PageTitle from '../../common/PageTitle';
+import SEO from '../../common/SEO';
 import { useForm, ValidationError } from '@formspree/react';
 
 /* Custom CSS for Account Deletion Page */
@@ -298,6 +299,7 @@ const AccountDeletionRequest = () => {
     if (state.succeeded) {
         return (
             <>
+            <SEO title="Account Deletion Request | 360Ghar" description="Request deletion of your account or data." canonical="/delete-account" noindex />
             <PageTitle title="360Ghar - Account Deletion Request" />
             <style>{customStyles}</style>
             <main className="body-bg">

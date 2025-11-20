@@ -8,6 +8,7 @@ import OffCanvasProvider from './contextApi/OffCanvasContext.jsx'
 import ScrollHideProvider from './contextApi/ScrollHideContext.jsx'
 import BlogDataProvider from './contextApi/BlogDataContext.jsx'
 import { HelmetProvider } from 'react-helmet-async'
+import { reportWebVitals } from './seo/reportWebVitals'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BlogDataProvider>
@@ -24,3 +25,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </HelmetProvider>
   </BlogDataProvider>
 )
+
+// Start measuring Core Web Vitals
+reportWebVitals()

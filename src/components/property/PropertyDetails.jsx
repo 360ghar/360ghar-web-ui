@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { usePropertyStore, useAuthStore } from '../../store';
 
+import LazyImage from '../../common/LazyImage';
 const PropertyDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -83,10 +84,11 @@ const PropertyDetails = () => {
           <div className="property-gallery mb-4">
             <div className="property-main-image">
               {activeImage ? (
-                <img
+                <LazyImage
                   src={activeImage.url}
                   alt={activeImage.title || currentProperty.title}
                   className="img-fluid rounded"
+                  priority
                 />
               ) : (
                 <div className="no-image rounded">No images available</div>
@@ -103,7 +105,7 @@ const PropertyDetails = () => {
                     }`}
                     onClick={() => setActiveImage(media)}
                   >
-                    <img
+                    <LazyImage
                       src={media.url}
                       alt={media.title || currentProperty.title}
                       className="img-fluid rounded"

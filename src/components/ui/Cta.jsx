@@ -2,6 +2,7 @@ import React from 'react';
 import CtaThumb from '/assets/images/thumbs/cta-img.png';
 import NewsletterForm from '../../common/NewsletterForm';
 
+import LazyImage from '../../common/LazyImage';
 const Cta = (props) => {
     return (
         <section className={`cta padding-b-120 ${props.ctaClass}`}>
@@ -15,7 +16,7 @@ const Cta = (props) => {
                         
                     </div>
                     <div className="cta-content__thumb d-xl-block d-none">
-                        <img src={CtaThumb} alt="Cta Image"/>
+                        <LazyImage src={CtaThumb} alt="Cta Image"/>
                     </div>
                 </div>
             </div>

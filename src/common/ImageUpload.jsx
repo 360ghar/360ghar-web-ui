@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import LazyImage from './LazyImage';
 const ImageUpload = () => {
     
     const [images, setImages] = useState([]);
@@ -33,7 +34,7 @@ const ImageUpload = () => {
                                     <i className="fas fa-times"></i>
                                 </button>
 
-                                <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
+                                <LazyImage src={URL.createObjectURL(image)} alt={`Image ${index}`} />
                             </div>
                         ))
                     }

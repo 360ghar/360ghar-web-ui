@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { socialLists } from '../../data/CommonData/CommonData';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 const TeamItem = ({ team }) => {
     
     const {thumb, name, designation, shareIcon} = team; 
@@ -30,7 +31,7 @@ const TeamItem = ({ team }) => {
     return (
         <div className="team-item">
             <div className="team-item__thumb">
-                <img src={thumb} alt="Team Image" className="cover-img"/>
+                <LazyImage src={thumb} alt="Team Image" className="cover-img"/>
             </div>
             <div className="team-item__content flx-between flex-nowrap">
                 <div>

@@ -4,10 +4,12 @@ import Footer from '../../common/Footer';
 import Cta from '../../components/ui/Cta';
 import CheckoutSection from '../../components/forms/CheckoutSection';
 import PageTitle from '../../common/PageTitle';
+import SEO from '../../common/SEO';
 
 const Checkout = () => {
     return (
         <>
+        <SEO title="Checkout | 360Ghar" description="Checkout page." canonical="/checkout" noindex />
         <PageTitle title="360Ghar - Checkout" />
 
             {/* Header */}

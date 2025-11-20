@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import { blogService } from '../../services/blogService';
 
 
+import LazyImage from '../../common/LazyImage';
 const BlogDetailsSection = () => {
 
     // Blog Data Context API
@@ -89,7 +90,7 @@ const BlogDetailsSection = () => {
                         <div className="col-lg-8">
                             <div className="blog-details">
                                 <div className="blog-details__thumb">
-                                    <img src={thumb} alt="" className='cover-img'/>
+                                    <LazyImage src={thumb} alt="" className='cover-img' priority />
                                     <span className="blog-details__date">{formattedDate}</span>
                                 </div>
                                 <div className="blog-details__content">

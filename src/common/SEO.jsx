@@ -27,9 +27,10 @@ const SEO = ({
   const metaKeywords = keywords || siteMetadata.defaultKeywords;
   const ogImage = absoluteUrl(image || siteMetadata.defaultOgImage);
 
+  // Only include hreflang values that actually exist.
+  // Default to en-in and x-default; callers can pass more.
   const alternates = hreflangs || [
     { hrefLang: 'en-in', href: canonicalUrl },
-    { hrefLang: 'hi-in', href: canonicalUrl.replace(/\/$/, '') + '/hi/' },
     { hrefLang: 'x-default', href: canonicalUrl },
   ];
 
@@ -42,7 +43,28 @@ const SEO = ({
       {metaDesc && <meta name="description" content={metaDesc} />}
       {metaKeywords && <meta name="keywords" content={metaKeywords} />}
       <link rel="canonical" href={canonicalUrl} />
-      {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+      {/* Additional SEO meta tags */}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta httpEquiv="Content-Language" content="en-IN" />
+      <meta name="geo.region" content="IN-HR" />
+      <meta name="geo.placename" content="Gurugram" />
+      <meta name="geo.position" content="28.4595;77.0266" />
+      <meta name="ICBM" content="28.4595, 77.0266" />
+      <meta name="author" content="360Ghar" />
+      <meta name="publisher" content="360Ghar" />
+      <meta
+        name="robots"
+        content={
+          noindex
+            ? 'noindex,nofollow'
+            : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+        }
+      />
+      <meta
+        name="googlebot"
+        content={noindex ? 'noindex,nofollow' : 'index, follow'}
+      />
 
       {/* Open Graph */}
       <meta property="og:title" content={metaTitle} />
@@ -50,6 +72,7 @@ const SEO = ({
       <meta property="og:image" content={ogImage} />
       <meta property="og:url" content={computedUrl} />
       <meta property="og:type" content={type} />
+      <meta property="og:site_name" content={siteMetadata.siteName} />
 
       {/* Twitter */}
       <meta name="twitter:card" content={siteMetadata.twitterCard} />
@@ -73,4 +96,3 @@ const SEO = ({
 };
 
 export default SEO;
-

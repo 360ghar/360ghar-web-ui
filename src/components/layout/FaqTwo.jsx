@@ -3,6 +3,7 @@ import FaqAccordion from '../../common/FaqAccordion';
 import FaqTwoThumb from '/assets/images/thumbs/faq-two-img.png';
 import SectionHeading from '../../common/SectionHeading';
 
+import LazyImage from '../../common/LazyImage';
 const FaqTwo = () => {
     return (
         <section className="faq-two padding-y-120">
@@ -28,7 +29,7 @@ const FaqTwo = () => {
                     </div>
                     <div className="col-lg-6 ps-lg-4 d-lg-block d-none">
                         <div className="faq-two-thumb">
-                            <img src={FaqTwoThumb} alt="360Ghar FAQ illustration" loading="lazy" decoding="async" />
+                            <LazyImage src={FaqTwoThumb} alt="360Ghar FAQ illustration" loading="lazy" decoding="async" />
                         </div>
                     </div>
                 </div>

@@ -4,10 +4,12 @@ import Footer from '../../common/Footer';
 import Cta from '../../components/ui/Cta';
 import CartSection from '../../components/forms/CartSection';
 import PageTitle from '../../common/PageTitle';
+import SEO from '../../common/SEO';
 
 const Cart = () => {
     return (
         <>
+        <SEO title="Cart | 360Ghar" description="Cart page." canonical="/cart" noindex />
         <PageTitle title="360Ghar - Shopping Cart" />
 
         <main className="body-bg">

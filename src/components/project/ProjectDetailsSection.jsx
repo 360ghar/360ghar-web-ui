@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { challengeLists, projectSidebarLists } from '../../data/OthersPageData/OthersPageData';
 import { socialLists } from '../../data/CommonData/CommonData';
 
+import LazyImage from '../../common/LazyImage';
 const ProjectDetailsSection = () => {
 
     const location = useLocation(); 
@@ -23,7 +24,7 @@ const ProjectDetailsSection = () => {
                     <div className="row gy-4">
                         <div className="col-lg-8">
                             <div className="project-details__thumb">
-                                <img src={location.state.thumb} alt="" className='cover-img'/>
+                                <LazyImage src={location.state.thumb} alt="" className='cover-img' priority />
                             </div>
                             <div className="project-details__content">
                                 <h2 className="project-details__title">{location.state.title}</h2>

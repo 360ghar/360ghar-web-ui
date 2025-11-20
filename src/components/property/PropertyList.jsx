@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { usePropertyStore } from '../../store';
 
+import LazyImage from '../../common/LazyImage';
 const PropertyList = ({ limit, filters = {} }) => {
   const { properties, isLoading, error, getAllProperties } = usePropertyStore();
 
@@ -35,7 +36,7 @@ const PropertyList = ({ limit, filters = {} }) => {
           <div className="property-item">
             <div className="property-img">
               {property.media && property.media.length > 0 ? (
-                <img 
+                <LazyImage 
                   src={property.media[0].url} 
                   alt={property.title} 
                   className="img-fluid"

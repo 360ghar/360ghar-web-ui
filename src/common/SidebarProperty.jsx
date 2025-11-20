@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { propertyAPIService } from '../services/propertyAPIService';
 
+import LazyImage from './LazyImage';
 const SidebarProperty = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -38,7 +39,7 @@ const SidebarProperty = () => {
                 {!loading && !error && items.map((p, idx) => (
                     <div className="col-lg-6 col-sm-4 col-6" key={p.id || idx}>
                         <Link to={`/property/${p.id}`} className="properties-item d-block w-100">
-                            <img src={getThumb(p)} alt="Property Image" className="cover-img"/>
+                            <LazyImage src={getThumb(p)} alt="Property Image" className="cover-img"/>
                             <span className="properties-item__text">{p.title || 'Property'}</span>
                         </Link>
                     </div>

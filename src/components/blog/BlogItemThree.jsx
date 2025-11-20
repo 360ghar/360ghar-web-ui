@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from '../../common/Button';
 import { BlogDataContext } from '../../contextApi/BlogDataContext';
 
+import LazyImage from '../../common/LazyImage';
 const BlogItemThree = ({blogItem}) => {
     
     // Blog Data Context API
@@ -24,7 +25,7 @@ const BlogItemThree = ({blogItem}) => {
         <div className="blog-item">
             <div className="blog-item__thumb">
                 <Link to={blogURL} onClick={()=>handleBlogClick()} className="blog-item__thumb-link">
-                    <img src={thumb} className="cover-img" alt=""/>
+                    <LazyImage src={thumb} className="cover-img" alt=""/>
                 </Link>
                 <span className="blog-item__date style-three font-18"> 
                     {new Date().getDate()}  <span className="text">{currentMonthName}</span>

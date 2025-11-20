@@ -1,0 +1,24 @@
+{
+  "name": "360Ghar",
+  "homepage": "https://360ghar.com/",
+  "description": "Real estate platform for Buy, Rent and PG with verified listings and 360° virtual tours across Gurugram and Delhi NCR.",
+  "search": {
+    "endpoint": "https://360ghar.com/properties",
+    "query_param": "q",
+    "example": "https://360ghar.com/properties?q=2%20BHK%20in%20Gurugram"
+  },
+  "important_pages": [
+    { "title": "Home", "url": "https://360ghar.com/" },
+    { "title": "Properties", "url": "https://360ghar.com/properties" },
+    { "title": "PG in Gurugram", "url": "https://360ghar.com/gurugram/pg/apartments" },
+    { "title": "Buy Flats in Gurugram", "url": "https://360ghar.com/gurugram/buy/flats" },
+    { "title": "Rent Flats in Gurugram", "url": "https://360ghar.com/gurugram/rent/flats" },
+    { "title": "For AI Assistants", "url": "https://360ghar.com/for-ai" },
+    { "title": "Contact", "url": "https://360ghar.com/contact" }
+  ],
+  "contact": {
+    "email": "info@360ghar.com",
+    "telephone": "+91-8178340031"
+  }
+}
+

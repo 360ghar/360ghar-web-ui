@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 const OwnerCta = ({ className = '' }) => {
   return (
     <section className={`cta padding-b-120 ${className}`}>
@@ -15,7 +16,7 @@ const OwnerCta = ({ className = '' }) => {
             </div>
           </div>
           <div className="cta-content__thumb d-xl-block d-none">
-            <img src="/assets/images/thumbs/cta-img.png" alt="Owner CTA" />
+            <LazyImage src="/assets/images/thumbs/cta-img.png" alt="Owner CTA" />
           </div>
         </div>
       </div>

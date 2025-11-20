@@ -207,6 +207,10 @@ export const footerUsefulLinks = [
         text: 'Contact Us',
         link: '/contact'
     },
+    {
+        text: 'For AI Assistants',
+        link: '/for-ai'
+    },
 ]
 
 import FooterGallery1 from '/assets/images/thumbs/gallery1.png';
@@ -256,6 +260,10 @@ export const BottomFooterLink = [
     {
         text: 'Privacy Policy',
         link: '/policies/privacy-policy'
+    },
+    {
+        text: 'For AI Assistants',
+        link: '/for-ai'
     }
 ]
 

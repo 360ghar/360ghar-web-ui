@@ -1,6 +1,7 @@
 import React from 'react';
 import CountUp from 'react-countup';
 
+import LazyImage from '../../common/LazyImage';
 const CounterFourItem = ({ counterFourItem }) => {
     
     const { icon, number, text} = counterFourItem; 
@@ -8,7 +9,7 @@ const CounterFourItem = ({ counterFourItem }) => {
     return (
         <div className="counter-three-item style-two flx-align">
             <span className="counter-three-item__icon">
-                <img src={icon} alt=""/>
+                <LazyImage src={icon} alt=""/>
             </span>
             <div className="counter-three-item__content">
                 <h2 className="counter-three-item__number text-heading">

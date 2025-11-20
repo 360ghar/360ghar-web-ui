@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import messageThumb from '/assets/images/thumbs/message-img.png';
 import ValidationForm from './ValidationForm';
 
+import LazyImage from '../../common/LazyImage';
 const Message = () => {
     return (
         <>
@@ -14,7 +15,7 @@ const Message = () => {
                     <div className="row">
                         <div className="col-lg-5">
                             <div className="message-thumb">
-                                <img src={messageThumb} alt="" className="cover-img"/>
+                                <LazyImage src={messageThumb} alt="" className="cover-img"/>
                             </div>
                         </div>
                         <div className="col-lg-7">

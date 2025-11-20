@@ -6,6 +6,7 @@ import TestimonialItem from './TestimonialItem';
 import TestimonialThumb from '/assets/images/thumbs/testimonial-img.png';
 import SectionHeading from '../../common/SectionHeading';
 
+import LazyImage from '../../common/LazyImage';
 // Custom arrows to avoid forwarding non-DOM props (currentSlide, slideCount)
 const PrevArrow = ({ currentSlide, slideCount, ...props }) => {
     const { className, style, onClick } = props;
@@ -79,7 +80,7 @@ const Testimonial = () => {
 
                             <div className="col-lg-6">
                                 <div className="testimonial-thumb">
-                                    <img src={TestimonialThumb} alt="" className="cover-img"/>
+                                    <LazyImage src={TestimonialThumb} alt="" className="cover-img"/>
                                 </div>
                             </div>
                         </div>

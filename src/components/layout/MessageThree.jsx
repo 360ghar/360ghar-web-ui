@@ -3,6 +3,7 @@ import SectionHeading from '../../common/SectionHeading';
 import { messageThreeContents } from '../../data/HomeThreeData/HomeThreeData';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 const MessageThree = () => {
     return (
         <>
@@ -28,7 +29,7 @@ const MessageThree = () => {
                                 <div className="contact-content__box">
                                     <div className=" d-flex align-items-center gap-3">
                                         <div className="contact-content__icon">
-                                            <img src={messageThreeContents.icon} alt=""/>
+                                            <LazyImage src={messageThreeContents.icon} alt=""/>
                                         </div>
                                         <div className="contact-content__infos">
                                             <span className="contact-content__text">Owners, need help?</span> 

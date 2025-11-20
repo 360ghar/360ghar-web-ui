@@ -23,7 +23,7 @@ const Property = () => {
         <SEO
           title="Properties in Gurugram | Buy, Sell, Rent Real Estate | 360Ghar"
           description="Browse verified properties in Gurugram with 360° virtual tours. Find apartments, flats, builder floors, independent houses, and PGs in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City."
-          keywords="Gurugram properties, Gurgaon real estate, buy property Gurugram, sell property Gurgaon, rent apartments Gurugram, PG in Gurgaon, DLF Phase properties, Golf Course Road real estate, Sohna Road apartments, Cyber City flats, verified listings, 360 virtual tours"
+          keywords="Gurugram properties, Gurgaon real estate, buy property Gurugram, sell property Gurgaon, rent apartments Gurugram, flats for sale in Gurgaon, flats for rent in Gurgaon, 1 BHK 2 BHK 3 BHK, ready to move flats, new launch projects, resale apartments, PG in Gurgaon, girls PG, co-living Gurugram, DLF Phase properties, Golf Course Road apartments, Sohna Road flats, Cyber City office space, near metro apartments, no broker, direct owner, verified listings, 360 virtual tours"
           canonical="/properties"
           image={siteMetadata.defaultOgImage}
           type="website"

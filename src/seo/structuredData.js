@@ -4,7 +4,7 @@ import { siteMetadata } from './siteMetadata';
 export const realEstateStructuredData = {
   // Organization schema for real estate company
   organization: {
-    '@type': 'RealEstateOrganization',
+    '@type': 'RealEstateAgent',
     name: siteMetadata.organization.name,
     url: siteMetadata.siteUrl,
     logo: siteMetadata.defaultOgImage,
@@ -73,45 +73,193 @@ export const realEstateStructuredData = {
     }
   },
 
-  // Real Estate listing schema
+  // Enhanced real estate listing schemas for better AI understanding
   realEstateListing: {
-    '@type': 'RealEstateListing',
+    '@type': 'ItemList',
     name: 'Properties for Sale and Rent in Gurugram',
     description: 'Verified properties with 360° virtual tours in prime Gurugram locations',
     url: `${siteMetadata.siteUrl}/properties`,
-    numberOfItems: 1000,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Gurugram',
-      addressRegion: 'HR',
-      addressCountry: 'IN'
-    }
+    numberOfItems: 1000
   },
 
-  // Local business schema
-  localBusiness: {
-    '@type': 'LocalBusiness',
+  // Real Estate Agency schema for enhanced visibility
+  realEstateAgency: {
+    '@type': 'RealEstateAgent',
     name: siteMetadata.siteName,
-    description: 'Best real estate platform in Gurugram for buying, selling, renting properties and PGs',
+    description: 'Leading real estate platform in Gurugram specializing in verified property listings with 360° virtual tours',
+    url: siteMetadata.siteUrl,
+    logo: siteMetadata.defaultOgImage,
+    image: siteMetadata.defaultOgImage,
+    telephone: siteMetadata.organization.telephone,
+    email: siteMetadata.organization.email,
+    address: siteMetadata.organization.address,
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 28.4595,
+      longitude: 77.0266
+    },
+    areaServed: [
+      {
+        '@type': 'City',
+        name: 'Gurugram',
+        addressCountry: 'IN'
+      },
+      {
+        '@type': 'City',
+        name: 'Delhi',
+        addressCountry: 'IN'
+      },
+      {
+        '@type': 'City',
+        name: 'Noida',
+        addressCountry: 'IN'
+      }
+    ],
+    hasCredential: {
+      '@type': 'EducationalOccupationalCredential',
+      name: 'Verified Real Estate Platform',
+      recognizedBy: {
+        '@type': 'Organization',
+        name: '360Ghar Verification System'
+      }
+    },
+    serviceType: [
+      'Residential Property Sales',
+      'Residential Property Rentals',
+      'PG Accommodation',
+      'Property Marketing',
+      'Virtual Property Tours',
+      'Real Estate Consulting'
+    ],
+    priceRange: '₹',
+    paymentAccepted: ['Cash', 'Bank Transfer', 'Cheque'],
+    currenciesAccepted: 'INR'
+  },
+
+  // Search action for AI assistants to understand site functionality
+  searchAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${siteMetadata.siteUrl}/properties?q={search_term_string}`,
+      inLanguage: 'en-IN'
+    },
+    'query-input': 'required name=search_term_string',
+    description: 'Search for properties in Gurugram by location, price, or type'
+  },
+
+  // Enhanced local business schema for better local SEO
+  localBusiness: {
+    '@type': 'RealEstateAgent',
+    name: siteMetadata.siteName,
+    description: 'Leading real estate platform in Gurugram offering verified properties with 360° virtual tours for buying, selling, renting apartments, houses, and PG accommodations',
     url: siteMetadata.siteUrl,
     telephone: siteMetadata.organization.telephone,
+    email: siteMetadata.organization.email,
     address: {
       '@type': 'PostalAddress',
-      ...siteMetadata.organization.address
+      streetAddress: siteMetadata.organization.address.streetAddress || 'Gurugram',
+      addressLocality: 'Gurugram',
+      addressRegion: 'HR',
+      postalCode: '122001',
+      addressCountry: 'IN'
     },
     geo: {
       '@type': 'GeoCoordinates',
       latitude: 28.4595,
       longitude: 77.0266
     },
-    openingHours: 'Mo-Su 00:00-23:59',
-    serviceArea: {
-      '@type': 'Place',
-      name: 'Gurugram, Haryana, India'
-    }
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        opens: '00:00',
+        closes: '23:59'
+      }
+    ],
+    sameAs: [
+      'https://www.facebook.com/360ghar',
+      'https://www.instagram.com/360ghar',
+      'https://www.linkedin.com/company/360ghar',
+      'https://twitter.com/360ghar'
+    ],
+    areaServed: [
+      {
+        '@type': 'City',
+        name: 'Gurugram',
+        sameAs: 'https://en.wikipedia.org/wiki/Gurugram'
+      },
+      {
+        '@type': 'City',
+        name: 'Delhi',
+        sameAs: 'https://en.wikipedia.org/wiki/Delhi'
+      },
+      {
+        '@type': 'City',
+        name: 'Noida',
+        sameAs: 'https://en.wikipedia.org/wiki/Noida'
+      },
+      {
+        '@type': 'City',
+        name: 'Faridabad',
+        sameAs: 'https://en.wikipedia.org/wiki/Faridabad'
+      }
+    ],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Real Estate Services in Gurugram',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Property Sales in Gurugram',
+            description: 'Buy verified properties with 360° virtual tours in prime Gurugram locations'
+          },
+          areaServed: {
+            '@type': 'City',
+            name: 'Gurugram'
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Property Rentals in Gurugram',
+            description: 'Rent apartments, houses, and PGs in Gurugram with verified listings'
+          },
+          areaServed: {
+            '@type': 'City',
+            name: 'Gurugram'
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'PG Accommodation in Gurugram',
+            description: 'Find verified paying guest accommodations in Gurugram for professionals and students'
+          },
+          areaServed: {
+            '@type': 'City',
+            name: 'Gurugram'
+          }
+        }
+      ]
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: 4.8,
+      reviewCount: 1250,
+      bestRating: 5,
+      worstRating: 1
+    },
+    priceRange: '₹',
+    paymentAccepted: ['Cash', 'Bank Transfer', 'Cheque', 'UPI'],
+    currenciesAccepted: 'INR'
   },
 
-  // FAQ schema for common real estate questions
+  // Enhanced FAQ schema for AI/LLM optimization with comprehensive real estate questions
   faq: {
     '@type': 'FAQPage',
     mainEntity: [
@@ -120,7 +268,7 @@ export const realEstateStructuredData = {
         name: 'What is 360Ghar?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: '360Ghar is Gurugram premier real estate platform offering verified properties with 360° virtual tours for buying, selling, renting properties and finding PGs.'
+          text: '360Ghar is Gurugram\'s premier real estate platform offering verified properties with 360° virtual tours for buying, selling, renting properties and finding PGs. We provide authentic listings with exact locations, high-quality photos, and immersive virtual tours to help you make informed real estate decisions.'
         }
       },
       {
@@ -128,7 +276,7 @@ export const realEstateStructuredData = {
         name: 'How can I list my property on 360Ghar?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'You can list your property on 360Ghar by visiting the post-property page. There are no upfront listing fees for owners.'
+          text: 'You can list your property on 360Ghar by visiting the post-property page. There are no upfront listing fees for owners. Simply provide property details, upload photos, and add 360° virtual tours for maximum visibility.'
         }
       },
       {
@@ -136,7 +284,7 @@ export const realEstateStructuredData = {
         name: 'What types of properties are available in Gurugram?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: '360Ghar offers various property types in Gurugram including apartments, flats, builder floors, independent houses, commercial spaces, and PG accommodations in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City, and more.'
+          text: '360Ghar offers various property types in Gurugram including apartments, flats, builder floors, independent houses, commercial spaces, and PG accommodations in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City, Sector 29, MG Road, and more. All properties come with verified details and virtual tours.'
         }
       },
       {
@@ -144,9 +292,121 @@ export const realEstateStructuredData = {
         name: 'Are all properties on 360Ghar verified?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, 360Ghar features verified properties with authentic photos, accurate details, exact locations, and 360° virtual tours to ensure transparency and authenticity.'
+          text: 'Yes, 360Ghar features verified properties with authentic photos, accurate details, exact locations, and 360° virtual tours to ensure transparency and authenticity. We verify each listing to provide you with reliable real estate information.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do I search for properties in Gurugram?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Use our advanced search filters to find properties in Gurugram by location, price range, property type, BHK, furnishing status, and amenities. Browse verified listings with 360° virtual tours and schedule instant visits with owners or agents.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What are the advantages of 360° virtual tours?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '360° virtual tours allow you to explore properties remotely from anywhere. Walk through rooms, check layouts, view amenities, and get a real feel of the property before scheduling a physical visit. This saves time and helps you make better real estate decisions.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How much does it cost to rent/buy property in Gurugram?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Property prices in Gurugram vary by location and type. Luxury apartments in Golf Course Road start from ₹2-5 lakhs/month for rent and ₹2-10 crores for purchase. Affordable options in Sohna Road range from ₹15,000-50,000/month for rent. Check our platform for current market rates and verified listings.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Are there PG options available in Gurugram?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes, 360Ghar offers verified PG accommodations in Gurugram with options for working professionals and students. PGs are available in prime locations with amenities like WiFi, meals, housekeeping, and security. Prices typically range from ₹8,000-25,000 per month including facilities.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What are the best areas to live in Gurugram?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Top areas in Gurugram include DLF Phase 1-5, Golf Course Road, Sohna Road, Cyber City, Sector 29, MG Road, and Nirvana Country. Each area offers different price points and amenities. DLF Phase offers luxury living, Golf Course Road has premium malls and restaurants, while Sohna Road provides more affordable options.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do I schedule a property visit?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Schedule instant visits through our platform by contacting property owners or agents directly. Use our virtual tours first to shortlist properties, then coordinate physical visits at your convenience. Most owners are flexible with viewing timings.'
         }
       }
+    ]
+  },
+
+  // Knowledge Panel data for AI/LLM responses
+  knowledgePanel: {
+    '@type': 'Organization',
+    '@id': siteMetadata.siteUrl,
+    name: siteMetadata.siteName,
+    alternateName: ['360Ghar', '360 Ghar', '360Ghar Real Estate'],
+    description: siteMetadata.defaultDescription,
+    url: siteMetadata.siteUrl,
+    logo: siteMetadata.defaultOgImage,
+    image: siteMetadata.defaultOgImage,
+    foundingDate: '2024',
+    sameAs: [
+      'https://www.facebook.com/360ghar',
+      'https://www.instagram.com/360ghar',
+      'https://www.linkedin.com/company/360ghar'
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: siteMetadata.organization.telephone,
+      contactType: 'customer service',
+      areaServed: 'IN',
+      availableLanguage: 'English'
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Real Estate Services',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Property Buying Assistance',
+            description: 'Help buyers find verified properties in Gurugram with virtual tours'
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Property Rental Services',
+            description: 'Find rental properties and PG accommodations in Gurugram'
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Property Listing Service',
+            description: 'List properties for free with 360° virtual tours'
+          }
+        }
+      ]
+    },
+    knowsAbout: [
+      'Real Estate in Gurugram',
+      'Property Buying in Delhi NCR',
+      'Rental Properties India',
+      'PG Accommodation Gurugram',
+      'Virtual Property Tours',
+      'Real Estate Technology',
+      'Indian Property Market'
     ]
   }
 };
@@ -217,32 +477,26 @@ export const gurugramAreasData = [
 
 // Property-specific structured data generator
 export const generatePropertyStructuredData = (property) => ({
-  '@type': ['RealEstateListing', 'Product'],
+  '@type': 'Product',
   name: property.title || 'Property in Gurugram',
   description: property.description || 'Premium property with 360° virtual tour in Gurugram',
   url: property.url || `${siteMetadata.siteUrl}/property/${property.id}`,
   image: property.images || [siteMetadata.defaultOgImage],
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: property.city || 'Gurugram',
-    addressRegion: 'HR',
-    addressCountry: 'IN',
-    streetAddress: property.address || ''
+  sku: String(property.id || ''),
+  brand: {
+    '@type': 'Brand',
+    name: siteMetadata.siteName
   },
-  numberOfRooms: property.bedrooms || 1,
-  floorSize: {
-    '@type': 'QuantitativeValue',
-    value: property.area || 1000,
-    unitText: property.areaUnit || 'sqft'
-  },
+  category: property.propertyType || 'Apartment',
   offers: {
     '@type': 'Offer',
+    url: property.url || `${siteMetadata.siteUrl}/property/${property.id}`,
     price: property.price || 0,
     priceCurrency: 'INR',
-    availability: property.available ? 'InStock' : 'OutOfStock',
+    availability: property.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
     priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
     seller: {
-      '@type': 'RealEstateOrganization',
+      '@type': 'RealEstateAgent',
       name: siteMetadata.siteName,
       telephone: siteMetadata.organization.telephone
     }

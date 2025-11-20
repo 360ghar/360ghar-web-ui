@@ -3,6 +3,7 @@ import SectionHeading from '../../common/SectionHeading';
 import { aboutTwoRight, checkLists } from '../../data/HomeTwoData/HomeTwoData';
 import Button from '../../common/Button';
 
+import LazyImage from '../../common/LazyImage';
 const AboutTwo = () => {
     return (
         <>
@@ -50,7 +51,7 @@ const AboutTwo = () => {
                             </div>
                             <div className="col-lg-6">
                                 <div className="about-two__thumb">
-                                    <img src={aboutTwoRight.thumb} alt="" className="cover-img"/>
+                                    <LazyImage src={aboutTwoRight.thumb} alt="" className="cover-img"/>
                                     <div className="about-two-info">
                                         <h6 className="about-two-info__title">{aboutTwoRight.title}</h6>
                                         <span className="about-two-info__date font-18">{aboutTwoRight.date}</span>

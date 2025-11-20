@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { BlogDataContext } from '../../contextApi/BlogDataContext';
 
+import LazyImage from '../../common/LazyImage';
 const BlogItemTwo = ({ blog }) => {
 
     // Blog Data Context API
@@ -24,7 +25,7 @@ const BlogItemTwo = ({ blog }) => {
         <div className="blog-item blog-dark">
             <div className="blog-item__thumb">
                 <Link to={blogURL} onClick={()=>handleBlogClick()} className="blog-item__thumb-link">
-                    <img src={thumb} className="cover-img" alt=""/>
+                    <LazyImage src={thumb} className="cover-img" alt=""/>
                 </Link>
                 <span className="blog-item__date"> {new Date().getDate()} {currentMonthName}</span>
             </div>

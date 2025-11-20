@@ -3,6 +3,7 @@ import Header from '../../common/Header';
 import Footer from '../../common/Footer';
 import Cta from '../../components/ui/Cta';
 import PageTitle from '../../common/PageTitle';
+import SEO from '../../common/SEO';
 import { useForm, ValidationError } from '@formspree/react';
 import { Link } from 'react-router-dom';
 
@@ -176,6 +177,7 @@ const PostPropertyForm = () => {
 const PostProperty = () => {
     return (
         <>
+            <SEO title="Post a Property | 360Ghar" description="Request assistance to post your property on 360Ghar." canonical="/post-property" noindex />
             <PageTitle title="360Ghar - Post a Property" />
 
             <main className="body-bg">

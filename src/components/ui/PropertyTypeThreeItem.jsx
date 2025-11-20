@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 const PropertyTypeThreeItem = ({ propertyTypeItem }) => {
 
     const {icon, title, desc, btnLink, btnText} = propertyTypeItem;  
@@ -9,7 +10,7 @@ const PropertyTypeThreeItem = ({ propertyTypeItem }) => {
         <>
             <div className="property-type-three-item d-flex align-items-start">
                 <span className="property-type-three-item__icon flex-shrink-0">
-                    <img src={icon} alt=""/>
+                    <LazyImage src={icon} alt=""/>
                 </span>
                 <div className="property-type-three-item__content">
                     <h6 className="property-type-three-item__title">{title}</h6>

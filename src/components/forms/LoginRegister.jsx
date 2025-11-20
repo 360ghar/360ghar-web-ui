@@ -7,6 +7,7 @@ import { useAuthStore } from '../../store';
 
 import LoginRegisterThumb from '/assets/images/thumbs/login-img.avif';
 
+import LazyImage from '../../common/LazyImage';
 const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, showLastName, passwordCol, showConfirm, btnText, showForgotRemember, showTermCondition, haveAccountText, haveAccountLink, haveAccountLinkText, isLogin = false}) => {
 
     const [showPassword, setShowPassword] = useState(false);
@@ -137,7 +138,7 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
                             <div className="row gy-4">
                                 <div className="col-lg-6">
                                     <div className="loginRegister-thumb rounded overflow-hidden me-lg-2 d-flex h-100">
-                                        <img src={LoginRegisterThumb} alt=""/>
+                                        <LazyImage src={LoginRegisterThumb} alt=""/>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">

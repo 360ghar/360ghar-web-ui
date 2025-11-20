@@ -8,6 +8,7 @@ import Button from './Button';
 import { useAuthStore } from '../store';
 import { toast } from 'react-toastify';
 
+import LazyImage from './LazyImage';
 const MobileMenu = () => {
     const navigate = useNavigate();
     const { toggleMobileMenu, handleMobileMenuClose } = useContext(MobileMenuContext);
@@ -52,7 +53,7 @@ const MobileMenu = () => {
                                 <div className="d-flex align-items-center gap-3 mb-3">
                                     <div className="user-avatar">
                                         {user?.profile_image_url ? (
-                                            <img
+                                            <LazyImage
                                                 src={user.profile_image_url}
                                                 alt="Profile"
                                                 className="rounded-circle"

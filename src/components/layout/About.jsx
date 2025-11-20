@@ -5,6 +5,7 @@ import SectionHeading from '../../common/SectionHeading';
 
 import CountUp from 'react-countup';
 
+import LazyImage from '../../common/LazyImage';
 const About = () => {
     return (
         <>
@@ -14,7 +15,7 @@ const About = () => {
                     <div className="row gy-4 align-items-center">
                         <div className="col-lg-6">
                             <div className="about-thumb">
-                                <img src={aboutContent.thumb} alt=""/>
+                                <LazyImage src={aboutContent.thumb} alt=""/>
                                 <div className="client-statistics flx-align">
                                     <span className="client-statistics__icon">
                                         {aboutStatistics.icon}
@@ -45,7 +46,7 @@ const About = () => {
                                 
                                 <div className="about-box d-flex">
                                     <div className="about-box__icon">
-                                        <img src={aboutContent.icon} alt="" />
+                                        <LazyImage src={aboutContent.icon} alt="" />
                                     </div>
                                     <div className="about-box__content">
                                         <h6 className="about-box__title">{aboutContent.title}</h6>

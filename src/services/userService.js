@@ -19,6 +19,16 @@ export const userService = {
     return response.data;
   },
 
+  getNotificationSettings: async () => {
+    const response = await api.get('/users/notification-settings');
+    return response.data;
+  },
+
+  updateNotificationSettings: async (settings) => {
+    const response = await api.put('/users/notification-settings', settings);
+    return response.data;
+  },
+
   // Agents
   getAssignedAgent: async () => {
     const response = await api.get('/agents/assigned/');

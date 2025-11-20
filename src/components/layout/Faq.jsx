@@ -2,6 +2,7 @@ import React from 'react';
 import SectionHeading from '../../common/SectionHeading';
 import FaqAccordion from '../../common/FaqAccordion';
 
+import LazyImage from '../../common/LazyImage';
 const Faq = () => {
     return (
         <>
@@ -28,7 +29,7 @@ const Faq = () => {
                         </div>
                         <div className="col-lg-6  d-lg-block d-none">
                             <div className="faq-thumb">
-                                <img src="assets/images/thumbs/faq-img.png" alt="Image"/>
+                                <LazyImage src="assets/images/thumbs/faq-img.png" alt="Image"/>
                             </div>
                         </div>
                     </div>

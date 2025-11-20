@@ -31,6 +31,12 @@ import NotFound from './pages/core/NotFound';
 import Policies from './pages/core/Policies';
 import PolicyDetails from './pages/core/PolicyDetails';
 import EmiCalculator from './pages/tools/EmiCalculator';
+import Landing from './pages/landing/Landing';
+import GurugramGuide from './pages/core/GurugramGuide';
+import PropertyInvestment from './pages/core/PropertyInvestment';
+import ForAI from './pages/core/ForAI';
+import FacetLanding from './pages/landing/FacetLanding';
+import McpLogin from './pages/account/McpLogin';
 
 function App() {
   const initializeLocation = useLocationStore((state) => state.initializeLocation);
@@ -56,6 +62,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/mcp/login" element={<McpLogin />} />
           <Route path="/register" element={<Register />} />
           <Route path="/account" element={<Account />} />
           <Route path="/project" element={<Project />} />
@@ -70,6 +77,15 @@ function App() {
           <Route path="/policies" element={<Policies />} />
           <Route path="/policies/:slug" element={<PolicyDetails />} />
           <Route path="/emi-calculator" element={<EmiCalculator />} />
+          <Route path="/gurugram-real-estate-guide" element={<GurugramGuide />} />
+          <Route path="/property-investment-gurugram" element={<PropertyInvestment />} />
+          <Route path="/for-ai" element={<ForAI />} />
+          {/* Facet landings: BHK and Budget */}
+          <Route path="/:citySlug/:intent/:type/:bhk" element={<FacetLanding />} />
+          <Route path="/:citySlug/:intent/:type/budget/:budget" element={<FacetLanding />} />
+          <Route path="/:citySlug/:intent/:type/amenity/:amenity" element={<FacetLanding />} />
+          {/* Programmatic SEO landing pages: /city/intent/type */}
+          <Route path="/:citySlug/:intent/:type" element={<Landing />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -23,9 +23,13 @@ const Home = () => {
     // Combine structured data for the homepage
     const homeStructuredData = [
         realEstateStructuredData.organization,
+        realEstateStructuredData.realEstateAgency,
         realEstateStructuredData.website,
+        realEstateStructuredData.searchAction,
         realEstateStructuredData.localBusiness,
-        realEstateStructuredData.faq
+        realEstateStructuredData.realEstateListing,
+        realEstateStructuredData.faq,
+        realEstateStructuredData.knowledgePanel
     ];
 
     return (

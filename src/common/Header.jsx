@@ -10,6 +10,7 @@ import LogoWhite from './LogoWhite';
 import { useAuthStore } from '../store';
 import { ToastContainer, toast } from 'react-toastify';
 
+import LazyImage from './LazyImage';
 const Header = ({
     headerClass = "bg-transparent",
     logoBlack = true,
@@ -116,7 +117,7 @@ const Header = ({
                                     >
                                         <div className="user-avatar">
                                             {user?.profile_image_url ? (
-                                                <img
+                                                <LazyImage
                                                     src={user.profile_image_url}
                                                     alt="Profile"
                                                     className="user-avatar-img rounded-circle"

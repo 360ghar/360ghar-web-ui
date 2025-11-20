@@ -1,6 +1,7 @@
 import React from 'react';
 import StarRating from '../../common/StarRating';
 
+import LazyImage from '../../common/LazyImage';
 const TestimonialItem = ({ testimonial }) => {
 
     const {name, designation, desc, quote} = testimonial; 
@@ -13,7 +14,7 @@ const TestimonialItem = ({ testimonial }) => {
                         <h6 className="testimonial-item__name">{name}</h6>
                         <span className="testimonial-item__designation">{designation}</span>
                     </div>
-                    <img src={quote} alt=""/>
+                    <LazyImage src={quote} alt=""/>
                 </div>
                 <p className="testimonial-item__desc">{desc}</p>
 

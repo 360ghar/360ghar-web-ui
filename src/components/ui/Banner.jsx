@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import TabFilter from '../../common/TabFilter';
 
+import LazyImage from '../../common/LazyImage';
 const Banner = () => {
     return (
         <>
@@ -29,11 +30,11 @@ const Banner = () => {
                                 </div>
                             </div>
                             <div className="col-lg-6 order-lg-0 order-1">
-                                <div className="banner-thumb">
-                                    <img src={bannerContent.thumb} alt=""/>
-                                    <img src="assets/images/shapes/shape-triangle.png" alt="" className="shape-element one"/>
-                                    <img src="assets/images/shapes/shape-circle.png" alt="" className="shape-element two"/>
-                                    <img src="assets/images/shapes/shape-moon.png" alt="" className="shape-element three"/>
+                                    <div className="banner-thumb">
+                                    <LazyImage src={bannerContent.thumb} alt="" priority />
+                                    <LazyImage src="assets/images/shapes/shape-triangle.png" alt="" className="shape-element one"/>
+                                    <LazyImage src="assets/images/shapes/shape-circle.png" alt="" className="shape-element two"/>
+                                    <LazyImage src="assets/images/shapes/shape-moon.png" alt="" className="shape-element three"/>
                                 </div>  
                             </div>
                             <div className="col-lg-12">

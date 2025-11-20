@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { useUserStore } from '../../store';
 import { ToastContainer, toast } from 'react-toastify';
 
+import LazyImage from '../../common/LazyImage';
 const AccountProfileTab = () => {
     const { profile, getProfile, updateProfile, isLoading, error, clearError } = useUserStore();
     const [isEditing, setIsEditing] = useState(false);
@@ -66,7 +67,7 @@ const AccountProfileTab = () => {
                 <div className="card-body">
                     <div className="profile-info d-flex gap-4 align-items-center">
                         <div className="profile-info__thumb">
-                            <img
+                            <LazyImage
                                 src={profile?.profile_image_url || '/assets/images/thumbs/team1.png'}
                                 alt="Profile"
                                 className="rounded-circle"

@@ -1,6 +1,7 @@
 import React from 'react';
 import { paymentMethods } from '../data/OthersPageData/OthersPageData';
 
+import LazyImage from './LazyImage';
 const CheckoutPaymentCard = () => {
     return (
         <>
@@ -16,7 +17,7 @@ const CheckoutPaymentCard = () => {
                                             <input className="form-check-input" type="radio" name="payment" id={paymentMethod.text}/>
                                             <label className="form-check-label" htmlFor={paymentMethod.text}>
                                                 {paymentMethod.text}
-                                                <img src={paymentMethod.img} alt=""/>
+                                                <LazyImage src={paymentMethod.img} alt=""/>
                                             </label>
                                         </div>
                                     </div>

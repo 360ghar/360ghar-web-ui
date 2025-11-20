@@ -5,6 +5,7 @@ import TabFilter from '../../common/TabFilter';
 import { bannerTwoContent } from '../../data/HomeTwoData/HomeTwoData';
 import { Link } from 'react-router-dom';
 
+import LazyImage from '../../common/LazyImage';
 const BannerTwo = () => {
     return (
         <>
@@ -17,7 +18,7 @@ const BannerTwo = () => {
                             <p className="contact-content__desc font-18">{bannerTwoContent.desc}</p>
                             <div className="d-flex align-items-center gap-3">
                                 <div className="contact-content__icon">
-                                    <img src={bannerTwoContent.icon} alt=""/>
+                                    <LazyImage src={bannerTwoContent.icon} alt=""/>
                                 </div>
                                 <div className="contact-content__infos">
                                     <span className="contact-content__text">{bannerTwoContent.text}</span> 
