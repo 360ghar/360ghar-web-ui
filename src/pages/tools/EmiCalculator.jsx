@@ -56,17 +56,17 @@ const EmiCalculator = () => {
     return (
         <>
         <SEO
-          title="EMI Calculator - Calculate Home Loan EMI for Gurugram Properties | 360Ghar"
-          description="Free online home loan EMI calculator. Calculate monthly installments, total interest, and payment schedule instantly."
-          keywords="EMI calculator, home loan EMI calculator, property loan calculator, mortgage EMI, housing loan EMI"
+          title="Home Loan EMI Calculator India | Calculate Mortgage EMI | 360Ghar"
+          description="Calculate your Home Loan EMI instantly with 360Ghar's free EMI Calculator. Plan your budget, check monthly installments, and view amortization schedule for properties in Gurugram & India."
+          keywords="home loan EMI calculator India, housing loan calculator, mortgage calculator India, loan repayment schedule, SBI home loan EMI, HDFC home loan EMI, real estate finance tool, 360ghar financial tools"
           canonical="/emi-calculator"
           image={siteMetadata.defaultOgImage}
           type="website"
         />
             <PageTitle
-                title="EMI Calculator - Calculate Home Loan EMI Online | 360Ghar"
-                description="Use 360Ghar's free EMI calculator to calculate your home loan monthly installments. Get accurate EMI calculations based on loan amount, interest rate, and tenure."
-                keywords="EMI calculator, home loan EMI, loan calculator, mortgage calculator, EMI calculation, housing loan EMI"
+                title="Home Loan EMI Calculator - Calculate EMI Online | 360Ghar"
+                description="Use 360Ghar's free EMI calculator to calculate your home loan monthly installments. Get accurate EMI calculations for property purchase based on loan amount, interest rate, and tenure."
+                keywords="home loan EMI, loan EMI calculator, mortgage calculator, EMI calculation, housing loan EMI, property loan EMI calculator, loan repayment calculator"
             />
 
             <OffCanvas/>

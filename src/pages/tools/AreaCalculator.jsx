@@ -40,16 +40,16 @@
      return (
          <>
              <SEO
-                 title="Carpet Area Calculator - Super Built-up vs Carpet Area | 360Ghar"
-                 description="Calculate actual Carpet Area from Super Built-up Area. Understand the difference between Carpet Area, Built-up Area, and Super Built-up Area."
-                 keywords="carpet area calculator, super built up area calculator, rera carpet area, loading factor calculator, property area calculator"
+                title="Carpet Area Calculator India | RERA Super Built-up vs Carpet Area | 360Ghar"
+                description="Calculate actual Carpet Area from Super Built-up Area using our RERA-compliant calculator. Understand loading factor and usable space for properties in Gurugram and Delhi NCR."
+                keywords="carpet area calculator India, super built up area vs carpet area, RERA area calculator, loading factor calculator, apartment area calculator, flat size calculator, 360ghar tools"
                  canonical="/area-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
              />
              <PageTitle
-                 title="Carpet Area vs Built-up Area Calculator"
-                 description="Calculate the actual usable area (Carpet Area) from the advertised Super Built-up Area by adjusting for loading factor."
+                 title="Carpet Area vs Built-up Area Calculator - RERA Compliant | 360Ghar"
+                 description="Calculate the actual usable area (Carpet Area) from the advertised Super Built-up Area by adjusting for loading factor. RERA compliant area calculation for Indian properties."
              />
              
              <OffCanvas />

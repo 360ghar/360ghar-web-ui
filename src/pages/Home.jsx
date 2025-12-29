@@ -43,7 +43,7 @@ const Home = () => {
           type="website"
           structuredData={homeStructuredData}
         />
-        <PageTitle title="360Ghar - Best Real Estate Platform in Gurugram" />
+        <PageTitle title="India's First AI-Enabled & Virtual Tour First Real Estate Platform | Verified Properties | 360Ghar" />
             <OffCanvas/>
             <MobileMenu/>
             

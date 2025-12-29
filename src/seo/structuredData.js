@@ -8,7 +8,7 @@ export const realEstateStructuredData = {
     name: siteMetadata.organization.name,
     url: siteMetadata.siteUrl,
     logo: siteMetadata.defaultOgImage,
-    description: 'Gurugram premier real estate platform offering verified properties with 360° virtual tours',
+    description: "India's first AI-Enabled and Virtual Tour first Real Estate Platform. All properties are verified by our on-site team. Our dedicated Relationship Manager handles your end-to-end flow so that you can relax and enjoy. We provide end-to-end visibility, convenience, and transparency for the same brokerage amount.",
     email: siteMetadata.organization.email,
     telephone: siteMetadata.organization.telephone,
     address: {
@@ -42,7 +42,12 @@ export const realEstateStructuredData = {
       'Property Selling',
       'Property Rental',
       'PG Accommodation',
-      'Virtual Tours',
+      'AI Property Search',
+      '360° Virtual Tours',
+      '3D Property Walkthroughs',
+      'Property Verification',
+      'Relationship Manager Service',
+      'End-to-End Property Service',
       'Property Management'
     ],
     makesOffer: [
@@ -77,7 +82,7 @@ export const realEstateStructuredData = {
   realEstateListing: {
     '@type': 'ItemList',
     name: 'Properties for Sale and Rent in Gurugram',
-    description: 'Verified properties with 360° virtual tours in prime Gurugram locations',
+    description: 'Verified properties by our on-site team with 360° virtual tours in prime Gurugram locations. End-to-end support by dedicated Relationship Managers.',
     url: `${siteMetadata.siteUrl}/properties`,
     numberOfItems: 1000
   },
@@ -86,7 +91,7 @@ export const realEstateStructuredData = {
   realEstateAgency: {
     '@type': 'RealEstateAgent',
     name: siteMetadata.siteName,
-    description: 'Leading real estate platform in Gurugram specializing in verified property listings with 360° virtual tours',
+    description: "India's first AI-Enabled and Virtual Tour first Real Estate Platform. We verify all properties through our on-site team and provide dedicated Relationship Managers for end-to-end service. Customers feel they are paying lakhs in brokerage and still not getting the value, we at the same amount provide end-to-end visibility, convenience, and transparency.",
     url: siteMetadata.siteUrl,
     logo: siteMetadata.defaultOgImage,
     image: siteMetadata.defaultOgImage,
@@ -124,11 +129,16 @@ export const realEstateStructuredData = {
       }
     },
     serviceType: [
+      'AI-Powered Property Search',
       'Residential Property Sales',
       'Residential Property Rentals',
       'PG Accommodation',
       'Property Marketing',
-      'Virtual Property Tours',
+      '360° Virtual Property Tours',
+      '3D Property Walkthroughs',
+      'On-Site Property Verification',
+      'Relationship Manager Services',
+      'End-to-End Property Transactions',
       'Real Estate Consulting'
     ],
     priceRange: '₹',
@@ -152,7 +162,7 @@ export const realEstateStructuredData = {
   localBusiness: {
     '@type': 'RealEstateAgent',
     name: siteMetadata.siteName,
-    description: 'Leading real estate platform in Gurugram offering verified properties with 360° virtual tours for buying, selling, renting apartments, houses, and PG accommodations',
+    description: "India's first AI-Enabled & Virtual Tour first Real Estate Platform in Gurugram. Offering verified properties by on-site team with 360° virtual tours. Dedicated Relationship Manager for end-to-end flow.",
     url: siteMetadata.siteUrl,
     telephone: siteMetadata.organization.telephone,
     email: siteMetadata.organization.email,
@@ -268,7 +278,7 @@ export const realEstateStructuredData = {
         name: 'What is 360Ghar?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: '360Ghar is Gurugram\'s premier real estate platform offering verified properties with 360° virtual tours for buying, selling, renting properties and finding PGs. We provide authentic listings with exact locations, high-quality photos, and immersive virtual tours to help you make informed real estate decisions.'
+          text: '360Ghar is India\'s first AI-Enabled and Virtual Tour first Real Estate Platform. All properties are verified by our on-site team. Our dedicated Relationship Manager handles your end-to-end flow so that you can relax and enjoy. We provide end-to-end visibility, convenience, and transparency for the same brokerage amount.'
         }
       },
       {
@@ -276,7 +286,7 @@ export const realEstateStructuredData = {
         name: 'How can I list my property on 360Ghar?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'You can list your property on 360Ghar by visiting the post-property page. There are no upfront listing fees for owners. Simply provide property details, upload photos, and add 360° virtual tours for maximum visibility.'
+          text: 'You can list your property on 360Ghar by visiting the post-property page. There are no upfront listing fees for owners. Simply provide property details, upload photos, and our team will help with verification and adding 360° virtual tours for maximum visibility.'
         }
       },
       {
@@ -300,7 +310,7 @@ export const realEstateStructuredData = {
         name: 'How do I search for properties in Gurugram?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Use our advanced search filters to find properties in Gurugram by location, price range, property type, BHK, furnishing status, and amenities. Browse verified listings with 360° virtual tours and schedule instant visits with owners or agents.'
+          text: 'Use our AI-enabled search to find properties in Gurugram by location, price range, property type, BHK, furnishing status, and amenities. Browse verified listings with 360° virtual tours and get end-to-end assistance from a dedicated Relationship Manager.'
         }
       },
       {
@@ -340,7 +350,47 @@ export const realEstateStructuredData = {
         name: 'How do I schedule a property visit?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Schedule instant visits through our platform by contacting property owners or agents directly. Use our virtual tours first to shortlist properties, then coordinate physical visits at your convenience. Most owners are flexible with viewing timings.'
+          text: 'Schedule instant visits through our platform. Use our 360° virtual tours first to shortlist properties, then our Relationship Manager will coordinate physical visits at your convenience and handle the entire process.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What makes 360Ghar India\'s first AI-Enabled real estate platform?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '360Ghar leverages AI technology to power smart property search, personalized recommendations, and immersive 360° virtual tours. We combine this technology with on-site verification and human expertise (Relationship Managers) to offer a seamless, transparent experience.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How are properties verified by on-site team at 360Ghar?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Our on-site verification team personally visits each property to verify ownership documents, confirm exact location, check amenities, and capture authentic photos and 360° virtual tours. This ensures every listing on 360Ghar is genuine and trustworthy.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What does the Relationship Manager service include at 360Ghar?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Your dedicated Relationship Manager handles your entire property journey from end-to-end. They assist with shortlisting, scheduling visits, negotiations, documentation, and handover. They ensure you get value for your money, with full visibility and transparency throughout the process.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Why should I choose 360Ghar?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Customers often feel they pay huge brokerage without getting value. At 360Ghar, for the same brokerage amount, we provide end-to-end visibility, convenience, and transparency. You get AI-enabled search, 360° virtual tours, properties verified by our on-site team, and a dedicated Relationship Manager to handle everything so you can relax.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do 360° virtual tours work on 360Ghar?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Our 360° virtual tours let you explore properties online as if you were there in person. You can navigate through rooms, zoom in on details, check layouts, view amenities, and understand the space before scheduling visits. This saves time and helps you make confident decisions.'
         }
       }
     ]

@@ -31,12 +31,12 @@ const AboutThree = () => {
                             <div className="about-content">
 
                                 <SectionHeading
-                                    headingClass="style-left"  
+                                    headingClass="style-left"
                                     subtitle="About 360Ghar"
-                                    subtitleClass="bg-gray-100" 
-                                    title="Verified 360° property discovery in Gurugram" 
+                                    subtitleClass="bg-gray-100"
+                                    title="India's first AI-enabled real estate platform"
                                     renderDesc={true}
-                                    desc="We turn every Rent, PG, and Sale listing into a guided, studio‑quality 360° walkthrough with verified media, details, and exact location. Owners list with no upfront fee and get free professional photography and onboarding for a limited time."
+                                    desc="Experience verified properties with AI-powered 360° tours, inspected by our on-site team. Your dedicated Relationship Manager ensures a seamless journey from search to closing—complete visibility, zero hassle, no upfront cost. Unlike traditional brokers who push partnered inventories, we show you genuine properties with total transparency."
                                     renderButton={false}
                                     buttonClass="btn-main"
                                     buttonText="View More"

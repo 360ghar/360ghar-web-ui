@@ -35,15 +35,15 @@ const AboutUs = () => {
     return (
         <>
             <SEO
-                title="About 360Ghar - Best Real Estate Platform in Gurugram | Verified 360° Tours"
-                description="Discover 360Ghar, Gurugram premier real estate platform offering verified properties with 360° virtual tours, expert guidance, and no upfront listing fees. Serving DLF Phase, Golf Course Road, Sohna Road, Cyber City and all Gurugram areas."
-                keywords="about 360Ghar, Gurugram real estate platform, property portal Gurgaon, virtual tours, real estate services, DLF Phase properties, Golf Course Road real estate, verified property listings, no broker fees, property management"
+                title="About 360Ghar - India's First AI-Enabled & Virtual Tour First Real Estate Platform | Verified Properties"
+                description="Learn about 360Ghar, India's first AI-enabled and virtual tour first real estate platform. All properties verified by on-site team with dedicated Relationship Managers for end-to-end service. Pay same brokerage, get full visibility, convenience and transparency."
+                keywords="about 360Ghar, India first AI enabled real estate platform, virtual tour first real estate, Gurugram real estate platform, property portal Gurgaon, virtual tours, on-site verified properties, relationship manager real estate, transparent brokerage, DLF Phase properties, Golf Course Road real estate, verified property listings"
                 canonical="/about-us"
                 image={siteMetadata.defaultOgImage}
                 type="website"
                 structuredData={aboutStructuredData}
             />
-            <PageTitle title="360Ghar - About Us" />
+            <PageTitle title="About 360Ghar - India's First AI-Enabled Real Estate Platform" />
 
             <OffCanvas />
             <MobileMenu />

@@ -51,7 +51,7 @@ const FacetLanding = () => {
       isBhk ? `${bhkText} options available.` : null,
       isBudget ? `Budget: ${budgetText}.` : null,
       isAmenity ? `Amenity: ${pretty(amenity)}.` : null,
-      'View photos, exact locations, 360° virtual tours, pricing, and amenities. Schedule visits instantly.'
+      'Verified by our on-site team. View photos, exact locations, 360° virtual tours. End-to-end service by dedicated Relationship Manager.'
     ].filter(Boolean);
     return parts.join(' ');
   }, [facetText, validCity, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity]);
@@ -83,7 +83,8 @@ const FacetLanding = () => {
       ...bhkSyn.map(b => `${b} ${lcFacet} ${validIntent} in ${city}`),
       ...budgetSyn.map(b => `${lcFacet} ${validIntent} ${b} in ${city}`),
       isAmenity ? `${pretty(amenity)} ${lcFacet} ${validIntent} in ${city}` : null,
-      'near metro', 'pet friendly', 'ready to move', 'no broker'
+      'near metro', 'pet friendly', 'ready to move', 'no broker',
+      'verified properties', '360 virtual tours', 'AI property search', 'on-site verified'
     ];
     return Array.from(new Set(base.filter(Boolean))).join(', ');
   }, [facetText, validCity, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity]);
@@ -170,6 +171,14 @@ const FacetLanding = () => {
                 {isBudget && <li>{facetText} {validIntent} {budgetText} in {validCity}</li>}
                 <li>Ready to move {facetText} for {validIntent} in {validCity}</li>
                 <li>No broker {facetText} for {validIntent} in {validCity}</li>
+                <li>Verified {facetText} with 360° virtual tours in {validCity}</li>
+              </ul>
+              <h2 className="h5 mb-3 mt-4">Why 360Ghar?</h2>
+              <ul className="text-start">
+                <li>India&apos;s first AI-Enabled and Virtual Tour first Real Estate Platform</li>
+                <li>All properties verified by our on-site team with 360° virtual tours</li>
+                <li>Dedicated Relationship Manager handles your end-to-end flow so you can relax</li>
+                <li>Full visibility, convenience, and transparency for the same brokerage amount</li>
               </ul>
             </div>
           </div>

@@ -11,10 +11,10 @@ const PropertyType = () => {
                 <div className="container container-two">
 
                     <SectionHeading
-                        headingClass=""  
-                        subtitle="Property Type"
-                        subtitleClass="bg-gray-100" 
-                        title="Let us find the perfect the  property for you" 
+                        headingClass=""
+                        subtitle="Why Choose 360Ghar"
+                        subtitleClass="bg-gray-100"
+                        title="Real value for your investment—not just brokerage"
                         renderDesc={false}
                         desc=""
                         renderButton={false}

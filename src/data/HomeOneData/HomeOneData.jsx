@@ -50,21 +50,21 @@ export const aboutContent = {
 import propertyTypeIcon1 from '/assets/images/icons/property-type-icon1.svg';
 import propertyTypeIcon2 from '/assets/images/icons/property-type-icon2.svg';
 import propertyTypeIcon3 from '/assets/images/icons/property-type-icon3.svg';
-export const propertyTypes = [ 
+export const propertyTypes = [
     {
         icon: propertyTypeIcon1,
-        title: '360° Virtual Tours',
-        desc: 'Experience properties like never before with our immersive 360° walkthroughs. See every detail from the comfort of your home.'
+        title: 'AI-Enabled Virtual Tours',
+        desc: 'India\'s first AI-powered platform with verified 360° tours. Every property inspected by our on-site team—authentic details, no misleading photos.'
     },
     {
         icon: propertyTypeIcon2,
-        title: 'Expert Property Guidance',
-        desc: 'Our experienced real estate consultants provide personalized guidance to help you make informed property decisions in Gurgaon.'
+        title: 'Dedicated Relationship Manager',
+        desc: 'Unlike traditional brokers, we assign you a Relationship Manager who handles everything end-to-end—property search to documentation. Total transparency, zero hassle.'
     },
     {
         icon: propertyTypeIcon3,
-        title: 'Comprehensive Property Solutions',
-        desc: 'From property listings to legal documentation, we provide end-to-end solutions for all your real estate needs in one platform.'
+        title: 'Complete Transparency & Value',
+        desc: 'No upfront cost, no gaslighting, no partnered-inventory push. We show genuine properties with full visibility. Get real value, not just expensive brokerage.'
     },
 ]
 
@@ -128,14 +128,14 @@ import quoteIcon from '/assets/images/icons/quote.svg';
 export const testimonials = [
     {
         name: 'Aman Sharma',
-        designation: 'Home Seeker – Gurugram',
-        desc: '360Ghar completely transformed how I search for properties. The verified 360° tours saved me countless visits and made shortlisting effortless.',
+        designation: 'Home Buyer – Gurugram',
+        desc: 'Tired of brokers pushing only partnered properties? 360Ghar\'s AI-powered platform showed me genuine verified listings. My Relationship Manager guided me through everything—total transparency, no hidden costs.',
         quote: quoteIcon
     },
     {
         name: 'Rajesh Kumar',
         designation: 'Property Investor',
-        desc: '360Ghar helped me find the perfect investment property in Gurugram. The team’s verification and guidance gave me full confidence.',
+        desc: 'I used to pay lakhs in brokerage for minimal service. 360Ghar gave me a dedicated RM, verified on-site inspections, and complete visibility at no upfront cost. This is real value.',
         quote: quoteIcon
     },
 ]

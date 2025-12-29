@@ -56,16 +56,16 @@
      return (
          <>
              <SEO
-                 title="Property Document Checklist - Essential Real Estate Documents | 360Ghar"
-                 description="Complete checklist of essential documents required for buying property in India. Track your progress with our interactive legal document checklist."
-                 keywords="property document checklist, home buying checklist, legal documents for property purchase, real estate documents india, property verification list"
+                title="Property Documents Checklist India | Home Buying Legal Checklist | 360Ghar"
+                description="Essential document checklist for buying property in India. Ensure you have all legal papers: Title Deed, EC, Occupancy Certificate, etc. Verified by 360Ghar experts."
+                keywords="property document checklist India, documents for buying flat, home loan documents list, property legal verification checklist, real estate documents India, 360ghar guide"
                  canonical="/property-document-checklist"
                  image={siteMetadata.defaultOgImage}
                  type="website"
              />
              <PageTitle
-                 title="Property Document Checklist"
-                 description="Don't miss a thing. Use our interactive checklist to ensure you have all essential legal and financial documents in place."
+                 title="Property Document Checklist - Home Buying Guide India | 360Ghar"
+                 description="Don't miss a thing. Use our interactive checklist to ensure you have all essential legal and financial documents in place for your property purchase in India."
              />
              
              <OffCanvas />

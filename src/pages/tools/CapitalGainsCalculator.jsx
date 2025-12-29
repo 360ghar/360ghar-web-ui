@@ -110,16 +110,16 @@
      return (
          <>
              <SEO
-                 title="Capital Gains Tax Calculator - LTCG & STCG on Property | 360Ghar"
-                 description="Calculate Long Term (LTCG) and Short Term (STCG) capital gains tax on property sale in India. Includes Cost Inflation Index (CII) benefits."
-                 keywords="capital gains tax calculator, property tax calculator, LTCG calculator india, real estate capital gains, short term capital gains, indexation benefit"
+                title="Capital Gains Tax Calculator India | Property LTCG & STCG Calculator | 360Ghar"
+                description="Calculate Capital Gains Tax on property sale in India. Check Long Term (LTCG) and Short Term (STCG) tax liability with indexation benefits. Plan your property sale tax efficiently."
+                keywords="capital gains tax calculator property India, LTCG on property, STCG on property, property sale tax calculator, indexation benefit calculator, income tax on property sale, 360ghar tax tools"
                  canonical="/capital-gains-tax-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
              />
              <PageTitle
-                 title="Capital Gains Tax Calculator"
-                 description="Estimate your tax liability when selling a property. Supports both Long Term (LTCG) and Short Term (STCG) calculations with Indexation."
+                 title="Capital Gains Tax Calculator - Property Sale Tax India | 360Ghar"
+                 description="Estimate your tax liability when selling a property in India. Supports both Long Term (LTCG) and Short Term (STCG) calculations with Cost Inflation Index (CII) indexation."
              />
              
              <OffCanvas />

@@ -15,9 +15,9 @@ const DesignBlueprint = () => {
   return (
     <>
       <SEO
-        title="Design Blueprint - 360Ghar"
-        description="Design and visualize floor plans in 2D and 3D."
-        keywords="floor plan, blueprint, 3D design, interior design"
+        title="Online Floor Planner & 3D Blueprint Designer India | 360Ghar"
+        description="Free online floor planner and 3D blueprint designer by 360Ghar. Create 2D & 3D floor plans, visualize your dream home, and plan interior layouts. Perfect for Indian homes."
+        keywords="floor planner India, 3D home design tool, online blueprint designer, free floor plan creator, interior design software India, virtual home staging, 360ghar tools, 2D 3D floor planner"
         canonical="/design-blueprint"
         image={siteMetadata.defaultOgImage}
         type="website"

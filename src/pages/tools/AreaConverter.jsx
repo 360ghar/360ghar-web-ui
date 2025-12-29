@@ -62,16 +62,16 @@
      return (
          <>
              <SEO
-                 title="Area Converter - Convert Sq Ft, Sq Yard, Acre, Gaj | 360Ghar"
-                 description="Free online area unit converter for real estate. Convert between Square Feet, Square Meters, Square Yards, Acres, Gaj, Bigha, and more."
-                 keywords="area converter, square feet converter, gaj to sq ft, acre to sq ft, bigha converter, land measurement converter, real estate calculator"
+                title="Land Area Converter India | Sq Ft, Gaj, Bigha, Acre Converter | 360Ghar"
+                description="Convert land area units instantly. Support for Sq Ft, Sq Yard (Gaj), Bigha, Acre, Hectare, Guntha, and more. Essential tool for buying land or plots in India."
+                keywords="land area converter India, sq ft to gaj converter, bigha to sq ft, acre to hectare converter, plot size converter, real estate unit converter, 360ghar tools, land measurement India"
                  canonical="/area-converter"
                  image={siteMetadata.defaultOgImage}
                  type="website"
              />
              <PageTitle
-                 title="Area Unit Converter"
-                 description="Instantly convert between different land measurement units used in Indian real estate."
+                 title="Land Area Unit Converter - Indian Real Estate Calculator | 360Ghar"
+                 description="Instantly convert between different land measurement units used in Indian real estate including Gaj, Bigha, Kanal, Marla, Acre, and Square Feet."
              />
              
              <OffCanvas />

@@ -2,11 +2,23 @@ export const siteMetadata = {
   siteUrl: 'https://360ghar.com',
   siteName: '360Ghar',
   defaultTitle:
-    '360Ghar - Best Real Estate Platform in Gurugram | Buy, Sell, Rent Properties & PGs',
+    "India's First AI-Enabled & Virtual Tour First Real Estate Platform | Verified Properties | 360Ghar",
   defaultDescription:
-    "360Ghar is Gurugram's premier real estate platform offering verified properties with 360° virtual tours. Buy, sell, rent apartments, flats, houses, and find PGs in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City. Schedule visits instantly. No listing fees for owners.",
+    "360Ghar is India's first AI-enabled and Virtual Tour first Real Estate Platform. All properties are verified by our on-site team. Our dedicated Relationship Managers handle your end-to-end flow for complete peace of mind. Experience full visibility, convenience, and transparency for the same brokerage. Buy, sell, rent properties & PGs in Gurugram and Delhi NCR.",
   defaultKeywords:
     [
+      // Brand positioning
+      'India first AI enabled real estate platform','virtual tour first real estate','AI property search India','smart real estate platform',
+      // AI & technology
+      'AI real estate platform','AI property search','AI virtual tours','smart real estate India','AI-powered property platform','AI home search',
+      // Virtual tours
+      '360 virtual tours','3D property tours','immersive property viewing','virtual walkthrough','VR real estate','360 degree property tours','virtual property viewing India',
+      // Verification & trust
+      'verified properties','on-site verified','genuine property listings','authentic listings','property verification team','real estate verification service','verified by on-site team',
+      // Relationship Manager service
+      'relationship manager','personal assistance','dedicated RM','end to end real estate service','property manager service','hassle free real estate',
+      // Value & transparency
+      'transparent brokerage','full visibility','no hidden charges','value for money','convenience real estate','transparent real estate India',
       // Core intents and generic
       'real estate India','property sites','properties near me','buy property','rent house','PG near me','co-living','paying guest','real estate agents','property dealers',
       // City coverage
@@ -31,6 +43,8 @@ export const siteMetadata = {
       'EMI calculator','home loan','stamp duty Haryana','RERA Gurugram','price trends Gurugram','rent index Gurugram',
       // Brand & features
       '360 virtual tours','verified listings','no broker properties','direct owner listings','property management',
+      // New Tools
+      'floor planner India','3D home design tool','online blueprint designer','area calculator','carpet area calculator','property valuation tool','capital gains calculator India','property document checklist',
     ].join(', '),
   defaultOgImage: '/assets/images/logo/logo.png',
   twitterCard: 'summary_large_image',

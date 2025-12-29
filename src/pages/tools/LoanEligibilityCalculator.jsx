@@ -63,16 +63,16 @@
      return (
          <>
              <SEO
-                 title="Home Loan Eligibility Calculator - Check Max Loan Amount | 360Ghar"
-                 description="Check how much home loan you can get with our free Loan Eligibility Calculator. Enter your income and expenses to estimate your maximum loan amount."
-                 keywords="loan eligibility calculator, home loan eligibility, how much loan can i get, mortgage eligibility, housing loan limit, 360Ghar calculators"
+                title="Home Loan Eligibility Calculator India | Check Max Loan Amount | 360Ghar"
+                description="Check your Home Loan Eligibility instantly. Calculate the maximum loan amount you can get based on your salary, existing EMIs, and tenure. Plan your home purchase budget."
+                keywords="home loan eligibility calculator India, how much home loan can I get, housing loan eligibility check, salary based home loan calculator, 360ghar financial tools"
                  canonical="/loan-eligibility-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
              />
              <PageTitle
-                 title="Home Loan Eligibility Calculator"
-                 description="Find out the maximum home loan amount you may be eligible for based on your income and existing financial obligations."
+                 title="Home Loan Eligibility Calculator - Maximum Loan Amount | 360Ghar"
+                 description="Find out the maximum home loan amount you may be eligible for based on your income and existing financial obligations. FOIR-based calculation for Indian banks."
              />
              
              <OffCanvas />

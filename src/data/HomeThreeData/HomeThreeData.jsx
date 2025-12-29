@@ -3,10 +3,10 @@ import React from 'react';
 // Banner Three
 import BannerThreeThumb from '/assets/images/thumbs/banner-three.png'
 export const bannerThreeContent = {
-    subtitle: '360 WALKTHROUGH',
-    title: 'Your trusted real estate',
-    shapedTitle: 'partner',
-    desc: 'Turn every Rent, PG, and Sale listing into a guided, studio‑quality 360° walkthrough. 360Ghar verifies photos, details, and exact location—no duplicates or misleading posts—so Gurugram buyers, tenants, and PG seekers shortlist confidently from home.',
+    subtitle: 'INDIA\'S FIRST AI-ENABLED PLATFORM',
+    title: 'Most trusted, affordable &',
+    shapedTitle: 'transparent',
+    desc: 'India\'s first AI-enabled real estate platform with 360° virtual tours and verified properties. Our on-site team inspects every listing while your Relationship Manager handles everything end-to-end. No upfront cost—just complete transparency and value you deserve.',
     thumb: BannerThreeThumb
 }
 
@@ -15,19 +15,19 @@ export const bannerThreeContent = {
 export const aboutCheckLists = [
     {
         icon: <i className="fas fa-check"></i>,
-        text: 'Verified photos, details & exact location'
+        text: 'AI-powered property matching with verified inspections'
     },
     {
         icon: <i className="fas fa-check"></i>,
-        text: 'Free professional photography & onboarding'
+        text: 'Dedicated Relationship Manager for end-to-end support'
     },
     {
         icon: <i className="fas fa-check"></i>,
-        text: '360° guided walkthroughs for every listing'
+        text: 'Complete transparency—no hidden costs or gaslighting'
     },
     {
         icon: <i className="fas fa-check"></i>,
-        text: 'No upfront listing fee for owners'
+        text: 'No upfront cost—we only show genuine inventories'
     },
 ]
 
@@ -109,9 +109,9 @@ export const propertyTwoTabs = [
 import messageThreeIcon from '/assets/images/icons/customer-service.svg'; 
 export const messageThreeContents = {
     icon: messageThreeIcon,
-    text: 'Need help?',
+    text: 'Owners, need help?',
     number: 'info@360ghar.com',
-    desc: 'Our Gurugram team is available 7 days a week for property search, documentation, and visit scheduling—email us anytime.'
+    desc: 'Our Gurugram team is available 7 days a week for property search, documentation, and visit scheduling—email us anytime. Your dedicated Relationship Manager handles everything end-to-end so you can relax.'
 }
 
 
@@ -123,13 +123,13 @@ export const testimonialThreeContents = [
         image: userThumb1,
         name: 'Rohit Verma',
         designation: 'Gurugram Resident',
-        desc: 'Booked a 2BHK in DLF Phase 3 after shortlisting via 360° tours—no wasted site visits and no fake photos. Scheduling the visit in‑app was super easy.',
+        desc: 'Finally found a platform that doesn\'t gaslight you! My Relationship Manager handled everything from shortlisting to documentation. The AI-powered tours showed verified properties—no fake photos or bait-and-switch tactics.',
     },
     {
         image: userThumb2,
         name: 'Neha Gupta',
-        designation: 'PG Seeker – Sector 48',
-        desc: 'Found a verified PG with accurate location and amenities. The 360° walkthrough gave me full clarity before I visited.',
+        designation: 'Property Buyer',
+        desc: 'Traditional brokers charge lakhs but offer no transparency. 360Ghar gave me complete visibility, genuine properties verified by on-site inspections, and a dedicated RM who actually cared. Real value for my investment.',
     },
 ]
 
@@ -167,28 +167,28 @@ export const counterThreeContents = [
 export const faqs = [
     {
         id: 1,
-        btnText: 'How do 360° walkthroughs work?',
-        bodyText: 'Open any listing to explore a guided, studio‑quality 360° tour on mobile or desktop—no app or VR headset required.'
+        btnText: 'How is 360Ghar different from traditional brokers?',
+        bodyText: 'We don\'t gaslight you with partnered inventories. Our AI-powered platform shows verified properties inspected by our on-site team. Your dedicated Relationship Manager handles everything end-to-end—complete transparency at no upfront cost.'
     },
     {
         id: 2,
-        btnText: 'Are listings verified by 360Ghar?',
-        bodyText: 'Yes. Our team visits the property to capture photos, verify details, and confirm the exact location. We remove duplicates and misleading posts.'
+        btnText: 'What does "AI-enabled platform" mean?',
+        bodyText: 'Our AI technology powers property matching, virtual tour creation, and verification workflows. Every listing gets a studio-quality 360° walkthrough, inspected and verified by our team—ensuring you see only genuine properties.'
     },
     {
         id: 3,
-        btnText: 'What does it cost owners to list?',
-        bodyText: 'There is no upfront fee to list. For a limited time, owners get free professional photography and end‑to‑end onboarding to publish standout listings.'
+        btnText: 'Do I really get a dedicated Relationship Manager?',
+        bodyText: 'Yes! Unlike traditional brokers who just show properties, your RM manages your entire journey—from search to documentation to closing. One point of contact, complete visibility, zero hassle.'
     },
     {
         id: 4,
-        btnText: 'Which areas in Gurugram do you cover?',
-        bodyText: 'DLF Phases 1–5, Golf Course Road/Extension, MG Road, Sohna Road, Udyog Vihar, Cyber City, Sushant Lok, South City, Palam Vihar, and Sectors 28/29/45/57/62/65/67/70–79, among others.'
+        btnText: 'Why is there no upfront cost?',
+        bodyText: 'We believe in earning your trust through transparency and real value—not upfront fees. You pay only when you find the right property, and we ensure you get complete visibility and support worth every rupee.'
     },
     {
         id: 5,
-        btnText: 'Can I schedule an in‑person visit after shortlisting?',
-        bodyText: 'Yes. Use the in‑app visit scheduler from the listing page. Our team coordinates with the owner/agent and confirms your slot.'
+        btnText: 'How are properties verified?',
+        bodyText: 'Our on-site team physically inspects every property, captures 360° tours, verifies details, and confirms exact location. No fake photos, no duplicates, no misleading information—just authentic, verified listings you can trust.'
     }
 ]
 

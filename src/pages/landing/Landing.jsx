@@ -32,12 +32,11 @@ const Landing = () => {
   }, [city, facet, validIntent]);
 
   const description = useMemo(() => {
-    const base = `Browse verified ${facet.toLowerCase()} in ${city} to ${validIntent}. Photos, exact locations, 360° virtual tours, pricing, amenities, and instant visit scheduling.`;
+    const base = `Browse verified ${facet.toLowerCase()} in ${city} to ${validIntent}. All properties verified by our on-site team with 360° virtual tours. Enjoy end-to-end service by dedicated Relationship Manager.`;
     return base;
   }, [city, facet, validIntent]);
 
   const keywords = useMemo(() => {
-    const lcCity = city.toLowerCase();
     const lcFacet = facet.toLowerCase();
     const isRes = ['flats','apartments','independent house','builder floor','villa'].some(k => lcFacet.includes(k));
     const typeSyn = (() => {
@@ -70,7 +69,8 @@ const Landing = () => {
       `near metro ${city}`,
       `pet friendly ${facet} ${validIntent} in ${city}`,
     ].filter(Boolean);
-    return Array.from(new Set(basePhrases)).join(', ');
+    const brandKeywords = ['verified properties', '360 virtual tours', 'AI property search', 'on-site verified'];
+    return [...Array.from(new Set(basePhrases)), ...brandKeywords].join(', ');
   }, [city, facet, validIntent]);
 
   const breadcrumbs = useMemo(() => (
@@ -131,9 +131,10 @@ const Landing = () => {
             <div className="mt-5">
               <h2 className="h5 mb-3">Why 360Ghar?</h2>
               <ul className="text-start">
-                <li>Verified listings with exact locations and 360° virtual tours</li>
-                <li>Filters by budget, BHK, furnishing, amenities and more</li>
-                <li>Instant visit scheduling and owner/agent connect</li>
+                <li>India&apos;s first AI-Enabled and Virtual Tour first Real Estate Platform</li>
+                <li>All properties verified by our on-site team with 360° virtual tours</li>
+                <li>Dedicated Relationship Manager handles your end-to-end flow so you can relax</li>
+                <li>Full visibility, convenience, and transparency for the same brokerage amount</li>
               </ul>
             </div>
           </div>

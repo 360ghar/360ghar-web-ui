@@ -23,15 +23,15 @@ const Property = () => {
     return (
         <>
         <SEO
-          title="Properties in Gurugram | Buy, Sell, Rent Real Estate | 360Ghar"
-          description="Browse verified properties in Gurugram with 360° virtual tours. Find apartments, flats, builder floors, independent houses, and PGs in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City."
-          keywords="Gurugram properties, Gurgaon real estate, buy property Gurugram, sell property Gurgaon, rent apartments Gurugram, flats for sale in Gurgaon, flats for rent in Gurgaon, 1 BHK 2 BHK 3 BHK, ready to move flats, new launch projects, resale apartments, PG in Gurgaon, girls PG, co-living Gurugram, DLF Phase properties, Golf Course Road apartments, Sohna Road flats, Cyber City office space, near metro apartments, no broker, direct owner, verified listings, 360 virtual tours"
+          title="Properties in Gurugram | AI-Powered Search & Verified Listings | 360Ghar"
+          description="Browse verified properties in Gurugram with 360° virtual tours. Find apartments, flats, builder floors, independent houses, and PGs in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City. All properties verified by on-site team."
+          keywords="Gurugram properties, Gurgaon real estate, AI property search Gurugram, buy property Gurugram, sell property Gurgaon, rent apartments Gurugram, verified properties India, on-site verified listings, flats for sale in Gurgaon, flats for rent in Gurgaon, 1 BHK 2 BHK 3 BHK, ready to move flats, new launch projects, resale apartments, PG in Gurgaon, girls PG, co-living Gurugram, DLF Phase properties, Golf Course Road apartments, Sohna Road flats, Cyber City office space, near metro apartments, no broker, direct owner, verified listings, 360 virtual tours"
           canonical="/properties"
           image={siteMetadata.defaultOgImage}
           type="website"
           structuredData={propertyStructuredData}
         />
-        <PageTitle title="360Ghar - Property" />
+        <PageTitle title="360Ghar - Verified Properties with AI-Powered Search" />
 
         <OffCanvas />
         <MobileMenu />

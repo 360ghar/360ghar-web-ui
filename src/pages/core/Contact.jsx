@@ -14,9 +14,9 @@ const Contact = () => {
     return (
         <>
         <SEO
-          title="Contact 360Ghar | Real Estate Virtual Tours"
-          description="Get in touch with 360Ghar for property buying, selling, renting, and immersive 360° virtual tours. Based in Gurugram, Haryana."
-          keywords="contact 360Ghar, real estate contact, Gurgaon, Gurugram, virtual tours"
+          title="Contact 360Ghar | Dedicated Relationship Manager Support | AI Real Estate Platform"
+          description="Get in touch with 360Ghar, India's first AI-enabled real estate platform. Contact for dedicated Relationship Manager support, verified property listings, 360° virtual tours, and end-to-end property services in Gurugram and Delhi NCR."
+          keywords="contact 360Ghar, relationship manager, real estate contact, Gurgaon, Gurugram, virtual tours, verified properties, AI real estate platform"
           canonical="/contact"
           image={siteMetadata.defaultOgImage}
           type="website"
@@ -45,7 +45,7 @@ const Contact = () => {
             },
           }}
         />
-        <PageTitle title="360Ghar - Contact Us" />
+        <PageTitle title="360Ghar - Dedicated Relationship Manager Support" />
 
         <OffCanvas />
         <MobileMenu />
