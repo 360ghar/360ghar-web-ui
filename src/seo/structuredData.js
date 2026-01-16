@@ -392,6 +392,22 @@ export const realEstateStructuredData = {
           '@type': 'Answer',
           text: 'Our 360° virtual tours let you explore properties online as if you were there in person. You can navigate through rooms, zoom in on details, check layouts, view amenities, and understand the space before scheduling visits. This saves time and helps you make confident decisions.'
         }
+      },
+      {
+        '@type': 'Question',
+        name: 'Does 360Ghar offer property management features for landlords?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes, 360Ghar provides a complete property management platform for landlords. Features include financial dashboards for tracking rent and expenses, tenant management tools, maintenance request tracking, secure document storage, and automated financial reports. All accessible through our mobile app.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How can I track rent collection on 360Ghar?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: "360Ghar's financial dashboard gives you real-time visibility into rent collection. Track outstanding payments, view payment history, generate invoices, and get notifications for due dates."
+        }
       }
     ]
   },
@@ -458,6 +474,34 @@ export const realEstateStructuredData = {
       'Real Estate Technology',
       'Indian Property Market'
     ]
+  },
+
+  // Mobile Application schema for Property Management features
+  mobileApplication: {
+    '@type': 'MobileApplication',
+    name: '360Ghar - Property Management & Search',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Android',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'INR'
+    },
+    description: 'Complete property management for landlords and AI-powered property search. Manage rent, tenants, maintenance, and documents.',
+    featureList: [
+      'Financial Dashboard',
+      'Tenant Management',
+      'Maintenance Tracking',
+      'Document Vault',
+      'AI Property Search',
+      '360 Virtual Tours',
+      'Visit Scheduling'
+    ],
+    downloadUrl: 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360',
+    publisher: {
+      '@type': 'Organization',
+      name: '360Ghar'
+    }
   }
 };
 

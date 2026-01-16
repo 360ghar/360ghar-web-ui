@@ -45,6 +45,8 @@ export const siteMetadata = {
       '360 virtual tours','verified listings','no broker properties','direct owner listings','property management',
       // New Tools
       'floor planner India','3D home design tool','online blueprint designer','area calculator','carpet area calculator','property valuation tool','capital gains calculator India','property document checklist',
+      // Property Management keywords
+      'property management app India','landlord app','rental management software','tenant management platform','rent collection app','property expense tracking','lease management software','maintenance request tracker','property document management','landlord dashboard','rental income tracker','property owner app',
     ].join(', '),
   defaultOgImage: '/assets/images/logo/logo.png',
   twitterCard: 'summary_large_image',

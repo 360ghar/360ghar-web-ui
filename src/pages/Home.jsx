@@ -16,6 +16,7 @@ import CounterThree from '../components/ui/CounterThree';
 import Faq from '../components/layout/Faq';
 import BlogThree from '../components/blog/BlogThree';
 import ToolShowcase from '../components/ui/ToolShowcase';
+import PropertyManagementShowcase from '../components/ui/PropertyManagementShowcase';
 import PageTitle from '../common/PageTitle';
 import SEO from '../common/SEO';
 import { realEstateStructuredData } from '../seo/structuredData';
@@ -31,7 +32,8 @@ const Home = () => {
         realEstateStructuredData.localBusiness,
         realEstateStructuredData.realEstateListing,
         realEstateStructuredData.faq,
-        realEstateStructuredData.knowledgePanel
+        realEstateStructuredData.knowledgePanel,
+        realEstateStructuredData.mobileApplication
     ];
 
     return (
@@ -69,6 +71,8 @@ const Home = () => {
                 {/* Message Three */}
                 <MessageThree/>
 
+                {/* Property Management Showcase */}
+                <PropertyManagementShowcase/>
 
                 {/* Newsletter */}
                 <Newsletter/>
