@@ -7,6 +7,7 @@
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
+ import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
  
  const AreaConverter = () => {
      const [amount, setAmount] = useState(1);
@@ -68,6 +69,12 @@
                  canonical="/area-converter"
                  image={siteMetadata.defaultOgImage}
                  type="website"
+                 structuredData={generateToolSchema(
+                     toolSchemas.areaConverter.name,
+                     toolSchemas.areaConverter.description,
+                     toolSchemas.areaConverter.keywords,
+                     toolSchemas.areaConverter.category
+                 )}
              />
              <PageTitle
                  title="Land Area Unit Converter - Indian Real Estate Calculator | 360Ghar"

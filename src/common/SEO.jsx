@@ -46,13 +46,21 @@ const SEO = ({
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta httpEquiv="Content-Language" content="en-IN" />
       <meta name="geo.region" content="IN-HR" />
-      <meta name="geo.placename" content="Gurgaon, Haryana, India" />
+      <meta name="geo.placename" content="Gurgaon, Gurugram, Haryana, India" />
       <meta name="geo.position" content="28.4595;77.0266" />
       <meta name="ICBM" content="28.4595, 77.0266" />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="3 days" />
       <meta name="rating" content="general" />
       <meta name="target" content="all" />
+
+      {/* Enhanced GEO meta tags for local SEO */}
+      <meta name="contactNumber" content="+91-8178340031" />
+      <meta name="contactEmail" content="info@360ghar.com" />
+      <meta name="contactOfficeHours" content="Mon-Fri 9:00-21:00, Sat-Sun 10:00-20:00" />
+      <meta name="businessLocation" content="Gurgaon, Haryana" />
+      <meta name="serviceArea" content="Gurgaon, Delhi, Noida, Faridabad, Ghaziabad" />
+      <meta name="realEstateListingType" content="Sale, Rent, PG" />
 
       {/* Dublin Core */}
       <meta name="DC.title" content="360Ghar – Real Estate in Gurgaon" />

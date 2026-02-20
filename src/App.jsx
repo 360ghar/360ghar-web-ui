@@ -6,6 +6,8 @@ import { useLocationStore } from './store/locationStore';
 import { useAuthStore } from './store';
 import PageLoader from './common/PageLoader';
 import ScrollToTop from './common/ScrollToTop';
+import SEO from './common/SEO';
+import { realEstateStructuredData } from './seo/structuredData';
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'));
@@ -49,6 +51,10 @@ const ForAI = lazy(() => import('./pages/core/ForAI'));
 const FacetLanding = lazy(() => import('./pages/landing/FacetLanding'));
 const McpLogin = lazy(() => import('./pages/account/McpLogin'));
 
+// Locality pages dynamic template
+const LocalityTemplate = lazy(() => import('./pages/localities/LocalityTemplate'));
+const LocalitiesDirectory = lazy(() => import('./pages/localities/LocalitiesDirectory'));
+
 function App() {
   const initializeLocation = useLocationStore((state) => state.initializeLocation);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -58,9 +64,15 @@ function App() {
     initializeAuth();
   }, [initializeLocation, initializeAuth]);
 
+  // Global schemas applied to every page
+  const globalSchemas = [
+    realEstateStructuredData.organization,
+  ];
+
   return (
     <>
       <BrowserRouter>
+        <SEO structuredData={globalSchemas} />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -99,6 +111,10 @@ function App() {
             <Route path="/design-blueprint" element={<DesignBlueprint />} />
             <Route path="/vastu-checker" element={<VastuChecker />} />
             <Route path="/ai-design-studio" element={<AIDesignStudio />} />
+
+            {/* Locality pages dynamic route handling 1000+ locations */}
+            <Route path="/localities" element={<LocalitiesDirectory />} />
+            <Route path="/locality/:slug-gurgaon" element={<LocalityTemplate />} />
             <Route path="/gurugram-real-estate-guide" element={<GurugramGuide />} />
             <Route path="/property-investment-gurugram" element={<PropertyInvestment />} />
             <Route path="/for-ai" element={<ForAI />} />
@@ -113,7 +129,7 @@ function App() {
         </Suspense>
       </BrowserRouter>
 
-      <ScrollToTop/>
+      <ScrollToTop />
     </>
   );
 }

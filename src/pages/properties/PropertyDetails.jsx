@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import PageTitle from '../../common/PageTitle';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
-import { generatePropertyStructuredData, generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import usePropertyStore from '../../store/propertyStore';
 
 const PropertyDetails = () => {
@@ -31,27 +31,65 @@ const PropertyDetails = () => {
     const generatePropertyStructured = () => {
         if (!propertyData) return [];
 
-        const propertyStructuredData = {
-            id: propertyData.id,
-            title: propertyData.title,
-            description: propertyData.description,
-            address: propertyData.full_address,
-            city: propertyData.city || 'Gurugram',
-            propertyType: propertyData.property_type || 'Apartment',
-            listingType: propertyData.purpose === 'rent' ? 'Rent' : 'Sale',
-            bedrooms: propertyData.bhk || 1,
-            bathrooms: propertyData.bathrooms || 1,
-            balconies: propertyData.balconies || 0,
-            area: propertyData.area_sqft || 1000,
-            areaUnit: 'sqft',
-            price: propertyData.purpose === 'rent'
-                ? (propertyData.monthly_rent || propertyData.daily_rate || propertyData.base_price || 0)
-                : propertyData.base_price || 0,
-            available: propertyData.is_available !== false,
-            images: Array.isArray(propertyData.images)
+        // SingleFamilyResidence / Accommodation schema
+        const basePropertySchema = {
+            '@type': propertyData.property_type === 'villa' || propertyData.property_type === 'independent-house'
+                ? 'SingleFamilyResidence'
+                : propertyData.property_type === 'apartment' || propertyData.property_type === 'flat'
+                    ? 'Apartment'
+                    : 'Accommodation',
+            name: propertyData.title || 'Property in Gurgaon',
+            description: propertyData.description || 'Premium property with 360° virtual tour in Gurgaon',
+            url: `https://360ghar.com/property/${propertyData.id}`,
+            image: Array.isArray(propertyData.images)
                 ? propertyData.images.map(img => img.image_url).filter(Boolean)
                 : [siteMetadata.defaultOgImage],
-            url: `/property/${propertyData.id}`
+            address: {
+                '@type': 'PostalAddress',
+                streetAddress: propertyData.full_address || propertyData.locality || 'Gurgaon',
+                addressLocality: propertyData.city || 'Gurgaon',
+                addressRegion: 'Haryana',
+                postalCode: propertyData.pincode || '122001',
+                addressCountry: 'IN'
+            },
+            geo: propertyData.lat && propertyData.lng ? {
+                '@type': 'GeoCoordinates',
+                latitude: propertyData.lat,
+                longitude: propertyData.lng
+            } : undefined,
+            numberOfRooms: propertyData.bhk || 1,
+            numberOfBedrooms: propertyData.bedrooms || propertyData.bhk || 1,
+            numberOfBathroomsTotal: propertyData.bathrooms || 1,
+            floorSize: {
+                '@type': 'QuantitativeValue',
+                value: propertyData.area_sqft || 1000,
+                unitCode: 'FTK'
+            },
+            accommodationCategory: propertyData.property_type === 'apartment' || propertyData.property_type === 'flat'
+                ? 'Apartment'
+                : propertyData.property_type === 'villa'
+                    ? 'House'
+                    : propertyData.property_type || 'Apartment',
+            amenities: propertyData.amenities || [],
+            petsAllowed: propertyData.amenities?.includes('pet-friendly') ? true : false,
+        };
+
+        // RealEstateListing schema
+        const listingSchema = {
+            '@type': 'RealEstateListing',
+            name: `${propertyData.title || 'Property'} - ${propertyData.purpose === 'rent' ? 'For Rent' : 'For Sale'}`,
+            description: propertyData.description,
+            url: `https://360ghar.com/property/${propertyData.id}`,
+            listingType: propertyData.purpose === 'rent' ? 'forRent' : 'forSale',
+            datePosted: propertyData.created_at,
+            price: propertyData.purpose === 'rent'
+                ? (propertyData.monthly_rent || propertyData.daily_rate || propertyData.base_price || 0)
+                : (propertyData.base_price || 0),
+            priceCurrency: 'INR',
+            availability: propertyData.is_available !== false
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+            itemOffered: basePropertySchema
         };
 
         const breadcrumbData = [
@@ -61,7 +99,8 @@ const PropertyDetails = () => {
         ];
 
         return [
-            generatePropertyStructuredData(propertyStructuredData),
+            basePropertySchema,
+            listingSchema,
             generateBreadcrumbStructuredData(breadcrumbData)
         ];
     };
@@ -71,7 +110,14 @@ const PropertyDetails = () => {
     return (
         <>
             <SEO
-                title={propertyData?.title ? `${propertyData.title} in ${propertyData.city || 'Gurugram'} | 360Ghar` : 'Property Details | 360Ghar - Best Real Estate Platform'}
+                title={propertyData?.title
+                    ? `${propertyData.bedrooms || ''} ${propertyData.bhk || ''} BHK ${propertyData.property_type || 'Apartment'} ${propertyData.purpose === 'rent' ? 'for Rent' : 'for Sale'} in ${propertyData.locality || propertyData.city || 'Gurgaon'} | ₹${propertyData.purpose === 'rent' ? (propertyData.monthly_rent || propertyData.base_price) : propertyData.base_price} | 360Ghar`
+                    : 'Property Details | 360Ghar - Best Real Estate Platform'
+                }
+                description={propertyData?.description
+                    ? `${propertyData.description.slice(0, 160)} Verified by on-site team with 360° virtual tour in ${propertyData.locality || propertyData.city || 'Gurgaon'}. ${propertyData.purpose === 'rent' ? 'Rent' : 'Buy'} directly from owner.`
+                    : siteMetadata.defaultDescription
+                }
                 image={mainImage}
                 type="product"
                 structuredData={generatePropertyStructured()}

@@ -6,6 +6,7 @@ import OffCanvas from '../../common/OffCanvas';
 import PageTitle from '../../common/PageTitle';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
+import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import FloorPlanUpload from '../../components/vastu/FloorPlanUpload';
 import DirectionSelector from '../../components/vastu/DirectionSelector';
 import VastuLoadingState from '../../components/vastu/VastuLoadingState';
@@ -132,6 +133,12 @@ const VastuChecker = () => {
                 canonical="/vastu-checker"
                 image={siteMetadata.defaultOgImage}
                 type="website"
+                structuredData={generateToolSchema(
+                    toolSchemas.vastuChecker.name,
+                    toolSchemas.vastuChecker.description,
+                    toolSchemas.vastuChecker.keywords,
+                    toolSchemas.vastuChecker.category
+                )}
             />
             <PageTitle
                 title="Free Vastu Checker - AI Floor Plan Analysis | 360Ghar"

@@ -13,7 +13,7 @@ import { generateBlogStructuredData } from '../../seo/structuredData';
 import { siteMetadata } from '../../seo/siteMetadata';
 
 const BlogDetails = () => {
-    const { title } = useParams(); 
+    useParams(); 
 
     // Blog Data Context API
     const { blogData } = useContext(BlogDataContext);

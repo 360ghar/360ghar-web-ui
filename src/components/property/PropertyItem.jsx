@@ -6,6 +6,58 @@ const PROPERTY_IMAGE_FALLBACK = '/assets/images/thumbs/property-1.png';
 const isUsableImageUrl = (value) =>
   typeof value === 'string' && value.trim() !== '' && !/kuula\.co/i.test(value);
 
+// Generate descriptive alt text for property images
+const generatePropertyAltText = (property) => {
+  const parts = [];
+
+  // Add BHK if available
+  if (property.bhk || property.bedrooms) {
+    parts.push(`${property.bhk || property.bedrooms} BHK`);
+  }
+
+  // Add property type
+  const propertyType = property.property_type === 'apartment' || property.property_type === 'flat'
+    ? 'Apartment'
+    : property.property_type === 'villa'
+      ? 'Villa'
+      : property.property_type === 'builder_floor'
+        ? 'Builder Floor'
+        : property.property_type === 'independent-house'
+          ? 'Independent House'
+          : property.property_type || 'Property';
+  parts.push(propertyType);
+
+  // Add purpose
+  if (property.purpose) {
+    parts.push(property.purpose === 'rent' ? 'for Rent' : property.purpose === 'buy' ? 'for Sale' : 'in');
+  }
+
+  // Add location
+  if (property.locality) {
+    parts.push(`in ${property.locality}`);
+  } else if (property.city) {
+    parts.push(`in ${property.city}`);
+  }
+
+  // Add furnishing if available
+  if (property.furnishing && property.furnishing !== 'not-specified') {
+    parts.push(`(${property.furnishing})`);
+  }
+
+  // Add area if available
+  if (property.area_sqft) {
+    const existingIndex = parts.findIndex(p => p.includes(`(${property.furnishing})`));
+    if (existingIndex >= 0) {
+      parts[existingIndex] = parts[existingIndex].replace(')', `, ${property.area_sqft.toLocaleString()} sqft)`);
+    } else {
+      parts.push(`(${property.area_sqft.toLocaleString()} sqft)`);
+    }
+  }
+
+  const altText = parts.join(' ');
+  return altText ? `${altText} - 360Ghar` : 'Property listing on 360Ghar';
+};
+
 function formatCurrency(value) {
   if (value === null || value === undefined) return 'Price on request';
   try {
@@ -15,7 +67,17 @@ function formatCurrency(value) {
   }
 }
 
-const PropertyItem = ({ property, itemClass, iconsClass, btnClass, badgeText, badgeClass, btnRenderBottom, btnRenderRight }) => {
+const PropertyItem = ({
+  property,
+  itemClass,
+  iconsClass,
+  btnClass,
+  badgeText,
+  badgeClass,
+  btnRenderBottom,
+  btnRenderRight,
+  showFeatureBadges = true
+}) => {
   // Handle API-first data structure with fallbacks
   const id = property.id;
   const mainImageFromList = Array.isArray(property.images)
@@ -31,7 +93,6 @@ const PropertyItem = ({ property, itemClass, iconsClass, btnClass, badgeText, ba
   const price = formatCurrency(priceValue);
   const day = purpose === 'rent' ? (property.daily_rate ? '/per day' : '/per month') : '';
   const title = property.title || property.name || 'Property Title';
-  const desc = property.description || property.desc || 'Property description';
   const locationIcon = <i className="fas fa-map-marker-alt"></i>;
   const location = property.full_address || [property.locality, property.city, property.state].filter(Boolean).join(', ') || property.address || property.location || 'Location not specified';
   const btnText = 'View Details';
@@ -91,7 +152,7 @@ const PropertyItem = ({ property, itemClass, iconsClass, btnClass, badgeText, ba
       >
         <div className="property-item__thumb">
           <Link to={propertyURL} className="link">
-            <LazyImage src={thumb} fallbackSrc={PROPERTY_IMAGE_FALLBACK} alt="" className="cover-img" />
+            <LazyImage src={thumb} fallbackSrc={PROPERTY_IMAGE_FALLBACK} alt={generatePropertyAltText(property)} className="cover-img" />
           </Link>
           {renderBadge && <span className={badgeClass}>{badgeText}</span>}
           {showDistance}
@@ -158,7 +219,7 @@ const PropertyItem = ({ property, itemClass, iconsClass, btnClass, badgeText, ba
           </div>
 
           {/* Show top amenities and features */}
-          {(topAmenities.length > 0 || topFeatures.length > 0) && (
+          {showFeatureBadges && (topAmenities.length > 0 || topFeatures.length > 0) && (
             <div className="property-item__amenities-features mt-2">
               {topAmenities.length > 0 && (
                 <div className="amenities-preview">
@@ -213,6 +274,4 @@ const PropertyItem = ({ property, itemClass, iconsClass, btnClass, badgeText, ba
 };
 
 export default PropertyItem;
-
-
 

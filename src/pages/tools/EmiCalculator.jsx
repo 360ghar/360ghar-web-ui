@@ -6,6 +6,7 @@ import OffCanvas from '../../common/OffCanvas';
 import PageTitle from '../../common/PageTitle';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
+import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 
 const EmiCalculator = () => {
     const [loanAmount, setLoanAmount] = useState(1000000);
@@ -57,11 +58,17 @@ const EmiCalculator = () => {
         <>
         <SEO
           title="Home Loan EMI Calculator India | Calculate Mortgage EMI | 360Ghar"
-          description="Calculate your Home Loan EMI instantly with 360Ghar's free EMI Calculator. Plan your budget, check monthly installments, and view amortization schedule for properties in Gurugram & India."
+          description="Calculate your Home Loan EMI instantly with 360Ghar's free EMI Calculator. Plan your budget, check monthly installments, and view amortization schedule for properties in Gurgaon & India."
           keywords="home loan EMI calculator India, housing loan calculator, mortgage calculator India, loan repayment schedule, SBI home loan EMI, HDFC home loan EMI, real estate finance tool, 360ghar financial tools"
           canonical="/emi-calculator"
           image={siteMetadata.defaultOgImage}
           type="website"
+          structuredData={generateToolSchema(
+              toolSchemas.emiCalculator.name,
+              toolSchemas.emiCalculator.description,
+              toolSchemas.emiCalculator.keywords,
+              toolSchemas.emiCalculator.category
+          )}
         />
             <PageTitle
                 title="Home Loan EMI Calculator - Calculate EMI Online | 360Ghar"

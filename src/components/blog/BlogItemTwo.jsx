@@ -25,7 +25,7 @@ const BlogItemTwo = ({ blog }) => {
         <div className="blog-item blog-dark">
             <div className="blog-item__thumb">
                 <Link to={blogURL} onClick={()=>handleBlogClick()} className="blog-item__thumb-link">
-                    <LazyImage src={thumb} className="cover-img" alt=""/>
+                    <LazyImage src={thumb} className="cover-img" alt={`${title} - 360Ghar Blog`}/>
                 </Link>
                 <span className="blog-item__date"> {new Date().getDate()} {currentMonthName}</span>
             </div>

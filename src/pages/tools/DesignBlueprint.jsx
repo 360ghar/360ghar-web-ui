@@ -4,6 +4,7 @@ import MobileMenu from '../../common/MobileMenu';
 import OffCanvas from '../../common/OffCanvas';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
+import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 
 import './DesignBlueprint.css';
 
@@ -21,7 +22,12 @@ const DesignBlueprint = () => {
         canonical="/design-blueprint"
         image={siteMetadata.defaultOgImage}
         type="website"
-        noindex
+        structuredData={generateToolSchema(
+            toolSchemas.designBlueprint.name,
+            toolSchemas.designBlueprint.description,
+            toolSchemas.designBlueprint.keywords,
+            toolSchemas.designBlueprint.category
+        )}
       />
 
       <OffCanvas />

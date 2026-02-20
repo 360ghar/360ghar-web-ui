@@ -1,109 +1,21 @@
 User-agent: *
 Allow: /
+Allow: /sitemap.xml
+Allow: /sitemap-static.xml
+Allow: /sitemap-landing.xml
 
-# Allow all important pages for real estate
-Allow: /properties
-Allow: /property/
-Allow: /blog
-Allow: /about-us
-Allow: /contact
-Allow: /emi-calculator
-Allow: /faq
-Allow: /project
-
-# Allow static assets for better crawling
-Allow: /assets/
-Allow: /assets/images/
-Allow: /assets/css/
-Allow: /assets/js/
-
-# Block admin and user-specific pages
-Disallow: /account
-Disallow: /login
-Disallow: /register
-Disallow: /add-new-listing
-Disallow: /post-property
-Disallow: /checkout
-Disallow: /cart
-Disallow: /delete-account
-
-# Block development and unused pages
-Disallow: /home-two
-Disallow: /home-three
-Disallow: /unused/
-
-# Block API endpoints
-Disallow: /api/
+# Explicitly disallow any account, admin, or API paths if they exist
+Disallow: /account/
 Disallow: /admin/
-Disallow: /wp-admin/
-Disallow: /wp-json/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /delete-account/
 
-# Block search and filter pages that might create duplicate content
-Disallow: /*?*
-Disallow: /*search*
-Disallow: /*filter*
-
-# Block pagination after certain limit to prevent crawl budget waste
-Disallow: /*?page=*
-Disallow: /*page/*/
-
-# Sitemap location
+# Sitemaps
 Sitemap: https://360ghar.com/sitemap.xml
+Sitemap: https://360ghar.com/sitemap-static.xml
+Sitemap: https://360ghar.com/sitemap-landing.xml
 
-# Crawl delay for respectful crawling
+# Crawl Delay
 Crawl-delay: 1
-
-# Specific instructions for major search engines
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 0
-
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Slurp
-Allow: /
-Crawl-delay: 1
-
-# Allow social media crawlers
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-# Allow AI/LLM crawlers for better indexing
-User-agent: GPTBot
-Allow: /
-
-User-agent: GoogleOther
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-# Additional AI/LLM crawlers allowed
-User-agent: OpenAI-User
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: PetalBot
-Allow: /

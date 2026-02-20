@@ -11,13 +11,11 @@ import Team from '../../components/ui/Team';
 import PageTitle from '../../common/PageTitle';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
-import { realEstateStructuredData, generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
 const AboutUs = () => {
     // Enhanced structured data for About page
     const aboutStructuredData = [
-        realEstateStructuredData.organization,
-        realEstateStructuredData.localBusiness,
         {
             '@type': 'AboutPage',
             name: 'About 360Ghar - Gurugram Real Estate Platform',
@@ -34,15 +32,15 @@ const AboutUs = () => {
     return (
         <>
             <SEO
-                title="About 360Ghar - India\India'sapos;s First AI-Enabled & Virtual Tour First Real Estate Platform | Verified Properties"
-                description="Learn about 360Ghar, India\India'sapos;s first AI-enabled and virtual tour first real estate platform. All properties verified by on-site team with dedicated Relationship Managers for end-to-end service. Pay same brokerage, get full visibility, convenience and transparency."
+                title="About 360Ghar | India's #1 VR-First Real Estate Platform"
+                description="Discover how 360Ghar is transforming real estate with 360° virtual tours, zero brokerage, and on-site verified listings in Gurgaon."
                 keywords="about 360Ghar, India first AI enabled real estate platform, virtual tour first real estate, Gurugram real estate platform, property portal Gurgaon, virtual tours, on-site verified properties, relationship manager real estate, transparent brokerage, DLF Phase properties, Golf Course Road real estate, verified property listings"
                 canonical="/about-us"
                 image={siteMetadata.defaultOgImage}
                 type="website"
                 structuredData={aboutStructuredData}
             />
-            <PageTitle title="About 360Ghar - India\India'sapos;s First AI-Enabled Real Estate Platform" />
+            <PageTitle title="About 360Ghar - India's First AI-Enabled Real Estate Platform" />
 
             <OffCanvas />
             <MobileMenu />
@@ -58,22 +56,22 @@ const AboutUs = () => {
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />
-      
-                <AboutThree/>    
 
-                <Team/>
+                <AboutThree />
 
-                <PropertyTypeThree/> 
+                <Team />
 
-                <AreasWeCover/>
+                <PropertyTypeThree />
 
-                <OwnerCta className="padding-y-60"/>
+                <AreasWeCover />
+
+                <OwnerCta className="padding-y-60" />
 
                 {/* Cta */}
-                <Cta ctaClass=""/>
+                <Cta ctaClass="" />
 
                 {/* Footer */}
-                <Footer/>
+                <Footer />
             </main>
         </>
     );

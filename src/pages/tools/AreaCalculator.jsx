@@ -7,6 +7,7 @@
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
+ import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
  
  const AreaCalculator = () => {
      const [superArea, setSuperArea] = useState(1000);
@@ -41,11 +42,17 @@
          <>
              <SEO
                 title="Carpet Area Calculator India | RERA Super Built-up vs Carpet Area | 360Ghar"
-                description="Calculate actual Carpet Area from Super Built-up Area using our RERA-compliant calculator. Understand loading factor and usable space for properties in Gurugram and Delhi NCR."
+                description="Calculate actual Carpet Area from Super Built-up Area using our RERA-compliant calculator. Understand loading factor and usable space for properties in Gurgaon and Delhi NCR."
                 keywords="carpet area calculator India, super built up area vs carpet area, RERA area calculator, loading factor calculator, apartment area calculator, flat size calculator, 360ghar tools"
                  canonical="/area-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
+                 structuredData={generateToolSchema(
+                     toolSchemas.areaCalculator.name,
+                     toolSchemas.areaCalculator.description,
+                     toolSchemas.areaCalculator.keywords,
+                     toolSchemas.areaCalculator.category
+                 )}
              />
              <PageTitle
                  title="Carpet Area vs Built-up Area Calculator - RERA Compliant | 360Ghar"

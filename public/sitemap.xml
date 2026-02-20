@@ -3,10 +3,14 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://360ghar.com/sitemap-static.xml</loc>
-    <lastmod>2026-02-20T17:05:07.150Z</lastmod>
+    <lastmod>2026-02-20</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://360ghar.com/sitemap-landing.xml</loc>
-    <lastmod>2026-02-20T17:05:07.150Z</lastmod>
+    <lastmod>2026-02-20</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://360ghar.com/sitemap-localities.xml</loc>
+    <lastmod>2026-02-20</lastmod>
   </sitemap>
 </sitemapindex>

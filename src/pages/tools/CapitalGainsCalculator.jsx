@@ -7,6 +7,7 @@ import PageTitle from '../../common/PageTitle';
 import SEO from '../../common/SEO';
 import Cta from '../../components/ui/Cta';
 import { siteMetadata } from '../../seo/siteMetadata';
+import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 
 const CapitalGainsCalculator = () => {
     const [salePrice, setSalePrice] = useState(5000000);
@@ -116,6 +117,12 @@ const CapitalGainsCalculator = () => {
                 canonical="/capital-gains-tax-calculator"
                 image={siteMetadata.defaultOgImage}
                 type="website"
+                structuredData={generateToolSchema(
+                    toolSchemas.capitalGains.name,
+                    toolSchemas.capitalGains.description,
+                    toolSchemas.capitalGains.keywords,
+                    toolSchemas.capitalGains.category
+                )}
             />
             <PageTitle
                 title="Capital Gains Tax Calculator - Property Sale Tax India | 360Ghar"

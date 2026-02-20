@@ -73,99 +73,129 @@ export const topHeaderInfos = [
 // Header Nav Menu
 export const navMenus = [
     {
-      text: "Home",
-      path: "/",
+        text: "Home",
+        path: "/",
     },
     {
-      text: "Properties",
-      path: "/properties",
+        text: "Properties",
+        path: "/properties",
     },
     {
-      text: "Vastu Checker",
-      path: "/vastu-checker",
+        text: "Localities",
+        path: "/localities",
+        submenus: [
+            {
+                text: "All Localities",
+                path: "/localities",
+            },
+            {
+                text: "DLF Phase 1",
+                path: "/locality/dlf-phase-1-gurgaon",
+            },
+            {
+                text: "DLF Phase 2",
+                path: "/locality/dlf-phase-2-gurgaon",
+            },
+            {
+                text: "DLF Phase 5",
+                path: "/locality/dlf-phase-5-gurgaon",
+            },
+            {
+                text: "Golf Course Road",
+                path: "/locality/golf-course-road-gurgaon",
+            },
+            {
+                text: "Sushant Lok 1",
+                path: "/locality/sushant-lok-1-gurgaon",
+            },
+        ],
     },
     {
-      text: "Design Blueprint",
-      path: "/design-blueprint",
+        text: "Vastu Checker",
+        path: "/vastu-checker",
     },
     {
-      text: "Services",
-      path: "#",
-      submenus: [
-        {
-            text: "Post Property",
-            path: "/post-property",
-        },
-        {
-            text: "Property Valuation",
-            path: "/post-property",
-        },
-        {
-            text: "Virtual Tours",
-            path: "/properties",
-        },
-        {
-            text: "Map Search",
-            path: "/map-location",
-        },
-      ],
+        text: "Design Blueprint",
+        path: "/design-blueprint",
     },
     {
-      text: "Resources",
-      path: "#",
-      submenus: [
-        {
-            text: "Blog",
-            path: "/blog",
-        },
-        {
-            text: "About Us",
-            path: "/about-us",
-        },
-        {
-            text: "FAQ",
-            path: "/faq",
-        },
-        {
-            text: "EMI Calculator",
-            path: "/emi-calculator",
-        },
-        {
-            text: "Loan Eligibility",
-            path: "/loan-eligibility-calculator",
-        },
-        {
-            text: "Area Converter",
-            path: "/area-converter",
-        },
-        {
-            text: "Carpet Area Calc",
-            path: "/area-calculator",
-        },
-        {
-            text: "Property Checklist",
-            path: "/property-document-checklist",
-        },
-        {
-            text: "Capital Gains Tax",
-            path: "/capital-gains-tax-calculator",
-        },
-        {
-            text: "Policies",
-            path: "/policies",
-        },
-      ],
+        text: "Services",
+        path: "#",
+        submenus: [
+            {
+                text: "Post Property",
+                path: "/post-property",
+            },
+            {
+                text: "Property Valuation",
+                path: "/post-property",
+            },
+            {
+                text: "Virtual Tours",
+                path: "/properties",
+            },
+            {
+                text: "Map Search",
+                path: "/map-location",
+            },
+        ],
     },
     {
-      text: "Contact",
-      path: "/contact",
+        text: "Resources",
+        path: "#",
+        submenus: [
+            {
+                text: "Blog",
+                path: "/blog",
+            },
+            {
+                text: "About Us",
+                path: "/about-us",
+            },
+            {
+                text: "FAQ",
+                path: "/faq",
+            },
+            {
+                text: "EMI Calculator",
+                path: "/emi-calculator",
+            },
+            {
+                text: "Loan Eligibility",
+                path: "/loan-eligibility-calculator",
+            },
+            {
+                text: "Area Converter",
+                path: "/area-converter",
+            },
+            {
+                text: "Carpet Area Calc",
+                path: "/area-calculator",
+            },
+            {
+                text: "Property Checklist",
+                path: "/property-document-checklist",
+            },
+            {
+                text: "Capital Gains Tax",
+                path: "/capital-gains-tax-calculator",
+            },
+            {
+                text: "Policies",
+                path: "/policies",
+            },
+        ],
+    },
+    {
+        text: "Contact",
+        path: "/contact",
     },
 ]
 
 
 
 // Footer Content
-export const footerInfos = [ 
+export const footerInfos = [
     {
         icon: <i className="fas fa-map-marker-alt"></i>,
         text: 'Address',
@@ -257,8 +287,8 @@ import FooterGallery2 from '/assets/images/thumbs/gallery2.png';
 import FooterGallery3 from '/assets/images/thumbs/gallery3.png';
 import FooterGallery4 from '/assets/images/thumbs/gallery4.png';
 import FooterGallery5 from '/assets/images/thumbs/gallery5.png';
-import FooterGallery6 from '/assets/images/thumbs/gallery6.png'; 
-export const footerGallery = [ 
+import FooterGallery6 from '/assets/images/thumbs/gallery6.png';
+export const footerGallery = [
     {
         img: FooterGallery1,
         link: 'https://www.instagram.com/360ghar/',

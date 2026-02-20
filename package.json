@@ -6,10 +6,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "prebuild": "node scripts/generate-sitemaps.mjs",
-    "build:sitemaps": "node scripts/generate-sitemaps.mjs",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "build": "npm run build:entities && npm run build:sitemaps && vite build",
+    "build:entities": "node scripts/ingest-gurgaon-entities.mjs && node scripts/merge-entities.mjs && node scripts/build-localities-json.mjs && node scripts/generate-locality-sitemap.mjs",
+    "build:sitemaps": "node scripts/generate-sitemaps.mjs && node scripts/generate-locality-sitemap.mjs && node scripts/generate-dynamic-sitemaps.mjs",
+    "build:sitemaps:static": "node scripts/generate-sitemaps.mjs",
+    "build:sitemaps:dynamic": "node scripts/generate-dynamic-sitemaps.mjs",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -7,6 +7,7 @@
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
+ import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
  
  const LoanEligibilityCalculator = () => {
      const [income, setIncome] = useState(50000);
@@ -69,6 +70,12 @@
                  canonical="/loan-eligibility-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
+                 structuredData={generateToolSchema(
+                     toolSchemas.loanEligibility.name,
+                     toolSchemas.loanEligibility.description,
+                     toolSchemas.loanEligibility.keywords,
+                     toolSchemas.loanEligibility.category
+                 )}
              />
              <PageTitle
                  title="Home Loan Eligibility Calculator - Maximum Loan Amount | 360Ghar"

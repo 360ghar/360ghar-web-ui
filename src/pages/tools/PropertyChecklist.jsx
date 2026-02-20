@@ -7,6 +7,7 @@
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
+ import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
  
  const PropertyChecklist = () => {
      const checklistData = {
@@ -62,6 +63,12 @@
                  canonical="/property-document-checklist"
                  image={siteMetadata.defaultOgImage}
                  type="website"
+                 structuredData={generateToolSchema(
+                     toolSchemas.propertyChecklist.name,
+                     toolSchemas.propertyChecklist.description,
+                     toolSchemas.propertyChecklist.keywords,
+                     toolSchemas.propertyChecklist.category
+                 )}
              />
              <PageTitle
                  title="Property Document Checklist - Home Buying Guide India | 360Ghar"
