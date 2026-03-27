@@ -2,13 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useChatStore } from '../../store';
 import UserMessage from './messages/UserMessage';
 import BotMessage from './messages/BotMessage';
-
-// ChatWidget will be created in Phase 5
-const ChatWidget = ({ message }) => (
-  <div className="chatbot-widget chatbot-widget--placeholder">
-    <span className="chatbot-widget__name">{message.widget?.widgetName}</span>
-  </div>
-);
+import ChatWidget from './messages/ChatWidget';
 
 function WelcomeState({ onQuickAction }) {
   const quickActions = [
