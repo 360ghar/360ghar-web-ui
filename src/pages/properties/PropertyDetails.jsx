@@ -6,6 +6,10 @@ import OffCanvas from '../../common/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import PropertyDetailsSection from '../../components/property/PropertyDetailsSection';
 import { useParams } from 'react-router-dom';
+import ReraVerifiedBadge from '../../components/data-hub/ReraVerifiedBadge';
+import NeighbourhoodScorePanel from '../../components/data-hub/NeighbourhoodScorePanel';
+import ZoneInfoCard from '../../components/data-hub/ZoneInfoCard';
+import CircleRateBanner from '../../components/data-hub/CircleRateBanner';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
@@ -185,7 +189,25 @@ const PropertyDetails = () => {
                         </div>
                     </section>
                 ) : (
-                    <PropertyDetailsSection property={propertyData} />
+                    <>
+                        <PropertyDetailsSection property={propertyData} />
+
+                        {/* Data Hub panels */}
+                        <section className="padding-y-40">
+                            <div className="container container-two">
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                    {propertyData.rera_number && (
+                                        <div>
+                                            <ReraVerifiedBadge reraNumber={propertyData.rera_number} />
+                                        </div>
+                                    )}
+                                    <CircleRateBanner sector={propertyData.locality || propertyData.sector} />
+                                    <ZoneInfoCard sector={propertyData.locality || propertyData.sector} />
+                                    <NeighbourhoodScorePanel listingId={propertyData.id} />
+                                </div>
+                            </div>
+                        </section>
+                    </>
                 )}
 
                 {/* Cta */}
