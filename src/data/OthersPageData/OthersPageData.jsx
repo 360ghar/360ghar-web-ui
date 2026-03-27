@@ -774,28 +774,28 @@ export const cartItems = [
         thumb: cartThumb1,
         title: '3BHK Luxury Apartment',
         locationIcon: <i className="fas fa-map-marker-alt"></i>,
-        location: 'Sector 56, Gurgaon, Haryana',
+        location: 'Sector 56, Gurugram, Haryana',
         price: '85.10'
     },
     {
         thumb: cartThumb2,
         title: '2BHK Modern Flat',
         locationIcon: <i className="fas fa-map-marker-alt"></i>,
-        location: 'Sector 56, Gurgaon, Haryana',
+        location: 'Sector 56, Gurugram, Haryana',
         price: '45,000'
     },
     {
         thumb: cartThumb3,
         title: '4BHK Penthouse',
         locationIcon: <i className="fas fa-map-marker-alt"></i>,
-        location: 'Sector 56, Gurgaon, Haryana',
+        location: 'Sector 56, Gurugram, Haryana',
         price: '1,20,000'
     },
     {       
         thumb: cartThumb4,
         title: '3BHK Luxury Apartment',
         locationIcon: <i className="fas fa-map-marker-alt"></i>,
-        location: 'Sector 56, Gurgaon, Haryana',
+        location: 'Sector 56, Gurugram, Haryana',
         price: '95,000'
     },
 ]
@@ -896,49 +896,49 @@ export const projectItems = [
         id: 1,
         thumb: projectItemThumb1,
         title: 'Turning Dreams into Addresses Home State',
-        desc: 'Explore premium residential and commercial properties in Gurgaon with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
+        desc: 'Explore premium residential and commercial properties in Gurugram with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
     },
     {
         id: 2,
         thumb: projectItemThumb2,
         title: 'Your journey homeownership starts here too',
-        desc: 'Explore premium residential and commercial properties in Gurgaon with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
+        desc: 'Explore premium residential and commercial properties in Gurugram with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
     },
     {
         id: 3,
         thumb: projectItemThumb3,
         title: 'Luxury Apartments in Sector 62',
-        desc: 'Discover premium 2BHK and 3BHK apartments in Sector 62, Gurgaon with world-class amenities, 24/7 security, and proximity to major business hubs. Our 360° virtual tours let you explore every corner of these modern living spaces from the comfort of your home.',
+        desc: 'Discover premium 2BHK and 3BHK apartments in Sector 62, Gurugram with world-class amenities, 24/7 security, and proximity to major business hubs. Our 360° virtual tours let you explore every corner of these modern living spaces from the comfort of your home.',
     },
     {
         id: 4,
         thumb: projectItemThumb4,
         title: 'Commercial Complex in Sector 18',
-        desc: 'Explore premium residential and commercial properties in Gurgaon with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
+        desc: 'Explore premium residential and commercial properties in Gurugram with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
     },
     {
         id: 5,
         thumb: projectItemThumb1,
         title: 'Building Trust, One Home at a Time',
-        desc: 'Explore premium residential and commercial properties in Gurgaon with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
+        desc: 'Explore premium residential and commercial properties in Gurugram with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
     },
     {
         id: 6,
         thumb: projectItemThumb2,
         title: 'Independent Houses in Sector 49',
-        desc: 'Explore premium residential and commercial properties in Gurgaon with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
+        desc: 'Explore premium residential and commercial properties in Gurugram with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
     },
     {
         id: 7,
         thumb: projectItemThumb3,
         title: 'Guiding You Home with Experience',
-        desc: 'Explore premium residential and commercial properties in Gurgaon with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
+        desc: 'Explore premium residential and commercial properties in Gurugram with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
     },
     {
         id: 8,
         thumb: projectItemThumb4,
         title: 'Villa Projects in DLF Phase 2',
-        desc: 'Explore premium residential and commercial properties in Gurgaon with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
+        desc: 'Explore premium residential and commercial properties in Gurugram with our comprehensive real estate platform. From luxury apartments to office spaces, we provide detailed information and immersive 360° tours to help you make informed property decisions.',
     },
 ]
 

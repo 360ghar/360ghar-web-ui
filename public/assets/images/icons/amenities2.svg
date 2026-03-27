@@ -2,11 +2,11 @@
 <path d="M11 16C8.1875 16 6 13.8125 6 11C6 8.25 8.1875 6 11 6C13.75 6 16 8.25 16 11C16 13.8125 13.75 16 11 16ZM34 6C37.3125 6 40 8.6875 40 12V27C40 27.5625 39.5 28 39 28H37C36.4375 28 36 27.5625 36 27V24H4V27C4 27.5625 3.5 28 3 28H1C0.4375 28 0 27.5625 0 27V1C0 0.5 0.4375 0 1 0H3C3.5 0 4 0.5 4 1V18H18V7C18 6.5 18.4375 6 19 6H34Z" fill="url(#paint0_linear_4024_1365)"/>
 <defs>
 <linearGradient id="paint0_linear_4024_1365" x1="0.0165942" y1="14.0006" x2="40.0163" y2="14.0006" gradientUnits="userSpaceOnUse">
-<stop stop-color="#F69220"/>
+<stop stop-color="#ff6b00"/>
 <stop offset="0.2863" stop-color="#F68E20"/>
 <stop offset="0.5401" stop-color="#F48421"/>
 <stop offset="0.7807" stop-color="#F37221"/>
-<stop offset="1" stop-color="#F05A22"/>
+<stop offset="1" stop-color="#cc5500"/>
 </linearGradient>
 </defs>
 </svg>

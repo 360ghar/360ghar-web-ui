@@ -33,7 +33,7 @@ export const generateToolSchema = (toolName, description, keywords, category = '
 export const toolSchemas = {
     emiCalculator: {
         name: 'Home Loan EMI Calculator',
-        description: "Calculate your Home Loan EMI instantly with 360Ghar's free EMI Calculator. Plan your budget, check monthly installments, and view amortization schedule for properties in Gurgaon & India.",
+        description: "Calculate your Home Loan EMI instantly with 360Ghar's free EMI Calculator. Plan your budget, check monthly installments, and view amortization schedule for properties in Gurugram & India.",
         keywords: 'home loan EMI calculator India, housing loan calculator, mortgage calculator India, loan repayment schedule, EMI calculation, property loan calculator, SBI home loan EMI, HDFC home loan EMI, real estate finance tool, 360ghar financial tools',
         category: 'FinanceApplication'
     },

@@ -3,7 +3,7 @@ export const authors = {
     name: 'Saksham Mittal',
     slug: 'saksham-mittal',
     title: 'Founder & CEO',
-    bio: 'Saksham Mittal is the founder of 360Ghar, India\'s first AI + VR-first real estate platform. With deep expertise in PropTech and the Gurgaon real estate market, he leads product strategy and technology innovation.',
+    bio: 'Saksham Mittal is the founder of 360Ghar, India\'s first AI + VR-first real estate platform. With deep expertise in PropTech and the Gurugram real estate market, he leads product strategy and technology innovation.',
     image: '/assets/images/team/team1.png',
     linkedin: 'https://www.linkedin.com/in/saksham360/',
     credentials: 'Real Estate Technology, AI/ML, Product Strategy',
@@ -13,7 +13,7 @@ export const authors = {
     name: '360Ghar Team',
     slug: '360ghar-team',
     title: 'Real Estate Research Team',
-    bio: 'The 360Ghar research team covers property market trends, locality guides, and verified listing insights across Gurgaon and Delhi NCR. Every insight is backed by on-ground verification.',
+    bio: 'The 360Ghar research team covers property market trends, locality guides, and verified listing insights across Gurugram and Delhi NCR. Every insight is backed by on-ground verification.',
     image: '/assets/images/logo/logo.png',
     organization: '360Ghar Technologies Pvt Ltd',
   },
@@ -41,7 +41,7 @@ export function getAuthorSchema(authorSlug) {
       name: '360Ghar',
       url: 'https://360ghar.com',
     },
-    knowsAbout: author.credentials || 'Real Estate, Property Market, Gurgaon Properties',
+    knowsAbout: author.credentials || 'Real Estate, Property Market, Gurugram Properties',
     sameAs: author.linkedin ? [author.linkedin] : [],
   };
 }

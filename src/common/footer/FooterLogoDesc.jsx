@@ -22,7 +22,7 @@ const FooterLogoDesc = () => {
             <div className="footer-item__logo mb-3">
                 <LogoWhite />
             </div>
-            <p className="footer-item__desc">India&apos;s first 360° Home Walkthrough Platform to easily Rent, Buy, and Sell properties in Gurugram</p>
+            <p className="footer-item__desc">India&apos;s VR-First Way to Find a Home. Verified properties with studio-quality 360° guided walkthroughs in Gurugram. Buy, sell, or rent — no fake listings, zero upfront fees.</p>
 
             {/* Contact Info */}
             <div className="footer-contact-info mt-4">

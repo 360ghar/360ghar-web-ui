@@ -16,7 +16,7 @@ const TERMS_DATA = [
     title: '2. Referral Qualification',
     content: `
       <ul>
-        <li>The referred property must be located within 360Ghar's current service areas (primarily Gurgaon/Delhi NCR).</li>
+        <li>The referred property must be located within 360Ghar's current service areas (primarily Gurugram/Delhi NCR).</li>
         <li>The property owner must be the legal owner with authority to rent or sell the property.</li>
         <li><strong>Duplicate/Redundant Properties:</strong> Properties already listed on 360Ghar or previously referred by any party are not eligible. Determination is made by 360Ghar based on address verification.</li>
         <li>The property must pass 360Ghar's on-ground verification process.</li>

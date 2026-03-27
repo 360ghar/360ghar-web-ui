@@ -2,7 +2,7 @@ const fallbackAmenities = [
     {
         icon: 'fa-route',
         title: 'Road Connectivity',
-        description: 'Smooth access to key Gurgaon corridors for everyday commute.'
+        description: 'Smooth access to key Gurugram corridors for everyday commute.'
     },
     {
         icon: 'fa-school',

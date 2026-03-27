@@ -70,7 +70,7 @@ input[type="button"] {
 }
 
 .btn-outline-main {
-    color: var(--main-color) !important;
+    color: var(--main-color-dark) !important;
     border-color: var(--main-color) !important;
     transition: all 200ms ease !important;
 }
@@ -167,7 +167,7 @@ a:not(.btn):active {
 .dropdown-item,
 .breadcrumb-item a {
     &:active {
-        background-color: rgba(15, 118, 110, 0.1);
+        background-color: rgba(255, 107, 0, 0.1);
     }
 }
 

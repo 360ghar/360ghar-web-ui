@@ -210,7 +210,7 @@
 }
 
 .comparison-table .us-column {
-  background: rgba(15, 118, 110, 0.05);
+  background: rgba(255, 107, 0, 0.05);
 }
 
 .comparison-table .them-column {
@@ -269,7 +269,7 @@
 
 .quick-compare-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(15, 118, 110, 0.08);
+  box-shadow: 0 8px 16px rgba(255, 107, 0, 0.08);
 }
 
 .feature-label {
@@ -334,15 +334,15 @@
 
 .advantage-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(15, 118, 110, 0.1);
-  border-color: rgba(15, 118, 110, 0.2);
+  box-shadow: 0 16px 32px rgba(255, 107, 0, 0.1);
+  border-color: rgba(255, 107, 0, 0.2);
 }
 
 .advantage-icon {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: rgba(15, 118, 110, 0.12);
+  background: rgba(255, 107, 0, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -518,8 +518,8 @@
 }
 
 .comparison-faq .faq-item:hover {
-  border-color: rgba(15, 118, 110, 0.3);
-  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.06);
+  border-color: rgba(255, 107, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(255, 107, 0, 0.06);
 }
 
 .comparison-faq .faq-question {

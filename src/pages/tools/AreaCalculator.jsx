@@ -27,7 +27,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
          <>
              <SEO
                 title="Carpet Area Calculator India | RERA Super Built-up vs Carpet Area | 360Ghar"
-                description="Calculate actual Carpet Area from Super Built-up Area using our RERA-compliant calculator. Understand loading factor and usable space for properties in Gurgaon and Delhi NCR."
+                description="Calculate actual Carpet Area from Super Built-up Area using our RERA-compliant calculator. Understand loading factor and usable space for properties in Gurugram and Delhi NCR."
                 keywords="carpet area calculator India, super built up area vs carpet area, RERA area calculator, loading factor calculator, apartment area calculator, flat size calculator, 360ghar tools"
                  canonical="/area-calculator"
                  image={siteMetadata.defaultOgImage}
@@ -95,7 +95,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                          <div className="results-card bg-white p-4 rounded-3 shadow-sm h-100">
                                              <h4 className="mb-4">Area Breakdown</h4>
                                              
-                                             <div className="mb-4 p-3 rounded-3" style={{backgroundColor: '#eefcf5'}}>
+                                             <div className="mb-4 p-3 rounded-3" style={{backgroundColor: '#fff5eb'}}>
                                                  <label className="text-success fw-bold small">ESTIMATED CARPET AREA (Usable Space)</label>
                                                  <div className="display-6 fw-bold text-dark">{carpetArea} <span className="fs-5 text-muted">Sq. Ft.</span></div>
                                                  <div className="small text-muted mt-1">

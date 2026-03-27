@@ -170,7 +170,7 @@ const buildConnectivityItems = (localityName, city) => [
     {
         icon: 'fa-subway',
         name: 'Metro Network',
-        details: `Commuters in ${localityName} can plan practical routes through Gurgaon's metro corridors.`
+        details: `Commuters in ${localityName} can plan practical routes through Gurugram's metro corridors.`
     },
     {
         icon: 'fa-road',
@@ -229,7 +229,7 @@ const LocalityTemplate = () => {
 
         const localityName = localityInfo.name;
         const localitySlug = localityInfo.slug;
-        const city = localityInfo.city || 'Gurgaon';
+        const city = localityInfo.city || 'Gurugram';
         const entityType = toTitleCase(localityInfo.entityType || localityInfo.type || 'Locality');
         const aliases = Array.isArray(localityInfo.aliases) ? localityInfo.aliases : [];
         const description = localityInfo.description || `Find verified properties, pricing trends, and locality insights in ${localityName}, ${city}.`;

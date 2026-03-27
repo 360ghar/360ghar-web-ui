@@ -49,10 +49,10 @@ All UI components must follow the 360Ghar brand guidelines defined in `src/style
 
 | Variable | Hex Value | Usage |
 |----------|-----------|-------|
-| `--main-color` | `#0F766E` | Primary teal - buttons, highlights, hero sections |
-| `--main-color-dark` | `#134E4A` | Darker variant - hover states, gradients |
-| `--main-color-light` | `#14B8A6` | Lighter variant - secondary highlights |
-| `--main-color-lighter` | `#F0FDFA` | Very light - subtle backgrounds |
+| `--main-color` | `#ff6b00` | Primary orange - buttons, highlights, hero sections |
+| `--main-color-dark` | `#cc5500` | Darker variant - hover states, gradients |
+| `--main-color-light` | `#ff8c3a` | Lighter variant - secondary highlights |
+| `--main-color-lighter` | `#fff5eb` | Very light - subtle backgrounds |
 | `--cta-color` | `#0369A1` | Call-to-action buttons, links |
 
 ### Semantic Colors
@@ -103,7 +103,7 @@ All cards should follow this consistent pattern:
 
 .card-name:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px rgba(15, 118, 110, 0.1);
+  box-shadow: 0 16px 32px rgba(255, 107, 0, 0.1);
 }
 ```
 
@@ -118,7 +118,7 @@ All cards should follow this consistent pattern:
 ### Gradients (Brand Colors Only)
 
 ```scss
-// Correct - Use brand teal gradient
+// Correct - Use brand orange gradient
 background: linear-gradient(135deg, var(--main-color) 0%, var(--main-color-dark) 100%);
 
 // Wrong - Never use generic purple/blue gradients
@@ -141,15 +141,15 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
 ### Do Not
 
-- ❌ Hardcode hex colors in components (e.g., `color: #0F766E`)
-- ❌ Use purple/blue gradients (use teal brand gradient)
+- ❌ Hardcode hex colors in components (e.g., `color: #ff6b00`)
+- ❌ Use purple/blue gradients (use orange brand gradient)
 - ❌ Skip CSS custom properties
 - ❌ Use inline styles for colors
 - ❌ Create new color variables outside `_theme.scss`
 
 ### Always
 
-- ✅ Use `var(--main-color)` for primary teal
+- ✅ Use `var(--main-color)` for primary orange
 - ✅ Use `var(--success-color)` for positive indicators
 - ✅ Use `var(--danger-color)` for negative indicators
 - ✅ Use semantic classes like `text-success`, `text-muted`

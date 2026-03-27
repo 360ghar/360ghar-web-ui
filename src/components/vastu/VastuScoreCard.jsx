@@ -2,7 +2,7 @@
 const VastuScoreCard = ({ score, summary, confidence, hasWarnings }) => {
     const getScoreColor = (score) => {
         if (score >= 8) return '#28a745'; // Green - Excellent
-        if (score >= 6) return '#F69220'; // Orange - Good (theme color)
+        if (score >= 6) return '#ff6b00'; // Orange - Good (theme color)
         if (score >= 4) return '#ffc107'; // Yellow - Needs Improvement
         return '#dc3545'; // Red - Poor
     };

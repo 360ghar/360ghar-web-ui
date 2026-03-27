@@ -61,8 +61,8 @@
     --heading-six: clamp(1rem, 0.769rem + 0.6813vw, 1.25rem);
   /* Font Size End */
   /* Color Variables Start */
-    --main-gradient: linear-gradient(90deg, #F69220 0.04%, #F68E20 28.67%, #F48421 54.05%, #F37221 78.11%, #F05A22 100.04%);
-    --main-gradient-rev: linear-gradient(270deg, #F69220 0.04%, #F68E20 28.67%, #F48421 54.05%, #F37221 78.11%, #F05A22 100.04%);
+    --main-gradient: linear-gradient(90deg, #ff8c3a 0%, #ff7d1a 29%, #ff6b00 54%, #e05e00 78%, #cc5500 100%);
+    --main-gradient-rev: linear-gradient(270deg, #ff8c3a 0%, #ff7d1a 29%, #ff6b00 54%, #e05e00 78%, #cc5500 100%);
   /* Gray Color */
     --gray-h: 0;
     --gray-s: 0%;
@@ -3226,7 +3226,7 @@ input[type=number] {
 
 /* Active page indicator */
 .nav-menu__link.active {
-    color: #0F766E !important;
+    color: #ff6b00 !important;
 }
 
 .nav-menu__link.active::after {
@@ -3236,7 +3236,7 @@ input[type=number] {
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: #0F766E;
+    background-color: #ff6b00;
 }
 
 /* User dropdown menu styles */
@@ -3267,7 +3267,7 @@ input[type=number] {
 
 .dropdown-link:hover {
     background-color: #f3f4f6;
-    color: #0F766E;
+    color: #ff6b00;
 }
 
 .dropdown-link i {

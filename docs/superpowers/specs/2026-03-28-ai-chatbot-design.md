@@ -15,7 +15,7 @@ App.jsx
 └── <ChatBot />                    — Lazy-loaded orchestrator, inside BrowserRouter
     ├── <ChatBubble />             — Fixed FAB button, bottom-right
     └── <ChatPanel />              — Slide-up overlay panel (conditional on isOpen)
-        ├── <ChatHeader />         — Teal header bar with title + controls
+        ├── <ChatHeader />         — Orange header bar with title + controls
         ├── <ChatMessages />       — Scrollable message list + welcome state
         │   ├── <UserMessage />    — Right-aligned user bubble
         │   ├── <BotMessage />     — Left-aligned markdown bubble + tool chips
@@ -196,7 +196,7 @@ Each widget is wrapped in an error boundary. Widgets receive `structuredContent`
 ### Chat Bubble
 - Position: `fixed; bottom: 24px; right: 24px` (mobile: `bottom: 16px; right: 16px`)
 - Size: `56px` circle (mobile: `48px`)
-- Background: teal gradient `#0F766E` → `#14B8A6`
+- Background: orange gradient `#ff6b00` → `#ff8c3a`
 - Icon: chat SVG (closed) / X SVG (open)
 - Shadow: `var(--shadow-lg)`
 - Pulse animation on first load (3s, once)
@@ -211,7 +211,7 @@ Each widget is wrapped in an error boundary. Widgets receive `structuredContent`
 - z-index: `9998`
 
 ### Chat Header
-- Background: `#0F766E`
+- Background: `#ff6b00`
 - Text: white, "360Ghar AI", Josefin Sans font
 - Status dot (green) + "Online" text
 - New Chat button (icon) + Close button (X)
@@ -219,16 +219,16 @@ Each widget is wrapped in an error boundary. Widgets receive `structuredContent`
 - Border-radius: `16px 16px 0 0` (desktop)
 
 ### Messages
-- **User:** right-aligned, teal bg `#0F766E`, white text, `border-radius: 16px 16px 4px 16px`
+- **User:** right-aligned, orange bg `#ff6b00`, white text, `border-radius: 16px 16px 4px 16px`
 - **Bot:** left-aligned, gray bg `#F8F8F8`, dark text, `border-radius: 16px 16px 16px 4px`, markdown via `react-markdown` + `remark-gfm`
-- **Tool chips:** small pills, teal border, animated spinner → checkmark/X, `12-13px` text
-- **Widgets:** full-width cards, `border-left: 3px solid #0F766E`, slight shadow
+- **Tool chips:** small pills, orange border, animated spinner → checkmark/X, `12-13px` text
+- **Widgets:** full-width cards, `border-left: 3px solid #ff6b00`, slight shadow
 
 ### Input Area
 - Sticky bottom, `border-top: 1px solid #E0E0E0`
 - Auto-growing textarea (1-4 lines), `border-radius: 24px`
 - Placeholder: "Ask me anything..."
-- Send: teal circle with arrow icon, `44px` touch target
+- Send: orange circle with arrow icon, `44px` touch target
 - Stop button (during streaming): replaces send, red accent
 - Max: 4000 characters
 

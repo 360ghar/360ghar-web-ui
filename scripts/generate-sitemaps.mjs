@@ -76,7 +76,7 @@ const staticRoutes = [
 
 // Cities and facets for programmatic landing pages
 const cities = [
-  'Gurugram', 'Gurgaon', 'Delhi', 'Noida', 'Ghaziabad', 'Faridabad',
+  'Gurgaon', 'Delhi', 'Noida', 'Ghaziabad', 'Faridabad',
   'Mumbai', 'Thane', 'Pune', 'Bengaluru', 'Hyderabad', 'Chennai', 'Kolkata',
   'Jaipur', 'Chandigarh', 'Mohali', 'Lucknow', 'Indore'
 ];
@@ -114,7 +114,7 @@ for (const city of cities) {
 }
 
 // Facet variants: limited to priority cities and residential types to control size
-const priorityCities = ['Gurugram','Gurgaon','Delhi','Noida'];
+const priorityCities = ['Gurgaon','Delhi','Noida'];
 const bhks = ['1-bhk','1-5-bhk','2-bhk','2-5-bhk','3-bhk','4-bhk','5-bhk'];
 const budgets = [
   // Rent budgets

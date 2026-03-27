@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const NearbyLocalities = ({ currentLocality, items = [], city = 'Gurgaon' }) => {
+const NearbyLocalities = ({ currentLocality, items = [], city = 'Gurugram' }) => {
     if (!items.length) return null;
 
     return (

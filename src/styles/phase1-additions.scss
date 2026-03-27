@@ -82,7 +82,7 @@
     width: 280px;
     height: 500px;
     margin: 0 auto;
-    background: linear-gradient(135deg, var(--main-color) 0%, #ff6b6b 100%);
+    background: linear-gradient(135deg, var(--main-color) 0%, #cc5500 100%);
     border-radius: 40px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     position: relative;
@@ -329,7 +329,7 @@
 
   &:hover:not(:disabled) {
     border-color: var(--main-color);
-    color: var(--main-color);
+    color: var(--main-color-dark);
   }
 
   &.active {
@@ -687,7 +687,7 @@
   border: 1px solid var(--border-color-light);
   border-radius: 24px;
   padding: 28px;
-  box-shadow: 0 16px 36px rgba(15, 118, 110, 0.08);
+  box-shadow: 0 16px 36px rgba(255, 107, 0, 0.08);
 }
 
 .locality-breadcrumb-list {
@@ -735,7 +735,7 @@
 }
 
 .locality-pill {
-  background: rgba(15, 118, 110, 0.12);
+  background: rgba(255, 107, 0, 0.12);
   color: var(--main-color-dark);
 }
 
@@ -771,7 +771,7 @@
   position: relative;
   border-radius: 18px;
   overflow: hidden;
-  border: 1px solid rgba(15, 118, 110, 0.16);
+  border: 1px solid rgba(255, 107, 0, 0.16);
   min-height: 320px;
   box-shadow: 0 18px 30px rgba(3, 16, 36, 0.16);
 }
@@ -872,7 +872,7 @@
 }
 
 .locality-anchor-strip__chip:hover {
-  background: rgba(15, 118, 110, 0.11);
+  background: rgba(255, 107, 0, 0.11);
   color: var(--main-color-dark);
 }
 
@@ -898,7 +898,7 @@
 .locality-section__eyebrow {
   display: inline-block;
   color: var(--main-color-dark);
-  background: rgba(15, 118, 110, 0.1);
+  background: rgba(255, 107, 0, 0.1);
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 0.72rem;
@@ -935,9 +935,9 @@
 
 .locality-editorial-card {
   border-radius: 14px;
-  border: 1px dashed rgba(15, 118, 110, 0.28);
+  border: 1px dashed rgba(255, 107, 0, 0.28);
   padding: 16px;
-  background: linear-gradient(135deg, rgba(15, 118, 110, 0.06), rgba(3, 105, 161, 0.05));
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.06), rgba(3, 105, 161, 0.05));
 }
 
 .locality-editorial-card p {
@@ -972,7 +972,7 @@
 
 .locality-feature-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 20px rgba(15, 118, 110, 0.1);
+  box-shadow: 0 12px 20px rgba(255, 107, 0, 0.1);
 }
 
 .locality-feature-card__icon {
@@ -983,7 +983,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 12px;
-  background: rgba(15, 118, 110, 0.12);
+  background: rgba(255, 107, 0, 0.12);
   color: var(--main-color-dark);
 }
 
@@ -1164,7 +1164,7 @@
 }
 
 .locality-faq-item.is-open {
-  border-color: rgba(15, 118, 110, 0.35);
+  border-color: rgba(255, 107, 0, 0.35);
 }
 
 .locality-faq-item h3 {
@@ -1285,7 +1285,7 @@
   border: 1px solid var(--border-color-light);
   border-radius: 24px;
   background: linear-gradient(140deg, #fff 0%, #f4faf9 100%);
-  box-shadow: 0 14px 28px rgba(15, 118, 110, 0.06);
+  box-shadow: 0 14px 28px rgba(255, 107, 0, 0.06);
   padding: 24px;
 }
 
@@ -1384,7 +1384,7 @@
 .locality-letter-chip:hover {
   border-color: var(--main-color);
   color: var(--main-color-dark);
-  background: rgba(15, 118, 110, 0.08);
+  background: rgba(255, 107, 0, 0.08);
 }
 
 .locality-directory-v2__group-list {
@@ -1403,7 +1403,7 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: rgba(15, 118, 110, 0.14);
+  background: rgba(255, 107, 0, 0.14);
   color: var(--main-color-dark);
   font-weight: 700;
   display: inline-flex;

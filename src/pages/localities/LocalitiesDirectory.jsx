@@ -112,9 +112,9 @@ const LocalitiesDirectory = () => {
     return (
         <>
             <SEO
-                title="Discover Localities in Gurgaon | 360Ghar"
-                description="Explore all sectors, colonies, and prime areas in Gurgaon. Get locality insights, verified inventory, and neighborhood intelligence in one place."
-                keywords="Gurgaon localities, sectors in Gurgaon, colony search Gurgaon, Gurgaon neighborhood guide"
+                title="Discover Localities in Gurugram | 360Ghar"
+                description="Explore all sectors, colonies, and prime areas in Gurugram. Get locality insights, verified inventory, and neighborhood intelligence in one place."
+                keywords="Gurgaon localities, Gurugram localities, sectors in Gurgaon, sectors in Gurugram, colony search Gurgaon, Gurugram neighborhood guide"
                 canonical="/localities"
                 image={siteMetadata.defaultOgImage}
                 type="website"
@@ -139,7 +139,7 @@ const LocalitiesDirectory = () => {
                             <div className="row g-4 align-items-end">
                                 <div className="col-lg-8">
                                     <span className="locality-section__eyebrow">Locality Discovery</span>
-                                    <h1 className="locality-directory-v2__title">Explore Gurgaon Localities with Verified Insights</h1>
+                                    <h1 className="locality-directory-v2__title">Explore Gurugram Localities with Verified Insights</h1>
                                     <p className="locality-directory-v2__desc mb-0">
                                         Compare sectors, neighborhoods, and premium pockets with structured insights before you shortlist properties.
                                     </p>
@@ -252,7 +252,7 @@ const LocalitiesDirectory = () => {
                                                             <h3 className="locality-directory-card__title mb-0">{loc.name}</h3>
                                                             <span className="locality-directory-card__type">{loc.entityType || loc.type || 'Locality'}</span>
                                                         </div>
-                                                        <p className="locality-directory-card__meta mb-0">{loc.city || 'Gurgaon'} • Verified locality insights</p>
+                                                        <p className="locality-directory-card__meta mb-0">{loc.city || 'Gurugram'} • Verified locality insights</p>
                                                     </Link>
                                                 </div>
                                             ))}

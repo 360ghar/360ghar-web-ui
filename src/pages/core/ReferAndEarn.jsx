@@ -144,7 +144,7 @@ const ReferAndEarn = () => {
                   </div>
                   <div className="referral-faq-item">
                     <h4>Which areas are eligible for the referral program?</h4>
-                    <p>Currently, the referral program is active for properties in Gurgaon and Delhi NCR regions where 360Ghar operates.</p>
+                    <p>Currently, the referral program is active for properties in Gurugram and Delhi NCR regions where 360Ghar operates.</p>
                   </div>
                   <div className="referral-faq-item">
                     <h4>How will I receive my reward?</h4>

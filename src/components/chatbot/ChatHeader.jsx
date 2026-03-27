@@ -66,7 +66,7 @@ function ChatHeader() {
         <div className="chatbot-header__avatar">
           <BotIcon />
         </div>
-        <span className="chatbot-header__title">360Ghar AI</span>
+        <span className="chatbot-header__title">360Ghar AI Assistant</span>
       </div>
 
       <div className="chatbot-header__center">

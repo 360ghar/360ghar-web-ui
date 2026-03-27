@@ -105,7 +105,7 @@ export const competitors = {
     testimonials: [
       { text: 'Within 24 hours of posting an inquiry, I received 50+ calls from brokers. Never again!', author: 'Property Seeker, Delhi' },
       { text: 'MagicBricks sold my phone number to every broker in the city. My phone hasn\'t stopped ringing.', author: 'User Review, Google Play' },
-      { text: 'The "verified" badge means nothing. Half the listings I viewed were already rented or fake.', author: 'Tenant, Gurgaon' },
+      { text: 'The "verified" badge means nothing. Half the listings I viewed were already rented or fake.', author: 'Tenant, Gurugram' },
       { text: 'I was looking for a flat but got calls for loans, insurance, and everything else. Complete harassment.', author: 'Home Seeker, Mumbai' },
       { text: 'Their premium listing package gave me zero results. Money wasted on fake leads.', author: 'Property Owner, Bangalore' }
     ],
@@ -299,7 +299,7 @@ export const competitors = {
       { text: 'No updates, no new features. Just a legacy platform now.', author: 'Property Advisor, Delhi' },
       { text: 'The community features don\'t work anymore. Nobody responds.', author: 'Resident, Bangalore' },
       { text: 'Listings are outdated. Most properties have already been sold or rented.', author: 'Home Seeker, Mumbai' },
-      { text: 'Support team doesn\'t exist. Raised multiple tickets, zero response.', author: 'Property Owner, Gurgaon' }
+      { text: 'Support team doesn\'t exist. Raised multiple tickets, zero response.', author: 'Property Owner, Gurugram' }
     ],
     
     faqs: [
@@ -376,7 +376,7 @@ export const competitors = {
     seoKeywords: 'proptiger alternative, proptiger vs 360ghar, proptiger review, proptiger cities',
     
     comparisonFeatures: {
-      'City Coverage': { us: true, them: false, note: 'Gurgaon-focused' },
+      'City Coverage': { us: true, them: false, note: 'Gurugram-focused' },
       'Transparent Pricing': { us: true, them: false, note: 'Premium fees' },
       'No Pressure Sales': { us: true, them: false, note: 'Sales-driven' },
       'All Property Types': { us: true, them: false, note: 'New projects only' },
@@ -419,7 +419,7 @@ export const competitors = {
     
     testimonials: [
       { text: 'They only recommend properties that give them highest commission, not what\'s best for me.', author: 'User Review' },
-      { text: 'Service quality depends entirely on which branch you deal with. Very inconsistent.', author: 'User, Gurgaon' },
+      { text: 'Service quality depends entirely on which branch you deal with. Very inconsistent.', author: 'User, Gurugram' },
       { text: 'Complex pricing with many hidden fees. Not transparent at all.', author: 'Property Buyer, Mumbai' },
       { text: 'Good for NRIs but locals should look elsewhere. Too much bureaucracy.', author: 'User, Bangalore' },
       { text: 'Their mortgage integration is helpful but the advisory is biased toward partners.', author: 'Home Buyer, Delhi' }

@@ -171,7 +171,7 @@
   
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 16px 32px rgba(15, 118, 110, 0.1);
+    box-shadow: 0 16px 32px rgba(255, 107, 0, 0.1);
   }
   
   &__number {
@@ -227,12 +227,12 @@
   
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 16px 32px rgba(15, 118, 110, 0.1);
+    box-shadow: 0 16px 32px rgba(255, 107, 0, 0.1);
   }
   
   &--highlight {
     border-color: var(--main-color);
-    box-shadow: 0 8px 24px rgba(15, 118, 110, 0.15);
+    box-shadow: 0 8px 24px rgba(255, 107, 0, 0.15);
     
     .reward-card__icon {
       background: var(--main-color);
@@ -390,9 +390,9 @@
       cursor: pointer;
       
       a {
-        color: var(--main-color);
+        color: var(--main-color-dark);
         text-decoration: underline;
-        
+
         &:hover {
           color: var(--main-color-dark);
         }
@@ -449,7 +449,7 @@
     margin-bottom: 24px;
     
     strong {
-      color: var(--main-color);
+      color: var(--main-color-dark);
     }
   }
 }
@@ -482,7 +482,7 @@
     
     &:not(.collapsed) {
       background: var(--main-color-lighter);
-      color: var(--main-color);
+      color: var(--main-color-dark);
       box-shadow: none;
     }
     
@@ -524,8 +524,8 @@
     }
     
     a {
-      color: var(--main-color);
-      
+      color: var(--main-color-dark);
+
       &:hover {
         text-decoration: underline;
       }
@@ -645,7 +645,7 @@
     
     .btn-main {
       background: #fff;
-      color: var(--main-color);
+      color: var(--main-color-dark);
       border: none;
       
       &:hover {

@@ -62,8 +62,8 @@ const ToolShowcase = () => {
                                                 <path d="M36 28V18L28 22" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                                 <defs>
                                                     <linearGradient id="grad1" x1="6" y1="4" x2="42" y2="44" gradientUnits="userSpaceOnUse">
-                                                        <stop stopColor="#F69220"/>
-                                                        <stop offset="1" stopColor="#F05A22"/>
+                                                        <stop stopColor="#ff8c3a"/>
+                                                        <stop offset="1" stopColor="#cc5500"/>
                                                     </linearGradient>
                                                 </defs>
                                             </svg>
@@ -80,8 +80,8 @@ const ToolShowcase = () => {
                                                 <circle cx="24" cy="24" r="3" fill="#1a1a2e"/>
                                                 <defs>
                                                     <linearGradient id="grad2" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                                                        <stop stopColor="#F69220"/>
-                                                        <stop offset="1" stopColor="#F05A22"/>
+                                                        <stop stopColor="#ff8c3a"/>
+                                                        <stop offset="1" stopColor="#cc5500"/>
                                                     </linearGradient>
                                                 </defs>
                                             </svg>
@@ -94,8 +94,8 @@ const ToolShowcase = () => {
                                                 <circle cx="28" cy="16" r="3" fill="#1a1a2e"/>
                                                 <defs>
                                                     <linearGradient id="grad3" x1="6" y1="4" x2="44" y2="46" gradientUnits="userSpaceOnUse">
-                                                        <stop stopColor="#F69220"/>
-                                                        <stop offset="1" stopColor="#F05A22"/>
+                                                        <stop stopColor="#ff8c3a"/>
+                                                        <stop offset="1" stopColor="#cc5500"/>
                                                     </linearGradient>
                                                 </defs>
                                             </svg>

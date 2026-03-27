@@ -20,8 +20,8 @@
   right: 0;
   bottom: 0;
   background-image:
-    radial-gradient(circle at 20% 80%, rgba(246, 146, 32, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(240, 90, 34, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(255, 107, 0, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(204, 85, 0, 0.05) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .house-fill {
-  fill: rgba(246, 146, 32, 0.08);
+  fill: rgba(255, 107, 0, 0.08);
   opacity: 0;
   animation: fillHouse 0.5s ease-out 1.8s forwards;
 }
@@ -83,7 +83,7 @@
 
 .window-glow-left,
 .window-glow-right {
-  fill: rgba(246, 146, 32, 0.3);
+  fill: rgba(255, 107, 0, 0.3);
   opacity: 0;
 }
 
@@ -112,7 +112,7 @@
 
 .location-pin {
   fill: url(#pinGradient);
-  filter: drop-shadow(0 4px 6px rgba(246, 146, 32, 0.3));
+  filter: drop-shadow(0 4px 6px rgba(255, 107, 0, 0.3));
 }
 
 .location-pin-dot {
@@ -133,7 +133,7 @@
   position: absolute;
   width: 6px;
   height: 6px;
-  background: linear-gradient(135deg, #F69220, #F05A22);
+  background: linear-gradient(135deg, #ff8c3a, #cc5500);
   border-radius: 50%;
   opacity: 0;
 }
@@ -172,7 +172,7 @@
 .brand-name {
   font-family: 'Vidaloka', serif;
   font-size: 2rem;
-  background: linear-gradient(90deg, #F69220 0%, #F05A22 100%);
+  background: linear-gradient(90deg, #ff8c3a 0%, #cc5500 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -201,7 +201,7 @@
 .loading-dots span {
   width: 6px;
   height: 6px;
-  background: linear-gradient(135deg, #F69220, #F05A22);
+  background: linear-gradient(135deg, #ff8c3a, #cc5500);
   border-radius: 50%;
   animation: dotPulse 1.4s ease-in-out infinite;
 }
@@ -218,7 +218,7 @@
 .loader-progress {
   width: 200px;
   height: 3px;
-  background: rgba(246, 146, 32, 0.15);
+  background: rgba(255, 107, 0, 0.15);
   border-radius: 3px;
   overflow: hidden;
   margin-top: 1rem;
@@ -226,7 +226,7 @@
 
 .loader-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #F69220, #F05A22);
+  background: linear-gradient(90deg, #ff8c3a, #cc5500);
   border-radius: 3px;
   animation: progressSlide 2s ease-in-out infinite;
 }

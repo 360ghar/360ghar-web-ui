@@ -66,15 +66,15 @@ const FAQ_DATA = {
         },
         {
             '@type': 'Question',
-            name: 'Which areas in Gurgaon does 360Ghar cover?',
+            name: 'Which areas in Gurugram does 360Ghar cover?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'We heavily cover major Gurgaon areas including Golf Course Road, Sohna Road, Dwarka Expressway, all DLF Phases, New Gurgaon (Sectors 80-115), and expanding regions across Delhi NCR.'
+                text: 'We heavily cover major Gurugram areas including Golf Course Road, Sohna Road, Dwarka Expressway, all DLF Phases, New Gurugram (Sectors 80-115), and expanding regions across Delhi NCR.'
             }
         },
         {
             '@type': 'Question',
-            name: 'Can I buy a flat in Gurgaon without visiting physically?',
+            name: 'Can I buy a flat in Gurugram without visiting physically?',
             acceptedAnswer: {
                 '@type': 'Answer',
                 text: 'Our 360° virtual tours give you a completely transparent view of the property. While we always encourage a physical visit before final transaction, many of our users are able to confidently shortlist and begin the buying process entirely based on our immersive tours.'

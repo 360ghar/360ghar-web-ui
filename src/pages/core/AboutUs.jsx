@@ -52,8 +52,8 @@ const AboutUs = () => {
     return (
         <>
             <SEO
-                title="About 360Ghar | India's #1 VR-First Real Estate Platform"
-                description="Discover how 360Ghar is transforming real estate with 360° virtual tours, no upfront fees, and on-site verified listings in Gurgaon."
+                title="About 360Ghar | India's VR-First Way to Find a Home"
+                description="Learn how 360Ghar eliminates fake property listings in Gurugram with studio-quality 360° guided walkthroughs and physically verified details. India's first AI + VR real estate platform."
                 keywords="about 360Ghar, India first AI enabled real estate platform, virtual tour first real estate, Gurugram real estate platform, property portal Gurgaon, virtual tours, on-site verified properties, relationship manager real estate, transparent brokerage, DLF Phase properties, Golf Course Road real estate, verified property listings"
                 canonical="/about-us"
                 image={siteMetadata.defaultOgImage}

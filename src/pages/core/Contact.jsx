@@ -13,8 +13,8 @@ const Contact = () => {
   return (
     <>
       <SEO
-        title="Contact 360Ghar | Gurgaon Real Estate Help & Support"
-        description="Get in touch with 360Ghar for property queries, listing support, or Relationship Manager assistance. We serve buyers, tenants, and owners across Gurgaon and NCR."
+        title="Contact 360Ghar | Gurugram Real Estate Help & Support"
+        description="Get in touch with 360Ghar for property queries, listing support, or Relationship Manager assistance. We serve buyers, tenants, and owners across Gurugram and NCR."
         keywords="contact 360Ghar, relationship manager, real estate contact, Gurgaon, Gurugram, virtual tours, verified properties, AI real estate platform"
         canonical="/contact"
         image={siteMetadata.defaultOgImage}

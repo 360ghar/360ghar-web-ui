@@ -2,10 +2,10 @@
 // Banner Three
 import BannerThreeThumb from '/assets/images/thumbs/banner-three.png'
 export const bannerThreeContent = {
-    subtitle: 'INDIA\'S FIRST AI-ENABLED PLATFORM',
-    title: 'Most trusted, affordable &',
-    shapedTitle: 'transparent',
-    desc: 'India\'s first AI-enabled real estate platform with 360° virtual tours and verified properties. Our on-site team inspects every listing while your Relationship Manager handles everything end-to-end. No upfront cost—just complete transparency and value you deserve.',
+    subtitle: 'INDIA\'S FIRST AI + VR REAL ESTATE PLATFORM',
+    title: 'India\'s VR-First Way to',
+    shapedTitle: 'Find a Home',
+    desc: 'We eliminate fake and misleading property listings in Gurugram. Browse verified properties with studio-quality 360° guided walkthroughs, inspected by our on-site team. Your dedicated Relationship Manager ensures a seamless journey — complete transparency, zero upfront fees.',
     thumb: BannerThreeThumb
 }
 
@@ -22,11 +22,11 @@ export const aboutCheckLists = [
     },
     {
         icon: <i className="fas fa-check"></i>,
-        text: 'Complete transparency—no hidden costs or gaslighting'
+        text: 'Verified details, exact locations, no misleading info'
     },
     {
         icon: <i className="fas fa-check"></i>,
-        text: 'No upfront cost—we only show genuine inventories'
+        text: 'Zero upfront fees—we only show genuine inventories'
     },
 ]
 
@@ -42,28 +42,28 @@ export const propertyThreeTypes = [
     {
         icon: propertyThreeTypeIcon1,
         title: 'Rentals & PG in Gurugram',
-        desc: 'Verified rooms, PGs, and apartments with studio‑quality 360° tours so you can shortlist from home with confidence.',
+        desc: 'Verified rooms, PGs, and apartments with studio-quality 360° guided walkthroughs so you can shortlist from home with confidence.',
         btnText: 'MORE ABOUT ',
         btnLink: '/properties'
     },
     {
         icon: propertyThreeTypeIcon2,
         title: 'Buy Apartments & Homes',
-        desc: 'Explore verified properties across DLF, Golf Course Road, Sohna Road, and more—complete with immersive 360° walkthroughs.',
+        desc: 'Explore verified properties across DLF, Golf Course Road, Sohna Road, and more—complete with immersive 360° guided walkthroughs.',
         btnText: 'MORE ABOUT ',
         btnLink: '/properties'
     },
     {
         icon: propertyThreeTypeIcon3,
         title: 'Commercial Offices & Shops',
-        desc: 'Discover office spaces and retail units with accurate details and 360° tours to speed up decisions.',
+        desc: 'Discover office spaces and retail units with accurate details and 360° guided walkthroughs to speed up decisions.',
         btnText: 'MORE ABOUT ',
         btnLink: '/properties'
     },
     {
         icon: propertyThreeTypeIcon4,
         title: 'Owner Onboarding',
-        desc: 'We come to your doorstep—free photography, verification, and listing setup. No upfront fee to publish.',
+        desc: 'We come to your doorstep—free photography, verification, and listing setup. Zero upfront fees to list.',
         btnText: 'MORE ABOUT ',
         btnLink: '/properties'
     },
@@ -122,7 +122,7 @@ export const testimonialThreeContents = [
         image: userThumb1,
         name: 'Rohit Verma',
         designation: 'Gurugram Resident',
-        desc: 'Finally found a platform that doesn\'t gaslight you! My Relationship Manager handled everything from shortlisting to documentation. The AI-powered tours showed verified properties—no fake photos or bait-and-switch tactics.',
+        desc: 'Finally found a platform that is genuinely transparent! My Relationship Manager handled everything from shortlisting to documentation. The immersive guided walkthroughs showed verified properties—no fake photos or misleading details.',
     },
     {
         image: userThumb2,
@@ -157,7 +157,7 @@ export const counterThreeContents = [
     {
         icon: counterThreeIcon4,
         number: '20+',
-        text: 'Expert Agents'
+        text: 'Relationship Managers'
     }
 ]
 
@@ -167,12 +167,12 @@ export const faqs = [
     {
         id: 1,
         btnText: 'How is 360Ghar different from traditional brokers?',
-        bodyText: 'We don\'t gaslight you with partnered inventories. Our AI-powered platform shows verified properties inspected by our on-site team. Your dedicated Relationship Manager handles everything end-to-end—complete transparency at no upfront cost.'
+        bodyText: 'Unlike traditional brokers, we don\'t push partnered inventories. Our AI-powered platform shows verified properties inspected by our on-site team. Your dedicated Relationship Manager handles everything end-to-end—complete transparency with zero upfront fees.'
     },
     {
         id: 2,
         btnText: 'What does "AI-enabled platform" mean?',
-        bodyText: 'Our AI technology powers property matching, virtual tour creation, and verification workflows. Every listing gets a studio-quality 360° walkthrough, inspected and verified by our team—ensuring you see only genuine properties.'
+        bodyText: 'Our AI technology powers property matching, virtual tour creation, and verification workflows. Every listing gets a studio-quality 360° guided walkthrough, inspected and verified by our team—ensuring you see only genuine properties.'
     },
     {
         id: 3,
@@ -182,7 +182,7 @@ export const faqs = [
     {
         id: 4,
         btnText: 'Why is there no upfront cost?',
-        bodyText: 'We believe in earning your trust through transparency and real value—not upfront fees. You pay only when you find the right property, and we ensure you get complete visibility and support worth every rupee.'
+        bodyText: 'We believe in earning your trust through transparency and real value—zero upfront fees. You pay only when you find the right property, and we ensure you get complete visibility and support worth every rupee.'
     },
     {
         id: 5,

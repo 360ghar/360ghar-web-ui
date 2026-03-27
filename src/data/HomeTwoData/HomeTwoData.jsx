@@ -4,7 +4,7 @@ import BannerPhoneIcon from '/assets/images/icons/phone.svg'
 export const bannerTwoContent = {
     title: 'Experience homes in ',
     boldTitle: '360° Virtual Reality',
-    desc: 'India\'s first 360° Home Walkthrough Platform making property viewing effortless and immersive for buyers and renters across Gurgaon.',
+    desc: 'India\'s first 360° Home Walkthrough Platform making property viewing effortless and immersive for buyers and renters across Gurugram.',
     icon: BannerPhoneIcon,
     text: 'Need help?',
     number: 'info@360ghar.com',

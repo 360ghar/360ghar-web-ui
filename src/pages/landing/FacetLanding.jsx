@@ -25,6 +25,7 @@ const VALID_BUDGETS = [
 
 const FacetLanding = () => {
   const { citySlug, intent, type, bhk, budget, amenity } = useParams();
+  const canonicalCitySlug = citySlug === 'gurugram' ? 'gurgaon' : citySlug;
 
   const validCity = pretty(citySlug);
   const validIntent = VALID_INTENTS.includes(intent) ? intent : 'buy';
@@ -91,11 +92,11 @@ const FacetLanding = () => {
   );
 
   const canonicalPath = useMemo(() => {
-    if (isBhk) return `/${citySlug}/${intent}/${type}/${bhk}`;
-    if (isBudget) return `/${citySlug}/${intent}/${type}/budget/${budget}`;
-    if (isAmenity) return `/${citySlug}/${intent}/${type}/amenity/${amenity}`;
-    return `/${citySlug}/${intent}/${type}`;
-  }, [isBhk, citySlug, intent, type, bhk, isBudget, budget, isAmenity, amenity]);
+    if (isBhk) return `/${canonicalCitySlug}/${intent}/${type}/${bhk}`;
+    if (isBudget) return `/${canonicalCitySlug}/${intent}/${type}/budget/${budget}`;
+    if (isAmenity) return `/${canonicalCitySlug}/${intent}/${type}/amenity/${amenity}`;
+    return `/${canonicalCitySlug}/${intent}/${type}`;
+  }, [isBhk, canonicalCitySlug, intent, type, bhk, isBudget, budget, isAmenity, amenity]);
 
   const citySearchUrl = useMemo(() => {
     const u = new URL('https://360ghar.com/properties');

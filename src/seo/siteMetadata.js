@@ -2,9 +2,9 @@ export const siteMetadata = {
   siteUrl: 'https://360ghar.com',
   siteName: '360Ghar',
   defaultTitle:
-    "360Ghar – India's #1 AI + VR Real Estate Platform | Buy, Sell & Rent Property in Gurgaon",
+    "360Ghar – India's VR-First Way to Find a Home | Buy, Sell & Rent Property in Gurugram",
   defaultDescription:
-    "360Ghar is India's first AI and VR-first real estate platform. Explore verified flats, apartments & villas in Gurgaon with studio-quality 360° virtual tours. No upfront fees. No fake listings. AI-powered search.",
+    "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. Explore verified flats, apartments & villas in Gurugram with studio-quality 360° guided walkthroughs. Zero upfront fees. No fake listings. AI-powered search.",
   defaultKeywords:
       [
         // AI Agent & MCP
@@ -56,7 +56,7 @@ export const siteMetadata = {
   twitterCard: 'summary_large_image',
   organization: {
     name: '360Ghar',
-    email: 'hello@360ghar.com',
+    email: 'info@360ghar.com',
     telephone: '+91-8178340031',
     address: {
       streetAddress: 'Sector 43, Golf Course Road',

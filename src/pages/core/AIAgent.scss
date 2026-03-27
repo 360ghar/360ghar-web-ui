@@ -22,8 +22,8 @@
         position: absolute;
         inset: 0;
         background-image: 
-            linear-gradient(rgba(246, 146, 32, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(246, 146, 32, 0.05) 1px, transparent 1px);
+            linear-gradient(rgba(255, 107, 0, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 107, 0, 0.05) 1px, transparent 1px);
         background-size: 50px 50px;
     }
 
@@ -36,7 +36,7 @@
         &--1 {
             width: 500px;
             height: 500px;
-            background: linear-gradient(135deg, #F69220, #F05A22);
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
             top: -150px;
             right: -100px;
         }
@@ -44,7 +44,7 @@
         &--2 {
             width: 400px;
             height: 400px;
-            background: linear-gradient(135deg, #F05A22, #F69220);
+            background: linear-gradient(135deg, #cc5500, #ff6b00);
             bottom: -100px;
             left: -100px;
         }
@@ -73,12 +73,12 @@
         align-items: center;
         gap: 8px;
         padding: 8px 20px;
-        background: rgba(246, 146, 32, 0.2);
-        border: 1px solid rgba(246, 146, 32, 0.4);
+        background: rgba(255, 107, 0, 0.2);
+        border: 1px solid rgba(255, 107, 0, 0.4);
         border-radius: 50px;
         font-size: 13px;
         font-weight: 600;
-        color: #F69220;
+        color: #ff6b00;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-bottom: 24px;
@@ -87,7 +87,7 @@
     &__badge-dot {
         width: 8px;
         height: 8px;
-        background: #F69220;
+        background: #ff6b00;
         border-radius: 50%;
         animation: pulse 2s ease-in-out infinite;
     }
@@ -104,7 +104,7 @@
     }
 
     &__title-gradient {
-        background: linear-gradient(135deg, #F69220, #F05A22);
+        background: linear-gradient(135deg, #ff6b00, #cc5500);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -129,12 +129,12 @@
         margin-bottom: 32px;
 
         .btn-main {
-            background: linear-gradient(135deg, #F69220, #F05A22);
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
             border: none;
-            box-shadow: 0 4px 20px rgba(246, 146, 32, 0.4);
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
 
             &:hover {
-                box-shadow: 0 8px 30px rgba(246, 146, 32, 0.5);
+                box-shadow: 0 8px 30px rgba(255, 107, 0, 0.5);
             }
         }
 
@@ -143,8 +143,8 @@
             color: #fff;
 
             &:hover {
-                border-color: #F69220;
-                color: #F69220;
+                border-color: #ff6b00;
+                color: #ff6b00;
             }
         }
     }
@@ -162,10 +162,10 @@
         &-url {
             padding: 10px 16px;
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(246, 146, 32, 0.3);
+            border: 1px solid rgba(255, 107, 0, 0.3);
             border-radius: 8px;
             font-size: 14px;
-            color: #F69220;
+            color: #ff6b00;
             font-family: 'Courier New', monospace;
         }
     }
@@ -220,7 +220,7 @@
 
         &--user {
             align-self: flex-end;
-            background: linear-gradient(135deg, #F69220, #F05A22);
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
             color: #fff;
             max-width: 85%;
         }
@@ -266,7 +266,7 @@
         display: block;
         font-size: 42px;
         font-weight: 800;
-        background: linear-gradient(135deg, #F69220, #F05A22);
+        background: linear-gradient(135deg, #ff6b00, #cc5500);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -289,12 +289,12 @@
     &__badge {
         display: inline-block;
         padding: 8px 20px;
-        background: linear-gradient(135deg, rgba(246, 146, 32, 0.1), rgba(240, 90, 34, 0.1));
-        border: 1px solid rgba(246, 146, 32, 0.3);
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(204, 85, 0, 0.1));
+        border: 1px solid rgba(255, 107, 0, 0.3);
         border-radius: 50px;
         font-size: 13px;
         font-weight: 600;
-        color: #F69220;
+        color: #ff6b00;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-bottom: 20px;
@@ -352,7 +352,7 @@
             right: -20px;
             width: 40px;
             height: 2px;
-            background: linear-gradient(90deg, #F69220, transparent);
+            background: linear-gradient(90deg, #ff6b00, transparent);
 
             @media (max-width: 991px) {
                 display: none;
@@ -369,7 +369,7 @@
         font-size: 20px;
         font-weight: 800;
         color: #fff;
-        background: linear-gradient(135deg, #F69220, #F05A22);
+        background: linear-gradient(135deg, #ff6b00, #cc5500);
         border-radius: 50%;
         margin-bottom: 24px;
     }
@@ -430,7 +430,7 @@
             color: #666;
 
             i {
-                color: #F69220;
+                color: #ff6b00;
                 margin-top: 4px;
             }
         }
@@ -444,9 +444,9 @@
 
     .ai-section-header {
         &__badge {
-            background: rgba(246, 146, 32, 0.2);
-            border-color: rgba(246, 146, 32, 0.4);
-            color: #F69220;
+            background: rgba(255, 107, 0, 0.2);
+            border-color: rgba(255, 107, 0, 0.4);
+            color: #ff6b00;
         }
 
         &__title {
@@ -470,7 +470,7 @@
 
     &__url-box {
         background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(246, 146, 32, 0.3);
+        border: 1px solid rgba(255, 107, 0, 0.3);
         border-radius: 12px;
         padding: 20px;
         margin-bottom: 24px;
@@ -487,7 +487,7 @@
 
     &__url {
         font-size: 18px;
-        color: #F69220;
+        color: #ff6b00;
         font-family: 'Courier New', monospace;
     }
 
@@ -514,11 +514,11 @@
 
     &__assistant {
         padding: 8px 16px;
-        background: rgba(246, 146, 32, 0.2);
-        border: 1px solid rgba(246, 146, 32, 0.4);
+        background: rgba(255, 107, 0, 0.2);
+        border: 1px solid rgba(255, 107, 0, 0.4);
         border-radius: 20px;
         font-size: 13px;
-        color: #F69220;
+        color: #ff6b00;
     }
 
     &__tools {
@@ -552,7 +552,7 @@
         code {
             display: block;
             font-size: 13px;
-            color: #F69220;
+            color: #ff6b00;
             margin-bottom: 6px;
             font-family: 'Courier New', monospace;
         }
@@ -588,7 +588,7 @@
     &__role {
         display: inline-block;
         padding: 6px 14px;
-        background: linear-gradient(135deg, #F69220, #F05A22);
+        background: linear-gradient(135deg, #ff6b00, #cc5500);
         color: #fff;
         font-size: 12px;
         font-weight: 600;
@@ -615,7 +615,7 @@
         strong {
             display: block;
             font-size: 12px;
-            color: #F69220;
+            color: #ff6b00;
             text-transform: uppercase;
             margin-bottom: 8px;
         }
@@ -688,7 +688,7 @@
         position: absolute;
         width: 600px;
         height: 600px;
-        background: linear-gradient(135deg, #F69220, #F05A22);
+        background: linear-gradient(135deg, #ff6b00, #cc5500);
         border-radius: 50%;
         filter: blur(150px);
         opacity: 0.3;
@@ -705,12 +705,12 @@
     &__badge {
         display: inline-block;
         padding: 8px 20px;
-        background: rgba(246, 146, 32, 0.2);
-        border: 1px solid rgba(246, 146, 32, 0.4);
+        background: rgba(255, 107, 0, 0.2);
+        border: 1px solid rgba(255, 107, 0, 0.4);
         border-radius: 50px;
         font-size: 13px;
         font-weight: 600;
-        color: #F69220;
+        color: #ff6b00;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-bottom: 24px;
@@ -742,9 +742,9 @@
         flex-wrap: wrap;
 
         .btn-main {
-            background: linear-gradient(135deg, #F69220, #F05A22);
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
             border: none;
-            box-shadow: 0 4px 20px rgba(246, 146, 32, 0.4);
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
         }
 
         .btn-outline-light {

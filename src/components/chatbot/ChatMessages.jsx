@@ -6,7 +6,7 @@ import ChatWidget from './messages/ChatWidget';
 
 function WelcomeState({ onQuickAction }) {
   const quickActions = [
-    { label: 'Search Properties', prompt: 'Help me search for properties in Gurgaon' },
+    { label: 'Search Properties', prompt: 'Help me search for verified properties in Gurugram' },
     { label: 'Schedule a Visit', prompt: 'I want to schedule a property visit' },
     { label: 'Check Rent Status', prompt: 'Show me my rent payment status' },
     { label: 'Maintenance Request', prompt: 'I need to create a maintenance request' },
@@ -21,7 +21,7 @@ function WelcomeState({ onQuickAction }) {
           height="40"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#0F766E"
+          stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -35,7 +35,7 @@ function WelcomeState({ onQuickAction }) {
       </div>
       <h3 className="chatbot-welcome__title">360Ghar AI Assistant</h3>
       <p className="chatbot-welcome__subtitle">
-        Hi! I can help you with property search, bookings, rent status, and more.
+        Your expert property guide. Search verified properties, schedule guided walkthroughs, check rent status, and more.
       </p>
       <div className="chatbot-quick-actions">
         {quickActions.map((action) => (

@@ -1662,7 +1662,7 @@
     &:hover,
     &--hovered {
       transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+      box-shadow: 0 16px 36px rgba(255, 107, 0, 0.15);
       z-index: 10;
 
       .property-item__thumb img {
@@ -1890,7 +1890,7 @@
   }
 
   &--buy {
-    background: linear-gradient(135deg, #0d9488, #0f766e);
+    background: linear-gradient(135deg, #ff8c3a, #ff6b00);
     color: #fff;
   }
 

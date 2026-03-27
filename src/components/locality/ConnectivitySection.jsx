@@ -28,7 +28,7 @@ const ConnectivitySection = ({ localityName, summary, items = [] }) => {
         <section id="locality-connectivity" className="locality-section locality-connectivity-v2">
             <div className="locality-section__head">
                 <span className="locality-section__eyebrow">Connectivity</span>
-                <h2 className="locality-section__title">How {localityName} Connects to Gurgaon</h2>
+                <h2 className="locality-section__title">How {localityName} Connects to Gurugram</h2>
                 <p className="locality-section__desc">
                     {summary || `This locality offers practical access to transport routes, employment nodes, and essential city infrastructure.`}
                 </p>

@@ -13,8 +13,8 @@ const FeatureIcon = ({ type }) => {
                     <path d="M16 22H20M22 18V26" stroke="url(#aiGrad1)" strokeWidth="1.5" strokeLinecap="round"/>
                     <defs>
                         <linearGradient id="aiGrad1" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#F69220"/>
-                            <stop offset="1" stopColor="#F05A22"/>
+                            <stop stopColor="#ff8c3a"/>
+                            <stop offset="1" stopColor="#cc5500"/>
                         </linearGradient>
                     </defs>
                 </svg>
@@ -30,8 +30,8 @@ const FeatureIcon = ({ type }) => {
                     <path d="M18 32H30" stroke="url(#aiGrad2)" strokeWidth="2" strokeLinecap="round"/>
                     <defs>
                         <linearGradient id="aiGrad2" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#F69220"/>
-                            <stop offset="1" stopColor="#F05A22"/>
+                            <stop stopColor="#ff8c3a"/>
+                            <stop offset="1" stopColor="#cc5500"/>
                         </linearGradient>
                     </defs>
                 </svg>
@@ -44,8 +44,8 @@ const FeatureIcon = ({ type }) => {
                     <circle cx="24" cy="18" r="2" fill="url(#aiGrad3)"/>
                     <defs>
                         <linearGradient id="aiGrad3" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#F69220"/>
-                            <stop offset="1" stopColor="#F05A22"/>
+                            <stop stopColor="#ff8c3a"/>
+                            <stop offset="1" stopColor="#cc5500"/>
                         </linearGradient>
                     </defs>
                 </svg>
@@ -60,8 +60,8 @@ const FeatureIcon = ({ type }) => {
                     <path d="M20 24H28" stroke="url(#aiGrad4)" strokeWidth="1.5" strokeLinecap="round"/>
                     <defs>
                         <linearGradient id="aiGrad4" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#F69220"/>
-                            <stop offset="1" stopColor="#F05A22"/>
+                            <stop stopColor="#ff8c3a"/>
+                            <stop offset="1" stopColor="#cc5500"/>
                         </linearGradient>
                     </defs>
                 </svg>

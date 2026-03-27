@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 - `npm run dev` - Start development server with Vite
-- `npm run build` - Build for production (runs sitemap generation first)
+- `npm run build` - Build for production (runs entity ingestion + sitemap generation + Vite build)
 - `npm run build:sitemaps` - Generate sitemaps manually
 - `npm run lint` - Run ESLint for code linting
 - `npm run preview` - Preview production build locally
@@ -762,6 +762,26 @@ VITE_GOOGLE_PLACES_API_KEY=your_google_places_api_key
   - `public/sitemap.xml` - Main sitemap
   - `public/sitemap-static.xml` - Static pages
   - `public/sitemap-landing.xml` - Landing pages
+
+---
+
+## Deployment & CI
+
+### Netlify Build
+- Netlify runs `npm run build` which triggers entity ingestion, sitemap generation, then Vite build
+- Netlify uses **strict peer dependency resolution** — mismatches that `npm install` tolerates locally will fail CI with `ERESOLVE`
+
+### ESLint Version Constraint
+- `eslint` and `@eslint/js` must stay on **major version 9** (`^9.x`)
+- `eslint-plugin-react@7.x` declares `peerDependency: eslint ^2 || ^3 || ... || ^9` — it does **not** support eslint 10+
+- Upgrading eslint to `^10` causes Netlify `npm install` to fail: `ERESOLVE unable to resolve dependency tree`
+- Current locked versions: `eslint@^9.39.4`, `@eslint/js@^9.39.4`
+
+### Dependency Upgrade Checklist
+Before upgrading any devDependency to a new major version:
+1. Check peer dependency ranges of all related plugins: `npm info <pkg> peerDependencies`
+2. Run `npm install` locally and check for `WARN peer dep` messages
+3. Run `npm run build && npm run lint` before pushing — Netlify runs both
 
 ---
 

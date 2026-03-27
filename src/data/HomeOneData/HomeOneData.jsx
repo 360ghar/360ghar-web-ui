@@ -2,10 +2,10 @@
 // Banner One
 import BannerImg from '/assets/images/thumbs/banner-img.png'; 
 export const bannerContent = {
-    subtitle: '360 WALKTHROUGH',
-    title: 'India\'s first 360° ',
-    gradientTitle: 'Home Platform',
-    desc: 'Unlock the power of virtual reality in real estate. Easily Rent, Buy, and Sell properties with immersive 360° walkthroughs across Gurgaon.',
+    subtitle: 'AI + VR REAL ESTATE',
+    title: 'India\'s VR-First Way to',
+    gradientTitle: 'Find a Home',
+    desc: 'Browse verified properties in Gurugram with immersive 360° guided walkthroughs. Every listing is physically verified by our on-site team. Zero upfront fees, no fake listings — just transparency.',
     thumb: BannerImg
 }
 
@@ -37,8 +37,8 @@ import aboutContentIcon from '/assets/images/icons/about-icon.svg';
 export const aboutContent = {
     thumb: aboutContentThumb,
     icon: aboutContentIcon,
-    title: 'Your Dream Home Awaits',
-    desc: '360Ghar revolutionizes the way you experience real estate with immersive 360° virtual tours. Our platform connects buyers, sellers, and renters across Gurgaon, making property transactions seamless and transparent.'
+    title: 'Your Expert Guide to Finding Home',
+    desc: '360Ghar is India\'s first AI + VR real estate platform. Browse verified properties in Gurugram with studio-quality 360° guided walkthroughs, inspected by our on-site team. Your dedicated Relationship Manager ensures complete transparency — zero upfront fees, no misleading info.'
 }
 
 
@@ -53,7 +53,7 @@ export const propertyTypes = [
     {
         icon: propertyTypeIcon1,
         title: 'AI-Enabled Virtual Tours',
-        desc: 'India\'s first AI-powered platform with verified 360° tours. Every property inspected by our on-site team—authentic details, no misleading photos.'
+        desc: 'India\'s first AI-powered platform with studio-quality 360° guided walkthroughs. Every property inspected by our on-site team—verified details, exact locations, no misleading photos.'
     },
     {
         icon: propertyTypeIcon2,
@@ -63,7 +63,7 @@ export const propertyTypes = [
     {
         icon: propertyTypeIcon3,
         title: 'Complete Transparency & Value',
-        desc: 'No upfront cost, no gaslighting, no partnered-inventory push. We show genuine properties with full visibility. Get real value, not just expensive brokerage.'
+        desc: 'Zero upfront fees, no partnered-inventory push, complete transparency. We show genuine, verified properties with full visibility. Get real value, not just expensive brokerage.'
     },
 ]
 
@@ -80,7 +80,7 @@ export const counts = [
     },
     {
         number: '50+',
-        text: 'Expert Agents'
+        text: 'Relationship Managers'
     },
     {
         number: '10',
@@ -98,25 +98,25 @@ export const portfolios = [
     {
         thumb: portfolioThumb1,
         title: 'Residential Properties',
-        desc: 'Discover luxury apartments, independent houses, and villas in prime locations across Gurgaon with 360° virtual tours.',
+        desc: 'Discover luxury apartments, independent houses, and villas in prime locations across Gurugram with immersive 360° guided walkthroughs.',
         btnIcon: <i className="fas fa-arrow-right"></i>
     },
     {
         thumb: portfolioThumb2,
         title: 'Commercial Spaces',
-        desc: 'Find the perfect office spaces, retail outlets, and commercial complexes for your business needs in Gurgaon.',
+        desc: 'Find the perfect office spaces, retail outlets, and commercial complexes for your business needs in Gurugram.',
         btnIcon: <i className="fas fa-arrow-right"></i>
     },
     {
         thumb: portfolioThumb3,
         title: 'Investment Properties',
-        desc: 'Explore high-yield investment opportunities in Gurgaon\'s growing real estate market with expert market analysis.',
+        desc: 'Explore high-yield investment opportunities in Gurugram\'s growing real estate market with expert market analysis.',
         btnIcon: <i className="fas fa-arrow-right"></i>
     },
     {
         thumb: portfolioThumb4,
         title: 'Rental Properties',
-        desc: 'Browse through a wide selection of rental properties including apartments, houses, and PG accommodations in Gurgaon.',
+        desc: 'Browse through a wide selection of verified rental properties including apartments, houses, and PG accommodations in Gurugram.',
         btnIcon: <i className="fas fa-arrow-right"></i>
     },
 ]
@@ -134,7 +134,7 @@ export const testimonials = [
     {
         name: 'Rajesh Kumar',
         designation: 'Property Investor',
-        desc: 'I used to pay lakhs in brokerage for minimal service. 360Ghar gave me a dedicated RM, verified on-site inspections, and complete visibility at no upfront cost. This is real value.',
+        desc: 'I used to pay lakhs in brokerage for minimal service. 360Ghar gave me a dedicated RM, verified on-site inspections, and complete visibility with zero upfront fees. This is real value.',
         quote: quoteIcon
     },
 ]

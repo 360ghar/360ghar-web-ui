@@ -15,11 +15,11 @@
   --poppins-font: "Poppins", sans-serif;
 
   /* Primary Colors (match 360Ghar main) */
-  --primary: #f05a22;
-  --primary-hover: #f37221;
-  --primary-light: rgba(240, 90, 34, 0.12);
-  --main-gradient: linear-gradient(90deg, #F69220 0.04%, #F68E20 28.67%, #F48421 54.05%, #F37221 78.11%, #F05A22 100.04%);
-  --main-gradient-rev: linear-gradient(270deg, #F69220 0.04%, #F68E20 28.67%, #F48421 54.05%, #F37221 78.11%, #F05A22 100.04%);
+  --primary: #ff6b00;
+  --primary-hover: #cc5500;
+  --primary-light: rgba(255, 107, 0, 0.12);
+  --main-gradient: linear-gradient(90deg, #ff6b00 0.04%, #f56a00 28.67%, #e86200 54.05%, #cc5500 78.11%, #cc5500 100.04%);
+  --main-gradient-rev: linear-gradient(270deg, #ff6b00 0.04%, #f56a00 28.67%, #e86200 54.05%, #cc5500 78.11%, #cc5500 100.04%);
 
   /* Neutral Colors */
   --surface: #ffffff;

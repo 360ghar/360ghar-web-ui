@@ -35,7 +35,7 @@ const About = () => {
                                     headingClass="style-left"  
                                     subtitle="About Us"
                                     subtitleClass="" 
-                                    title="Your Trusted Real Estate Partner in Gurgaon" 
+                                    title="Your Trusted Real Estate Partner in Gurugram" 
                                     renderDesc={false}
                                     desc=""
                                     renderButton={false}

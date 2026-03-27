@@ -9,7 +9,7 @@ const Cta = (props) => {
                 <div className="cta-box flx-between gap-2">
                     <div className="cta-content">
                         <h2 className="cta-content__title">Subscribe To Our <span className="text-gradient">Newsletter</span> </h2>
-                        <p className="cta-content__desc">Stay updated with the latest property listings, market trends, and exclusive deals in Gurgaon&apos;s real estate market.</p>
+                        <p className="cta-content__desc">Get verified property listings, market insights, and exclusive deals in Gurugram delivered to your inbox. Your trusted guide to finding home.</p>
 
                         <NewsletterForm formClass="max-w-unset" inputClass="bg-danger" iconClass="text-gradient" />
 

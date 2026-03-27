@@ -62,8 +62,8 @@ const SEO = ({
       <meta name="contactNumber" content="+91-8178340031" />
       <meta name="contactEmail" content="info@360ghar.com" />
       <meta name="contactOfficeHours" content="Mon-Fri 9:00-21:00, Sat-Sun 10:00-20:00" />
-      <meta name="businessLocation" content="Gurgaon, Haryana" />
-      <meta name="serviceArea" content="Gurgaon, Delhi, Noida, Faridabad, Ghaziabad" />
+      <meta name="businessLocation" content="Gurgaon, Gurugram, Haryana" />
+      <meta name="serviceArea" content="Gurgaon, Gurugram, Delhi, Noida, Faridabad, Ghaziabad" />
       <meta name="realEstateListingType" content="Sale, Rent, PG" />
 
       {/* Dublin Core */}
@@ -71,7 +71,7 @@ const SEO = ({
       {metaKeywords && <meta name="DC.subject" content={metaKeywords} />}
       {metaDesc && <meta name="DC.description" content={metaDesc} />}
       <meta name="DC.language" content="en-IN" />
-      <meta name="DC.coverage" content="Gurgaon, Haryana, India" />
+      <meta name="DC.coverage" content="Gurgaon, Gurugram, Haryana, India" />
       <meta name="DC.publisher" content="360Ghar" />
       <meta name="DC.rights" content="https://360ghar.com" />
 

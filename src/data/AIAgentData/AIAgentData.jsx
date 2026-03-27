@@ -1,7 +1,7 @@
 export const aiAgentShowcaseContent = {
     badge: "AI-Powered",
-    title: "Meet Your AI Real Estate Assistant",
-    subtitle: "Find properties, book visits, and manage your rentals — all through natural conversation with AI. No apps to navigate, no forms to fill.",
+    title: "Meet Your AI-Powered Property Guide",
+    subtitle: "Search verified properties, schedule guided walkthroughs, and manage your rentals — all through natural conversation. No apps to navigate, no forms to fill.",
     subtitleHighlight: "Just ask.",
     mcpUrl: "http://api.360ghar.com/mcp"
 };
@@ -10,7 +10,7 @@ export const aiAgentFeatures = [
     {
         icon: "search",
         title: "Smart Property Search",
-        description: "Describe what you need in plain language. Our AI finds matching properties, compares options, and presents the best matches with virtual tours.",
+        description: "Describe what you need in plain language. Our AI finds matching verified properties, compares options, and presents the best matches with guided walkthroughs.",
         example: '"Find a 2BHK furnished apartment in DLF Phase 3 under 35k"'
     },
     {
@@ -130,13 +130,13 @@ export const aiAgentUseCases = [
         role: "Home Buyer",
         scenario: "Looking for a 3BHK apartment in Golf Course Road area",
         conversation: '"I\'m looking to buy a 3BHK apartment in Golf Course Road area, preferably in a gated society with amenities. What options do you have under 2 crores?"',
-        result: "AI presented 5 verified listings with 360° tours, compared amenities, and scheduled visits for the top 3 properties."
+        result: "AI presented 5 verified listings with guided walkthroughs, compared amenities, and scheduled visits for the top 3 properties."
     },
     {
         role: "Tenant",
-        scenario: "Searching for PG in Gurgaon near metro",
+        scenario: "Searching for PG in Gurugram near metro",
         conversation: '"Need a single room in a PG near MG Road metro, with WiFi and meals included. Budget around 15k."',
-        result: "AI found 8 verified PGs, showed photos and virtual tours, and helped schedule site visits."
+        result: "AI found 8 verified PGs, showed photos and guided walkthroughs, and helped schedule site visits."
     },
     {
         role: "Landlord",
@@ -190,8 +190,8 @@ export const aiAgentStats = {
 
 export const aiAgentCTASection = {
     badge: "Get Started",
-    title: "Ready to Experience AI-Powered Real Estate?",
-    subtitle: "Connect your AI assistant in seconds and discover a smarter way to find, visit, and manage properties.",
+    title: "Ready to Find Home the Smart Way?",
+    subtitle: "Connect your AI assistant in seconds and discover India's VR-First Way to Find a Home — verified properties, guided walkthroughs, complete transparency.",
     primaryCTA: "Connect AI Assistant",
     primaryLink: "/mcp/login",
     secondaryCTA: "Learn More",

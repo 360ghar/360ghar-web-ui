@@ -29,7 +29,7 @@ const ContactUsSection = () => {
                         <span className="section-heading__subtitle bg-gray-100">
                             <span className="text-gradient fw-semibold">Contact us</span>
                         </span>
-                        <p className="section-heading__desc">We&apos;re here to help you find your dream property in Gurgaon. Our expert team is ready to assist with property search, documentation, and all your real estate needs.</p>
+                        <p className="section-heading__desc">We&apos;re here to help you find your dream property in Gurugram. Our expert team is ready to assist with property search, documentation, and all your real estate needs.</p>
                     </div>
                     <div className="contact-form__form">
                         <form onSubmit={handleSubmit} className="contact-form__form">

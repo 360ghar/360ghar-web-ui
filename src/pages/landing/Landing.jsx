@@ -20,6 +20,7 @@ const VALID_INTENTS = ['buy', 'rent', 'pg'];
 
 const Landing = () => {
   const { citySlug, intent, type } = useParams();
+  const canonicalCitySlug = citySlug === 'gurugram' ? 'gurgaon' : citySlug;
   const city = pretty(citySlug);
   const validIntent = VALID_INTENTS.includes(intent) ? intent : 'buy';
   const canonicalType = validIntent === 'pg'
@@ -73,7 +74,7 @@ const Landing = () => {
         title={title}
         description={description}
         keywords={keywords}
-        canonical={`/${citySlug}/${intent}/${type}`}
+        canonical={`/${canonicalCitySlug}/${intent}/${type}`}
         structuredData={[
           generateBreadcrumbStructuredData(breadcrumbs),
           {

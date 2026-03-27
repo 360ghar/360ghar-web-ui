@@ -19,8 +19,8 @@
         position: absolute;
         inset: 0;
         background-image: 
-            linear-gradient(rgba(246, 146, 32, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(246, 146, 32, 0.03) 1px, transparent 1px);
+            linear-gradient(rgba(255, 107, 0, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 107, 0, 0.03) 1px, transparent 1px);
         background-size: 60px 60px;
         mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%);
     }
@@ -34,7 +34,7 @@
         &--1 {
             width: 400px;
             height: 400px;
-            background: linear-gradient(135deg, #F69220, #F05A22);
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
             top: -100px;
             right: -100px;
             animation: float 8s ease-in-out infinite;
@@ -43,7 +43,7 @@
         &--2 {
             width: 300px;
             height: 300px;
-            background: linear-gradient(135deg, #F05A22, #F69220);
+            background: linear-gradient(135deg, #cc5500, #ff6b00);
             bottom: -50px;
             left: -50px;
             animation: float 10s ease-in-out infinite reverse;
@@ -53,8 +53,8 @@
     &__float-shape {
         position: absolute;
         border-radius: 50%;
-        background: linear-gradient(135deg, rgba(246, 146, 32, 0.1), rgba(240, 90, 34, 0.1));
-        border: 1px solid rgba(246, 146, 32, 0.2);
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(204, 85, 0, 0.1));
+        border: 1px solid rgba(255, 107, 0, 0.2);
 
         &--1 {
             width: 60px;
@@ -91,12 +91,12 @@
         align-items: center;
         gap: 8px;
         padding: 8px 20px;
-        background: linear-gradient(135deg, rgba(246, 146, 32, 0.1), rgba(240, 90, 34, 0.1));
-        border: 1px solid rgba(246, 146, 32, 0.3);
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(204, 85, 0, 0.1));
+        border: 1px solid rgba(255, 107, 0, 0.3);
         border-radius: 50px;
         font-size: 13px;
         font-weight: 600;
-        color: #F69220;
+        color: #ff6b00;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-bottom: 20px;
@@ -105,7 +105,7 @@
     &__badge-dot {
         width: 8px;
         height: 8px;
-        background: linear-gradient(135deg, #F69220, #F05A22);
+        background: linear-gradient(135deg, #ff6b00, #cc5500);
         border-radius: 50%;
         animation: pulse 2s ease-in-out infinite;
     }
@@ -133,7 +133,7 @@
     }
 
     &__subtitle-highlight {
-        color: #F69220;
+        color: #ff6b00;
         font-weight: 600;
     }
 
@@ -179,7 +179,7 @@
     &__glow {
         position: absolute;
         inset: -2px;
-        background: linear-gradient(135deg, #F69220, #F05A22);
+        background: linear-gradient(135deg, #ff6b00, #cc5500);
         border-radius: 22px;
         opacity: 0;
         transition: opacity 0.4s ease;
@@ -191,7 +191,7 @@
         inset: 0;
         border: 2px solid transparent;
         border-radius: 18px;
-        background: linear-gradient(135deg, #F69220, #F05A22) border-box;
+        background: linear-gradient(135deg, #ff6b00, #cc5500) border-box;
         -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
@@ -217,7 +217,7 @@
     &__icon-bg {
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, rgba(246, 146, 32, 0.15), rgba(240, 90, 34, 0.1));
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(204, 85, 0, 0.1));
         border-radius: 16px;
         transform: rotate(6deg);
     }
@@ -231,7 +231,7 @@
         justify-content: center;
         background: #fff;
         border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(246, 146, 32, 0.15);
+        box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15);
         transition: transform 0.4s ease;
 
         svg {
@@ -243,7 +243,7 @@
     &__icon-ring {
         position: absolute;
         inset: -4px;
-        border: 2px dashed rgba(246, 146, 32, 0.3);
+        border: 2px dashed rgba(255, 107, 0, 0.3);
         border-radius: 20px;
         animation: rotate 20s linear infinite;
     }
@@ -268,7 +268,7 @@
     }
 
     &__example {
-        background: linear-gradient(135deg, rgba(246, 146, 32, 0.05), rgba(240, 90, 34, 0.03));
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.05), rgba(204, 85, 0, 0.03));
         border-radius: 10px;
         padding: 12px 16px;
         margin-top: auto;
@@ -278,7 +278,7 @@
         display: block;
         font-size: 11px;
         font-weight: 600;
-        color: #F69220;
+        color: #ff6b00;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 4px;
@@ -295,7 +295,7 @@
         position: absolute;
         width: 20px;
         height: 20px;
-        border: 2px solid rgba(246, 146, 32, 0.3);
+        border: 2px solid rgba(255, 107, 0, 0.3);
         opacity: 0.5;
 
         &--tl {
@@ -353,13 +353,13 @@
         }
 
         &--primary {
-            background: linear-gradient(135deg, #F69220, #F05A22);
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
             color: #fff;
-            box-shadow: 0 4px 20px rgba(246, 146, 32, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
 
             &:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 8px 30px rgba(246, 146, 32, 0.4);
+                box-shadow: 0 8px 30px rgba(255, 107, 0, 0.4);
 
                 svg {
                     transform: translateX(4px);
@@ -374,8 +374,8 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 
             &:hover {
-                border-color: #F69220;
-                color: #F69220;
+                border-color: #ff6b00;
+                color: #ff6b00;
                 transform: translateY(-2px);
 
                 svg {
@@ -398,12 +398,12 @@
     &-link {
         display: inline-block;
         padding: 8px 16px;
-        background: linear-gradient(135deg, rgba(246, 146, 32, 0.1), rgba(240, 90, 34, 0.05));
-        border: 1px solid rgba(246, 146, 32, 0.2);
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(204, 85, 0, 0.05));
+        border: 1px solid rgba(255, 107, 0, 0.2);
         border-radius: 8px;
         font-size: 14px;
         font-weight: 500;
-        color: #F05A22;
+        color: #cc5500;
         font-family: 'Courier New', monospace;
     }
 }

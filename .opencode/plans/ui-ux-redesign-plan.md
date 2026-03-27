@@ -2,7 +2,7 @@
 
 **Date**: 2026-02-21  
 **Scope**: Full Platform Redesign  
-**Goal**: Transform 360ghar into a luxury, trustworthy real estate platform while maintaining the current Teal (#0F766E) theme
+**Goal**: Transform 360ghar into a luxury, trustworthy real estate platform with the Orange (#ff6b00) brand theme
 
 ---
 
@@ -19,13 +19,13 @@ This plan addresses 47 identified issues across 6 key areas, implementing a comp
 
 ## Design System Foundation
 
-### Colors (Keeping Current Teal Theme)
+### Colors (Orange Brand Theme)
 
 ```
-Primary Teal:    #0F766E  --main-color
-Primary Dark:    #134E4A  --main-color-dark  
-Primary Light:   #14B8A6  --main-color-light
-Primary Lighter: #F0FDFA  --main-color-lighter
+Primary Orange:  #ff6b00  --main-color
+Primary Dark:    #cc5500  --main-color-dark
+Primary Light:   #ff8c3a  --main-color-light
+Primary Lighter: #fff5eb  --main-color-lighter
 CTA Blue:        #0369A1  --cta-color
 
 Accent Gold:     #B8860B  --accent-color (new, for luxury touches)

@@ -38,7 +38,7 @@ const PropertyDetails = () => {
         propertyType: propertyData?.property_type,
         purpose: propertyData?.purpose,
     });
-    const locationLabel = propertyData?.locality || propertyData?.city || 'Gurgaon';
+    const locationLabel = propertyData?.locality || propertyData?.city || 'Gurugram';
     const priceValue = propertyData?.purpose === 'rent'
         ? (propertyData?.monthly_rent || propertyData?.daily_rate || propertyData?.base_price || 0)
         : (propertyData?.base_price || propertyData?.monthly_rent || propertyData?.daily_rate || 0);
@@ -55,8 +55,8 @@ const PropertyDetails = () => {
         // SingleFamilyResidence / Accommodation schema
         const basePropertySchema = {
             '@type': getAccommodationSchemaType(propertyData.property_type),
-            name: propertyData.title || 'Property in Gurgaon',
-            description: propertyData.description || 'Premium property with 360° virtual tour in Gurgaon',
+            name: propertyData.title || 'Property in Gurugram',
+            description: propertyData.description || 'Premium property with 360° virtual tour in Gurugram',
             url: `https://360ghar.com/property/${propertyData.id}`,
             image: Array.isArray(propertyData.images)
                 ? propertyData.images.map(img => img.image_url).filter(Boolean)
