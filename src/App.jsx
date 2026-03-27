@@ -68,6 +68,13 @@ const Truth99acres = lazy(() => import('./pages/truth/99acres-fake'));
 const TruthNestAway = lazy(() => import('./pages/truth/nestaway-collapse'));
 const TruthZolo = lazy(() => import('./pages/truth/zolo-issues'));
 
+const VerifyOwnership = lazy(() => import('./pages/data-hub/VerifyOwnership'));
+const ZoneChecker = lazy(() => import('./pages/data-hub/ZoneChecker'));
+const ZoneCheckerDetail = lazy(() => import('./pages/data-hub/ZoneCheckerDetail'));
+const RegulatoryUpdates = lazy(() => import('./pages/data-hub/RegulatoryUpdates'));
+const BuilderReputation = lazy(() => import('./pages/data-hub/BuilderReputation'));
+const BuilderReputationDetail = lazy(() => import('./pages/data-hub/BuilderReputationDetail'));
+
 const propertyRoutes = [
   { path: '/properties', element: <Property /> },
   { path: '/property-sidebar', element: <PropertySidebar /> },
@@ -117,6 +124,15 @@ const toolRoutes = [
   { path: '/ai-design-studio', element: <AIDesignStudio /> },
 ];
 
+const dataHubRoutes = [
+  { path: '/verify-ownership', element: <VerifyOwnership /> },
+  { path: '/zone-checker', element: <ZoneChecker /> },
+  { path: '/zone-checker/:slug', element: <ZoneCheckerDetail /> },
+  { path: '/regulatory-updates', element: <RegulatoryUpdates /> },
+  { path: '/builder-reputation', element: <BuilderReputation /> },
+  { path: '/builder-reputation/:slug', element: <BuilderReputationDetail /> },
+];
+
 const comparisonRoutes = [
   { path: '/vs/nobroker', element: <VsNoBroker /> },
   { path: '/vs/magicbricks', element: <VsMagicBricks /> },
@@ -150,6 +166,7 @@ const routeGroups = [
   ...accountRoutes,
   ...propertyRoutes,
   ...toolRoutes,
+  ...dataHubRoutes,
   ...comparisonRoutes,
   ...truthRoutes,
   ...programmaticRoutes,
