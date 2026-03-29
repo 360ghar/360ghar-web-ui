@@ -7,7 +7,7 @@ import { useAuthStore } from '../../store';
 
 import LoginRegisterThumb from '/assets/images/thumbs/login-img.avif';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 
 // Tooltip for form field help - defined at module scope to avoid re-creation on each render
 const Tooltip = ({ text, children }) => {

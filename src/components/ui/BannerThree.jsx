@@ -1,8 +1,8 @@
-import TabFilter from '../../common/TabFilter';
-import { bannerThreeContent } from '../../data/HomeThreeData/HomeThreeData';
+import TabFilter from '../../common/forms/TabFilter';
+import { bannerThreeContent } from '../../data/HomeThreeData';
 import { Link } from 'react-router-dom';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 
 // Hero banner responsive srcset for LCP optimization
 const HERO_SRCSET = `/assets/images/thumbs/banner-three-320w.webp 320w,

@@ -1,4 +1,4 @@
-import { pmShowcaseContent, pmFeatures, pmStats } from '../../data/PropertyManagementData/PropertyManagementData';
+import { pmShowcaseContent, pmFeatures, pmStats } from '../../data/PropertyManagementData';
 import './PropertyManagementShowcase.scss';
 
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360';

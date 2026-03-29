@@ -1,40 +1,14 @@
-import { getApiBaseUrl, createAxiosInstance } from './http';
+import { getApiBaseUrl } from './http';
+import { api } from './api';
 import { getSupabaseAccessToken } from './supabaseClient';
 
 /**
- * Stream a chat message via SSE (Server-Sent Events) using fetch + POST.
- * EventSource cannot be used because it only supports GET with no custom headers.
+ * Parse a streaming SSE response and call onEvent for each complete event.
  *
- * @param {string} message - The user's message (1-4000 chars)
- * @param {number|null} conversationId - Existing conversation ID, or null to start new
+ * @param {Response} response - The fetch Response with a readable body
  * @param {(type: string, data: object) => void} onEvent - Called for each SSE event
- * @param {AbortSignal} signal - AbortController signal for cancellation
  */
-async function streamChat(message, conversationId, onEvent, signal) {
-  const token = await getSupabaseAccessToken();
-  if (!token) {
-    throw new Error('Authentication required');
-  }
-
-  const url = `${getApiBaseUrl()}/agent/chat`;
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      message,
-      conversation_id: conversationId,
-    }),
-    signal,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Chat request failed with status ${response.status}`);
-  }
-
+async function _parseSSEStream(response, onEvent) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
@@ -86,13 +60,74 @@ async function streamChat(message, conversationId, onEvent, signal) {
 }
 
 /**
+ * Stream a chat message via SSE (Server-Sent Events) using fetch + POST.
+ * EventSource cannot be used because it only supports GET with no custom headers.
+ *
+ * @param {string} message - The user's message (1-4000 chars)
+ * @param {number|null} conversationId - Existing conversation ID, or null to start new
+ * @param {(type: string, data: object) => void} onEvent - Called for each SSE event
+ * @param {AbortSignal} signal - AbortController signal for cancellation
+ */
+async function streamChat(message, conversationId, onEvent, signal) {
+  const token = await getSupabaseAccessToken();
+  if (!token) {
+    throw new Error('Authentication required');
+  }
+
+  const url = `${getApiBaseUrl()}/agent/chat`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      message,
+      conversation_id: conversationId,
+    }),
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Chat request failed with status ${response.status}`);
+  }
+
+  await _parseSSEStream(response, onEvent);
+}
+
+/**
+ * Stream a chat message for unauthenticated guests. Hits the public endpoint
+ * which only has property search tools available.
+ *
+ * @param {string} message - The user's message (1-4000 chars)
+ * @param {(type: string, data: object) => void} onEvent - Called for each SSE event
+ * @param {AbortSignal} signal - AbortController signal for cancellation
+ */
+async function streamChatPublic(message, onEvent, signal) {
+  const url = `${getApiBaseUrl()}/agent/chat-public`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Chat request failed with status ${response.status}`);
+  }
+
+  await _parseSSEStream(response, onEvent);
+}
+
+/**
  * Get list of conversations for the current user.
  *
  * @param {number} limit
  * @param {number} offset
  */
 async function getConversations(limit = 50, offset = 0) {
-  const api = createAxiosInstance({ withAuth: true });
   const response = await api.get(
     `${getApiBaseUrl()}/agent/conversations?limit=${limit}&offset=${offset}`
   );
@@ -106,7 +141,6 @@ async function getConversations(limit = 50, offset = 0) {
  * @param {number} limit
  */
 async function getConversationMessages(conversationId, limit = 100) {
-  const api = createAxiosInstance({ withAuth: true });
   const response = await api.get(
     `${getApiBaseUrl()}/agent/conversations/${conversationId}/messages?limit=${limit}`
   );
@@ -119,7 +153,6 @@ async function getConversationMessages(conversationId, limit = 100) {
  * @param {number} conversationId
  */
 async function deleteConversation(conversationId) {
-  const api = createAxiosInstance({ withAuth: true });
   const response = await api.delete(
     `${getApiBaseUrl()}/agent/conversations/${conversationId}`
   );
@@ -128,6 +161,7 @@ async function deleteConversation(conversationId) {
 
 export const chatService = {
   streamChat,
+  streamChatPublic,
   getConversations,
   getConversationMessages,
   deleteConversation,

@@ -1,11 +1,11 @@
 import { useState, useEffect }  from 'react';
-import Pagination from '../../common/Pagination';
+import Pagination from '../../common/ui/Pagination';
 import PropertyFilterBottom from '../property-filters/PropertyFilterBottom';
 import PropertyItem from './PropertyItem';
-import SearchSidebar from '../../common/SearchSidebar';
-import LocationSearchInput from '../../common/LocationSearchInput';
+import SearchSidebar from '../../common/search/SearchSidebar';
+import LocationSearchInput from '../../common/search/LocationSearchInput';
 import { useLocationStore } from '../../store/locationStore';
-import usePropertyStore from '../../store/propertyStore';
+import { usePropertyStore } from '../../store/propertyStore';
 
 const PropertySidebarSection = () => {
     const { location, isLocating, error: locationError } = useLocationStore();

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { dataHubService } from '../../services/dataHubService';
 
 const LAND_USE_COLORS = {
@@ -101,6 +102,22 @@ const ZoneChecker = () => {
         description="Check zoning regulations for Gurugram sectors. View land use classification, Floor Area Ratio (FAR), maximum height, and setback rules from Haryana Master Plan."
         keywords="zone checker Gurugram, land use Gurugram, FAR Gurgaon, Master Plan Haryana, sector zoning Gurugram, residential commercial zone"
         canonical="/zone-checker"
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Zone Checker', url: 'https://360ghar.com/zone-checker' },
+          ]),
+          {
+            '@type': 'SoftwareApplication',
+            name: 'Zone Checker Gurugram',
+            applicationCategory: 'BusinessApplication',
+            operatingSystem: 'Web Browser',
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+            description: 'Check zoning regulations for Gurugram sectors. View land use classification, FAR, maximum height, and setback rules from Haryana Master Plan.',
+            keywords: 'zone checker Gurugram, land use Gurugram, FAR Gurgaon, Master Plan Haryana',
+            author: { '@type': 'Organization', name: '360Ghar' },
+          },
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

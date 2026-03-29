@@ -1,5 +1,5 @@
 import NewsletterThumb from '/assets/images/thumbs/newsletter-bg.png';
-import NewsletterForm from '../../common/NewsletterForm';
+import NewsletterForm from '../../common/forms/NewsletterForm';
 
 const Newsletter = () => {
     return (

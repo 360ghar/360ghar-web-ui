@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import Pagination from '../../common/Pagination';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import Pagination from '../../common/ui/Pagination';
 import GazetteItem from '../../components/data-hub/GazetteItem';
 import { dataHubService } from '../../services/dataHubService';
 
@@ -55,6 +56,18 @@ const RegulatoryUpdates = () => {
         description="Stay updated with official Haryana Gazette notifications affecting Gurugram real estate. Land acquisition notices, circle rate revisions, policy changes, and CLU updates."
         keywords="Haryana Gazette notifications, Gurugram regulatory updates, land acquisition notices, circle rate revision, CLU change Gurgaon, HRERA policy update, 360Ghar data hub"
         canonical="/regulatory-updates"
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Regulatory Updates', url: 'https://360ghar.com/regulatory-updates' },
+          ]),
+          {
+            '@type': 'CollectionPage',
+            name: 'Regulatory Updates — Haryana Gazette',
+            description: 'Official notifications from the Haryana Government affecting real estate in Gurugram.',
+            url: 'https://360ghar.com/regulatory-updates',
+          },
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

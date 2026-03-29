@@ -1,24 +1,72 @@
 {
   "name": "360Ghar",
   "homepage": "https://360ghar.com/",
-  "description": "Real estate platform for Buy, Rent and PG with verified listings and 360° virtual tours across Gurugram and Delhi NCR.",
+  "description": "Real estate platform for Buy, Rent and PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.",
   "search": {
     "endpoint": "https://360ghar.com/properties",
     "query_param": "q",
     "example": "https://360ghar.com/properties?q=2%20BHK%20in%20Gurugram"
   },
   "important_pages": [
-    { "title": "Home", "url": "https://360ghar.com/" },
-    { "title": "Properties", "url": "https://360ghar.com/properties" },
-    { "title": "PG in Gurugram", "url": "https://360ghar.com/gurugram/pg/apartments" },
-    { "title": "Buy Flats in Gurugram", "url": "https://360ghar.com/gurugram/buy/flats" },
-    { "title": "Rent Flats in Gurugram", "url": "https://360ghar.com/gurugram/rent/flats" },
-    { "title": "For AI Assistants", "url": "https://360ghar.com/for-ai" },
-    { "title": "Contact", "url": "https://360ghar.com/contact" }
+    {
+      "title": "Home",
+      "url": "https://360ghar.com/"
+    },
+    {
+      "title": "Properties",
+      "url": "https://360ghar.com/properties"
+    },
+    {
+      "title": "Localities",
+      "url": "https://360ghar.com/localities"
+    },
+    {
+      "title": "Blog",
+      "url": "https://360ghar.com/blog"
+    },
+    {
+      "title": "For AI Assistants",
+      "url": "https://360ghar.com/for-ai"
+    },
+    {
+      "title": "AI Agent",
+      "url": "https://360ghar.com/ai-agent"
+    },
+    {
+      "title": "Gurugram Real Estate Guide",
+      "url": "https://360ghar.com/gurugram-real-estate-guide"
+    },
+    {
+      "title": "EMI Calculator",
+      "url": "https://360ghar.com/emi-calculator"
+    },
+    {
+      "title": "Stamp Duty Calculator",
+      "url": "https://360ghar.com/stamp-duty-calculator"
+    },
+    {
+      "title": "Circle Rates",
+      "url": "https://360ghar.com/circle-rates"
+    },
+    {
+      "title": "Bank Auctions",
+      "url": "https://360ghar.com/bank-auctions"
+    },
+    {
+      "title": "Builder Reputation",
+      "url": "https://360ghar.com/builder-reputation"
+    },
+    {
+      "title": "Compare: 360Ghar vs NoBroker",
+      "url": "https://360ghar.com/vs/nobroker"
+    },
+    {
+      "title": "Contact",
+      "url": "https://360ghar.com/contact"
+    }
   ],
   "contact": {
     "email": "info@360ghar.com",
     "telephone": "+91-8178340031"
   }
 }
-

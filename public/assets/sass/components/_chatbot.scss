@@ -411,7 +411,7 @@
 // ========================= Chat Input Area =========================
 .chatbot-input-area {
   flex-shrink: 0;
-  padding: 12px 16px;
+  padding: 9px 14px;
   border-top: 1px solid var(--gray-200);
   background: #fff;
 }
@@ -423,7 +423,7 @@
   background: var(--gray-100);
   border: 1px solid var(--gray-200);
   border-radius: 24px;
-  padding: 8px 8px 8px 14px;
+  padding: 6px 6px 6px 12px;
   transition: border-color 0.2s;
 
   &:focus-within {
@@ -496,50 +496,36 @@
   }
 }
 
-// ========================= Guest Prompt =========================
-.chatbot-guest {
+// ========================= Guest Login Banner =========================
+.chatbot-guest-banner {
   flex-shrink: 0;
-  padding: 16px;
-  border-top: 1px solid var(--gray-200);
-  text-align: center;
+  padding: 6px 14px;
+  background: var(--chatbot-primary-lighter);
+  border-top: 1px solid rgba(255, 107, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
   &__text {
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1.2;
     color: var(--gray-800);
-    margin-bottom: 12px;
   }
 
-  &__actions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  &__link {
+    display: inline-flex;
     align-items: center;
-  }
-
-  &__login-btn {
-    display: inline-block;
-    padding: 9px 24px;
-    background: var(--chatbot-primary);
-    color: #fff;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background 0.2s;
-
-    &:hover {
-      background: var(--chatbot-primary-dark);
-      color: #fff;
-    }
-  }
-
-  &__register-link {
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 600;
     color: var(--chatbot-primary);
     text-decoration: none;
+    white-space: nowrap;
 
     &:hover {
       text-decoration: underline;
+      color: var(--chatbot-primary-dark);
     }
   }
 }
@@ -551,26 +537,26 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
+  padding: 12px 16px;
   text-align: center;
 
   &__icon {
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     color: var(--chatbot-primary);
   }
 
   &__title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--gray-900);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
   &__subtitle {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--gray-800);
-    line-height: 1.5;
-    margin-bottom: 20px;
+    line-height: 1.4;
+    margin-bottom: 12px;
     max-width: 260px;
   }
 }
@@ -578,12 +564,12 @@
 .chatbot-quick-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
 }
 
 .chatbot-quick-action {
-  padding: 7px 14px;
+  padding: 5px 12px;
   border: 1px solid var(--chatbot-primary);
   border-radius: 20px;
   background: none;
@@ -595,6 +581,47 @@
   &:hover {
     background: var(--chatbot-primary);
     color: #fff;
+  }
+
+  &--locked {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-color: var(--gray-200);
+    color: var(--gray-800);
+    opacity: 0.65;
+
+    &:hover {
+      background: var(--gray-100);
+      color: var(--gray-800);
+      border-color: var(--gray-300);
+    }
+  }
+}
+
+// ========================= Guest Welcome Sections =========================
+.chatbot-welcome__section {
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: left;
+
+  &-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--gray-800);
+    margin-bottom: 6px;
+  }
+
+  &--locked {
+    margin-bottom: 0;
+
+    .chatbot-welcome__section-label {
+      color: var(--gray-800);
+      opacity: 0.7;
+    }
   }
 }
 

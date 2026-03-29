@@ -1,8 +1,8 @@
-import SectionHeading from '../../common/SectionHeading';
-import { messageThreeContents } from '../../data/HomeThreeData/HomeThreeData';
+import SectionHeading from '../../common/ui/SectionHeading';
+import { messageThreeContents } from '../../data/HomeThreeData';
 import { Link } from 'react-router-dom';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const MessageThree = () => {
     return (
         <>

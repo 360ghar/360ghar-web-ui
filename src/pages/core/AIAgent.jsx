@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
 import SEO from '../../common/SEO';
 import { 
     aiAgentShowcaseContent, 
@@ -11,7 +11,7 @@ import {
     aiAgentFAQs,
     aiAgentStats,
     aiAgentCTASection
-} from '../../data/AIAgentData/AIAgentData';
+} from '../../data/AIAgentData';
 import { siteMetadata } from '../../seo/siteMetadata';
 import './AIAgent.scss';
 

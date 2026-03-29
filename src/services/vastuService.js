@@ -10,7 +10,7 @@ import axios from 'axios';
 // Use direct API URL in production to bypass Netlify's 26s proxy timeout
 // Vastu analysis requires up to 3 minutes for AI processing
 const API_BASE_URL = import.meta.env.PROD
-  ? 'https://api.360ghar.com/api/v1'
+  ? `${import.meta.env.VITE_API_SERVER || 'https://api.360ghar.com'}/api/v1`
   : '/api';
 
 const vastuApi = axios.create({
@@ -56,7 +56,3 @@ export const checkHealth = async () => {
   return response.data;
 };
 
-export default {
-  analyzeFloorPlan,
-  checkHealth,
-};

@@ -1,17 +1,16 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import './index.css'
 import './index.scss'
-import MobileMenuProvider from './contextApi/MobileMenuContext.jsx'
-import OffCanvasProvider from './contextApi/OffCanvasContext.jsx'
-import ScrollHideProvider from './contextApi/ScrollHideContext.jsx'
-import BlogDataProvider from './contextApi/BlogDataContext.jsx'
 import { HelmetProvider } from 'react-helmet-async'
 import { reportWebVitals } from './seo/reportWebVitals'
 import LazyToastProvider from './common/LazyToast.jsx'
 
 // Lazy load PostHog analytics after initial render
 const loadAnalytics = () => {
+  if (window.__PRERENDER_INJECTED?.isPrerendering) {
+    return
+  }
+
   // Load Google Tag Manager
   if (import.meta.env.PROD) {
     const gtmId = 'GTM-XXXXXXX'
@@ -44,19 +43,11 @@ const loadAnalytics = () => {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BlogDataProvider>
-    <HelmetProvider>
-      <ScrollHideProvider>
-        <OffCanvasProvider>
-          <MobileMenuProvider>
-            <LazyToastProvider>
-              <App />
-            </LazyToastProvider>
-          </MobileMenuProvider>
-        </OffCanvasProvider>
-      </ScrollHideProvider>
-    </HelmetProvider>
-  </BlogDataProvider>
+  <HelmetProvider>
+    <LazyToastProvider>
+      <App />
+    </LazyToastProvider>
+  </HelmetProvider>
 )
 
 // Load analytics after app renders and is idle

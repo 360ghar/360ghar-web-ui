@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { dataHubService } from '../../services/dataHubService';
 import StampDutyWidget from '../../components/data-hub/StampDutyWidget';
 
@@ -30,6 +31,7 @@ const CircleRateDetail = () => {
 
   if (error || !rate) return (
     <>
+      <SEO noindex={true} title="Not Found | 360Ghar" />
       <OffCanvas /><MobileMenu />
       <main className="body-bg"><Header /><section className="pt-60 pb-60"><div className="container">
         <h1>Circle Rate Not Found</h1>
@@ -45,6 +47,34 @@ const CircleRateDetail = () => {
         description={`Official circle rates for ${rate.sector}, Gurugram for ${rate.property_type} properties. Rate: ₹${rate.rate_per_sqyd}/sq yd for ${rate.revision_year}. Calculate stamp duty.`}
         keywords={`${rate.sector} circle rate, DLC rate ${rate.sector}, stamp duty ${rate.sector} Gurugram`}
         canonical={`/circle-rate/${slug}`}
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Circle Rates', url: 'https://360ghar.com/circle-rates' },
+            { name: rate.sector, url: `https://360ghar.com/circle-rate/${slug}` },
+          ]),
+          {
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                q: `What is the circle rate for ${rate.sector}?`,
+                a: `The current circle rate for ${rate.property_type} properties in ${rate.sector} is ₹${rate.rate_per_sqyd || 'N/A'} per square yard as per the ${rate.revision_year} revision by IGRS Haryana.`,
+              },
+              {
+                q: `How is stamp duty calculated in ${rate.sector}?`,
+                a: 'Stamp duty in Haryana is 7% for male buyers, 5% for female buyers, and 6% for joint ownership. Registration fees are an additional 1% of the property value.',
+              },
+              {
+                q: 'What is the difference between circle rate and market rate?',
+                a: 'Circle rate (DLC rate) is the minimum value set by the government for property registration. The actual market rate (transaction price) is usually higher. Stamp duty is calculated on whichever is higher.',
+              },
+            ].map(({ q, a }) => ({
+              '@type': 'Question',
+              name: q,
+              acceptedAnswer: { '@type': 'Answer', text: a },
+            })),
+          },
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

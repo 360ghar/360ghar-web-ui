@@ -1,5 +1,5 @@
-import SectionHeading from '../../common/SectionHeading';
-import { propertyTypes } from '../../data/HomeOneData/HomeOneData';
+import SectionHeading from '../../common/ui/SectionHeading';
+import { propertyTypes } from '../../data/HomeOneData';
 import PropertyTypeItem from './PropertyTypeItem';
 
 const PropertyType = () => {

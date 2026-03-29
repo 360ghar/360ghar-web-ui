@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import Pagination from '../../common/Pagination';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import Pagination from '../../common/ui/Pagination';
 import AuctionCard from '../../components/data-hub/AuctionCard';
 import AuctionAlertModal from '../../components/data-hub/AuctionAlertModal';
 import { dataHubService } from '../../services/dataHubService';
@@ -100,6 +101,19 @@ const BankAuctions = () => {
         description="Browse bank auctions (SARFAESI) and court-ordered property auctions in Gurugram. Find foreclosed properties from SBI, HDFC, ICICI and other lenders at reserve prices."
         keywords="bank auctions Gurugram, SARFAESI auctions, court ordered property auction, foreclosure properties Gurgaon, bank auction flats, property auction Haryana"
         canonical="/bank-auctions"
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Bank Auctions', url: 'https://360ghar.com/bank-auctions' },
+          ]),
+          {
+            '@type': 'ItemList',
+            name: 'Bank & Court Property Auctions — Gurugram',
+            description: 'SARFAESI auctions and court-ordered property sales in Gurugram.',
+            url: 'https://360ghar.com/bank-auctions',
+            numberOfItems: total,
+          },
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

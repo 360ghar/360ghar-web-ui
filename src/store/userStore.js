@@ -1,14 +1,6 @@
 import { create } from 'zustand';
 import { userService } from '../services/userService';
-
-// Normalize API error messages
-const extractError = (err, fallback = 'Request failed') => {
-  const detail = err?.response?.data?.detail ?? err?.message;
-  if (!detail) return fallback;
-  if (Array.isArray(detail)) return detail.map((d) => d?.msg || d?.message || d).join(', ');
-  if (typeof detail === 'object') return detail.msg || detail.message || JSON.stringify(detail);
-  return String(detail);
-};
+import { extractError } from '../utils/apiError';
 
 const useUserStore = create((set, get) => ({
   profile: null,
@@ -69,4 +61,4 @@ const useUserStore = create((set, get) => ({
   clearError: () => set({ error: null }),
 }));
 
-export default useUserStore;
+export { useUserStore };

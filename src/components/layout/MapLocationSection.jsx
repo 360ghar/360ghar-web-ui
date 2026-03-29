@@ -1,6 +1,6 @@
 /* global google */
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import usePropertyStore from '../../store/propertyStore';
+import { usePropertyStore } from '../../store/propertyStore';
 import { useLocationStore } from '../../store/locationStore';
 import PropertyItem from '../property/PropertyItem';
 import PropertyFilters from '../property-filters/PropertyFilters';
@@ -8,7 +8,7 @@ import PropertyQuickFilters from '../property/PropertyQuickFilters';
 import MapControls from '../map/MapControls';
 import RadiusSlider from '../map/RadiusSlider';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import GooglePlacesInput from '../../common/GooglePlacesInput';
+import GooglePlacesInput from '../../common/search/GooglePlacesInput';
 import { Loader } from '@googlemaps/js-api-loader';
 
 let googleMapsLoader;

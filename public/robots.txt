@@ -1,23 +1,61 @@
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
 User-agent: *
 Allow: /
 Allow: /sitemap.xml
 Allow: /sitemap-static.xml
 Allow: /sitemap-landing.xml
 Allow: /sitemap-localities.xml
+Allow: /.well-known/ai.txt
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /data/llm-feed.json
 
-# Explicitly disallow any account, admin, or API paths if they exist
-Disallow: /account/
+# Explicitly disallow private or system paths
 Disallow: /admin/
 Disallow: /api/
 Disallow: /checkout/
 Disallow: /cart/
-Disallow: /delete-account/
 
 # Sitemaps
 Sitemap: https://360ghar.com/sitemap.xml
 Sitemap: https://360ghar.com/sitemap-static.xml
 Sitemap: https://360ghar.com/sitemap-landing.xml
 Sitemap: https://360ghar.com/sitemap-localities.xml
-
-# Crawl Delay
-Crawl-delay: 1

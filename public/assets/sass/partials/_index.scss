@@ -1,10 +1,6 @@
 
 @import "home/index";
-@import "home-two/index";
+@import "home-two/index";    // keep: cta, floor-plan, service, gallery, counter-two are used by active components
 @import "home-three/index";
-@import "home-four/index";
-@import "home-five/index";
-@import "home-six/index";
-@import "home-seven/index";
 @import "othersPage/index";
-@import "rtlVersion/index";
+// Removed: home-four, home-five, home-six, home-seven, rtlVersion (confirmed unused)

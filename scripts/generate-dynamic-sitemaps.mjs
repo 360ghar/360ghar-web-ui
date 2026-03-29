@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { fetchPaginatedCollection } from './lib/paginatedApi.mjs';
+import { getProjectEntries } from './lib/projectEntries.mjs';
 
 const SITE_URL = process.env.SITE_URL || 'https://360ghar.com';
-const API_BASE = process.env.API_BASE || 'https://api.360ghar.com/api/v1';
+const API_BASE = `${process.env.VITE_API_SERVER || 'https://api.360ghar.com'}/api/v1`;
 const outDir = path.resolve(process.cwd(), 'public');
 
 const writeFile = (p, content) => {
@@ -24,59 +27,94 @@ const urlTag = (loc, lastmod, changefreq, priority) =>
 
 // Format date for sitemap
 const formatDate = (dateString) => {
-  if (!dateString) return new Date().toISOString().split('T')[0];
+  if (!dateString) return null;
   try {
     return new Date(dateString).toISOString().split('T')[0];
   } catch {
-    return new Date().toISOString().split('T')[0];
+    return null;
   }
 };
 
 // Fetch properties from API
 async function fetchProperties() {
   try {
-    const response = await fetch(`${API_BASE}/properties/?limit=10000`);
-    if (!response.ok) throw new Error(`API error: ${response.status}`);
-    const data = await response.json();
-    return data.results || data.items || data;
+    return {
+      items: await fetchPaginatedCollection({
+        baseUrl: API_BASE,
+        path: '/properties/',
+      }),
+      ok: true,
+    };
   } catch (error) {
     console.warn('Failed to fetch properties:', error.message);
-    return [];
+    return { items: [], ok: false };
   }
 }
 
 // Fetch blog posts from API
 async function fetchBlogPosts() {
   try {
-    const response = await fetch(`${API_BASE}/blog/posts/?limit=1000`);
-    if (!response.ok) throw new Error(`API error: ${response.status}`);
-    const data = await response.json();
-    return data.results || data.items || data;
+    return {
+      items: await fetchPaginatedCollection({
+        baseUrl: API_BASE,
+        path: '/blog/posts',
+      }),
+      ok: true,
+    };
   } catch (error) {
     console.warn('Failed to fetch blog posts:', error.message);
-    return [];
+    return { items: [], ok: false };
   }
 }
 
-// Fetch projects from API
 async function fetchProjects() {
   try {
-    const response = await fetch(`${API_BASE}/projects/?limit=1000`);
-    if (!response.ok) throw new Error(`API error: ${response.status}`);
-    const data = await response.json();
-    return data.results || data.items || data;
+    return {
+      items: getProjectSitemapEntries(),
+      ok: true,
+    };
   } catch (error) {
-    console.warn('Failed to fetch projects:', error.message);
-    return [];
+    console.warn('Failed to build project sitemap entries:', error.message);
+    return { items: [], ok: false };
   }
+}
+
+export function getProjectSitemapEntries() {
+  return getProjectEntries();
+}
+
+function buildSitemapXml(urls) {
+  return [
+    xmlHeader,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...urls,
+    '</urlset>\n'
+  ].join('\n');
+}
+
+function getExistingSitemapUrl(filename) {
+  const filePath = path.join(outDir, filename);
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
+
+  return `${SITE_URL}/${filename}`;
 }
 
 // Generate properties sitemap
 async function generatePropertiesSitemap() {
-  const properties = await fetchProperties();
+  const { items: properties, ok } = await fetchProperties();
+  const filename = 'sitemap-properties.xml';
+  const filePath = path.join(outDir, filename);
 
-  if (properties.length === 0) {
-    console.log('No properties found, skipping properties sitemap');
+  if (!ok) {
+    const existing = getExistingSitemapUrl(filename);
+    if (existing) {
+      console.log('Preserving existing properties sitemap after API failure');
+      return existing;
+    }
+
+    console.log('No properties sitemap generated and no previous file to preserve');
     return null;
   }
 
@@ -91,23 +129,24 @@ async function generatePropertiesSitemap() {
     );
   });
 
-  const xml = [
-    xmlHeader,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...urls,
-    '</urlset>\n'
-  ].join('\n');
-
-  writeFile(path.join(outDir, 'sitemap-properties.xml'), xml);
-  return `${SITE_URL}/sitemap-properties.xml`;
+  writeFile(filePath, buildSitemapXml(urls));
+  return `${SITE_URL}/${filename}`;
 }
 
 // Generate blog sitemap
 async function generateBlogSitemap() {
-  const posts = await fetchBlogPosts();
+  const { items: posts, ok } = await fetchBlogPosts();
+  const filename = 'sitemap-blog.xml';
+  const filePath = path.join(outDir, filename);
 
-  if (posts.length === 0) {
-    console.log('No blog posts found, skipping blog sitemap');
+  if (!ok) {
+    const existing = getExistingSitemapUrl(filename);
+    if (existing) {
+      console.log('Preserving existing blog sitemap after API failure');
+      return existing;
+    }
+
+    console.log('No blog sitemap generated and no previous file to preserve');
     return null;
   }
 
@@ -122,46 +161,39 @@ async function generateBlogSitemap() {
     );
   });
 
-  const xml = [
-    xmlHeader,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...urls,
-    '</urlset>\n'
-  ].join('\n');
-
-  writeFile(path.join(outDir, 'sitemap-blog.xml'), xml);
-  return `${SITE_URL}/sitemap-blog.xml`;
+  writeFile(filePath, buildSitemapXml(urls));
+  return `${SITE_URL}/${filename}`;
 }
 
 // Generate projects sitemap
 async function generateProjectsSitemap() {
-  const projects = await fetchProjects();
+  const { items: projects, ok } = await fetchProjects();
+  const filename = 'sitemap-projects.xml';
+  const filePath = path.join(outDir, filename);
 
-  if (projects.length === 0) {
-    console.log('No projects found, skipping projects sitemap');
+  if (!ok) {
+    const existing = getExistingSitemapUrl(filename);
+    if (existing) {
+      console.log('Preserving existing projects sitemap after project-index failure');
+      return existing;
+    }
+
+    console.log('No projects sitemap generated and no previous file to preserve');
     return null;
   }
 
   const urls = projects.map(proj => {
-    const slug = proj.slug || proj.title || proj.id;
     const lastmod = formatDate(proj.updated_at || proj.created_at);
     return urlTag(
-      `${SITE_URL}/project/${slug}`,
+      `${SITE_URL}/project/${proj.slug}`,
       lastmod,
       'weekly',
       '0.7'
     );
   });
 
-  const xml = [
-    xmlHeader,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...urls,
-    '</urlset>\n'
-  ].join('\n');
-
-  writeFile(path.join(outDir, 'sitemap-projects.xml'), xml);
-  return `${SITE_URL}/sitemap-projects.xml`;
+  writeFile(filePath, buildSitemapXml(urls));
+  return `${SITE_URL}/${filename}`;
 }
 
 // Update sitemap index to include dynamic sitemaps
@@ -178,7 +210,7 @@ function updateSitemapIndex(dynamicSitemaps) {
     xmlHeader,
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...allSitemaps.map(sitemap =>
-      `  <sitemap>\n    <loc>${sitemap}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n  </sitemap>`
+      `  <sitemap>\n    <loc>${sitemap}</loc>\n  </sitemap>`
     ),
     '</sitemapindex>\n'
   ].join('\n');
@@ -204,4 +236,6 @@ async function main() {
   console.log(`- Projects: ${projectsSitemap ? 'Generated' : 'Skipped'}`);
 }
 
-main().catch(console.error);
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch(console.error);
+}

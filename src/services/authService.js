@@ -4,7 +4,7 @@ import { ensureSupabaseClient } from './supabaseClient';
 export const authService = {
   // Login user directly with Supabase Auth (phone-first, email optional)
   login: async (phoneOrEmail, password) => {
-    const client = ensureSupabaseClient();
+    const client = await ensureSupabaseClient();
     const identifier = (phoneOrEmail || '').trim();
     const credentials = identifier.includes('@')
       ? { email: identifier, password }
@@ -27,7 +27,7 @@ export const authService = {
 
   // Register new user directly with Supabase Auth
   register: async (userData) => {
-    const client = ensureSupabaseClient();
+    const client = await ensureSupabaseClient();
     const phone = (userData.phone || '').trim();
     const email = (userData.email || '').trim();
 
@@ -88,14 +88,14 @@ export const authService = {
 
   // Logout - clear localStorage
   logout: async () => {
-    const client = ensureSupabaseClient();
+    const client = await ensureSupabaseClient();
     await client.auth.signOut();
     localStorage.removeItem('user');
   },
 
   // Change password - requires current password verification
   changePassword: async (currentPassword, newPassword) => {
-    const client = ensureSupabaseClient();
+    const client = await ensureSupabaseClient();
 
     // Get current user and their email/phone
     const { data: { user } } = await client.auth.getUser();
@@ -133,5 +133,3 @@ export const authService = {
     return { success: true };
   },
 };
-
-export default authService; 

@@ -7,11 +7,11 @@ import { useSwipeable } from 'react-swipeable';
 import PropTypes from 'prop-types';
 import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import CommonSidebar from '../../common/CommonSidebar';
-import usePropertyStore from '../../store/propertyStore';
+import CommonSidebar from '../../common/listing/CommonSidebar';
+import { usePropertyStore } from '../../store/propertyStore';
 import { useVisitStore } from '../../store';
 import { useAuthStore } from '../../store';
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 import PropertyActions from './PropertyActions';
 import PropertyItem from './PropertyItem';
 import WhatsAppButton from '../ui/WhatsAppButton';
@@ -424,7 +424,6 @@ const PropertyDetailsSection = ({ property }) => {
 
   const handlePhoneReveal = () => {
     setShowPhoneNumber(true);
-    console.log('[Lead Tracking] Phone number revealed for property:', property?.id);
   };
 
   const validateCallbackForm = () => {
@@ -449,13 +448,6 @@ const PropertyDetailsSection = ({ property }) => {
     setCallbackErrors({});
     setCallbackLoading(true);
     await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log('[Callback Request]', {
-      propertyId: property?.id,
-      phone: callbackForm.phone,
-      preferredTime: callbackForm.preferredTime,
-      notes: callbackForm.notes,
-      timestamp: new Date().toISOString()
-    });
     setCallbackLoading(false);
     setCallbackSuccess(true);
     setTimeout(() => {

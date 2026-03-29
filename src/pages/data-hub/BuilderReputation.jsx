@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import Pagination from '../../common/Pagination';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import Pagination from '../../common/ui/Pagination';
 import ScoreWheel from '../../components/data-hub/ScoreWheel';
 import { dataHubService } from '../../services/dataHubService';
 
@@ -76,6 +77,19 @@ const BuilderReputation = () => {
         description="Check builder reputation scores for Gurugram developers. Based on HRERA registered projects, complaint history, and penalties. Find reliable builders before you invest."
         keywords="builder reputation Gurugram, RERA score builder, Gurgaon developer complaints, HRERA builder check, builder score checker, reliable builders Gurgaon 360Ghar"
         canonical="/builder-reputation"
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Builder Reputation', url: 'https://360ghar.com/builder-reputation' },
+          ]),
+          {
+            '@type': 'ItemList',
+            name: 'Builder Reputation Directory — Gurugram',
+            description: 'Builder reputation scores based on HRERA registered projects and complaints.',
+            url: 'https://360ghar.com/builder-reputation',
+            numberOfItems: total,
+          },
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

@@ -35,6 +35,12 @@
 
     &__content {
         padding: 32px;
+        // Override legacy _blog-details.scss which sets margin-top: -110px, max-width: 740px,
+        // background-color: var(--gray-100), padding-top: 0, and border-radius: 0 5px 5px 5px
+        margin-top: 0 !important;
+        max-width: 100% !important;
+        background-color: transparent !important;
+        border-radius: 0 !important;
 
         @media (max-width: 768px) {
             padding: 20px;
@@ -51,6 +57,17 @@
         @media (max-width: 768px) {
             font-size: 1.25rem;
         }
+    }
+
+    // Excerpt / lead paragraph
+    &__excerpt {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #4b5563;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid #f3f4f6;
+        font-style: italic;
     }
 
     // Blog content body - styles for rendered HTML content
@@ -325,23 +342,35 @@
 }
 
 // Blog infos styling
+// Overrides legacy _blog-details.scss which sets background: var(--main-gradient),
+// display: inline-flex, padding: 15px 12px, border-radius: 0 0 5px 5px, and white item text
 .blog-infos {
-    display: flex;
+    display: flex !important;
     flex-wrap: wrap;
     gap: 1.5rem;
     list-style: none;
-    padding: 0;
+    padding: 0 !important;
     margin: 0 0 1rem 0;
+    background: none !important;
+    border-radius: 0 !important;
 
     &__item {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         font-size: 0.9rem;
-        color: #6b7280;
+        color: #6b7280 !important;
 
         .icon {
             color: #f97316;
+        }
+
+        a {
+            color: #6b7280;
+
+            &:hover {
+                color: #f97316;
+            }
         }
     }
 }

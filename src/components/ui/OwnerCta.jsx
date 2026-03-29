@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const OwnerCta = ({ className = '' }) => {
   return (
     <section className={`cta padding-b-120 ${className}`}>

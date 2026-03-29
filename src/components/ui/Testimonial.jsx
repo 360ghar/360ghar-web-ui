@@ -1,11 +1,11 @@
 import Slider from "react-slick";
 
-import { testimonials } from '../../data/HomeOneData/HomeOneData';
+import { testimonials } from '../../data/HomeOneData';
 import TestimonialItem from './TestimonialItem';
 import TestimonialThumb from '/assets/images/thumbs/testimonial-img.png';
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 // Custom arrows to avoid forwarding non-DOM props (currentSlide, slideCount)
 const PrevArrow = ({ currentSlide: _currentSlide, slideCount: _slideCount, ...props }) => {
     const { className, style, onClick } = props;

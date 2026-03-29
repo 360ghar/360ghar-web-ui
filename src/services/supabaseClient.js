@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_PUBLISHABLE_KEY =
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || '';
@@ -11,29 +9,42 @@ if (!IS_TEST_MODE && (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY)) {
   );
 }
 
-export const supabase =
-  SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-        },
-      })
-    : null;
+// Lazy-loaded singleton — the @supabase/supabase-js SDK (~152KB) is only downloaded
+// when first needed (login, session check, etc.) instead of on every page load.
+let _supabase = null;
+let _initPromise = null;
 
-export function ensureSupabaseClient() {
-  if (!supabase) {
+async function getClientLazy() {
+  if (_supabase) return _supabase;
+  if (_initPromise) return _initPromise;
+  _initPromise = import('@supabase/supabase-js').then(({ createClient }) => {
+    if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) return null;
+    _supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    });
+    return _supabase;
+  });
+  return _initPromise;
+}
+
+export async function ensureSupabaseClient() {
+  const client = await getClientLazy();
+  if (!client) {
     throw new Error(
       'Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY.'
     );
   }
-  return supabase;
+  return client;
 }
 
 export async function getSupabaseSession() {
-  if (!supabase) return null;
-  const { data } = await supabase.auth.getSession();
+  const client = await getClientLazy();
+  if (!client) return null;
+  const { data } = await client.auth.getSession();
   return data.session || null;
 }
 
@@ -43,19 +54,19 @@ export async function getSupabaseAccessToken() {
 }
 
 export async function refreshSupabaseSession() {
-  if (!supabase) return null;
-  const { data, error } = await supabase.auth.refreshSession();
+  const client = await getClientLazy();
+  if (!client) return null;
+  const { data, error } = await client.auth.refreshSession();
   if (error || !data.session) return null;
   return data.session;
 }
 
-export function onSupabaseAuthStateChange(callback) {
-  if (!supabase) {
-    return { unsubscribe: () => undefined };
-  }
+export async function onSupabaseAuthStateChange(callback) {
+  const client = await getClientLazy();
+  if (!client) return { unsubscribe: () => undefined };
   const {
     data: { subscription },
-  } = supabase.auth.onAuthStateChange(callback);
+  } = client.auth.onAuthStateChange(callback);
   return {
     unsubscribe: () => subscription.unsubscribe(),
   };

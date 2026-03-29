@@ -1,8 +1,5 @@
-import { createAxiosInstance } from './http';
-import { buildPropertySearchParams } from '../store/propertyFilters';
-
-// Create a separate axios instance for public property endpoints (no auth required)
-const publicApi = createAxiosInstance({ withAuth: false });
+import { publicApi } from './api';
+import { buildPropertySearchParams } from '../utils/propertyFilters';
 
 /**
  * Searches for properties based on filters, location, and pagination.

@@ -37,9 +37,8 @@ const DesignResult = ({
         text: 'Check out this AI-generated design!',
         files: [file],
       });
-    } catch (error) {
+    } catch {
       // User cancelled or share failed
-      console.log('Share cancelled or failed:', error);
     }
   }, [imageUrl]);
 

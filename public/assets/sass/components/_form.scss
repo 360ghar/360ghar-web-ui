@@ -191,6 +191,16 @@ textarea+.input-icon {
         padding-right: 30px !important;
     }
 } 
+/* Google Place Autocomplete Element */
+.google-places-input {
+    width: 100%;
+    gmp-place-autocomplete {
+        width: 100%;
+        --gmp-mat-font-family: inherit;
+        font-size: 16px;
+        min-height: 48px;
+    }
+}
 .select {
     color: hsl(var(--black) / .6) !important;
     padding: 16px 24px;

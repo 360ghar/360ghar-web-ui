@@ -1,4 +1,4 @@
-import ListingSidebar from '../../common/ListingSidebar';
+import ListingSidebar from '../../common/listing/ListingSidebar';
 import AddListingForm from './AddListingForm';
 
 const AddListingSection = () => {
@@ -11,7 +11,7 @@ const AddListingSection = () => {
                             <ListingSidebar/>
                         </div>
                         <div className="col-lg-9 ps-lg-5">
-                            <div data-bs-spy="scroll" data-bs-target="#list-scroll" data-bs-offset="0" data-bs-smooth-scroll="true" className="scrollspy-example" tabIndex="0">
+                            <div className="scrollspy-example" tabIndex="0">
                                 <AddListingForm/>
                             </div>
                         </div>

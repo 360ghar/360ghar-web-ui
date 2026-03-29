@@ -57,4 +57,3 @@ export const useDataHubStore = create((set, get) => ({
   },
 }));
 
-export default useDataHubStore;

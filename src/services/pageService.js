@@ -1,6 +1,4 @@
-import { createAxiosInstance } from './http';
-
-const publicApi = createAxiosInstance({ withAuth: false });
+import { publicApi } from './api';
 
 const normalizePagePayload = (rawPayload) => {
   if (!rawPayload) return null;
@@ -44,4 +42,3 @@ export const pageService = {
   },
 };
 
-export default pageService;

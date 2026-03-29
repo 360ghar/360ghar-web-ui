@@ -55,13 +55,13 @@
   stroke-linejoin: round;
   stroke-dasharray: 500;
   stroke-dashoffset: 500;
-  animation: drawHouse 2s ease-out forwards;
+  animation: drawHouse 1s ease-out forwards;
 }
 
 .house-fill {
   fill: rgba(255, 107, 0, 0.08);
   opacity: 0;
-  animation: fillHouse 0.5s ease-out 1.8s forwards;
+  animation: fillHouse 0.3s ease-out 0.9s forwards;
 }
 
 /* Window animations */
@@ -74,11 +74,11 @@
 }
 
 .window-left {
-  animation: windowGlow 0.4s ease-out 2.2s forwards;
+  animation: windowGlow 0.3s ease-out 1.1s forwards;
 }
 
 .window-right {
-  animation: windowGlow 0.4s ease-out 2.4s forwards;
+  animation: windowGlow 0.3s ease-out 1.2s forwards;
 }
 
 .window-glow-left,
@@ -88,11 +88,11 @@
 }
 
 .window-glow-left {
-  animation: glowPulse 1.5s ease-in-out 2.6s infinite;
+  animation: glowPulse 1.5s ease-in-out 1.3s infinite;
 }
 
 .window-glow-right {
-  animation: glowPulse 1.5s ease-in-out 2.8s infinite;
+  animation: glowPulse 1.5s ease-in-out 1.4s infinite;
 }
 
 /* Door */
@@ -101,13 +101,13 @@
   stroke: url(#houseGradient);
   stroke-width: 2;
   opacity: 0;
-  animation: windowGlow 0.4s ease-out 2s forwards;
+  animation: windowGlow 0.3s ease-out 1s forwards;
 }
 
 /* Location Pin */
 .location-pin-group {
   transform-origin: center bottom;
-  animation: pinBounce 1s ease-in-out 2.5s infinite;
+  animation: pinBounce 1s ease-in-out 1.2s infinite;
 }
 
 .location-pin {
@@ -141,36 +141,36 @@
 .particle:nth-child(1) {
   top: 10%;
   left: 20%;
-  animation: floatParticle 3s ease-in-out 0.5s infinite;
+  animation: floatParticle 2s ease-in-out 0.3s infinite;
 }
 
 .particle:nth-child(2) {
   top: 20%;
   right: 15%;
-  animation: floatParticle 3.5s ease-in-out 1s infinite;
+  animation: floatParticle 2.5s ease-in-out 0.5s infinite;
 }
 
 .particle:nth-child(3) {
   bottom: 30%;
   left: 10%;
-  animation: floatParticle 4s ease-in-out 1.5s infinite;
+  animation: floatParticle 3s ease-in-out 0.7s infinite;
 }
 
 .particle:nth-child(4) {
   bottom: 20%;
   right: 20%;
-  animation: floatParticle 3.2s ease-in-out 0.8s infinite;
+  animation: floatParticle 2.2s ease-in-out 0.4s infinite;
 }
 
 /* Loader Text */
 .loader-text {
   text-align: center;
   opacity: 0;
-  animation: fadeInUp 0.6s ease-out 1s forwards;
+  animation: fadeInUp 0.5s ease-out 0.5s forwards;
 }
 
 .brand-name {
-  font-family: 'Vidaloka', serif;
+  font-family: 'Cinzel', serif;
   font-size: 2rem;
   background: linear-gradient(90deg, #ff8c3a 0%, #cc5500 100%);
   -webkit-background-clip: text;
@@ -182,7 +182,7 @@
 }
 
 .loader-message {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Josefin Sans', sans-serif;
   font-size: 1rem;
   color: #777777;
   margin: 0;
@@ -228,7 +228,7 @@
   height: 100%;
   background: linear-gradient(90deg, #ff8c3a, #cc5500);
   border-radius: 3px;
-  animation: progressSlide 2s ease-in-out infinite;
+  animation: progressSlide 1.5s ease-in-out infinite;
 }
 
 /* Keyframes */

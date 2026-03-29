@@ -1,7 +1,4 @@
-import { createAxiosInstance } from './http';
-
-// Blog endpoints are public - no auth required
-const publicApi = createAxiosInstance({ withAuth: false });
+import { publicApi } from './api';
 
 // Blog and Content Service
 export const blogService = {
@@ -42,4 +39,3 @@ export const blogService = {
   },
 };
 
-export default blogService;

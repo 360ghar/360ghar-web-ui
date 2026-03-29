@@ -15,8 +15,8 @@ export function buildLocalitySitemapXml(siteUrl, entities) {
     .filter((item) => item?.canonicalUrl)
     .map((item) => {
       const url = escapeXml(`${base}${item.canonicalUrl}`);
-      const lastmod = escapeXml(item.lastVerifiedAt || new Date().toISOString().slice(0, 10));
-      return `  <url>\n    <loc>${url}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`;
+      const lastmod = item.lastVerifiedAt ? escapeXml(item.lastVerifiedAt) : null;
+      return `  <url>\n    <loc>${url}</loc>\n${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`;
     });
 
   return [xmlHeader, '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', ...urls, "</urlset>", ""].join("\n");

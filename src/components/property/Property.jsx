@@ -1,8 +1,8 @@
 import { useEffect }  from 'react';
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 import PropertyItem from './PropertyItem';
-import Button from '../../common/Button';
-import usePropertyStore from '../../store/propertyStore';
+import Button from '../../common/ui/Button';
+import { usePropertyStore } from '../../store/propertyStore';
 
 const Property = ({ properties: propsProperties, loading: propsLoading }) => {
     const { 

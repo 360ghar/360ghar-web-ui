@@ -1,8 +1,8 @@
-import { galleries } from '../../data/HomeTwoData/HomeTwoData';
+import { galleries } from '../../data/HomeTwoData';
 import { Link } from 'react-router-dom';
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const Gallery = () => {
     
     return (
@@ -50,7 +50,7 @@ export default Gallery;
 
 
 // import React, { useState } from 'react';
-// import SectionHeading from '../../common/SectionHeading';
+// import SectionHeading from '../../common/ui/SectionHeading';
 // import Lightbox from "react-image-lightbox";
 
 // const Gallery = () => {

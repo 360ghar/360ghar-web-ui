@@ -24,3 +24,12 @@ dist-ssr
 *.sw?
 
 .env
+
+# Temp/scratch files
+.tmp_*
+current-locality-page.png
+*.tmp.html
+*.tmp.xml
+
+# Source maps in public
+public/assets/css/*.css.map

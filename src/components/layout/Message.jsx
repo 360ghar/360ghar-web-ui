@@ -1,7 +1,7 @@
 import messageThumb from '/assets/images/thumbs/message-img.png';
 import ValidationForm from './ValidationForm';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const Message = () => {
     return (
         <>

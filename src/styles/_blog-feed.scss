@@ -1,0 +1,116 @@
+/* Blog Feed Section — homepage feed replacing BlogThree */
+
+.blog-feed {
+    &__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    &__item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    &__thumb {
+        flex-shrink: 0;
+        width: 72px;
+        height: 72px;
+        border-radius: 8px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+        line-height: 1.4;
+
+        a {
+            color: inherit;
+            text-decoration: none;
+
+            &:hover {
+                color: var(--color-primary, #ff6b00);
+            }
+        }
+    }
+
+    &__excerpt {
+        font-size: 0.8rem;
+        color: #6b7280;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    &__meta {
+        flex-shrink: 0;
+        font-size: 0.75rem;
+        color: #9ca3af;
+        white-space: nowrap;
+        padding-top: 2px;
+    }
+
+    &__heading-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    &__rss-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 107, 0, 0.3);
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-primary, #ff6b00);
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        white-space: nowrap;
+
+        &:hover {
+            background: var(--color-primary, #ff6b00);
+            color: #fff;
+        }
+
+        .icon {
+            font-size: 0.85em;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+    }
+}

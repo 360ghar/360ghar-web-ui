@@ -1,13 +1,6 @@
 import { create } from 'zustand';
 import { visitService } from '../services/visitService';
-
-const extractError = (err, fallback = 'Request failed') => {
-  const d = err?.response?.data?.detail ?? err?.message;
-  if (!d) return fallback;
-  if (Array.isArray(d)) return d.map((x) => x?.msg || x?.message || x).join(', ');
-  if (typeof d === 'object') return d.msg || d.message || JSON.stringify(d);
-  return String(d);
-};
+import { extractError } from '../utils/apiError';
 
 const useVisitStore = create((set) => ({
   visits: [],
@@ -129,4 +122,4 @@ const useVisitStore = create((set) => ({
   clearError: () => set({ error: null }),
 }));
 
-export default useVisitStore;
+export { useVisitStore };

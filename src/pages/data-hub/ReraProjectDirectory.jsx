@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import Pagination from '../../common/Pagination';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import Pagination from '../../common/ui/Pagination';
 import { dataHubService } from '../../services/dataHubService';
 
 const PROPERTY_TYPES = ['residential', 'commercial', 'mixed', 'plotted'];
@@ -79,6 +80,19 @@ const ReraProjectDirectory = () => {
         description="Browse all RERA-registered real estate projects in Gurugram. Verify project registration numbers, check developer details, possession dates, and project status."
         keywords="RERA projects Gurugram, HRERA registered projects, builder RERA number, Haryana RERA, verified developers Gurgaon"
         canonical="/rera-projects"
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'RERA Projects', url: 'https://360ghar.com/rera-projects' },
+          ]),
+          {
+            '@type': 'ItemList',
+            name: 'RERA Projects Gurugram',
+            description: 'RERA-registered real estate projects in Gurugram.',
+            url: 'https://360ghar.com/rera-projects',
+            numberOfItems: total,
+          },
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

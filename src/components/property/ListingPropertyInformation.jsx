@@ -1,4 +1,4 @@
-import { addAmenities } from '../../data/OthersPageData/OthersPageData';
+import { addAmenities } from '../../data/OthersPageData';
 
 const ListingPropertyInformation = () => {
     return (

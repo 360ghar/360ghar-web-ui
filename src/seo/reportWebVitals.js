@@ -12,9 +12,8 @@ function sendToAnalytics(metric) {
         metric_id: metric.id,
         non_interaction: true,
       });
-    } else {
-      // Fallback to console for visibility during development
-       
+    } else if (import.meta.env.DEV) {
+      // Fallback to console for visibility during development only
       console.log('[web-vitals]', metric.name, metric.value, metric);
     }
   } catch (e) {

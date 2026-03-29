@@ -1,4 +1,4 @@
-import usePropertyStore from '../../store/propertyStore';
+import { usePropertyStore } from '../../store/propertyStore';
 import {
   COMMERCIAL_PROPERTY_TYPES,
   isCommercialSelection,

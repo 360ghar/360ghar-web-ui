@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
+import { isIndexableCitySlug } from '../../seo/indexationPolicy';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
-import { buildPropertySearchQuery } from '../../store/propertyFilters';
+import { buildPropertySearchQuery } from '../../utils/propertyFilters';
 import {
+  getPropertyRouteSlug,
   getPropertyTypeLabel,
   normalizePropertyTypeToken,
 } from '../../utils/propertyTaxonomy';
@@ -32,10 +34,20 @@ const FacetLanding = () => {
   const canonicalType = validIntent === 'pg'
     ? 'pg'
     : normalizePropertyTypeToken(type)[0] || 'apartment';
+  const canonicalTypeSlug = getPropertyRouteSlug(canonicalType, validIntent);
   const intentLabel = validIntent === 'pg' ? 'PG' : validIntent === 'rent' ? 'Rent' : 'Buy';
   const isBhk = bhk && VALID_BHKS.includes(bhk);
   const isBudget = budget && VALID_BUDGETS.includes(budget);
   const isAmenity = Boolean(amenity);
+
+  // Index BHK facet pages for approved cities (buy/rent only, not PG)
+  // Budget and amenity facets remain noindex until content is enriched
+  const shouldIndex = isBhk
+    && isIndexableCitySlug(canonicalCitySlug)
+    && ['buy', 'rent'].includes(validIntent)
+    && ['1-bhk', '2-bhk', '3-bhk'].includes(bhk);
+
+  const baseCanonicalPath = `/${canonicalCitySlug}/${validIntent}/${canonicalTypeSlug}`;
 
   const facetText = getPropertyTypeLabel(canonicalType);
   const bhkText = isBhk ? bhk.replace('-bhk', ' BHK').toUpperCase() : '';
@@ -92,11 +104,11 @@ const FacetLanding = () => {
   );
 
   const canonicalPath = useMemo(() => {
-    if (isBhk) return `/${canonicalCitySlug}/${intent}/${type}/${bhk}`;
-    if (isBudget) return `/${canonicalCitySlug}/${intent}/${type}/budget/${budget}`;
-    if (isAmenity) return `/${canonicalCitySlug}/${intent}/${type}/amenity/${amenity}`;
-    return `/${canonicalCitySlug}/${intent}/${type}`;
-  }, [isBhk, canonicalCitySlug, intent, type, bhk, isBudget, budget, isAmenity, amenity]);
+    if (isBhk) return `${baseCanonicalPath}/${bhk}`;
+    if (isBudget) return `${baseCanonicalPath}/budget/${budget}`;
+    if (isAmenity) return `${baseCanonicalPath}/amenity/${amenity}`;
+    return baseCanonicalPath;
+  }, [isAmenity, isBhk, isBudget, amenity, baseCanonicalPath, bhk, budget]);
 
   const citySearchUrl = useMemo(() => {
     const u = new URL('https://360ghar.com/properties');
@@ -109,16 +121,42 @@ const FacetLanding = () => {
     [
       { name: 'Home', url: 'https://360ghar.com/' },
       { name: validCity, url: citySearchUrl },
-      { name: `${facetText} - ${intentLabel}`, url: `https://360ghar.com/${citySlug}/${intent}/${type}` },
-      isBhk ? { name: bhkText, url: `https://360ghar.com/${citySlug}/${intent}/${type}/${bhk}` } : null,
-      isBudget ? { name: budgetText, url: `https://360ghar.com/${citySlug}/${intent}/${type}/budget/${budget}` } : null,
-      isAmenity ? { name: pretty(amenity), url: `https://360ghar.com/${citySlug}/${intent}/${type}/amenity/${amenity}` } : null,
+      { name: `${facetText} - ${intentLabel}`, url: `https://360ghar.com${baseCanonicalPath}` },
+      isBhk ? { name: bhkText, url: `https://360ghar.com${baseCanonicalPath}/${bhk}` } : null,
+      isBudget ? { name: budgetText, url: `https://360ghar.com${baseCanonicalPath}/budget/${budget}` } : null,
+      isAmenity ? { name: pretty(amenity), url: `https://360ghar.com${baseCanonicalPath}/amenity/${amenity}` } : null,
     ].filter(Boolean)
-  ), [validCity, citySearchUrl, facetText, intentLabel, citySlug, intent, type, isBhk, bhkText, bhk, isBudget, budgetText, budget, isAmenity, amenity]);
+  ), [validCity, citySearchUrl, facetText, intentLabel, baseCanonicalPath, isBhk, bhkText, bhk, isBudget, budgetText, budget, isAmenity, amenity]);
 
   const targetUrl = () => {
     return `/properties?${browseQuery}`;
   };
+
+  // Build related search links (other BHK/budget variants for same city+intent+type)
+  const relatedSearches = useMemo(() => {
+    const base = baseCanonicalPath;
+    const links = [];
+
+    // Other BHK variants
+    VALID_BHKS.filter((b) => b !== bhk).slice(0, 3).forEach((b) => {
+      links.push({ label: b.replace('-bhk', ' BHK').toUpperCase() + ' ' + facetText + ' in ' + validCity, to: `${base}/${b}` });
+    });
+
+    // Budget variants (pick a couple relevant ones)
+    const budgetLabels = {
+      'under-50-lakhs': 'Under 50 Lakhs',
+      'under-80-lakhs': 'Under 80 Lakhs',
+      'under-1-crore': 'Under 1 Crore',
+      'under-10k': 'Under 10K',
+      'under-15k': 'Under 15K',
+      'under-20k': 'Under 20K',
+    };
+    VALID_BUDGETS.filter((b) => b !== budget).slice(0, 2).forEach((b) => {
+      links.push({ label: facetText + ' ' + (budgetLabels[b] || b) + ' in ' + validCity, to: `${base}/budget/${b}` });
+    });
+
+    return links.slice(0, 5);
+  }, [baseCanonicalPath, bhk, budget, facetText, validCity]);
 
   return (
     <>
@@ -126,10 +164,16 @@ const FacetLanding = () => {
         title={title}
         description={description}
         keywords={keywords}
-        canonical={canonicalPath}
+        canonical={shouldIndex ? canonicalPath : baseCanonicalPath}
+        noindex={!shouldIndex}
         structuredData={[
           generateBreadcrumbStructuredData(breadcrumbs),
-          { '@type': 'ItemList', name: title, description, url: `https://360ghar.com${canonicalPath}` }
+          {
+            '@type': 'CollectionPage',
+            name: title,
+            description,
+            url: `https://360ghar.com${shouldIndex ? canonicalPath : baseCanonicalPath}`,
+          },
         ]}
       />
 
@@ -178,6 +222,29 @@ const FacetLanding = () => {
             </div>
           </div>
         </section>
+
+        {/* Related Searches — cross-link to other BHK/budget facets */}
+        {relatedSearches.length > 0 && (
+          <section className="padding-y-60 bg-light">
+            <div className="container container-two">
+              <h2 className="h5 mb-3">Related Searches</h2>
+              <div className="row g-3">
+                {relatedSearches.map((rs) => (
+                  <div className="col-lg-4 col-md-6" key={rs.to}>
+                    <Link
+                      to={rs.to}
+                      className="d-block p-3 rounded-3 bg-white border text-decoration-none"
+                      style={{ color: 'inherit' }}
+                    >
+                      <i className="fas fa-search text-gradient me-2" />
+                      <span className="fw-medium">{rs.label}</span>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         <Cta ctaClass="" />
 

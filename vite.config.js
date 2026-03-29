@@ -1,37 +1,64 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import compression from 'vite-plugin-compression'
-import { visualizer } from 'rollup-plugin-visualizer'
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
-import { VitePWA } from 'vite-plugin-pwa'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { createRequire } from 'node:module'
+import { defineConfig, loadEnv } from "vite";
+import react from "@vitejs/plugin-react";
+import compression from "vite-plugin-compression";
+import { visualizer } from "rollup-plugin-visualizer";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
+import { VitePWA } from "vite-plugin-pwa";
+import Critters from "critters";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { readFileSync, writeFileSync } from "node:fs";
 
-// vite-plugin-prerender uses CJS require() internally, so we use createRequire
-// to load it in this ESM config file
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const require = createRequire(import.meta.url)
-const Prerender = require('vite-plugin-prerender')
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Custom plugin to inline critical CSS and defer the rest
+const criticalCssPlugin = () => ({
+  name: "critical-css",
+  apply: "build",
+  async closeBundle() {
+    const indexPath = path.join(__dirname, "dist", "index.html");
+    let html;
+    try {
+      html = readFileSync(indexPath, "utf-8");
+    } catch {
+      return; // No index.html yet (prerender mode)
+    }
+    const critters = new Critters({
+      path: path.join(__dirname, "dist"),
+      publicPath: "/",
+      preload: "swap",
+      pruneSource: false,
+      logLevel: "warn",
+    });
+    const processed = await critters.process(html);
+    writeFileSync(indexPath, processed);
+  },
+});
 
 // Custom plugin to optimize modulepreload hints
 const optimizeModulepreload = () => ({
-  name: 'optimize-modulepreload',
+  name: "optimize-modulepreload",
   transformIndexHtml(html) {
     // Remove preload hints for heavy, rarely-used chunks to improve initial load
     // IMPORTANT: Keep this list in sync with manualChunks configuration below
-    // These chunks are lazy-loaded only when needed (PDF export, markdown rendering, analytics)
+    // These chunks are lazy-loaded only when needed (markdown rendering, analytics)
     return html
-      .replace(/<link rel="modulepreload"[^>]*vendor-pdf[^>]*>/g, '')
-      .replace(/<link rel="modulepreload"[^>]*vendor-markdown[^>]*>/g, '')
-      .replace(/<link rel="modulepreload"[^>]*vendor-analytics[^>]*>/g, '');
-  }
+      .replace(/<link rel="modulepreload"[^>]*vendor-markdown[^>]*>/g, "")
+      .replace(/<link rel="modulepreload"[^>]*vendor-analytics[^>]*>/g, "")
+      .replace(/<link rel="modulepreload"[^>]*vendor-supabase[^>]*>/g, "");
+  },
 });
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const apiServer = env.VITE_API_SERVER || 'https://api.360ghar.com';
+  return {
   plugins: [
     react(),
+
+    // Inline critical CSS and defer the rest (eliminates CSS render-blocking)
+    criticalCssPlugin(),
 
     // Optimize modulepreload hints (remove heavy rarely-used chunks)
     optimizeModulepreload(),
@@ -51,58 +78,61 @@ export default defineConfig({
         lossless: false,
         quality: 80,
       },
+      avif: {
+        quality: 60,
+      },
     }),
 
     // Generate gzip compressed files
     compression({
-      algorithm: 'gzip',
-      ext: '.gz',
+      algorithm: "gzip",
+      ext: ".gz",
       threshold: 1024,
     }),
 
     // Generate brotli compressed files
     compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
+      algorithm: "brotliCompress",
+      ext: ".br",
       threshold: 1024,
     }),
 
     // PWA support
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.png', 'assets/images/logo/*.png'],
+      registerType: "autoUpdate",
+      includeAssets: ["favicon.png", "assets/images/logo/*.png"],
       manifest: {
-        name: '360Ghar',
-        short_name: '360Ghar',
+        name: "360Ghar",
+        short_name: "360Ghar",
         description: "India's First AI-Enabled Real Estate Platform",
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
-        display: 'standalone',
+        theme_color: "#ffffff",
+        background_color: "#ffffff",
+        display: "standalone",
         icons: [
           {
-            src: '/assets/images/logo/favicon.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: "/assets/images/logo/favicon.png",
+            sizes: "192x192",
+            type: "image/png",
           },
           {
-            src: '/assets/images/logo/logo.png',
-            sizes: '512x512',
-            type: 'image/png',
+            src: "/assets/images/logo/logo.png",
+            sizes: "512x512",
+            type: "image/png",
           },
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
         // Exclude large blueprint3d files from precaching
-        globIgnores: ['**/blueprint3d/**', '**/data/**'],
+        globIgnores: ["**/blueprint3d/**", "**/data/**"],
         // Increase file size limit for precaching
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/api\.360ghar\.com\/.*/i,
-            handler: 'NetworkFirst',
+            urlPattern: new RegExp('^' + apiServer.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '/.*', 'i'),
+            handler: "NetworkFirst",
             options: {
-              cacheName: 'api-cache',
+              cacheName: "api-cache",
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60, // 1 hour
@@ -111,9 +141,9 @@ export default defineConfig({
           },
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
-            handler: 'CacheFirst',
+            handler: "CacheFirst",
             options: {
-              cacheName: 'image-cache',
+              cacheName: "image-cache",
               expiration: {
                 maxEntries: 200,
                 maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
@@ -122,9 +152,9 @@ export default defineConfig({
           },
           {
             urlPattern: /\.(?:woff2|woff)$/,
-            handler: 'CacheFirst',
+            handler: "CacheFirst",
             options: {
-              cacheName: 'font-cache',
+              cacheName: "font-cache",
               expiration: {
                 maxEntries: 20,
                 maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
@@ -135,72 +165,22 @@ export default defineConfig({
       },
     }),
 
-    // Prerender static pages for SEO (only in production build)
-    // IMPORTANT: Keep routes list small. Dynamic/programmatic pages stay SPA-rendered.
-    process.env.VITE_ENABLE_PRERENDER && Prerender({
-      staticDir: path.join(__dirname, 'dist'),
-      routes: [
-        '/',
-        '/properties',
-        '/about-us',
-        '/contact',
-        '/faq',
-        '/blog',
-        '/project',
-        '/policies',
-        '/refer-and-earn',
-        '/emi-calculator',
-        '/area-converter',
-        '/area-calculator',
-        '/loan-eligibility-calculator',
-        '/capital-gains-tax-calculator',
-        '/property-document-checklist',
-        '/design-blueprint',
-        '/vastu-checker',
-        '/ai-design-studio',
-        '/ai-agent',
-        '/localities',
-        '/for-ai',
-        '/gurugram-real-estate-guide',
-        '/property-investment-gurugram',
-        '/vs/nobroker',
-        '/vs/magicbricks',
-        '/vs/99acres',
-        '/vs/housing',
-        '/vs/commonfloor',
-        '/vs/proptiger',
-        '/vs/squareyards',
-        '/vs/nestaway',
-        '/vs/zolo',
-        '/vs/stanza-living',
-        '/truth/nobroker-listings',
-        '/truth/magicbricks-spam',
-        '/truth/99acres-fake',
-        '/truth/nestaway-collapse',
-        '/truth/zolo-issues',
-      ],
-      renderer: '@prerenderer/renderer-puppeteer',
-      postProcess(renderedRoute) {
-        // Ensure viewport meta tag is present
-        if (!renderedRoute.html.includes('viewport')) {
-          renderedRoute.html = renderedRoute.html.replace(
-            '<head>',
-            '<head><meta name="viewport" content="width=device-width, initial-scale=1.0">'
-          );
-        }
-      },
-    }),
-
     // Bundle analyzer (only in analyze mode)
-    (process.env.ANALYZE) && visualizer({ // eslint-disable-line no-undef
-      open: true,
-      filename: 'dist/stats.html',
-      gzipSize: true,
-      brotliSize: true,
-    }),
+    process.env.ANALYZE &&
+      visualizer({
+        // eslint-disable-line no-undef
+        open: true,
+        filename: "dist/stats.html",
+        gzipSize: true,
+        brotliSize: true,
+      }),
   ].filter(Boolean),
 
   build: {
+    // Keep the build syntax compatible with the Chromium version bundled by
+    // Puppeteer so post-build prerendering can execute the app reliably.
+    target: "es2019",
+
     // Disable source maps for production
     sourcemap: false,
 
@@ -212,31 +192,35 @@ export default defineConfig({
       output: {
         manualChunks: {
           // React core
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
 
           // Form libraries
-          'vendor-forms': ['formik', 'yup'],
+          "vendor-forms": ["formik", "yup"],
 
           // UI libraries
-          'vendor-ui': ['react-slick', 'react-toastify', 'yet-another-react-lightbox'],
+          "vendor-ui": [
+            "react-slick",
+            "react-toastify",
+            "yet-another-react-lightbox",
+          ],
 
           // Markdown rendering
-          'vendor-markdown': ['react-markdown', 'remark-gfm'],
+          "vendor-markdown": ["react-markdown", "remark-gfm"],
 
           // Utilities
-          'vendor-utils': ['axios', 'zustand', 'dompurify'],
+          "vendor-utils": ["axios", "zustand", "dompurify"],
 
           // Analytics (separate for lazy loading)
-          'vendor-analytics': ['posthog-js', 'web-vitals'],
+          "vendor-analytics": ["posthog-js", "web-vitals"],
 
-          // PDF/Canvas (heavy, rarely used)
-          'vendor-pdf': ['jspdf', 'html2canvas'],
+          // Supabase Auth SDK (lazy-loaded, not on critical path)
+          "vendor-supabase": ["@supabase/supabase-js"],
         },
       },
     },
 
     // Minification settings
-    minify: 'terser',
+    minify: "terser",
     terserOptions: {
       compress: {
         drop_console: true,
@@ -247,12 +231,12 @@ export default defineConfig({
 
   server: {
     proxy: {
-      '/api': {
-        // target: 'http://localhost:8000',
-        target: 'https://api.360ghar.com',
+      "/api": {
+        target: env.VITE_API_SERVER || 'http://localhost:8000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
+        rewrite: (path) => path.replace(/^\/api/, "/api/v1"),
       },
     },
   },
-})
+  };
+});

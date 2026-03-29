@@ -1,7 +1,8 @@
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
+import { aiDiscoveryFeed } from '../../seo/aiDiscovery';
 
 const ForAI = () => {
   const title = 'For AI Assistants | 360Ghar';
@@ -39,6 +40,17 @@ const ForAI = () => {
         },
         'query-input': 'required name=search_term_string'
       }
+    },
+    {
+      '@type': 'DataFeed',
+      name: '360Ghar AI Discovery Feed',
+      description: aiDiscoveryFeed.description,
+      url: `${siteMetadata.siteUrl}/data/llm-feed.json`,
+      dataFeedElement: aiDiscoveryFeed.important_pages.map((page) => ({
+        '@type': 'DataFeedItem',
+        name: page.title,
+        url: page.url,
+      }))
     }
   ];
 
@@ -141,13 +153,14 @@ const ForAI = () => {
             <h2 className="h5 mt-4">Policies for AI Crawlers</h2>
             <ul>
               <li>AI crawling is allowed. See /.well-known/ai.txt for details.</li>
+              <li>Machine-readable discovery files are available at <code>/llms.txt</code>, <code>/llms-full.txt</code>, and <code>/data/llm-feed.json</code>.</li>
               <li>Please attribute 360Ghar with a link when citing.</li>
               <li>Respect rate limits and avoid scraping user-personal data.</li>
             </ul>
 
             <h2 className="h5 mt-4">MCP Server Integration</h2>
             <ul>
-              <li><strong>MCP Server URL:</strong> <code>http://api.360ghar.com/mcp</code></li>
+              <li><strong>MCP Server URL:</strong> <code>https://api.360ghar.com/mcp</code></li>
               <li>AI assistants can connect to 360Ghar via the Model Context Protocol (MCP)</li>
               <li>Supported assistants: Claude, ChatGPT, and any MCP-compatible AI</li>
               <li>Capabilities: Property search, visit scheduling, rent tracking, tenant management, maintenance requests, document access</li>

@@ -2,6 +2,7 @@
 .header {
     background-color: hsl(var(--white));
     transition: .2s linear;
+    min-height: 72px; /* Prevent CLS during sticky transition */
     @include md-screen {
         padding: 10px 0;
     }

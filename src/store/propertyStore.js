@@ -2,26 +2,8 @@ import { create } from 'zustand';
 import propertyService from '../services/propertyService';
 import { propertyAPIService } from '../services/propertyAPIService';
 import swipeService from '../services/swipeService';
-import { cleanPropertyFilters, cloneDefaultPropertyFilters } from './propertyFilters';
-
-// Normalize various API error shapes (FastAPI/Pydantic v2 arrays, objects, strings)
-const extractErrorMessage = (err, fallback = 'Something went wrong') => {
-  try {
-    const detail = err?.response?.data?.detail ?? err?.message ?? err?.toString?.();
-    if (Array.isArray(detail)) {
-      const msgs = detail.map((d) => d?.msg || d?.message || (typeof d === 'string' ? d : JSON.stringify(d)));
-      return msgs.filter(Boolean).join(', ') || fallback;
-    }
-    if (detail && typeof detail === 'object') {
-      if (detail?.msg || detail?.message) return detail.msg || detail.message;
-      return JSON.stringify(detail);
-    }
-    if (typeof detail === 'string') return detail;
-    return fallback;
-  } catch {
-    return fallback;
-  }
-};
+import { cleanPropertyFilters, cloneDefaultPropertyFilters } from '../utils/propertyFilters';
+import { extractError } from '../utils/apiError';
 
 const usePropertyStore = create((set, get) => ({
   // State
@@ -82,7 +64,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: extractErrorMessage(error, 'Failed to fetch properties')
+        error: extractError(error, 'Failed to fetch properties')
       });
       return { items: [], properties: [] };
     }
@@ -101,7 +83,7 @@ const usePropertyStore = create((set, get) => ({
       }));
       return true;
     } catch (error) {
-      set({ isSwipeLoading: false, error: extractErrorMessage(error, 'Failed to record swipe') });
+      set({ isSwipeLoading: false, error: extractError(error, 'Failed to record swipe') });
       return false;
     }
   },
@@ -115,7 +97,7 @@ const usePropertyStore = create((set, get) => ({
       set({ likedProperties: items, isSwipeLoading: false });
       return items;
     } catch (error) {
-      set({ isSwipeLoading: false, error: extractErrorMessage(error, 'Failed to load liked properties') });
+      set({ isSwipeLoading: false, error: extractError(error, 'Failed to load liked properties') });
       return [];
     }
   },
@@ -127,7 +109,7 @@ const usePropertyStore = create((set, get) => ({
       set({ isSwipeLoading: false });
       return true;
     } catch (error) {
-      set({ isSwipeLoading: false, error: extractErrorMessage(error, 'Failed to undo swipe') });
+      set({ isSwipeLoading: false, error: extractError(error, 'Failed to undo swipe') });
       return false;
     }
   },
@@ -139,7 +121,7 @@ const usePropertyStore = create((set, get) => ({
       set({ isSwipeLoading: false });
       return data;
     } catch (error) {
-      set({ isSwipeLoading: false, error: extractErrorMessage(error, 'Failed to fetch swipe stats') });
+      set({ isSwipeLoading: false, error: extractError(error, 'Failed to fetch swipe stats') });
       return null;
     }
   },
@@ -159,7 +141,7 @@ const usePropertyStore = create((set, get) => ({
       set({ recommendations: Array.isArray(list) ? list : (list.items || []), isLoading: false });
       return list;
     } catch (error) {
-      set({ isLoading: false, error: extractErrorMessage(error, 'Failed to fetch recommendations') });
+      set({ isLoading: false, error: extractError(error, 'Failed to fetch recommendations') });
       return [];
     }
   },
@@ -176,7 +158,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: extractErrorMessage(error, 'Failed to fetch your properties')
+        error: extractError(error, 'Failed to fetch your properties')
       });
       return [];
     }
@@ -200,7 +182,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: extractErrorMessage(error, 'Failed to fetch property details')
+        error: extractError(error, 'Failed to fetch property details')
       });
       return null;
     }
@@ -218,7 +200,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: extractErrorMessage(error, 'Failed to create property')
+        error: extractError(error, 'Failed to create property')
       });
       return null;
     }
@@ -245,7 +227,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: extractErrorMessage(error, 'Failed to update property')
+        error: extractError(error, 'Failed to update property')
       });
       return null;
     }
@@ -268,7 +250,7 @@ const usePropertyStore = create((set, get) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: extractErrorMessage(error, 'Failed to delete property')
+        error: extractError(error, 'Failed to delete property')
       });
       return false;
     }
@@ -354,4 +336,4 @@ const usePropertyStore = create((set, get) => ({
   clearError: () => set({ error: null }),
 }));
 
-export default usePropertyStore; 
+export { usePropertyStore };

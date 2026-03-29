@@ -3,14 +3,20 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://360ghar.com/sitemap-static.xml</loc>
-    <lastmod>2026-03-27</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://360ghar.com/sitemap-landing.xml</loc>
-    <lastmod>2026-03-27</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://360ghar.com/sitemap-localities.xml</loc>
-    <lastmod>2026-03-27</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://360ghar.com/sitemap-properties.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://360ghar.com/sitemap-blog.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://360ghar.com/sitemap-projects.xml</loc>
   </sitemap>
 </sitemapindex>

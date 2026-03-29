@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Pagination from '../../common/Pagination';
-import CommonSidebar from '../../common/CommonSidebar';
+import Pagination from '../../common/ui/Pagination';
+import CommonSidebar from '../../common/listing/CommonSidebar';
 import BlogClassicItem from './BlogClassicItem';
 import { blogService } from '../../services/blogService';
 

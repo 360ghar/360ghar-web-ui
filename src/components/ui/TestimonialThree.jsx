@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 
-import SectionHeading from '../../common/SectionHeading';
-import { testimonialThreeContents } from '../../data/HomeThreeData/HomeThreeData';
+import SectionHeading from '../../common/ui/SectionHeading';
+import { testimonialThreeContents } from '../../data/HomeThreeData';
 import TestimonialThreeItem from './TestimonialThreeItem';
 
 // Custom arrows to avoid forwarding non-DOM props (currentSlide, slideCount)

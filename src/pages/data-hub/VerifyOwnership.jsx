@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateToolSchema } from '../../seo/toolSchemas';
+import { toolSchemas } from '../../seo/toolSchemas';
 import { dataHubService } from '../../services/dataHubService';
 
 const TEHSIL_OPTIONS = [
@@ -101,6 +104,18 @@ const VerifyOwnership = () => {
         description="Verify property ownership using official Haryana land records (Jamabandi). Look up Khasra numbers, owner names, mutation status, and encumbrance details for plots in Gurugram."
         keywords="verify property ownership Gurugram, Jamabandi Haryana land records, Khasra number lookup, mutation status Haryana, property ownership check Gurgaon"
         canonical="/verify-ownership"
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Verify Ownership', url: 'https://360ghar.com/verify-ownership' },
+          ]),
+          generateToolSchema(
+            toolSchemas.verifyOwnership.name,
+            toolSchemas.verifyOwnership.description,
+            toolSchemas.verifyOwnership.keywords,
+            toolSchemas.verifyOwnership.category,
+          ),
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

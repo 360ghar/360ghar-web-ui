@@ -17,15 +17,19 @@ const SEO = ({
   noindex = false,
   prevUrl,
   nextUrl,
+  articlePublishedTime,
+  articleModifiedTime,
+  articleTags,
+  articleSection,
 }) => {
   const location = useLocation();
-  const path = `${location.pathname || ''}${location.search || ''}`;
+  const path = location.pathname || '';
   const computedUrl = absoluteUrl(url || path);
   const canonicalUrl = absoluteUrl(canonical || path);
 
   const metaTitle = title || siteMetadata.defaultTitle;
   const metaDesc = description || siteMetadata.defaultDescription;
-  const metaKeywords = keywords || siteMetadata.defaultKeywords;
+  const metaKeywords = keywords;
   const ogImage = absoluteUrl(image || siteMetadata.defaultOgImage);
 
   // Default to en-in and x-default; callers can pass more.
@@ -35,6 +39,7 @@ const SEO = ({
   ];
 
   const ldBlocks = toArray(structuredData);
+  const isArticle = type === 'article';
 
   return (
     <Helmet>
@@ -46,37 +51,7 @@ const SEO = ({
       {prevUrl && <link rel="prev" href={absoluteUrl(prevUrl)} />}
       {nextUrl && <link rel="next" href={absoluteUrl(nextUrl)} />}
 
-      {/* Additional SEO meta tags */}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta httpEquiv="Content-Language" content="en-IN" />
-      <meta name="geo.region" content="IN-HR" />
-      <meta name="geo.placename" content="Gurgaon, Gurugram, Haryana, India" />
-      <meta name="geo.position" content="28.4595;77.0266" />
-      <meta name="ICBM" content="28.4595, 77.0266" />
-      <meta name="language" content="English" />
-      <meta name="revisit-after" content="3 days" />
-      <meta name="rating" content="general" />
-      <meta name="target" content="all" />
-
-      {/* Enhanced GEO meta tags for local SEO */}
-      <meta name="contactNumber" content="+91-8178340031" />
-      <meta name="contactEmail" content="info@360ghar.com" />
-      <meta name="contactOfficeHours" content="Mon-Fri 9:00-21:00, Sat-Sun 10:00-20:00" />
-      <meta name="businessLocation" content="Gurgaon, Gurugram, Haryana" />
-      <meta name="serviceArea" content="Gurgaon, Gurugram, Delhi, Noida, Faridabad, Ghaziabad" />
-      <meta name="realEstateListingType" content="Sale, Rent, PG" />
-
-      {/* Dublin Core */}
-      <meta name="DC.title" content={metaTitle} />
-      {metaKeywords && <meta name="DC.subject" content={metaKeywords} />}
-      {metaDesc && <meta name="DC.description" content={metaDesc} />}
-      <meta name="DC.language" content="en-IN" />
-      <meta name="DC.coverage" content="Gurgaon, Gurugram, Haryana, India" />
-      <meta name="DC.publisher" content="360Ghar" />
-      <meta name="DC.rights" content="https://360ghar.com" />
-
-      <meta name="author" content="360Ghar" />
-      <meta name="publisher" content="360Ghar" />
+      <meta name="theme-color" content="#ff6b00" />
       <meta
         name="robots"
         content={
@@ -99,15 +74,33 @@ const SEO = ({
       <meta property="og:title" content={metaTitle} />
       {metaDesc && <meta property="og:description" content={metaDesc} />}
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:alt" content={`${siteMetadata.siteName} preview image`} />
+      <meta property="og:locale" content="en_IN" />
       <meta property="og:url" content={computedUrl} />
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content={siteMetadata.siteName} />
+
+      {/* OG Article extensions (only when type === 'article') */}
+      {isArticle && articlePublishedTime && (
+        <meta property="article:published_time" content={articlePublishedTime} />
+      )}
+      {isArticle && articleModifiedTime && (
+        <meta property="article:modified_time" content={articleModifiedTime} />
+      )}
+      {isArticle && articleSection && (
+        <meta property="article:section" content={articleSection} />
+      )}
+      {isArticle && articleTags?.length > 0 && articleTags.map((tag) => (
+        <meta key={tag} property="article:tag" content={tag} />
+      ))}
 
       {/* Twitter */}
       <meta name="twitter:card" content={siteMetadata.twitterCard} />
       <meta name="twitter:title" content={metaTitle} />
       {metaDesc && <meta name="twitter:description" content={metaDesc} />}
       <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content={`${siteMetadata.siteName} preview image`} />
+      <meta name="twitter:url" content={computedUrl} />
       <meta name="twitter:site" content="@360ghar" />
       <meta name="twitter:creator" content="@360ghar" />
 

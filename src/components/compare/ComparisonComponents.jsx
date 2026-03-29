@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 import { ourAdvantages } from '../../data/competitors';
 
 const ComparisonTable = ({ features, competitorFeatures, competitorName }) => {

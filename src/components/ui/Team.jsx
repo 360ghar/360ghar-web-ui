@@ -1,5 +1,5 @@
-import SectionHeading from '../../common/SectionHeading';
-import { teams } from '../../data/OthersPageData/OthersPageData';
+import SectionHeading from '../../common/ui/SectionHeading';
+import { teams } from '../../data/OthersPageData';
 import TeamItem from './TeamItem';
 
 const Team = () => {

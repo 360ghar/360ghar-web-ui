@@ -1,7 +1,7 @@
-import Header from '../common/Header';
-import Footer from '../common/Footer';
-import MobileMenu from '../common/MobileMenu';
-import OffCanvas from '../common/OffCanvas';
+import Header from '../common/layout/Header';
+import Footer from '../common/layout/Footer';
+import MobileMenu from '../common/layout/MobileMenu';
+import OffCanvas from '../common/layout/OffCanvas';
 import Cta from '../components/ui/Cta';
 import MapLocationSection from '../components/layout/MapLocationSection';
 import SEO from '../common/SEO';
@@ -15,6 +15,7 @@ const MapLocation = () => {
             description="Explore properties on an interactive map. Find homes, apartments, and commercial spaces near you in Gurugram."
             keywords="map search, properties near me, real estate map, Gurugram properties map"
             canonical="/map-location"
+            noindex
             image={siteMetadata.defaultOgImage}
             type="website"
         />

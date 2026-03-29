@@ -2,8 +2,6 @@ import { useCallback, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { toast } from 'react-toastify';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import VastuScoreCard from './VastuScoreCard';
 import FloorPlanSummary from './FloorPlanSummary';
 import VastuWarningsBanner from './VastuWarningsBanner';
@@ -113,6 +111,11 @@ const VastuReport = ({ result, onReset }) => {
         });
 
         try {
+            const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+                import('html2canvas'),
+                import('jspdf'),
+            ]);
+
             // Create a clone to modify for PDF
             const element = reportRef.current;
 

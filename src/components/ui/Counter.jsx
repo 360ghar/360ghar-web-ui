@@ -1,5 +1,5 @@
 
-import { counts } from '../../data/HomeOneData/HomeOneData';
+import { counts } from '../../data/HomeOneData';
 import CounterItem from './CounterItem';
 
 

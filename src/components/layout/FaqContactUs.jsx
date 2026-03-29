@@ -1,4 +1,4 @@
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 import ValidationForm from '../forms/ValidationForm';
 
 const FaqContactUs = () => {

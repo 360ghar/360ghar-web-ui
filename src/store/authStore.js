@@ -11,7 +11,104 @@ function readStoredUser() {
   }
 }
 
-let hasAuthSubscription = false;
+let initializationInProgress = false;
+let authSubscriptionPromise = null;
+let profileSyncPromise = null;
+let profileSyncToken = null;
+
+function writeStoredUser(user) {
+  try {
+    localStorage.setItem('user', JSON.stringify(user));
+  } catch {
+    // Ignore storage quota/private mode failures.
+  }
+}
+
+function clearStoredUser() {
+  try {
+    localStorage.removeItem('user');
+  } catch {
+    // Ignore storage failures during cleanup.
+  }
+}
+
+function clearAuthState(set) {
+  clearStoredUser();
+  set({
+    user: null,
+    token: null,
+    isAuthenticated: false,
+    isInitializing: false,
+  });
+}
+
+async function syncUserProfile(token, set) {
+  if (profileSyncPromise && profileSyncToken === token) {
+    return profileSyncPromise;
+  }
+
+  profileSyncToken = token;
+  profileSyncPromise = (async () => {
+    try {
+      const userProfile = await authService.getCurrentUser();
+      writeStoredUser(userProfile);
+      set({
+        user: userProfile,
+        token,
+        isAuthenticated: true,
+        isInitializing: false,
+      });
+      return userProfile;
+    } catch {
+      await authService.logout();
+      clearAuthState(set);
+      return null;
+    } finally {
+      if (profileSyncToken === token) {
+        profileSyncPromise = null;
+      }
+    }
+  })();
+
+  return profileSyncPromise;
+}
+
+async function handleAuthStateChange(event, session, set, get) {
+  if (event === 'SIGNED_OUT' || !session) {
+    clearAuthState(set);
+    return;
+  }
+
+  if (event === 'INITIAL_SESSION' && initializationInProgress) {
+    return;
+  }
+
+  set({
+    token: session.access_token,
+    isAuthenticated: true,
+  });
+
+  if (event === 'TOKEN_REFRESHED' && get().user) {
+    return;
+  }
+
+  await syncUserProfile(session.access_token, set);
+}
+
+async function ensureAuthSubscription(set, get) {
+  if (authSubscriptionPromise) {
+    return authSubscriptionPromise;
+  }
+
+  authSubscriptionPromise = onSupabaseAuthStateChange((event, session) =>
+    handleAuthStateChange(event, session, set, get)
+  ).catch((error) => {
+    authSubscriptionPromise = null;
+    throw error;
+  });
+
+  return authSubscriptionPromise;
+}
 
 const useAuthStore = create((set, get) => ({
   user: readStoredUser(),
@@ -22,85 +119,30 @@ const useAuthStore = create((set, get) => ({
   error: null,
 
   initializeAuth: async () => {
-    if (!hasAuthSubscription) {
-      hasAuthSubscription = true;
-      onSupabaseAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_OUT' || !session) {
-          localStorage.removeItem('user');
-          set({
-            user: null,
-            token: null,
-            isAuthenticated: false,
-          });
-          return;
-        }
+    if (initializationInProgress) return;
+    initializationInProgress = true;
+    try {
+      set({ isInitializing: true, error: null });
+      await ensureAuthSubscription(set, get);
 
+      const token = await getSupabaseAccessToken();
+      if (!token) {
+        clearAuthState(set);
+        return;
+      }
+
+      const cachedUser = readStoredUser();
+      if (cachedUser) {
         set({
-          token: session.access_token,
+          user: cachedUser,
+          token,
           isAuthenticated: true,
         });
+      }
 
-        if (event === 'TOKEN_REFRESHED' && get().user) {
-          return;
-        }
-
-        try {
-          const userProfile = await authService.getCurrentUser();
-          localStorage.setItem('user', JSON.stringify(userProfile));
-          set({ user: userProfile });
-        } catch {
-          await authService.logout();
-          localStorage.removeItem('user');
-          set({
-            user: null,
-            token: null,
-            isAuthenticated: false,
-          });
-        }
-      });
-    }
-
-    set({ isInitializing: true, error: null });
-    const token = await getSupabaseAccessToken();
-
-    if (!token) {
-      localStorage.removeItem('user');
-      set({
-        user: null,
-        token: null,
-        isAuthenticated: false,
-        isInitializing: false,
-      });
-      return;
-    }
-
-    const cachedUser = readStoredUser();
-    if (cachedUser) {
-      set({
-        user: cachedUser,
-        token,
-        isAuthenticated: true,
-      });
-    }
-
-    try {
-      const userProfile = await authService.getCurrentUser();
-      localStorage.setItem('user', JSON.stringify(userProfile));
-      set({
-        user: userProfile,
-        token,
-        isAuthenticated: true,
-        isInitializing: false,
-      });
-    } catch {
-      await authService.logout();
-      localStorage.removeItem('user');
-      set({
-        user: null,
-        token: null,
-        isAuthenticated: false,
-        isInitializing: false,
-      });
+      await syncUserProfile(token, set);
+    } finally {
+      initializationInProgress = false;
     }
   },
 
@@ -112,7 +154,7 @@ const useAuthStore = create((set, get) => ({
       if (data.access_token) {
         const userProfile = data.user || (await authService.getCurrentUser());
         if (userProfile) {
-          localStorage.setItem('user', JSON.stringify(userProfile));
+          writeStoredUser(userProfile);
         }
 
         set({
@@ -146,7 +188,7 @@ const useAuthStore = create((set, get) => ({
       if (result.access_token) {
         const userProfile = result.user || (await authService.getCurrentUser());
         if (userProfile) {
-          localStorage.setItem('user', JSON.stringify(userProfile));
+          writeStoredUser(userProfile);
         }
 
         set({
@@ -175,20 +217,14 @@ const useAuthStore = create((set, get) => ({
 
   logout: async () => {
     await authService.logout();
-    localStorage.removeItem('user');
-    set({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      isInitializing: false,
-    });
+    clearAuthState(set);
   },
 
   updateProfile: async (userData) => {
     try {
       set({ isLoading: true, error: null });
       const updatedUser = await authService.updateCurrentUser(userData);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      writeStoredUser(updatedUser);
       set({
         user: updatedUser,
         isLoading: false,
@@ -206,4 +242,5 @@ const useAuthStore = create((set, get) => ({
   clearError: () => set({ error: null }),
 }));
 
+export { useAuthStore };
 export default useAuthStore;

@@ -1,22 +1,29 @@
 import { Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
-import SectionHeading from '../../common/SectionHeading';
-import { 
-  WhyChooseUs, 
-  TestimonialCard, 
+import SectionHeading from '../../common/ui/SectionHeading';
+import {
+  WhyChooseUs,
+  TestimonialCard,
   ComparisonFAQ,
   ClaimsVsReality,
   IssueCard,
   CompareBreadcrumb
 } from '../../components/compare/ComparisonComponents';
-import { generateCompetitorBreadcrumbs } from '../../data/competitors';
+import { competitors, generateCompetitorBreadcrumbs } from '../../data/competitors';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { siteMetadata } from '../../seo/siteMetadata';
 import '../../components/compare/ComparisonStyles.scss';
+
+const ALL_COMPARE_SLUGS = Object.keys(competitors);
+
+function getOtherCompares(currentId, count = 3) {
+  return ALL_COMPARE_SLUGS.filter((id) => id !== currentId).slice(0, count);
+}
 
 const TruthPage = ({ 
   competitor,
@@ -40,16 +47,28 @@ const TruthPage = ({
     generateBreadcrumbStructuredData(breadcrumbs),
     {
       '@type': 'Article',
+      headline: pageTitle,
       name: pageTitle,
       description: pageDescription,
       url: `https://360ghar.com${canonicalPath}`,
+      datePublished: new Date().toISOString(),
+      dateModified: new Date().toISOString(),
+      image: siteMetadata.defaultOgImage,
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': `https://360ghar.com${canonicalPath}`
+      },
       author: {
         '@type': 'Organization',
         name: '360Ghar'
       },
       publisher: {
         '@type': 'Organization',
-        name: '360Ghar'
+        name: '360Ghar',
+        logo: {
+          '@type': 'ImageObject',
+          url: siteMetadata.defaultOgImage
+        }
       }
     },
     {
@@ -180,12 +199,58 @@ const TruthPage = ({
         <WhyChooseUs />
         
         {/* FAQ Section */}
-        <ComparisonFAQ 
+        <ComparisonFAQ
           faqs={competitorData.faqs}
           title={`Common Questions Answered`}
           subtitle="Get the facts you need to make an informed decision"
         />
-        
+
+        {/* Compare — cross-link to compare page and other competitors */}
+        <section className="padding-y-60 bg-white">
+          <div className="container container-two">
+            <SectionHeading
+              headingClass="text-center"
+              subtitle="Compare"
+              subtitleClass="bg-gray-100"
+              title="Compare Side-by-Side"
+              renderDesc={false}
+            />
+            <div className="row g-3 mt-3">
+              <div className="col-md-4">
+                <Link
+                  to={`/vs/${competitorData.id}`}
+                  className="d-flex align-items-center gap-3 p-3 rounded-3 border text-decoration-none h-100"
+                  style={{ color: 'inherit' }}
+                >
+                  <i className="fas fa-exchange-alt text-gradient" style={{ fontSize: '1.25rem' }} />
+                  <div>
+                    <div className="fw-semibold">360Ghar vs {competitorData.name}</div>
+                    <small className="text-muted">Feature-by-feature comparison</small>
+                  </div>
+                </Link>
+              </div>
+              {getOtherCompares(competitorData.id).map((otherId) => {
+                const other = competitors[otherId];
+                return (
+                  <div className="col-md-4" key={otherId}>
+                    <Link
+                      to={`/vs/${otherId}`}
+                      className="d-flex align-items-center gap-3 p-3 rounded-3 border text-decoration-none h-100"
+                      style={{ color: 'inherit' }}
+                    >
+                      <i className="fas fa-exchange-alt text-gradient" style={{ fontSize: '1.25rem' }} />
+                      <div>
+                        <div className="fw-semibold">360Ghar vs {other.name}</div>
+                        <small className="text-muted">See how they compare</small>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="compare-cta-section">
           <div className="container container-two">

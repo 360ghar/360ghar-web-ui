@@ -1,8 +1,8 @@
 import FaqAccordion from '../../common/FaqAccordion';
 import FaqTwoThumb from '/assets/images/thumbs/faq-two-img.png';
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const FaqTwo = () => {
     return (
         <section className="faq-two padding-y-120">

@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useLocationStore } from '../../store/locationStore';
-import GooglePlacesInput from '../../common/GooglePlacesInput';
+import GooglePlacesInput from '../../common/search/GooglePlacesInput';
 import {
   COMMERCIAL_PROPERTY_TYPES,
   GENDER_PREFERENCE_OPTIONS,
@@ -14,7 +14,7 @@ import {
   includesPgOrFlatmateType,
   isCommercialSelection,
 } from '../../utils/propertyTaxonomy';
-import { buildPropertySearchQuery } from '../../store/propertyFilters';
+import { buildPropertySearchQuery } from '../../utils/propertyFilters';
 
 const AdvancedPropertyFilter = ({ buttonText = "Search Properties" }) => {
   const { location, setLocation } = useLocationStore();

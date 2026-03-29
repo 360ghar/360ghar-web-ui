@@ -1,13 +1,6 @@
 import { create } from 'zustand';
 import { agentService } from '../services';
-
-const extractError = (err, fallback = 'Request failed') => {
-  const d = err?.response?.data?.detail ?? err?.message;
-  if (!d) return fallback;
-  if (Array.isArray(d)) return d.map((x) => x?.msg || x?.message || x).join(', ');
-  if (typeof d === 'object') return d.msg || d.message || JSON.stringify(d);
-  return String(d);
-};
+import { extractError } from '../utils/apiError';
 
 const useAgentStore = create((set) => ({
   assignedAgent: null,
@@ -29,4 +22,4 @@ const useAgentStore = create((set) => ({
   clearError: () => set({ error: null }),
 }));
 
-export default useAgentStore;
+export { useAgentStore };

@@ -1,10 +1,10 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 import FloorImage from '/assets/images/thumbs/floor-plan.png';
-import { floorTabLists, floorTabPanels } from '../../data/HomeTwoData/HomeTwoData';
+import { floorTabLists, floorTabPanels } from '../../data/HomeTwoData';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const FloorPlan = () => {
     return (
         <>

@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 
 import SEO from '../../common/SEO';
 import Cta from '../../components/ui/Cta';
@@ -93,12 +93,7 @@ const CapitalGainsCalculator = () => {
                 image={siteMetadata.defaultOgImage}
                 type="website"
                 structuredData={[
-                    generateToolSchema(
-                        toolSchemas.capitalGains.name,
-                        toolSchemas.capitalGains.description,
-                        toolSchemas.capitalGains.keywords,
-                        toolSchemas.capitalGains.category
-                    ),
+                    generateToolSchema(toolSchemas.capitalGains),
                     generateBreadcrumbStructuredData([
                         { name: 'Home', url: 'https://360ghar.com/' },
                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },

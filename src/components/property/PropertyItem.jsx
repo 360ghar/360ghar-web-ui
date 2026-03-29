@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 import TrustBadge from '../ui/TrustBadge';
 import { usePropertyStore } from '../../store';
 import { useAuthStore } from '../../store';
@@ -33,7 +33,7 @@ const ShareModal = ({ isOpen, onClose, propertyTitle, propertyURL }) => {
           url: fullURL,
         });
       } catch {
-        console.log('Share cancelled');
+        // User cancelled share dialog
       }
     }
     onClose();

@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { useUserStore } from '../../store';
 import { toast } from 'react-toastify';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const AccountProfileTab = () => {
     const { profile, getProfile, updateProfile, isLoading, error, clearError } = useUserStore();
     const [isEditing, setIsEditing] = useState(false);

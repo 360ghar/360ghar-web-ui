@@ -1,25 +1,30 @@
-import Header from '../common/Header';
-import Footer from '../common/Footer';
-import MobileMenu from '../common/MobileMenu';
-import OffCanvas from '../common/OffCanvas';
+import { lazy, Suspense } from 'react';
+import { Link } from 'react-router-dom';
+import Header from '../common/layout/Header';
+import MobileMenu from '../common/layout/MobileMenu';
+import OffCanvas from '../common/layout/OffCanvas';
 import BannerThree from '../components/ui/BannerThree';
 import AboutThree from '../components/layout/AboutThree';
-import PropertyType from '../components/ui/PropertyType';
-import PropertyTwo from '../components/property/PropertyTwo';
-import MessageThree from '../components/layout/MessageThree';
-import Newsletter from '../components/ui/Newsletter';
-import AppDownload from '../components/ui/AppDownload';
-import TestimonialThree from '../components/ui/TestimonialThree';
-import CounterThree from '../components/ui/CounterThree';
-import Faq from '../components/layout/Faq';
-import BlogThree from '../components/blog/BlogThree';
-import ToolShowcase from '../components/ui/ToolShowcase';
-import AIAgentShowcase from '../components/ui/AIAgentShowcase';
-import PropertyManagementShowcase from '../components/ui/PropertyManagementShowcase';
-import ReferEarnCta from '../components/ui/ReferEarnCta';
 import SEO from '../common/SEO';
+import LazySection from '../common/LazySection';
 import { realEstateStructuredData, generateBreadcrumbStructuredData } from '../seo/structuredData';
 import { siteMetadata } from '../seo/siteMetadata';
+
+// Below-fold components — lazy-loaded only when approaching viewport
+const ReferEarnCta = lazy(() => import('../components/ui/ReferEarnCta'));
+const PropertyType = lazy(() => import('../components/ui/PropertyType'));
+const PropertyTwo = lazy(() => import('../components/property/PropertyTwo'));
+const MessageThree = lazy(() => import('../components/layout/MessageThree'));
+const PropertyManagementShowcase = lazy(() => import('../components/ui/PropertyManagementShowcase'));
+const Newsletter = lazy(() => import('../components/ui/Newsletter'));
+const AppDownload = lazy(() => import('../components/ui/AppDownload'));
+const TestimonialThree = lazy(() => import('../components/ui/TestimonialThree'));
+const CounterThree = lazy(() => import('../components/ui/CounterThree'));
+const AIAgentShowcase = lazy(() => import('../components/ui/AIAgentShowcase'));
+const ToolShowcase = lazy(() => import('../components/ui/ToolShowcase'));
+const Faq = lazy(() => import('../components/layout/Faq'));
+const BlogFeed = lazy(() => import('../components/blog/BlogFeed'));
+const Footer = lazy(() => import('../common/layout/Footer'));
 
 const FAQ_DATA = {
     '@type': 'FAQPage',
@@ -108,7 +113,6 @@ const FAQ_DATA = {
 };
 
 const Home = () => {
-    // Combine structured data for the homepage
     const homeStructuredData = [
         realEstateStructuredData.website,
         realEstateStructuredData.localBusiness,
@@ -134,55 +138,128 @@ const Home = () => {
 
             <main className="body-bg">
 
-                {/* Header */}
+                {/* Above-fold — eagerly loaded */}
                 <Header />
-
-                {/* Banner Three */}
                 <BannerThree />
-
-                {/* About Three */}
                 <AboutThree />
 
-                {/* Refer & Earn CTA */}
-                <ReferEarnCta />
+                {/* Below-fold — lazy-loaded as user scrolls */}
+                <LazySection minHeight="200px">
+                    <Suspense fallback={<div style={{ minHeight: '200px' }} />}>
+                        <ReferEarnCta />
+                    </Suspense>
+                </LazySection>
 
-                {/* Property Type */}
-                <PropertyType />
+                <LazySection minHeight="300px">
+                    <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+                        <PropertyType />
+                    </Suspense>
+                </LazySection>
 
-                {/* Property Two */}
-                <PropertyTwo />
+                <LazySection minHeight="400px">
+                    <Suspense fallback={<div style={{ minHeight: '400px' }} />}>
+                        <PropertyTwo />
+                    </Suspense>
+                </LazySection>
 
-                {/* Message Three */}
-                <MessageThree />
+                <LazySection minHeight="200px">
+                    <Suspense fallback={<div style={{ minHeight: '200px' }} />}>
+                        <MessageThree />
+                    </Suspense>
+                </LazySection>
 
-                {/* Property Management Showcase */}
-                <PropertyManagementShowcase />
+                <LazySection minHeight="300px">
+                    <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+                        <PropertyManagementShowcase />
+                    </Suspense>
+                </LazySection>
 
-                {/* Newsletter */}
-                <Newsletter />
-                {/* App Download */}
-                <AppDownload />
+                <LazySection minHeight="200px">
+                    <Suspense fallback={<div style={{ minHeight: '200px' }} />}>
+                        <Newsletter />
+                        <AppDownload />
+                    </Suspense>
+                </LazySection>
 
-                {/* Testimonial Three */}
-                <TestimonialThree />
+                <LazySection minHeight="300px">
+                    <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+                        <TestimonialThree />
+                    </Suspense>
+                </LazySection>
 
-                {/* Counter Three */}
-                <CounterThree />
+                <LazySection minHeight="200px">
+                    <Suspense fallback={<div style={{ minHeight: '200px' }} />}>
+                        <CounterThree />
+                    </Suspense>
+                </LazySection>
 
-                {/* AI Agent Showcase */}
-                <AIAgentShowcase />
+                <LazySection minHeight="300px">
+                    <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+                        <AIAgentShowcase />
+                    </Suspense>
+                </LazySection>
 
-                {/* Tool Showcase */}
-                <ToolShowcase />
+                <LazySection minHeight="300px">
+                    <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+                        <ToolShowcase />
+                    </Suspense>
+                </LazySection>
 
-                {/* Faq */}
-                <Faq />
+                <LazySection minHeight="300px">
+                    <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+                        <Faq />
+                    </Suspense>
+                </LazySection>
 
-                {/* Blog Three */}
-                <BlogThree />
+                <LazySection minHeight="400px">
+                    <Suspense fallback={<div style={{ minHeight: '400px' }} />}>
+                        <BlogFeed />
+                    </Suspense>
+                </LazySection>
 
-                {/* Footer */}
-                <Footer />
+                {/* Explore 360Ghar — internal linking hub */}
+                <LazySection minHeight="300px">
+                    <section className="padding-y-60 bg-white">
+                        <div className="container container-two">
+                            <div className="section-heading text-center mb-4">
+                                <h2 className="section-heading__title">Explore 360Ghar</h2>
+                                <p className="section-heading__desc">Tools, resources, and listings to help you find your perfect property</p>
+                            </div>
+                            <div className="row g-3">
+                                {[
+                                    { to: '/localities', label: 'Browse Localities', icon: 'fa-map-marker-alt' },
+                                    { to: '/circle-rates', label: 'Circle Rates', icon: 'fa-indian-rupee-sign' },
+                                    { to: '/bank-auctions', label: 'Bank Auctions', icon: 'fa-gavel' },
+                                    { to: '/emi-calculator', label: 'EMI Calculator', icon: 'fa-calculator' },
+                                    { to: '/area-converter', label: 'Area Converter', icon: 'fa-ruler-combined' },
+                                    { to: '/about-us', label: 'About Us', icon: 'fa-building' },
+                                    { to: '/faq', label: 'FAQ', icon: 'fa-question-circle' },
+                                    { to: '/contact', label: 'Contact Us', icon: 'fa-envelope' },
+                                    { to: '/gurgaon/buy/flats', label: 'Flats for Sale in Gurgaon', icon: 'fa-home' },
+                                    { to: '/gurgaon/rent/flats', label: 'Flats for Rent in Gurgaon', icon: 'fa-key' },
+                                    { to: '/vs/nobroker', label: '360Ghar vs NoBroker', icon: 'fa-exchange-alt' },
+                                ].map((link) => (
+                                    <div className="col-lg-3 col-md-4 col-sm-6" key={link.to}>
+                                        <Link
+                                            to={link.to}
+                                            className="d-flex align-items-center gap-3 p-3 rounded-3 border text-decoration-none h-100"
+                                            style={{ transition: 'box-shadow 0.2s', color: 'inherit' }}
+                                        >
+                                            <i className={`fas ${link.icon} text-gradient`} style={{ fontSize: '1.25rem', width: '24px', textAlign: 'center' }} />
+                                            <span className="fw-medium">{link.label}</span>
+                                        </Link>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </LazySection>
+
+                <LazySection minHeight="400px">
+                    <Suspense fallback={<div style={{ minHeight: '400px' }} />}>
+                        <Footer />
+                    </Suspense>
+                </LazySection>
 
             </main>
         </>

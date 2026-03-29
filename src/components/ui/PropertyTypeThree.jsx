@@ -1,5 +1,5 @@
-import SectionHeading from '../../common/SectionHeading';
-import { propertyThreeTypes } from '../../data/HomeThreeData/HomeThreeData';
+import SectionHeading from '../../common/ui/SectionHeading';
+import { propertyThreeTypes } from '../../data/HomeThreeData';
 import PropertyTypeThreeItem from './PropertyTypeThreeItem';
 
 const PropertyTypeThree = () => {

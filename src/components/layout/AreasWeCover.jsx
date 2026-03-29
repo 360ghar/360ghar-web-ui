@@ -1,4 +1,4 @@
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 
 const AREAS = [
   'DLF Phase 1',

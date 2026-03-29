@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { toolFeatures } from '../../data/HomeOneData/HomeOneData';
+import { toolFeatures } from '../../data/HomeOneData';
 import './ToolShowcase.scss';
 
 const ToolShowcase = () => {

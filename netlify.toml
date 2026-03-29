@@ -1,0 +1,110 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# ── Server-side redirects (processed top-to-bottom, BEFORE the SPA catch-all) ──
+
+# WWW → non-www (consolidate authority)
+[[redirects]]
+  from = "https://www.360ghar.com/*"
+  to = "https://360ghar.com/:splat"
+  status = 301
+  force = true
+
+# Trailing slash normalization
+[[redirects]]
+  from = "/*/"
+  to = "/:splat"
+  status = 301
+
+# City slug normalization: gurugram → gurgaon
+[[redirects]]
+  from = "/gurugram/*"
+  to = "/gurgaon/:splat"
+  status = 301
+
+# Deduplicate flats/apartments: apartments → flats for all city/intent combos
+[[redirects]]
+  from = "/:city/buy/apartments"
+  to = "/:city/buy/flats"
+  status = 301
+
+[[redirects]]
+  from = "/:city/rent/apartments"
+  to = "/:city/rent/flats"
+  status = 301
+
+[[redirects]]
+  from = "/:city/pg/apartments"
+  to = "/:city/pg/flats"
+  status = 301
+
+# SPA fallback - serve index.html for all unmatched routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Hashed JS chunks — content-addressed, safe to cache forever
+[[headers]]
+  for = "/assets/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Hashed CSS chunks — content-addressed, safe to cache forever
+[[headers]]
+  for = "/assets/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Webfonts (Font Awesome woff2) — immutable
+[[headers]]
+  for = "/assets/webfonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+# Static CSS from public/ (Bootstrap, Font Awesome CSS, local fonts)
+[[headers]]
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, stale-while-revalidate=604800"
+
+# Images — 30 days with stale-while-revalidate
+[[headers]]
+  for = "/assets/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, stale-while-revalidate=604800"
+
+# Service worker — never cache so updates propagate immediately
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/registerSW.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/workbox-*.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# HTML pages — always revalidate
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+
+# Root index.html
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"

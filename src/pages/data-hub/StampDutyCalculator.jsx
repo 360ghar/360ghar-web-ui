@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateToolSchema } from '../../seo/toolSchemas';
+import { toolSchemas } from '../../seo/toolSchemas';
 import { dataHubService } from '../../services/dataHubService';
 import { useDataHubStore } from '../../store/dataHubStore';
 
@@ -48,6 +51,18 @@ const StampDutyCalculator = () => {
         description="Calculate stamp duty and registration charges for property in Gurugram, Haryana. Male: 7%, Female: 5%, Joint: 6%. Includes circle rate comparison and EMI estimation."
         keywords="Haryana stamp duty calculator, Gurugram property registration charges, DLC rate stamp duty, stamp duty female buyer Haryana, property registration cost Gurgaon"
         canonical="/stamp-duty-calculator"
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Stamp Duty Calculator', url: 'https://360ghar.com/stamp-duty-calculator' },
+          ]),
+          generateToolSchema(
+            toolSchemas.stampDutyCalculator.name,
+            toolSchemas.stampDutyCalculator.description,
+            toolSchemas.stampDutyCalculator.keywords,
+            toolSchemas.stampDutyCalculator.category,
+          ),
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { dataHubService } from '../../services/dataHubService';
 import StampDutyWidget from '../../components/data-hub/StampDutyWidget';
 
@@ -43,6 +44,19 @@ const CircleRateDirectory = () => {
         description="Official circle rates (DLC rates) for all sectors in Gurugram. Check IGRS Haryana stamp duty rates for residential, commercial, and plot properties sector-by-sector."
         keywords="Gurugram circle rates, DLC rates Gurugram, IGRS Haryana rates, stamp duty circle rate, sector wise circle rate Gurgaon 2024"
         canonical="/circle-rates"
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Circle Rates', url: 'https://360ghar.com/circle-rates' },
+          ]),
+          {
+            '@type': 'ItemList',
+            name: 'Gurugram Circle Rates (DLC Rates)',
+            description: 'Official circle rates for all sectors in Gurugram.',
+            url: 'https://360ghar.com/circle-rates',
+            numberOfItems: total,
+          },
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import ListGridButtons from '../../common/ListGridButtons';
-import usePropertyStore from '../../store/propertyStore';
+import ListGridButtons from '../../common/listing/ListGridButtons';
+import { usePropertyStore } from '../../store/propertyStore';
 
 const PropertyFilterBottom = ({
     total = 0,

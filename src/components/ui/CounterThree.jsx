@@ -1,9 +1,9 @@
-import { counterThreeContents } from '../../data/HomeThreeData/HomeThreeData';
+import { counterThreeContents } from '../../data/HomeThreeData';
 import CounterThreeItem from './CounterThreeItem';
 
 import CounterBg from '/assets/images/thumbs/counter-bg.png';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const CounterThree = () => {
     return (
         <>

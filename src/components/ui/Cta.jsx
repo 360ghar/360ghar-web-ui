@@ -1,7 +1,7 @@
 import CtaThumb from '/assets/images/thumbs/cta-img.png';
-import NewsletterForm from '../../common/NewsletterForm';
+import NewsletterForm from '../../common/forms/NewsletterForm';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const Cta = (props) => {
     return (
         <section className={`cta padding-b-120 ${props.ctaClass}`}>

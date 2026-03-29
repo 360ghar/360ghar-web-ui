@@ -1,7 +1,7 @@
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import FaqTwo from '../../components/layout/FaqTwo';
 import FaqContactUs from '../../components/layout/FaqContactUs';
@@ -9,7 +9,7 @@ import CounterFour from '../../components/ui/CounterFour';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
-import { faqs } from '../../data/HomeThreeData/HomeThreeData';
+import { faqs } from '../../data/HomeThreeData';
 
 const FaqPage = () => {
     return (

@@ -1,14 +1,32 @@
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import PropertyPageSection from '../../components/property/PropertyPageSection';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
+import { Link, useSearchParams } from 'react-router-dom';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { realEstateStructuredData, generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
+const popularSearches = [
+    { label: 'Flats for rent in Gurugram', to: '/gurgaon/rent/flats' },
+    { label: 'Apartments for sale in Gurugram', to: '/gurgaon/buy/flats' },
+    { label: 'PG in Gurugram', to: '/gurgaon/pg/flats' },
+    { label: 'Explore localities', to: '/localities' },
+];
+
 const Property = () => {
+    const [searchParams] = useSearchParams();
+    const page = parseInt(searchParams.get('page'), 10) || 1;
+
+    // Canonical: /properties for page 1, /properties?page=N for page > 1
+    const canonical = page > 1 ? `/properties?page=${page}` : '/properties';
+
+    // Prev/next for pagination
+    const prevUrl = page > 1 ? (page === 2 ? '/properties' : `/properties?page=${page - 1}`) : undefined;
+    const nextUrl = page > 1 ? `/properties?page=${page + 1}` : undefined;
+
     // Enhanced structured data for property listings
     const propertyStructuredData = [
         realEstateStructuredData.realEstateListing,
@@ -24,17 +42,17 @@ const Property = () => {
           title="Properties in Gurugram | AI-Powered Search & Verified Listings | 360Ghar"
           description="Browse verified properties in Gurugram with 360° virtual tours. Find apartments, flats, builder floors, independent houses, and PGs in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City. All properties verified by on-site team."
           keywords="Gurugram properties, Gurgaon real estate, AI property search Gurugram, buy property Gurugram, sell property Gurgaon, rent apartments Gurugram, verified properties India, on-site verified listings, flats for sale in Gurgaon, flats for rent in Gurgaon, 1 BHK 2 BHK 3 BHK, ready to move flats, new launch projects, resale apartments, PG in Gurgaon, girls PG, co-living Gurugram, DLF Phase properties, Golf Course Road apartments, Sohna Road flats, Cyber City office space, near metro apartments, no broker, direct owner, verified listings, 360 virtual tours"
-          canonical="/properties"
+          canonical={canonical}
           image={siteMetadata.defaultOgImage}
           type="website"
           structuredData={propertyStructuredData}
+          prevUrl={prevUrl}
+          nextUrl={nextUrl}
         />
         <OffCanvas />
         <MobileMenu />
 
         <main className="body-bg">
-            
-            {/* Header */}
             <Header
                 headerClass="dark-header has-border"
                 headerMenusClass="mx-auto"
@@ -45,14 +63,44 @@ const Property = () => {
                 showContactNumber={false}
             />
 
-          
-            {/* Property Page Section */}
+            <section className="padding-y-60 bg-white">
+                <div className="container container-two">
+                    <div className="row g-4 align-items-start">
+                        <div className="col-lg-7">
+                            <span className="subtitle bg-gray-100 px-3 py-2 rounded-pill d-inline-block mb-3">Verified Search Hub</span>
+                            <h1 className="mb-3">Verified Property Search in Gurugram</h1>
+                            <p className="text-muted mb-4">
+                                Start with verified listings, then refine by locality, budget, property type, and furnishing. 360Ghar combines on-site verification, 360° tours, and direct search paths so you can shortlist with less noise.
+                            </p>
+                            <div className="d-flex flex-wrap gap-2">
+                                <a href="#property-search-results" className="btn btn-main">Browse Listings</a>
+                                <Link to="/localities" className="btn btn-outline-main">Compare Localities</Link>
+                            </div>
+                        </div>
+                        <div className="col-lg-5">
+                            <div className="locality-stat-card h-100">
+                                <span className="locality-stat-card__label">Popular property searches</span>
+                                <div className="d-flex flex-wrap gap-2 mb-3">
+                                    {popularSearches.map((search) => (
+                                        <Link key={search.to} to={search.to} className="btn btn-outline-main btn-sm">
+                                            {search.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                                <p className="text-muted mb-0">
+                                    If you are still deciding where to search, use locality pages first, then return here to filter the verified inventory.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="property-search-results">
             <PropertyPageSection/>
+            </section>
 
-            {/* Cta */}
             <Cta ctaClass=""/>
-
-            {/* Footer */}
             <Footer/>
 
         </main>   

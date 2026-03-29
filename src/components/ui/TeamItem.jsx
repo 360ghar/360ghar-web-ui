@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { socialLists } from '../../data/CommonData/CommonData';
+import { socialLists } from '../../data/CommonData';
 import { Link } from 'react-router-dom';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const TeamItem = ({ team }) => {
     
     const {thumb, name, designation, shareIcon} = team; 

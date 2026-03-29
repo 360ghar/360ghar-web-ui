@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
 import { useForm, ValidationError } from '@formspree/react';
@@ -101,6 +101,7 @@ const AccountDeletionRequest = () => {
 
     return (
         <>
+        <SEO title="Account Deletion Request | 360Ghar" description="Request deletion of your account or data." canonical="/delete-account" noindex />
         <OffCanvas />
         <MobileMenu />
 

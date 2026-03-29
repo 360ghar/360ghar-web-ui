@@ -1,7 +1,4 @@
-import { createAxiosInstance } from './http';
-import api from './api';
-
-const publicApi = createAxiosInstance({ withAuth: false });
+import { api, publicApi } from './api';
 
 export const dataHubService = {
   // ─── CIRCLE RATES ────────────────────────────────────────────────────────
@@ -93,4 +90,3 @@ export const dataHubService = {
     publicApi.get(`/data-hub/neighbourhood/${listingId}`).then(r => r.data),
 };
 
-export default dataHubService;

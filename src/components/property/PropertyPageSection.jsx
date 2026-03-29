@@ -2,16 +2,16 @@ import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import PropertyItem from './PropertyItem';
-import Pagination from '../../common/Pagination';
+import Pagination from '../../common/ui/Pagination';
 import PropertyFilterBottom from '../property-filters/PropertyFilterBottom';
 import PropertyFilters from '../property-filters/PropertyFilters';
 import PropertyTopBar from '../property-filters/PropertyTopBar';
-import usePropertyStore from '../../store/propertyStore';
+import { usePropertyStore } from '../../store/propertyStore';
 import { useLocationStore } from '../../store/locationStore';
 import { propertyAPIService } from '../../services/propertyAPIService';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import { hapticLight } from '../../utils/hapticFeedback';
-import { parsePropertySearchParams } from '../../store/propertyFilters';
+import { parsePropertySearchParams } from '../../utils/propertyFilters';
 
 const PropertyPageSection = () => {
     const { setLocation } = useLocationStore();

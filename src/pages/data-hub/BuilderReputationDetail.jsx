@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import Pagination from '../../common/Pagination';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import Pagination from '../../common/ui/Pagination';
 import BuilderScoreChart from '../../components/data-hub/BuilderScoreChart';
 import { dataHubService } from '../../services/dataHubService';
 
@@ -114,6 +115,7 @@ const BuilderReputationDetail = () => {
   if (notFound) {
     return (
       <>
+        <SEO noindex={true} title="Not Found | 360Ghar" />
         <OffCanvas />
         <MobileMenu />
         <main className="body-bg">
@@ -134,6 +136,7 @@ const BuilderReputationDetail = () => {
   if (error) {
     return (
       <>
+        <SEO noindex={true} title="Error | 360Ghar" />
         <OffCanvas />
         <MobileMenu />
         <main className="body-bg">
@@ -160,6 +163,28 @@ const BuilderReputationDetail = () => {
         description={`Check ${builderName}'s RERA reputation score, registered projects, and complaint history in Gurugram. Data sourced from HRERA public records.`}
         keywords={`${builderName} RERA score, ${builderName} complaints, builder reputation Gurugram, HRERA ${builderName}`}
         canonical={`/builder-reputation/${slug}`}
+        structuredData={[
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Builder Reputation', url: 'https://360ghar.com/builder-reputation' },
+            { name: builderName, url: `https://360ghar.com/builder-reputation/${slug}` },
+          ]),
+          {
+            '@type': 'Organization',
+            name: builderName,
+            address: builder?.city
+              ? { '@type': 'PostalAddress', addressLocality: builder.city, addressRegion: 'Haryana', addressCountry: 'IN' }
+              : undefined,
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: score,
+              bestRating: 100,
+              worstRating: 0,
+              reviewCount: builder?.total_complaints ?? 0,
+            },
+            description: `${builderName} — RERA reputation score: ${score}/100. ${builder?.total_projects ?? 0} registered projects, ${builder?.total_complaints ?? 0} complaints.`,
+          },
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

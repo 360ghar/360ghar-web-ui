@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 import BlogItem from './BlogItem';
 import { blogService } from '../../services/blogService';
 

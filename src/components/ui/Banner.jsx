@@ -1,9 +1,9 @@
-import { bannerContent } from '../../data/HomeOneData/HomeOneData';
+import { bannerContent } from '../../data/HomeOneData';
 import { Link } from 'react-router-dom';
 
-import TabFilter from '../../common/TabFilter';
+import TabFilter from '../../common/forms/TabFilter';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const Banner = () => {
     return (
         <>

@@ -1,7 +1,7 @@
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import PropertySidebarSection from '../../components/property/PropertySidebarSection';
 import SEO from '../../common/SEO';
@@ -13,6 +13,7 @@ const Property = () => {
                 title="Properties with Filter Sidebar | 360Ghar"
                 description="Filter and search verified properties in Gurugram on 360Ghar's property portal."
                 canonical="/property-sidebar"
+                noindex
             />
             <main className="body-bg">
 

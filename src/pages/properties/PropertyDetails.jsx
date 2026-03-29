@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import PropertyDetailsSection from '../../components/property/PropertyDetailsSection';
 import { useParams } from 'react-router-dom';
@@ -13,8 +13,8 @@ import CircleRateBanner from '../../components/data-hub/CircleRateBanner';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
-import usePropertyStore from '../../store/propertyStore';
+import { generateBreadcrumbStructuredData, generateVideoStructuredData } from '../../seo/structuredData';
+import { usePropertyStore } from '../../store/propertyStore';
 import {
     getAccommodationSchemaType,
     getListingLabel,
@@ -116,14 +116,36 @@ const PropertyDetails = () => {
             { name: propertyData.title || 'Property Details', url: `https://360ghar.com/property/${propertyData.id}` }
         ];
 
-        return [
+        const structuredDataArray = [
             basePropertySchema,
             listingSchema,
             generateBreadcrumbStructuredData(breadcrumbData)
         ];
+
+        // Add VideoObject schema when a virtual tour is available
+        const virtualTourUrl = propertyData.virtual_tour_url || propertyData.tour_url;
+        if (virtualTourUrl) {
+            structuredDataArray.push(
+                generateVideoStructuredData({
+                    title: `360° Virtual Tour — ${propertyData.title || 'Property in Gurugram'}`,
+                    description: propertyData.description
+                        ? `Virtual tour: ${propertyData.description.slice(0, 200)}`
+                        : 'Experience this property through an immersive 360° virtual tour on 360Ghar',
+                    thumbnail: Array.isArray(propertyData.images) && propertyData.images[0]?.image_url
+                        ? propertyData.images[0].image_url
+                        : undefined,
+                    uploadDate: propertyData.created_at || undefined,
+                    contentUrl: virtualTourUrl,
+                })
+            );
+        }
+
+        return structuredDataArray;
     };
 
     const mainImage = (Array.isArray(propertyData?.images) && propertyData.images[0]?.image_url) || siteMetadata.defaultOgImage;
+
+    const isNotFound = !isLoading && (!propertyData || error);
 
     return (
         <>
@@ -141,6 +163,7 @@ const PropertyDetails = () => {
                 image={mainImage}
                 type="product"
                 structuredData={generatePropertyStructured()}
+                noindex={isNotFound}
             />
             <main className="body-bg">
                 <OffCanvas />

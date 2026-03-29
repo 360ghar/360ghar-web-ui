@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Header from '../../common/Header';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
@@ -22,12 +22,7 @@ const DesignBlueprint = () => {
         canonical="/design-blueprint"
         image={siteMetadata.defaultOgImage}
         type="website"
-        structuredData={generateToolSchema(
-            toolSchemas.designBlueprint.name,
-            toolSchemas.designBlueprint.description,
-            toolSchemas.designBlueprint.keywords,
-            toolSchemas.designBlueprint.category
-        )}
+        structuredData={generateToolSchema(toolSchemas.designBlueprint)}
       />
 
       <OffCanvas />

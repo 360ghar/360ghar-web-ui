@@ -1,4 +1,4 @@
-import { contactTopInfos } from '../../data/OthersPageData/OthersPageData';
+import { contactTopInfos } from '../../data/OthersPageData';
 import { Link } from 'react-router-dom';
 
 const ContactTop = () => {

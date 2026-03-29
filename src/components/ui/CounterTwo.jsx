@@ -1,4 +1,4 @@
-import { counters } from '../../data/HomeTwoData/HomeTwoData';
+import { counters } from '../../data/HomeTwoData';
 import CounterTwoItem from './CounterTwoItem';
 
 const CounterTwo = () => {

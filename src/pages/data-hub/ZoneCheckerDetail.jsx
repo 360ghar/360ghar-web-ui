@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { dataHubService } from '../../services/dataHubService';
 
 const LAND_USE_COLORS = {
@@ -77,6 +78,25 @@ const ZoneCheckerDetail = () => {
           : 'Detailed zoning information for Gurugram sectors including FAR, height restrictions, and land use classification.'}
         keywords={`${sectorName} zoning Gurugram, ${sectorName} FAR, land use ${sectorName}, Master Plan Gurugram`}
         canonical={`/zone-checker/${slug}`}
+        noindex={!loading && (!zone || notFound || error)}
+        structuredData={zone ? [
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Zone Checker', url: 'https://360ghar.com/zone-checker' },
+            { name: sectorName, url: `https://360ghar.com/zone-checker/${slug}` },
+          ]),
+          {
+            '@type': 'Place',
+            name: `${sectorName}, Gurugram`,
+            description: `Zoning details for ${sectorName}. Land use: ${zone.primary_land_use || zone.land_use || 'N/A'}, FAR: ${zone.far ?? 'N/A'}, Max height: ${zone.max_height ?? 'N/A'}m.`,
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: sectorName,
+              addressRegion: 'Haryana',
+              addressCountry: 'IN',
+            },
+          },
+        ] : []}
       />
       <OffCanvas />
       <MobileMenu />

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import AuctionAlertModal from '../../components/data-hub/AuctionAlertModal';
 import { dataHubService } from '../../services/dataHubService';
 
@@ -89,6 +90,32 @@ const BankAuctionDetail = () => {
         }
         keywords="bank auction property, SARFAESI auction Gurugram, court ordered sale, property auction detail"
         canonical={`/bank-auctions/${id}`}
+        noindex={!loading && (!!error || !auction)}
+        structuredData={auction ? [
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Bank Auctions', url: 'https://360ghar.com/bank-auctions' },
+            { name: auction.property_description || auction.property_type || 'Auction', url: `https://360ghar.com/bank-auctions/${id}` },
+          ]),
+          {
+            '@type': 'Event',
+            name: auction.property_description || 'Property Auction',
+            description: `${sourceBadge} auction by ${institution || 'bank'}. Reserve price: ${formatPrice(auction.reserve_price)}.`,
+            startDate: auction.auction_date || undefined,
+            location: auction.address
+              ? { '@type': 'Place', name: auction.address, address: { '@type': 'PostalAddress', streetAddress: auction.address, addressLocality: 'Gurugram', addressRegion: 'Haryana', addressCountry: 'IN' } }
+              : { '@type': 'Place', name: 'Gurugram, Haryana' },
+            organizer: institution
+              ? { '@type': 'Organization', name: institution }
+              : undefined,
+            offers: {
+              '@type': 'Offer',
+              price: auction.reserve_price || 0,
+              priceCurrency: 'INR',
+              availability: 'https://schema.org/LimitedAvailability',
+            },
+          },
+        ] : []}
       />
       <OffCanvas />
       <MobileMenu />

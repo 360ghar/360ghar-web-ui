@@ -1,10 +1,10 @@
 
 import BannerTwoThumb from '/assets/images/thumbs/banner-two-filter-bg.png';
-import TabFilter from '../../common/TabFilter';
-import { bannerTwoContent } from '../../data/HomeTwoData/HomeTwoData';
+import TabFilter from '../../common/forms/TabFilter';
+import { bannerTwoContent } from '../../data/HomeTwoData';
 import { Link } from 'react-router-dom';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const BannerTwo = () => {
     return (
         <>

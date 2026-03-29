@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import BlogItemThree from './BlogItemThree';
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 import { blogService } from '../../services/blogService';
 
 const BlogThree = () => {

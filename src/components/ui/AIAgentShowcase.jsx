@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { aiAgentShowcaseContent, aiAgentFeatures } from '../../data/AIAgentData/AIAgentData';
+import { aiAgentShowcaseContent, aiAgentFeatures } from '../../data/AIAgentData';
 import './AIAgentShowcase.scss';
 
 const FeatureIcon = ({ type }) => {

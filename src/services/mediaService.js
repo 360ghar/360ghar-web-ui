@@ -36,4 +36,3 @@ export const mediaService = {
   },
 };
 
-export default mediaService;

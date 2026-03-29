@@ -5,8 +5,9 @@ import './App.css';
 import { useLocationStore } from './store/locationStore';
 import { useAuthStore } from './store';
 import PageLoader from './common/PageLoader';
-import ScrollToTop from './common/ScrollToTop';
+import ScrollToTop from './common/layout/ScrollToTop';
 import SEO from './common/SEO';
+import UIScrollLockEffect from './common/UIScrollLockEffect';
 import { realEstateStructuredData } from './seo/structuredData';
 
 const Home = lazy(() => import('./pages/Home'));
@@ -209,8 +210,9 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <RouteScrollToTop />
+        <UIScrollLockEffect />
         <SEO structuredData={globalSchemas} />
         <Suspense fallback={<PageLoader />}>
           <Routes>

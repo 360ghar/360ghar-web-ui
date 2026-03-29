@@ -2,7 +2,7 @@ import { useChatStore } from '../../store';
 import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
-import GuestPrompt from './messages/GuestPrompt';
+import GuestLoginBanner from './messages/GuestLoginBanner';
 
 function ChatPanel({ isAuthenticated }) {
   const isOpen = useChatStore((state) => state.isOpen);
@@ -18,7 +18,8 @@ function ChatPanel({ isAuthenticated }) {
     >
       <ChatHeader />
       <ChatMessages />
-      {isAuthenticated ? <ChatInput /> : <GuestPrompt />}
+      {!isAuthenticated && <GuestLoginBanner />}
+      <ChatInput />
     </div>
   );
 }

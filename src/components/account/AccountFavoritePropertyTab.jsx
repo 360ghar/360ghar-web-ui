@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import usePropertyStore from '../../store/propertyStore';
+import { usePropertyStore } from '../../store/propertyStore';
 import PropertyItem from '../property/PropertyItem';
 
 const AccountFavoritePropertyTab = () => {

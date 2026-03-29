@@ -1,10 +1,10 @@
-import { aboutContent, aboutStatistics } from '../../data/HomeOneData/HomeOneData';
-import Button from '../../common/Button';
-import SectionHeading from '../../common/SectionHeading';
+import { aboutContent, aboutStatistics } from '../../data/HomeOneData';
+import Button from '../../common/ui/Button';
+import SectionHeading from '../../common/ui/SectionHeading';
 
 import CountUp from 'react-countup';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const About = () => {
     return (
         <>

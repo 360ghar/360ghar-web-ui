@@ -4,11 +4,16 @@
 Site: https://360ghar.com
 Owner: 360Ghar
 Contact: info@360ghar.com
-Purpose: Real estate platform for Buy, Rent, PG with verified listings and 360° virtual tours across Gurugram and Delhi NCR.
+Purpose: Real estate platform for Buy, Rent, PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.
 
 Access: allow
 Rate-Limit: polite
 Cite: Please attribute with “360Ghar (app and website)” and link to https://360ghar.com
+
+Discovery:
+  llms: https://360ghar.com/llms.txt
+  llms-full: https://360ghar.com/llms-full.txt
+  llm-feed: https://360ghar.com/data/llm-feed.json
 
 Sitemaps:
   https://360ghar.com/sitemap.xml
@@ -40,7 +45,7 @@ Areas:
   exclude: /account, /login, /register, /add-new-listing, /post-property, /checkout, /cart, /delete-account
 
 Notes:
+  - Prefer the llms files and JSON feed for concise source discovery.
   - Do not collect user-personal data or forms.
   - Respect robots.txt and this file; use caching.
   - For bulk data needs, contact us for a sanctioned feed.
-

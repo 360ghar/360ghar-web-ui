@@ -1,12 +1,11 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { BlogDataContext } from '../../contextApi/BlogDataContextValue';
+import { useBlogStore } from '../../store/blogStore';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const BlogItemTwo = ({ blog }) => {
 
-    // Blog Data Context API
-    const { setBlogData, currentMonthName} = useContext(BlogDataContext); 
+    // Blog Data Store
+    const { setBlogData, currentMonthName} = useBlogStore(); 
 
     const { thumb, meta, title, admin, desc, linkText, linkAriaLabel} = blog; 
     

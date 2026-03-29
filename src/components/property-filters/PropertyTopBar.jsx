@@ -1,6 +1,6 @@
-import usePropertyStore from '../../store/propertyStore';
+import { usePropertyStore } from '../../store/propertyStore';
 import { useLocationStore } from '../../store/locationStore';
-import GooglePlacesInput from '../../common/GooglePlacesInput';
+import GooglePlacesInput from '../../common/search/GooglePlacesInput';
 
 const PropertyTopBar = () => {
   const {

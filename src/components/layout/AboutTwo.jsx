@@ -1,8 +1,8 @@
-import SectionHeading from '../../common/SectionHeading';
-import { aboutTwoRight, checkLists } from '../../data/HomeTwoData/HomeTwoData';
-import Button from '../../common/Button';
+import SectionHeading from '../../common/ui/SectionHeading';
+import { aboutTwoRight, checkLists } from '../../data/HomeTwoData';
+import Button from '../../common/ui/Button';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const AboutTwo = () => {
     return (
         <>

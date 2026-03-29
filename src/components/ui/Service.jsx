@@ -1,7 +1,7 @@
-import { services } from '../../data/HomeTwoData/HomeTwoData';
+import { services } from '../../data/HomeTwoData';
 import { Link } from 'react-router-dom';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const Service = () => {
     return (
         <>

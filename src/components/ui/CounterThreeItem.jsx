@@ -1,6 +1,6 @@
 import CountUp from 'react-countup';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const CounterThreeItem = ({ counterThreeItem }) => {
     const {icon, number, text} = counterThreeItem; 
     

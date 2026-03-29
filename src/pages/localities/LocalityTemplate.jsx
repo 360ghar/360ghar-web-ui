@@ -1,9 +1,9 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
@@ -133,61 +133,334 @@ const getNearbyLocalities = (localityInfo, allLocalities) => {
         .slice(0, 6);
 };
 
-const buildAmenityItems = (localityName, city) => [
-    {
-        icon: 'fa-route',
-        title: 'Road Access',
-        description: `Efficient links from ${localityName} to major travel corridors across ${city}.`
-    },
-    {
-        icon: 'fa-subway',
-        title: 'Transit Convenience',
-        description: `Public transit options support daily travel for residents and working professionals.`
-    },
-    {
-        icon: 'fa-hospital',
-        title: 'Healthcare Reach',
-        description: `Nearby clinics and hospitals offer reliable access to essential healthcare services.`
-    },
-    {
-        icon: 'fa-graduation-cap',
-        title: 'Schools and Education',
-        description: `Families can access multiple school options and learning hubs in surrounding sectors.`
-    },
-    {
-        icon: 'fa-shopping-bag',
-        title: 'Retail and Daily Needs',
-        description: `Grocery, convenience retail, and food outlets are available within easy reach.`
-    },
-    {
-        icon: 'fa-home',
-        title: 'Lifestyle Comfort',
-        description: `Residential pockets and neighborhood facilities support long-term livability.`
-    }
-];
+/**
+ * Build amenity items that vary by entityType so that sector, society, project,
+ * and other entity types get distinct amenity descriptions instead of identical
+ * templates across all 3,195 pages.
+ */
+const buildAmenityItems = (localityName, city, entityType = 'locality') => {
+    const rawEntityType = entityType.toLowerCase();
 
-const buildConnectivityItems = (localityName, city) => [
-    {
-        icon: 'fa-subway',
-        name: 'Metro Network',
-        details: `Commuters in ${localityName} can plan practical routes through Gurugram's metro corridors.`
-    },
-    {
-        icon: 'fa-road',
-        name: 'Arterial Roads',
-        details: `Road connectivity supports daily travel to business, education, and retail hubs in ${city}.`
-    },
-    {
-        icon: 'fa-plane-departure',
-        name: 'Airport Accessibility',
-        details: 'Intercity and airport travel is manageable for business professionals and frequent flyers.'
-    },
-    {
-        icon: 'fa-briefcase',
-        name: 'Office Connectivity',
-        details: 'Key employment centers remain reachable for regular workday commuting.'
+    // Sector-specific amenities
+    if (rawEntityType === 'sector') {
+        return [
+            {
+                icon: 'fa-route',
+                title: 'Sector Road Network',
+                description: `Planned sector roads in ${localityName} provide structured access to arterial highways and internal commercial zones across ${city}.`
+            },
+            {
+                icon: 'fa-subway',
+                title: 'Public Transit Access',
+                description: `${localityName} benefits from city transit planning with bus routes and nearby metro stations serving daily commuters.`
+            },
+            {
+                icon: 'fa-hospital',
+                title: 'Healthcare Facilities',
+                description: `Multi-specialty hospitals and clinics within the sector or adjacent sectors offer comprehensive medical support.`
+            },
+            {
+                icon: 'fa-graduation-cap',
+                title: 'Schools and Institutions',
+                description: `Reputed schools and coaching centres operate within ${localityName}, reducing commute time for families with children.`
+            },
+            {
+                icon: 'fa-shopping-bag',
+                title: 'Sector Market Complexes',
+                description: `Local markets and convenience stores in ${localityName} cater to daily household needs without requiring inter-sector travel.`
+            },
+            {
+                icon: 'fa-gavel',
+                title: 'Regulatory Framework',
+                description: `Properties in ${localityName} fall under HUDA/HSVP sector guidelines. Verify circle rates and RERA compliance before purchase.`
+            }
+        ];
     }
-];
+
+    // Society-specific amenities
+    if (rawEntityType === 'society') {
+        return [
+            {
+                icon: 'fa-shield-alt',
+                title: 'Gated Security',
+                description: `${localityName} typically offers gated entry with security personnel, CCTV surveillance, and visitor management for resident safety.`
+            },
+            {
+                icon: 'fa-tree',
+                title: 'Internal Green Spaces',
+                description: `Landscaped gardens, jogging tracks, and children's play areas within ${localityName} support an active outdoor lifestyle.`
+            },
+            {
+                icon: 'fa-swimming-pool',
+                title: 'Club and Recreation',
+                description: `Many societies in ${city} feature clubhouses with swimming pools, gymnasiums, and community halls for resident use.`
+            },
+            {
+                icon: 'fa-tools',
+                title: 'Maintenance Services',
+                description: `${localityName} is expected to have a resident welfare association (RWA) managing maintenance, housekeeping, and common-area upkeep.`
+            },
+            {
+                icon: 'fa-parking',
+                title: 'Dedicated Parking',
+                description: `Covered or basement parking slots are typically allocated to residents, with visitor parking managed at the society gate.`
+            },
+            {
+                icon: 'fa-bolt',
+                title: 'Power and Water Backup',
+                description: `Societies in ${city} commonly provide power backup for common areas and elevators, along with water storage and supply systems.`
+            }
+        ];
+    }
+
+    // Project-specific amenities
+    if (rawEntityType === 'project') {
+        return [
+            {
+                icon: 'fa-hard-hat',
+                title: 'Builder and Developer',
+                description: `${localityName} is a registered real estate project. Verify the builder's track record, delivery history, and RERA registration status.`
+            },
+            {
+                icon: 'fa-key',
+                title: 'Possession Status',
+                description: `Check whether ${localityName} is ready-to-move, under construction, or in pre-launch phase before committing. Possession timelines impact investment returns.`
+            },
+            {
+                icon: 'fa-file-contract',
+                title: 'RERA Compliance',
+                description: `Projects in ${city} must be registered under H-RERA. Verify the project's RERA number, approved plans, and compliance status on the official portal.`
+            },
+            {
+                icon: 'fa-layer-group',
+                title: 'Floor Plans and Configurations',
+                description: `${localityName} may offer multiple unit configurations (1/2/3/4 BHK). Compare carpet area, super area, and loading percentage across options.`
+            },
+            {
+                icon: 'fa-tags',
+                title: 'Pricing and Payment Plans',
+                description: `Developers often offer construction-linked or possession-linked payment plans. Compare base price, PLC charges, and all-inclusive cost for ${localityName}.`
+            },
+            {
+                icon: 'fa-handshake',
+                title: 'Amenities Package',
+                description: `Assess the promised amenities (club, pool, gym, park) against the maintenance charges proposed for ${localityName} post-handover.`
+            }
+        ];
+    }
+
+    // Phase / Township-specific amenities
+    if (rawEntityType === 'phase' || rawEntityType === 'township') {
+        return [
+            {
+                icon: 'fa-map-marked-alt',
+                title: 'Master-Planned Layout',
+                description: `${localityName} is part of a phased or township development with planned infrastructure, designated commercial zones, and internal road networks.`
+            },
+            {
+                icon: 'fa-city',
+                title: 'Integrated Living',
+                description: `Township-style developments in ${city} typically combine residential, retail, and recreational spaces within a single managed boundary.`
+            },
+            {
+                icon: 'fa-road',
+                title: 'Internal Connectivity',
+                description: `Wide internal roads, pedestrian pathways, and cycling tracks connect residential blocks to common facilities within ${localityName}.`
+            },
+            {
+                icon: 'fa-leaf',
+                title: 'Open and Green Spaces',
+                description: `Large township projects allocate significant area to parks, water bodies, and green buffers — verify the actual delivered vs. promised ratio for ${localityName}.`
+            },
+            {
+                icon: 'fa-store',
+                title: 'In-House Retail',
+                description: `Convenience stores, pharmacies, and daily-need outlets within the township reduce dependency on external markets for residents.`
+            },
+            {
+                icon: 'fa-bus',
+                title: 'Transport Access',
+                description: `${localityName} may offer shuttle services or dedicated pickup points for metro and bus connectivity to major employment hubs.`
+            }
+        ];
+    }
+
+    // Road / corridor-specific amenities
+    if (rawEntityType === 'road') {
+        return [
+            {
+                icon: 'fa-road',
+                title: 'Corridor Positioning',
+                description: `${localityName} is a road-based locality where properties line a major corridor. Evaluate frontage, noise levels, and access points before choosing a unit.`
+            },
+            {
+                icon: 'fa-briefcase',
+                title: 'Commercial Proximity',
+                description: `Road-facing localities in ${city} often sit near office complexes, retail strips, and hospitality zones — ideal for those prioritizing walk-to-work convenience.`
+            },
+            {
+                icon: 'fa-subway',
+                title: 'Transit Connectivity',
+                description: `Major road corridors typically intersect with metro stations and bus stops, offering strong public transit access for daily commuters.`
+            },
+            {
+                icon: 'fa-hospital',
+                title: 'Healthcare Access',
+                description: `Properties along ${localityName} are usually close to hospitals, diagnostic centres, and pharmacies given the high-visibility corridor location.`
+            },
+            {
+                icon: 'fa-utensils',
+                title: 'Dining and Retail',
+                description: `Road-based localities benefit from a high density of restaurants, cafes, and retail outlets catering to both residents and office-goers.`
+            },
+            {
+                icon: 'fa-volume-up',
+                title: 'Noise and Privacy',
+                description: `Consider noise levels from traffic on ${localityName}. Higher floors and setback properties typically offer better privacy in corridor locations.`
+            }
+        ];
+    }
+
+    // Village / default locality amenities
+    return [
+        {
+            icon: 'fa-route',
+            title: 'Road Access',
+            description: `Efficient links from ${localityName} to major travel corridors across ${city}.`
+        },
+        {
+            icon: 'fa-subway',
+            title: 'Transit Convenience',
+            description: `Public transit options support daily travel for residents and working professionals.`
+        },
+        {
+            icon: 'fa-hospital',
+            title: 'Healthcare Reach',
+            description: `Nearby clinics and hospitals offer reliable access to essential healthcare services.`
+        },
+        {
+            icon: 'fa-graduation-cap',
+            title: 'Schools and Education',
+            description: `Families can access multiple school options and learning hubs in surrounding areas.`
+        },
+        {
+            icon: 'fa-shopping-bag',
+            title: 'Retail and Daily Needs',
+            description: `Grocery, convenience retail, and food outlets are available within easy reach.`
+        },
+        {
+            icon: 'fa-home',
+            title: 'Lifestyle Comfort',
+            description: `Residential pockets and neighborhood facilities support long-term livability.`
+        }
+    ];
+};
+
+/**
+ * Build connectivity items that vary by entityType for page uniqueness.
+ */
+const buildConnectivityItems = (localityName, city, entityType = 'locality') => {
+    const rawEntityType = entityType.toLowerCase();
+
+    if (rawEntityType === 'sector') {
+        return [
+            {
+                icon: 'fa-subway',
+                name: 'Metro and Rapid Transit',
+                details: `Sector-based localities like ${localityName} in ${city} are often connected via Rapid Metro or DMRC corridors. Verify nearest station distance for your daily commute.`
+            },
+            {
+                icon: 'fa-road',
+                name: 'Sector Road Hierarchy',
+                details: `${localityName} features a planned road network with dividing sectors, internal sector roads, and access to major arterials like Golf Course Road or Sohna Road.`
+            },
+            {
+                icon: 'fa-plane-departure',
+                name: 'Airport Reach',
+                details: `IGI Airport is accessible via expressway connectors from ${localityName}. Typical travel time ranges from 30-60 minutes depending on traffic and route.`
+            },
+            {
+                icon: 'fa-briefcase',
+                name: 'Employment Hub Access',
+                details: `Major office clusters in Cyber City, Udyog Vihar, and Golf Course Road are reachable from ${localityName} within a practical daily commute window.`
+            }
+        ];
+    }
+
+    if (rawEntityType === 'society') {
+        return [
+            {
+                icon: 'fa-subway',
+                name: 'Metro Proximity',
+                details: `Residents of ${localityName} can access metro connectivity through the nearest station. Auto and cab aggregators provide reliable first- and last-mile options in ${city}.`
+            },
+            {
+                icon: 'fa-road',
+                name: 'Internal and External Roads',
+                details: `${localityName} connects to main arterial roads via well-maintained internal approaches. Check gate-to-highway distance during peak hours for realistic commute estimates.`
+            },
+            {
+                icon: 'fa-bus',
+                name: 'School and Office Bus Services',
+                details: `Many societies in ${city} have dedicated school bus routes and shuttle services to nearby metro stations and corporate parks.`
+            },
+            {
+                icon: 'fa-briefcase',
+                name: 'Workplace Connectivity',
+                details: `Assess commute time from ${localityName} to your primary workplace. Proximity to Cyber City, Sohna Road, or NH-48 can significantly impact daily schedule.`
+            }
+        ];
+    }
+
+    if (rawEntityType === 'project') {
+        return [
+            {
+                icon: 'fa-map-marked-alt',
+                name: 'Site Location and Approach',
+                details: `${localityName} is located within ${city}. Evaluate approach road width, surrounding development, and any pending infrastructure projects that may affect accessibility.`
+            },
+            {
+                icon: 'fa-subway',
+                name: 'Transit Connectivity',
+                details: `Check the distance from ${localityName} to the nearest metro station and bus stops. Under-construction projects should assess planned transit expansions in the area.`
+            },
+            {
+                icon: 'fa-road',
+                name: 'Highway and Expressway Links',
+                details: `Project connectivity in ${city} is often determined by proximity to NH-48, Dwarka Expressway, or Southern Peripheral Road. Verify approach road quality for ${localityName}.`
+            },
+            {
+                icon: 'fa-briefcase',
+                name: 'Employment Corridor Access',
+                details: `For under-construction projects like ${localityName}, assess both current and projected commute times to major employment hubs once the project is delivered.`
+            }
+        ];
+    }
+
+    // Default for locality, village, phase, township, road, etc.
+    return [
+        {
+            icon: 'fa-subway',
+            name: 'Metro Network',
+            details: `Commuters in ${localityName} can plan practical routes through ${city}'s metro corridors.`
+        },
+        {
+            icon: 'fa-road',
+            name: 'Arterial Roads',
+            details: `Road connectivity supports daily travel to business, education, and retail hubs in ${city}.`
+        },
+        {
+            icon: 'fa-plane-departure',
+            name: 'Airport Accessibility',
+            details: 'Intercity and airport travel is manageable for business professionals and frequent flyers.'
+        },
+        {
+            icon: 'fa-briefcase',
+            name: 'Office Connectivity',
+            details: 'Key employment centers remain reachable for regular workday commuting.'
+        }
+    ];
+};
 
 const LocalityTemplate = () => {
     const params = useParams();
@@ -233,9 +506,28 @@ const LocalityTemplate = () => {
         const entityType = toTitleCase(localityInfo.entityType || localityInfo.type || 'Locality');
         const aliases = Array.isArray(localityInfo.aliases) ? localityInfo.aliases : [];
         const description = localityInfo.description || `Find verified properties, pricing trends, and locality insights in ${localityName}, ${city}.`;
-        const overview = localityInfo.contentBlocks?.overview || `${localityName} is an established ${entityType.toLowerCase()} within ${city} with consistent buyer and tenant interest.`;
-        const connectivitySummary = localityInfo.contentBlocks?.connectivity || `Compare road, metro, and business-hub connectivity for ${localityName} before finalizing your move.`;
-        const marketSignals = localityInfo.contentBlocks?.marketSignals || `Monitor listing momentum and buyer demand indicators for ${localityName}.`;
+
+        // Entity-type-specific overview fallbacks for page uniqueness
+        const rawEntityType = (localityInfo.entityType || localityInfo.type || 'locality').toLowerCase();
+        const overview = localityInfo.contentBlocks?.overview || (() => {
+            if (rawEntityType === 'sector') return `${localityName} is a planned sector in ${city} governed by HSVP/HUDA zoning regulations. Properties here range from plotted developments to group housing, with defined commercial belts and institutional areas.`;
+            if (rawEntityType === 'society') return `${localityName} is a residential society in ${city} offering gated community living with shared amenities, maintenance services, and a resident welfare association. Society properties appeal to families seeking managed living environments.`;
+            if (rawEntityType === 'project') return `${localityName} is a real estate project in ${city}. Verify the builder's credentials, RERA registration, possession timeline, and approved plans before investing. 360Ghar provides verified project data to support your decision.`;
+            if (rawEntityType === 'phase' || rawEntityType === 'township') return `${localityName} is a phased or township development in ${city} offering integrated residential, commercial, and recreational spaces within a master-planned layout.`;
+            if (rawEntityType === 'road') return `${localityName} is a road-corridor locality in ${city} with properties along a major thoroughfare. These locations offer strong transit access and commercial proximity — ideal for buyers prioritizing connectivity.`;
+            return `${localityName} is an established ${entityType.toLowerCase()} within ${city} with consistent buyer and tenant interest.`;
+        })();
+        const connectivitySummary = localityInfo.contentBlocks?.connectivity || (() => {
+            if (rawEntityType === 'society') return `Assess gate-to-main-road distance, availability of cab aggregators, and proximity to metro/bus stops for ${localityName}.`;
+            if (rawEntityType === 'project') return `Evaluate current and projected connectivity for ${localityName} including approach road quality, transit proximity, and planned infrastructure improvements.`;
+            return `Compare road, metro, and business-hub connectivity for ${localityName} before finalizing your move.`;
+        })();
+        const marketSignals = localityInfo.contentBlocks?.marketSignals || (() => {
+            if (rawEntityType === 'sector') return `Sector properties in ${localityName} are governed by circle rates and HSVP transfer policies. Track listing volumes and price trends on 360Ghar for market pulse.`;
+            if (rawEntityType === 'society') return `Society properties in ${localityName} derive value from maintenance quality, RWA effectiveness, and amenity delivery. Monitor resale activity and time-on-market on 360Ghar.`;
+            if (rawEntityType === 'project') return `Project market signals for ${localityName} include builder credibility, construction progress, RERA compliance, and pre-launch vs. ready-to-move pricing differentials.`;
+            return `Monitor listing momentum and buyer demand indicators for ${localityName}.`;
+        })();
 
         const marketStatus = getMarketStatus(localityInfo.confidence);
         const confidenceLabel = typeof localityInfo.confidence === 'number'
@@ -307,6 +599,9 @@ const LocalityTemplate = () => {
         { name: `Properties in ${computed.city}`, url: 'https://360ghar.com/properties' },
         { name: `${computed.localityName}, ${computed.city}`, url: `https://360ghar.com/locality/${computed.localitySlug}-gurgaon` }
     ];
+
+    // Derive URL-safe city slug for cross-linking (e.g. "Gurugram" -> "gurgaon")
+    const canonicalCitySlug = (computed.city || 'gurgaon').toLowerCase().replace(/\s+/g, '-').replace('gurugram', 'gurgaon');
 
     const faqItems = defaultFaqBuilder(computed.localityName, computed.entityType);
 
@@ -418,13 +713,13 @@ const LocalityTemplate = () => {
 
                                 <LocalityAmenities
                                     localityName={computed.localityName}
-                                    items={buildAmenityItems(computed.localityName, computed.city)}
+                                    items={buildAmenityItems(computed.localityName, computed.city, computed.entityType)}
                                 />
 
                                 <ConnectivitySection
                                     localityName={computed.localityName}
                                     summary={computed.connectivitySummary}
-                                    items={buildConnectivityItems(computed.localityName, computed.city)}
+                                    items={buildConnectivityItems(computed.localityName, computed.city, computed.entityType)}
                                 />
 
                                 <section id="locality-properties" className="locality-section locality-properties-v2">
@@ -458,6 +753,44 @@ const LocalityTemplate = () => {
                                 />
 
                                 <LocalityFaq localityName={computed.localityName} entityType={computed.entityType} />
+
+                                {/* Browse Properties — cross-link to landing page */}
+                                <section className="locality-section mt-5">
+                                  <span className="locality-section__eyebrow">Explore</span>
+                                  <h2 className="locality-section__title mb-3">Browse Properties in {computed.city}</h2>
+                                  <div className="d-flex flex-wrap gap-2">
+                                    <Link
+                                      to={`/${canonicalCitySlug}/buy/flats`}
+                                      className="btn btn-outline-main btn-sm rounded-pill"
+                                    >
+                                      Flats for Sale in {computed.city}
+                                    </Link>
+                                    <Link
+                                      to={`/${canonicalCitySlug}/rent/flats`}
+                                      className="btn btn-outline-main btn-sm rounded-pill"
+                                    >
+                                      Flats for Rent in {computed.city}
+                                    </Link>
+                                    <Link
+                                      to={`/${canonicalCitySlug}/buy/flats/2-bhk`}
+                                      className="btn btn-outline-main btn-sm rounded-pill"
+                                    >
+                                      2 BHK in {computed.city}
+                                    </Link>
+                                    <Link
+                                      to={`/${canonicalCitySlug}/buy/flats/3-bhk`}
+                                      className="btn btn-outline-main btn-sm rounded-pill"
+                                    >
+                                      3 BHK in {computed.city}
+                                    </Link>
+                                    <Link
+                                      to="/properties"
+                                      className="btn btn-outline-main btn-sm rounded-pill"
+                                    >
+                                      All Properties
+                                    </Link>
+                                  </div>
+                                </section>
                             </div>
 
                             <aside className="col-xl-4">
@@ -475,6 +808,93 @@ const LocalityTemplate = () => {
                                         </div>
                                         <Link to="/contact" className="btn btn-main w-100 mt-4 rounded-pill">Get Locality Report</Link>
                                     </article>
+
+                                    {/* Entity-type-specific cross-links */}
+                                    {(computed.entityType.toLowerCase() === 'sector' || computed.entityType.toLowerCase() === 'locality') && (
+                                        <article className="locality-sidebar-card">
+                                            <p className="locality-sidebar-card__eyebrow">Useful Links</p>
+                                            <h3 className="locality-sidebar-card__title">Research Resources</h3>
+                                            <div className="d-flex flex-column gap-2 mt-3">
+                                                <Link to="/circle-rates" className="btn btn-outline-main btn-sm rounded-pill">
+                                                    <i className="fas fa-indian-rupee-sign me-1" />
+                                                    Check Circle Rates
+                                                </Link>
+                                                <Link to="/rera-projects" className="btn btn-outline-main btn-sm rounded-pill">
+                                                    <i className="fas fa-file-contract me-1" />
+                                                    RERA Project Lookup
+                                                </Link>
+                                                <Link to={`/${canonicalCitySlug}/buy/flats`} className="btn btn-outline-main btn-sm rounded-pill">
+                                                    <i className="fas fa-building me-1" />
+                                                    Flats for Sale in {computed.city}
+                                                </Link>
+                                            </div>
+                                        </article>
+                                    )}
+
+                                    {computed.entityType.toLowerCase() === 'society' && (
+                                        <article className="locality-sidebar-card">
+                                            <p className="locality-sidebar-card__eyebrow">Society Resources</p>
+                                            <h3 className="locality-sidebar-card__title">Living in {computed.localityName}</h3>
+                                            <ul className="text-start ps-3 mb-0 mt-2" style={{ fontSize: '0.875rem' }}>
+                                                <li>Verify RWA registration and bylaws</li>
+                                                <li>Request maintenance charge break-up from the seller</li>
+                                                <li>Check parking allocation and visitor parking rules</li>
+                                                <li>Confirm power backup coverage (common areas + individual units)</li>
+                                                <li>Review society&apos;s age and upcoming major repair assessments</li>
+                                            </ul>
+                                            <Link to="/contact" className="btn btn-outline-main btn-sm w-100 rounded-pill mt-3">Get Society Report</Link>
+                                        </article>
+                                    )}
+
+                                    {computed.entityType.toLowerCase() === 'project' && (
+                                        <article className="locality-sidebar-card">
+                                            <p className="locality-sidebar-card__eyebrow">Project Due Diligence</p>
+                                            <h3 className="locality-sidebar-card__title">Before You Book</h3>
+                                            <ul className="text-start ps-3 mb-0 mt-2" style={{ fontSize: '0.875rem' }}>
+                                                <li>Verify H-RERA registration number on the official portal</li>
+                                                <li>Cross-check approved building plans vs. actual construction</li>
+                                                <li>Review builder&apos;s delivery track record on other projects</li>
+                                                <li>Compare all-inclusive cost (base + PLC + EDC + club + maintenance deposit)</li>
+                                                <li>Check for any litigation or complaints on H-RERA</li>
+                                            </ul>
+                                            <div className="d-flex flex-column gap-2 mt-3">
+                                                <Link to="/rera-projects" className="btn btn-outline-main btn-sm rounded-pill">
+                                                    <i className="fas fa-file-contract me-1" />
+                                                    RERA Project Lookup
+                                                </Link>
+                                                <Link to="/builder-reputation" className="btn btn-outline-main btn-sm rounded-pill">
+                                                    <i className="fas fa-hard-hat me-1" />
+                                                    Check Builder Reputation
+                                                </Link>
+                                            </div>
+                                        </article>
+                                    )}
+
+                                    {(computed.entityType.toLowerCase() === 'phase' || computed.entityType.toLowerCase() === 'township') && (
+                                        <article className="locality-sidebar-card">
+                                            <p className="locality-sidebar-card__eyebrow">Township Insights</p>
+                                            <h3 className="locality-sidebar-card__title">Evaluating {computed.localityName}</h3>
+                                            <ul className="text-start ps-3 mb-0 mt-2" style={{ fontSize: '0.875rem' }}>
+                                                <li>Compare delivered vs. promised amenities across phases</li>
+                                                <li>Assess density and unit count per acre</li>
+                                                <li>Verify which phase is delivered and which is under construction</li>
+                                                <li>Check internal road width and parking ratios</li>
+                                            </ul>
+                                        </article>
+                                    )}
+
+                                    {computed.entityType.toLowerCase() === 'road' && (
+                                        <article className="locality-sidebar-card">
+                                            <p className="locality-sidebar-card__eyebrow">Corridor Insights</p>
+                                            <h3 className="locality-sidebar-card__title">Road Locality Checklist</h3>
+                                            <ul className="text-start ps-3 mb-0 mt-2" style={{ fontSize: '0.875rem' }}>
+                                                <li>Evaluate noise levels by visiting during peak traffic hours</li>
+                                                <li>Check for dust and pollution mitigation (tree cover, setbacks)</li>
+                                                <li>Verify parking availability — road-facing buildings often have limited parking</li>
+                                                <li>Assess walkability to daily necessities and transit stops</li>
+                                            </ul>
+                                        </article>
+                                    )}
 
                                     <article className="locality-sidebar-card locality-sidebar-card--dark">
                                         <p className="locality-sidebar-card__eyebrow">Need Expert Help?</p>

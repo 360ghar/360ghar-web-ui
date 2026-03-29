@@ -1,13 +1,7 @@
 import { create } from 'zustand';
 import { chatService } from '../services/chatService';
-
-const extractError = (err, fallback = 'Request failed') => {
-  const d = err?.response?.data?.detail ?? err?.message;
-  if (!d) return fallback;
-  if (Array.isArray(d)) return d.map((x) => x?.msg || x?.message || x).join(', ');
-  if (typeof d === 'object') return d.msg || d.message || JSON.stringify(d);
-  return String(d);
-};
+import { useAuthStore } from './authStore';
+import { extractError } from '../utils/apiError';
 
 const useChatStore = create((set, get) => ({
   isOpen: false,
@@ -192,13 +186,23 @@ const useChatStore = create((set, get) => ({
       }
     };
 
+    const isAuthenticated = useAuthStore.getState().isAuthenticated;
+
     try {
-      await chatService.streamChat(
-        text.trim(),
-        get().conversationId,
-        onEvent,
-        abortController.signal
-      );
+      if (isAuthenticated) {
+        await chatService.streamChat(
+          text.trim(),
+          get().conversationId,
+          onEvent,
+          abortController.signal
+        );
+      } else {
+        await chatService.streamChatPublic(
+          text.trim(),
+          onEvent,
+          abortController.signal
+        );
+      }
     } catch (err) {
       if (err.name === 'AbortError') {
         // Cancelled — clean up streaming state without showing an error
@@ -209,18 +213,6 @@ const useChatStore = create((set, get) => ({
           isStreaming: false,
           streamingMessageId: null,
           _abortController: null,
-        }));
-      } else if (err.message === 'Authentication required') {
-        set((state) => ({
-          messages: state.messages.map((msg) =>
-            msg.id === streamingId
-              ? { ...msg, isError: true, isStreaming: false }
-              : msg
-          ),
-          isStreaming: false,
-          streamingMessageId: null,
-          _abortController: null,
-          error: 'Authentication required. Please log in again.',
         }));
       } else {
         set((state) => ({
@@ -268,4 +260,20 @@ const useChatStore = create((set, get) => ({
   clearError: () => set({ error: null }),
 }));
 
-export default useChatStore;
+// When the user logs in, keep messages visible but reset conversationId so the next
+// message creates a new authenticated conversation.
+// When the user logs out, reset the entire chat.
+let _prevIsAuthenticated = useAuthStore.getState().isAuthenticated;
+useAuthStore.subscribe((authState) => {
+  const isAuthenticated = authState.isAuthenticated;
+  if (isAuthenticated && !_prevIsAuthenticated) {
+    // Just logged in
+    useChatStore.setState({ conversationId: null });
+  } else if (!isAuthenticated && _prevIsAuthenticated) {
+    // Just logged out
+    useChatStore.getState().resetChat();
+  }
+  _prevIsAuthenticated = isAuthenticated;
+});
+
+export { useChatStore };

@@ -1,6 +1,6 @@
-import StarRating from '../../common/StarRating';
+import StarRating from '../../common/ui/StarRating';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const TestimonialItem = ({ testimonial }) => {
 
     const {name, designation, desc, quote} = testimonial; 

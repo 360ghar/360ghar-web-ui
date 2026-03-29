@@ -1,5 +1,5 @@
-import SectionHeading from '../../common/SectionHeading';
-import { apartmentTds, apartmentThs } from '../../data/HomeTwoData/HomeTwoData';
+import SectionHeading from '../../common/ui/SectionHeading';
+import { apartmentTds, apartmentThs } from '../../data/HomeTwoData';
 import { Link } from 'react-router-dom';
 
 const Apartment = () => {

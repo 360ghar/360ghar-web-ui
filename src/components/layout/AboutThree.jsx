@@ -1,11 +1,11 @@
-import SectionHeading from '../../common/SectionHeading';
-import Button from '../../common/Button';
-import { aboutCheckLists } from '../../data/HomeThreeData/HomeThreeData';
+import SectionHeading from '../../common/ui/SectionHeading';
+import Button from '../../common/ui/Button';
+import { aboutCheckLists } from '../../data/HomeThreeData';
 import CountUp from 'react-countup';
 
 import AboutThreeThumb from '/assets/images/thumbs/about-three-img.png';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const AboutThree = () => {
     return (
         <>

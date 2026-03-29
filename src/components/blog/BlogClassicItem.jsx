@@ -1,14 +1,13 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { BlogDataContext } from '../../contextApi/BlogDataContextValue';
-import LazyImage from '../../common/LazyImage';
+import { useBlogStore } from '../../store/blogStore';
+import LazyImage from '../../common/ui/LazyImage';
 
 /**
  * BlogClassicItem - Displays a single blog post card in the listing
  * @param {object} post - Full blog post object from API
  */
 const BlogClassicItem = ({ post }) => {
-    const { setBlogData, currentMonthName } = useContext(BlogDataContext);
+    const { setBlogData, currentMonthName } = useBlogStore();
 
     // Extract post data
     const thumb = post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.png';
@@ -30,14 +29,13 @@ const BlogClassicItem = ({ post }) => {
     // Build URL using backend slug
     const blogURL = `/blog/${encodeURIComponent(slug)}`;
 
-    // Save post data to context for detail page
+    // Save minimal post data to context for navigation (detail page always fetches full content from API)
     const handleBlogClick = () => {
         setBlogData({
-            ...post,
             thumb,
             title,
+            slug,
             admin: `By ${authorName}`,
-            desc: post.content || excerpt
         });
     };
 

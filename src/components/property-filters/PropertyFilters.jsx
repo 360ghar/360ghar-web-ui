@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import usePropertyStore from '../../store/propertyStore';
+import { usePropertyStore } from '../../store/propertyStore';
 import { useLocationStore } from '../../store/locationStore';
 import {
   COMMERCIAL_PROPERTY_TYPES,

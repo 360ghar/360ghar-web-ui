@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import Pagination from '../../common/Pagination';
+import Pagination from '../../common/ui/Pagination';
 import { Link } from 'react-router-dom';
 import { usePropertyStore } from '../../store';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const PROPERTY_IMAGE_FALLBACK = '/assets/images/thumbs/property-1.png';
 const isUsableImageUrl = (value) =>
     typeof value === 'string' && value.trim() !== '' && !/kuula\.co/i.test(value);

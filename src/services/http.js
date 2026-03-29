@@ -6,7 +6,7 @@ const LOCAL_HOSTNAMES = ['localhost', '127.0.0.1', '::1'];
 // Retry configuration
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
-const RETRY_STATUS_CODES = [408, 429, 500, 502, 503, 504];
+const RETRY_STATUS_CODES = [408, 429, 502, 503, 504];
 
 // Determine if a given host (or URL) is localhost
 export const isLocalhost = (hostOrUrl) => {

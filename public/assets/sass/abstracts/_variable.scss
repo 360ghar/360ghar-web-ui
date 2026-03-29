@@ -1,13 +1,10 @@
-/* Font Family*/
-@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Vidaloka&display=swap');
-
 /* ========================= Variable Css Start ======================== */
-:root {    
+:root {
 
   /* Font Family Variable */
-  --heading-font: 'Vidaloka', serif;
-  --body-font: 'Jost', sans-serif;
-  --poppins-font: 'Poppins', sans-serif;
+  --heading-font: 'Cinzel', serif;
+  --body-font: 'Josefin Sans', sans-serif;
+  --poppins-font: 'Josefin Sans', sans-serif;
   
   /* Font Size Variable Start */
   --heading-one: clamp(2rem, -0.0733rem + 6.3692vw, 4.25rem); // Min:32px - Max:68px

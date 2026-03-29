@@ -1,14 +1,13 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { BlogDataContext } from '../../contextApi/BlogDataContextValue';
+import { useBlogStore } from '../../store/blogStore';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const BlogItem = ({ blog }) => {
 
-    // Blog Data Context API
-    const { setBlogData, currentMonthName} = useContext(BlogDataContext); 
+    // Blog Data Store
+    const { setBlogData, currentMonthName} = useBlogStore(); 
 
-    const { thumb, meta, title, admin, desc, linkText, linkAriaLabel} = blog; 
+    const { thumb, meta, title, admin, linkText, linkAriaLabel} = blog;
     
     // Title Convert To Slug
     const convertToSlug = (text) => {
@@ -18,7 +17,7 @@ const BlogItem = ({ blog }) => {
 
 
     const handleBlogClick = () => {
-        setBlogData({ thumb, meta, title, admin, desc });
+        setBlogData({ thumb, meta, title, admin });
     };
 
     return (

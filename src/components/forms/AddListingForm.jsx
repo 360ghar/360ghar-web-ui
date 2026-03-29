@@ -1,8 +1,8 @@
 
-import ListingBasicInformation from '../../common/ListingBasicInformation';
-import ListingPropertyGallery from '../../common/ListingPropertyGallery';
+import ListingBasicInformation from '../../common/listing/ListingBasicInformation';
+import ListingPropertyGallery from '../../common/listing/ListingPropertyGallery';
 import ListingPropertyInformation from '../property/ListingPropertyInformation';
-import ListingContactDetails from '../../common/ListingContactDetails';
+import ListingContactDetails from '../../common/listing/ListingContactDetails';
 
 const AddListingForm = () => {
     return (

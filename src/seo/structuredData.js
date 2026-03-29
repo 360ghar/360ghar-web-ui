@@ -84,7 +84,7 @@ export const realEstateStructuredData = {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://360ghar.com/search?q={search_term_string}&city=gurgaon'
+        urlTemplate: 'https://360ghar.com/properties?q={search_term_string}&city=gurgaon'
       },
       'query-input': 'required name=search_term_string'
     }
@@ -138,13 +138,6 @@ export const realEstateStructuredData = {
         closes: '20:00'
       }
     ],
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      reviewCount: '500',
-      bestRating: '5',
-      worstRating: '1'
-    },
     hasMap: 'https://maps.google.com/?q=360Ghar+Gurgaon',
     areaServed: 'Gurgaon, Haryana, India'
   },
@@ -310,7 +303,7 @@ export const realEstateStructuredData = {
         name: 'Which AI assistants can connect to 360Ghar via MCP?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: "Our MCP server is compatible with any AI assistant that supports the Model Context Protocol, including Claude (via Claude Desktop), ChatGPT, and custom AI implementations. The MCP server URL is http://api.360ghar.com/mcp"
+          text: "Our MCP server is compatible with any AI assistant that supports the Model Context Protocol, including Claude (via Claude Desktop), ChatGPT, and custom AI implementations. The MCP server URL is https://api.360ghar.com/mcp"
         }
       },
       {
@@ -600,15 +593,14 @@ export const generatePropertyStructuredData = (property) => ({
 });
 
 // Blog post structured data generator
-export const generateBlogStructuredData = ({ authorSlug, authorName, ...blog }) => ({
+export const generateBlogStructuredData = ({ authorSchema, ...blog }) => ({
   '@type': 'BlogPosting',
   headline: blog.title || 'Real Estate Blog',
   description: blog.description || 'Latest real estate insights and tips',
   image: blog.image || siteMetadata.defaultOgImage,
-  author: {
-    '@type': authorSlug ? 'Person' : 'Organization',
-    name: authorName || siteMetadata.siteName,
-    ...(authorSlug ? { url: `https://360ghar.com/blog/author/${authorSlug}` } : {})
+  author: authorSchema || {
+    '@type': 'Organization',
+    name: siteMetadata.siteName,
   },
   publisher: {
     '@type': 'Organization',

@@ -180,6 +180,20 @@ export const getPropertyTypeLabel = (propertyType) => {
   return labels[propertyType] || String(propertyType || 'Property');
 };
 
+export const getPropertyRouteSlug = (propertyType, intent = 'buy') => {
+  if (intent === 'pg') return 'flats';
+
+  const routeSlugs = {
+    apartment: 'flats',
+    house: 'independent-house',
+    builder_floor: 'builder-floor',
+    plot: 'plots',
+    office: 'office-space',
+  };
+
+  return routeSlugs[propertyType] || String(propertyType || 'flats').replace(/_/g, '-');
+};
+
 export const getListingLabel = ({ propertyType, purpose }) => {
   if (propertyType === 'pg') return 'PG';
   if (propertyType === 'flatmate') return 'Flatmate';

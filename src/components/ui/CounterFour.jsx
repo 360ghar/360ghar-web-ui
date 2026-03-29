@@ -1,4 +1,4 @@
-import { counterFourContents } from '../../data/OthersPageData/OthersPageData';
+import { counterFourContents } from '../../data/OthersPageData';
 import CounterFourItem from './CounterFourItem';
 
 const CounterFour = () => {

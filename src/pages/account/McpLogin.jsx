@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
+import { useCallback, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
-import useAuthStore from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { getSupabaseAccessToken } from '../../services/supabaseClient';
 
 /**
@@ -17,7 +17,6 @@ import { getSupabaseAccessToken } from '../../services/supabaseClient';
  */
 const McpLogin = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const { login, isLoading, error, clearError } = useAuthStore();
 
   const [phone, setPhone] = useState('');
@@ -32,13 +31,6 @@ const McpLogin = () => {
     () => searchParams.get('state') || '',
     [searchParams]
   );
-
-  useEffect(() => {
-    // If this page is accessed without redirect_uri, fall back to normal login page.
-    if (!redirectUri) {
-      navigate('/login', { replace: true });
-    }
-  }, [redirectUri, navigate]);
 
   const handleSubmit = useCallback(
     async (e) => {
@@ -74,7 +66,42 @@ const McpLogin = () => {
   );
 
   if (!redirectUri) {
-    return null;
+    return (
+      <>
+        <SEO
+          title="Connect AI Assistant | 360Ghar"
+          description="Securely connect your 360Ghar account to an AI assistant."
+          canonical="/mcp/login"
+          noindex
+        />
+        <main className="body-bg">
+          <Header
+            headerClass="dark-header has-border"
+            headerMenusClass="mx-auto"
+            btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
+            btnLink="/add-new-listing"
+            btnText="Add Listing"
+            spanClass="icon-right text-gradient"
+            showContactNumber={false}
+          />
+
+          <section className="section-padding">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-lg-6">
+                  <div className="card shadow-sm p-4 text-center">
+                    <h1 className="mb-3">AI assistant connection link required</h1>
+                    <p className="text-muted mb-0">
+                      Open this page from a valid AI assistant connection flow to finish linking your 360Ghar account.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </>
+    );
   }
 
   return (

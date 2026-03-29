@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { propertyTwoTabs } from '../../data/HomeThreeData/HomeThreeData';
-import SectionHeading from '../../common/SectionHeading';
+import { propertyTwoTabs } from '../../data/HomeThreeData';
+import SectionHeading from '../../common/ui/SectionHeading';
 import PropertyItem from './PropertyItem';
-import usePropertyStore from '../../store/propertyStore';
+import { usePropertyStore } from '../../store/propertyStore';
 
 const PropertyTwo = ({
     sectionClass = 'property-two bg-gray-100 padding-t-60 padding-b-120',

@@ -1,8 +1,8 @@
  import React, { useState, useEffect, useMemo } from 'react'; // eslint-disable-line no-unused-vars
- import Header from '../../common/Header';
- import Footer from '../../common/Footer';
- import MobileMenu from '../../common/MobileMenu';
- import OffCanvas from '../../common/OffCanvas';
+ import Header from '../../common/layout/Header';
+ import Footer from '../../common/layout/Footer';
+ import MobileMenu from '../../common/layout/MobileMenu';
+ import OffCanvas from '../../common/layout/OffCanvas';
  
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
@@ -71,12 +71,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                  image={siteMetadata.defaultOgImage}
                  type="website"
                  structuredData={[
-                    generateToolSchema(
-                        toolSchemas.areaConverter.name,
-                        toolSchemas.areaConverter.description,
-                        toolSchemas.areaConverter.keywords,
-                        toolSchemas.areaConverter.category
-                    ),
+                    generateToolSchema(toolSchemas.areaConverter),
                     generateBreadcrumbStructuredData([
                         { name: 'Home', url: 'https://360ghar.com/' },
                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },

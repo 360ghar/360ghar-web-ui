@@ -1,5 +1,5 @@
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const PropertyTypeItem = ({ propertyType }) => {
     const { icon, title, desc } = propertyType;
     

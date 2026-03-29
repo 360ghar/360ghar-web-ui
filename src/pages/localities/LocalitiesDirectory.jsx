@@ -1,56 +1,20 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
-
-let localitiesDataPromise = null;
-let cachedLocalitiesData = null;
-
-async function getLocalitiesData() {
-    if (cachedLocalitiesData) return cachedLocalitiesData;
-    if (!localitiesDataPromise) {
-        localitiesDataPromise = import('../../data/localities.json').then((m) => {
-            cachedLocalitiesData = m.default;
-            return cachedLocalitiesData;
-        });
-    }
-    return localitiesDataPromise;
-}
+import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import localitiesIndex from '../../data/localities-index.json';
 
 const LocalitiesDirectory = () => {
-    const [localities, setLocalities] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedType, setSelectedType] = useState('all');
 
-    useEffect(() => {
-        let cancelled = false;
-
-        async function loadLocalities() {
-            try {
-                const data = await getLocalitiesData();
-                if (!cancelled) {
-                    const sorted = data.slice().sort((a, b) => a.name.localeCompare(b.name));
-                    setLocalities(sorted);
-                    setIsLoading(false);
-                }
-            } catch (error) {
-                console.error('Failed to load localities:', error);
-                if (!cancelled) {
-                    setLocalities([]);
-                    setIsLoading(false);
-                }
-            }
-        }
-
-        loadLocalities();
-        return () => { cancelled = true; };
-    }, []);
+    const localities = useMemo(() => localitiesIndex.slice(), []);
 
     const entityTypes = useMemo(() => {
         const types = new Set(localities.map((item) => item.entityType || item.type || 'Locality'));
@@ -99,15 +63,36 @@ const LocalitiesDirectory = () => {
         });
     }, [localities]);
 
-    if (isLoading) {
-        return (
-            <div className="d-flex justify-content-center align-items-center min-vh-100">
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        );
-    }
+    const structuredData = useMemo(() => {
+        const siteUrl = siteMetadata.siteUrl.replace(/\/$/, '');
+        const topLocalities = [
+            { name: 'DLF Phase 1', slug: 'dlf-phase-1-gurgaon' },
+            { name: 'Golf Course Road', slug: 'golf-course-road-gurgaon' },
+            { name: 'Sushant Lok 1', slug: 'sushant-lok-1-gurgaon' },
+            { name: 'Sohna Road', slug: 'sohna-road-gurgaon' },
+            { name: 'Sector 29', slug: 'sector-29-gurgaon' },
+        ];
+
+        const itemList = {
+            '@type': 'ItemList',
+            name: 'Top Gurugram Localities on 360Ghar',
+            description: 'Discover verified locality pages with neighbourhood intelligence, connectivity notes, and property listings across Gurugram.',
+            numberOfItems: topLocalities.length,
+            itemListElement: topLocalities.map((loc, idx) => ({
+                '@type': 'ListItem',
+                position: idx + 1,
+                name: loc.name,
+                url: `${siteUrl}/locality/${loc.slug}`,
+            })),
+        };
+
+        const breadcrumb = generateBreadcrumbStructuredData([
+            { name: 'Home', url: `${siteUrl}/` },
+            { name: 'Localities', url: `${siteUrl}/localities` },
+        ]);
+
+        return [itemList, breadcrumb];
+    }, []);
 
     return (
         <>
@@ -118,6 +103,7 @@ const LocalitiesDirectory = () => {
                 canonical="/localities"
                 image={siteMetadata.defaultOgImage}
                 type="website"
+                structuredData={structuredData}
             />
             <OffCanvas />
             <MobileMenu />
@@ -155,6 +141,33 @@ const LocalitiesDirectory = () => {
                                             <strong className="locality-stat-card__value">{latestVerification}</strong>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="row g-3 mt-2 mb-4">
+                            <div className="col-lg-4">
+                                <div className="locality-stat-card h-100">
+                                    <span className="locality-stat-card__label">Coverage snapshot</span>
+                                    <strong className="locality-stat-card__value">Neighborhood, sector, and project intelligence</strong>
+                                    <p className="text-muted mb-0">Use this directory to jump into verified locality pages before you start comparing listings.</p>
+                                </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="locality-stat-card h-100">
+                                    <span className="locality-stat-card__label">Best for searchers</span>
+                                    <strong className="locality-stat-card__value">Shortlist localities faster</strong>
+                                    <p className="text-muted mb-0">Filter by locality type, scan the alphabetized directory, and move directly into detailed locality pages.</p>
+                                </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="locality-stat-card h-100">
+                                    <span className="locality-stat-card__label">Popular jumps</span>
+                                    <p className="mb-0 d-flex flex-wrap gap-2">
+                                        <Link to="/locality/dlf-phase-1-gurgaon" className="btn btn-outline-main btn-sm">DLF Phase 1</Link>
+                                        <Link to="/locality/golf-course-road-gurgaon" className="btn btn-outline-main btn-sm">Golf Course Road</Link>
+                                        <Link to="/locality/sushant-lok-1-gurgaon" className="btn btn-outline-main btn-sm">Sushant Lok 1</Link>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -261,6 +274,27 @@ const LocalitiesDirectory = () => {
                                 ))}
                             </div>
                         )}
+                    </div>
+                </section>
+
+                <section className="padding-y-60 bg-white">
+                    <div className="container container-two">
+                        <div className="row g-4">
+                            <div className="col-lg-6">
+                                <h2 className="h3 mb-3">How to use this locality directory</h2>
+                                <p className="text-muted mb-0">
+                                    Start with a neighborhood or sector you already know, then compare nearby pockets before you open listing pages. Each locality page is designed to help you evaluate fit before you spend time on visits.
+                                </p>
+                            </div>
+                            <div className="col-lg-6">
+                                <h2 className="h3 mb-3">What you will find on locality pages</h2>
+                                <ul className="check-list style-two mb-0">
+                                    <li className="check-list__item d-flex align-items-center"><span className="icon"><i className="fas fa-check"></i></span><span className="text fw-semibold">Connectivity notes, nearby areas, and neighborhood context</span></li>
+                                    <li className="check-list__item d-flex align-items-center"><span className="icon"><i className="fas fa-check"></i></span><span className="text fw-semibold">Verification dates and structured locality signals</span></li>
+                                    <li className="check-list__item d-flex align-items-center"><span className="icon"><i className="fas fa-check"></i></span><span className="text fw-semibold">Direct paths into verified property search on 360Ghar</span></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </section>
 

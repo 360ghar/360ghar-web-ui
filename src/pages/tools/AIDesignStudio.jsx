@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect }  from 'react';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import MobileMenu from '../../common/MobileMenu';
-import OffCanvas from '../../common/OffCanvas';
+import Header from '../../common/layout/Header';
+import Footer from '../../common/layout/Footer';
+import MobileMenu from '../../common/layout/MobileMenu';
+import OffCanvas from '../../common/layout/OffCanvas';
 
 import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
@@ -126,7 +126,7 @@ const AIDesignStudio = () => {
           setAppState('input');
         }
       } catch {
-        console.log('Puter SDK not yet loaded');
+        // Puter SDK not yet loaded — will retry on user action
       }
     };
     checkAuth();

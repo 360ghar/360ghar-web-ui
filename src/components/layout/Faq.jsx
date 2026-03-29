@@ -1,7 +1,7 @@
-import SectionHeading from '../../common/SectionHeading';
+import SectionHeading from '../../common/ui/SectionHeading';
 import FaqAccordion from '../../common/FaqAccordion';
 
-import LazyImage from '../../common/LazyImage';
+import LazyImage from '../../common/ui/LazyImage';
 const Faq = () => {
     return (
         <>
