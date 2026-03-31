@@ -195,7 +195,7 @@ const PropertyDetailsSection = ({ property }) => {
         }
       : null,
     { label: 'Listing ID', value: property?.id },
-  ].filter(i => i.value !== null && i.value !== undefined && i.value !== '')), [listingLabel, listingPreferences, property, propertyTypeLabel]);
+  ].filter(i => i && i.value !== null && i.value !== undefined && i.value !== '')), [listingLabel, listingPreferences, property, propertyTypeLabel]);
 
   const pricingDetails = useMemo(() => ([
     { label: purpose === 'rent' ? 'Monthly Rent' : 'Base Price', value: formatCurrency(priceValue) },
