@@ -27,28 +27,23 @@ const OffCanvas = () => {
                 <SearchBox/>
 
                 <ul className="address-list mt-5">
-                    {offCanvasInfos.map((offCanvasInfo, index) => (
-                        <li className="address-list__item flx-align flex-nowrap" key={index}>
-                            <span className="address-list__icon"> { offCanvasInfo.icon } </span>
-                            <div className="address-list__content">
-                                {Array.isArray(offCanvasInfo.link) ? (
-                                    offCanvasInfo.link.map((link, linkIndex) => (
-                                        <I18nLink to={`${link}${offCanvasInfo.text[linkIndex]}`} className="address-list__text" key={linkIndex}>
-                                            {offCanvasInfo.text[linkIndex]}
-                                        </I18nLink>
-                                    ))
-                                ) : (
-                                    offCanvasInfo.link ? (
-                                        <I18nLink to={`${offCanvasInfo.link}${offCanvasInfo.text}`} className="address-list__text">
-                                            {offCanvasInfo.text}
+                    {offCanvasInfos.map((offCanvasInfo, index) => {
+                        const text = t(offCanvasInfo.textKey);
+                        return (
+                            <li className="address-list__item flx-align flex-nowrap" key={index}>
+                                <span className="address-list__icon"> { offCanvasInfo.icon } </span>
+                                <div className="address-list__content">
+                                    {offCanvasInfo.link ? (
+                                        <I18nLink to={`${offCanvasInfo.link}${text}`} className="address-list__text">
+                                            {text}
                                         </I18nLink>
                                     ) : (
-                                        <p className="address-list__text">{offCanvasInfo.text}</p>
-                                    )
-                                )}
-                            </div>
-                        </li>
-                    ))}
+                                        <p className="address-list__text">{text}</p>
+                                    )}
+                                </div>
+                            </li>
+                        );
+                    })}
                 </ul>
 
                 <div className="google-map mt-5">

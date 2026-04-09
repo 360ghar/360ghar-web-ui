@@ -18,9 +18,9 @@ const TopHeader = () => {
                                         <span className="header-info__icon">{item.icon}</span>
                                         {
                                             item.link ? (
-                                                <I18nLink to={`${item.link}${item.text}`} className="header-info__text">{item.text}</I18nLink>
+                                                <I18nLink to={`${item.link}${t(item.textKey)}`} className="header-info__text">{t(item.textKey)}</I18nLink>
                                             ) : (
-                                                <p className="header-info__text">{item.text}</p>
+                                                <p className="header-info__text">{t(item.textKey)}</p>
                                             )
                                         }
                                     </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -8,6 +9,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
 import LazyImage from '../../common/ui/LazyImage';
 const GurugramGuide = () => {
+  const { t } = useTranslation('policies');
   const breadcrumbs = [
     { name: 'Home', url: 'https://360ghar.com/' },
     { name: 'Gurugram Real Estate Guide', url: 'https://360ghar.com/gurugram-real-estate-guide' },
@@ -65,8 +67,8 @@ const GurugramGuide = () => {
           <div className="container container-two">
             <nav aria-label="breadcrumb" className="mb-4">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="/">{t('policies.gurugramGuide.breadcrumbHome')}</a></li>
-                <li className="breadcrumb-item active" aria-current="page">{t('policies.gurugramGuide.breadcrumbCurrent')}</li>
+                <li className="breadcrumb-item"><a href="/">{t('gurugramGuide.breadcrumbHome')}</a></li>
+                <li className="breadcrumb-item active" aria-current="page">{t('gurugramGuide.breadcrumbCurrent')}</li>
               </ol>
             </nav>
 

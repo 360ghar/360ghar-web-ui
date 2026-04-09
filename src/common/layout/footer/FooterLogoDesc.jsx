@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import LogoWhite from '../../LogoWhite';
 import { offCanvasInfos } from '../../../data/CommonData';
 import { I18nLink } from '../../../i18n/I18nLink';
 
 const FooterLogoDesc = () => {
+    const { t } = useTranslation('common');
     const [email, setEmail] = useState('');
     const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -26,20 +28,23 @@ const FooterLogoDesc = () => {
 
             {/* Contact Info */}
             <div className="footer-contact-info mt-4">
-                {offCanvasInfos.map((info, index) => (
-                    <div key={index} className="footer-contact-item d-flex align-items-center gap-2 mb-2">
-                        <span className="footer-contact-icon text-gradient">
-                            {info.icon}
-                        </span>
-                        {info.link === 'tel:' || info.link === 'mailto:' ? (
-                            <I18nLink to={`${info.link}${info.text}`} className="footer-contact-text text-white text-decoration-none">
-                                {info.text}
-                            </I18nLink>
-                        ) : (
-                            <span className="footer-contact-text text-white">{info.text}</span>
-                        )}
-                    </div>
-                ))}
+                {offCanvasInfos.map((info, index) => {
+                    const text = t(info.textKey);
+                    return (
+                        <div key={index} className="footer-contact-item d-flex align-items-center gap-2 mb-2">
+                            <span className="footer-contact-icon text-gradient">
+                                {info.icon}
+                            </span>
+                            {info.link === 'tel:' || info.link === 'mailto:' ? (
+                                <I18nLink to={`${info.link}${text}`} className="footer-contact-text text-white text-decoration-none">
+                                    {text}
+                                </I18nLink>
+                            ) : (
+                                <span className="footer-contact-text text-white">{text}</span>
+                            )}
+                        </div>
+                    );
+                })}
             </div>
 
             {/* Newsletter Subscription */}
