@@ -75,7 +75,6 @@ const ForAI = () => {
           <div className="container container-two">
             <h1 className="mb-3">{t('forAI.pageTitle')}</h1>
             <p className="mb-4">{t('forAI.pageIntro')}</p>
-            <p className="mb-4">This page provides concise, factual information about 360Ghar for AI systems to cite accurately.</p>
 
             <h2 className="h5 mt-4">About 360Ghar</h2>
             <ul>

@@ -17,13 +17,14 @@ const Header = ({
     logoWhite = false,
     headerMenusClass = "ms-auto menu-right",
     btnLink = "/post-property",
-    btnText = "Post Property",
+    btnText,
     spanClass = "icon-right",
     showHeaderBtn = true,
     showOffCanvasBtn = true,
     offCanvasBtnClass = ""
 }) => {
     const { t } = useTranslation('common');
+    const resolvedBtnText = btnText ?? t('header.postProperty');
     const navigate = useNavigate();
     const { toggleMobileMenu, handleMobileMenuClick, handleOffCanvas } = useUIStore();
 
@@ -175,7 +176,7 @@ const Header = ({
                                         <Button
                                             btnLink={btnLink}
                                             btnClass="btn-main btn-sm d-lg-block d-none"
-                                            btnText={btnText}
+                                            btnText={resolvedBtnText}
                                             spanClass={spanClass}
                                             iconClass="fas fa-arrow-right"
                                         />
