@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -11,14 +12,10 @@ import AuctionAlertModal from '../../components/data-hub/AuctionAlertModal';
 import { dataHubService } from '../../services/dataHubService';
 
 const PROPERTY_TYPES = ['residential', 'commercial', 'plot', 'industrial'];
-const SOURCE_TYPES = [
-  { label: 'All', value: '' },
-  { label: 'SARFAESI (Bank)', value: 'bank' },
-  { label: 'Court Ordered', value: 'court' },
-];
 const PAGE_LIMIT = 12;
 
 const BankAuctions = () => {
+  const { t } = useTranslation('data-hub');
   const [auctions, setAuctions] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -94,6 +91,12 @@ const BankAuctions = () => {
     });
   };
 
+  const SOURCE_TYPES = [
+    { label: t('bankAuctions.sourceTypes.all'), value: '' },
+    { label: t('bankAuctions.sourceTypes.bank'), value: 'bank' },
+    { label: t('bankAuctions.sourceTypes.court'), value: 'court' },
+  ];
+
   return (
     <>
       <SEO
@@ -124,9 +127,9 @@ const BankAuctions = () => {
           <div className="container">
             <div className="row mb-20">
               <div className="col-12">
-                <h1 className="fs-28 fw-600 mb-10">Bank & Court Property Auctions — Gurugram</h1>
+                <h1 className="fs-28 fw-600 mb-10">{t('bankAuctions.title')}</h1>
                 <p className="mb-0 color-text-3">
-                  SARFAESI auctions and court-ordered property sales in Gurugram. Set alerts to get notified about new listings.
+                  {t('bankAuctions.description')}
                 </p>
               </div>
             </div>
@@ -139,7 +142,7 @@ const BankAuctions = () => {
                     onClick={() => setSidebarOpen(o => !o)}
                     style={{ width: '100%', background: '#f8fafc', border: 'none', borderBottom: '1px solid #e5e7eb', padding: '12px 16px', textAlign: 'left', fontWeight: 600, fontSize: 14, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                   >
-                    Filters
+                    {t('bankAuctions.filters')}
                     <i className={`fas fa-chevron-${sidebarOpen ? 'up' : 'down'}`} style={{ fontSize: 12 }}></i>
                   </button>
 
@@ -147,7 +150,7 @@ const BankAuctions = () => {
                     <div style={{ padding: 16 }}>
                       {/* Source type radio */}
                       <div style={{ marginBottom: 16 }}>
-                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Source Type</label>
+                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('bankAuctions.sourceType')}</label>
                         {SOURCE_TYPES.map(({ label, value }) => (
                           <label key={value} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, fontSize: 13, cursor: 'pointer' }}>
                             <input
@@ -164,40 +167,40 @@ const BankAuctions = () => {
 
                       {/* Bank dropdown */}
                       <div style={{ marginBottom: 16 }}>
-                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bank / Source</label>
+                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('bankAuctions.bankSource')}</label>
                         <select
                           className="form-select form-select-sm"
                           value={filters.bank_name}
                           onChange={(e) => handleFilterChange('bank_name', e.target.value)}
                         >
-                          <option value="">All Banks</option>
+                          <option value="">{t('bankAuctions.allBanks')}</option>
                           {banks.map(b => <option key={b} value={b}>{b}</option>)}
                         </select>
                       </div>
 
                       {/* Property type */}
                       <div style={{ marginBottom: 16 }}>
-                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Property Type</label>
+                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('bankAuctions.propertyType')}</label>
                         <select
                           className="form-select form-select-sm"
                           value={filters.property_type}
                           onChange={(e) => handleFilterChange('property_type', e.target.value)}
                         >
-                          <option value="">All Types</option>
-                          {PROPERTY_TYPES.map(t => (
-                            <option key={t} value={t} style={{ textTransform: 'capitalize' }}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
+                          <option value="">{t('bankAuctions.allTypes')}</option>
+                          {PROPERTY_TYPES.map(pt => (
+                            <option key={pt} value={pt} style={{ textTransform: 'capitalize' }}>{pt.charAt(0).toUpperCase() + pt.slice(1)}</option>
                           ))}
                         </select>
                       </div>
 
                       {/* Price range */}
                       <div style={{ marginBottom: 16 }}>
-                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Price Range (₹)</label>
+                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('bankAuctions.priceRange')}</label>
                         <div className="d-flex gap-2">
                           <input
                             type="number"
                             className="form-control form-control-sm"
-                            placeholder="Min"
+                            placeholder={t('bankAuctions.min')}
                             value={filters.price_min}
                             onChange={(e) => handleFilterChange('price_min', e.target.value)}
                             min="0"
@@ -205,7 +208,7 @@ const BankAuctions = () => {
                           <input
                             type="number"
                             className="form-control form-control-sm"
-                            placeholder="Max"
+                            placeholder={t('bankAuctions.max')}
                             value={filters.price_max}
                             onChange={(e) => handleFilterChange('price_max', e.target.value)}
                             min="0"
@@ -215,7 +218,7 @@ const BankAuctions = () => {
 
                       {/* Date range */}
                       <div style={{ marginBottom: 16 }}>
-                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Auction Date</label>
+                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('bankAuctions.auctionDate')}</label>
                         <div className="d-flex flex-column gap-2">
                           <input
                             type="date"
@@ -238,7 +241,7 @@ const BankAuctions = () => {
                         className="btn btn-sm btn-outline-secondary w-100"
                         onClick={clearFilters}
                       >
-                        Clear Filters
+                        {t('bankAuctions.clearFilters')}
                       </button>
                     </div>
                   )}
@@ -261,17 +264,17 @@ const BankAuctions = () => {
                   </div>
                 ) : error ? (
                   <div className="text-center py-40">
-                    <p className="color-danger fs-16">Auction data temporarily unavailable. Please try again later.</p>
+                    <p className="color-danger fs-16">{t('bankAuctions.error')}</p>
                   </div>
                 ) : auctions.length === 0 ? (
                   <div className="text-center py-40">
                     <i className="fas fa-gavel" style={{ fontSize: 48, color: '#d1d5db', display: 'block', marginBottom: 16 }}></i>
-                    <p className="fs-16 color-text-3">No auctions match your filters. Try adjusting the filters or check back later.</p>
-                    <button className="btn btn-sm btn-outline-secondary mt-10" onClick={clearFilters}>Clear Filters</button>
+                    <p className="fs-16 color-text-3">{t('bankAuctions.noResults')}</p>
+                    <button className="btn btn-sm btn-outline-secondary mt-10" onClick={clearFilters}>{t('bankAuctions.clearFilters')}</button>
                   </div>
                 ) : (
                   <>
-                    <p className="mb-20 fs-14 color-text-3">{total} auction{total !== 1 ? 's' : ''} found</p>
+                    <p className="mb-20 fs-14 color-text-3">{t('bankAuctions.auctionsFound', { count: total, suffix: total !== 1 ? 's' : '' })}</p>
                     <div className="row g-3 mb-30">
                       {auctions.map((auction) => (
                         <div key={auction.id} className="col-md-6 col-12">
@@ -296,11 +299,11 @@ const BankAuctions = () => {
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center">
-                <h2 className="cta-title mb-3">Find Your Next Investment Property</h2>
-                <p className="mb-4">Explore regular listings alongside auction properties for the best deals in Gurugram.</p>
+                <h2 className="cta-title mb-3">{t('bankAuctions.cta.title')}</h2>
+                <p className="mb-4">{t('bankAuctions.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">Browse Properties</a>
-                  <a href="/contact" className="btn btn-outline-white">Contact Us</a>
+                  <a href="/properties" className="btn btn-white btn-main">{t('bankAuctions.cta.browseProperties')}</a>
+                  <a href="/contact" className="btn btn-outline-white">{t('bankAuctions.cta.contactUs')}</a>
                 </div>
               </div>
             </div>

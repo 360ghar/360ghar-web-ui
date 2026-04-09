@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ScrollToTop = () => {
     const [visible, setVisible] = useState(false);
+    const { t } = useTranslation('common');
 
     useEffect(() => {
         const handleScroll = () => {
@@ -22,7 +24,7 @@ const ScrollToTop = () => {
             className="scrollToTop"
             style={{ visibility: visible ? 'visible' : 'hidden' }}
             onClick={scrollToTop}
-            aria-label="Scroll to top"
+            aria-label={t('scrollToTop')}
         >
             <i className="fas fa-chevron-up text-gradient"></i>
         </button>

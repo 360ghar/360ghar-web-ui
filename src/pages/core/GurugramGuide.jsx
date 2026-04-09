@@ -65,8 +65,8 @@ const GurugramGuide = () => {
           <div className="container container-two">
             <nav aria-label="breadcrumb" className="mb-4">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="/">Home</a></li>
-                <li className="breadcrumb-item active" aria-current="page">Gurugram Real Estate Guide</li>
+                <li className="breadcrumb-item"><a href="/">{t('policies.gurugramGuide.breadcrumbHome')}</a></li>
+                <li className="breadcrumb-item active" aria-current="page">{t('policies.gurugramGuide.breadcrumbCurrent')}</li>
               </ol>
             </nav>
 

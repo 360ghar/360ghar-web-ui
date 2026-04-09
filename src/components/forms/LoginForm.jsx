@@ -1,20 +1,23 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store';
 import { useNavigate } from 'react-router-dom';
+import i18n from '../../i18n';
 
 const LoginSchema = Yup.object().shape({
   phone: Yup.string()
-    .matches(/^[+]?\d{10,15}$/, 'Enter a valid phone number')
-    .required('Phone number is required'),
+    .matches(/^[+]?\d{10,15}$/, () => i18n.t('forms:phone.genericInvalid'))
+    .required(() => i18n.t('forms:phone.genericRequired')),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .min(6, () => i18n.t('forms:password.minLength6'))
+    .required(() => i18n.t('forms:password.required')),
 });
 
 const LoginForm = ({ redirectTo = '/' }) => {
   const { login, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
+  const { t } = useTranslation('forms');
 
   const handleSubmit = async (values, { setSubmitting }) => {
     clearError();
@@ -35,7 +38,7 @@ const LoginForm = ({ redirectTo = '/' }) => {
         {({ isSubmitting }) => (
           <Form>
             <div className="form-group mb-4">
-              <label htmlFor="phone">Phone Number</label>
+              <label htmlFor="phone">{t('phone.labelPhoneNumber')}</label>
               <Field
                 type="tel"
                 name="phone"
@@ -46,12 +49,12 @@ const LoginForm = ({ redirectTo = '/' }) => {
             </div>
 
             <div className="form-group mb-4">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t('password.label')}</label>
               <Field
                 type="password"
                 name="password"
                 className="form-control"
-                placeholder="Your Password"
+                placeholder={t('password.placeholderYour')}
               />
               <ErrorMessage name="password" component="div" className="text-danger" />
             </div>
@@ -63,7 +66,7 @@ const LoginForm = ({ redirectTo = '/' }) => {
               className="btn btn-primary w-100"
               disabled={isSubmitting || isLoading}
             >
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? t('loginRegister.loggingIn') : t('loginBtn')}
             </button>
           </Form>
         )}
@@ -72,4 +75,4 @@ const LoginForm = ({ redirectTo = '/' }) => {
   );
 };
 
-export default LoginForm; 
+export default LoginForm;

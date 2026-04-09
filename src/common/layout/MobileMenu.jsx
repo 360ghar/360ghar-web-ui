@@ -1,14 +1,18 @@
 import { useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Logo from '../Logo';
 import NavMenu from './NavMenu';
 import { useAuthStore, useUIStore } from '../../store';
 import { useLazyToast } from '../useLazyToast';
 
 import LazyImage from '../ui/LazyImage';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const MobileMenu = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation('common');
     const { toggleMobileMenu, handleMobileMenuClose } = useUIStore();
     const menuRef = useRef(null);
     const overlayRef = useRef(null);
@@ -43,7 +47,7 @@ const MobileMenu = () => {
 
     const handleLogout = async () => {
         await logout();
-        toastSuccess('Logged out successfully!');
+        toastSuccess(t('header.loggedOutSuccess'));
         navigate('/');
         handleMobileMenuClose();
     };
@@ -106,7 +110,7 @@ const MobileMenu = () => {
                                     </div>
                                     <div>
                                         <div className="text-white fw-semibold">{user?.full_name || user?.email || 'User'}</div>
-                                        <div className="text-white-50 small">Welcome back!</div>
+                                        <div className="text-white-50 small">{t('mobileMenu.welcomeBack')}</div>
                                     </div>
                                 </div>
 
@@ -116,28 +120,28 @@ const MobileMenu = () => {
                                         onClick={() => handleNavigation('/account')}
                                     >
                                         <i className="fas fa-user-circle me-2"></i>
-                                        My Account
+                                        {t('header.myAccount')}
                                     </button>
                                     <button
                                         className="btn btn-outline-light btn-sm w-100 text-start mb-2"
                                         onClick={() => handleNavigation('/account?tab=favorites')}
                                     >
                                         <i className="fas fa-heart me-2"></i>
-                                        Favorites
+                                        {t('header.favorites')}
                                     </button>
                                     <button
                                         className="btn btn-outline-light btn-sm w-100 text-start mb-2"
                                         onClick={() => handleNavigation('/account?tab=visits')}
                                     >
                                         <i className="fas fa-calendar me-2"></i>
-                                        My Visits
+                                        {t('header.myVisits')}
                                     </button>
                                     <button
                                         className="btn btn-danger btn-sm w-100 text-start"
                                         onClick={() => void handleLogout()}
                                     >
                                         <i className="fas fa-sign-out-alt me-2"></i>
-                                        Logout
+                                        {t('header.logout')}
                                     </button>
                                 </div>
                             </div>
@@ -149,22 +153,27 @@ const MobileMenu = () => {
                         {/* Authentication Buttons */}
                         {!isAuthenticated && (
                             <div className="mobile-auth-buttons mt-4 d-flex flex-column gap-2">
-                                <Link
+                                <I18nLink
                                     to="/login"
                                     className="btn btn-outline-light w-100"
                                     onClick={handleMobileMenuClose}
                                 >
-                                    Login
-                                </Link>
-                                <Link
+                                    {t('mobileMenu.signIn')}
+                                </I18nLink>
+                                <I18nLink
                                     to="/register"
                                     className="btn btn-main w-100"
                                     onClick={handleMobileMenuClose}
                                 >
-                                    Sign Up
-                                </Link>
+                                    {t('mobileMenu.signUp')}
+                                </I18nLink>
                             </div>
                         )}
+
+                        {/* Language Switcher */}
+                        <div className="mt-4 pt-3 border-top border-secondary">
+                            <LanguageSwitcher variant="dark" className="w-100 justify-content-center" />
+                        </div>
 
                     </div>
                 </div>

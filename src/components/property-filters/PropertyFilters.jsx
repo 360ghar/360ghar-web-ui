@@ -401,6 +401,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
                 value={purpose.value}
                 checked={(filters.purpose || '') === purpose.value}
                 onChange={(e) => updateFilter('purpose', e.target.value)}
+                style={{ width: '16px', height: '16px', marginTop: '2px', cursor: 'pointer' }}
               />
               <label className="form-check-label" htmlFor={`purpose-${purpose.value || 'all'}`}>
                 {purpose.label}
@@ -426,6 +427,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
                     : filters.property_type?.includes(type.value) || false
                 }
                 onChange={(e) => handlePropertyTypeChange(type.value, e.target.checked)}
+                style={{ width: '16px', height: '16px', marginTop: '2px', cursor: 'pointer' }}
               />
               <label className="form-check-label" htmlFor={`type-${type.value}`}>
                 {type.label}

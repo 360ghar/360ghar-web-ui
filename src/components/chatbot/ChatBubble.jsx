@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useChatStore } from '../../store';
 
 const ChatIcon = () => (
@@ -34,6 +35,7 @@ const XIcon = () => (
 );
 
 function ChatBubble() {
+  const { t } = useTranslation('common');
   const isOpen = useChatStore((state) => state.isOpen);
   const toggleChat = useChatStore((state) => state.toggleChat);
 
@@ -42,7 +44,7 @@ function ChatBubble() {
       id="chatbot-bubble"
       className={`chatbot-bubble${isOpen ? ' chatbot-bubble--open' : ''}`}
       onClick={toggleChat}
-      aria-label={isOpen ? 'Close chat assistant' : 'Open chat assistant'}
+      aria-label={isOpen ? t('chatbot.closeAssistant') : t('chatbot.openAssistant')}
       aria-expanded={isOpen}
       aria-haspopup="dialog"
       style={{ zIndex: 9999 }}

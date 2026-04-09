@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../../i18n/I18nLink';
 
 export default function GuestLoginBanner() {
   return (
@@ -6,9 +6,9 @@ export default function GuestLoginBanner() {
       <span className="chatbot-guest-banner__text">
         Sign in for visits, rent tracking &amp; more
       </span>
-      <Link to="/login" className="chatbot-guest-banner__link">
+      <I18nLink to="/login" className="chatbot-guest-banner__link">
         Sign In
-      </Link>
+      </I18nLink>
     </div>
   );
 }

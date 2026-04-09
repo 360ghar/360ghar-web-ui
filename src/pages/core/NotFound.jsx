@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Button from '../../common/ui/Button';
 import SEO from '../../common/SEO';
 import Header from '../../common/layout/Header';
@@ -6,6 +7,7 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 
 const NotFound = () => {
+    const { t } = useTranslation('policies');
     
     return (
         <>
@@ -26,7 +28,7 @@ const NotFound = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common:header.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />

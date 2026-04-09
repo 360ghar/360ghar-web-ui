@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../../i18n/I18nLink';
 
 function formatPrice(price) {
   if (!price) return 'Price on request';
@@ -9,7 +9,7 @@ function formatPrice(price) {
 
 function PropertyCard({ property }) {
   return (
-    <Link
+    <I18nLink
       to={`/property/${property.id}`}
       className="chatbot-property-card"
       target="_blank"
@@ -28,7 +28,7 @@ function PropertyCard({ property }) {
           <span className="chatbot-property-card__badge">{property.bedrooms} BHK</span>
         )}
       </div>
-    </Link>
+    </I18nLink>
   );
 }
 
@@ -63,9 +63,9 @@ export default function PropertyResultsWidget({ data }) {
         ))}
       </div>
       {total > 4 && (
-        <Link to="/properties" className="chatbot-widget__view-all">
+        <I18nLink to="/properties" className="chatbot-widget__view-all">
           View all {total} properties →
-        </Link>
+        </I18nLink>
       )}
     </div>
   );

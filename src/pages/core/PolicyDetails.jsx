@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -39,6 +40,7 @@ const MARKDOWN_COMPONENTS = {
 };
 
 const PolicyDetails = () => {
+  const { t } = useTranslation('policies');
   const { slug } = useParams();
   const [page, setPage] = useState(null);
   const [error, setError] = useState(null);
@@ -94,7 +96,7 @@ const PolicyDetails = () => {
         headerMenusClass="mx-auto"
         btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
         btnLink="/add-new-listing"
-        btnText="Add Listing"
+        btnText={t('common:header.postProperty')}
         spanClass="icon-right text-gradient"
         showContactNumber={false}
       />
@@ -106,14 +108,14 @@ const PolicyDetails = () => {
             <div className="row justify-content-center py-5">
               <div className="col-lg-6 text-center">
                 <div className="spinner-border text-main mb-3" role="status" aria-live="polite">
-                  <span className="visually-hidden">Loading...</span>
+                  <span className="visually-hidden">{t('policyDetails.loadingAria')}</span>
                 </div>
-                <p className="mb-0 text-secondary">Loading...</p>
+                <p className="mb-0 text-secondary">{t('policyDetails.loading')}</p>
               </div>
             </div>
           ) : error ? (
             <div className="alert alert-warning" role="alert">
-              Unable to load this policy. Please try again later.
+              <p className="mb-0">{t('policyDetails.unableToLoad')}</p>
             </div>
           ) : (
             <div className="row justify-content-center">

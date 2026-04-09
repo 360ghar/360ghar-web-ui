@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useUserStore } from '../../store';
 
 const AccountAddressTab = () => {
     const { profile, getProfile, isLoading, error } = useUserStore();
+    const { t } = useTranslation('account');
 
     useEffect(() => {
         getProfile();
@@ -10,20 +12,20 @@ const AccountAddressTab = () => {
 
     const addressBlocks = [
         {
-            title: 'Primary Address',
-            name: profile?.full_name || '—',
+            title: t('tabs.address.primaryAddress'),
+            name: profile?.full_name || '\u2014',
             infos: [
-                { title: 'Location:', text: profile?.full_address || [profile?.locality, profile?.city, profile?.state, profile?.pincode].filter(Boolean).join(', ') || '—' },
-                { title: 'Email:', text: profile?.email || '—' },
-                { title: 'Phone:', text: profile?.phone || '—' },
+                { title: t('tabs.address.location'), text: profile?.full_address || [profile?.locality, profile?.city, profile?.state, profile?.pincode].filter(Boolean).join(', ') || '\u2014' },
+                { title: t('tabs.address.email'), text: profile?.email || '\u2014' },
+                { title: t('tabs.address.phone'), text: profile?.phone || '\u2014' },
             ],
         },
     ];
 
     return (
         <>
-            <p className="account-alert">Your saved contact and address details.</p>
-            {isLoading && <div className="py-3">Loading address...</div>}
+            <p className="account-alert">{t('tabs.address.description')}</p>
+            {isLoading && <div className="py-3">{t('tabs.address.loading')}</div>}
             {error && !isLoading && <div className="alert alert-danger">{error}</div>}
             {!isLoading && (
                 <div className="row gy-4">

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import Button from '../../common/ui/Button';
 import { useBlogStore } from '../../store/blogStore';
 
@@ -23,9 +23,9 @@ const BlogItemThree = ({blogItem}) => {
     return (
         <div className="blog-item">
             <div className="blog-item__thumb">
-                <Link to={blogURL} onClick={()=>handleBlogClick()} className="blog-item__thumb-link">
+                <I18nLink to={blogURL} onClick={()=>handleBlogClick()} className="blog-item__thumb-link">
                     <LazyImage src={thumb} className="cover-img" alt={`${title} - 360Ghar Blog`}/>
-                </Link>
+                </I18nLink>
                 <span className="blog-item__date style-three font-18"> 
                     {new Date().getDate()}  <span className="text">{currentMonthName}</span>
                 </span>
@@ -37,14 +37,14 @@ const BlogItemThree = ({blogItem}) => {
                             return (
                                 <li className="text-list__item font-12" key={metaIndex}> 
                                     <span className="icon text-gradient">{metaInfo.icon}</span> 
-                                    <Link to={blogURL} onClick={()=>handleBlogClick()} className="link">{metaInfo.text}</Link>
+                                    <I18nLink to={blogURL} onClick={()=>handleBlogClick()} className="link">{metaInfo.text}</I18nLink>
                                 </li>
                             )
                         })
                     }
                 </ul>
                 <h6 className="blog-item__title mb-4">
-                    <Link to={blogURL} onClick={()=>handleBlogClick()} className="blog-item__title-link border-effect"> {title}</Link>
+                    <I18nLink to={blogURL} onClick={()=>handleBlogClick()} className="blog-item__title-link border-effect"> {title}</I18nLink>
                 </h6>
 
                 <Button

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -15,6 +16,7 @@ import {
   normalizePropertyTypeToken,
 } from '../../utils/propertyTaxonomy';
 import { buildLandingKeywords } from '../../utils/landingKeywords';
+import { I18nLink } from '../../i18n/I18nLink';
 import localitiesIndex from '../../data/localities-index.json';
 
 const pretty = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
@@ -101,26 +103,60 @@ const getPriceRange = (citySlug, intent, canonicalType) => {
   return intentPrices[canonicalType] || intentPrices.default || null;
 };
 
-const buildLandingFaqs = (city, facet, validIntent) => {
+const buildLandingFaqs = (t, city, facet, validIntent) => {
   const verb = validIntent === 'rent' ? 'renting' : validIntent === 'pg' ? 'staying in a PG in' : 'buying';
   const intentNoun = validIntent === 'pg' ? 'PG and co-living' : validIntent === 'rent' ? 'rental' : 'resale and new launch';
+  const lcFacet = facet.toLowerCase();
+  const accommodation = validIntent === 'pg' ? 'accommodation' : verb;
+
+  // Hindi-specific variables for Q4
+  const hindiAction = validIntent === 'buy' ? 'kharidne' : validIntent === 'pg' ? 'ke liye' : 'kiraye par lene';
+  const hindiBuyRent = validIntent === 'buy' ? 'kharidne' : 'rent karne';
+  const hindiDocSuffix = validIntent === 'buy'
+    ? t('landing:landingFaqs.q4DocBuy')
+    : t('landing:landingFaqs.q4DocRent');
+
+  // Fee intent variable for Q6
+  const feeIntent = validIntent === 'buy' ? 'buying' : validIntent === 'pg' ? 'PG' : 'renting';
+
   return [
     {
-      question: `What is the average price range for ${facet.toLowerCase()} ${validIntent === 'pg' ? 'in' : `for ${verb}`} ${city}?`,
-      answer: `Prices for ${facet.toLowerCase()} in ${city} vary by locality and configuration. ${intentNoun} inventory spans a broad budget range. Use 360Ghar's verified listings with 360\u00B0 virtual tours to compare actual market rates before deciding.`,
+      question: t('landing:landingFaqs.q1', { facetLower: lcFacet, preposition: validIntent === 'pg' ? 'in' : `for ${verb}`, city }),
+      answer: t('landing:landingFaqs.a1', { facetLower: lcFacet, city, intentNoun }),
     },
     {
-      question: `Which are the best localities for ${facet.toLowerCase()} ${validIntent === 'pg' ? 'accommodation' : `${verb}`} in ${city}?`,
-      answer: `Top localities depend on commute preference, budget, and lifestyle priorities. 360Ghar provides verified on-ground data, locality insights, and 360\u00B0 virtual tours for each listing so you can evaluate neighborhoods before visiting.`,
+      question: t('landing:landingFaqs.q2', { facetLower: lcFacet, accommodation, city }),
+      answer: t('landing:landingFaqs.a2'),
     },
     {
-      question: `Are properties on 360Ghar verified before listing in ${city}?`,
-      answer: `Yes. Every property listed on 360Ghar is physically verified by our on-site team. We confirm ownership documents, capture authentic photos and 360\u00B0 virtual tours, and validate exact locations before a listing goes live.`,
+      question: t('landing:landingFaqs.q3', { city }),
+      answer: t('landing:landingFaqs.a3'),
+    },
+    {
+      question: t('landing:landingFaqs.q4', { city, facetLower: lcFacet, hindiAction }),
+      answer: t('landing:landingFaqs.a4', { hindiBuyRent, hindiDocSuffix }),
+    },
+    {
+      question: t('landing:landingFaqs.q5', { facetLower: lcFacet, city }),
+      answer: t('landing:landingFaqs.a5', { facetLower: lcFacet, city }),
+    },
+    {
+      question: t('landing:landingFaqs.q6', { feeIntent, facetLower: lcFacet, city }),
+      answer: t('landing:landingFaqs.a6'),
+    },
+    {
+      question: t('landing:landingFaqs.q7'),
+      answer: t('landing:landingFaqs.a7'),
+    },
+    {
+      question: t('landing:landingFaqs.q8', { facetLower: lcFacet, city }),
+      answer: t('landing:landingFaqs.a8', { facetLower: lcFacet, city }),
     },
   ];
 };
 
 const Landing = () => {
+  const { t } = useTranslation('landing');
   const { citySlug, intent, type } = useParams();
   const canonicalCitySlug = citySlug === 'gurugram' ? 'gurgaon' : citySlug;
   const shouldIndex = isIndexableCitySlug(canonicalCitySlug);
@@ -148,12 +184,27 @@ const Landing = () => {
 
   const verb = validIntent === 'rent' ? 'Rent' : validIntent === 'pg' ? 'PG' : 'Buy';
   const title = validIntent === 'pg'
-    ? `PG in ${city} | ${city} Paying Guest & Co-living | 360Ghar`
-    : `${facet} for ${verb} in ${city} | ${city} Real Estate | 360Ghar`;
+    ? t('landing:seo.titlePg', { city })
+    : t('landing:seo.titleBuyRent', { facet, verb, city });
 
+  const cityLower = city.toLowerCase();
+  const isGurgaon = cityLower.includes('gurgaon') || cityLower.includes('gurugram');
   const description = validIntent === 'pg'
-    ? `Browse verified ${facet.toLowerCase()} and co-living listings in ${city}. All properties are verified by our on-site team with 360\u00B0 virtual tours and end-to-end assistance from a dedicated Relationship Manager.`
-    : `Browse verified ${facet.toLowerCase()} in ${city} to ${validIntent}. All properties verified by our on-site team with 360\u00B0 virtual tours. Enjoy end-to-end service by dedicated Relationship Manager.`;
+    ? t('landing:seo.descPg', {
+        facetLower: facet.toLowerCase(),
+        city,
+        gurgaonHindi: isGurgaon ? t('landing:seo.descPgGurgaon') : '',
+      })
+    : t('landing:seo.descBuyRent', {
+        facetLower: facet.toLowerCase(),
+        city,
+        intent: validIntent,
+        gurgaonHindi: isGurgaon
+          ? (validIntent === 'buy'
+            ? t('landing:seo.descBuyRentGurgaonBuy', { city, facetLower: facet.toLowerCase() })
+            : t('landing:seo.descBuyRentGurgaonRent', { city, facetLower: facet.toLowerCase() }))
+          : '',
+      });
 
   const keywords = buildLandingKeywords({ facet, city, validIntent });
 
@@ -169,20 +220,20 @@ const Landing = () => {
 
   const priceRange = getPriceRange(canonicalCitySlug, validIntent, canonicalType);
 
-  const faqItems = buildLandingFaqs(city, facet, validIntent);
+  const faqItems = buildLandingFaqs(t, city, facet, validIntent);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const relatedSearches = [];
   (INTENT_ALTERNATES[validIntent] || []).forEach((altIntent) => {
     relatedSearches.push({
       to: `/${canonicalCitySlug}/${altIntent}/${canonicalTypeSlug}`,
-      label: `${facet} for ${pretty(altIntent)} in ${city}`,
+      label: t('landing:relatedSearches.label', { facet, intentLabel: pretty(altIntent), city }),
     });
   });
   (RELATED_TYPES[canonicalType] || []).slice(0, 2).forEach((rt) => {
     relatedSearches.push({
       to: `/${canonicalCitySlug}/${validIntent}/${getPropertyRouteSlug(rt, validIntent)}`,
-      label: `${getPropertyTypeLabel(rt)} for ${intentLabel} in ${city}`,
+      label: t('landing:relatedSearches.label', { facet: getPropertyTypeLabel(rt), intentLabel, city }),
     });
   });
   const visibleRelatedSearches = relatedSearches.slice(0, 4);
@@ -195,6 +246,11 @@ const Landing = () => {
       acceptedAnswer: { '@type': 'Answer', text: faq.answer },
     })),
   };
+
+  // Preposition for price overview
+  const pricePreposition = validIntent === 'pg'
+    ? t('landing:priceOverview.prepositionPg')
+    : t('landing:priceOverview.prepositionBuy', { intentLabel: intentLabel.toLowerCase() });
 
   return (
     <>
@@ -211,6 +267,7 @@ const Landing = () => {
             name: title,
             description,
             url: `https://360ghar.com${canonicalPath}`,
+            inLanguage: ['en-IN', 'hi-IN'],
           },
           faqStructuredData,
         ]}
@@ -238,39 +295,38 @@ const Landing = () => {
             </div>
 
             <div className="text-center">
-              <Link
+              <I18nLink
                 to={`/properties?${browseQuery}`}
                 className="btn btn-main"
               >
-                Browse Listings
-              </Link>
+                {t('landing:hero.browseListings')}
+              </I18nLink>
             </div>
 
             {/* Quick price context */}
             {priceRange && (
               <div className="mt-5 p-4 bg-light rounded-3 border">
-                <h2 className="h5 mb-2">{city} {facet} Price Overview</h2>
+                <h2 className="h5 mb-2">{t('landing:priceOverview.heading', { city, facet })}</h2>
                 <p className="mb-0">
-                  Average prices for {facet.toLowerCase()} {validIntent === 'pg' ? 'in' : `for ${intentLabel.toLowerCase()} in`} {city} typically range from <strong>{priceRange}</strong>.
-                  Prices vary by locality, configuration, furnishing, and floor. Browse 360Ghar verified listings for up-to-date rates with 360&deg; virtual tours.
+                  {t('landing:priceOverview.body', { facetLower: facet.toLowerCase(), preposition: pricePreposition, city, priceRange })}
                 </p>
               </div>
             )}
 
             {/* Why 360Ghar */}
             <div className="mt-5">
-              <h2 className="h5 mb-3">Why 360Ghar?</h2>
+              <h2 className="h5 mb-3">{t('landing:why360Ghar.heading')}</h2>
               <ul className="text-start">
-                <li>India&apos;s first AI-Enabled and Virtual Tour first Real Estate Platform</li>
-                <li>All properties verified by our on-site team with 360&deg; virtual tours</li>
-                <li>Dedicated Relationship Manager handles your end-to-end flow so you can relax</li>
-                <li>Full visibility, convenience, and transparency for the same brokerage amount</li>
+                <li>{t('landing:why360Ghar.point1')}</li>
+                <li>{t('landing:why360Ghar.point2')}</li>
+                <li>{t('landing:why360Ghar.point3')}</li>
+                <li>{t('landing:why360Ghar.point4')}</li>
               </ul>
             </div>
 
             {/* FAQ */}
             <div className="mt-5">
-              <h2 className="h5 mb-3">Frequently Asked Questions</h2>
+              <h2 className="h5 mb-3">{t('landing:faq.heading')}</h2>
               <div className="accordion" id="landingFaqAccordion">
                 {faqItems.map((faq, idx) => (
                   (() => {
@@ -307,16 +363,16 @@ const Landing = () => {
             {/* Related Searches */}
             {visibleRelatedSearches.length > 0 && (
               <div className="mt-5">
-                <h2 className="h5 mb-3">Related Searches</h2>
+                <h2 className="h5 mb-3">{t('landing:relatedSearches.heading')}</h2>
                 <div className="d-flex flex-wrap gap-2">
                   {visibleRelatedSearches.map((rs) => (
-                    <Link
+                    <I18nLink
                       key={rs.to}
                       to={rs.to}
                       className="btn btn-sm btn-outline-main rounded-pill"
                     >
                       {rs.label}
-                    </Link>
+                    </I18nLink>
                   ))}
                 </div>
               </div>
@@ -328,14 +384,14 @@ const Landing = () => {
         {popularLocalities.length > 0 && (
           <section className="padding-y-60 bg-light">
             <div className="container container-two">
-              <h2 className="h5 mb-3">Popular Localities in {city}</h2>
+              <h2 className="h5 mb-3">{t('landing:localities.heading', { city })}</h2>
               <p className="mb-3">
-                Explore verified properties in {city}&apos;s top residential areas. Each locality page provides market insights, connectivity info, and active listings.
+                {t('landing:localities.description', { city })}
               </p>
               <div className="row g-3">
                 {popularLocalities.map((loc) => (
                   <div className="col-sm-6 col-lg-4 col-xl" key={loc.slug}>
-                    <Link
+                    <I18nLink
                       to={`/locality/${loc.slug}-gurgaon`}
                       className="d-block p-3 rounded-3 bg-white border text-decoration-none text-center"
                       style={{ color: 'inherit' }}
@@ -343,24 +399,24 @@ const Landing = () => {
                       <i className="fas fa-map-marker-alt text-gradient me-1" />
                       <span className="fw-medium">{pretty(loc.name)}</span>
                       <small className="d-block text-muted text-uppercase mt-1">{loc.entityType}</small>
-                    </Link>
+                    </I18nLink>
                   </div>
                 ))}
               </div>
 
-              <h3 className="h5 mb-3 mt-5">Data &amp; Research</h3>
+              <h3 className="h5 mb-3 mt-5">{t('landing:localities.dataAndResearch')}</h3>
               <div className="row g-3">
                 <div className="col-lg-2 col-md-4 col-sm-6">
-                  <Link to="/circle-rates" className="d-block p-3 rounded-3 bg-white border text-decoration-none text-center" style={{ color: 'inherit' }}>
+                  <I18nLink to="/circle-rates" className="d-block p-3 rounded-3 bg-white border text-decoration-none text-center" style={{ color: 'inherit' }}>
                     <i className="fas fa-indian-rupee-sign text-gradient me-1" />
-                    <span className="fw-medium">Circle Rates</span>
-                  </Link>
+                    <span className="fw-medium">{t('landing:localities.circleRates')}</span>
+                  </I18nLink>
                 </div>
                 <div className="col-lg-2 col-md-4 col-sm-6">
-                  <Link to="/builder-reputation" className="d-block p-3 rounded-3 bg-white border text-decoration-none text-center" style={{ color: 'inherit' }}>
+                  <I18nLink to="/builder-reputation" className="d-block p-3 rounded-3 bg-white border text-decoration-none text-center" style={{ color: 'inherit' }}>
                     <i className="fas fa-hard-hat text-gradient me-1" />
-                    <span className="fw-medium">Builder Reputation</span>
-                  </Link>
+                    <span className="fw-medium">{t('landing:localities.builderReputation')}</span>
+                  </I18nLink>
                 </div>
               </div>
             </div>

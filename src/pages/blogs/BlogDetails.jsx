@@ -4,6 +4,7 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import BlogDetailsSection from '../../components/blog/BlogDetailsSection';
+import { useTranslation } from 'react-i18next';
 
 const BlogDetails = () => {
     return (

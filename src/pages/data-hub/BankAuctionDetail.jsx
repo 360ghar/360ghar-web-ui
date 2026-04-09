@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -48,6 +50,7 @@ const sourceBadgeStyle = (source, caseNumber) => {
 };
 
 const BankAuctionDetail = () => {
+  const { t } = useTranslation('data-hub');
   const { id } = useParams();
   const [auction, setAuction] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +73,7 @@ const BankAuctionDetail = () => {
 
   const isBank = auction ? !auction.case_number : true;
   const sourceBadge = auction
-    ? (isBank ? (auction.source || 'SARFAESI').toUpperCase() : 'Court Ordered')
+    ? (isBank ? (auction.source || 'SARFAESI').toUpperCase() : t('bankAuctions.detail.courtOrdered'))
     : '';
   const institution = auction ? (auction.bank_name || auction.court_name || '') : '';
   const remaining = auction ? daysUntil(auction.auction_date) : null;
@@ -126,10 +129,10 @@ const BankAuctionDetail = () => {
           <div className="container">
             {/* Back link */}
             <div className="mb-20">
-              <Link to="/bank-auctions" style={{ fontSize: 14, color: '#6b7280', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <I18nLink to="/bank-auctions" style={{ fontSize: 14, color: '#6b7280', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                 <i className="fas fa-arrow-left" style={{ fontSize: 12 }}></i>
-                Back to Auctions
-              </Link>
+                {t('bankAuctions.detail.backToAuctions')}
+              </I18nLink>
             </div>
 
             {loading ? (
@@ -146,14 +149,14 @@ const BankAuctionDetail = () => {
             ) : error === 'not_found' ? (
               <div className="text-center py-60">
                 <i className="fas fa-search" style={{ fontSize: 48, color: '#d1d5db', display: 'block', marginBottom: 16 }}></i>
-                <h2 className="fs-24 fw-600 mb-10">Auction Not Found</h2>
-                <p className="color-text-3 mb-20">This auction listing may have been removed or the ID is incorrect.</p>
-                <Link to="/bank-auctions" className="btn btn-main">Browse All Auctions</Link>
+                <h2 className="fs-24 fw-600 mb-10">{t('bankAuctions.detail.notFound')}</h2>
+                <p className="color-text-3 mb-20">{t('bankAuctions.detail.notFoundDesc')}</p>
+                <I18nLink to="/bank-auctions" className="btn btn-main">{t('bankAuctions.detail.browseAll')}</I18nLink>
               </div>
             ) : error ? (
               <div className="text-center py-60">
-                <p className="color-danger fs-16">Auction data temporarily unavailable. Please try again later.</p>
-                <Link to="/bank-auctions" className="btn btn-outline-secondary mt-20">Back to Auctions</Link>
+                <p className="color-danger fs-16">{t('bankAuctions.detail.error')}</p>
+                <I18nLink to="/bank-auctions" className="btn btn-outline-secondary mt-20">{t('bankAuctions.detail.backToAuctions')}</I18nLink>
               </div>
             ) : auction ? (
               <div className="row justify-content-center">
@@ -171,7 +174,7 @@ const BankAuctionDetail = () => {
 
                     {/* Property heading */}
                     <h1 style={{ fontSize: 22, fontWeight: 700, color: '#111827', marginBottom: 8 }}>
-                      {auction.property_description || auction.property_type || 'Property Auction'}
+                      {auction.property_description || auction.property_type || t('bankAuctions.detail.propertyAuction')}
                     </h1>
 
                     {auction.address && (
@@ -184,37 +187,37 @@ const BankAuctionDetail = () => {
                     {/* Key details grid */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 16, marginBottom: 28, padding: '20px 24px', background: '#f8fafc', borderRadius: 10 }}>
                       <div>
-                        <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Reserve Price</p>
+                        <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>{t('bankAuctions.detail.reservePrice')}</p>
                         <p style={{ margin: '4px 0 0', fontSize: 20, fontWeight: 700, color: '#111827' }}>{formatPrice(auction.reserve_price)}</p>
                       </div>
                       {auction.emd_amount != null && (
                         <div>
-                          <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>EMD Amount</p>
+                          <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>{t('bankAuctions.detail.emdAmount')}</p>
                           <p style={{ margin: '4px 0 0', fontSize: 18, fontWeight: 600, color: '#374151' }}>{formatPrice(auction.emd_amount)}</p>
                         </div>
                       )}
                       <div>
-                        <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Auction Date</p>
+                        <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>{t('bankAuctions.detail.auctionDate')}</p>
                         <p style={{ margin: '4px 0 0', fontSize: 15, fontWeight: 600, color: '#374151' }}>
                           {auction.auction_date
                             ? new Date(auction.auction_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
-                            : 'TBD'}
+                            : t('bankAuctions.detail.tbd')}
                         </p>
                         {remaining && (
                           <p style={{ margin: '2px 0 0', fontSize: 12, color: '#059669', fontWeight: 600 }}>
-                            {remaining} day{remaining !== 1 ? 's' : ''} remaining
+                            {t('bankAuctions.detail.daysRemaining', { count: remaining, suffix: remaining !== 1 ? 's' : '' })}
                           </p>
                         )}
                       </div>
                       {auction.property_type && (
                         <div>
-                          <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Property Type</p>
+                          <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>{t('bankAuctions.detail.propertyType')}</p>
                           <p style={{ margin: '4px 0 0', fontSize: 15, fontWeight: 600, color: '#374151', textTransform: 'capitalize' }}>{auction.property_type}</p>
                         </div>
                       )}
                       {(auction.area || auction.area_sqft) && (
                         <div>
-                          <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Area</p>
+                          <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>{t('bankAuctions.detail.area')}</p>
                           <p style={{ margin: '4px 0 0', fontSize: 15, fontWeight: 600, color: '#374151' }}>
                             {auction.area || auction.area_sqft} {auction.area_unit || 'sq ft'}
                           </p>
@@ -225,23 +228,23 @@ const BankAuctionDetail = () => {
                     {/* Additional details */}
                     {(auction.case_number || auction.loan_account_number || auction.borrower_name) && (
                       <div style={{ marginBottom: 24 }}>
-                        <h3 style={{ fontSize: 15, fontWeight: 600, color: '#374151', marginBottom: 12 }}>Additional Information</h3>
+                        <h3 style={{ fontSize: 15, fontWeight: 600, color: '#374151', marginBottom: 12 }}>{t('bankAuctions.detail.additionalInfo')}</h3>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                           {auction.case_number && (
                             <div className="d-flex gap-10">
-                              <span style={{ fontSize: 13, color: '#9ca3af', minWidth: 140 }}>Case Number</span>
+                              <span style={{ fontSize: 13, color: '#9ca3af', minWidth: 140 }}>{t('bankAuctions.detail.caseNumber')}</span>
                               <span style={{ fontSize: 13, color: '#374151', fontFamily: 'monospace' }}>{auction.case_number}</span>
                             </div>
                           )}
                           {auction.loan_account_number && (
                             <div className="d-flex gap-10">
-                              <span style={{ fontSize: 13, color: '#9ca3af', minWidth: 140 }}>Loan Account</span>
+                              <span style={{ fontSize: 13, color: '#9ca3af', minWidth: 140 }}>{t('bankAuctions.detail.loanAccount')}</span>
                               <span style={{ fontSize: 13, color: '#374151', fontFamily: 'monospace' }}>{auction.loan_account_number}</span>
                             </div>
                           )}
                           {auction.borrower_name && (
                             <div className="d-flex gap-10">
-                              <span style={{ fontSize: 13, color: '#9ca3af', minWidth: 140 }}>Borrower</span>
+                              <span style={{ fontSize: 13, color: '#9ca3af', minWidth: 140 }}>{t('bankAuctions.detail.borrower')}</span>
                               <span style={{ fontSize: 13, color: '#374151' }}>{auction.borrower_name}</span>
                             </div>
                           )}
@@ -252,7 +255,7 @@ const BankAuctionDetail = () => {
                     {/* Contact information */}
                     {(auction.contact_name || auction.contact_phone || auction.contact_email) && (
                       <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 8, padding: '16px 20px', marginBottom: 24 }}>
-                        <h3 style={{ fontSize: 14, fontWeight: 600, color: '#166534', marginBottom: 10 }}>Contact for Auction</h3>
+                        <h3 style={{ fontSize: 14, fontWeight: 600, color: '#166534', marginBottom: 10 }}>{t('bankAuctions.detail.contactForAuction')}</h3>
                         {auction.contact_name && <p style={{ margin: '0 0 4px', fontSize: 14, color: '#166534' }}>{auction.contact_name}</p>}
                         {auction.contact_phone && (
                           <p style={{ margin: '0 0 4px', fontSize: 14 }}>
@@ -274,11 +277,11 @@ const BankAuctionDetail = () => {
                         onClick={() => setAlertModal(true)}
                       >
                         <i className="fas fa-bell me-2"></i>
-                        Set Alert for Similar Properties
+                        {t('bankAuctions.detail.setAlert')}
                       </button>
-                      <Link to="/bank-auctions" className="btn btn-outline-secondary">
-                        Browse All Auctions
-                      </Link>
+                      <I18nLink to="/bank-auctions" className="btn btn-outline-secondary">
+                        {t('bankAuctions.detail.browseAll')}
+                      </I18nLink>
                     </div>
                   </div>
                 </div>
@@ -292,11 +295,11 @@ const BankAuctionDetail = () => {
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center">
-                <h2 className="cta-title mb-3">Explore More Investment Opportunities</h2>
-                <p className="mb-4">Browse regular listings and RERA-verified projects alongside auction properties.</p>
+                <h2 className="cta-title mb-3">{t('bankAuctions.detail.cta.title')}</h2>
+                <p className="mb-4">{t('bankAuctions.detail.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">Browse Properties</a>
-                  <a href="/rera-projects" className="btn btn-outline-white">RERA Projects</a>
+                  <a href="/properties" className="btn btn-white btn-main">{t('bankAuctions.detail.cta.browseProperties')}</a>
+                  <a href="/rera-projects" className="btn btn-outline-white">{t('bankAuctions.detail.cta.reraProjects')}</a>
                 </div>
               </div>
             </div>

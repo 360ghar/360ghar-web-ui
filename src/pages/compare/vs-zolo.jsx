@@ -1,16 +1,19 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const ComparePage = lazy(() => import('./ComparePage'));
 
 const ZoloCompare = () => {
+  const { t } = useTranslation('compare');
   const competitor = competitors.zolo;
-  
+
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs Zolo Stays | Better Co-living Option in Gurugram"
-      pageDescription="Compare 360 Ghar with Zolo Stays. See why verified listings, transparent pricing, and no hidden charges make 360 Ghar the better co-living choice."
+      pageTitle={t('zolo.pageTitle')}
+      pageDescription={t('zolo.pageDescription')}
       canonicalPath="/vs/zolo"
     />
   );

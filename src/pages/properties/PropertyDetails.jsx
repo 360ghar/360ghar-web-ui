@@ -12,6 +12,7 @@ import ZoneInfoCard from '../../components/data-hub/ZoneInfoCard';
 import CircleRateBanner from '../../components/data-hub/CircleRateBanner';
 
 import SEO from '../../common/SEO';
+import { useTranslation } from 'react-i18next';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData, generateVideoStructuredData } from '../../seo/structuredData';
 import { usePropertyStore } from '../../store/propertyStore';
@@ -23,6 +24,7 @@ import {
 } from '../../utils/propertyTaxonomy';
 
 const PropertyDetails = () => {
+    const { t } = useTranslation('properties');
     const { id } = useParams();
     const {
         currentProperty: propertyData,
@@ -183,11 +185,46 @@ const PropertyDetails = () => {
 
                 {/* Loading, Error, or Property Details Section */}
                 {isLoading ? (
-                    <section className="property-details compact padding-y-60">
+                    <section className="padding-y-60">
                         <div className="container container-two">
-                            <div className="text-center py-5">
-                                <i className="fas fa-spinner fa-spin fa-2x text-primary"></i>
-                                <p className="mt-3">Loading property details...</p>
+                            <div className="row g-4">
+                                {/* Left column */}
+                                <div className="col-lg-8">
+                                    <div className="property-skeleton__image" />
+                                    <div className="property-skeleton__card">
+                                        <div className="property-skeleton__block property-skeleton__title" />
+                                        <div className="property-skeleton__block property-skeleton__subtitle" />
+                                        <div className="d-flex flex-wrap mb-3">
+                                            {[1,2,3,4].map(i => (
+                                                <div key={i} className="property-skeleton__block property-skeleton__badge" />
+                                            ))}
+                                        </div>
+                                        {[1,2,3,4].map(i => (
+                                            <div key={i} className={`property-skeleton__block property-skeleton__line${i % 3 === 0 ? ' property-skeleton__line--short' : ''}`} />
+                                        ))}
+                                    </div>
+                                    <div className="property-skeleton__card">
+                                        <div className="property-skeleton__block property-skeleton__line property-skeleton__line--xshort mb-3" />
+                                        {[1,2,3].map(i => (
+                                            <div key={i} className="property-skeleton__block property-skeleton__line" />
+                                        ))}
+                                    </div>
+                                </div>
+                                {/* Right column */}
+                                <div className="col-lg-4">
+                                    <div className="property-skeleton__card">
+                                        <div className="property-skeleton__block property-skeleton__line property-skeleton__line--short mb-3" />
+                                        {[1,2,3,4,5].map(i => (
+                                            <div key={i} className="property-skeleton__block property-skeleton__line" />
+                                        ))}
+                                    </div>
+                                    <div className="property-skeleton__card">
+                                        <div className="property-skeleton__block property-skeleton__line property-skeleton__line--xshort mb-3" />
+                                        {[1,2,3].map(i => (
+                                            <div key={i} className="property-skeleton__block property-skeleton__line" />
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -196,7 +233,7 @@ const PropertyDetails = () => {
                         <div className="container container-two">
                             <div className="text-center py-5">
                                 <i className="fas fa-exclamation-triangle fa-2x text-danger"></i>
-                                <h4 className="mt-3 text-danger">Error Loading Property</h4>
+                                <h4 className="mt-3 text-danger">{t('details.errorTitle')}</h4>
                                 <p>{error}</p>
                             </div>
                         </div>
@@ -206,8 +243,8 @@ const PropertyDetails = () => {
                         <div className="container container-two">
                             <div className="text-center py-5">
                                 <i className="fas fa-home fa-2x text-muted"></i>
-                                <h4 className="mt-3">Property Not Found</h4>
-                                <p>The property you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+                                <h4 className="mt-3">{t('details.notFoundTitle')}</h4>
+                                <p>{t('details.notFoundDescription')}</p>
                             </div>
                         </div>
                     </section>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const LocalityHero = ({
     localityName,
@@ -19,10 +19,10 @@ const LocalityHero = ({
                             <nav aria-label="breadcrumb" className="mb-3">
                                 <ol className="locality-breadcrumb-list">
                                     <li className="locality-breadcrumb-item">
-                                        <Link to="/" className="text-decoration-none">Home</Link>
+                                        <I18nLink to="/" className="text-decoration-none">Home</I18nLink>
                                     </li>
                                     <li className="locality-breadcrumb-item">
-                                        <Link to="/localities" className="text-decoration-none">Localities</Link>
+                                        <I18nLink to="/localities" className="text-decoration-none">Localities</I18nLink>
                                     </li>
                                     <li className="locality-breadcrumb-item locality-breadcrumb-item--active" aria-current="page">
                                         {localityName}
@@ -48,10 +48,10 @@ const LocalityHero = ({
                                     <i className="fas fa-building me-2" aria-hidden="true"></i>
                                     Browse Properties
                                 </a>
-                                <Link to="/contact" className="btn btn-outline-main locality-hero-v2__cta">
+                                <I18nLink to="/contact" className="btn btn-outline-main locality-hero-v2__cta">
                                     <i className="fas fa-calendar-check me-2" aria-hidden="true"></i>
                                     Schedule Site Visit
-                                </Link>
+                                </I18nLink>
                             </div>
                         </div>
 

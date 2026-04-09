@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import LogoWhite from '../LogoWhite';
 import { offCanvasInfos } from '../../data/CommonData';
 import SearchBox from '../search/SearchBox';
@@ -7,7 +8,8 @@ import { useUIStore } from '../../store';
 
 const OffCanvas = () => {
 
-    const { offCanvas, handleOffCanvasClose } = useUIStore(); 
+    const { offCanvas, handleOffCanvasClose } = useUIStore();
+    const { t } = useTranslation('common'); 
     
     return (
         <>
@@ -31,15 +33,15 @@ const OffCanvas = () => {
                             <div className="address-list__content">
                                 {Array.isArray(offCanvasInfo.link) ? (
                                     offCanvasInfo.link.map((link, linkIndex) => (
-                                        <Link to={`${link}${offCanvasInfo.text[linkIndex]}`} className="address-list__text" key={linkIndex}>
+                                        <I18nLink to={`${link}${offCanvasInfo.text[linkIndex]}`} className="address-list__text" key={linkIndex}>
                                             {offCanvasInfo.text[linkIndex]}
-                                        </Link>
+                                        </I18nLink>
                                     ))
                                 ) : (
                                     offCanvasInfo.link ? (
-                                        <Link to={`${offCanvasInfo.link}${offCanvasInfo.text}`} className="address-list__text">
+                                        <I18nLink to={`${offCanvasInfo.link}${offCanvasInfo.text}`} className="address-list__text">
                                             {offCanvasInfo.text}
-                                        </Link>
+                                        </I18nLink>
                                     ) : (
                                         <p className="address-list__text">{offCanvasInfo.text}</p>
                                     )

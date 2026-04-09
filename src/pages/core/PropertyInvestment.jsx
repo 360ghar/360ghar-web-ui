@@ -4,20 +4,24 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
 const PropertyInvestment = () => {
+  const { t } = useTranslation('policies');
+
   const breadcrumbs = [
-    { name: 'Home', url: 'https://360ghar.com/' },
-    { name: 'Property Investment Guide', url: 'https://360ghar.com/property-investment-gurugram' },
+    { name: t('propertyInvestment.breadcrumbHome'), url: 'https://360ghar.com/' },
+    { name: t('propertyInvestment.breadcrumbCurrent'), url: 'https://360ghar.com/property-investment-gurugram' },
   ];
 
   const structuredData = [
     generateBreadcrumbStructuredData(breadcrumbs),
     {
       '@type': 'Article',
-      headline: 'Property Investment Guide Gurugram 2024 | Best Areas & ROI',
-      description: 'Complete guide to property investment in Gurugram. Learn about best investment areas, expected returns, market trends, and strategies for maximum ROI in Gurugram real estate.',
+      headline: t('propertyInvestment.seoTitle'),
+      description: t('propertyInvestment.seoDescription'),
       image: '/assets/images/logo/logo.png',
       author: {
         '@type': 'Organization',
@@ -39,9 +43,9 @@ const PropertyInvestment = () => {
   return (
     <>
       <SEO
-        title="Property Investment Guide Gurugram 2024 | Best Areas & ROI"
-        description="Complete guide to property investment in Gurugram. Learn about best investment areas, expected returns, market trends, and strategies for maximum ROI in Gurugram real estate."
-        keywords="property investment Gurugram, real estate investment Gurugram, best investment areas Gurugram, property ROI Gurugram, buy property Gurugram investment, Gurugram property market analysis"
+        title={t('propertyInvestment.seoTitle')}
+        description={t('propertyInvestment.seoDescription')}
+        keywords={t('propertyInvestment.seoKeywords')}
         canonical="/property-investment-gurugram"
         structuredData={structuredData}
       />
@@ -64,16 +68,15 @@ const PropertyInvestment = () => {
           <div className="container container-two">
             <nav aria-label="breadcrumb" className="mb-4">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="/">Home</a></li>
-                <li className="breadcrumb-item active" aria-current="page">Property Investment Guide</li>
+                <li className="breadcrumb-item"><I18nLink to="/">{t('propertyInvestment.breadcrumbHome')}</I18nLink></li>
+                <li className="breadcrumb-item active" aria-current="page">{t('propertyInvestment.breadcrumbCurrent')}</li>
               </ol>
             </nav>
 
             <div className="section-heading text-center mb-5">
-              <h1 className="section-heading__title">Property Investment Guide Gurugram 2024</h1>
+              <h1 className="section-heading__title">{t('propertyInvestment.pageTitle')}</h1>
               <p className="section-heading__desc">
-                Maximize your returns with smart property investment in Gurugram.
-                Discover high-growth areas, market trends, and investment strategies.
+                {t('propertyInvestment.pageDesc')}
               </p>
             </div>
 
@@ -81,34 +84,32 @@ const PropertyInvestment = () => {
               <div className="col-lg-8 mx-auto">
                 <article className="blog-details">
                   <div className="blog-details__content">
-                    <h2>Why Invest in Gurugram Real Estate?</h2>
+                    <h2>{t('propertyInvestment.whyInvest')}</h2>
                     <p>
-                      Gurugram has consistently delivered excellent returns for property investors.
-                      With its proximity to Delhi, robust infrastructure development, and economic growth,
-                      Gurugram offers one of the best risk-adjusted returns in the Indian real estate market.
+                      {t('propertyInvestment.whyInvestDesc')}
                     </p>
 
-                    <h3>Key Investment Advantages:</h3>
+                    <h3>{t('propertyInvestment.keyAdvantages')}</h3>
                     <ul>
-                      <li><strong>Location Advantage:</strong> Part of Delhi NCR, excellent connectivity</li>
-                      <li><strong>Economic Growth:</strong> Home to IT hubs and corporate offices</li>
-                      <li><strong>Infrastructure:</strong> Metro, expressways, and modern amenities</li>
-                      <li><strong>Demand Drivers:</strong> Population growth and job creation</li>
-                      <li><strong>Legal Framework:</strong> RERA compliance ensures transparency</li>
+                      <li><strong>{t('propertyInvestment.advantageLocation')}</strong></li>
+                      <li><strong>{t('propertyInvestment.advantageEconomy')}</strong></li>
+                      <li><strong>{t('propertyInvestment.advantageInfra')}</strong></li>
+                      <li><strong>{t('propertyInvestment.advantageDemand')}</strong></li>
+                      <li><strong>{t('propertyInvestment.advantageLegal')}</strong></li>
                     </ul>
 
-                    <h2>Best Areas for Property Investment</h2>
+                    <h2>{t('propertyInvestment.bestAreas')}</h2>
 
                     <div className="row mb-4">
                       <div className="col-md-6">
                         <div className="card h-100">
                           <div className="card-body">
-                            <h5 className="card-title">DLF Phase 2 & 3</h5>
-                            <p className="card-text">Established areas with stable appreciation. Good for long-term holding and rental income.</p>
+                            <h5 className="card-title">{t('propertyInvestment.dlfTitle')}</h5>
+                            <p className="card-text">{t('propertyInvestment.dlfDesc')}</p>
                             <ul className="list-unstyled">
-                              <li><strong>Expected ROI:</strong> 8-10% annually</li>
-                              <li><strong>Rental Yield:</strong> 3-4%</li>
-                              <li><strong>Risk Level:</strong> Low</li>
+                              <li><strong>{t('propertyInvestment.dlfRoi')}</strong></li>
+                              <li><strong>{t('propertyInvestment.dlfYield')}</strong></li>
+                              <li><strong>{t('propertyInvestment.dlfRisk')}</strong></li>
                             </ul>
                           </div>
                         </div>
@@ -116,12 +117,12 @@ const PropertyInvestment = () => {
                       <div className="col-md-6">
                         <div className="card h-100">
                           <div className="card-body">
-                            <h5 className="card-title">Sohna Road</h5>
-                            <p className="card-text">High growth potential with upcoming infrastructure. Good for value investing.</p>
+                            <h5 className="card-title">{t('propertyInvestment.sohnaTitle')}</h5>
+                            <p className="card-text">{t('propertyInvestment.sohnaDesc')}</p>
                             <ul className="list-unstyled">
-                              <li><strong>Expected ROI:</strong> 12-15% annually</li>
-                              <li><strong>Rental Yield:</strong> 4-5%</li>
-                              <li><strong>Risk Level:</strong> Medium</li>
+                              <li><strong>{t('propertyInvestment.sohnaRoi')}</strong></li>
+                              <li><strong>{t('propertyInvestment.sohnaYield')}</strong></li>
+                              <li><strong>{t('propertyInvestment.sohnaRisk')}</strong></li>
                             </ul>
                           </div>
                         </div>
@@ -132,12 +133,12 @@ const PropertyInvestment = () => {
                       <div className="col-md-6">
                         <div className="card h-100">
                           <div className="card-body">
-                            <h5 className="card-title">Sector 29-35</h5>
-                            <p className="card-text">Commercial hub with steady demand from professionals. Good rental yields.</p>
+                            <h5 className="card-title">{t('propertyInvestment.sectorTitle')}</h5>
+                            <p className="card-text">{t('propertyInvestment.sectorDesc')}</p>
                             <ul className="list-unstyled">
-                              <li><strong>Expected ROI:</strong> 9-11% annually</li>
-                              <li><strong>Rental Yield:</strong> 4-5%</li>
-                              <li><strong>Risk Level:</strong> Low</li>
+                              <li><strong>{t('propertyInvestment.sectorRoi')}</strong></li>
+                              <li><strong>{t('propertyInvestment.sectorYield')}</strong></li>
+                              <li><strong>{t('propertyInvestment.sectorRisk')}</strong></li>
                             </ul>
                           </div>
                         </div>
@@ -145,83 +146,77 @@ const PropertyInvestment = () => {
                       <div className="col-md-6">
                         <div className="card h-100">
                           <div className="card-body">
-                            <h5 className="card-title">New Gurugram</h5>
-                            <p className="card-text">Emerging areas with high growth potential. Best for long-term investment.</p>
+                            <h5 className="card-title">{t('propertyInvestment.newGurugramTitle')}</h5>
+                            <p className="card-text">{t('propertyInvestment.newGurugramDesc')}</p>
                             <ul className="list-unstyled">
-                              <li><strong>Expected ROI:</strong> 15-20% annually</li>
-                              <li><strong>Rental Yield:</strong> 3-4%</li>
-                              <li><strong>Risk Level:</strong> High</li>
+                              <li><strong>{t('propertyInvestment.newGurugramRoi')}</strong></li>
+                              <li><strong>{t('propertyInvestment.newGurugramYield')}</strong></li>
+                              <li><strong>{t('propertyInvestment.newGurugramRisk')}</strong></li>
                             </ul>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <h2>Investment Strategies for Gurugram</h2>
+                    <h2>{t('propertyInvestment.strategies')}</h2>
 
-                    <h3>1. Buy and Hold Strategy</h3>
+                    <h3>{t('propertyInvestment.strategy1Title')}</h3>
                     <p>
-                      Purchase property in established areas like DLF Phase and hold for 5-7 years.
-                      Focus on areas with consistent rental demand and capital appreciation.
+                      {t('propertyInvestment.strategy1Desc')}
                     </p>
 
-                    <h3>2. Rental Income Focus</h3>
+                    <h3>{t('propertyInvestment.strategy2Title')}</h3>
                     <p>
-                      Invest in 2BHK and 3BHK apartments in professional hubs. Look for areas
-                      with high occupancy rates and good rental yields.
+                      {t('propertyInvestment.strategy2Desc')}
                     </p>
 
-                    <h3>3. Under-Construction Projects</h3>
+                    <h3>{t('propertyInvestment.strategy3Title')}</h3>
                     <p>
-                      Buy apartments in pre-launch or under-construction projects from reputed
-                      developers. Get benefits of stamp duty exemption and assured returns.
+                      {t('propertyInvestment.strategy3Desc')}
                     </p>
 
-                    <h3>4. Commercial Property Investment</h3>
+                    <h3>{t('propertyInvestment.strategy4Title')}</h3>
                     <p>
-                      Invest in office spaces and retail shops in commercial areas.
-                      Suitable for investors seeking stable long-term returns.
+                      {t('propertyInvestment.strategy4Desc')}
                     </p>
 
-                    <h2>Current Market Trends</h2>
+                    <h2>{t('propertyInvestment.marketTrends')}</h2>
                     <ul>
-                      <li><strong>Affordable Housing:</strong> Government schemes driving demand in mid-segment</li>
-                      <li><strong>Co-living & PG:</strong> Growing demand for furnished rentals</li>
-                      <li><strong>Virtual Tours:</strong> Technology adoption changing property viewing</li>
-                      <li><strong>Sustainability:</strong> Green buildings gaining preference</li>
-                      <li><strong>Smart Homes:</strong> IoT-enabled properties in demand</li>
+                      <li><strong>{t('propertyInvestment.trendAffordable')}</strong></li>
+                      <li><strong>{t('propertyInvestment.trendColiving')}</strong></li>
+                      <li><strong>{t('propertyInvestment.trendVirtual')}</strong></li>
+                      <li><strong>{t('propertyInvestment.trendGreen')}</strong></li>
+                      <li><strong>{t('propertyInvestment.trendSmart')}</strong></li>
                     </ul>
 
-                    <h2>Risk Factors to Consider</h2>
+                    <h2>{t('propertyInvestment.riskFactors')}</h2>
                     <ul>
-                      <li><strong>Market Volatility:</strong> Real estate markets can be cyclical</li>
-                      <li><strong>Liquidity:</strong> Property is not easily convertible to cash</li>
-                      <li><strong>Regulatory Changes:</strong> Stay updated with RERA and tax laws</li>
-                      <li><strong>Location Risks:</strong> Infrastructure delays can affect returns</li>
-                      <li><strong>Economic Factors:</strong> Interest rates and economic conditions impact demand</li>
+                      <li><strong>{t('propertyInvestment.riskVolatility')}</strong></li>
+                      <li><strong>{t('propertyInvestment.riskLiquidity')}</strong></li>
+                      <li><strong>{t('propertyInvestment.riskRegulatory')}</strong></li>
+                      <li><strong>{t('propertyInvestment.riskLocation')}</strong></li>
+                      <li><strong>{t('propertyInvestment.riskEconomic')}</strong></li>
                     </ul>
 
-                    <h2>How to Get Started</h2>
+                    <h2>{t('propertyInvestment.howToStart')}</h2>
                     <ol>
-                      <li><strong>Research:</strong> Study market trends and location analysis</li>
-                      <li><strong>Budget Planning:</strong> Calculate total investment including stamp duty and registration</li>
-                      <li><strong>Legal Due Diligence:</strong> Verify builder credentials and project approvals</li>
-                      <li><strong>Financial Planning:</strong> Consider loan options and tax benefits</li>
-                      <li><strong>Property Management:</strong> Plan for maintenance and tenant management</li>
+                      <li><strong>{t('propertyInvestment.step1')}</strong></li>
+                      <li><strong>{t('propertyInvestment.step2')}</strong></li>
+                      <li><strong>{t('propertyInvestment.step3')}</strong></li>
+                      <li><strong>{t('propertyInvestment.step4')}</strong></li>
+                      <li><strong>{t('propertyInvestment.step5')}</strong></li>
                     </ol>
 
                     <div className="alert alert-info mt-4">
-                      <h5>Pro Tip:</h5>
+                      <h5>{t('propertyInvestment.proTipTitle')}</h5>
                       <p>
-                        Always work with verified real estate consultants and conduct thorough due diligence
-                        before making any investment decision. Consider consulting a financial advisor for
-                        personalized investment planning.
+                        {t('propertyInvestment.proTipDesc')}
                       </p>
                     </div>
 
                     <div className="text-center mt-5">
-                      <a href="/properties" className="btn btn-main me-3">Explore Investment Properties</a>
-                      <a href="/gurugram-real-estate-guide" className="btn btn-outline-main">Read Complete Guide</a>
+                      <I18nLink to="/properties" className="btn btn-main me-3">{t('propertyInvestment.exploreProperties')}</I18nLink>
+                      <I18nLink to="/gurugram-real-estate-guide" className="btn btn-outline-main">{t('propertyInvestment.readGuide')}</I18nLink>
                     </div>
                   </div>
                 </article>

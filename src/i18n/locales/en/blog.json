@@ -1,0 +1,97 @@
+{
+  "blogClassic": {
+    "subtitle": "Research Hub",
+    "title": "Real Estate Guides for Gurugram and Delhi NCR",
+    "desc": "Use this hub for buying guides, rental checklists, locality research, investment notes, and property-planning tools. The latest posts load dynamically, but this page always keeps key research paths crawlable and easy to reach.",
+    "browseLatest": "Browse Latest Posts",
+    "exploreLocalities": "Explore Localities",
+    "baseTitle": "Real Estate Blog | 360Ghar Insights",
+    "baseDescription": "Guides and insights on buying, renting, PGs, investment trends, locality deep-dives, and market updates across Gurugram and Delhi NCR.",
+    "collectionName": "Real Estate Articles",
+    "collectionDesc": "Latest insights on property buying, renting, and investment in Gurugram"
+  },
+  "featuredGuides": {
+    "marketReports": {
+      "title": "Market reports",
+      "description": "Track Gurugram buying, renting, and locality trends before you shortlist.",
+      "guideLabel": "Gurugram Real Estate Guide",
+      "investmentLabel": "Property Investment in Gurugram"
+    },
+    "localityResearch": {
+      "title": "Locality research",
+      "description": "Move from broad city search into locality-level intelligence and price context.",
+      "directoryLabel": "Localities Directory",
+      "searchLabel": "Properties Search"
+    },
+    "planningTools": {
+      "title": "Planning tools",
+      "description": "Use calculators and checklists while reading guides so decisions stay grounded.",
+      "emiLabel": "EMI Calculator",
+      "checklistLabel": "Property Checklist"
+    }
+  },
+  "classicSection": {
+    "loading": "Loading posts...",
+    "loadingAria": "Loading...",
+    "searchLabel": "Search: {{query}}",
+    "categoryLabel": "Category: {{category}}",
+    "tagLabel": "Tag: {{tag}}",
+    "resultCount": "{{count}} result found",
+    "resultCountPlural": "{{count}} results found",
+    "clearFilters": "Clear Filters",
+    "retry": "Retry",
+    "noPostsTitle": "No posts found",
+    "noPostsFiltered": "Try adjusting your search or filters",
+    "noPostsEmpty": "Check back later for new content",
+    "showing": "Showing {{start}} - {{end}} of {{total}} posts",
+    "errorPrefix": "Failed to load posts"
+  },
+  "blogDetails": {
+    "loading": "Loading article...",
+    "loadingAria": "Loading...",
+    "errorTitle": "Failed to Load Article",
+    "tryAgain": "Try Again",
+    "backToBlog": "Back to Blog",
+    "notFoundTitle": "Article Not Found",
+    "notFoundDesc": "The article you are looking for does not exist.",
+    "defaultTitle": "Blog Details",
+    "defaultSeoTitle": "Real Estate Blog | 360Ghar",
+    "defaultSeoDesc": "Read insights on buying, renting, PGs, locality guides, and investment trends in Gurugram and Delhi NCR.",
+    "by": "By",
+    "tagsLabel": "Tags:"
+  },
+  "blogShowcase": {
+    "title": "Showcase your talent with our portfolio",
+    "desc": "Aliquam eros justo, posuere loborti viverra laoreet matti ullamcorper posuere viverra .Aliquam eros justo, posuere lobortis, viverra laoreet augue mattis fermentum ullamcorper viverra laoreet Aliquam eros justo, posuere lobortis, viverra laoreet augue mattis ferment ullamcorer viverra laoreet Aliquam eros justo, posuere loborti viverra laoreet matti ullamcorper posuere viverra .Aliquam eros justo, posuere",
+    "check1": "Your trusted real estate partner",
+    "check2": "Unlocking the door to your new home",
+    "check3": "Luxury living at affordable prices",
+    "check4": "Your journey to homeownership starts here",
+    "bottomDesc": "Real estate is a lucrative industry that involves the buying selling and renting properties It encompass residential commercial and industrial properties. Real estate agents play a crucial role in facilitating at transactions and an english helping commercial, and industrial"
+  },
+  "blogNextPrev": {
+    "prevLabel": "Previous post",
+    "nextLabel": "Next post",
+    "placeholderTitle": "Insure your peace of mind"
+  },
+  "blogTesti": {
+    "desc": "Real estate is a lucrative industry that involves the buying selling and renting properties It encompasses residential commercial and industrial properties. Real estate agents play a crucial role in facilitating at transactions and helping commercial, and industrial",
+    "author": "Mark wood"
+  },
+  "blogKeyword": {
+    "label": "Keyword: ",
+    "keyword1": "Gurugram Real Estate",
+    "keyword2": "PG in Gurugram",
+    "keyword3": "360\u00b0 Tours"
+  },
+  "blogClassicPage": {
+    "baseTitle": "Real Estate Blog | 360Ghar Insights",
+    "baseDescription": "Guides and insights on buying, renting, PGs, investment trends, locality deep-dives, and market updates across Gurugram and Delhi NCR.",
+    "collectionName": "Real Estate Articles",
+    "collectionDesc": "Latest insights on property buying, renting, and investment in Gurugram",
+    "categoryArticles": "Browse {{category}} articles. {{baseDescription}}",
+    "taggedPosts": "Posts tagged \"{{tag}}\". {{baseDescription}}",
+    "breadcrumbHome": "Home",
+    "breadcrumbBlog": "Blog"
+  }
+}

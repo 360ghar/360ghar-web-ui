@@ -1,16 +1,18 @@
  import { useMemo, useState } from 'react';
+ import { useTranslation } from 'react-i18next';
  import Header from '../../common/layout/Header';
  import Footer from '../../common/layout/Footer';
  import MobileMenu from '../../common/layout/MobileMenu';
  import OffCanvas from '../../common/layout/OffCanvas';
- 
+
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
- 
+
  const AreaCalculator = () => {
+     const { t } = useTranslation('tools');
      const [superArea, setSuperArea] = useState(1000);
      const [loading, setLoading] = useState(30);
      const { carpetArea, builtUpArea } = useMemo(() => {
@@ -26,9 +28,9 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
      return (
          <>
              <SEO
-                title="Carpet Area Calculator India | RERA Super Built-up vs Carpet Area | 360Ghar"
-                description="Calculate actual Carpet Area from Super Built-up Area using our RERA-compliant calculator. Understand loading factor and usable space for properties in Gurugram and Delhi NCR."
-                keywords="carpet area calculator India, super built up area vs carpet area, RERA area calculator, loading factor calculator, apartment area calculator, flat size calculator, 360ghar tools"
+                title={t('areaCalculator.title')}
+                description={t('areaCalculator.description')}
+                keywords={t('areaCalculator.keywords')}
                  canonical="/area-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
@@ -55,21 +57,21 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                  <div className="row g-4">
                                      <div className="col-lg-5">
                                          <div className="calculator-form bg-white p-4 rounded-3 shadow-sm h-100">
-                                             <h4 className="mb-4">Enter Property Details</h4>
+                                             <h4 className="mb-4">{t('areaCalculator.enterPropertyDetails')}</h4>
                                              
                                              <div className="mb-3">
-                                                 <label className="form-label">Super Built-up Area (Sq. Ft.)</label>
+                                                 <label className="form-label">{t('areaCalculator.superBuiltupArea')}</label>
                                                  <input 
                                                      type="number" 
                                                      className="form-control" 
                                                      value={superArea}
                                                      onChange={(e) => setSuperArea(Number(e.target.value))}
                                                  />
-                                                 <small className="text-muted">Total area advertised by builder</small>
+                                                 <small className="text-muted">{t('areaCalculator.superBuiltupHint')}</small>
                                              </div>
  
                                              <div className="mb-3">
-                                                 <label className="form-label">Loading Factor (%)</label>
+                                                 <label className="form-label">{t('areaCalculator.loadingFactor')}</label>
                                                  <div className="d-flex align-items-center gap-2">
                                                      <input 
                                                          type="range" 
@@ -81,36 +83,36 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                                      />
                                                      <span className="fw-bold" style={{width: '50px'}}>{loading}%</span>
                                                  </div>
-                                                 <small className="text-muted">Standard loading is 25-35%</small>
+                                                 <small className="text-muted">{t('areaCalculator.loadingHint')}</small>
                                              </div>
                                          </div>
                                      </div>
  
                                      <div className="col-lg-7">
                                          <div className="results-card bg-white p-4 rounded-3 shadow-sm h-100">
-                                             <h4 className="mb-4">Area Breakdown</h4>
+                                             <h4 className="mb-4">{t('areaCalculator.areaBreakdown')}</h4>
                                              
                                              <div className="mb-4 p-3 rounded-3" style={{backgroundColor: '#fff5eb'}}>
-                                                 <label className="text-success fw-bold small">ESTIMATED CARPET AREA (Usable Space)</label>
-                                                 <div className="display-6 fw-bold text-dark">{carpetArea} <span className="fs-5 text-muted">Sq. Ft.</span></div>
+                                                 <label className="text-success fw-bold small">{t('areaCalculator.estimatedCarpetArea')}</label>
+                                                 <div className="display-6 fw-bold text-dark">{carpetArea} <span className="fs-5 text-muted">{t('areaCalculator.sqFt')}</span></div>
                                                  <div className="small text-muted mt-1">
-                                                     This is the actual area you can use within the walls.
+                                                     {t('areaCalculator.carpetDesc')}
                                                  </div>
                                              </div>
  
                                              <div className="row g-3">
                                                  <div className="col-md-6">
                                                      <div className="p-3 bg-light rounded-3">
-                                                         <label className="text-muted small fw-bold">BUILT-UP AREA (Approx)</label>
-                                                         <div className="fs-4 fw-bold">{builtUpArea} <span className="fs-6">Sq. Ft.</span></div>
-                                                         <small className="text-muted">Includes walls & balconies</small>
+                                                         <label className="text-muted small fw-bold">{t('areaCalculator.builtUpArea')}</label>
+                                                         <div className="fs-4 fw-bold">{builtUpArea} <span className="fs-6">{t('areaCalculator.sqFt')}</span></div>
+                                                         <small className="text-muted">{t('areaCalculator.builtUpHint')}</small>
                                                      </div>
                                                  </div>
                                                  <div className="col-md-6">
                                                      <div className="p-3 bg-light rounded-3">
-                                                         <label className="text-muted small fw-bold">COMMON AREA (Loading)</label>
-                                                         <div className="fs-4 fw-bold">{superArea - carpetArea} <span className="fs-6">Sq. Ft.</span></div>
-                                                         <small className="text-muted">Lobby, stairs, lift, etc.</small>
+                                                         <label className="text-muted small fw-bold">{t('areaCalculator.commonArea')}</label>
+                                                         <div className="fs-4 fw-bold">{superArea - carpetArea} <span className="fs-6">{t('areaCalculator.sqFt')}</span></div>
+                                                         <small className="text-muted">{t('areaCalculator.commonAreaHint')}</small>
                                                      </div>
                                                  </div>
                                              </div>
@@ -119,24 +121,24 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                  </div>
  
                                  <div className="mt-5">
-                                     <h3 className="mb-3">Understanding the Terms</h3>
+                                     <h3 className="mb-3">{t('areaCalculator.understandingTerms')}</h3>
                                      <div className="row g-4">
                                          <div className="col-md-4">
                                              <div className="bg-white p-3 rounded-3 shadow-sm h-100">
-                                                 <h5 className="text-main">Carpet Area</h5>
-                                                 <p className="small mb-0">The area enclosed within the walls, actual usable floor area. According to RERA, it excludes external walls, service shafts, balconies, and open terraces.</p>
+                                                 <h5 className="text-main">{t('areaCalculator.carpetAreaTitle')}</h5>
+                                                 <p className="small mb-0">{t('areaCalculator.carpetAreaDesc')}</p>
                                              </div>
                                          </div>
                                          <div className="col-md-4">
                                              <div className="bg-white p-3 rounded-3 shadow-sm h-100">
-                                                 <h5 className="text-main">Built-up Area</h5>
-                                                 <p className="small mb-0">Carpet Area + Area of walls + Area of balconies. This is typically 10-15% more than the carpet area.</p>
+                                                 <h5 className="text-main">{t('areaCalculator.builtUpAreaTitle')}</h5>
+                                                 <p className="small mb-0">{t('areaCalculator.builtUpAreaDesc')}</p>
                                              </div>
                                          </div>
                                          <div className="col-md-4">
                                              <div className="bg-white p-3 rounded-3 shadow-sm h-100">
-                                                 <h5 className="text-main">Super Built-up Area</h5>
-                                                 <p className="small mb-0">Built-up Area + Proportionate share of common areas (lobby, lifts, stairs, amenities). This is what you usually pay for.</p>
+                                                 <h5 className="text-main">{t('areaCalculator.superBuiltUpAreaTitle')}</h5>
+                                                 <p className="small mb-0">{t('areaCalculator.superBuiltUpAreaDesc')}</p>
                                              </div>
                                          </div>
                                      </div>

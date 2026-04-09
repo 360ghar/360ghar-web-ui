@@ -6,4 +6,15 @@
 /gurugram/:intent/:type/:bhk  /gurgaon/:intent/:type/:bhk  301
 /gurugram/:intent/:type  /gurgaon/:intent/:type  301
 
+# Hindi gurugram redirects
+/hi/gurugram/:intent/:type/budget/:budget  /hi/gurgaon/:intent/:type/budget/:budget  301
+/hi/gurugram/:intent/:type/amenity/:amenity  /hi/gurgaon/:intent/:type/amenity/:amenity  301
+/hi/gurugram/:intent/:type/:bhk  /hi/gurgaon/:intent/:type/:bhk  301
+/hi/gurugram/:intent/:type  /hi/gurgaon/:intent/:type  301
+
+# Hindi apartments → flats
+/hi/:city/buy/apartments  /hi/:city/buy/flats  301
+/hi/:city/rent/apartments  /hi/:city/rent/flats  301
+/hi/:city/pg/apartments  /hi/:city/pg/flats  301
+
 /*    /index.html   200

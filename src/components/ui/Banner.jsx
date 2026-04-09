@@ -1,5 +1,5 @@
 import { bannerContent } from '../../data/HomeOneData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import TabFilter from '../../common/forms/TabFilter';
 
@@ -22,7 +22,7 @@ const Banner = () => {
                                             <span className="contact-info__icon text-gradient"><i className="fas fa-envelope"></i></span>
                                             <div className="contact-info__content">
                                                 <span className="contact-info__text fw-500">Email us</span>
-                                                <Link to={`mailto:info@360ghar.com`} className="contact-info__address text-gradient">info@360ghar.com</Link>
+                                                <I18nLink to={`mailto:info@360ghar.com`} className="contact-info__address text-gradient">info@360ghar.com</I18nLink>
                                             </div>
                                         </div>
                                     </div>

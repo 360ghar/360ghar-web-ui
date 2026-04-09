@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -10,7 +11,10 @@ import RewardTiers from '../../components/referral/RewardTiers';
 import ReferralForm from '../../components/referral/ReferralForm';
 import ReferralTerms from '../../components/referral/ReferralTerms';
 
+import { I18nLink } from '../../i18n/I18nLink';
+
 const ReferAndEarn = () => {
+  const { t } = useTranslation('policies');
   const pageStructuredData = [
     {
       '@type': 'WebPage',
@@ -46,7 +50,7 @@ const ReferAndEarn = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -58,20 +62,18 @@ const ReferAndEarn = () => {
                 <div className="refer-hero__content">
                   <span className="refer-hero__badge">
                     <i className="fas fa-gift me-2"></i>
-                    Referral Program
+                    {t('referAndEarn.referralProgram')}
                   </span>
                   <h1 className="refer-hero__title">
-                    Know Someone Selling or Renting?
-                    <span className="text-gradient"> Earn up to ₹10,000</span>
+                    {t('referAndEarn.heroTitle1')}
+                    <span className="text-gradient">{t('referAndEarn.heroTitle2')}</span>
                   </h1>
                   <p className="refer-hero__desc">
-                    Refer a property owner to 360Ghar and earn rewards at every step.
-                    Get ₹100 when the property is verified and listed, plus up to ₹10,000
-                    when the deal completes successfully.
+                    {t('referAndEarn.heroDesc')}
                   </p>
                   <a href="#referral-form" className="btn btn-main btn-lg">
                     <i className="fas fa-paper-plane me-2"></i>
-                    Submit Referral Now
+                    {t('referAndEarn.submitReferral')}
                   </a>
                 </div>
               </div>
@@ -80,11 +82,11 @@ const ReferAndEarn = () => {
                   <div className="refer-hero__image-wrapper">
                     <div className="refer-hero__float-card refer-hero__float-card--1">
                       <i className="fas fa-home"></i>
-                      <span>Property Verified</span>
+                      <span>{t('referAndEarn.propertyVerified')}</span>
                     </div>
                     <div className="refer-hero__float-card refer-hero__float-card--2">
                       <i className="fas fa-rupee-sign"></i>
-                      <span>Reward Credited</span>
+                      <span>{t('referAndEarn.rewardCredited')}</span>
                     </div>
                     <div className="refer-hero__illustration">
                       <i className="fas fa-handshake"></i>
@@ -106,9 +108,9 @@ const ReferAndEarn = () => {
               <div className="col-lg-10">
                 <div className="referral-form-wrapper">
                   <div className="referral-form-header text-center mb-40">
-                    <h2 className="section-heading">Submit Your Referral</h2>
+                    <h2 className="section-heading">{t('referAndEarn.formTitle')}</h2>
                     <p className="section-desc">
-                      Fill in the details below to refer a property. Make sure you have the owner&apos;s consent.
+                      {t('referAndEarn.formDesc')}
                     </p>
                   </div>
                   <ReferralForm />
@@ -124,31 +126,31 @@ const ReferAndEarn = () => {
           <div className="container container-two">
             <div className="row justify-content-center">
               <div className="col-lg-8">
-                <h2 className="section-heading text-center mb-40">Frequently Asked Questions</h2>
+                <h2 className="section-heading text-center mb-40">{t('referAndEarn.faqTitle')}</h2>
                 <div className="referral-faq-list">
                   <div className="referral-faq-item">
-                    <h4>When will I receive my ₹100 onboarding bonus?</h4>
-                    <p>The ₹100 bonus is credited within 7 business days after the property is verified and successfully listed on 360Ghar.</p>
+                    <h4>{t('referAndEarn.faq1Q')}</h4>
+                    <p>{t('referAndEarn.faq1A')}</p>
                   </div>
                   <div className="referral-faq-item">
-                    <h4>How is the deal completion bonus calculated?</h4>
-                    <p>For rental deals, you receive 10% of the brokerage (max ₹5,000). For sale deals, you receive 5% of the brokerage (max ₹10,000). The bonus is paid after 360Ghar receives its commission.</p>
+                    <h4>{t('referAndEarn.faq2Q')}</h4>
+                    <p>{t('referAndEarn.faq2A')}</p>
                   </div>
                   <div className="referral-faq-item">
-                    <h4>What if someone else refers the same property?</h4>
-                    <p>Only the first valid referral submission (determined by timestamp) will be considered for rewards. Duplicate submissions are automatically rejected.</p>
+                    <h4>{t('referAndEarn.faq3Q')}</h4>
+                    <p>{t('referAndEarn.faq3A')}</p>
                   </div>
                   <div className="referral-faq-item">
-                    <h4>Can I refer my own property?</h4>
-                    <p>Self-referrals are not eligible for the referral program. However, you can still list your property for free on 360Ghar.</p>
+                    <h4>{t('referAndEarn.faq4Q')}</h4>
+                    <p>{t('referAndEarn.faq4A')}</p>
                   </div>
                   <div className="referral-faq-item">
-                    <h4>Which areas are eligible for the referral program?</h4>
-                    <p>Currently, the referral program is active for properties in Gurugram and Delhi NCR regions where 360Ghar operates.</p>
+                    <h4>{t('referAndEarn.faq5Q')}</h4>
+                    <p>{t('referAndEarn.faq5A')}</p>
                   </div>
                   <div className="referral-faq-item">
-                    <h4>How will I receive my reward?</h4>
-                    <p>Rewards are transferred via UPI or Bank Transfer. You&apos;ll need to provide your bank details when claiming the reward.</p>
+                    <h4>{t('referAndEarn.faq6Q')}</h4>
+                    <p>{t('referAndEarn.faq6A')}</p>
                   </div>
                 </div>
               </div>

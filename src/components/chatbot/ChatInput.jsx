@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useChatStore } from '../../store';
 
 const MAX_LENGTH = 4000;
@@ -38,6 +39,7 @@ function StopIcon() {
 }
 
 export default function ChatInput() {
+  const { t } = useTranslation('common');
   const [text, setText] = useState('');
   const isStreaming = useChatStore((state) => state.isStreaming);
   const sendMessage = useChatStore((state) => state.sendMessage);
@@ -82,9 +84,9 @@ export default function ChatInput() {
           value={text}
           onChange={(e) => setText(e.target.value.slice(0, MAX_LENGTH))}
           onKeyDown={handleKeyDown}
-          placeholder="Ask me anything..."
+          placeholder={t('chatbot.placeholder')}
           rows={1}
-          aria-label="Type your message"
+          aria-label={t('chatbot.typeMessage')}
           aria-multiline="true"
           maxLength={MAX_LENGTH}
         />
@@ -92,8 +94,8 @@ export default function ChatInput() {
           className={`chatbot-input__send${isStreaming ? ' chatbot-input__send--stop' : ''}`}
           onClick={isStreaming ? cancelStream : handleSend}
           disabled={!isStreaming && !text.trim()}
-          aria-label={isStreaming ? 'Stop generating' : 'Send message'}
-          title={isStreaming ? 'Stop generating' : 'Send message'}
+          aria-label={isStreaming ? t('chatbot.stopGenerating') : t('chatbot.sendMessage')}
+          title={isStreaming ? t('chatbot.stopGenerating') : t('chatbot.sendMessage')}
         >
           {isStreaming ? <StopIcon /> : <SendIcon />}
         </button>

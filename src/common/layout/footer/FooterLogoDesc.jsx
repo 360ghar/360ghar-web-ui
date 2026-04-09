@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import LogoWhite from '../../LogoWhite';
 import { offCanvasInfos } from '../../../data/CommonData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../../i18n/I18nLink';
 
 const FooterLogoDesc = () => {
     const [email, setEmail] = useState('');
@@ -32,9 +32,9 @@ const FooterLogoDesc = () => {
                             {info.icon}
                         </span>
                         {info.link === 'tel:' || info.link === 'mailto:' ? (
-                            <Link to={`${info.link}${info.text}`} className="footer-contact-text text-white text-decoration-none">
+                            <I18nLink to={`${info.link}${info.text}`} className="footer-contact-text text-white text-decoration-none">
                                 {info.text}
-                            </Link>
+                            </I18nLink>
                         ) : (
                             <span className="footer-contact-text text-white">{info.text}</span>
                         )}

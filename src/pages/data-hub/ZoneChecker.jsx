@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -9,23 +10,24 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { dataHubService } from '../../services/dataHubService';
 
 const LAND_USE_COLORS = {
-  residential: { bg: '#198754', label: 'Residential' },
-  commercial:  { bg: '#0d6efd', label: 'Commercial' },
-  mixed:       { bg: '#6f42c1', label: 'Mixed Use' },
-  industrial:  { bg: '#fd7e14', label: 'Industrial' },
-  institutional: { bg: '#0dcaf0', label: 'Institutional' },
+  residential: { bg: '#198754' },
+  commercial:  { bg: '#0d6efd' },
+  mixed:       { bg: '#6f42c1' },
+  industrial:  { bg: '#fd7e14' },
+  institutional: { bg: '#0dcaf0' },
 };
 
 const PAGE_SIZE = 12;
 const COLONY_PAGE_SIZE = 10;
 
-const LandUseBadge = ({ landUse }) => {
-  const config = LAND_USE_COLORS[landUse?.toLowerCase()] || { bg: '#6c757d', label: landUse || 'Unknown' };
+const LandUseBadge = ({ landUse, t }) => {
+  const key = landUse?.toLowerCase() || 'unknown';
+  const config = LAND_USE_COLORS[key] || { bg: '#6c757d' };
   return (
     <span
       style={{ background: config.bg, color: '#fff', padding: '2px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: 600, display: 'inline-block' }}
     >
-      {config.label}
+      {t(`zoneChecker.landUse.${key}`)}
     </span>
   );
 };
@@ -44,6 +46,7 @@ const StatusBadge = ({ status }) => {
 };
 
 const ZoneChecker = () => {
+  const { t } = useTranslation('data-hub');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [zones, setZones] = useState([]);
@@ -129,9 +132,9 @@ const ZoneChecker = () => {
             {/* Page heading */}
             <div className="row mb-30">
               <div className="col-12">
-                <h1 className="fs-28 fw-600 mb-10">Zone Checker — Gurugram</h1>
+                <h1 className="fs-28 fw-600 mb-10">{t('zoneChecker.title')}</h1>
                 <p className="color-text-3 mb-20">
-                  Browse land use zones, Floor Area Ratio (FAR), and height restrictions for Gurugram sectors as per the Haryana Master Plan.
+                  {t('zoneChecker.description')}
                 </p>
 
                 {/* Search */}
@@ -143,7 +146,7 @@ const ZoneChecker = () => {
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Search by sector..."
+                      placeholder={t('zoneChecker.searchPlaceholder')}
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -163,28 +166,28 @@ const ZoneChecker = () => {
                 <div className="spinner-border text-main" role="status">
                   <span className="visually-hidden">Loading…</span>
                 </div>
-                <p className="mt-10 color-text-3">Loading zoning data…</p>
+                <p className="mt-10 color-text-3">{t('zoneChecker.loading')}</p>
               </div>
             ) : zonesError ? (
               <div className="alert alert-warning" role="alert">
                 <i className="fas fa-exclamation-triangle me-2"></i>
-                Zoning data temporarily unavailable. Please try again later.
+                {t('zoneChecker.error')}
               </div>
             ) : zones.length === 0 ? (
               <div className="text-center py-40">
                 <i className="fas fa-map-marked-alt fs-40 color-text-3 mb-15"></i>
-                <p className="color-text-3">No zones found{debouncedSearch ? ` for "${debouncedSearch}"` : ''}.</p>
+                <p className="color-text-3">{t('zoneChecker.noZones', { search: debouncedSearch ? t('zoneChecker.noZonesSearch', { search: debouncedSearch }) : '' })}</p>
               </div>
             ) : (
               <>
-                <p className="mb-20 fs-14 color-text-3">{zoneMeta.total} zone{zoneMeta.total !== 1 ? 's' : ''} found</p>
+                <p className="mb-20 fs-14 color-text-3">{t('zoneChecker.zonesFound', { count: zoneMeta.total, suffix: zoneMeta.total !== 1 ? 's' : '' })}</p>
                 <div className="row g-3 mb-30">
                   {zones.map((zone) => (
                     <div key={zone.id || zone.slug} className="col-lg-4 col-md-6 col-12">
                       <div className="bg-white p-4 rounded-3 shadow-sm h-100 d-flex flex-column">
                         <div className="d-flex justify-content-between align-items-start mb-10">
                           <h3 className="fs-16 fw-600 mb-0">{zone.sector_name || zone.sector}</h3>
-                          <LandUseBadge landUse={zone.primary_land_use || zone.land_use} />
+                          <LandUseBadge landUse={zone.primary_land_use || zone.land_use} t={t} />
                         </div>
                         <div className="row g-2 mt-auto">
                           <div className="col-6">
@@ -192,7 +195,7 @@ const ZoneChecker = () => {
                               <div className="fs-18 fw-700 color-text-1">
                                 {zone.far != null ? zone.far : '—'}
                               </div>
-                              <div className="fs-12 color-text-3">FAR</div>
+                              <div className="fs-12 color-text-3">{t('zoneChecker.far')}</div>
                             </div>
                           </div>
                           <div className="col-6">
@@ -200,16 +203,16 @@ const ZoneChecker = () => {
                               <div className="fs-18 fw-700 color-text-1">
                                 {zone.max_height != null ? `${zone.max_height}m` : '—'}
                               </div>
-                              <div className="fs-12 color-text-3">Max Height</div>
+                              <div className="fs-12 color-text-3">{t('zoneChecker.maxHeight')}</div>
                             </div>
                           </div>
                         </div>
-                        <Link
+                        <I18nLink
                           to={`/zone-checker/${zone.slug}`}
                           className="btn btn-sm btn-outline-main mt-15 align-self-start"
                         >
-                          View Details <i className="fas fa-arrow-right ms-1"></i>
-                        </Link>
+                          {t('zoneChecker.viewDetails')} <i className="fas fa-arrow-right ms-1"></i>
+                        </I18nLink>
                       </div>
                     </div>
                   ))}
@@ -223,17 +226,17 @@ const ZoneChecker = () => {
                       disabled={zonePage === 1}
                       onClick={() => setZonePage((p) => p - 1)}
                     >
-                      ← Prev
+                      {t('zoneChecker.pagination.prev')}
                     </button>
                     <span className="fs-14 color-text-3">
-                      Page {zonePage} of {zoneMeta.pages}
+                      {t('zoneChecker.pagination.page', { current: zonePage, total: zoneMeta.pages })}
                     </span>
                     <button
                       className="btn btn-sm btn-outline-secondary"
                       disabled={zonePage >= zoneMeta.pages}
                       onClick={() => setZonePage((p) => p + 1)}
                     >
-                      Next →
+                      {t('zoneChecker.pagination.next')}
                     </button>
                   </div>
                 )}
@@ -243,27 +246,27 @@ const ZoneChecker = () => {
             {/* Colony Approvals Section */}
             <div className="row mt-20">
               <div className="col-12">
-                <h2 className="fs-22 fw-600 mb-5">Colony Approvals</h2>
-                <p className="color-text-3 mb-20">Licensed colonies in Gurugram with their approval status.</p>
+                <h2 className="fs-22 fw-600 mb-5">{t('zoneChecker.colonyApprovals')}</h2>
+                <p className="color-text-3 mb-20">{t('zoneChecker.colonyApprovalsDesc')}</p>
 
                 {coloniesLoading ? (
-                  <p className="color-text-3">Loading colony approvals…</p>
+                  <p className="color-text-3">{t('zoneChecker.colonyLoading')}</p>
                 ) : coloniesError ? (
                   <div className="alert alert-warning" role="alert">
                     <i className="fas fa-exclamation-triangle me-2"></i>
-                    Colony approval data temporarily unavailable.
+                    {t('zoneChecker.colonyError')}
                   </div>
                 ) : colonies.length === 0 ? (
-                  <p className="color-text-3">No colony approvals data available.</p>
+                  <p className="color-text-3">{t('zoneChecker.noColonyData')}</p>
                 ) : (
                   <>
                     <div className="table-responsive mb-15">
                       <table className="table table-bordered">
                         <thead className="table-light">
                           <tr>
-                            <th>Colony Name</th>
-                            <th>Licence Number</th>
-                            <th>Status</th>
+                            <th>{t('zoneChecker.colonyTableHeaders.colonyName')}</th>
+                            <th>{t('zoneChecker.colonyTableHeaders.licenceNumber')}</th>
+                            <th>{t('zoneChecker.colonyTableHeaders.status')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -286,17 +289,17 @@ const ZoneChecker = () => {
                           disabled={colonyPage === 1}
                           onClick={() => setColonyPage((p) => p - 1)}
                         >
-                          ← Prev
+                          {t('zoneChecker.pagination.prev')}
                         </button>
                         <span className="fs-14 color-text-3">
-                          Page {colonyPage} of {colonyMeta.pages}
+                          {t('zoneChecker.pagination.page', { current: colonyPage, total: colonyMeta.pages })}
                         </span>
                         <button
                           className="btn btn-sm btn-outline-secondary"
                           disabled={colonyPage >= colonyMeta.pages}
                           onClick={() => setColonyPage((p) => p + 1)}
                         >
-                          Next →
+                          {t('zoneChecker.pagination.next')}
                         </button>
                       </div>
                     )}

@@ -1,5 +1,5 @@
 import { services } from '../../data/HomeTwoData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import LazyImage from '../../common/ui/LazyImage';
 const Service = () => {
@@ -18,9 +18,9 @@ const Service = () => {
                                             </span>
                                             <h6 className="service-item__title">{service.title}</h6>
                                             <span className="service-item__text font-18 d-block">{service.text}</span>
-                                            <Link to={service.btnLink} className="simple-btn text-gradient fw-semibold font-14">{service.btnText} 
+                                            <I18nLink to={service.btnLink} className="simple-btn text-gradient fw-semibold font-14">{service.btnText} 
                                                 <span className="icon-right"> <i className="fas fa-arrow-right"></i> </span> 
-                                            </Link>
+                                            </I18nLink>
                                         </div>
                                     </div>
                                 )

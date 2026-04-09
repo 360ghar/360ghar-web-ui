@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import SectionHeading from '../../common/ui/SectionHeading';
 import LazyImage from '../../common/ui/LazyImage';
 import { blogService } from '../../services/blogService';
@@ -94,19 +94,19 @@ const BlogFeed = () => {
                             return (
                                 <li className="blog-feed__item" key={item.id || index}>
                                     <div className="blog-feed__thumb">
-                                        <Link to={blogURL} onClick={handleClick} tabIndex={-1}>
+                                        <I18nLink to={blogURL} onClick={handleClick} tabIndex={-1}>
                                             <LazyImage
                                                 src={item.thumb}
                                                 alt={`${item.title} - 360Ghar Blog`}
                                                 className="cover-img"
                                             />
-                                        </Link>
+                                        </I18nLink>
                                     </div>
                                     <div className="blog-feed__content">
                                         <h6 className="blog-feed__title">
-                                            <Link to={blogURL} onClick={handleClick} className="border-effect">
+                                            <I18nLink to={blogURL} onClick={handleClick} className="border-effect">
                                                 {item.title}
-                                            </Link>
+                                            </I18nLink>
                                         </h6>
                                         {item.excerpt && (
                                             <p className="blog-feed__excerpt">{item.excerpt}</p>
@@ -122,9 +122,9 @@ const BlogFeed = () => {
                 )}
 
                 <div className="blog-feed__actions">
-                    <Link to="/blog" className="btn btn-main">
+                    <I18nLink to="/blog" className="btn btn-main">
                         View All Posts <i className="fas fa-arrow-right icon-right"></i>
-                    </Link>
+                    </I18nLink>
                     <a
                         href="/rss.xml"
                         className="blog-feed__rss-btn"

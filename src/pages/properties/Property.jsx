@@ -5,7 +5,9 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import PropertyPageSection from '../../components/property/PropertyPageSection';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { realEstateStructuredData, generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
@@ -17,6 +19,7 @@ const popularSearches = [
 ];
 
 const Property = () => {
+    const { t } = useTranslation('properties');
     const [searchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page'), 10) || 1;
 
@@ -63,32 +66,32 @@ const Property = () => {
                 showContactNumber={false}
             />
 
-            <section className="padding-y-60 bg-white">
+            <section className="py-4 bg-white">
                 <div className="container container-two">
                     <div className="row g-4 align-items-start">
                         <div className="col-lg-7">
-                            <span className="subtitle bg-gray-100 px-3 py-2 rounded-pill d-inline-block mb-3">Verified Search Hub</span>
-                            <h1 className="mb-3">Verified Property Search in Gurugram</h1>
+                            <span className="subtitle bg-gray-100 px-3 py-2 rounded-pill d-inline-block mb-3">{t('listing.subtitle')}</span>
+                            <h1 className="mb-2">{t('listing.title')}</h1>
                             <p className="text-muted mb-4">
-                                Start with verified listings, then refine by locality, budget, property type, and furnishing. 360Ghar combines on-site verification, 360° tours, and direct search paths so you can shortlist with less noise.
+                                {t('listing.description')}
                             </p>
                             <div className="d-flex flex-wrap gap-2">
-                                <a href="#property-search-results" className="btn btn-main">Browse Listings</a>
-                                <Link to="/localities" className="btn btn-outline-main">Compare Localities</Link>
+                                <a href="#property-search-results" className="btn btn-main">{t('listing.browseListings')}</a>
+                                <I18nLink to="/localities" className="btn btn-outline-main">{t('listing.compareLocalities')}</I18nLink>
                             </div>
                         </div>
                         <div className="col-lg-5">
                             <div className="locality-stat-card h-100">
-                                <span className="locality-stat-card__label">Popular property searches</span>
+                                <span className="locality-stat-card__label">{t('listing.popularSearches')}</span>
                                 <div className="d-flex flex-wrap gap-2 mb-3">
                                     {popularSearches.map((search) => (
-                                        <Link key={search.to} to={search.to} className="btn btn-outline-main btn-sm">
+                                        <I18nLink key={search.to} to={search.to} className="btn btn-outline-main btn-sm">
                                             {search.label}
-                                        </Link>
+                                        </I18nLink>
                                     ))}
                                 </div>
                                 <p className="text-muted mb-0">
-                                    If you are still deciding where to search, use locality pages first, then return here to filter the verified inventory.
+                                    {t('listing.popularSearchesDescription')}
                                 </p>
                             </div>
                         </div>
@@ -103,7 +106,7 @@ const Property = () => {
             <Cta ctaClass=""/>
             <Footer/>
 
-        </main>   
+        </main>
         </>
     );
 };

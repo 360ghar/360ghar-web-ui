@@ -1,5 +1,6 @@
 
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { challengeLists, projectSidebarLists, projectItems } from '../../data/OthersPageData';
 import { socialLists } from '../../data/CommonData';
 
@@ -49,9 +50,9 @@ const ProjectDetailsSection = () => {
                         <p className="font-18 mb-4">
                             The project you are looking for does not exist or has been removed.
                         </p>
-                        <Link to="/project" className="btn btn-main">
+                        <I18nLink to="/project" className="btn btn-main">
                             Browse All Projects
-                        </Link>
+                        </I18nLink>
                     </div>
                 </div>
             </section>
@@ -131,9 +132,9 @@ const ProjectDetailsSection = () => {
                                 <ul className="social-share-list style-two mt-lg-5 mt-4">
                                     {socialLists.map((socialList, socialListIndex) => (
                                         <li className="social-share-list__item" key={socialListIndex}>
-                                            <Link to={socialList.link} className="social-share-list__link">
+                                            <I18nLink to={socialList.link} className="social-share-list__link">
                                                 {socialList.icon}
-                                            </Link>
+                                            </I18nLink>
                                         </li>
                                     ))}
                                 </ul>

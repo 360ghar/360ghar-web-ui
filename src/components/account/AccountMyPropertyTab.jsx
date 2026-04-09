@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Pagination from '../../common/ui/Pagination';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { usePropertyStore } from '../../store';
 
 import LazyImage from '../../common/ui/LazyImage';
@@ -9,11 +10,11 @@ const isUsableImageUrl = (value) =>
     typeof value === 'string' && value.trim() !== '' && !/kuula\.co/i.test(value);
 
 function formatCurrency(value) {
-    if (value === null || value === undefined) return '—';
+    if (value === null || value === undefined) return '\u2014';
     try {
         const num = Number(value);
         if (!Number.isFinite(num)) return String(value);
-        return `₹${num.toLocaleString('en-IN')}`;
+        return `\u20B9${num.toLocaleString('en-IN')}`;
     } catch {
         return String(value);
     }
@@ -21,6 +22,7 @@ function formatCurrency(value) {
 
 const AccountMyPropertyTab = () => {
     const { userProperties, getUserProperties, isLoading, error } = usePropertyStore();
+    const { t } = useTranslation('account');
 
     useEffect(() => {
         getUserProperties();
@@ -36,7 +38,7 @@ const AccountMyPropertyTab = () => {
 
     const renderLocation = (property) => {
         const parts = [property?.locality, property?.city, property?.state].filter(Boolean);
-        return property?.full_address || (parts.length ? parts.join(', ') : (property?.address || property?.city || '—'));
+        return property?.full_address || (parts.length ? parts.join(', ') : (property?.address || property?.city || '\u2014'));
     };
 
     const renderPrice = (property) => {
@@ -46,7 +48,7 @@ const AccountMyPropertyTab = () => {
         const priceValue = purpose === 'rent'
             ? (property?.monthly_rent || property?.daily_rate || property?.base_price)
             : (property?.base_price || property?.monthly_rent || property?.daily_rate);
-        return priceValue !== null && priceValue !== undefined ? formatCurrency(priceValue) : '—';
+        return priceValue !== null && priceValue !== undefined ? formatCurrency(priceValue) : '\u2014';
     };
 
     return (
@@ -55,19 +57,19 @@ const AccountMyPropertyTab = () => {
                 <div className="card common-card min-w-maxContent">
                     <div className="card-body">
                         <table className="table style-two">
-                            <caption className="visually-hidden">Properties you listed on 360Ghar</caption>
+                            <caption className="visually-hidden">{t('tabs.myProperties.caption')}</caption>
                             <thead>
                                 <tr>
-                                <th scope="col">My Properties</th>
-                                <th scope="col">Date Added</th>
-                                <th scope="col">Actions</th>
-                                <th scope="col">Delete</th>
+                                <th scope="col">{t('tabs.myProperties.colProperty')}</th>
+                                <th scope="col">{t('tabs.myProperties.colDate')}</th>
+                                <th scope="col">{t('tabs.myProperties.colActions')}</th>
+                                <th scope="col">{t('tabs.myProperties.colDelete')}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {isLoading && (
                                     <tr>
-                                        <td colSpan={4}>Loading your properties...</td>
+                                        <td colSpan={4}>{t('tabs.myProperties.loading')}</td>
                                     </tr>
                                 )}
                                 {error && !isLoading && (
@@ -77,7 +79,7 @@ const AccountMyPropertyTab = () => {
                                 )}
                                 {!isLoading && !error && userProperties?.length === 0 && (
                                     <tr>
-                                        <td colSpan={4}>No properties found.</td>
+                                        <td colSpan={4}>{t('tabs.myProperties.noProperties')}</td>
                                     </tr>
                                 )}
                                 {!isLoading && !error && userProperties?.map((property) => (
@@ -89,13 +91,13 @@ const AccountMyPropertyTab = () => {
                                                 </div>
                                                 <div className="cart-item__content">
                                                     <h6 className="cart-item__title fw-500 font-18">
-                                                        <Link to={`/property/${property.id}`} className="link">{property.title || property.name || `Property #${property.id}`}</Link>
+                                                        <I18nLink to={`/property/${property.id}`} className="link">{property.title || property.name || `Property #${property.id}`}</I18nLink>
                                                     </h6>
                                                     <p className="property-item__location d-flex gap-2 font-14">
                                                         <span className="icon text-gradient"><i className="fas fa-map-marker-alt"></i></span>
                                                         {renderLocation(property)}
                                                     </p>
-                                                    <span className="cart-item__price">Price: <span className="fw-500 text-heading">{renderPrice(property)}</span></span>
+                                                    <span className="cart-item__price">{t('tabs.myProperties.price')} <span className="fw-500 text-heading">{renderPrice(property)}</span></span>
                                                 </div>
                                             </div>
                                         </td>

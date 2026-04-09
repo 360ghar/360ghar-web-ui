@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { toolFeatures } from '../../data/HomeOneData';
 import './ToolShowcase.scss';
 
@@ -34,7 +34,7 @@ const ToolShowcase = () => {
                 {/* Tool Cards */}
                 <div className="tool-showcase__cards">
                     {toolFeatures.map((tool, index) => (
-                        <Link
+                        <I18nLink
                             to={tool.btnLink}
                             className="tool-card"
                             key={index}
@@ -126,7 +126,7 @@ const ToolShowcase = () => {
                                 <div className="tool-card__corner tool-card__corner--bl"></div>
                                 <div className="tool-card__corner tool-card__corner--br"></div>
                             </div>
-                        </Link>
+                        </I18nLink>
                     ))}
                 </div>
 

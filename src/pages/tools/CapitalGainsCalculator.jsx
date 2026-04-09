@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -38,6 +39,7 @@ const ciiData = {
 };
 
 const CapitalGainsCalculator = () => {
+    const { t } = useTranslation('tools');
     const [salePrice, setSalePrice] = useState(5000000);
     const [purchasePrice, setPurchasePrice] = useState(2000000);
     const [purchaseYear, setPurchaseYear] = useState('2015-2016');
@@ -69,6 +71,7 @@ const CapitalGainsCalculator = () => {
 
         return {
             gainType,
+            isLongTerm,
             indexedCost: Math.round(finalCost),
             capitalGain: Math.round(gain),
             taxLiability,
@@ -86,9 +89,9 @@ const CapitalGainsCalculator = () => {
     return (
         <>
             <SEO
-                title="Capital Gains Tax Calculator India | Property LTCG & STCG Calculator | 360Ghar"
-                description="Calculate Capital Gains Tax on property sale in India. Check Long Term (LTCG) and Short Term (STCG) tax liability with indexation benefits. Plan your property sale tax efficiently."
-                keywords="capital gains tax calculator property India, LTCG on property, STCG on property, property sale tax calculator, indexation benefit calculator, income tax on property sale, 360ghar tax tools"
+                title={t('capitalGains.title')}
+                description={t('capitalGains.description')}
+                keywords={t('capitalGains.keywords')}
                 canonical="/capital-gains-tax-calculator"
                 image={siteMetadata.defaultOgImage}
                 type="website"
@@ -115,10 +118,10 @@ const CapitalGainsCalculator = () => {
                                 <div className="row g-4">
                                     <div className="col-lg-6">
                                         <div className="calculator-form bg-white p-4 rounded-3 shadow-sm h-100">
-                                            <h4 className="mb-4">Transaction Details</h4>
+                                            <h4 className="mb-4">{t('capitalGains.transactionDetails')}</h4>
 
                                             <div className="mb-3">
-                                                <label className="form-label">Sale Price (₹)</label>
+                                                <label className="form-label">{t('capitalGains.salePrice')}</label>
                                                 <input
                                                     type="number"
                                                     className="form-control"
@@ -128,7 +131,7 @@ const CapitalGainsCalculator = () => {
                                             </div>
 
                                             <div className="mb-3">
-                                                <label className="form-label">Purchase Price (₹)</label>
+                                                <label className="form-label">{t('capitalGains.purchasePrice')}</label>
                                                 <input
                                                     type="number"
                                                     className="form-control"
@@ -139,7 +142,7 @@ const CapitalGainsCalculator = () => {
 
                                             <div className="row">
                                                 <div className="col-6 mb-3">
-                                                    <label className="form-label">Purchase Year</label>
+                                                    <label className="form-label">{t('capitalGains.purchaseYear')}</label>
                                                     <select className="form-select" value={purchaseYear} onChange={(e) => setPurchaseYear(e.target.value)}>
                                                         {Object.keys(ciiData).map(year => (
                                                             <option key={year} value={year}>{year}</option>
@@ -147,7 +150,7 @@ const CapitalGainsCalculator = () => {
                                                     </select>
                                                 </div>
                                                 <div className="col-6 mb-3">
-                                                    <label className="form-label">Sale Year</label>
+                                                    <label className="form-label">{t('capitalGains.saleYear')}</label>
                                                     <select className="form-select" value={saleYear} onChange={(e) => setSaleYear(e.target.value)}>
                                                         {[...Object.keys(ciiData)].reverse().map(year => (
                                                             <option key={year} value={year}>{year}</option>
@@ -157,7 +160,7 @@ const CapitalGainsCalculator = () => {
                                             </div>
 
                                             <div className="mb-3">
-                                                <label className="form-label">Transfer Expenses (Brokerage, Legal) (₹)</label>
+                                                <label className="form-label">{t('capitalGains.transferExpenses')}</label>
                                                 <input
                                                     type="number"
                                                     className="form-control"
@@ -170,28 +173,28 @@ const CapitalGainsCalculator = () => {
 
                                     <div className="col-lg-6">
                                         <div className="results-card bg-white p-4 rounded-3 shadow-sm h-100 border border-light">
-                                            <h4 className="mb-4">Tax Calculation</h4>
+                                            <h4 className="mb-4">{t('capitalGains.taxCalculation')}</h4>
 
                                             <div className="mb-3">
-                                                <label className="text-muted small fw-bold">ASSET TYPE</label>
-                                                <div className={`fs-5 fw-bold ${taxSummary.gainType.includes('Long') ? 'text-success' : 'text-warning'}`}>
-                                                    {taxSummary.gainType}
+                                                <label className="text-muted small fw-bold">{t('capitalGains.assetType')}</label>
+                                                <div className={`fs-5 fw-bold ${taxSummary.isLongTerm ? 'text-success' : 'text-warning'}`}>
+                                                    {taxSummary.isLongTerm ? t('capitalGains.longTerm') : t('capitalGains.shortTerm')}
                                                 </div>
                                             </div>
 
                                             <div className="mb-3 p-3 bg-light rounded-2">
                                                 <div className="d-flex justify-content-between mb-2">
-                                                    <span className="text-muted">Indexed Cost of Acquisition</span>
+                                                    <span className="text-muted">{t('capitalGains.indexedCost')}</span>
                                                     <span className="fw-bold">{formatCurrency(taxSummary.indexedCost)}</span>
                                                 </div>
                                                 <div className="small text-muted fst-italic">
-                                                    (Purchase Price adjusted for inflation using CII)
+                                                    {t('capitalGains.indexedCostNote')}
                                                 </div>
                                             </div>
 
                                             <div className="mb-4 p-3 bg-light rounded-2">
                                                 <div className="d-flex justify-content-between mb-2">
-                                                    <span className="text-muted">Capital Gains</span>
+                                                    <span className="text-muted">{t('capitalGains.capitalGains')}</span>
                                                     <span className={`fw-bold ${taxSummary.capitalGain > 0 ? 'text-success' : 'text-danger'}`}>
                                                         {formatCurrency(taxSummary.capitalGain)}
                                                     </span>
@@ -199,14 +202,14 @@ const CapitalGainsCalculator = () => {
                                             </div>
 
                                             <div className="p-3 bg-main bg-opacity-10 rounded-2 border border-main">
-                                                <label className="text-main small fw-bold">ESTIMATED TAX LIABILITY</label>
+                                                <label className="text-main small fw-bold">{t('capitalGains.estimatedTaxLiability')}</label>
                                                 <div className="display-6 fw-bold text-main">
-                                                    {taxSummary.gainType.includes('Long') ? formatCurrency(taxSummary.taxLiability) : 'As per Tax Slab'}
+                                                    {taxSummary.isLongTerm ? formatCurrency(taxSummary.taxLiability) : t('capitalGains.asPerTaxSlab')}
                                                 </div>
                                                 <div className="small text-muted mt-1">
-                                                    {taxSummary.gainType.includes('Long')
-                                                        ? '@ 20% on gains with indexation benefit'
-                                                        : 'Short term gains are added to your total income and taxed as per your slab.'}
+                                                    {taxSummary.isLongTerm
+                                                        ? t('capitalGains.longTermTaxNote')
+                                                        : t('capitalGains.shortTermTaxNote')}
                                                 </div>
                                             </div>
                                         </div>
@@ -214,15 +217,15 @@ const CapitalGainsCalculator = () => {
                                 </div>
 
                                 <div className="mt-5">
-                                    <h5>Exemptions (Section 54)</h5>
+                                    <h5>{t('capitalGains.exemptionsTitle')}</h5>
                                     <p className="text-muted small">
-                                        You can save tax on Long Term Capital Gains by reinvesting the gain amount into another residential property within:
+                                        {t('capitalGains.exemptionsDesc')}
                                         <ul className="mt-2">
-                                            <li>1 year before the sale</li>
-                                            <li>2 years after the sale (for purchase)</li>
-                                            <li>3 years after the sale (for construction)</li>
+                                            <li>{t('capitalGains.exemption1')}</li>
+                                            <li>{t('capitalGains.exemption2')}</li>
+                                            <li>{t('capitalGains.exemption3')}</li>
                                         </ul>
-                                        Or by investing in 54EC Capital Gain Bonds (max ₹50 Lakhs) within 6 months.
+                                        {t('capitalGains.exemptionBonds')}
                                     </p>
                                 </div>
                             </div>

@@ -1,16 +1,18 @@
  import React, { useState, useEffect, useMemo } from 'react'; // eslint-disable-line no-unused-vars
+ import { useTranslation } from 'react-i18next';
  import Header from '../../common/layout/Header';
  import Footer from '../../common/layout/Footer';
  import MobileMenu from '../../common/layout/MobileMenu';
  import OffCanvas from '../../common/layout/OffCanvas';
- 
+
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
- 
+
  const AreaConverter = () => {
+     const { t } = useTranslation('tools');
      const [amount, setAmount] = useState(1);
      const [fromUnit, setFromUnit] = useState('sq_ft');
      const [toUnit, setToUnit] = useState('sq_yard');
@@ -33,18 +35,18 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
      }), []);
  
      const unitLabels = {
-         sq_ft: 'Square Feet (sq ft)',
-         sq_mt: 'Square Meter (sq mt)',
-         sq_yd: 'Square Yard (sq yd)',
-         acre: 'Acre',
-         hectare: 'Hectare',
-         gaj: 'Gaj',
-         bigha: 'Bigha',
-         guntha: 'Guntha',
-         ground: 'Ground',
-         cent: 'Cent',
-         kanal: 'Kanal',
-         marla: 'Marla'
+         sq_ft: t('areaConverter.sqFt'),
+         sq_mt: t('areaConverter.sqMt'),
+         sq_yd: t('areaConverter.sqYd'),
+         acre: t('areaConverter.acre'),
+         hectare: t('areaConverter.hectare'),
+         gaj: t('areaConverter.gaj'),
+         bigha: t('areaConverter.bigha'),
+         guntha: t('areaConverter.guntha'),
+         ground: t('areaConverter.ground'),
+         cent: t('areaConverter.cent'),
+         kanal: t('areaConverter.kanal'),
+         marla: t('areaConverter.marla')
      };
  
      useEffect(() => {
@@ -64,9 +66,9 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
      return (
          <>
              <SEO
-                title="Land Area Converter India | Sq Ft, Gaj, Bigha, Acre Converter | 360Ghar"
-                description="Convert land area units instantly. Support for Sq Ft, Sq Yard (Gaj), Bigha, Acre, Hectare, Guntha, and more. Essential tool for buying land or plots in India."
-                keywords="land area converter India, sq ft to gaj converter, bigha to sq ft, acre to hectare converter, plot size converter, real estate unit converter, 360ghar tools, land measurement India"
+                title={t('areaConverter.title')}
+                description={t('areaConverter.description')}
+                keywords={t('areaConverter.keywords')}
                  canonical="/area-converter"
                  image={siteMetadata.defaultOgImage}
                  type="website"
@@ -91,16 +93,16 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                          <div className="row justify-content-center">
                              <div className="col-lg-8">
                                  <div className="section-heading text-center mb-5">
-                                     <h2 className="section-title">Land Area Converter</h2>
+                                     <h2 className="section-title">{t('areaConverter.headingTitle')}</h2>
                                      <p className="section-desc">
-                                         Compare properties easily by converting between local and standard measurement units.
+                                         {t('areaConverter.headingDesc')}
                                      </p>
                                  </div>
  
                                  <div className="calculator-form bg-white p-4 rounded-3 shadow-sm">
                                      <div className="row g-4 align-items-center">
                                          <div className="col-md-5">
-                                             <label className="form-label">From</label>
+                                             <label className="form-label">{t('areaConverter.from')}</label>
                                              <input
                                                  type="number"
                                                  className="form-control mb-2"
@@ -123,14 +125,14 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                              <button 
                                                  className="btn btn-outline-main rounded-circle p-2"
                                                  onClick={handleSwap}
-                                                 title="Swap Units"
+                                                 title={t('areaConverter.swapUnits')}
                                              >
                                                  <i className="fas fa-exchange-alt"></i>
                                              </button>
                                          </div>
  
                                          <div className="col-md-5">
-                                             <label className="form-label">To</label>
+                                             <label className="form-label">{t('areaConverter.to')}</label>
                                              <div className="form-control mb-2 bg-light fw-bold text-main fs-5">
                                                  {parseFloat(result.toFixed(4))}
                                              </div>
@@ -149,14 +151,14 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
  
                                  {/* Common Conversions Table */}
                                  <div className="mt-5">
-                                     <h4 className="mb-4">Common Conversions</h4>
+                                     <h4 className="mb-4">{t('areaConverter.commonConversions')}</h4>
                                      <div className="table-responsive">
                                          <table className="table table-bordered table-striped bg-white">
                                              <thead>
                                                  <tr>
-                                                     <th>Unit</th>
-                                                     <th>Equivalent in Sq. Feet</th>
-                                                     <th>Equivalent in Sq. Yards</th>
+                                                     <th>{t('areaConverter.unitCol')}</th>
+                                                     <th>{t('areaConverter.sqFeetCol')}</th>
+                                                     <th>{t('areaConverter.sqYardsCol')}</th>
                                                  </tr>
                                              </thead>
                                              <tbody>

@@ -27,6 +27,28 @@
   to = "/gurgaon/:splat"
   status = 301
 
+# City slug normalization for Hindi: /hi/gurugram/ → /hi/gurgaon/
+[[redirects]]
+  from = "/hi/gurugram/*"
+  to = "/hi/gurgaon/:splat"
+  status = 301
+
+# Hindi apartments → flats redirects
+[[redirects]]
+  from = "/hi/:city/buy/apartments"
+  to = "/hi/:city/buy/flats"
+  status = 301
+
+[[redirects]]
+  from = "/hi/:city/rent/apartments"
+  to = "/hi/:city/rent/flats"
+  status = 301
+
+[[redirects]]
+  from = "/hi/:city/pg/apartments"
+  to = "/hi/:city/pg/flats"
+  status = 301
+
 # Deduplicate flats/apartments: apartments → flats for all city/intent combos
 [[redirects]]
   from = "/:city/buy/apartments"

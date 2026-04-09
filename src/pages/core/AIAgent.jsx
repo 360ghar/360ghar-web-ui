@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import SEO from '../../common/SEO';
@@ -89,10 +90,10 @@ const AIAgent = () => {
                                 No apps to navigate, no forms to fill. Just ask.
                             </p>
                             <div className="ai-hero__cta">
-                                <Link to="/mcp/login" className="btn btn-main">
+                                <I18nLink to="/mcp/login" className="btn btn-main">
                                     Connect AI Assistant
                                     <span className="icon-right"><i className="fas fa-arrow-right"></i></span>
-                                </Link>
+                                </I18nLink>
                                 <a href="#how-it-works" className="btn btn-outline-main bg-white">
                                     See How It Works
                                 </a>
@@ -304,13 +305,13 @@ const AIAgent = () => {
                             <h2 className="ai-cta__title">{aiAgentCTASection.title}</h2>
                             <p className="ai-cta__desc">{aiAgentCTASection.subtitle}</p>
                             <div className="ai-cta__buttons">
-                                <Link to={aiAgentCTASection.primaryLink} className="btn btn-main btn-lg">
+                                <I18nLink to={aiAgentCTASection.primaryLink} className="btn btn-main btn-lg">
                                     {aiAgentCTASection.primaryCTA}
                                     <span className="icon-right"><i className="fas fa-arrow-right"></i></span>
-                                </Link>
-                                <Link to={aiAgentCTASection.secondaryLink} className="btn btn-outline-light btn-lg">
+                                </I18nLink>
+                                <I18nLink to={aiAgentCTASection.secondaryLink} className="btn btn-outline-light btn-lg">
                                     {aiAgentCTASection.secondaryCTA}
-                                </Link>
+                                </I18nLink>
                             </div>
                         </div>
                     </div>

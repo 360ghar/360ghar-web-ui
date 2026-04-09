@@ -1,0 +1,376 @@
+{
+  "circleRates": {
+    "title": "Gurugram Circle Rates (DLC Rates)",
+    "description": "Official rates published by IGRS Haryana. Used to calculate stamp duty on property registrations.",
+    "allSectors": "All Sectors",
+    "allPropertyTypes": "All Property Types",
+    "loading": "Loading circle rates...",
+    "error": "Data temporarily unavailable. Please try again later.",
+    "ratesFound": "{{count}} rates found",
+    "tableHeaders": {
+      "sector": "Sector",
+      "colony": "Colony",
+      "propertyType": "Property Type",
+      "ratePerSqYd": "Rate (\u20b9/sq yd)",
+      "ratePerSqFt": "Rate (\u20b9/sq ft)",
+      "year": "Year",
+      "view": "View"
+    },
+    "noResults": "No circle rates found for selected filters.",
+    "pagination": {
+      "prev": "\u2190 Prev",
+      "page": "Page {{current}} of {{total}}",
+      "next": "Next \u2192"
+    },
+    "quickCalc": "Quick Stamp Duty Calculator",
+    "detail": {
+      "notFound": "Circle Rate Not Found",
+      "unavailable": "Data temporarily unavailable.",
+      "backToCircleRates": "\u2190 Back to Circle Rates",
+      "breadcrumb": {
+        "home": "Home",
+        "circleRates": "Circle Rates"
+      },
+      "circleRatesFor": "{{sector}} Circle Rates",
+      "revisionYear": "Revision Year: {{year}}",
+      "effective": "Effective: {{date}}",
+      "ratePerSqYard": "Rate per Sq. Yard",
+      "ratePerSqFt": "Rate per Sq. Ft",
+      "calculateStampDuty": "Calculate Stamp Duty for {{sector}}",
+      "faqTitle": "FAQs about {{sector}} Circle Rates",
+      "backToAll": "\u2190 Back to all Circle Rates",
+      "loading": "Loading..."
+    }
+  },
+  "stampDuty": {
+    "title": "Haryana Stamp Duty Calculator",
+    "description": "Calculate stamp duty and registration fees for property registration in Gurugram, Haryana.",
+    "propertyValue": "Property Value (\u20b9)",
+    "propertyValuePlaceholder": "e.g. 8500000",
+    "buyerType": "Buyer Type",
+    "sectorOptional": "Sector (optional)",
+    "selectSector": "Select sector for circle rate comparison",
+    "calculate": "Calculate Stamp Duty",
+    "calculating": "Calculating...",
+    "result": "Calculation Result",
+    "propertyValueLabel": "Property Value",
+    "stampDutyLabel": "Stamp Duty ({{rate}}% \u2014 {{type}})",
+    "registrationFee": "Registration Fee (1%)",
+    "totalCost": "Total Registration Cost",
+    "homeLoanRate": "Current home loan rate: <strong>{{rate}}% p.a.</strong> \u2014 You can use the <1>EMI Calculator</1> to estimate your monthly installment.",
+    "rateReference": "Haryana Stamp Duty Rates",
+    "tableHeaders": {
+      "buyerType": "Buyer Type",
+      "stampDuty": "Stamp Duty",
+      "regFee": "Reg. Fee"
+    },
+    "source": "Source: Haryana Government, applicable across all districts including Gurugram.",
+    "buyerTypes": {
+      "male": "Male",
+      "female": "Female",
+      "joint": "Joint"
+    }
+  },
+  "rera": {
+    "title": "RERA Projects Directory \u2014 Gurugram",
+    "description": "Verified real estate projects registered under HRERA (Haryana Real Estate Regulatory Authority).",
+    "quickVerify": "Quick RERA Verify",
+    "quickVerifyDesc": "Enter a RERA registration number to instantly verify a project.",
+    "placeholder": "e.g. HRERA-PKL-GGM-2024-001",
+    "verify": "Verify",
+    "verifying": "Verifying...",
+    "verified": "Verified \u2014 {{name}}",
+    "developer": "Developer: {{name}}",
+    "notFound": "Not Found \u2014 No RERA project found with that registration number.",
+    "searchPlaceholder": "Search by project name or developer...",
+    "allStatuses": "All Statuses",
+    "allPropertyTypes": "All Property Types",
+    "error": "RERA data temporarily unavailable. Please try again later.",
+    "projectsFound": "{{count}} project{{suffix}} found",
+    "noResults": "No RERA projects found for the selected filters.",
+    "units": "Units",
+    "possession": "Possession",
+    "unnamedProject": "Unnamed Project",
+    "unknown": "Unknown",
+    "cta": {
+      "title": "Looking for RERA-Verified Properties?",
+      "description": "Explore our curated listings from verified builders in Gurugram.",
+      "browseProperties": "Browse Properties",
+      "contactUs": "Contact Us"
+    }
+  },
+  "bankAuctions": {
+    "title": "Bank & Court Property Auctions \u2014 Gurugram",
+    "description": "SARFAESI auctions and court-ordered property sales in Gurugram. Set alerts to get notified about new listings.",
+    "filters": "Filters",
+    "sourceType": "Source Type",
+    "bankSource": "Bank / Source",
+    "allBanks": "All Banks",
+    "propertyType": "Property Type",
+    "allTypes": "All Types",
+    "priceRange": "Price Range (\u20b9)",
+    "min": "Min",
+    "max": "Max",
+    "auctionDate": "Auction Date",
+    "clearFilters": "Clear Filters",
+    "error": "Auction data temporarily unavailable. Please try again later.",
+    "noResults": "No auctions match your filters. Try adjusting the filters or check back later.",
+    "auctionsFound": "{{count}} auction{{suffix}} found",
+    "sourceTypes": {
+      "all": "All",
+      "bank": "SARFAESI (Bank)",
+      "court": "Court Ordered"
+    },
+    "cta": {
+      "title": "Find Your Next Investment Property",
+      "description": "Explore regular listings alongside auction properties for the best deals in Gurugram.",
+      "browseProperties": "Browse Properties",
+      "contactUs": "Contact Us"
+    },
+    "detail": {
+      "backToAuctions": "Back to Auctions",
+      "notFound": "Auction Not Found",
+      "notFoundDesc": "This auction listing may have been removed or the ID is incorrect.",
+      "browseAll": "Browse All Auctions",
+      "error": "Auction data temporarily unavailable. Please try again later.",
+      "propertyAuction": "Property Auction",
+      "reservePrice": "Reserve Price",
+      "emdAmount": "EMD Amount",
+      "auctionDate": "Auction Date",
+      "tbd": "TBD",
+      "daysRemaining": "{{count}} day{{suffix}} remaining",
+      "propertyType": "Property Type",
+      "area": "Area",
+      "additionalInfo": "Additional Information",
+      "caseNumber": "Case Number",
+      "loanAccount": "Loan Account",
+      "borrower": "Borrower",
+      "contactForAuction": "Contact for Auction",
+      "setAlert": "Set Alert for Similar Properties",
+      "courtOrdered": "Court Ordered",
+      "cta": {
+        "title": "Explore More Investment Opportunities",
+        "description": "Browse regular listings and RERA-verified projects alongside auction properties.",
+        "browseProperties": "Browse Properties",
+        "reraProjects": "RERA Projects"
+      }
+    }
+  },
+  "verifyOwnership": {
+    "title": "Verify Property Ownership",
+    "description": "Verify property ownership using Haryana land records (Jamabandi). Enter the Tehsil, Village, and Khasra Number to look up the official record.",
+    "important": "<strong>Important:</strong> You must solve the CAPTCHA yourself. We do not bypass security mechanisms of the Haryana Jamabandi portal.",
+    "landRecordLookup": "Land Record Lookup",
+    "tehsil": "Tehsil",
+    "selectTehsil": "Select Tehsil",
+    "village": "Village",
+    "enterVillage": "Enter village name",
+    "selectTehsilFirst": "Select a Tehsil first",
+    "khasraNumber": "Khasra Number",
+    "khasraPlaceholder": "e.g. 123/4",
+    "enterVillageFirst": "Enter a Village first",
+    "captchaVerification": "CAPTCHA Verification",
+    "noCaptcha": "No CAPTCHA loaded",
+    "refresh": "Refresh",
+    "loadCaptcha": "Load CAPTCHA",
+    "enterCaptcha": "Enter CAPTCHA text",
+    "clickLoadCaptcha": "Click \"Load CAPTCHA\" to get a CAPTCHA image",
+    "captchaFailed": "Failed to load CAPTCHA. Please try again.",
+    "captchaIncorrect": "CAPTCHA was incorrect. Please refresh and try again.",
+    "notFound": "No land record found for the given Tehsil, Village, and Khasra Number.",
+    "genericError": "Unable to fetch land records at this time. Please try again later.",
+    "refreshCaptcha": "Refresh CAPTCHA",
+    "lookingUp": "Looking up\u2026",
+    "lookupRecord": "Lookup Land Record",
+    "ownershipRecord": "Ownership Record",
+    "found": "Found",
+    "owners": "Owner(s)",
+    "area": "Area",
+    "mutationStatus": "Mutation Status",
+    "encumbrance": "Encumbrance",
+    "encumbered": "Encumbered",
+    "clear": "Clear",
+    "lastUpdated": "Last Updated",
+    "dataSourced": "Data sourced from the <strong>Haryana Jamabandi portal</strong>. Always verify with official records before making property decisions.",
+    "fillForm": "Fill in the form and submit to view land ownership details.",
+    "aboutJamabandi": {
+      "title": "About Jamabandi Land Records",
+      "description": "Jamabandi is the official land record maintained by the Revenue Department of Haryana. It contains details of ownership, cultivation rights, and encumbrances on agricultural and non-agricultural land parcels identified by Khasra numbers.",
+      "tips": [
+        "Verify ownership before buying a plot or agricultural land",
+        "Check for any pending litigations or encumbrances",
+        "Confirm mutation (intkal) has been completed after purchase",
+        "Official data is periodically updated by Patwaris"
+      ]
+    },
+    "plotsCta": {
+      "title": "Looking for plots in Gurugram?",
+      "description": "Browse verified residential plots and properties listed on 360Ghar.",
+      "browseProperties": "Browse Properties"
+    }
+  },
+  "zoneChecker": {
+    "title": "Zone Checker \u2014 Gurugram",
+    "description": "Browse land use zones, Floor Area Ratio (FAR), and height restrictions for Gurugram sectors as per the Haryana Master Plan.",
+    "searchPlaceholder": "Search by sector...",
+    "loading": "Loading zoning data\u2026",
+    "error": "Zoning data temporarily unavailable. Please try again later.",
+    "noZones": "No zones found{{search}}.",
+    "noZonesSearch": " for \"{{search}}\"",
+    "zonesFound": "{{count}} zone{{suffix}} found",
+    "far": "FAR",
+    "maxHeight": "Max Height",
+    "viewDetails": "View Details",
+    "pagination": {
+      "prev": "\u2190 Prev",
+      "page": "Page {{current}} of {{total}}",
+      "next": "Next \u2192"
+    },
+    "colonyApprovals": "Colony Approvals",
+    "colonyApprovalsDesc": "Licensed colonies in Gurugram with their approval status.",
+    "colonyLoading": "Loading colony approvals\u2026",
+    "colonyError": "Colony approval data temporarily unavailable.",
+    "noColonyData": "No colony approvals data available.",
+    "colonyTableHeaders": {
+      "colonyName": "Colony Name",
+      "licenceNumber": "Licence Number",
+      "status": "Status"
+    },
+    "landUse": {
+      "residential": "Residential",
+      "commercial": "Commercial",
+      "mixed": "Mixed Use",
+      "industrial": "Industrial",
+      "institutional": "Institutional",
+      "unknown": "Unknown"
+    },
+    "detail": {
+      "backToZoneChecker": "Back to Zone Checker",
+      "loading": "Loading zone details\u2026",
+      "notFound": "Zone Not Found",
+      "notFoundDesc": "We could not find zoning data for this sector.",
+      "browseAllZones": "Browse All Zones",
+      "error": "Zoning data temporarily unavailable. Please try again later.",
+      "zoningData": "Gurugram, Haryana \u2014 Zoning data as per Haryana Master Plan",
+      "zoningDetails": "Zoning Details",
+      "landUse": "Land Use",
+      "floorAreaRatio": "Floor Area Ratio (FAR)",
+      "maximumHeight": "Maximum Height",
+      "metres": "{{value}} metres",
+      "groundCoverage": "Ground Coverage",
+      "frontSetback": "Front Setback",
+      "rearSetback": "Rear Setback",
+      "sideSetback": "Side Setback",
+      "parkingNorm": "Parking Norm",
+      "density": "Density",
+      "notes": "Notes",
+      "colonyApprovalStatus": "Colony Approval Status",
+      "colonyName": "Colony Name",
+      "licenceNumber": "Licence Number",
+      "status": "Status",
+      "viewPropertiesIn": "View Properties in {{sector}}",
+      "whatDoesFarMean": "What does FAR mean?",
+      "farExplanation": "<strong>Floor Area Ratio (FAR)</strong>, also called Floor Space Index (FSI), is the ratio of a building's total floor area to the size of the plot on which it is built.",
+      "farExample": "For example, a FAR of <strong>2.0</strong> on a 200 sq m plot allows a maximum built-up floor area of <strong>400 sq m</strong> across all floors.",
+      "farTips": [
+        "Higher FAR = more permissible construction",
+        "FAR limits are set by the Master Plan authority (DTCP Haryana)",
+        "Violation of FAR can result in demolition notices",
+        "Always verify with the local municipal authority before construction"
+      ],
+      "quickStats": "Quick Stats",
+      "dataSourced": "Data sourced from <strong>DTCP Haryana</strong> and the Gurugram Master Plan. For official verification, consult DTCP or the local urban local body."
+    }
+  },
+  "regulatoryUpdates": {
+    "title": "Regulatory Updates \u2014 Haryana Gazette",
+    "description": "Official notifications from the Haryana Government affecting real estate in Gurugram. Updated as new gazette entries are published.",
+    "tabs": {
+      "all": "All",
+      "landAcquisition": "Land Acquisition",
+      "rateRevision": "Rate Revision",
+      "policy": "Policy",
+      "cluChange": "CLU Change"
+    },
+    "error": "Regulatory updates temporarily unavailable. Please try again later.",
+    "notificationsFound": "{{count}} notification{{suffix}} found",
+    "noNotifications": "No {{tab}} notifications found.",
+    "cta": {
+      "title": "Need Help Navigating Regulatory Changes?",
+      "description": "Our experts can guide you through the latest Haryana real estate regulations.",
+      "talkToExpert": "Talk to an Expert",
+      "browseProperties": "Browse Properties"
+    }
+  },
+  "builderReputation": {
+    "title": "Builder Reputation Directory \u2014 Gurugram",
+    "description": "Scores based on HRERA registered projects and complaints. Higher is better.",
+    "searchPlaceholder": "Search by builder name...",
+    "search": "Search",
+    "sortOptions": {
+      "scoreDesc": "Score (High to Low)",
+      "nameAsc": "Name (A-Z)",
+      "projectsDesc": "Projects (Most First)",
+      "complaintsDesc": "Complaints (Most First)"
+    },
+    "scoreLegend": {
+      "good": "70+ \u2014 Good",
+      "average": "40\u201369 \u2014 Average",
+      "poor": "Below 40 \u2014 Poor"
+    },
+    "error": "Builder data temporarily unavailable. Please try again later.",
+    "buildersFound": "{{count}} builder{{suffix}} found",
+    "noBuilders": "No builders found{{search}}.",
+    "noBuildersSearch": " for \"{{search}}\"",
+    "tableHeaders": {
+      "builderName": "Builder Name",
+      "projects": "Projects",
+      "complaints": "Complaints",
+      "score": "Score"
+    },
+    "unknownBuilder": "Unknown Builder",
+    "viewProfile": "View Profile",
+    "mobileLabels": {
+      "projects": "Projects",
+      "complaints": "Complaints"
+    },
+    "disclaimer": "Scores based on HRERA registered projects and complaints. Higher is better. Data sourced from publicly available HRERA records. 360Ghar does not guarantee accuracy of regulatory data.",
+    "cta": {
+      "title": "Looking for Trusted Properties?",
+      "description": "Browse verified properties from reputable builders in Gurugram.",
+      "browseProperties": "Browse Properties",
+      "contactUs": "Contact Us"
+    },
+    "detail": {
+      "loading": "Loading builder profile...",
+      "notFound": "Builder Not Found",
+      "notFoundDesc": "We could not find a builder profile for this page.",
+      "backToDirectory": "Back to Builder Directory",
+      "error": "Builder data temporarily unavailable. Please try again later.",
+      "backToDir": "Back to Directory",
+      "builderDirectory": "Builder Directory",
+      "totalProjects": "Total Projects",
+      "totalComplaints": "Total Complaints",
+      "totalPenalties": "Total Penalties",
+      "tabs": {
+        "reraProjects": "RERA Projects",
+        "complaintsOrders": "Complaints & Orders"
+      },
+      "noProjects": "No RERA projects found for this builder.",
+      "projectsFound": "{{count}} project{{suffix}} found",
+      "unnamedProject": "Unnamed Project",
+      "unknown": "Unknown",
+      "units": "Units",
+      "possession": "Possession",
+      "noComplaints": "No complaints or orders found for this builder.",
+      "penalty": "Penalty: {{amount}}",
+      "disclaimer": "Data sourced from publicly available HRERA records. 360Ghar does not guarantee accuracy or completeness of regulatory data.",
+      "cta": {
+        "title": "Looking for Verified Properties?",
+        "description": "Explore our curated listings from trusted developers in Gurugram.",
+        "browseProperties": "Browse Properties",
+        "backToDirectory": "Back to Builder Directory"
+      }
+    }
+  }
+}

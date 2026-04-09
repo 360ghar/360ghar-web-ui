@@ -1,16 +1,20 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
+
+import { I18nLink } from '../../i18n/I18nLink';
 
 const ComparePage = lazy(() => import('./ComparePage'));
 
 const NoBrokerCompare = () => {
+  const { t } = useTranslation('compare');
   const competitor = competitors.nobroker;
-  
+
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs NoBroker | Why 360 Ghar is Better for Gurugram Property Search"
-      pageDescription="Discover why 360 Ghar is the better alternative to NoBroker. Compare features, read user reviews, and see why thousands choose 360 Ghar for verified properties with 360° virtual tours in Gurugram."
+      pageTitle={t('nobroker.pageTitle')}
+      pageDescription={t('nobroker.pageDescription')}
       canonicalPath="/vs/nobroker"
     />
   );

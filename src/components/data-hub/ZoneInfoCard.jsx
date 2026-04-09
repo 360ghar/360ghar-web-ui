@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { dataHubService } from '../../services/dataHubService';
 
 const ZoneInfoCard = ({ sector }) => {
@@ -30,9 +30,9 @@ const ZoneInfoCard = ({ sector }) => {
           </div>
         ) : null)}
       </div>
-      <Link to={`/zone-checker/${zone.slug}`} style={{ fontSize: 12, color: '#2563eb', display: 'block', marginTop: 8 }}>
+      <I18nLink to={`/zone-checker/${zone.slug}`} style={{ fontSize: 12, color: '#2563eb', display: 'block', marginTop: 8 }}>
         Full zone details →
-      </Link>
+      </I18nLink>
     </div>
   );
 };

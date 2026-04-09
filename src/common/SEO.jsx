@@ -1,8 +1,25 @@
 import { Helmet } from 'react-helmet-async';
 import { siteMetadata, absoluteUrl } from '../seo/siteMetadata';
 import { useLocation } from 'react-router-dom';
+import useLocaleStore from '../store/localeStore';
+import { stripLocalePrefix } from '../i18n/I18nLink';
 
 const toArray = (maybeArray) => (Array.isArray(maybeArray) ? maybeArray : [maybeArray].filter(Boolean));
+
+/**
+ * Build hreflang alternates for the current page.
+ * English: bare path, Hindi: /hi/ prefixed, x-default: bare path.
+ */
+const buildHreflangs = (canonicalUrl, pathname) => {
+  const barePath = stripLocalePrefix(pathname);
+  const enUrl = absoluteUrl(barePath);
+  const hiUrl = absoluteUrl(barePath === '/' ? '/hi' : `/hi${barePath}`);
+  return [
+    { hrefLang: 'en', href: enUrl },
+    { hrefLang: 'hi', href: hiUrl },
+    { hrefLang: 'x-default', href: enUrl },
+  ];
+};
 
 const SEO = ({
   title,
@@ -23,6 +40,7 @@ const SEO = ({
   articleSection,
 }) => {
   const location = useLocation();
+  const locale = useLocaleStore((s) => s.locale);
   const path = location.pathname || '';
   const computedUrl = absoluteUrl(url || path);
   const canonicalUrl = absoluteUrl(canonical || path);
@@ -32,17 +50,15 @@ const SEO = ({
   const metaKeywords = keywords;
   const ogImage = absoluteUrl(image || siteMetadata.defaultOgImage);
 
-  // Default to en-in and x-default; callers can pass more.
-  const alternates = hreflangs || [
-    { hrefLang: 'en-in', href: canonicalUrl },
-    { hrefLang: 'x-default', href: canonicalUrl },
-  ];
+  // Auto-generate hreflang alternates based on current URL
+  const alternates = hreflangs || buildHreflangs(canonicalUrl, path);
 
   const ldBlocks = toArray(structuredData);
   const isArticle = type === 'article';
 
   return (
     <Helmet>
+      <html lang={locale || 'en'} />
       {/* Primary */}
       <title>{metaTitle}</title>
       {metaDesc && <meta name="description" content={metaDesc} />}
@@ -75,7 +91,8 @@ const SEO = ({
       {metaDesc && <meta property="og:description" content={metaDesc} />}
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:alt" content={`${siteMetadata.siteName} preview image`} />
-      <meta property="og:locale" content="en_IN" />
+      <meta property="og:locale" content={locale === 'hi' ? 'hi_IN' : 'en_IN'} />
+      <meta property="og:locale:alternate" content={locale === 'hi' ? 'en_IN' : 'hi_IN'} />
       <meta property="og:url" content={computedUrl} />
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content={siteMetadata.siteName} />

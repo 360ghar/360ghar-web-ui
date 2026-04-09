@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -15,8 +16,55 @@ import {
   normalizePropertyTypeToken,
 } from '../../utils/propertyTaxonomy';
 import { buildFacetKeywords } from '../../utils/landingKeywords';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const pretty = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+
+const buildFacetFaqs = (t, validCity, facetText, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity) => {
+  const lcFacet = facetText.toLowerCase();
+  const verb = validIntent === 'rent' ? 'rent' : validIntent === 'pg' ? 'stay in' : 'buy';
+  const verbIng = validIntent === 'rent' ? 'renting' : validIntent === 'pg' ? 'staying in' : 'buying';
+
+  // Build interpolation variables
+  const bhkPrefix = isBhk ? `${bhkText} ` : '';
+  const budgetSuffix = isBudget ? ` ${budgetText}` : '';
+  const budgetSuffixDetail = isBudget ? ` (${budgetText})` : '';
+  const amenityPrettyVal = amenity ? amenity.replace(/-/g, ' ') : '';
+  const facetPreposition = validIntent === 'pg' ? 'in' : `for ${verb} in`;
+
+  // Hindi action for Q2
+  const hindiAction = validIntent === 'buy' ? 'kharidna' : 'kiraye par lena';
+
+  const faqs = [
+    {
+      question: t('landing:facetFaqs.q1', { bhkPrefix, facetTextLower: lcFacet, facetPreposition, city: validCity, budgetSuffix }),
+      answer: t('landing:facetFaqs.a1', { bhkPrefix, facetTextLower: lcFacet, city: validCity, budgetSuffixDetail }),
+    },
+    {
+      question: t('landing:facetFaqs.q2', { bhkPrefix, facetTextLower: lcFacet, hindiAction, city: validCity }),
+      answer: t('landing:facetFaqs.a2'),
+    },
+    {
+      question: t('landing:facetFaqs.q3', { bhkPrefix, facetTextLower: lcFacet, city: validCity }),
+      answer: t('landing:facetFaqs.a3'),
+    },
+    {
+      question: t('landing:facetFaqs.q4', { verb, bhkPrefix, facetTextLower: lcFacet, city: validCity }),
+      answer: validIntent === 'buy'
+        ? t('landing:facetFaqs.a4Buy')
+        : t('landing:facetFaqs.a4Rent'),
+    },
+    {
+      question: t('landing:facetFaqs.q5', { verbIng, bhkPrefix, facetTextLower: lcFacet, city: validCity }),
+      answer: t('landing:facetFaqs.a5'),
+    },
+    isAmenity ? {
+      question: t('landing:facetFaqs.q6', { facetTextLower: lcFacet, city: validCity, amenityPretty: amenityPrettyVal || 'top amenities' }),
+      answer: t('landing:facetFaqs.a6', { facetTextLower: lcFacet, city: validCity, amenityPretty: amenityPrettyVal || 'specific amenities' }),
+    } : null,
+  ].filter(Boolean);
+  return faqs;
+};
 
 const VALID_INTENTS = ['buy', 'rent', 'pg'];
 const VALID_BHKS = ['1-bhk','2-bhk','3-bhk','4-bhk','5-bhk'];
@@ -26,6 +74,7 @@ const VALID_BUDGETS = [
 ];
 
 const FacetLanding = () => {
+  const { t } = useTranslation('landing');
   const { citySlug, intent, type, bhk, budget, amenity } = useParams();
   const canonicalCitySlug = citySlug === 'gurugram' ? 'gurgaon' : citySlug;
 
@@ -62,41 +111,43 @@ const FacetLanding = () => {
   });
 
   const title = useMemo(() => {
+    // Build interpolation-safe parts (already space-padded with surrounding content)
+    const bhkPart = isBhk ? `${bhkText} ` : '';
+    const budgetPart = isBudget ? ` | ${budgetText}` : '';
+    const amenityPart = isAmenity ? ` | ${pretty(amenity)}` : '';
+
     if (validIntent === 'pg') {
-      const bits = [
-        isBhk ? `${bhkText}` : null,
+      return t('landing:facetSeo.titlePg', {
+        bhk: bhkPart,
         facetText,
-        'in',
-        validCity,
-        isBudget ? `| ${budgetText}` : null,
-        isAmenity ? `| ${pretty(amenity)}` : null,
-      ].filter(Boolean).join(' ');
-      return `${bits} | 360Ghar`;
+        city: validCity,
+        budget: budgetPart,
+        amenity: amenityPart,
+      });
     }
 
-    const bits = [
-      isBhk ? `${bhkText}` : null,
+    return t('landing:facetSeo.titleBuyRent', {
+      bhk: bhkPart,
       facetText,
-      'for', intentLabel,
-      'in', validCity,
-      isBudget ? `| ${budgetText}` : null,
-      isAmenity ? `| ${pretty(amenity)}` : null,
-    ].filter(Boolean).join(' ');
-    return `${bits} | 360Ghar`;
-  }, [validCity, facetText, validIntent, intentLabel, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity]);
+      intentLabel,
+      city: validCity,
+      budget: budgetPart,
+      amenity: amenityPart,
+    });
+  }, [t, validCity, facetText, validIntent, intentLabel, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity]);
 
   const description = useMemo(() => {
     const parts = [
       validIntent === 'pg'
-        ? `Explore verified ${facetText.toLowerCase()} and co-living options in ${validCity}.`
-        : `Explore verified ${facetText.toLowerCase()} in ${validCity} to ${validIntent}.`,
-      isBhk ? `${bhkText} options available.` : null,
-      isBudget ? `Budget: ${budgetText}.` : null,
-      isAmenity ? `Amenity: ${pretty(amenity)}.` : null,
-      'Verified by our on-site team. View photos, exact locations, 360° virtual tours. End-to-end service by dedicated Relationship Manager.'
+        ? t('landing:facetSeo.descPg', { facetTextLower: facetText.toLowerCase(), city: validCity })
+        : t('landing:facetSeo.descBuyRent', { facetTextLower: facetText.toLowerCase(), city: validCity, validIntent }),
+      isBhk ? t('landing:facetSeo.descBhk', { bhkText }) : null,
+      isBudget ? t('landing:facetSeo.descBudget', { budgetText }) : null,
+      isAmenity ? t('landing:facetSeo.descAmenity', { amenityPretty: pretty(amenity) }) : null,
+      t('landing:facetSeo.descSuffix'),
     ].filter(Boolean);
     return parts.join(' ');
-  }, [facetText, validCity, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity]);
+  }, [t, facetText, validCity, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity]);
 
   const keywords = useMemo(
     () => buildFacetKeywords({ facetText, validCity, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity, pretty }),
@@ -158,6 +209,22 @@ const FacetLanding = () => {
     return links.slice(0, 5);
   }, [baseCanonicalPath, bhk, budget, facetText, validCity]);
 
+  const faqItems = buildFacetFaqs(t, validCity, facetText, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity);
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
+  const faqStructuredData = {
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  };
+
+  // Preposition helpers for popular searches
+  const intentDisplay = validIntent === 'pg' ? '' : validIntent;
+  const intentDisplayPg = validIntent === 'pg' ? '' : validIntent;
+  const readyPreposition = validIntent === 'pg' ? 'in' : `for ${validIntent} in`;
+
   return (
     <>
       <SEO
@@ -174,6 +241,7 @@ const FacetLanding = () => {
             description,
             url: `https://360ghar.com${shouldIndex ? canonicalPath : baseCanonicalPath}`,
           },
+          faqStructuredData,
         ]}
       />
 
@@ -199,25 +267,28 @@ const FacetLanding = () => {
             </div>
 
             <div className="text-center">
-              <Link to={targetUrl()} className="btn btn-main">Browse Listings</Link>
+              <I18nLink to={targetUrl()} className="btn btn-main">{t('landing:hero.browseListings')}</I18nLink>
             </div>
 
             <div className="mt-5">
-              <h2 className="h5 mb-3">Popular searches</h2>
+              <h2 className="h5 mb-3">{t('landing:facetPopularSearches.heading')}</h2>
               <ul className="text-start">
-                <li>{facetText} {validIntent === 'pg' ? 'near metro' : validIntent} in {validCity}</li>
-                {isBhk && <li>{bhkText} {facetText} {validIntent === 'pg' ? '' : validIntent} in {validCity}</li>}
-                {isBudget && <li>{facetText} {validIntent === 'pg' ? '' : validIntent} {budgetText} in {validCity}</li>}
-                <li>Ready to move {facetText} {validIntent === 'pg' ? 'in' : `for ${validIntent} in`} {validCity}</li>
-                <li>No broker {facetText} {validIntent === 'pg' ? 'in' : `for ${validIntent} in`} {validCity}</li>
-                <li>Verified {facetText} with 360° virtual tours in {validCity}</li>
+                <li>{validIntent === 'pg'
+                  ? t('landing:facetPopularSearches.item1Pg', { facetText, city: validCity })
+                  : t('landing:facetPopularSearches.item1', { facetText, intentDisplay, city: validCity })
+                }</li>
+                {isBhk && <li>{t('landing:facetPopularSearches.item2', { bhkText, facetText, intentDisplayPg, city: validCity })}</li>}
+                {isBudget && <li>{t('landing:facetPopularSearches.item3', { facetText, intentDisplayPg, budgetText, city: validCity })}</li>}
+                <li>{t('landing:facetPopularSearches.item4', { facetText, readyPreposition, city: validCity })}</li>
+                <li>{t('landing:facetPopularSearches.item5', { facetText, readyPreposition, city: validCity })}</li>
+                <li>{t('landing:facetPopularSearches.item6', { facetText, city: validCity })}</li>
               </ul>
-              <h2 className="h5 mb-3 mt-4">Why 360Ghar?</h2>
+              <h2 className="h5 mb-3 mt-4">{t('landing:why360Ghar.heading')}</h2>
               <ul className="text-start">
-                <li>India&apos;s first AI-Enabled and Virtual Tour first Real Estate Platform</li>
-                <li>All properties verified by our on-site team with 360° virtual tours</li>
-                <li>Dedicated Relationship Manager handles your end-to-end flow so you can relax</li>
-                <li>Full visibility, convenience, and transparency for the same brokerage amount</li>
+                <li>{t('landing:why360Ghar.point1')}</li>
+                <li>{t('landing:why360Ghar.point2')}</li>
+                <li>{t('landing:why360Ghar.point3')}</li>
+                <li>{t('landing:why360Ghar.point4')}</li>
               </ul>
             </div>
           </div>
@@ -227,24 +298,58 @@ const FacetLanding = () => {
         {relatedSearches.length > 0 && (
           <section className="padding-y-60 bg-light">
             <div className="container container-two">
-              <h2 className="h5 mb-3">Related Searches</h2>
+              <h2 className="h5 mb-3">{t('landing:relatedSearches.heading')}</h2>
               <div className="row g-3">
                 {relatedSearches.map((rs) => (
                   <div className="col-lg-4 col-md-6" key={rs.to}>
-                    <Link
+                    <I18nLink
                       to={rs.to}
                       className="d-block p-3 rounded-3 bg-white border text-decoration-none"
                       style={{ color: 'inherit' }}
                     >
                       <i className="fas fa-search text-gradient me-2" />
                       <span className="fw-medium">{rs.label}</span>
-                    </Link>
+                    </I18nLink>
                   </div>
                 ))}
               </div>
             </div>
           </section>
         )}
+
+        {/* FAQ */}
+        <section className="padding-y-40">
+          <div className="container container-two">
+            <h2 className="h5 mb-3">{t('landing:faq.heading')}</h2>
+            <div className="accordion" id="facetFaqAccordion">
+              {faqItems.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div className="accordion-item border-0 border-bottom" key={faq.question}>
+                    <h3 className="accordion-header" id={`facetFaqHeading${idx}`}>
+                      <button
+                        className={`accordion-button ${isOpen ? '' : 'collapsed'}`}
+                        type="button"
+                        aria-expanded={isOpen}
+                        aria-controls={`facetFaqCollapse${idx}`}
+                        onClick={() => setOpenFaqIndex((cur) => (cur === idx ? -1 : idx))}
+                      >
+                        {faq.question}
+                      </button>
+                    </h3>
+                    <div
+                      id={`facetFaqCollapse${idx}`}
+                      className={`accordion-collapse collapse ${isOpen ? 'show' : ''}`}
+                      aria-labelledby={`facetFaqHeading${idx}`}
+                    >
+                      <div className="accordion-body text-muted">{faq.answer}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
         <Cta ctaClass="" />
 

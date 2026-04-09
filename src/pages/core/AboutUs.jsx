@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -13,6 +14,7 @@ import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
 const AboutUs = () => {
+    const { t } = useTranslation('policies');
     // Enhanced structured data for About page
     const aboutStructuredData = [
         {
@@ -71,7 +73,7 @@ const AboutUs = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common:header.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />

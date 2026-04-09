@@ -1,6 +1,6 @@
 import SectionHeading from '../../common/ui/SectionHeading';
 import { apartmentTds, apartmentThs } from '../../data/HomeTwoData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const Apartment = () => {
     return (
@@ -48,10 +48,10 @@ const Apartment = () => {
                                                 <td>{apartmentTd.area}</td>
                                                 <td>{apartmentTd.pricing}</td>
                                                 <td>
-                                                    <Link to={apartmentTd.actionLink} className="simple-btn text-gradient fw-semibold font-14">
+                                                    <I18nLink to={apartmentTd.actionLink} className="simple-btn text-gradient fw-semibold font-14">
                                                         {apartmentTd.action} 
                                                         <span className="icon-right"> <i className="fas fa-arrow-right"></i> </span> 
-                                                    </Link>
+                                                    </I18nLink>
                                                 </td>
                                             </tr>
                                         )

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { propertyAPIService } from '../../services/propertyAPIService';
 
 import LazyImage from '../ui/LazyImage';
@@ -43,10 +43,10 @@ const SidebarProperty = () => {
                 {error && !loading && <div className="col-12 text-danger">{error}</div>}
                 {!loading && !error && items.map((p, idx) => (
                     <div className="col-lg-6 col-sm-4 col-6" key={p.id || idx}>
-                        <Link to={`/property/${p.id}`} className="properties-item d-block w-100">
+                        <I18nLink to={`/property/${p.id}`} className="properties-item d-block w-100">
                             <LazyImage src={getThumb(p)} fallbackSrc={PROPERTY_IMAGE_FALLBACK} alt="Property Image" className="cover-img"/>
                             <span className="properties-item__text">{p.title || 'Property'}</span>
-                        </Link>
+                        </I18nLink>
                     </div>
                 ))}
             </div>   

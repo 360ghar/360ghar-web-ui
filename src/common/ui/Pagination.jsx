@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { absoluteUrl } from '../../seo/siteMetadata';
+import { I18nLink } from '../../i18n/I18nLink';
 
 /**
  * Functional Pagination component with crawlable links
@@ -97,14 +98,14 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisibleP
                 {/* Previous Button */}
                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                     {currentPage > 1 ? (
-                        <Link
+                        <I18nLink
                             className="page-link"
                             to={getPageUrl(currentPage - 1)}
                             onClick={(e) => handlePageClick(e, currentPage - 1)}
                             aria-label="Previous page"
                         >
                             <i className="fas fa-chevron-left"></i>
-                        </Link>
+                        </I18nLink>
                     ) : (
                         <span className="page-link" aria-label="Previous page" aria-disabled="true">
                             <i className="fas fa-chevron-left"></i>
@@ -128,7 +129,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisibleP
                             key={page}
                             className={`page-item ${isActive ? 'active' : ''}`}
                         >
-                            <Link
+                            <I18nLink
                                 className="page-link"
                                 to={getPageUrl(page)}
                                 onClick={(e) => handlePageClick(e, page)}
@@ -136,7 +137,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisibleP
                                 aria-current={isActive ? 'page' : undefined}
                             >
                                 {page}
-                            </Link>
+                            </I18nLink>
                         </li>
                     );
                 })}
@@ -144,14 +145,14 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisibleP
                 {/* Next Button */}
                 <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                     {currentPage < totalPages ? (
-                        <Link
+                        <I18nLink
                             className="page-link"
                             to={getPageUrl(currentPage + 1)}
                             onClick={(e) => handlePageClick(e, currentPage + 1)}
                             aria-label="Next page"
                         >
                             <i className="fas fa-chevron-right"></i>
-                        </Link>
+                        </I18nLink>
                     ) : (
                         <span className="page-link" aria-label="Next page" aria-disabled="true">
                             <i className="fas fa-chevron-right"></i>

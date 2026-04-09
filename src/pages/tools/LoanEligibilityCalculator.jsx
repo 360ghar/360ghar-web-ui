@@ -1,16 +1,18 @@
  import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+ import { useTranslation } from 'react-i18next';
  import Header from '../../common/layout/Header';
  import Footer from '../../common/layout/Footer';
  import MobileMenu from '../../common/layout/MobileMenu';
  import OffCanvas from '../../common/layout/OffCanvas';
- 
+
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
- 
+
  const LoanEligibilityCalculator = () => {
+     const { t } = useTranslation('tools');
      const [income, setIncome] = useState(50000);
      const [existingEmi, setExistingEmi] = useState(0);
      const [interestRate, setInterestRate] = useState(8.5);
@@ -65,9 +67,9 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
      return (
          <>
              <SEO
-                title="Home Loan Eligibility Calculator India | Check Max Loan Amount | 360Ghar"
-                description="Check your Home Loan Eligibility instantly. Calculate the maximum loan amount you can get based on your salary, existing EMIs, and tenure. Plan your home purchase budget."
-                keywords="home loan eligibility calculator India, how much home loan can I get, housing loan eligibility check, salary based home loan calculator, 360ghar financial tools"
+                title={t('loanEligibility.title')}
+                description={t('loanEligibility.description')}
+                keywords={t('loanEligibility.keywords')}
                  canonical="/loan-eligibility-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
@@ -94,10 +96,10 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                  <div className="row g-4">
                                      <div className="col-lg-6">
                                          <div className="calculator-form bg-white p-4 rounded-3 shadow-sm h-100">
-                                             <h4 className="mb-4">Your Financial Details</h4>
+                                             <h4 className="mb-4">{t('loanEligibility.financialDetails')}</h4>
                                              
                                              <div className="mb-3">
-                                                 <label className="form-label">Net Monthly Income (₹)</label>
+                                                 <label className="form-label">{t('loanEligibility.netMonthlyIncome')}</label>
                                                  <input 
                                                      type="number" 
                                                      className="form-control" 
@@ -107,7 +109,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                              </div>
  
                                              <div className="mb-3">
-                                                 <label className="form-label">Existing Monthly EMIs (₹)</label>
+                                                 <label className="form-label">{t('loanEligibility.existingEmis')}</label>
                                                  <input 
                                                      type="number" 
                                                      className="form-control" 
@@ -117,7 +119,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                              </div>
  
                                              <div className="mb-3">
-                                                 <label className="form-label">Other Monthly Expenses (₹)</label>
+                                                 <label className="form-label">{t('loanEligibility.otherExpenses')}</label>
                                                  <input 
                                                      type="number" 
                                                      className="form-control" 
@@ -127,7 +129,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                              </div>
  
                                              <div className="mb-3">
-                                                 <label className="form-label">Interest Rate (%)</label>
+                                                 <label className="form-label">{t('loanEligibility.interestRate')}</label>
                                                  <input 
                                                      type="number" 
                                                      className="form-control" 
@@ -138,7 +140,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                              </div>
  
                                              <div className="mb-3">
-                                                 <label className="form-label">Loan Tenure (Years)</label>
+                                                 <label className="form-label">{t('loanEligibility.loanTenure')}</label>
                                                  <input 
                                                      type="number" 
                                                      className="form-control" 
@@ -151,7 +153,7 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
  
                                      <div className="col-lg-6">
                                          <div className="bg-main text-white p-4 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center text-center">
-                                             <h3 className="text-white mb-2">Maximum Eligible Loan</h3>
+                                             <h3 className="text-white mb-2">{t('loanEligibility.maxEligibleLoan')}</h3>
                                              <div className="display-4 fw-bold mb-4 text-white">
                                                  {formatCurrency(maxLoan)}
                                              </div>
@@ -160,18 +162,18 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
  
                                              <div className="row">
                                                  <div className="col-6">
-                                                     <small className="d-block opacity-75">Max Monthly EMI</small>
+                                                     <small className="d-block opacity-75">{t('loanEligibility.maxMonthlyEmi')}</small>
                                                      <span className="fs-5 fw-bold">{formatCurrency(eligibleEmi)}</span>
                                                  </div>
                                                  <div className="col-6">
-                                                     <small className="d-block opacity-75">Tenure</small>
-                                                     <span className="fs-5 fw-bold">{tenure} Years</span>
+                                                     <small className="d-block opacity-75">{t('loanEligibility.tenure')}</small>
+                                                     <span className="fs-5 fw-bold">{t('loanEligibility.tenureYears', { years: tenure })}</span>
                                                  </div>
                                              </div>
                                              
                                              <div className="mt-4 pt-3">
                                                  <p className="small opacity-75 mb-0">
-                                                     * This is an estimate based on standard bank norms (FOIR). Actual eligibility may vary based on credit score, age, and bank policies.
+                                                     {t('loanEligibility.estimateNote')}
                                                  </p>
                                              </div>
                                          </div>

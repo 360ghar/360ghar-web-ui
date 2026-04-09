@@ -1,5 +1,5 @@
 import { socialLists } from '../../data/CommonData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const SocialList = () => {
     return (
@@ -8,7 +8,7 @@ const SocialList = () => {
                 socialLists.map((socialList, index) => {
                     return (
                         <li className="social-list__item" key={index}>
-                            <Link to={socialList.link} className="social-list__link flx-center">{socialList.icon}</Link>
+                            <I18nLink to={socialList.link} className="social-list__link flx-center">{socialList.icon}</I18nLink>
                         </li>
                     )
                 })

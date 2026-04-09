@@ -1,16 +1,19 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const ComparePage = lazy(() => import('./ComparePage'));
 
 const StanzaCompare = () => {
+  const { t } = useTranslation('compare');
   const competitor = competitors.stanza;
-  
+
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs Stanza Living | Better Managed Accommodation"
-      pageDescription="Compare 360 Ghar with Stanza Living. See why consistent quality, transparent pricing, and responsive maintenance make 360 Ghar the better choice."
+      pageTitle={t('stanza.pageTitle')}
+      pageDescription={t('stanza.pageDescription')}
       canonicalPath="/vs/stanza-living"
     />
   );

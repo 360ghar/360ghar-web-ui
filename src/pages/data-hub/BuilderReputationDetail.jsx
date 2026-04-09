@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -38,6 +40,7 @@ const formatCurrency = (amount) => {
 };
 
 const BuilderReputationDetail = () => {
+  const { t } = useTranslation('data-hub');
   const { slug } = useParams();
 
   const [builder, setBuilder] = useState(null);
@@ -103,7 +106,7 @@ const BuilderReputationDetail = () => {
           <Header />
           <section className="pt-60 pb-60">
             <div className="container">
-              <p className="color-text-3">Loading builder profile...</p>
+              <p className="color-text-3">{t('builderReputation.detail.loading')}</p>
             </div>
           </section>
           <Footer />
@@ -122,9 +125,9 @@ const BuilderReputationDetail = () => {
           <Header />
           <section className="pt-60 pb-60">
             <div className="container text-center py-60">
-              <h2 className="fs-24 fw-600 mb-15">Builder Not Found</h2>
-              <p className="color-text-3 mb-20">We could not find a builder profile for this page.</p>
-              <Link to="/builder-reputation" className="btn btn-main">Back to Builder Directory</Link>
+              <h2 className="fs-24 fw-600 mb-15">{t('builderReputation.detail.notFound')}</h2>
+              <p className="color-text-3 mb-20">{t('builderReputation.detail.notFoundDesc')}</p>
+              <I18nLink to="/builder-reputation" className="btn btn-main">{t('builderReputation.detail.backToDirectory')}</I18nLink>
             </div>
           </section>
           <Footer />
@@ -143,8 +146,8 @@ const BuilderReputationDetail = () => {
           <Header />
           <section className="pt-60 pb-60">
             <div className="container text-center py-60">
-              <p className="color-danger fs-16">Builder data temporarily unavailable. Please try again later.</p>
-              <Link to="/builder-reputation" className="btn btn-outline-secondary mt-20">Back to Directory</Link>
+              <p className="color-danger fs-16">{t('builderReputation.detail.error')}</p>
+              <I18nLink to="/builder-reputation" className="btn btn-outline-secondary mt-20">{t('builderReputation.detail.backToDir')}</I18nLink>
             </div>
           </section>
           <Footer />
@@ -196,9 +199,9 @@ const BuilderReputationDetail = () => {
 
             {/* Breadcrumb */}
             <div className="mb-20" style={{ fontSize: 13, color: '#6b7280' }}>
-              <Link to="/builder-reputation" style={{ color: '#6b7280', textDecoration: 'none' }}>
-                Builder Directory
-              </Link>
+              <I18nLink to="/builder-reputation" style={{ color: '#6b7280', textDecoration: 'none' }}>
+                {t('builderReputation.detail.builderDirectory')}
+              </I18nLink>
               <span className="mx-2">/</span>
               <span style={{ color: '#111827' }}>{builderName}</span>
             </div>
@@ -231,7 +234,7 @@ const BuilderReputationDetail = () => {
                         <div style={{ fontSize: 22, fontWeight: 700, color: '#111827' }}>
                           {builder?.total_projects ?? '—'}
                         </div>
-                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>Total Projects</div>
+                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>{t('builderReputation.detail.totalProjects')}</div>
                       </div>
                     </div>
                     <div className="col-4 col-md-3">
@@ -239,7 +242,7 @@ const BuilderReputationDetail = () => {
                         <div style={{ fontSize: 22, fontWeight: 700, color: '#111827' }}>
                           {builder?.total_complaints ?? '—'}
                         </div>
-                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>Total Complaints</div>
+                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>{t('builderReputation.detail.totalComplaints')}</div>
                       </div>
                     </div>
                     <div className="col-4 col-md-3">
@@ -247,7 +250,7 @@ const BuilderReputationDetail = () => {
                         <div style={{ fontSize: 22, fontWeight: 700, color: '#111827' }}>
                           {builder?.total_penalties != null ? formatCurrency(builder.total_penalties) : '—'}
                         </div>
-                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>Total Penalties</div>
+                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>{t('builderReputation.detail.totalPenalties')}</div>
                       </div>
                     </div>
                   </div>
@@ -260,8 +263,8 @@ const BuilderReputationDetail = () => {
               <div className="col-12">
                 <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #e5e7eb' }}>
                   {[
-                    { key: 'projects', label: 'RERA Projects' },
-                    { key: 'complaints', label: 'Complaints & Orders' },
+                    { key: 'projects', label: t('builderReputation.detail.tabs.reraProjects') },
+                    { key: 'complaints', label: t('builderReputation.detail.tabs.complaintsOrders') },
                   ].map((tab) => (
                     <button
                       key={tab.key}
@@ -316,25 +319,25 @@ const BuilderReputationDetail = () => {
                     </div>
                   ) : projects.length === 0 ? (
                     <div className="text-center py-40">
-                      <p className="fs-16 color-text-3">No RERA projects found for this builder.</p>
+                      <p className="fs-16 color-text-3">{t('builderReputation.detail.noProjects')}</p>
                     </div>
                   ) : (
                     <>
-                      <p className="mb-20 fs-14 color-text-3">{projectsTotal} project{projectsTotal !== 1 ? 's' : ''} found</p>
+                      <p className="mb-20 fs-14 color-text-3">{t('builderReputation.detail.projectsFound', { count: projectsTotal, suffix: projectsTotal !== 1 ? 's' : '' })}</p>
                       <div className="row g-3 mb-30">
                         {projects.map((project) => (
                           <div key={project.id || project.rera_number} className="col-lg-4 col-md-6 col-12">
                             <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 20, background: '#fff', height: '100%' }}>
                               <div className="d-flex justify-content-between align-items-start mb-10">
                                 <span style={statusBadgeStyle(project.status)}>
-                                  {project.status ? project.status.charAt(0).toUpperCase() + project.status.slice(1) : 'Unknown'}
+                                  {project.status ? project.status.charAt(0).toUpperCase() + project.status.slice(1) : t('builderReputation.detail.unknown')}
                                 </span>
                                 {project.property_type && (
                                   <span style={{ fontSize: 11, color: '#6b7280', textTransform: 'capitalize' }}>{project.property_type}</span>
                                 )}
                               </div>
                               <h3 style={{ fontSize: 15, fontWeight: 600, margin: '0 0 6px', color: '#111827' }}>
-                                {project.project_name || 'Unnamed Project'}
+                                {project.project_name || t('builderReputation.detail.unnamedProject')}
                               </h3>
                               {project.rera_number && (
                                 <p style={{ margin: '0 0 10px', fontFamily: 'monospace', fontSize: 12, color: '#374151', background: '#f3f4f6', padding: '4px 8px', borderRadius: 4, wordBreak: 'break-all' }}>
@@ -344,13 +347,13 @@ const BuilderReputationDetail = () => {
                               <div className="d-flex gap-20 flex-wrap">
                                 {project.total_units != null && (
                                   <div>
-                                    <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>Units</span>
+                                    <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>{t('builderReputation.detail.units')}</span>
                                     <span style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>{project.total_units}</span>
                                   </div>
                                 )}
                                 {project.possession_date && (
                                   <div>
-                                    <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>Possession</span>
+                                    <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>{t('builderReputation.detail.possession')}</span>
                                     <span style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>
                                       {new Date(project.possession_date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
                                     </span>
@@ -377,7 +380,7 @@ const BuilderReputationDetail = () => {
                 <div className="col-12">
                   {complaints.length === 0 ? (
                     <div className="text-center py-40">
-                      <p className="fs-16 color-text-3">No complaints or orders found for this builder.</p>
+                      <p className="fs-16 color-text-3">{t('builderReputation.detail.noComplaints')}</p>
                     </div>
                   ) : (
                     <div className="d-flex flex-column gap-3 mb-30">
@@ -411,7 +414,7 @@ const BuilderReputationDetail = () => {
                                   padding: '3px 10px',
                                   borderRadius: 6,
                                 }}>
-                                  Penalty: {formatCurrency(complaint.penalty_amount)}
+                                  {t('builderReputation.detail.penalty', { amount: formatCurrency(complaint.penalty_amount) })}
                                 </span>
                               )}
                             </div>
@@ -433,7 +436,7 @@ const BuilderReputationDetail = () => {
             <div className="row mt-20">
               <div className="col-12">
                 <p style={{ fontSize: 12, color: '#9ca3af', borderTop: '1px solid #e5e7eb', paddingTop: 16 }}>
-                  Data sourced from publicly available HRERA records. 360Ghar does not guarantee accuracy or completeness of regulatory data.
+                  {t('builderReputation.detail.disclaimer')}
                 </p>
               </div>
             </div>
@@ -445,11 +448,11 @@ const BuilderReputationDetail = () => {
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center">
-                <h2 className="cta-title mb-3">Looking for Verified Properties?</h2>
-                <p className="mb-4">Explore our curated listings from trusted developers in Gurugram.</p>
+                <h2 className="cta-title mb-3">{t('builderReputation.detail.cta.title')}</h2>
+                <p className="mb-4">{t('builderReputation.detail.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">Browse Properties</a>
-                  <Link to="/builder-reputation" className="btn btn-outline-white">Back to Builder Directory</Link>
+                  <a href="/properties" className="btn btn-white btn-main">{t('builderReputation.detail.cta.browseProperties')}</a>
+                  <I18nLink to="/builder-reputation" className="btn btn-outline-white">{t('builderReputation.detail.cta.backToDirectory')}</I18nLink>
                 </div>
               </div>
             </div>

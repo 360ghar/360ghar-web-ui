@@ -302,3 +302,69 @@
 }
 
 /* ====================== Property Details Section End ================= */
+
+/* ====================== Property Skeleton Shimmer Start ================= */
+@keyframes shimmer {
+    0%   { background-position: -800px 0; }
+    100% { background-position:  800px 0; }
+}
+
+.property-skeleton {
+    $shimmer-bg: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    $shimmer-size: 1600px 100%;
+
+    &__block {
+        border-radius: 6px;
+        background: $shimmer-bg;
+        background-size: $shimmer-size;
+        animation: shimmer 1.4s infinite linear;
+    }
+
+    &__image {
+        width: 100%;
+        height: 420px;
+        border-radius: 10px;
+        background: $shimmer-bg;
+        background-size: $shimmer-size;
+        animation: shimmer 1.4s infinite linear;
+        margin-bottom: 20px;
+    }
+
+    &__title {
+        height: 32px;
+        width: 60%;
+        margin-bottom: 12px;
+    }
+
+    &__subtitle {
+        height: 20px;
+        width: 40%;
+        margin-bottom: 24px;
+    }
+
+    &__line {
+        height: 16px;
+        width: 100%;
+        margin-bottom: 10px;
+
+        &--short { width: 70%; }
+        &--xshort { width: 45%; }
+    }
+
+    &__badge {
+        height: 28px;
+        width: 80px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+
+    &__card {
+        border: 1px solid #ececec;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+}
+/* ====================== Property Skeleton Shimmer End ================= */

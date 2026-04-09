@@ -4,17 +4,20 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import ProjectSection from '../../components/project/ProjectSection';
+import { useTranslation } from 'react-i18next';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 
 const Project = () => {
+    const { t } = useTranslation('projects');
+
     return (
         <>
         <SEO
-            title="Real Estate Projects in Gurugram | 360Ghar"
-            description="Explore new and upcoming real estate projects in Gurugram. Find residential and commercial developments with virtual tours."
-            keywords="real estate projects, new projects Gurugram, upcoming developments, residential projects, commercial projects"
+            title={t('projectPage.seoTitle')}
+            description={t('projectPage.seoDescription')}
+            keywords={t('projectPage.seoKeywords')}
             canonical="/projects"
             image={siteMetadata.defaultOgImage}
             type="website"
@@ -23,7 +26,7 @@ const Project = () => {
         <MobileMenu />
 
         <main className="body-bg">
-            
+
             {/* Header */}
             <Header
                 headerClass="dark-header has-border"
@@ -35,9 +38,9 @@ const Project = () => {
                 showContactNumber={false}
             />
 
-            
+
             {/* Project Section */}
-            <ProjectSection/>     
+            <ProjectSection/>
 
             {/* Cta */}
             <Cta ctaClass=""/>
@@ -45,7 +48,7 @@ const Project = () => {
             {/* Footer */}
             <Footer/>
 
-        </main>   
+        </main>
         </>
     );
 };

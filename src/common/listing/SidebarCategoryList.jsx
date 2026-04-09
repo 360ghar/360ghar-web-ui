@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { blogService } from '../../services/blogService';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const SidebarCategoryList = () => {
     const [categories, setCategories] = useState([]);
@@ -32,10 +32,10 @@ const SidebarCategoryList = () => {
                 {error && !loading && <li className="category-list__item text-danger">{error}</li>}
                 {!loading && !error && categories.map((c, i) => (
                     <li className="category-list__item" key={c.id || i}>
-                        <Link to={`/blog?category=${c.slug || c.id}`} className="category-list__link flx-between">
+                        <I18nLink to={`/blog?category=${c.slug || c.id}`} className="category-list__link flx-between">
                             <span className="text">{c.name || c.title}</span>
                             {c.count !== undefined && <span className="number">({c.count})</span>}
-                        </Link>
+                        </I18nLink>
                     </li>
                 ))}
             </ul>   

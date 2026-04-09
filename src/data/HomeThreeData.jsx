@@ -3,7 +3,7 @@
 import BannerThreeThumb from '/assets/images/thumbs/banner-three.png'
 export const bannerThreeContent = {
     subtitle: 'INDIA\'S FIRST AI + VR REAL ESTATE PLATFORM',
-    title: 'India\'s VR-First Way to',
+    title: 'India\'s VR-First Way to ',
     shapedTitle: 'Find a Home',
     desc: 'We eliminate fake and misleading property listings in Gurugram. Browse verified properties with studio-quality 360° guided walkthroughs, inspected by our on-site team. Your dedicated Relationship Manager ensures a seamless journey — complete transparency, zero upfront fees.',
     thumb: BannerThreeThumb

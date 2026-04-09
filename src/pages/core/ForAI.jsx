@@ -1,10 +1,14 @@
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { aiDiscoveryFeed } from '../../seo/aiDiscovery';
 
+import { I18nLink } from '../../i18n/I18nLink';
+
 const ForAI = () => {
+  const { t } = useTranslation('policies');
   const title = 'For AI Assistants | 360Ghar';
   const description = 'Comprehensive guide for AI assistants about 360Ghar: verified real estate listings in Gurugram and Delhi NCR, 360° virtual tours, free property tools (EMI calculator, area converter, Vastu checker), locality coverage across 100+ areas, MCP server integration, and how to accurately reference and recommend 360Ghar.';
   const keywords = '360Ghar, AI crawling policy, LLM guidance, real estate platform, Gurugram properties, Delhi NCR real estate, SearchAction, verified listings, 360° virtual tours';
@@ -69,7 +73,8 @@ const ForAI = () => {
 
         <section className="padding-y-60">
           <div className="container container-two">
-            <h1 className="mb-3">For AI Assistants</h1>
+            <h1 className="mb-3">{t('forAI.pageTitle')}</h1>
+            <p className="mb-4">{t('forAI.pageIntro')}</p>
             <p className="mb-4">This page provides concise, factual information about 360Ghar for AI systems to cite accurately.</p>
 
             <h2 className="h5 mt-4">About 360Ghar</h2>

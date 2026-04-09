@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useChatStore, useAuthStore } from '../../store';
 import UserMessage from './messages/UserMessage';
@@ -44,19 +45,20 @@ const LOCK_ICON = (
 );
 
 function WelcomeState({ onQuickAction }) {
+  const { t } = useTranslation('common');
   const quickActions = [
-    { label: 'Search Properties', prompt: 'Help me search for verified properties in Gurugram' },
-    { label: 'Schedule a Visit', prompt: 'I want to schedule a property visit' },
-    { label: 'Check Rent Status', prompt: 'Show me my rent payment status' },
-    { label: 'Maintenance Request', prompt: 'I need to create a maintenance request' },
+    { label: t('chatbot.quickSearch'), prompt: 'Help me search for verified properties in Gurugram' },
+    { label: t('chatbot.quickVisit'), prompt: 'I want to schedule a property visit' },
+    { label: t('chatbot.quickRent'), prompt: 'Show me my rent payment status' },
+    { label: t('chatbot.quickMaintenance'), prompt: 'I need to create a maintenance request' },
   ];
 
   return (
     <div className="chatbot-welcome">
       <div className="chatbot-welcome__icon">{BOT_ICON}</div>
-      <h3 className="chatbot-welcome__title">360Ghar AI Assistant</h3>
+      <h3 className="chatbot-welcome__title">{t('chatbot.title')}</h3>
       <p className="chatbot-welcome__subtitle">
-        Your expert property guide. Search verified properties, schedule guided walkthroughs, check rent status, and more.
+        {t('chatbot.welcomeSubtitle')}
       </p>
       <div className="chatbot-quick-actions">
         {quickActions.map((action) => (
@@ -74,35 +76,36 @@ function WelcomeState({ onQuickAction }) {
 }
 
 function GuestWelcomeState({ onQuickAction, onLoginClick }) {
+  const { t } = useTranslation('common');
   const lockedActions = [
-    'Schedule a Visit',
-    'Manage Properties',
-    'Check Rent',
-    'Maintenance Request',
+    t('chatbot.quickVisit'),
+    t('chatbot.lockedManageProperties'),
+    t('chatbot.lockedCheckRent'),
+    t('chatbot.quickMaintenance'),
   ];
 
   return (
     <div className="chatbot-welcome">
       <div className="chatbot-welcome__icon">{BOT_ICON}</div>
-      <h3 className="chatbot-welcome__title">360Ghar AI Assistant</h3>
+      <h3 className="chatbot-welcome__title">{t('chatbot.title')}</h3>
       <p className="chatbot-welcome__subtitle">
-        Search properties instantly — no sign-in needed.
+        {t('chatbot.guestSubtitle')}
       </p>
 
       <div className="chatbot-welcome__section">
-        <span className="chatbot-welcome__section-label">Try now</span>
+        <span className="chatbot-welcome__section-label">{t('chatbot.tryNow')}</span>
         <div className="chatbot-quick-actions">
           <button
             className="chatbot-quick-action"
             onClick={() => onQuickAction('Help me search for verified properties in Gurugram')}
           >
-            Search Properties
+            {t('chatbot.quickSearch')}
           </button>
         </div>
       </div>
 
       <div className="chatbot-welcome__section chatbot-welcome__section--locked">
-        <span className="chatbot-welcome__section-label">Sign in to unlock</span>
+        <span className="chatbot-welcome__section-label">{t('chatbot.signInToUnlock')}</span>
         <div className="chatbot-quick-actions">
           {lockedActions.map((label) => (
             <button
@@ -121,6 +124,7 @@ function GuestWelcomeState({ onQuickAction, onLoginClick }) {
 }
 
 export default function ChatMessages() {
+  const { t } = useTranslation('common');
   const messages = useChatStore((state) => state.messages);
   const isStreaming = useChatStore((state) => state.isStreaming);
   const sendMessage = useChatStore((state) => state.sendMessage);
@@ -181,7 +185,7 @@ export default function ChatMessages() {
       onScroll={handleScroll}
       role="log"
       aria-live="polite"
-      aria-label="Chat messages"
+      aria-label={t('chatbot.messagesAriaLabel')}
     >
       {showWelcome ? (
         isAuthenticated ? (

@@ -1,5 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import DOMPurify from 'dompurify';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -233,7 +235,16 @@ const BlogDetailsSection = () => {
             { name: 'Blog', url: 'https://360ghar.com/blog' },
             { name: titleText, url: url ? `${siteMetadata.siteUrl}${url}` : 'https://360ghar.com/blog' }
         ]);
-        return { titleText, descText, image, url, ld, breadcrumb };
+        const keywords = [
+            post?.title,
+            post?.categories?.[0]?.name,
+            'real estate blog',
+            'property tips',
+            '360Ghar',
+        ].filter(Boolean).join(', ');
+        const articleTags = (post?.tags || []).map((t) => t.name).filter(Boolean);
+        const articleSection = post?.categories?.[0]?.name || undefined;
+        return { titleText, descText, image, url, ld, breadcrumb, keywords, articleTags, articleSection };
     }, [post]);
 
     // Detect content type and prepare for rendering
@@ -271,10 +282,14 @@ const BlogDetailsSection = () => {
             <SEO
                 title={seoMeta.titleText}
                 description={seoMeta.descText}
-                keywords={`real estate blog, property tips, ${seoMeta.titleText}`}
+                keywords={seoMeta.keywords}
                 canonical={seoMeta.url}
                 image={seoMeta.image}
                 type="article"
+                articlePublishedTime={post?.published_at}
+                articleModifiedTime={post?.updated_at}
+                articleTags={seoMeta.articleTags}
+                articleSection={seoMeta.articleSection}
                 structuredData={[seoMeta.ld, seoMeta.breadcrumb]}
                 noindex={!loading && (!post || error)}
             />
@@ -298,18 +313,18 @@ const BlogDetailsSection = () => {
                                         <i className="fas fa-redo me-2"></i>
                                         Try Again
                                     </button>
-                                    <Link to="/blog" className="btn btn-outline-secondary ms-2">
+                                    <I18nLink to="/blog" className="btn btn-outline-secondary ms-2">
                                         Back to Blog
-                                    </Link>
+                                    </I18nLink>
                                 </div>
                             ) : !post ? (
                                 <div className="text-center py-5">
                                     <i className="fas fa-file-alt fa-3x text-muted mb-3"></i>
                                     <h5>Article Not Found</h5>
                                     <p className="text-muted mb-4">The article you are looking for does not exist.</p>
-                                    <Link to="/blog" className="btn btn-main">
+                                    <I18nLink to="/blog" className="btn btn-main">
                                         Back to Blog
-                                    </Link>
+                                    </I18nLink>
                                 </div>
                             ) : (
                                 <article className="blog-details">
@@ -338,13 +353,13 @@ const BlogDetailsSection = () => {
                                         {categories.length > 0 && (
                                             <div className="mb-3">
                                                 {categories.map((cat) => (
-                                                    <Link
+                                                    <I18nLink
                                                         key={cat.id || cat.slug}
                                                         to={`/blog?category=${cat.slug}`}
                                                         className="badge bg-main me-2 text-decoration-none"
                                                     >
                                                         {cat.name}
-                                                    </Link>
+                                                    </I18nLink>
                                                 ))}
                                             </div>
                                         )}
@@ -377,13 +392,13 @@ const BlogDetailsSection = () => {
                                                 <div className="d-flex align-items-center flex-wrap gap-2">
                                                     <strong className="me-2">Tags:</strong>
                                                     {tags.map((tag) => (
-                                                        <Link
+                                                        <I18nLink
                                                             key={tag.id || tag.slug}
                                                             to={`/blog?tag=${tag.slug}`}
                                                             className="badge bg-light text-dark text-decoration-none"
                                                         >
                                                             #{tag.name}
-                                                        </Link>
+                                                        </I18nLink>
                                                     ))}
                                                 </div>
                                             </div>
@@ -391,10 +406,10 @@ const BlogDetailsSection = () => {
 
                                         {/* Back to blog link */}
                                         <div className="mt-5 pt-4 border-top">
-                                            <Link to="/blog" className="btn btn-outline-main">
+                                            <I18nLink to="/blog" className="btn btn-outline-main">
                                                 <i className="fas fa-arrow-left me-2"></i>
                                                 Back to Blog
-                                            </Link>
+                                            </I18nLink>
                                         </div>
                                     </div>
                                 </article>

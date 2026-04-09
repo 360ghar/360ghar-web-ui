@@ -1,6 +1,6 @@
 import SectionHeading from '../../common/ui/SectionHeading';
 import { messageThreeContents } from '../../data/HomeThreeData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import LazyImage from '../../common/ui/LazyImage';
 const MessageThree = () => {
@@ -78,7 +78,7 @@ const MessageThree = () => {
                                             <div className="common-check">
                                                 <input className="form-check-input" type="checkbox" id="terms_agreement" name="terms_agreement" required />
                                                 <label className="form-check-label" htmlFor="terms_agreement">
-                                                    I agree to the <Link to="/policies/terms-of-service" className="text-decoration-underline text-main">Terms of Service</Link> and <Link to="/policies/privacy-policy" className="text-decoration-underline text-main">Privacy Policy</Link>.
+                                                    I agree to the <I18nLink to="/policies/terms-of-service" className="text-decoration-underline text-main">Terms of Service</I18nLink> and <I18nLink to="/policies/privacy-policy" className="text-decoration-underline text-main">Privacy Policy</I18nLink>.
                                                 </label>
                                             </div>
                                         </div>

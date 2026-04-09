@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const BlogKeyword = () => {
     return (
@@ -6,22 +6,22 @@ const BlogKeyword = () => {
             <div className="blog-keyword flx-between gap-2">
                 <div className="blog-keyword__content">
                     <span className="blog-keyword__text t text-heading fw-bold">Keyword: </span>
-                    <Link to="#" className="blog-keyword__link">Gurugram Real Estate</Link>
-                    <Link to="#" className="blog-keyword__link">PG in Gurugram</Link>
-                    <Link to="#" className="blog-keyword__link">360° Tours</Link>
+                    <I18nLink to="#" className="blog-keyword__link">Gurugram Real Estate</I18nLink>
+                    <I18nLink to="#" className="blog-keyword__link">PG in Gurugram</I18nLink>
+                    <I18nLink to="#" className="blog-keyword__link">360° Tours</I18nLink>
                 </div>
                 <ul className="social-list style-two mt-0">
                     <li className="social-list__item">
-                        <Link to="https://www.facebook.com/people/360Ghar" className="social-list__link flx-center text-facebook"><i className="fab fa-facebook"></i>
-                        </Link>
+                        <I18nLink to="https://www.facebook.com/people/360Ghar" className="social-list__link flx-center text-facebook"><i className="fab fa-facebook"></i>
+                        </I18nLink>
                     </li>
                     <li className="social-list__item">
-                        <Link to="https://x.com/360Ghar" className="social-list__link flx-center text-twitter"><i className="fab fa-twitter"></i>
-                        </Link>
+                        <I18nLink to="https://x.com/360Ghar" className="social-list__link flx-center text-twitter"><i className="fab fa-twitter"></i>
+                        </I18nLink>
                     </li>
                     <li className="social-list__item">
-                        <Link to="https://in.linkedin.com/company/360ghar" className="social-list__link flx-center text-linkedin"> <i className="fab fa-linkedin"></i>
-                        </Link>
+                        <I18nLink to="https://in.linkedin.com/company/360ghar" className="social-list__link flx-center text-linkedin"> <i className="fab fa-linkedin"></i>
+                        </I18nLink>
                     </li>
                 </ul>
             </div>   

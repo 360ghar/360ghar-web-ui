@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { dataHubService } from '../../services/dataHubService';
 
 const CircleRateBanner = ({ sector }) => {
@@ -29,7 +29,7 @@ const CircleRateBanner = ({ sector }) => {
         <strong>Circle Rate ({sector}): {rateDisplay}</strong>
         {latest.property_type && <span style={{ color: '#6b7280', marginLeft: 6 }}>({latest.property_type})</span>}
       </span>
-      <Link to="/circle-rates" style={{ color: '#2563eb', fontWeight: 600 }}>View All →</Link>
+      <I18nLink to="/circle-rates" style={{ color: '#2563eb', fontWeight: 600 }}>View All →</I18nLink>
     </div>
   );
 };

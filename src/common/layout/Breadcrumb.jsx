@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import BreadcrumbImage from '/assets/images/thumbs/breadcrumb-img.png';
 
 import LazyImage from '../ui/LazyImage';
@@ -15,7 +15,7 @@ const Breadcrumb = (props) => {
                                 <h2 className="breadcrumb__title"> {props.pageTitle}</h2>
                                 <ul className="breadcrumb__list">
                                     <li className="breadcrumb__item">
-                                        <Link to="/" className="breadcrumb__link"> <i className="fas fa-home"></i> Home</Link> 
+                                        <I18nLink to="/" className="breadcrumb__link"> <i className="fas fa-home"></i> Home</I18nLink> 
                                     </li>
                                     <li className="breadcrumb__item"><i className="fas fa-angle-right"></i></li>
                                     <li className="breadcrumb__item"> <span className="breadcrumb__item-text"> {props.pageName}  </span> </li>

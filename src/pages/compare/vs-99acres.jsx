@@ -1,16 +1,18 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
 
 const ComparePage = lazy(() => import('./ComparePage'));
 
 const AcresCompare = () => {
+  const { t } = useTranslation('compare');
   const competitor = competitors['99acres'];
-  
+
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs 99acres | Why 360 Ghar is the Better Property Platform"
-      pageDescription="Compare 360 Ghar with 99acres. See why 360 Ghar offers better property verification, zero spam calls, and verified 360° virtual tours in Gurugram."
+      pageTitle={t('99acres.pageTitle')}
+      pageDescription={t('99acres.pageDescription')}
       canonicalPath="/vs/99acres"
     />
   );

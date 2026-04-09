@@ -5,13 +5,13 @@
     <link>https://360ghar.com</link>
     <description>Index of all 360Ghar RSS feeds: blog, properties, and localities</description>
     <language>en-in</language>
-    <lastBuildDate>Sun, 29 Mar 2026 22:03:21 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 07 Apr 2026 00:04:26 GMT</lastBuildDate>
     <atom:link href="https://360ghar.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>360Ghar Blog</title>
       <link>https://360ghar.com/rss/blog.xml</link>
       <description>Real estate guides, buying tips, locality deep-dives, and market updates</description>
-      <pubDate>Sun, 29 Mar 2026 22:03:21 GMT</pubDate>
+      <pubDate>Tue, 07 Apr 2026 00:04:26 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/blog.xml</guid>
     </item>
     <item>
@@ -25,7 +25,7 @@
       <title>360Ghar Localities</title>
       <link>https://360ghar.com/rss/localities.xml</link>
       <description>Locality guides and neighbourhood intelligence for Gurugram and Delhi NCR</description>
-      <pubDate>Sun, 29 Mar 2026 00:00:00 GMT</pubDate>
+      <pubDate>Mon, 06 Apr 2026 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/localities.xml</guid>
     </item>
   </channel>

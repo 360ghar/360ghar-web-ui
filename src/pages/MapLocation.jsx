@@ -5,15 +5,18 @@ import OffCanvas from '../common/layout/OffCanvas';
 import Cta from '../components/ui/Cta';
 import MapLocationSection from '../components/layout/MapLocationSection';
 import SEO from '../common/SEO';
+import { useTranslation } from 'react-i18next';
 import { siteMetadata } from '../seo/siteMetadata';
 
 const MapLocation = () => {
+    const { t } = useTranslation('properties');
+
     return (
         <>
         <SEO
-            title="Properties on Map | Find Real Estate Near You | 360Ghar"
-            description="Explore properties on an interactive map. Find homes, apartments, and commercial spaces near you in Gurugram."
-            keywords="map search, properties near me, real estate map, Gurugram properties map"
+            title={t('mapLocation.seoTitle')}
+            description={t('mapLocation.seoDescription')}
+            keywords={t('mapLocation.seoKeywords')}
             canonical="/map-location"
             noindex
             image={siteMetadata.defaultOgImage}
@@ -24,7 +27,7 @@ const MapLocation = () => {
         <MobileMenu />
 
         <main className="body-bg">
-            
+
             {/* Header */}
             <Header
                 headerClass="dark-header has-border"
@@ -36,7 +39,7 @@ const MapLocation = () => {
                 showContactNumber={false}
             />
 
-            
+
             {/* Map Location  */}
             <MapLocationSection/>
 
@@ -46,7 +49,7 @@ const MapLocation = () => {
             {/* Footer */}
             <Footer/>
 
-        </main>   
+        </main>
         </>
     );
 };

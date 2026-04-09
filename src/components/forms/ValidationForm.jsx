@@ -1,8 +1,12 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import i18n from '../../i18n';
 
 const ValidationForm = (props) => {
+
+    const { t } = useTranslation('forms');
 
     const formik = useFormik({
         initialValues: {
@@ -13,16 +17,15 @@ const ValidationForm = (props) => {
         },
         // Validate by Yup
         validationSchema: yup.object({
-            name: yup.string().min(3, "Too Short! Must be at least 3 characters long").required(),
-            address: yup.string().min(3, "Too Short! Must be at least 3 characters long").required(),
-            email: yup.string().email("Your Email is not valid! Provide valid email").required(),
-            message: yup.string().min(5, "Message must have minimum 5 characters"),
+            name: yup.string().min(3, () => i18n.t('forms:name.tooShort')).required(() => i18n.t('forms:generic.required')),
+            address: yup.string().min(3, () => i18n.t('forms:address.tooShort')).required(() => i18n.t('forms:generic.required')),
+            email: yup.string().email(() => i18n.t('forms:email.invalid')).required(() => i18n.t('forms:generic.required')),
+            message: yup.string().min(5, () => i18n.t('forms:message.minLength')),
         }),
 
         onSubmit: (values, { resetForm }) => {
-            // alert(JSON.stringify(values, null, 2));
             resetForm({ values: "" });
-            toast.success("Congratulations! You Have Submitted Successfully.", {
+            toast.success(t('generic.congratsSuccess'), {
                 theme: "colored",
             });
         },
@@ -54,13 +57,13 @@ const ValidationForm = (props) => {
                     <div className={props.colClass}>
                         {
                             props.renderLabel && (
-                                <label htmlFor="name" className={`form-label ${props.labelClass}`}>Your Name</label>
+                                <label htmlFor="name" className={`form-label ${props.labelClass}`}>{t('name.labelYourName')}</label>
                             )
                         }
                         <div className="position-relative">
                             <input
                                 type="text"
-                                placeholder="Name"
+                                placeholder={t('name.placeholderName')}
                                 name='name'
                                 id='name'
                                 onChange={formik.handleChange}
@@ -79,13 +82,13 @@ const ValidationForm = (props) => {
                     <div className={props.colClass}>
                         {
                             props.renderLabel && (
-                                <label htmlFor="email" className={`form-label ${props.labelClass}`}>Your Email</label>
+                                <label htmlFor="email" className={`form-label ${props.labelClass}`}>{t('email.labelYourEmail')}</label>
                             )
                         }
                         <div className="position-relative">
                             <input
                                 type="email"
-                                placeholder="Your Email"
+                                placeholder={t('email.placeholderYourEmail')}
                                 name='email'
                                 id='email'
                                 onChange={formik.handleChange}
@@ -102,13 +105,13 @@ const ValidationForm = (props) => {
                     <div className={props.colClass}>
                         {
                             props.renderLabel && (
-                                <label htmlFor="address" className={`form-label ${props.labelClass}`}>Your Address</label>
+                                <label htmlFor="address" className={`form-label ${props.labelClass}`}>{t('address.label')}</label>
                             )
                         }
                         <div className="position-relative">
                             <input
                                 type="text"
-                                placeholder="Your Address"
+                                placeholder={t('address.placeholder')}
                                 name='address'
                                 id='address'
                                 onChange={formik.handleChange}
@@ -125,12 +128,12 @@ const ValidationForm = (props) => {
                     <div className="col-lg-12">
                         {
                             props.renderLabel && (
-                                <label htmlFor="message" className={`form-label ${props.labelClass}`}>Your Message</label>
+                                <label htmlFor="message" className={`form-label ${props.labelClass}`}>{t('message.label')}</label>
                             )
                         }
                         <div className="position-relative">
                             <textarea
-                                placeholder="Write Message.."
+                                placeholder={t('message.placeholder')}
                                 name='message'
                                 id='message'
                                 onChange={formik.handleChange}
@@ -146,7 +149,7 @@ const ValidationForm = (props) => {
                     </div>
 
                     <div className="col-lg-12">
-                        <button type="submit" className="btn btn-main w-100"> Send Message </button>
+                        <button type="submit" className="btn btn-main w-100"> {t('message.sendBtn')} </button>
                     </div>
                 </div>
             </form>

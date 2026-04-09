@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect }  from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -6,6 +7,7 @@ import OffCanvas from '../../common/layout/OffCanvas';
 
 import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import {
   PuterAuthPrompt,
@@ -88,6 +90,8 @@ const buildReimaginePrompt = ({ style, customPrompt }) => {
 };
 
 const AIDesignStudio = () => {
+  const { t } = useTranslation('tools');
+
   // App state: auth, input, loading, result, error
   const [appState, setAppState] = useState('auth');
   const [isAuthLoading, setIsAuthLoading] = useState(false);
@@ -308,9 +312,9 @@ const AIDesignStudio = () => {
   return (
     <>
       <SEO
-        title="AI Design Studio - Interior & Exterior Design Generator | 360Ghar"
-        description="Transform your space with AI-powered interior and exterior design generation. Create stunning room designs or reimagine your existing photos with our free AI design tool."
-        keywords="AI interior design, AI exterior design, room design generator, home design AI, interior decorator AI, 360ghar, free design tool"
+        title={t('aiDesignStudio.title')}
+        description={t('aiDesignStudio.description')}
+        keywords={t('aiDesignStudio.keywords')}
         canonical="/ai-design-studio"
         type="website"
         structuredData={generateBreadcrumbStructuredData([
@@ -332,8 +336,8 @@ const AIDesignStudio = () => {
             {appState === 'auth' && (
               <>
                 <div className="section-heading text-center mb-4">
-                  <h2 className="section-title">AI Design Studio</h2>
-                  <p className="section-desc">Generate stunning room designs with AI</p>
+                  <h2 className="section-title">{t('aiDesignStudio.heroTitle')}</h2>
+                  <p className="section-desc">{t('aiDesignStudio.heroDescAuth')}</p>
                 </div>
                 <PuterAuthPrompt
                   onSignIn={handleSignIn}
@@ -346,8 +350,8 @@ const AIDesignStudio = () => {
             {appState === 'input' && (
               <>
                 <div className="section-heading text-center mb-4">
-                  <h2 className="section-title">AI Design Studio</h2>
-                  <p className="section-desc">Select your preferences and generate</p>
+                  <h2 className="section-title">{t('aiDesignStudio.heroTitle')}</h2>
+                  <p className="section-desc">{t('aiDesignStudio.heroDescInput')}</p>
                 </div>
 
                 <div className="design-form-wrapper">
@@ -423,7 +427,7 @@ const AIDesignStudio = () => {
                         disabled={generationMode === 'image-to-image' && !selectedFile}
                       >
                         <i className="fas fa-magic me-2"></i>
-                        Generate Design
+                        {t('aiDesignStudio.generateDesign')}
                       </button>
                     </div>
                   </form>

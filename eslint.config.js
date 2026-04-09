@@ -22,6 +22,14 @@ export default [
       'react/prop-types': 'off',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      // Enforce I18nLink usage — warn on direct Link imports from react-router-dom
+      'no-restricted-imports': ['warn', {
+        paths: [{
+          name: 'react-router-dom',
+          importNames: ['Link'],
+          message: 'Use I18nLink from "src/i18n/I18nLink" instead of Link from react-router-dom for localization support.',
+        }],
+      }],
     },
     languageOptions: {
       parserOptions: {

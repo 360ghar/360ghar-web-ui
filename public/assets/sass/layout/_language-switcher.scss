@@ -1,0 +1,44 @@
+/* Language Switcher */
+.language-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    /* Light variant -- for white/light backgrounds (header) */
+    &--light {
+        border: 1px solid var(--gray-200);
+        color: var(--text-primary);
+
+        &:hover {
+            border-color: var(--main-color);
+            color: var(--main-color-dark);
+            background-color: var(--gray-100);
+        }
+    }
+
+    /* Dark variant -- for dark backgrounds (mobile menu, footer) */
+    &--dark {
+        border: 1px solid hsl(var(--white) / 0.3);
+        color: hsl(var(--white));
+
+        &:hover {
+            border-color: var(--main-color);
+            color: var(--main-color);
+            background-color: hsl(var(--white) / 0.06);
+        }
+    }
+}

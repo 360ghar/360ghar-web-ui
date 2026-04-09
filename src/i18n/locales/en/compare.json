@@ -1,0 +1,139 @@
+{
+  "hero": {
+    "vs": "vs",
+    "browseProperties": "Browse Properties",
+    "listYourProperty": "List Your Property"
+  },
+  "quickComparison": {
+    "subtitle": "Quick Comparison",
+    "titlePrefix": "Why 360 Ghar Beats",
+    "desc": "See how we stack up against the competition in key areas that matter most to property seekers"
+  },
+  "featureComparison": {
+    "subtitle": "Feature Comparison",
+    "title": "Detailed Feature-by-Feature Analysis",
+    "descPrefix": "A comprehensive look at how 360 Ghar compares to",
+    "descSuffix": "across all important features"
+  },
+  "claimsVsReality": {
+    "subtitle": "The Truth",
+    "titlePrefix": "What",
+    "titleSuffix": "Claims vs Reality",
+    "desc": "We investigated the marketing promises to find out what users actually experience",
+    "claimBadge": "Claim",
+    "realityBadge": "Reality"
+  },
+  "whyChooseUs": {
+    "subtitle": "Our Advantage",
+    "title": "Why Choose 360 Ghar?",
+    "desc": "The smarter way to find your perfect property with verified listings and dedicated support",
+    "browseVerified": "Browse Verified Properties"
+  },
+  "userReviews": {
+    "subtitle": "User Reviews",
+    "titlePrefix": "What Users Say About",
+    "desc": "Real feedback from users who have experienced the platform firsthand"
+  },
+  "faq": {
+    "subtitle": "FAQ",
+    "titlePrefix": "Common Questions About",
+    "subtitleDefault": "Get answers to frequently asked questions"
+  },
+  "seeAlso": {
+    "subtitle": "Related",
+    "title": "See Also",
+    "truthPrefix": "The Truth About",
+    "truthDesc": "Investigate real user experiences",
+    "comparePrefix": "360Ghar vs",
+    "compareDesc": "Compare features side-by-side"
+  },
+  "cta": {
+    "title": "Ready to Experience the 360 Ghar Difference?",
+    "subtitle": "Join thousands of happy property seekers who made the switch",
+    "findProperty": "Find Your Perfect Property",
+    "listFree": "List Your Property Free"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "compare": "Compare"
+  },
+  "comparisonTable": {
+    "feature": "Feature"
+  },
+  "features": {
+    "360VirtualTours": "360\u00b0 Virtual Tours",
+    "360VirtualToursDesc": "Immersive 360-degree property walkthroughs",
+    "onSiteVerification": "On-site Verification",
+    "onSiteVerificationDesc": "Physical verification of properties by team",
+    "spamFreeExperience": "Spam-free Experience",
+    "spamFreeExperienceDesc": "No unwanted calls or data sharing",
+    "dedicatedRM": "Dedicated Relationship Manager",
+    "dedicatedRMDesc": "Personal manager for end-to-end support",
+    "transparentPricing": "Transparent Pricing",
+    "transparentPricingDesc": "No hidden charges or surprise fees",
+    "verifiedProperties": "Verified Properties",
+    "verifiedPropertiesDesc": "Genuine, accurate property listings",
+    "aiPropertyMatch": "AI Property Match",
+    "aiPropertyMatchDesc": "Smart AI-powered recommendations",
+    "dataPrivacy": "Data Privacy",
+    "dataPrivacyDesc": "User data not sold to third parties",
+    "customerSupport": "Customer Support",
+    "customerSupportDesc": "Responsive and helpful support team",
+    "noUpfrontFees": "No Upfront Fees",
+    "noUpfrontFeesDesc": "No upfront fees for renters/buyers"
+  },
+  "advantages": {
+    "virtualToursTitle": "360\u00b0 Virtual Tours",
+    "virtualToursDesc": "Every property comes with immersive 360\u00b0 virtual tours. Explore properties from anywhere before visiting.",
+    "verificationTitle": "On-Site Verification",
+    "verificationDesc": "Our team personally visits and verifies every listing. What you see is what you get.",
+    "zeroSpamTitle": "Zero Spam Calls",
+    "zeroSpamDesc": "Your privacy is paramount. We never sell your data. No brokers, no spam calls.",
+    "dedicatedRMTitle": "Dedicated Relationship Manager",
+    "dedicatedRMDesc": "Get a personal Relationship Manager who handles your entire journey from search to possession.",
+    "transparentTitle": "Transparent Pricing",
+    "transparentDesc": "No hidden charges. What you see is what you pay. Full visibility into all costs.",
+    "aiSearchTitle": "AI-Powered Search",
+    "aiSearchDesc": "Our AI understands your needs and finds the perfect property match instantly."
+  },
+  "nobroker": {
+    "pageTitle": "360 Ghar vs NoBroker | Why 360 Ghar is Better for Gurugram Property Search",
+    "pageDescription": "Discover why 360 Ghar is the better alternative to NoBroker. Compare features, read user reviews, and see why thousands choose 360 Ghar for verified properties with 360\u00b0 virtual tours in Gurugram."
+  },
+  "magicbricks": {
+    "pageTitle": "360 Ghar vs MagicBricks | Best Alternative to MagicBricks in Gurugram",
+    "pageDescription": "Find out why 360 Ghar is the best MagicBricks alternative for Gurugram property search. Compare verified listings, virtual tours, and zero spam experience."
+  },
+  "99acres": {
+    "pageTitle": "360 Ghar vs 99acres | Why 360 Ghar is the Better Property Platform",
+    "pageDescription": "Compare 360 Ghar with 99acres. See why 360 Ghar offers better property verification, zero spam calls, and verified 360\u00b0 virtual tours in Gurugram."
+  },
+  "housing": {
+    "pageTitle": "360 Ghar vs Housing.com | Better Alternative for Gurugram Property Search",
+    "pageDescription": "Compare 360 Ghar with Housing.com. See why verified properties, 360\u00b0 virtual tours, and dedicated relationship managers make 360 Ghar the better choice."
+  },
+  "commonfloor": {
+    "pageTitle": "360 Ghar vs CommonFloor | Modern Property Search in Gurugram",
+    "pageDescription": "Compare 360 Ghar with CommonFloor. See why 360 Ghar's modern features, AI-powered search, and verified listings are the better choice for Gurugram property seekers."
+  },
+  "proptiger": {
+    "pageTitle": "360 Ghar vs PropTiger | Better Real Estate Advisory in Gurugram",
+    "pageDescription": "Compare 360 Ghar with PropTiger. See why transparent pricing, verified properties, and no-pressure approach make 360 Ghar the better property platform."
+  },
+  "squareyards": {
+    "pageTitle": "360 Ghar vs Square Yards | Transparent Property Search in Gurugram",
+    "pageDescription": "Compare 360 Ghar with Square Yards. See why unbiased recommendations and transparent pricing make 360 Ghar the better choice for property seekers."
+  },
+  "nestaway": {
+    "pageTitle": "360 Ghar vs NestAway | Reliable Rental Property Platform",
+    "pageDescription": "Compare 360 Ghar with NestAway. See why verified properties, transparent pricing, and financial stability make 360 Ghar the better rental platform."
+  },
+  "zolo": {
+    "pageTitle": "360 Ghar vs Zolo Stays | Better Co-living Option in Gurugram",
+    "pageDescription": "Compare 360 Ghar with Zolo Stays. See why verified listings, transparent pricing, and no hidden charges make 360 Ghar the better co-living choice."
+  },
+  "stanza": {
+    "pageTitle": "360 Ghar vs Stanza Living | Better Managed Accommodation",
+    "pageDescription": "Compare 360 Ghar with Stanza Living. See why consistent quality, transparent pricing, and responsive maintenance make 360 Ghar the better choice."
+  }
+}

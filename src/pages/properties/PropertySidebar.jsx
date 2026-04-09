@@ -5,8 +5,11 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import PropertySidebarSection from '../../components/property/PropertySidebarSection';
 import SEO from '../../common/SEO';
+import { useTranslation } from 'react-i18next';
 
 const Property = () => {
+    const { t } = useTranslation('properties');
+
     return (
         <>
             <SEO
@@ -23,7 +26,7 @@ const Property = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/add-new-listing"
-                    btnText="Add Listing"
+                    btnText={t('addListing.addListing')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />

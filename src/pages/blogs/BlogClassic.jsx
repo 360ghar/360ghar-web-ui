@@ -5,38 +5,14 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import BlogClassicSection from '../../components/blog/BlogClassicSection';
 import SEO from '../../common/SEO';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
-const featuredGuides = [
-    {
-        title: 'Market reports',
-        description: 'Track Gurugram buying, renting, and locality trends before you shortlist.',
-        links: [
-            { label: 'Gurugram Real Estate Guide', to: '/gurugram-real-estate-guide' },
-            { label: 'Property Investment in Gurugram', to: '/property-investment-gurugram' },
-        ],
-    },
-    {
-        title: 'Locality research',
-        description: 'Move from broad city search into locality-level intelligence and price context.',
-        links: [
-            { label: 'Localities Directory', to: '/localities' },
-            { label: 'Properties Search', to: '/properties' },
-        ],
-    },
-    {
-        title: 'Planning tools',
-        description: 'Use calculators and checklists while reading guides so decisions stay grounded.',
-        links: [
-            { label: 'EMI Calculator', to: '/emi-calculator' },
-            { label: 'Property Checklist', to: '/property-document-checklist' },
-        ],
-    },
-];
-
 const BlogClassic = () => {
+    const { t } = useTranslation('blog');
     const [searchParams] = useSearchParams();
 
     // Category / tag / page awareness
@@ -45,19 +21,47 @@ const BlogClassic = () => {
     const page = parseInt(searchParams.get('page'), 10) || 1;
     const isFiltered = Boolean(category || tag);
 
+    // Featured guides derived from translation keys
+    const featuredGuides = [
+        {
+            title: t('featuredGuides.marketReports.title'),
+            description: t('featuredGuides.marketReports.description'),
+            links: [
+                { label: t('featuredGuides.marketReports.guideLabel'), to: '/gurugram-real-estate-guide' },
+                { label: t('featuredGuides.marketReports.investmentLabel'), to: '/property-investment-gurugram' },
+            ],
+        },
+        {
+            title: t('featuredGuides.localityResearch.title'),
+            description: t('featuredGuides.localityResearch.description'),
+            links: [
+                { label: t('featuredGuides.localityResearch.directoryLabel'), to: '/localities' },
+                { label: t('featuredGuides.localityResearch.searchLabel'), to: '/properties' },
+            ],
+        },
+        {
+            title: t('featuredGuides.planningTools.title'),
+            description: t('featuredGuides.planningTools.description'),
+            links: [
+                { label: t('featuredGuides.planningTools.emiLabel'), to: '/emi-calculator' },
+                { label: t('featuredGuides.planningTools.checklistLabel'), to: '/property-document-checklist' },
+            ],
+        },
+    ];
+
     // Build dynamic title and description
-    const baseTitle = 'Real Estate Blog | 360Ghar Insights';
+    const baseTitle = t('blogClassicPage.baseTitle');
     const seoTitle = category
-        ? `${category} | Real Estate Blog | 360Ghar`
+        ? `${category} | ${baseTitle}`
         : tag
-            ? `${tag} | Real Estate Blog | 360Ghar`
+            ? `${tag} | ${baseTitle}`
             : baseTitle;
 
-    const baseDescription = 'Guides and insights on buying, renting, PGs, investment trends, locality deep-dives, and market updates across Gurugram and Delhi NCR.';
+    const baseDescription = t('blogClassicPage.baseDescription');
     const seoDescription = category
-        ? `Browse ${category} articles. ${baseDescription}`
+        ? t('blogClassicPage.categoryArticles', { category, baseDescription })
         : tag
-            ? `Posts tagged "${tag}". ${baseDescription}`
+            ? t('blogClassicPage.taggedPosts', { tag, baseDescription })
             : baseDescription;
 
     // Canonical: /blog for page 1, /blog?page=N for page > 1
@@ -79,8 +83,8 @@ const BlogClassic = () => {
         },
         mainEntity: {
             '@type': 'ItemList',
-            name: 'Real Estate Articles',
-            description: 'Latest insights on property buying, renting, and investment in Gurugram'
+            name: t('blogClassicPage.collectionName'),
+            description: t('blogClassicPage.collectionDesc')
         }
     };
 
@@ -99,8 +103,8 @@ const BlogClassic = () => {
           structuredData={[
             blogCollectionSchema,
             generateBreadcrumbStructuredData([
-              { name: 'Home', url: 'https://360ghar.com/' },
-              { name: 'Blog', url: 'https://360ghar.com/blog' }
+              { name: t('blogClassicPage.breadcrumbHome'), url: 'https://360ghar.com/' },
+              { name: t('blogClassicPage.breadcrumbBlog'), url: 'https://360ghar.com/blog' }
             ])
           ]}
         />
@@ -122,14 +126,14 @@ const BlogClassic = () => {
                 <div className="container container-two">
                     <div className="row g-4 align-items-start">
                         <div className="col-lg-7">
-                            <span className="subtitle bg-gray-100 px-3 py-2 rounded-pill d-inline-block mb-3">Research Hub</span>
-                            <h1 className="mb-3">Real Estate Guides for Gurugram and Delhi NCR</h1>
+                            <span className="subtitle bg-gray-100 px-3 py-2 rounded-pill d-inline-block mb-3">{t('blogClassic.subtitle')}</span>
+                            <h1 className="mb-3">{t('blogClassic.title')}</h1>
                             <p className="text-muted mb-4">
-                                Use this hub for buying guides, rental checklists, locality research, investment notes, and property-planning tools. The latest posts load dynamically, but this page always keeps key research paths crawlable and easy to reach.
+                                {t('blogClassic.desc')}
                             </p>
                             <div className="d-flex flex-wrap gap-2">
-                                <a href="#latest-posts" className="btn btn-main">Browse Latest Posts</a>
-                                <Link to="/localities" className="btn btn-outline-main">Explore Localities</Link>
+                                <a href="#latest-posts" className="btn btn-main">{t('blogClassic.browseLatest')}</a>
+                                <I18nLink to="/localities" className="btn btn-outline-main">{t('blogClassic.exploreLocalities')}</I18nLink>
                             </div>
                         </div>
                         <div className="col-lg-5">
@@ -141,9 +145,9 @@ const BlogClassic = () => {
                                             <p className="text-muted mb-3">{group.description}</p>
                                             <div className="d-flex flex-wrap gap-2">
                                                 {group.links.map((link) => (
-                                                    <Link key={link.to} to={link.to} className="btn btn-outline-main btn-sm">
+                                                    <I18nLink key={link.to} to={link.to} className="btn btn-outline-main btn-sm">
                                                         {link.label}
-                                                    </Link>
+                                                    </I18nLink>
                                                 ))}
                                             </div>
                                         </div>
@@ -154,7 +158,7 @@ const BlogClassic = () => {
                     </div>
                 </div>
             </section>
-            
+
             <section id="latest-posts">
                 <BlogClassicSection/>
             </section>

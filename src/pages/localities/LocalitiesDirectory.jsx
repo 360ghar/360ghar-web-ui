@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -164,9 +164,9 @@ const LocalitiesDirectory = () => {
                                 <div className="locality-stat-card h-100">
                                     <span className="locality-stat-card__label">Popular jumps</span>
                                     <p className="mb-0 d-flex flex-wrap gap-2">
-                                        <Link to="/locality/dlf-phase-1-gurgaon" className="btn btn-outline-main btn-sm">DLF Phase 1</Link>
-                                        <Link to="/locality/golf-course-road-gurgaon" className="btn btn-outline-main btn-sm">Golf Course Road</Link>
-                                        <Link to="/locality/sushant-lok-1-gurgaon" className="btn btn-outline-main btn-sm">Sushant Lok 1</Link>
+                                        <I18nLink to="/locality/dlf-phase-1-gurgaon" className="btn btn-outline-main btn-sm">DLF Phase 1</I18nLink>
+                                        <I18nLink to="/locality/golf-course-road-gurgaon" className="btn btn-outline-main btn-sm">Golf Course Road</I18nLink>
+                                        <I18nLink to="/locality/sushant-lok-1-gurgaon" className="btn btn-outline-main btn-sm">Sushant Lok 1</I18nLink>
                                     </p>
                                 </div>
                             </div>
@@ -260,13 +260,13 @@ const LocalitiesDirectory = () => {
                                         <div className="row g-3">
                                             {groupedLocalities[letter].map((loc) => (
                                                 <div className="col-sm-6 col-lg-4" key={loc.slug}>
-                                                    <Link to={`/locality/${loc.slug}-gurgaon`} className="locality-directory-card text-decoration-none">
+                                                    <I18nLink to={`/locality/${loc.slug}-gurgaon`} className="locality-directory-card text-decoration-none">
                                                         <div className="d-flex justify-content-between align-items-start gap-3">
                                                             <h3 className="locality-directory-card__title mb-0">{loc.name}</h3>
                                                             <span className="locality-directory-card__type">{loc.entityType || loc.type || 'Locality'}</span>
                                                         </div>
                                                         <p className="locality-directory-card__meta mb-0">{loc.city || 'Gurugram'} • Verified locality insights</p>
-                                                    </Link>
+                                                    </I18nLink>
                                                 </div>
                                             ))}
                                         </div>

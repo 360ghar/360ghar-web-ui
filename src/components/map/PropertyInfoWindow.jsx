@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import {
   getListingLabel,
   getPropertyTypeLabel,
@@ -79,10 +79,10 @@ const PropertyInfoWindow = ({ property, onClose }) => {
           )}
         </div>
         
-        <Link to={`/property/${property.id}`} className="info-window-link">
+        <I18nLink to={`/property/${property.id}`} className="info-window-link">
           View Details
           <i className="fas fa-arrow-right ms-2"></i>
-        </Link>
+        </I18nLink>
       </div>
     </div>
   );

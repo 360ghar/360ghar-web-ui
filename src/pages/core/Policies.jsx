@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -64,6 +65,7 @@ const extractSummary = (page, fallbackDescription) => {
 };
 
 const Policies = () => {
+  const { t } = useTranslation('policies');
   const [fetchedPolicies, setFetchedPolicies] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -162,7 +164,7 @@ const Policies = () => {
           <div className="row justify-content-center mb-40">
             <div className="col-lg-8 text-center">
               <p className="mb-0 text-secondary">
-                Access the latest legal and operational policies for using the 360Ghar platform.
+                {t('policies.pageSubtitle')}
               </p>
             </div>
           </div>
@@ -171,8 +173,7 @@ const Policies = () => {
             <div className="row justify-content-center mb-4">
               <div className="col-lg-8">
                 <div className="alert alert-warning mb-0" role="alert">
-                  We could not refresh the policy summaries. You can still open each document to see the latest
-                  details.
+                  {t('policies.errorAlert')}
                 </div>
               </div>
             </div>
@@ -182,9 +183,9 @@ const Policies = () => {
             <div className="row justify-content-center py-5">
               <div className="col-lg-6 text-center">
                 <div className="spinner-border text-main mb-3" role="status" aria-live="polite">
-                  <span className="visually-hidden">Loading...</span>
+                  <span className="visually-hidden">{t('policies.loadingAria')}</span>
                 </div>
-                <p className="mb-0 text-secondary">Loading policies...</p>
+                <p className="mb-0 text-secondary">{t('policies.loading')}</p>
               </div>
             </div>
           ) : (
@@ -198,7 +199,7 @@ const Policies = () => {
                           <h3 className="h5 mb-1">{policy.title}</h3>
                           {policy.lastUpdated && (
                             <p className="small text-muted mb-0">
-                              Updated{' '}
+                              {t('policies.updatedLabel')}{' '}
                               {new Date(policy.lastUpdated).toLocaleDateString(undefined, {
                                 year: 'numeric',
                                 month: 'short',
@@ -208,14 +209,14 @@ const Policies = () => {
                           )}
                         </div>
                         {policy.hasError && (
-                          <span className="badge bg-warning text-dark">Offline</span>
+                          <span className="badge bg-warning text-dark">{t('policies.offlineBadge')}</span>
                         )}
                       </div>
                       {policy.summary && <p className="mt-3 mb-4 text-secondary flex-grow-1">{policy.summary}</p>}
                       <div className="d-flex justify-content-end mt-auto pt-3">
-                        <Link to={`/policies/${policy.uniqueName}`} className="btn btn-outline-main px-4">
-                          Read Policy
-                        </Link>
+                        <I18nLink to={`/policies/${policy.uniqueName}`} className="btn btn-outline-main px-4">
+                          {t('policies.readPolicy')}
+                        </I18nLink>
                       </div>
                     </div>
                   </article>

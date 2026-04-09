@@ -238,7 +238,9 @@ const PropertyDetailsSection = ({ property }) => {
   const { scheduleVisit, isLoading: visitLoading } = useVisitStore();
   const { isAuthenticated, user } = useAuthStore();
 
-  const [visitDate, setVisitDate] = useState('');
+  const [visitDatePart, setVisitDatePart] = useState('');
+  const [visitTimePart, setVisitTimePart] = useState('');
+  const visitDate = visitDatePart && visitTimePart ? `${visitDatePart}T${visitTimePart}` : '';
   const [visitNotes, setVisitNotes] = useState('');
   const [likeLoading, setLikeLoading] = useState(false);
 
@@ -415,7 +417,8 @@ const PropertyDetailsSection = ({ property }) => {
     const res = await scheduleVisit({ property_id: property?.id, scheduled_date: isoDate, special_requirements: visitNotes });
     if (res) {
       setVisitNotes('');
-      setVisitDate('');
+      setVisitDatePart('');
+      setVisitTimePart('');
       setVisitSuccess(true);
       setTimeout(() => setVisitSuccess(false), 5000);
       hapticSuccess();
@@ -677,7 +680,7 @@ const PropertyDetailsSection = ({ property }) => {
                 />
               </div>
 
-              <h3 className="property-details__title mt-3 mb-1">{title}</h3>
+              <h1 className="property-details__title mt-3 mb-1">{title}</h1>
               <h5 className="property-details__price mb-2">
                 {price} <span className="day">{day}</span>
               </h5>
@@ -1014,28 +1017,48 @@ const PropertyDetailsSection = ({ property }) => {
                       )}
                       
                       <div className="d-flex flex-column gap-2">
-                        <div className="position-relative">
-                          <input
-                            id="visit-date-time"
-                            name="visitDate"
-                            type="datetime-local"
-                            className={`form-control ${visitErrors.visitDate ? 'is-invalid' : ''}`}
-                            value={visitDate}
-                            onChange={(e) => {
-                              setVisitDate(e.target.value);
-                              if (visitErrors.visitDate) {
-                                setVisitErrors(prev => ({ ...prev, visitDate: '' }));
-                              }
-                            }}
-                            autoComplete="off"
-                          />
-                          {visitErrors.visitDate && (
-                            <div className="invalid-feedback d-block">
-                              <i className="fas fa-exclamation-circle me-1"></i>
-                              {visitErrors.visitDate}
-                            </div>
-                          )}
+                        <div className="d-flex gap-2">
+                          <div className="flex-fill">
+                            <label htmlFor="visit-date" className="visually-hidden">Visit date</label>
+                            <input
+                              id="visit-date"
+                              name="visitDate"
+                              type="date"
+                              className={`form-control ${visitErrors.visitDate ? 'is-invalid' : ''}`}
+                              value={visitDatePart}
+                              onChange={(e) => {
+                                setVisitDatePart(e.target.value);
+                                if (visitErrors.visitDate) {
+                                  setVisitErrors(prev => ({ ...prev, visitDate: '' }));
+                                }
+                              }}
+                              autoComplete="off"
+                            />
+                          </div>
+                          <div className="flex-fill">
+                            <label htmlFor="visit-time" className="visually-hidden">Visit time</label>
+                            <input
+                              id="visit-time"
+                              name="visitTime"
+                              type="time"
+                              className={`form-control ${visitErrors.visitDate ? 'is-invalid' : ''}`}
+                              value={visitTimePart}
+                              onChange={(e) => {
+                                setVisitTimePart(e.target.value);
+                                if (visitErrors.visitDate) {
+                                  setVisitErrors(prev => ({ ...prev, visitDate: '' }));
+                                }
+                              }}
+                              autoComplete="off"
+                            />
+                          </div>
                         </div>
+                        {visitErrors.visitDate && (
+                          <div className="invalid-feedback d-block">
+                            <i className="fas fa-exclamation-circle me-1"></i>
+                            {visitErrors.visitDate}
+                          </div>
+                        )}
                         
                         <label htmlFor="visit-notes" className="visually-hidden">Special requirements</label>
                         <textarea

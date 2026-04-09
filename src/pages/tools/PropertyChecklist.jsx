@@ -1,35 +1,38 @@
  import { useState } from 'react';
+ import { useTranslation } from 'react-i18next';
  import Header from '../../common/layout/Header';
  import Footer from '../../common/layout/Footer';
  import MobileMenu from '../../common/layout/MobileMenu';
  import OffCanvas from '../../common/layout/OffCanvas';
- 
+
  import SEO from '../../common/SEO';
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
- 
+
  const PropertyChecklist = () => {
+     const { t } = useTranslation('tools');
+
      const checklistData = {
-         "Legal Documents (Pre-Purchase)": [
-             { id: 1, text: "Title Deed / Sale Deed", desc: "Verify the seller has clear ownership of the property." },
-             { id: 2, text: "Encumbrance Certificate (EC)", desc: "Ensures the property is free from legal dues or mortgages." },
-             { id: 3, text: "NA Order (Non-Agricultural)", desc: "Required if buying land to build a home." },
-             { id: 4, text: "Approved Building Plan", desc: "Check if the building plan is approved by the local municipal authority." },
-             { id: 5, text: "Completion / Occupancy Certificate", desc: "Proof that the building is constructed according to approved plans and is ready for habitation." }
+         [t('propertyChecklist.catLegalDocuments')]: [
+             { id: 1, text: t('propertyChecklist.docTitleDeed'), desc: t('propertyChecklist.docTitleDeedDesc') },
+             { id: 2, text: t('propertyChecklist.docEncumbrance'), desc: t('propertyChecklist.docEncumbranceDesc') },
+             { id: 3, text: t('propertyChecklist.docNAOrder'), desc: t('propertyChecklist.docNAOrderDesc') },
+             { id: 4, text: t('propertyChecklist.docBuildingPlan'), desc: t('propertyChecklist.docBuildingPlanDesc') },
+             { id: 5, text: t('propertyChecklist.docCompletion'), desc: t('propertyChecklist.docCompletionDesc') }
          ],
-         "Financial & Tax Documents": [
-             { id: 6, text: "Property Tax Receipts", desc: "Ensure all previous property taxes have been paid by the seller." },
-             { id: 7, text: "Khata Certificate", desc: "Proof that the property is registered in the municipal records." },
-             { id: 8, text: "NOC from Bank", desc: "If the seller had a loan, ensure they have a No Objection Certificate from the bank." },
-             { id: 9, text: "NOC from Society/RWA", desc: "Required for transferring the share certificate in housing societies." }
+         [t('propertyChecklist.catFinancialTax')]: [
+             { id: 6, text: t('propertyChecklist.docPropertyTax'), desc: t('propertyChecklist.docPropertyTaxDesc') },
+             { id: 7, text: t('propertyChecklist.docKhata'), desc: t('propertyChecklist.docKhataDesc') },
+             { id: 8, text: t('propertyChecklist.docNocBank'), desc: t('propertyChecklist.docNocBankDesc') },
+             { id: 9, text: t('propertyChecklist.docNocSociety'), desc: t('propertyChecklist.docNocSocietyDesc') }
          ],
-         "Agreement & Registration": [
-             { id: 10, text: "Sale Agreement", desc: "Drafted on stamp paper, outlining terms and conditions of the sale." },
-             { id: 11, text: "Stamp Duty Payment", desc: "Proof of stamp duty payment to the government." },
-             { id: 12, text: "Registration Receipt", desc: "Final proof of transaction registration with the sub-registrar." },
-             { id: 13, text: "Possession Letter", desc: "Issued by the builder/seller when handing over keys." }
+         [t('propertyChecklist.catAgreementRegistration')]: [
+             { id: 10, text: t('propertyChecklist.docSaleAgreement'), desc: t('propertyChecklist.docSaleAgreementDesc') },
+             { id: 11, text: t('propertyChecklist.docStampDuty'), desc: t('propertyChecklist.docStampDutyDesc') },
+             { id: 12, text: t('propertyChecklist.docRegistration'), desc: t('propertyChecklist.docRegistrationDesc') },
+             { id: 13, text: t('propertyChecklist.docPossession'), desc: t('propertyChecklist.docPossessionDesc') }
          ]
      };
  
@@ -53,9 +56,9 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
      return (
          <>
              <SEO
-                title="Property Documents Checklist India | Home Buying Legal Checklist | 360Ghar"
-                description="Essential document checklist for buying property in India. Ensure you have all legal papers: Title Deed, EC, Occupancy Certificate, etc. Verified by 360Ghar experts."
-                keywords="property document checklist India, documents for buying flat, home loan documents list, property legal verification checklist, real estate documents India, 360ghar guide"
+                title={t('propertyChecklist.title')}
+                description={t('propertyChecklist.description')}
+                keywords={t('propertyChecklist.keywords')}
                  canonical="/property-document-checklist"
                  image={siteMetadata.defaultOgImage}
                  type="website"
@@ -83,8 +86,8 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                  {/* Progress Bar */}
                                  <div className="mb-5 bg-white p-4 rounded-3 shadow-sm sticky-top" style={{top: '90px', zIndex: 90}}>
                                      <div className="d-flex justify-content-between mb-2">
-                                         <span className="fw-bold">Your Progress</span>
-                                         <span className="fw-bold text-main">{calculateProgress()}% Completed</span>
+                                         <span className="fw-bold">{t('propertyChecklist.yourProgress')}</span>
+                                         <span className="fw-bold text-main">{calculateProgress()}{t('propertyChecklist.completed')}</span>
                                      </div>
                                      <div className="progress" style={{height: '10px'}}>
                                          <div 
@@ -128,10 +131,9 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                                  ))}
  
                                  <div className="mt-5 p-4 bg-info bg-opacity-10 rounded-3 border border-info">
-                                     <h5 className="text-info-emphasis"><i className="fas fa-info-circle me-2"></i>Note</h5>
+                                     <h5 className="text-info-emphasis"><i className="fas fa-info-circle me-2"></i>{t('propertyChecklist.noteTitle')}</h5>
                                      <p className="mb-0 small text-dark">
-                                         This checklist is for general guidance only. Property laws vary by state in India. 
-                                         It is highly recommended to consult a property lawyer for legal verification of documents before making a purchase.
+                                         {t('propertyChecklist.noteDesc')}
                                      </p>
                                  </div>
  

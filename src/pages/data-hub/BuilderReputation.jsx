@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -11,13 +12,6 @@ import ScoreWheel from '../../components/data-hub/ScoreWheel';
 import { dataHubService } from '../../services/dataHubService';
 
 const PAGE_LIMIT = 20;
-
-const SORT_OPTIONS = [
-  { value: 'score_desc', label: 'Score (High to Low)' },
-  { value: 'name_asc', label: 'Name (A-Z)' },
-  { value: 'projects_desc', label: 'Projects (Most First)' },
-  { value: 'complaints_desc', label: 'Complaints (Most First)' },
-];
 
 const scoreColor = (score) => {
   if (score >= 70) return '#22c55e';
@@ -38,6 +32,7 @@ const scoreBadgeStyle = (score) => ({
 });
 
 const BuilderReputation = () => {
+  const { t } = useTranslation('data-hub');
   const [builders, setBuilders] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -48,6 +43,13 @@ const BuilderReputation = () => {
   const [error, setError] = useState(null);
 
   const totalPages = Math.ceil(total / PAGE_LIMIT);
+
+  const SORT_OPTIONS = [
+    { value: 'score_desc', label: t('builderReputation.sortOptions.scoreDesc') },
+    { value: 'name_asc', label: t('builderReputation.sortOptions.nameAsc') },
+    { value: 'projects_desc', label: t('builderReputation.sortOptions.projectsDesc') },
+    { value: 'complaints_desc', label: t('builderReputation.sortOptions.complaintsDesc') },
+  ];
 
   useEffect(() => {
     dataHubService.getBuilders({ search, sort_by: sortBy, page, limit: PAGE_LIMIT })
@@ -100,9 +102,9 @@ const BuilderReputation = () => {
           <div className="container">
             <div className="row mb-20">
               <div className="col-12">
-                <h1 className="fs-28 fw-600 mb-10">Builder Reputation Directory — Gurugram</h1>
+                <h1 className="fs-28 fw-600 mb-10">{t('builderReputation.title')}</h1>
                 <p className="mb-0 color-text-3">
-                  Scores based on HRERA registered projects and complaints. Higher is better.
+                  {t('builderReputation.description')}
                 </p>
               </div>
             </div>
@@ -114,12 +116,12 @@ const BuilderReputation = () => {
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    placeholder="Search by builder name..."
+                    placeholder={t('builderReputation.searchPlaceholder')}
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                   />
                   <button type="submit" className="btn btn-main btn-sm" style={{ whiteSpace: 'nowrap' }}>
-                    Search
+                    {t('builderReputation.search')}
                   </button>
                 </form>
               </div>
@@ -140,9 +142,9 @@ const BuilderReputation = () => {
             <div className="row mb-20">
               <div className="col-12">
                 <div className="d-flex gap-20 flex-wrap" style={{ fontSize: 12, color: '#6b7280' }}>
-                  <span><span style={{ color: '#22c55e', fontWeight: 700 }}>70+</span> — Good</span>
-                  <span><span style={{ color: '#f59e0b', fontWeight: 700 }}>40–69</span> — Average</span>
-                  <span><span style={{ color: '#ef4444', fontWeight: 700 }}>Below 40</span> — Poor</span>
+                  <span>{t('builderReputation.scoreLegend.good')}</span>
+                  <span>{t('builderReputation.scoreLegend.average')}</span>
+                  <span>{t('builderReputation.scoreLegend.poor')}</span>
                 </div>
               </div>
             </div>
@@ -162,17 +164,17 @@ const BuilderReputation = () => {
               </div>
             ) : error ? (
               <div className="text-center py-40">
-                <p className="color-danger fs-16">Builder data temporarily unavailable. Please try again later.</p>
+                <p className="color-danger fs-16">{t('builderReputation.error')}</p>
               </div>
             ) : (
               <>
                 <p className="mb-20 fs-14 color-text-3">
-                  {total} builder{total !== 1 ? 's' : ''} found
+                  {t('builderReputation.buildersFound', { count: total, suffix: total !== 1 ? 's' : '' })}
                 </p>
 
                 {builders.length === 0 ? (
                   <div className="text-center py-40">
-                    <p className="fs-16 color-text-3">No builders found{search ? ` for "${search}"` : ''}.</p>
+                    <p className="fs-16 color-text-3">{t('builderReputation.noBuilders', { search: search ? t('builderReputation.noBuildersSearch', { search }) : '' })}</p>
                   </div>
                 ) : (
                   <>
@@ -182,10 +184,10 @@ const BuilderReputation = () => {
                         <table className="table table-bordered" style={{ fontSize: 14 }}>
                           <thead className="table-light">
                             <tr>
-                              <th>Builder Name</th>
-                              <th className="text-center">Projects</th>
-                              <th className="text-center">Complaints</th>
-                              <th className="text-center">Score</th>
+                              <th>{t('builderReputation.tableHeaders.builderName')}</th>
+                              <th className="text-center">{t('builderReputation.tableHeaders.projects')}</th>
+                              <th className="text-center">{t('builderReputation.tableHeaders.complaints')}</th>
+                              <th className="text-center">{t('builderReputation.tableHeaders.score')}</th>
                               <th></th>
                             </tr>
                           </thead>
@@ -195,12 +197,12 @@ const BuilderReputation = () => {
                               return (
                                 <tr key={builder.slug || builder.id}>
                                   <td>
-                                    <Link
+                                    <I18nLink
                                       to={`/builder-reputation/${builder.slug}`}
                                       style={{ fontWeight: 600, color: '#111827', textDecoration: 'none' }}
                                     >
-                                      {builder.name || 'Unknown Builder'}
-                                    </Link>
+                                      {builder.name || t('builderReputation.unknownBuilder')}
+                                    </I18nLink>
                                   </td>
                                   <td className="text-center">{builder.total_projects ?? '—'}</td>
                                   <td className="text-center">{builder.total_complaints ?? '—'}</td>
@@ -208,12 +210,12 @@ const BuilderReputation = () => {
                                     <span style={scoreBadgeStyle(score)}>{score}</span>
                                   </td>
                                   <td>
-                                    <Link
+                                    <I18nLink
                                       to={`/builder-reputation/${builder.slug}`}
                                       className="btn btn-sm btn-outline-secondary"
                                     >
-                                      View Profile
-                                    </Link>
+                                      {t('builderReputation.viewProfile')}
+                                    </I18nLink>
                                   </td>
                                 </tr>
                               );
@@ -231,21 +233,21 @@ const BuilderReputation = () => {
                           <div key={builder.slug || builder.id} className="col-12">
                             <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, background: '#fff' }}>
                               <div className="d-flex justify-content-between align-items-center mb-10">
-                                <Link
+                                <I18nLink
                                   to={`/builder-reputation/${builder.slug}`}
                                   style={{ fontWeight: 600, fontSize: 15, color: '#111827', textDecoration: 'none' }}
                                 >
-                                  {builder.name || 'Unknown Builder'}
-                                </Link>
+                                  {builder.name || t('builderReputation.unknownBuilder')}
+                                </I18nLink>
                                 <ScoreWheel score={score} size={52} label="" />
                               </div>
                               <div className="d-flex gap-20">
                                 <div>
-                                  <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>Projects</span>
+                                  <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>{t('builderReputation.mobileLabels.projects')}</span>
                                   <span style={{ fontSize: 14, fontWeight: 600 }}>{builder.total_projects ?? '—'}</span>
                                 </div>
                                 <div>
-                                  <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>Complaints</span>
+                                  <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>{t('builderReputation.mobileLabels.complaints')}</span>
                                   <span style={{ fontSize: 14, fontWeight: 600 }}>{builder.total_complaints ?? '—'}</span>
                                 </div>
                               </div>
@@ -269,8 +271,7 @@ const BuilderReputation = () => {
             <div className="row mt-30">
               <div className="col-12">
                 <p style={{ fontSize: 12, color: '#9ca3af', borderTop: '1px solid #e5e7eb', paddingTop: 16 }}>
-                  Scores based on HRERA registered projects and complaints. Higher is better.
-                  Data sourced from publicly available HRERA records. 360Ghar does not guarantee accuracy of regulatory data.
+                  {t('builderReputation.disclaimer')}
                 </p>
               </div>
             </div>
@@ -282,11 +283,11 @@ const BuilderReputation = () => {
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center">
-                <h2 className="cta-title mb-3">Looking for Trusted Properties?</h2>
-                <p className="mb-4">Browse verified properties from reputable builders in Gurugram.</p>
+                <h2 className="cta-title mb-3">{t('builderReputation.cta.title')}</h2>
+                <p className="mb-4">{t('builderReputation.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">Browse Properties</a>
-                  <a href="/contact" className="btn btn-outline-white">Contact Us</a>
+                  <a href="/properties" className="btn btn-white btn-main">{t('builderReputation.cta.browseProperties')}</a>
+                  <a href="/contact" className="btn btn-outline-white">{t('builderReputation.cta.contactUs')}</a>
                 </div>
               </div>
             </div>

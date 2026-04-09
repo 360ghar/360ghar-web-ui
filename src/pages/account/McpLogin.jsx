@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -18,6 +19,7 @@ import { getSupabaseAccessToken } from '../../services/supabaseClient';
 const McpLogin = () => {
   const [searchParams] = useSearchParams();
   const { login, isLoading, error, clearError } = useAuthStore();
+  const { t } = useTranslation('account');
 
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -69,8 +71,8 @@ const McpLogin = () => {
     return (
       <>
         <SEO
-          title="Connect AI Assistant | 360Ghar"
-          description="Securely connect your 360Ghar account to an AI assistant."
+          title={t('mcp.title')}
+          description={t('mcp.description')}
           canonical="/mcp/login"
           noindex
         />
@@ -80,7 +82,7 @@ const McpLogin = () => {
             headerMenusClass="mx-auto"
             btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
             btnLink="/add-new-listing"
-            btnText="Add Listing"
+            btnText={t('common.postProperty')}
             spanClass="icon-right text-gradient"
             showContactNumber={false}
           />
@@ -90,9 +92,9 @@ const McpLogin = () => {
               <div className="row justify-content-center">
                 <div className="col-lg-6">
                   <div className="card shadow-sm p-4 text-center">
-                    <h1 className="mb-3">AI assistant connection link required</h1>
+                    <h1 className="mb-3">{t('mcp.linkRequired')}</h1>
                     <p className="text-muted mb-0">
-                      Open this page from a valid AI assistant connection flow to finish linking your 360Ghar account.
+                      {t('mcp.linkRequiredDesc')}
                     </p>
                   </div>
                 </div>
@@ -107,8 +109,8 @@ const McpLogin = () => {
   return (
     <>
       <SEO
-        title="Connect AI Assistant | 360Ghar"
-        description="Securely connect your 360Ghar account to an AI assistant."
+        title={t('mcp.title')}
+        description={t('mcp.description')}
         canonical="/mcp/login"
         noindex
       />
@@ -118,7 +120,7 @@ const McpLogin = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/add-new-listing"
-          btnText="Add Listing"
+          btnText={t('common.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -128,12 +130,9 @@ const McpLogin = () => {
             <div className="row justify-content-center">
               <div className="col-lg-6">
                 <div className="card shadow-sm p-4">
-                  <h2 className="mb-3">Sign in to connect</h2>
+                  <h2 className="mb-3">{t('mcp.signInToConnect')}</h2>
                   <p className="text-muted mb-4">
-                    Sign in with your phone number and password to securely
-                    connect your 360Ghar account to your AI assistant. You can
-                    revoke access at any time by logging out or rotating your
-                    token.
+                    {t('mcp.signInToConnectDesc')}
                   </p>
 
                   {error && (
@@ -145,7 +144,7 @@ const McpLogin = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                       <label htmlFor="phone" className="form-label">
-                        Phone number
+                        {t('mcp.phoneNumber')}
                       </label>
                       <input
                         id="phone"
@@ -160,7 +159,7 @@ const McpLogin = () => {
 
                     <div className="mb-3">
                       <label htmlFor="password" className="form-label">
-                        Password
+                        {t('mcp.password')}
                       </label>
                       <input
                         id="password"
@@ -177,13 +176,11 @@ const McpLogin = () => {
                       className="btn btn-main w-100"
                       disabled={isLoading || submitting}
                     >
-                      {isLoading || submitting ? 'Signing in…' : 'Sign in & connect'}
+                      {isLoading || submitting ? t('mcp.signingIn') : t('mcp.signInConnect')}
                     </button>
 
                     <p className="mt-3 small text-muted">
-                      By continuing, you allow 360Ghar tools to access your
-                      saved properties, swipes, and visits so the AI assistant
-                      can personalize recommendations for you.
+                      {t('mcp.consent')}
                     </p>
                   </form>
                 </div>

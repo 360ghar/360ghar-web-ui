@@ -1,0 +1,69 @@
+{
+  "hero": {
+    "ctaButton": "Try Transparent Alternative",
+    "ctaSubtitle": "Join thousands of happy property seekers who chose 360 Ghar",
+    "startSearch": "Start Your Property Search"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "truth": "Truth"
+  },
+  "claimsSection": {
+    "subtitle": "Investigation",
+    "title": "The Claims vs Reality",
+    "descPrefix": "What",
+    "descSuffix": "promises vs what users actually experience"
+  },
+  "issuesSection": {
+    "subtitle": "Documented Issues",
+    "title": "Key Problems Reported",
+    "desc": "Verified issues that users have experienced with this platform"
+  },
+  "reviewsSection": {
+    "subtitle": "User Experiences",
+    "title": "What Users Actually Experience",
+    "desc": "Real reviews from people who have used this platform"
+  },
+  "compareSection": {
+    "subtitle": "Compare",
+    "title": "Compare Side-by-Side",
+    "compareVs": "360Ghar vs",
+    "compareFeatureDesc": "Feature-by-feature comparison",
+    "compareSeeHow": "See how they compare"
+  },
+  "ctaSection": {
+    "title": "Don't Settle for Less. Choose Transparency.",
+    "subtitle": "Join thousands of happy property seekers who chose 360 Ghar",
+    "startSearch": "Start Your Property Search"
+  },
+  "nobroker": {
+    "pageTitle": "Why NoBroker Listings Are Misleading | The Truth About NoBroker",
+    "pageDescription": "The truth about NoBroker listings revealed. Learn about hidden charges, fake listings, and refund issues that NoBroker doesn't want you to know.",
+    "truthTitle": "The Truth About NoBroker Listings",
+    "introText": "Despite their marketing promises, NoBroker has transformed from a zero-brokerage platform to a subscription-based service with numerous user complaints."
+  },
+  "magicbricks": {
+    "pageTitle": "Why MagicBricks Spam Calls are a Nightmare | The Truth About MagicBricks",
+    "pageDescription": "Discover why MagicBricks spam calls are legendary in the property market. Learn how your data is sold and why verified listings mean nothing.",
+    "truthTitle": "The Truth About MagicBricks Spam Calls",
+    "introText": "MagicBricks has perfected the art of selling your data to brokers. What starts as a simple property search becomes a nightmare of spam calls"
+  },
+  "99acres": {
+    "pageTitle": "Why 99acres Fake Listings Are a Problem | The Truth About 99acres",
+    "pageDescription": "Learn the truth about 99acres fake listings and spam calls. See why thousands of users are switching to transparent alternatives.",
+    "truthTitle": "The Truth About 99acres Listings",
+    "introText": "99acres promises verified properties but delivers fake listings and endless spam. Here's what users actually experience"
+  },
+  "nestaway": {
+    "pageTitle": "Why NestAway Failed | The Truth About NestAway Collapse",
+    "pageDescription": "The shocking truth about NestAway's 95% valuation collapse and why their business model failed. Learn what happened to your deposits.",
+    "truthTitle": "The Truth About NestAway's Collapse",
+    "introText": "From \u20b919000 crore to \u20b990 crore - NestAway represents one of India's most dramatic startup failure. Here's what really happened"
+  },
+  "zolo": {
+    "pageTitle": "Why Zolo Stays has 1.7/5 Rating | The Truth About Zolo Service Issues",
+    "pageDescription": "Discover why Zolo Stays has terrible reviews - hidden charges, deposit refund issues, and ignored maintenance. The truth about co-living in India",
+    "truthTitle": "The Truth About Zolo Stays Service Issues",
+    "introText": "With a Trustpilot rating of just 1.7/5, Zolo Stays' premium positioning masks serious service issues reported by thousands of users"
+  }
+}

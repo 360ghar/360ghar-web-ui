@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store';
 
 const Logout = ({ redirectTo = '/login' }) => {
   const { logout } = useAuthStore();
   const navigate = useNavigate();
+  const { t } = useTranslation('account');
 
   useEffect(() => {
     const executeLogout = async () => {
@@ -16,9 +18,9 @@ const Logout = ({ redirectTo = '/login' }) => {
 
   return (
     <div className="text-center py-5">
-      <p>Logging out...</p>
+      <p>{t('logout.loggingOut')}</p>
     </div>
   );
 };
 
-export default Logout; 
+export default Logout;

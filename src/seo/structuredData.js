@@ -7,7 +7,7 @@ export const realEstateStructuredData = {
     '@type': ['RealEstateAgent', 'Organization'],
     '@id': 'https://360ghar.com/#organization',
     name: '360Ghar',
-    alternateName: ['360 Ghar', '360Ghar.com', 'Three Sixty Ghar'],
+    alternateName: ['360 Ghar', '360Ghar.com', 'Three Sixty Ghar', '३६०घर', '360 Ghar Hindi'],
     legalName: '360Ghar Technologies Pvt Ltd',
     description: "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. We eliminate fake and misleading property listings in Gurugram with studio-quality 360° guided walkthroughs and physically verified property details. Buy, sell, or rent with zero upfront fees and AI-powered matching.",
     url: 'https://360ghar.com',
@@ -79,7 +79,7 @@ export const realEstateStructuredData = {
     alternateName: '360 Ghar',
     url: 'https://360ghar.com',
     description: "India's VR-First Way to Find a Home. India's first AI + VR real estate platform with verified properties in Gurugram and studio-quality 360° guided walkthroughs.",
-    inLanguage: 'en-IN',
+    inLanguage: ['en-IN', 'hi-IN'],
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -313,6 +313,38 @@ export const realEstateStructuredData = {
           '@type': 'Answer',
           text: "Yes! Landlords can use the AI assistant to track rent collection, manage tenants, handle maintenance requests, and access property documents. Just ask: \"Show me this month's rent status\" or \"List all maintenance requests\"."
         }
+      },
+      {
+        '@type': 'Question',
+        name: '360Ghar kya hai?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '360Ghar India ka pehla AI aur Virtual Tour-first real estate platform hai. Yahan sabhi properties humare on-site team dwara verify ki jaati hain. Aapko milta hai dedicated Relationship Manager jo aapki poori journey handle karta hai — property search se lekar final handover tak. Same brokerage mein end-to-end visibility aur transparency.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Gurgaon mein flat kaise khariden?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '360Ghar par Gurgaon ke verified flats browse karein. AI-powered search se apni budget aur requirement ke hisaab se filter karein. Har listing mein 360° virtual tour available hai. Apna dedicated Relationship Manager shortlisting, site visits, negotiations, aur documentation mein help karta hai. Koi hidden charges nahi.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'क्या 360Ghar पर सभी प्रॉपर्टी verified हैं?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'हाँ, 360Ghar पर हर प्रॉपर्टी हमारी on-site team द्वारा physically verify की जाती है। हम ownership documents, exact location, authentic photos, और 360° virtual tour verify करते हैं। कोई fake listing नहीं, कोई outdated inventory नहीं।'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Gurugram mein kiraye par flat kaise milega?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '360Ghar par Gurugram ke verified rental flats search karein — DLF Phase, Golf Course Road, Sohna Road, Sector 56 jaise prime areas mein. Budget, BHK, aur amenity filters use karein. Har listing mein 360° virtual tour hai taaki aap ghar baithke property explore kar sakein. Relationship Manager agreement aur handover mein help karta hai.'
+        }
       }
     ]
   },
@@ -338,7 +370,7 @@ export const realEstateStructuredData = {
       telephone: siteMetadata.organization.telephone,
       contactType: 'customer service',
       areaServed: 'IN',
-      availableLanguage: 'English'
+      availableLanguage: ['English', 'Hindi']
     },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
@@ -377,7 +409,14 @@ export const realEstateStructuredData = {
       'PG Accommodation Gurugram',
       'Virtual Property Tours',
       'Real Estate Technology',
-      'Indian Property Market'
+      'Indian Property Market',
+      'गुड़गाँव में संपत्ति',
+      'Gurgaon mein property',
+      'मकान खरीदना',
+      'किराये पर मकान',
+      'Flat rent Gurgaon',
+      'DLF Gurgaon real estate',
+      'Verified property India'
     ]
   },
 
@@ -422,7 +461,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'DLF Phase 1 properties, DLF Phase 1 apartments, DLF Phase 1 flats'
+    alternateName: 'डीएलएफ फेज 1',
+    keywords: 'DLF Phase 1 properties, DLF Phase 1 apartments, DLF Phase 1 flats, DLF Phase 1 flat for sale, DLF Phase 1 kiraye par'
   },
   {
     '@type': 'Place',
@@ -434,7 +474,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'Golf Course Road properties, Golf Course Road luxury apartments'
+    alternateName: 'गोल्फ कोर्स रोड',
+    keywords: 'Golf Course Road properties, Golf Course Road luxury apartments, Golf Course Road flat rent, Golf Course Road property'
   },
   {
     '@type': 'Place',
@@ -446,7 +487,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'Sohna Road properties, Sohna Road apartments, Sohna Road flats'
+    alternateName: 'सोहना रोड',
+    keywords: 'Sohna Road properties, Sohna Road apartments, Sohna Road flats, Sohna Road affordable flats, Sohna Road rent'
   },
   {
     '@type': 'Place',
@@ -458,7 +500,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'Cyber City properties, Cyber City apartments, Cyber City office space'
+    alternateName: 'साइबर सिटी',
+    keywords: 'Cyber City properties, Cyber City apartments, Cyber City office space, Cyber City office space rent'
   },
   {
     '@type': 'Place',
@@ -470,7 +513,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'Sector 29 properties, Sector 29 apartments, Sector 29 flats'
+    alternateName: 'सेक्टर 29',
+    keywords: 'Sector 29 properties, Sector 29 apartments, Sector 29 flats, Sector 29 property'
   }
 ];
 

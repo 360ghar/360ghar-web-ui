@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -10,6 +11,7 @@ import { dataHubService } from '../../services/dataHubService';
 import StampDutyWidget from '../../components/data-hub/StampDutyWidget';
 
 const CircleRateDirectory = () => {
+  const { t } = useTranslation('data-hub');
   const [rates, setRates] = useState([]);
   const [sectors, setSectors] = useState([]);
   const [total, setTotal] = useState(0);
@@ -66,8 +68,8 @@ const CircleRateDirectory = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h1 className="fs-28 fw-600 mb-10">Gurugram Circle Rates (DLC Rates)</h1>
-                <p className="mb-30 color-text-3">Official rates published by IGRS Haryana. Used to calculate stamp duty on property registrations.</p>
+                <h1 className="fs-28 fw-600 mb-10">{t('circleRates.title')}</h1>
+                <p className="mb-30 color-text-3">{t('circleRates.description')}</p>
               </div>
             </div>
 
@@ -77,7 +79,7 @@ const CircleRateDirectory = () => {
                 <select className="form-select form-select-sm"
                   value={filters.sector}
                   onChange={(e) => { setFilters(f => ({ ...f, sector: e.target.value })); setPage(1); }}>
-                  <option value="">All Sectors</option>
+                  <option value="">{t('circleRates.allSectors')}</option>
                   {sectors.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
@@ -85,36 +87,36 @@ const CircleRateDirectory = () => {
                 <select className="form-select form-select-sm"
                   value={filters.property_type}
                   onChange={(e) => { setFilters(f => ({ ...f, property_type: e.target.value })); setPage(1); }}>
-                  <option value="">All Property Types</option>
-                  {PROPERTY_TYPES.map(t => <option key={t} value={t} style={{ textTransform: 'capitalize' }}>{t}</option>)}
+                  <option value="">{t('circleRates.allPropertyTypes')}</option>
+                  {PROPERTY_TYPES.map(pt => <option key={pt} value={pt} style={{ textTransform: 'capitalize' }}>{pt}</option>)}
                 </select>
               </div>
             </div>
 
             {/* Table */}
             {loading ? (
-              <p>Loading circle rates...</p>
+              <p>{t('circleRates.loading')}</p>
             ) : error ? (
-              <p className="color-danger">Data temporarily unavailable. Please try again later.</p>
+              <p className="color-danger">{t('circleRates.error')}</p>
             ) : (
               <>
-                <p className="mb-15 fs-14 color-text-3">{total} rates found</p>
+                <p className="mb-15 fs-14 color-text-3">{t('circleRates.ratesFound', { count: total })}</p>
                 <div className="table-responsive mb-30">
                   <table className="table table-bordered">
                     <thead className="table-light">
                       <tr>
-                        <th>Sector</th>
-                        <th>Colony</th>
-                        <th>Property Type</th>
-                        <th>Rate (₹/sq yd)</th>
-                        <th>Rate (₹/sq ft)</th>
-                        <th>Year</th>
+                        <th>{t('circleRates.tableHeaders.sector')}</th>
+                        <th>{t('circleRates.tableHeaders.colony')}</th>
+                        <th>{t('circleRates.tableHeaders.propertyType')}</th>
+                        <th>{t('circleRates.tableHeaders.ratePerSqYd')}</th>
+                        <th>{t('circleRates.tableHeaders.ratePerSqFt')}</th>
+                        <th>{t('circleRates.tableHeaders.year')}</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       {rates.length === 0 ? (
-                        <tr><td colSpan={7} className="text-center py-20">No circle rates found for selected filters.</td></tr>
+                        <tr><td colSpan={7} className="text-center py-20">{t('circleRates.noResults')}</td></tr>
                       ) : rates.map((rate) => (
                         <tr key={rate.id}>
                           <td>{rate.sector}</td>
@@ -124,7 +126,7 @@ const CircleRateDirectory = () => {
                           <td>{rate.rate_per_sqft ? `₹${Number(rate.rate_per_sqft).toLocaleString('en-IN')}` : '—'}</td>
                           <td>{rate.revision_year}</td>
                           <td>
-                            <Link to={`/circle-rate/${rate.slug}`} className="btn-sm">View</Link>
+                            <I18nLink to={`/circle-rate/${rate.slug}`} className="btn-sm">{t('circleRates.tableHeaders.view')}</I18nLink>
                           </td>
                         </tr>
                       ))}
@@ -135,9 +137,9 @@ const CircleRateDirectory = () => {
                 {/* Pagination */}
                 {total > 20 && (
                   <div className="d-flex gap-10 mb-30">
-                    <button className="btn btn-sm btn-outline-secondary" disabled={page === 1} onClick={() => setPage(p => p - 1)}>← Prev</button>
-                    <span className="align-self-center fs-14">Page {page} of {Math.ceil(total / 20)}</span>
-                    <button className="btn btn-sm btn-outline-secondary" disabled={page >= Math.ceil(total / 20)} onClick={() => setPage(p => p + 1)}>Next →</button>
+                    <button className="btn btn-sm btn-outline-secondary" disabled={page === 1} onClick={() => setPage(p => p - 1)}>{t('circleRates.pagination.prev')}</button>
+                    <span className="align-self-center fs-14">{t('circleRates.pagination.page', { current: page, total: Math.ceil(total / 20) })}</span>
+                    <button className="btn btn-sm btn-outline-secondary" disabled={page >= Math.ceil(total / 20)} onClick={() => setPage(p => p + 1)}>{t('circleRates.pagination.next')}</button>
                   </div>
                 )}
               </>
@@ -146,7 +148,7 @@ const CircleRateDirectory = () => {
             {/* Stamp Duty Widget */}
             <div className="row mt-20">
               <div className="col-lg-6">
-                <h3 className="fs-20 fw-600 mb-15">Quick Stamp Duty Calculator</h3>
+                <h3 className="fs-20 fw-600 mb-15">{t('circleRates.quickCalc')}</h3>
                 <StampDutyWidget />
               </div>
             </div>

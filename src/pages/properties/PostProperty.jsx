@@ -9,47 +9,49 @@ import SEO from '../../common/SEO';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import { PROPERTY_TYPE_OPTIONS } from '../../utils/propertyTaxonomy';
 
-const postPropertyTypeOptions = [
-    ...PROPERTY_TYPE_OPTIONS,
-    { value: 'other', label: 'Other (Tell us more)' }
-];
-
-const listingTypeOptions = [
-    { value: 'buy', label: 'For Sale' },
-    { value: 'rent', label: 'For Rent' },
-    { value: 'short_stay', label: 'Short Stay' }
-];
-
-const validationSchema = yup.object({
-    full_name: yup.string()
-        .min(2, 'Name must be at least 2 characters')
-        .required('Full name is required'),
-    email: yup.string()
-        .email('Please enter a valid email address')
-        .required('Email is required'),
-    phone: yup.string()
-        .matches(/^[6-9]\d{9}$/, 'Please enter a valid 10-digit mobile number')
-        .required('Phone number is required'),
-    property_type: yup.string()
-        .required('Please select a property type'),
-    property_location: yup.string()
-        .min(3, 'Location must be at least 3 characters')
-        .required('Property location is required'),
-    property_size: yup.string(),
-    budget_range: yup.string(),
-    listing_type: yup.string(),
-    property_description: yup.string(),
-    terms_agreement: yup.boolean()
-        .oneOf([true], 'You must agree to the Terms of Service and Privacy Policy')
-});
-
 const PostPropertyForm = () => {
+    const { t } = useTranslation('properties');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [globalError, setGlobalError] = useState(null);
+
+    const postPropertyTypeOptions = [
+        ...PROPERTY_TYPE_OPTIONS,
+        { value: 'other', label: t('postProperty.otherType') }
+    ];
+
+    const listingTypeOptions = [
+        { value: 'buy', label: t('postProperty.forSale') },
+        { value: 'rent', label: t('postProperty.forRent') },
+        { value: 'short_stay', label: t('postProperty.shortStay') }
+    ];
+
+    const validationSchema = yup.object({
+        full_name: yup.string()
+            .min(2, t('postProperty.validation.nameMin'))
+            .required(t('postProperty.validation.nameRequired')),
+        email: yup.string()
+            .email(t('postProperty.validation.emailInvalid'))
+            .required(t('postProperty.validation.emailRequired')),
+        phone: yup.string()
+            .matches(/^[6-9]\d{9}$/, t('postProperty.validation.phoneInvalid'))
+            .required(t('postProperty.validation.phoneRequired')),
+        property_type: yup.string()
+            .required(t('postProperty.validation.propertyTypeRequired')),
+        property_location: yup.string()
+            .min(3, t('postProperty.validation.locationMin'))
+            .required(t('postProperty.validation.locationRequired')),
+        property_size: yup.string(),
+        budget_range: yup.string(),
+        listing_type: yup.string(),
+        property_description: yup.string(),
+        terms_agreement: yup.boolean()
+            .oneOf([true], t('postProperty.validation.termsRequired'))
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -86,15 +88,15 @@ const PostPropertyForm = () => {
                 if (response.ok) {
                     setIsSuccess(true);
                     resetForm();
-                    toast.success('Your property listing request has been submitted!', {
+                    toast.success(t('postProperty.submitSuccess'), {
                         theme: 'colored'
                     });
                 } else {
                     throw new Error('Failed to submit form');
                 }
             } catch {
-                setGlobalError('Failed to submit your request. Please try again.');
-                toast.error('Failed to submit your request. Please try again.', {
+                setGlobalError(t('postProperty.submitError'));
+                toast.error(t('postProperty.submitError'), {
                     theme: 'colored'
                 });
             } finally {
@@ -110,15 +112,15 @@ const PostPropertyForm = () => {
                     <div className="contact-form bg-white">
                         <div className="section-heading">
                             <span className="section-heading__subtitle bg-gray-100">
-                                <span className="text-gradient fw-semibold">Success!</span>
+                                <span className="text-gradient fw-semibold">{t('postProperty.successSubtitle')}</span>
                             </span>
-                            <h2 className="section-heading__title">Thank You for Your Interest</h2>
-                            <p className="section-heading__desc">We have received your property posting request! Our team will review your details and contact you within 24 hours to help you post your property on 360Ghar.</p>
+                            <h2 className="section-heading__title">{t('postProperty.successTitle')}</h2>
+                            <p className="section-heading__desc">{t('postProperty.successDescription')}</p>
                         </div>
                         <div className="text-center mt-4">
-                            <Link to="/" className="btn btn-main">
-                                Back to Home
-                            </Link>
+                            <I18nLink to="/" className="btn btn-main">
+                                {t('postProperty.backToHome')}
+                            </I18nLink>
                         </div>
                     </div>
                 </div>
@@ -132,10 +134,10 @@ const PostPropertyForm = () => {
                 <div className="contact-form bg-white">
                     <div className="section-heading">
                         <span className="section-heading__subtitle bg-gray-100">
-                            <span className="text-gradient fw-semibold">Post a Property</span>
+                            <span className="text-gradient fw-semibold">{t('postProperty.title')}</span>
                         </span>
-                        <h2 className="section-heading__title">Ready to List Your Property?</h2>
-                        <p className="section-heading__desc">Fill out the form below with basic details about your property, and our expert team will reach out to guide you through the listing process and help you get the best exposure for your property.</p>
+                        <h2 className="section-heading__title">{t('postProperty.heading')}</h2>
+                        <p className="section-heading__desc">{t('postProperty.description')}</p>
                     </div>
 
                     {globalError && (
@@ -146,13 +148,13 @@ const PostPropertyForm = () => {
                         <form onSubmit={formik.handleSubmit} className="contact-form__form">
                             <div className="row gy-4">
                                 <div className="col-sm-6 col-xs-6">
-                                    <label htmlFor="full_name" className="form-label">Full Name <span className="text-danger">*</span></label>
+                                    <label htmlFor="full_name" className="form-label">{t('postProperty.fullName')} <span className="text-danger">*</span></label>
                                     <input
                                         type="text"
                                         id="full_name"
                                         name="full_name"
                                         className={`common-input ${formik.touched.full_name && formik.errors.full_name ? 'is-invalid' : ''}`}
-                                        placeholder="Full Name"
+                                        placeholder={t('postProperty.fullNamePlaceholder')}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.full_name}
@@ -162,13 +164,13 @@ const PostPropertyForm = () => {
                                     )}
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
-                                    <label htmlFor="email" className="form-label">Email Address <span className="text-danger">*</span></label>
+                                    <label htmlFor="email" className="form-label">{t('postProperty.emailAddress')} <span className="text-danger">*</span></label>
                                     <input
                                         type="email"
                                         id="email"
                                         name="email"
                                         className={`common-input ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
-                                        placeholder="Email Address"
+                                        placeholder={t('postProperty.emailPlaceholder')}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.email}
@@ -178,14 +180,14 @@ const PostPropertyForm = () => {
                                     )}
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
-                                    <label htmlFor="phone" className="form-label">Phone Number <span className="text-danger">*</span></label>
+                                    <label htmlFor="phone" className="form-label">{t('postProperty.phoneNumber')} <span className="text-danger">*</span></label>
                                     <input
                                         type="tel"
                                         id="phone"
                                         name="phone"
                                         maxLength={10}
                                         className={`common-input ${formik.touched.phone && formik.errors.phone ? 'is-invalid' : ''}`}
-                                        placeholder="10-digit mobile number"
+                                        placeholder={t('postProperty.phonePlaceholder')}
                                         onChange={(e) => {
                                             const value = e.target.value.replace(/\D/g, '');
                                             formik.setFieldValue('phone', value);
@@ -196,10 +198,10 @@ const PostPropertyForm = () => {
                                     {formik.touched.phone && formik.errors.phone && (
                                         <span className="text-danger">{formik.errors.phone}</span>
                                     )}
-                                    <small className="text-muted">Enter 10-digit number (e.g., 9876543210)</small>
+                                    <small className="text-muted">{t('postProperty.phoneHint')}</small>
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
-                                    <label htmlFor="property_type" className="form-label">Property Type <span className="text-danger">*</span></label>
+                                    <label htmlFor="property_type" className="form-label">{t('postProperty.propertyType')} <span className="text-danger">*</span></label>
                                     <div className="select-has-icon icon-black">
                                         <select
                                             id="property_type"
@@ -209,7 +211,7 @@ const PostPropertyForm = () => {
                                             onBlur={formik.handleBlur}
                                             value={formik.values.property_type}
                                         >
-                                            <option value="">Select Property Type</option>
+                                            <option value="">{t('postProperty.selectPropertyType')}</option>
                                             {postPropertyTypeOptions.map((option) => (
                                                 <option key={option.value} value={option.value}>
                                                     {option.label}
@@ -222,13 +224,13 @@ const PostPropertyForm = () => {
                                     )}
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
-                                    <label htmlFor="property_location" className="form-label">Property Location <span className="text-danger">*</span></label>
+                                    <label htmlFor="property_location" className="form-label">{t('postProperty.propertyLocation')} <span className="text-danger">*</span></label>
                                     <input
                                         type="text"
                                         id="property_location"
                                         name="property_location"
                                         className={`common-input ${formik.touched.property_location && formik.errors.property_location ? 'is-invalid' : ''}`}
-                                        placeholder="Property Location (City/Area)"
+                                        placeholder={t('postProperty.locationPlaceholder')}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.property_location}
@@ -238,33 +240,33 @@ const PostPropertyForm = () => {
                                     )}
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
-                                    <label htmlFor="property_size" className="form-label">Property Size</label>
+                                    <label htmlFor="property_size" className="form-label">{t('postProperty.propertySize')}</label>
                                     <input
                                         type="text"
                                         id="property_size"
                                         name="property_size"
                                         className="common-input"
-                                        placeholder="Property Size (sq ft)"
+                                        placeholder={t('postProperty.sizePlaceholder')}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.property_size}
                                     />
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
-                                    <label htmlFor="budget_range" className="form-label">Expected Price Range</label>
+                                    <label htmlFor="budget_range" className="form-label">{t('postProperty.expectedPrice')}</label>
                                     <input
                                         type="text"
                                         id="budget_range"
                                         name="budget_range"
                                         className="common-input"
-                                        placeholder="Expected Price Range"
+                                        placeholder={t('postProperty.pricePlaceholder')}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.budget_range}
                                     />
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
-                                    <label htmlFor="listing_type" className="form-label">Listing Type</label>
+                                    <label htmlFor="listing_type" className="form-label">{t('postProperty.listingType')}</label>
                                     <div className="select-has-icon icon-black">
                                         <select
                                             id="listing_type"
@@ -274,7 +276,7 @@ const PostPropertyForm = () => {
                                             onBlur={formik.handleBlur}
                                             value={formik.values.listing_type}
                                         >
-                                            <option value="">Select Listing Type</option>
+                                            <option value="">{t('postProperty.selectListingType')}</option>
                                             {listingTypeOptions.map((option) => (
                                                 <option key={option.value} value={option.value}>
                                                     {option.label}
@@ -284,12 +286,12 @@ const PostPropertyForm = () => {
                                     </div>
                                 </div>
                                 <div className="col-12">
-                                    <label htmlFor="property_description" className="form-label">Property Description</label>
+                                    <label htmlFor="property_description" className="form-label">{t('postProperty.propertyDescription')}</label>
                                     <textarea
                                         id="property_description"
                                         name="property_description"
                                         className="common-input"
-                                        placeholder="Brief description of your property (optional)"
+                                        placeholder={t('postProperty.descriptionPlaceholder')}
                                         rows="4"
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
@@ -309,8 +311,25 @@ const PostPropertyForm = () => {
                                         />
                                         <div className="form-check-label">
                                             <label htmlFor="terms_agreement">
-                                                I agree to the <Link to="/policies/terms-of-service" className="text-decoration-underline text-main">Terms of Service</Link> and
-                                                <Link to="/policies/privacy-policy" className="text-decoration-underline text-main"> Privacy Policy</Link>. I understand that 360Ghar team will contact me to discuss property listing details.
+                                                {t('postProperty.termsAgreement').split('Terms of Service').map((part, i) =>
+                                                    i === 0 ? (
+                                                        <span key={i}>{part}</span>
+                                                    ) : (
+                                                        <span key={i}>
+                                                            <I18nLink to="/policies/terms-of-service" className="text-decoration-underline text-main">{t('postProperty.termsOfService')}</I18nLink>
+                                                            {part.split('Privacy Policy').map((p2, j) =>
+                                                                j === 0 ? (
+                                                                    <span key={j}>{p2}</span>
+                                                                ) : (
+                                                                    <span key={j}>
+                                                                        <I18nLink to="/policies/privacy-policy" className="text-decoration-underline text-main">{t('postProperty.privacyPolicy')}</I18nLink>
+                                                                        {p2}
+                                                                    </span>
+                                                                )
+                                                            )}
+                                                        </span>
+                                                    )
+                                                )}
                                             </label>
                                         </div>
                                     </div>
@@ -323,11 +342,11 @@ const PostPropertyForm = () => {
                                         {isSubmitting ? (
                                             <>
                                                 <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                                Submitting...
+                                                {t('postProperty.submitting')}
                                             </>
                                         ) : (
                                             <>
-                                                Request Property Listing Assistance
+                                                {t('postProperty.submitButton')}
                                                 <span className="icon-right"><i className="far fa-paper-plane"></i></span>
                                             </>
                                         )}
@@ -343,6 +362,8 @@ const PostPropertyForm = () => {
 };
 
 const PostProperty = () => {
+    const { t } = useTranslation('properties');
+
     return (
         <>
             <SEO title="Post a Property | 360Ghar" description="Request assistance to post your property on 360Ghar." canonical="/post-property" noindex />
@@ -357,7 +378,7 @@ const PostProperty = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('postProperty.title')}
                     spanClass="icon-right text-gradient"
                     showHeaderBtn={false}
                     showContactNumber={false}

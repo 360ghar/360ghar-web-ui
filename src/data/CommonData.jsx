@@ -1,15 +1,13 @@
-
-
 // Top header Info
 export const offCanvasInfos = [
     {
         icon: <i className="fas fa-map-marker-alt"></i>,
-        text: 'Gurugram, Haryana India, 122001',
+        textKey: 'common:offCanvas.location',
         link: ''
     },
     {
         icon: <i className="fas fa-envelope"></i>,
-        text: 'info@360ghar.com',
+        textKey: 'common:offCanvas.email',
         link: 'mailto:'
     }
 ];
@@ -59,12 +57,12 @@ export const starRatings = [
 export const topHeaderInfos = [
     {
         icon: <i className="fas fa-envelope"></i>,
-        text: 'info@360ghar.com',
+        textKey: 'common:offCanvas.email',
         link: 'mailto:'
     },
     {
         icon: <i className="fas fa-map-marker-alt"></i>,
-        text: 'Gurugram, Haryana, India',
+        textKey: 'common:offCanvas.location',
         link: ''
     }
 ]
@@ -73,167 +71,167 @@ export const topHeaderInfos = [
 // Header Nav Menu
 export const navMenus = [
     {
-        text: "Home",
+        textKey: "common:nav.home",
         path: "/",
     },
     {
-        text: "Properties",
+        textKey: "common:nav.properties",
         path: "/properties",
     },
     {
-        text: "Localities",
+        textKey: "common:nav.localities",
         path: "/localities",
         submenus: [
             {
-                text: "All Localities",
+                textKey: "common:nav.allLocalities",
                 path: "/localities",
             },
             {
-                text: "DLF Phase 1",
+                textKey: "common:nav.dlfPhase1",
                 path: "/locality/dlf-phase-1-gurgaon",
             },
             {
-                text: "DLF Phase 2",
+                textKey: "common:nav.dlfPhase2",
                 path: "/locality/dlf-phase-2-gurgaon",
             },
             {
-                text: "DLF Phase 5",
+                textKey: "common:nav.dlfPhase5",
                 path: "/locality/dlf-phase-5-gurgaon",
             },
             {
-                text: "Golf Course Road",
+                textKey: "common:nav.golfCourseRoad",
                 path: "/locality/golf-course-road-gurgaon",
             },
             {
-                text: "Sushant Lok 1",
+                textKey: "common:nav.sushantLok1",
                 path: "/locality/sushant-lok-1-gurgaon",
             },
         ],
     },
     {
-        text: "Vastu Checker",
+        textKey: "common:nav.vastuChecker",
         path: "/vastu-checker",
     },
     {
-        text: "Design Blueprint",
+        textKey: "common:nav.designBlueprint",
         path: "/design-blueprint",
     },
     {
-        text: "Data Hub",
+        textKey: "common:nav.dataHub",
         path: "#",
         submenus: [
             {
-                text: "Circle Rates",
+                textKey: "common:nav.circleRates",
                 path: "/circle-rates",
             },
             {
-                text: "RERA Projects",
+                textKey: "common:nav.reraProjects",
                 path: "/rera-projects",
             },
             {
-                text: "Bank Auctions",
+                textKey: "common:nav.bankAuctions",
                 path: "/bank-auctions",
             },
             {
-                text: "Stamp Duty Calc",
+                textKey: "common:nav.stampDutyCalc",
                 path: "/stamp-duty-calculator",
             },
             {
-                text: "Verify Ownership",
+                textKey: "common:nav.verifyOwnership",
                 path: "/verify-ownership",
             },
             {
-                text: "Zone Checker",
+                textKey: "common:nav.zoneChecker",
                 path: "/zone-checker",
             },
             {
-                text: "Regulatory Updates",
+                textKey: "common:nav.regulatoryUpdates",
                 path: "/regulatory-updates",
             },
             {
-                text: "Builder Reputation",
+                textKey: "common:nav.builderReputation",
                 path: "/builder-reputation",
             },
         ],
     },
     {
-        text: "Services",
+        textKey: "common:nav.services",
         path: "#",
         submenus: [
             {
-                text: "Post Property",
+                textKey: "common:nav.postProperty",
                 path: "/post-property",
             },
             {
-                text: "Property Valuation",
+                textKey: "common:nav.propertyValuation",
                 path: "/post-property",
             },
             {
-                text: "Virtual Tours",
+                textKey: "common:nav.virtualTours",
                 path: "/properties",
             },
             {
-                text: "Map Search",
+                textKey: "common:nav.mapSearch",
                 path: "/map-location",
             },
             {
-                text: "AI Assistant",
+                textKey: "common:nav.aiAssistant",
                 path: "/ai-agent",
             },
             {
-                text: "Refer & Earn",
+                textKey: "common:nav.referAndEarn",
                 path: "/refer-and-earn",
             },
         ],
     },
     {
-        text: "Resources",
+        textKey: "common:nav.resources",
         path: "#",
         submenus: [
             {
-                text: "Blog",
+                textKey: "common:nav.blog",
                 path: "/blog",
             },
             {
-                text: "About Us",
+                textKey: "common:nav.aboutUs",
                 path: "/about-us",
             },
             {
-                text: "FAQ",
+                textKey: "common:nav.faq",
                 path: "/faq",
             },
             {
-                text: "EMI Calculator",
+                textKey: "common:nav.emiCalculator",
                 path: "/emi-calculator",
             },
             {
-                text: "Loan Eligibility",
+                textKey: "common:nav.loanEligibility",
                 path: "/loan-eligibility-calculator",
             },
             {
-                text: "Area Converter",
+                textKey: "common:nav.areaConverter",
                 path: "/area-converter",
             },
             {
-                text: "Carpet Area Calc",
+                textKey: "common:nav.carpetAreaCalc",
                 path: "/area-calculator",
             },
             {
-                text: "Property Checklist",
+                textKey: "common:nav.propertyChecklist",
                 path: "/property-document-checklist",
             },
             {
-                text: "Capital Gains Tax",
+                textKey: "common:nav.capitalGainsTax",
                 path: "/capital-gains-tax-calculator",
             },
             {
-                text: "Policies",
+                textKey: "common:nav.policies",
                 path: "/policies",
             },
         ],
     },
     {
-        text: "Contact",
+        textKey: "common:nav.contact",
         path: "/contact",
     },
 ]
@@ -244,134 +242,134 @@ export const navMenus = [
 export const footerInfos = [
     {
         icon: <i className="fas fa-map-marker-alt"></i>,
-        text: 'Address',
-        address: 'Gurugram, Haryana, India'
+        textKey: 'common:commonData.addressLabel',
+        addressKey: 'common:commonData.addressValue'
     },
     {
         icon: <i className="fas fa-envelope"></i>,
-        text: 'Email',
-        address: 'info@360ghar.com'
+        textKey: 'common:commonData.emailLabel',
+        addressKey: 'common:commonData.emailValue'
     }
 ]
 
 export const footerServiceLinks = [
     {
-        text: 'Property Search',
+        textKey: 'common:footer.propertySearch',
         link: '/properties'
     },
     {
-        text: 'Post Property',
+        textKey: 'common:nav.postProperty',
         link: '/post-property'
     },
     {
-        text: '360° Virtual Tours',
+        textKey: 'common:footer.virtualTours',
         link: '/properties'
     },
     {
-        text: 'Bank Auctions',
+        textKey: 'common:nav.bankAuctions',
         link: '/bank-auctions'
     },
     {
-        text: 'Verify Ownership',
+        textKey: 'common:nav.verifyOwnership',
         link: '/verify-ownership'
     },
     {
-        text: 'Zone Checker',
+        textKey: 'common:nav.zoneChecker',
         link: '/zone-checker'
     },
     {
-        text: 'Builder Reputation',
+        textKey: 'common:nav.builderReputation',
         link: '/builder-reputation'
     },
     {
-        text: 'Regulatory Updates',
+        textKey: 'common:nav.regulatoryUpdates',
         link: '/regulatory-updates'
     },
     {
-        text: 'Property Management',
+        textKey: 'common:footer.propertyManagement',
         link: '/contact'
     },
     {
-        text: 'Investment Advisory',
+        textKey: 'common:footer.investmentAdvisory',
         link: '/contact'
     },
 ]
 
 export const footerUsefulLinks = [
     {
-        text: 'Property Listings',
+        textKey: 'common:footer.propertyListings',
         link: '/properties'
     },
     {
-        text: 'About 360Ghar',
+        textKey: 'common:footer.about360ghar',
         link: '/about-us'
     },
     {
-        text: 'Blog & Insights',
+        textKey: 'common:footer.blogAndInsights',
         link: '/blog'
     },
     {
-        text: 'AI Assistant',
+        textKey: 'common:nav.aiAssistant',
         link: '/ai-agent'
     },
     {
-        text: 'Vastu Checker',
+        textKey: 'common:nav.vastuChecker',
         link: '/vastu-checker'
     },
     {
-        text: 'EMI Calculator',
+        textKey: 'common:nav.emiCalculator',
         link: '/emi-calculator'
     },
     {
-        text: 'Loan Eligibility',
+        textKey: 'common:nav.loanEligibility',
         link: '/loan-eligibility-calculator'
     },
     {
-        text: 'Area Converter',
+        textKey: 'common:nav.areaConverter',
         link: '/area-converter'
     },
     {
-        text: 'Property Checklist',
+        textKey: 'common:nav.propertyChecklist',
         link: '/property-document-checklist'
     },
     {
-        text: 'Circle Rates',
+        textKey: 'common:nav.circleRates',
         link: '/circle-rates'
     },
     {
-        text: 'RERA Projects',
+        textKey: 'common:nav.reraProjects',
         link: '/rera-projects'
     },
     {
-        text: 'Stamp Duty Calculator',
+        textKey: 'common:footer.stampDutyCalculator',
         link: '/stamp-duty-calculator'
     },
     {
-        text: 'Help Center',
+        textKey: 'common:footer.helpCenter',
         link: '/faq'
     },
     {
-        text: 'Contact Us',
+        textKey: 'common:footer.contactUs',
         link: '/contact'
     },
     {
-        text: 'For AI Assistants',
+        textKey: 'common:footer.forAIAssistants',
         link: '/for-ai'
     },
     {
-        text: 'Refer & Earn',
+        textKey: 'common:nav.referAndEarn',
         link: '/refer-and-earn'
     },
     {
-        text: '360Ghar vs NoBroker',
+        textKey: 'common:footer.vsNoBroker',
         link: '/vs/nobroker'
     },
     {
-        text: '360Ghar vs MagicBricks',
+        textKey: 'common:footer.vsMagicBricks',
         link: '/vs/magicbricks'
     },
     {
-        text: '360Ghar vs 99acres',
+        textKey: 'common:footer.vs99acres',
         link: '/vs/99acres'
     },
 ]
@@ -379,21 +377,20 @@ export const footerUsefulLinks = [
 
 export const BottomFooterLink = [
     {
-        text: 'Terms of Service',
+        textKey: 'common:footer.termsOfService',
         link: '/policies/terms-of-service'
     },
     {
-        text: 'Privacy Policy',
+        textKey: 'common:footer.privacyPolicy',
         link: '/policies/privacy-policy'
     },
     {
-        text: 'Refer & Earn',
+        textKey: 'common:nav.referAndEarn',
         link: '/refer-and-earn'
     },
     {
-        text: 'For AI Assistants',
+        textKey: 'common:footer.forAIAssistants',
         link: '/for-ai'
     }
 ]
-
 

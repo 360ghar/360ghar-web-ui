@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import NavMenu from './NavMenu';
 import Logo from '../Logo';
 import Button from '../ui/Button';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import LogoWhite from '../LogoWhite';
 import { useAuthStore, useUIStore } from '../../store';
 import { useLazyToast } from '../useLazyToast';
 
 import LazyImage from '../ui/LazyImage';
+import LanguageSwitcher from './LanguageSwitcher';
 const Header = ({
     headerClass = "bg-transparent",
     logoBlack = true,
@@ -20,6 +23,7 @@ const Header = ({
     showOffCanvasBtn = true,
     offCanvasBtnClass = ""
 }) => {
+    const { t } = useTranslation('common');
     const navigate = useNavigate();
     const { toggleMobileMenu, handleMobileMenuClick, handleOffCanvas } = useUIStore();
 
@@ -45,7 +49,7 @@ const Header = ({
 
     const handleLogout = async () => {
         await logout();
-        toastSuccess('Logged out successfully!');
+        toastSuccess(t('header.loggedOutSuccess'));
         navigate('/');
         setShowUserDropdown(false);
     };
@@ -128,22 +132,22 @@ const Header = ({
                                     {showUserDropdown && (
                                         <div id="user-menu" role="menu" className="user-dropdown-menu">
                                             <div className="dropdown-item p-0">
-                                                <Link to="/account" role="menuitem" className="dropdown-link d-flex align-items-center gap-3">
+                                                <I18nLink to="/account" role="menuitem" className="dropdown-link d-flex align-items-center gap-3">
                                                     <i className="fas fa-user-circle"></i>
-                                                    <span>My Account</span>
-                                                </Link>
+                                                    <span>{t('header.myAccount')}</span>
+                                                </I18nLink>
                                             </div>
                                             <div className="dropdown-item p-0">
-                                                <Link to="/account?tab=favorites" role="menuitem" className="dropdown-link d-flex align-items-center gap-3">
+                                                <I18nLink to="/account?tab=favorites" role="menuitem" className="dropdown-link d-flex align-items-center gap-3">
                                                     <i className="fas fa-heart"></i>
-                                                    <span>Favorites</span>
-                                                </Link>
+                                                    <span>{t('header.favorites')}</span>
+                                                </I18nLink>
                                             </div>
                                             <div className="dropdown-item p-0">
-                                                <Link to="/account?tab=visits" role="menuitem" className="dropdown-link d-flex align-items-center gap-3">
+                                                <I18nLink to="/account?tab=visits" role="menuitem" className="dropdown-link d-flex align-items-center gap-3">
                                                     <i className="fas fa-calendar"></i>
-                                                    <span>My Visits</span>
-                                                </Link>
+                                                    <span>{t('header.myVisits')}</span>
+                                                </I18nLink>
                                             </div>
                                             <div className="dropdown-item p-0">
                                                 <button
@@ -153,7 +157,7 @@ const Header = ({
                                                     onClick={() => void handleLogout()}
                                                 >
                                                     <i className="fas fa-sign-out-alt"></i>
-                                                    <span>Logout</span>
+                                                    <span>{t('header.logout')}</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -162,10 +166,10 @@ const Header = ({
                             ) : (
                                 <div className="header-cta-group d-lg-flex align-items-center d-none">
                                     <div className="auth-buttons">
-                                        <Link to="/login" className="btn btn-outline-main btn-sm">
+                                        <I18nLink to="/login" className="btn btn-outline-main btn-sm">
                                             <i className="fas fa-sign-in-alt me-2"></i>
-                                            Sign In
-                                        </Link>
+                                            {t('header.signIn')}
+                                        </I18nLink>
                                     </div>
                                     {showHeaderBtn && (
                                         <Button
@@ -178,6 +182,11 @@ const Header = ({
                                     )}
                                 </div>
                             )}
+
+                            {/* Language Switcher - Desktop only */}
+                            <div className="d-lg-block d-none">
+                                <LanguageSwitcher variant="light" />
+                            </div>
 
                             {
                                 showOffCanvasBtn && (
