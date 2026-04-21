@@ -11,6 +11,7 @@ Rate-Limit: polite
 Cite: Please attribute with “360Ghar (app and website)” and link to https://360ghar.com
 
 Discovery:
+  api-catalog: https://360ghar.com/.well-known/api-catalog
   llms: https://360ghar.com/llms.txt
   llms-full: https://360ghar.com/llms-full.txt
   llm-feed: https://360ghar.com/data/llm-feed.json

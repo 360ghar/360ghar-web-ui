@@ -1,9 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import useLocaleStore from '../../store/localeStore';
-import { stripLocalePrefix } from '../../i18n/I18nLink';
+import { localizePath, stripLocalePrefix } from '../../i18n/I18nLink';
 import i18n from '../../i18n';
 
-const SUPPORTED_LOCALES = ['en', 'hi'];
 const LOCALE_LABELS = { en: 'EN', hi: 'HI' };
 
 export default function LanguageSwitcher({ className = '', variant = 'light' }) {
@@ -13,7 +12,8 @@ export default function LanguageSwitcher({ className = '', variant = 'light' }) 
 
   const handleSwitch = () => {
     const nextLocale = locale === 'en' ? 'hi' : 'en';
-    const barePath = stripLocalePrefix(location.pathname);
+    const currentUrl = `${location.pathname}${location.search}${location.hash}`;
+    const barePath = stripLocalePrefix(currentUrl);
 
     // Update Zustand store
     setLocale(nextLocale);
@@ -33,7 +33,7 @@ export default function LanguageSwitcher({ className = '', variant = 'light' }) 
 
     // Navigate to the localized path
     if (nextLocale === 'hi') {
-      navigate(barePath === '/' ? '/hi' : `/hi${barePath}`, { replace: true });
+      navigate(localizePath(barePath, 'hi'), { replace: true });
     } else {
       navigate(barePath, { replace: true });
     }

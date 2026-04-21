@@ -1,0 +1,49 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://360ghar.com/.well-known/api-catalog",
+      "item": [
+        {
+          "href": "https://api.360ghar.com/mcp"
+        },
+        {
+          "href": "https://api.360ghar.com/api/v1"
+        }
+      ]
+    },
+    {
+      "anchor": "https://api.360ghar.com/mcp",
+      "service-doc": [
+        {
+          "href": "https://360ghar.com/for-ai",
+          "type": "text/html"
+        }
+      ],
+      "service-meta": [
+        {
+          "href": "https://360ghar.com/data/llm-feed.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://360ghar.com/.well-known/ai.txt",
+          "type": "text/plain"
+        }
+      ]
+    },
+    {
+      "anchor": "https://api.360ghar.com/api/v1",
+      "service-desc": [
+        {
+          "href": "https://api.360ghar.com/api/v1/openapi.json",
+          "type": "application/openapi+json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://api.360ghar.com/api/v1/docs",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import NavMenu from './NavMenu';
 import Logo from '../Logo';
 import Button from '../ui/Button';
-import { useNavigate } from 'react-router-dom';
-import { I18nLink } from '../../i18n/I18nLink';
+import { I18nLink, useI18nNavigate } from '../../i18n/I18nLink';
 import LogoWhite from '../LogoWhite';
 import { useAuthStore, useUIStore } from '../../store';
 import { useLazyToast } from '../useLazyToast';
@@ -25,7 +24,7 @@ const Header = ({
 }) => {
     const { t } = useTranslation('common');
     const resolvedBtnText = btnText ?? t('header.postProperty');
-    const navigate = useNavigate();
+    const navigate = useI18nNavigate();
     const { toggleMobileMenu, handleMobileMenuClick, handleOffCanvas } = useUIStore();
 
     // Authentication state

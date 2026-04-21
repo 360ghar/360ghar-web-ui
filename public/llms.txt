@@ -22,6 +22,7 @@
 - Builder Reputation: https://360ghar.com/builder-reputation
 - Compare: 360Ghar vs NoBroker: https://360ghar.com/vs/nobroker
 - Contact: https://360ghar.com/contact
+- API Catalog: https://360ghar.com/.well-known/api-catalog
 - llm-feed.json: https://360ghar.com/data/llm-feed.json
 - ai.txt: https://360ghar.com/.well-known/ai.txt
 

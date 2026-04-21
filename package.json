@@ -6,17 +6,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:entities && npm run build:ai-discovery && npm run build:sitemaps && npm run build:rss && vite build && npm run build:prerender && node scripts/purge-bootstrap.mjs",
+    "build": "npm run build:entities && npm run build:ai-discovery && npm run build:sitemaps && npm run build:rss && vite build && npm run build:prerender && npm run build:markdown-pages && node scripts/purge-bootstrap.mjs",
     "build:entities": "node scripts/ingest-gurgaon-entities.mjs && node scripts/merge-entities.mjs && node scripts/build-localities-json.mjs && node scripts/build-localities-index.mjs && node scripts/generate-locality-sitemap.mjs",
     "build:ai-discovery": "node scripts/write-ai-discovery.mjs",
+    "build:markdown-pages": "node scripts/generate-markdown-pages.mjs",
     "build:sitemaps": "node scripts/generate-sitemaps.mjs && node scripts/generate-locality-sitemap.mjs && node scripts/generate-dynamic-sitemaps.mjs",
     "build:prerender": "npm run build:prerender-routes && node scripts/prerender-pages.mjs",
     "build:rss": "node scripts/generate-rss.mjs",
     "build:sitemaps:static": "node scripts/generate-sitemaps.mjs",
     "build:sitemaps:dynamic": "node scripts/generate-dynamic-sitemaps.mjs",
     "build:prerender-routes": "node scripts/generate-prerender-routes.mjs",
+    "test:node": "node --test scripts/__tests__ functions",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives",
-    "test": "vitest run src",
+    "test": "npm run test:node && vitest run src",
     "preview": "vite preview"
   },
   "dependencies": {

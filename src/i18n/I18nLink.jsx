@@ -1,6 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom';
 import useLocaleStore from '../store/localeStore';
 
+function splitPathSuffix(path) {
+  const suffixStart = path.search(/[?#]/);
+
+  if (suffixStart === -1) {
+    return { pathname: path, suffix: '' };
+  }
+
+  return {
+    pathname: path.slice(0, suffixStart),
+    suffix: path.slice(suffixStart),
+  };
+}
+
 /**
  * Language-aware <Link> wrapper.
  * Automatically prepends /hi/ to paths when the current locale is Hindi.
@@ -25,10 +38,17 @@ export function useI18nNavigate() {
 }
 
 /**
+ * Deprecated alias for useI18nNavigate.
+ * @deprecated Use useI18nNavigate instead.
+ */
+export const useLocaleNavigate = useI18nNavigate;
+
+/**
  * Prepend /hi/ to a path when locale is Hindi.
  * Handles root path, relative paths, and full URLs.
  */
 export function localizePath(path, locale) {
+  if (typeof path !== 'string') return path;
   if (locale !== 'hi') return path;
   if (!path) return '/hi';
 
@@ -37,29 +57,35 @@ export function localizePath(path, locale) {
     return path;
   }
 
+  const { pathname, suffix } = splitPathSuffix(path);
+
   // Don't double-prefix
-  if (path.startsWith('/hi/') || path === '/hi') {
+  if (pathname.startsWith('/hi/') || pathname === '/hi') {
     return path;
   }
 
   // Root path
-  if (path === '/') {
-    return '/hi';
+  if (pathname === '/') {
+    return `/hi${suffix}`;
   }
 
   // Relative paths (no leading /)
-  if (!path.startsWith('/')) {
+  if (!pathname.startsWith('/')) {
     return path;
   }
 
-  return `/hi${path}`;
+  return `/hi${pathname}${suffix}`;
 }
 
 /**
  * Strip the /hi/ prefix from a path to get the canonical English path.
  */
 export function stripLocalePrefix(path) {
-  if (path === '/hi') return '/';
-  if (path.startsWith('/hi/')) return path.slice(3);
+  if (typeof path !== 'string') return path;
+
+  const { pathname, suffix } = splitPathSuffix(path);
+
+  if (pathname === '/hi') return `/${suffix}`;
+  if (pathname.startsWith('/hi/')) return `${pathname.slice(3)}${suffix}`;
   return path;
 }

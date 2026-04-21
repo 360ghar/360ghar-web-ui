@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import { useChatStore, useAuthStore } from '../../store';
 import UserMessage from './messages/UserMessage';
 import BotMessage from './messages/BotMessage';
@@ -129,7 +129,7 @@ export default function ChatMessages() {
   const isStreaming = useChatStore((state) => state.isStreaming);
   const sendMessage = useChatStore((state) => state.sendMessage);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
 
   const scrollContainerRef = useRef(null);
   const messagesEndRef = useRef(null);

@@ -1,5 +1,7 @@
 /api/*   https://api.360ghar.com/api/v1/:splat   200
 
+# Host-level redirects such as www -> apex should be configured in Cloudflare Bulk Redirects.
+
 # Redirect /gurugram/ landing pages to /gurgaon/ (canonical slug)
 /gurugram/:intent/:type/budget/:budget  /gurgaon/:intent/:type/budget/:budget  301
 /gurugram/:intent/:type/amenity/:amenity  /gurgaon/:intent/:type/amenity/:amenity  301
@@ -16,5 +18,10 @@
 /hi/:city/buy/apartments  /hi/:city/buy/flats  301
 /hi/:city/rent/apartments  /hi/:city/rent/flats  301
 /hi/:city/pg/apartments  /hi/:city/pg/flats  301
+
+# Apartments → flats
+/:city/buy/apartments  /:city/buy/flats  301
+/:city/rent/apartments  /:city/rent/flats  301
+/:city/pg/apartments  /:city/pg/flats  301
 
 /*    /index.html   200

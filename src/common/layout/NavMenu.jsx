@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState }  from 'react';
-import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import { navMenus } from '../../data/CommonData';
@@ -140,7 +139,7 @@ const NavMenu = (props) => {
                         {navMenu.textKey ? t(navMenu.textKey) : navMenu.text}
                     </button>
                 ) : (
-                    <NavLink to={navMenu.path} className={getActiveClass} onClick={handleNavigate}>{navMenu.textKey ? t(navMenu.textKey) : navMenu.text}</NavLink>
+                    <I18nLink to={navMenu.path} className="nav-menu__link" onClick={handleNavigate}>{navMenu.textKey ? t(navMenu.textKey) : navMenu.text}</I18nLink>
                 )}
                 {hasSubmenu && (
                     <ul className="nav-submenu" id={`submenu-${itemKey}`}>

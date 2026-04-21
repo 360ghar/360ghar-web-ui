@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import useSWR from 'swr';
 import PropertyItem from './PropertyItem';
 import Pagination from '../../common/ui/Pagination';
@@ -16,7 +17,7 @@ import { parsePropertySearchParams } from '../../utils/propertyFilters';
 const PropertyPageSection = () => {
     const { setLocation } = useLocationStore();
     const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
+    const navigate = useI18nNavigate();
     const {
         properties,
         pagination,

@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '../../store';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import AccountHomeTab from './AccountHomeTab';
 import AccountProfileTab from './AccountProfileTab';
 import AccountAddressTab from './AccountAddressTab';
@@ -37,7 +38,7 @@ const aliasToKey = {
 };
 
 const AccountSection = () => {
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
   const [searchParams] = useSearchParams();
   const { logout } = useAuthStore();
   const { t } = useTranslation('account');

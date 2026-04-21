@@ -1,41 +1,54 @@
 User-agent: OAI-SearchBot
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: GPTBot
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: ChatGPT-User
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: ClaudeBot
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Claude-SearchBot
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Claude-User
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Googlebot
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Google-Extended
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: GoogleOther
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Bingbot
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Applebot
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: PerplexityBot
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Perplexity-User
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: *
 Allow: /
@@ -47,6 +60,7 @@ Allow: /.well-known/ai.txt
 Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /data/llm-feed.json
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 # Explicitly disallow private or system paths
 Disallow: /admin/

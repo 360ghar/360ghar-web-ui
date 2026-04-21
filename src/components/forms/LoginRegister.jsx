@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import { I18nLink } from '../../i18n/I18nLink';
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -52,7 +52,7 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
     const [termsError, setTermsError] = useState(false);
 
     // Navigate to Account Page
-    const navigate = useNavigate();
+    const navigate = useI18nNavigate();
     const { login, register, isLoading, error, clearError } = useAuthStore();
 
     // Password strength calculation with detailed requirements

@@ -2,7 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store';
-import { useNavigate } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import i18n from '../../i18n';
 
 const LoginSchema = Yup.object().shape({
@@ -16,7 +16,7 @@ const LoginSchema = Yup.object().shape({
 
 const LoginForm = ({ redirectTo = '/' }) => {
   const { login, isLoading, error, clearError } = useAuthStore();
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
   const { t } = useTranslation('forms');
 
   const handleSubmit = async (values, { setSubmitting }) => {

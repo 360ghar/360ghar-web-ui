@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import { useLocationStore } from '../../store/locationStore';
 import GooglePlacesInput from '../../common/search/GooglePlacesInput';
 import {
@@ -18,7 +18,7 @@ import { buildPropertySearchQuery } from '../../utils/propertyFilters';
 
 const AdvancedPropertyFilter = ({ buttonText = "Search Properties" }) => {
   const { location, setLocation } = useLocationStore();
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const formik = useFormik({

@@ -2,18 +2,21 @@ import { Helmet } from 'react-helmet-async';
 import { siteMetadata, absoluteUrl } from '../seo/siteMetadata';
 import { useLocation } from 'react-router-dom';
 import useLocaleStore from '../store/localeStore';
-import { stripLocalePrefix } from '../i18n/I18nLink';
+import { localizePath, stripLocalePrefix } from '../i18n/I18nLink';
 
 const toArray = (maybeArray) => (Array.isArray(maybeArray) ? maybeArray : [maybeArray].filter(Boolean));
+const inferLocaleFromPath = (path) => (path === '/hi' || path.startsWith('/hi/') ? 'hi' : 'en');
+const localizeSeoPath = (pathOrUrl, locale) => localizePath(pathOrUrl, locale);
 
 /**
  * Build hreflang alternates for the current page.
  * English: bare path, Hindi: /hi/ prefixed, x-default: bare path.
  */
-const buildHreflangs = (canonicalUrl, pathname) => {
-  const barePath = stripLocalePrefix(pathname);
+const buildHreflangs = (canonicalUrl) => {
+  const { pathname, search, hash } = new URL(canonicalUrl, siteMetadata.siteUrl);
+  const barePath = stripLocalePrefix(`${pathname}${search}${hash}`);
   const enUrl = absoluteUrl(barePath);
-  const hiUrl = absoluteUrl(barePath === '/' ? '/hi' : `/hi${barePath}`);
+  const hiUrl = absoluteUrl(localizePath(barePath, 'hi'));
   return [
     { hrefLang: 'en', href: enUrl },
     { hrefLang: 'hi', href: hiUrl },
@@ -40,10 +43,12 @@ const SEO = ({
   articleSection,
 }) => {
   const location = useLocation();
-  const locale = useLocaleStore((s) => s.locale);
+  const storeLocale = useLocaleStore((s) => s.locale);
   const path = location.pathname || '';
-  const computedUrl = absoluteUrl(url || path);
-  const canonicalUrl = absoluteUrl(canonical || path);
+  const locale = storeLocale === 'hi' || inferLocaleFromPath(path) === 'hi' ? 'hi' : 'en';
+  const localizedPath = localizeSeoPath(path, locale);
+  const computedUrl = absoluteUrl(localizeSeoPath(url || localizedPath, locale));
+  const canonicalUrl = absoluteUrl(localizeSeoPath(canonical || localizedPath, locale));
 
   const metaTitle = title || siteMetadata.defaultTitle;
   const metaDesc = description || siteMetadata.defaultDescription;
@@ -51,7 +56,7 @@ const SEO = ({
   const ogImage = absoluteUrl(image || siteMetadata.defaultOgImage);
 
   // Auto-generate hreflang alternates based on current URL
-  const alternates = hreflangs || buildHreflangs(canonicalUrl, path);
+  const alternates = hreflangs || buildHreflangs(canonicalUrl);
 
   const ldBlocks = toArray(structuredData);
   const isArticle = type === 'article';

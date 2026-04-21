@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { I18nLink } from '../../i18n/I18nLink';
+import { I18nLink, useI18nNavigate } from '../../i18n/I18nLink';
 import Logo from '../Logo';
 import NavMenu from './NavMenu';
 import { useAuthStore, useUIStore } from '../../store';
@@ -11,7 +10,7 @@ import LazyImage from '../ui/LazyImage';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const MobileMenu = () => {
-    const navigate = useNavigate();
+    const navigate = useI18nNavigate();
     const { t } = useTranslation('common');
     const { toggleMobileMenu, handleMobileMenuClose } = useUIStore();
     const menuRef = useRef(null);

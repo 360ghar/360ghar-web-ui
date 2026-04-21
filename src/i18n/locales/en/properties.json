@@ -392,5 +392,24 @@
     "seoTitle": "Properties on Map | Find Real Estate Near You | 360Ghar",
     "seoDescription": "Explore properties on an interactive map. Find homes, apartments, and commercial spaces near you in Gurugram.",
     "seoKeywords": "map search, properties near me, real estate map, Gurugram properties map"
+  },
+  "searchBox": {
+    "title": "Property Search",
+    "generalMode": "General Search",
+    "locationMode": "Location Search",
+    "keywordPlaceholder": "Search by keyword, title, or description...",
+    "allTypes": "All Types",
+    "searchBtn": "Search",
+    "locationPlaceholder": "Enter location, city, or area...",
+    "minPrice": "Min Price",
+    "maxPrice": "Max Price",
+    "findNearby": "Find Nearby",
+    "bedrooms": "Bedrooms",
+    "bedroom1": "1+ Bedroom",
+    "bedroom2": "2+ Bedrooms",
+    "bedroom3": "3+ Bedrooms",
+    "bedroom4": "4+ Bedrooms",
+    "applyFilters": "Apply Filters",
+    "kmRadius": "{{km}} km"
   }
 }

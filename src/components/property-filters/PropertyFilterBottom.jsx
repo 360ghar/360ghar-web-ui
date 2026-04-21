@@ -1,4 +1,5 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import ListGridButtons from '../../common/listing/ListGridButtons';
 import { usePropertyStore } from '../../store/propertyStore';
 
@@ -8,8 +9,8 @@ const PropertyFilterBottom = ({
     viewMode = 'grid',
     onViewModeChange
 }) => {
+    const navigate = useI18nNavigate();
     const { filters, updateFilter, applyFilters } = usePropertyStore();
-    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
     const selectedSort = filters.sort_by || 'newest';

@@ -4,8 +4,12 @@ const siteUrl = siteMetadata.siteUrl.replace(/\/$/, '');
 const llmsUrl = `${siteUrl}/llms.txt`;
 const llmsFullUrl = `${siteUrl}/llms-full.txt`;
 const aiTxtUrl = `${siteUrl}/.well-known/ai.txt`;
+const apiCatalogUrl = `${siteUrl}/.well-known/api-catalog`;
 const llmFeedUrl = `${siteUrl}/data/llm-feed.json`;
 const mcpUrl = 'https://api.360ghar.com/mcp';
+const restApiUrl = 'https://api.360ghar.com/api/v1';
+const restOpenApiUrl = `${restApiUrl}/openapi.json`;
+const restDocsUrl = `${restApiUrl}/docs`;
 
 export const aiDiscoveryImportantPages = [
   { title: 'Home', url: `${siteUrl}/` },
@@ -41,6 +45,37 @@ export const aiDiscoveryFeed = {
   },
 };
 
+export const apiCatalog = {
+  linkset: [
+    {
+      anchor: apiCatalogUrl,
+      item: [
+        { href: mcpUrl },
+        { href: restApiUrl },
+      ],
+    },
+    {
+      anchor: mcpUrl,
+      'service-doc': [
+        { href: `${siteUrl}/for-ai`, type: 'text/html' },
+      ],
+      'service-meta': [
+        { href: llmFeedUrl, type: 'application/json' },
+        { href: aiTxtUrl, type: 'text/plain' },
+      ],
+    },
+    {
+      anchor: restApiUrl,
+      'service-desc': [
+        { href: restOpenApiUrl, type: 'application/openapi+json' },
+      ],
+      'service-doc': [
+        { href: restDocsUrl, type: 'text/html' },
+      ],
+    },
+  ],
+};
+
 export function buildAiDiscoveryArtifacts() {
   const aiTxt = [
     '# ai.txt — guidance for AI crawlers and assistants',
@@ -56,6 +91,7 @@ export function buildAiDiscoveryArtifacts() {
     `Cite: Please attribute with “${siteMetadata.siteName} (app and website)” and link to ${siteUrl}`,
     '',
     'Discovery:',
+    `  api-catalog: ${apiCatalogUrl}`,
     `  llms: ${llmsUrl}`,
     `  llms-full: ${llmsFullUrl}`,
     `  llm-feed: ${llmFeedUrl}`,
@@ -109,6 +145,7 @@ export function buildAiDiscoveryArtifacts() {
     '## Key URLs',
     '',
     ...aiDiscoveryImportantPages.map((page) => `- ${page.title}: ${page.url}`),
+    `- API Catalog: ${apiCatalogUrl}`,
     `- llm-feed.json: ${llmFeedUrl}`,
     `- ai.txt: ${aiTxtUrl}`,
     '',
@@ -156,6 +193,7 @@ export function buildAiDiscoveryArtifacts() {
     '## Discovery Assets',
     '',
     `- AI Assistant Integration Guide: ${siteUrl}/for-ai`,
+    `- API Catalog: ${apiCatalogUrl}`,
     `- AI Crawler Policy: ${aiTxtUrl}`,
     `- llms.txt: ${llmsUrl}`,
     `- llm-feed.json: ${llmFeedUrl}`,
@@ -211,5 +249,6 @@ export function buildAiDiscoveryArtifacts() {
     llmsTxt,
     llmsFullTxt,
     llmFeed: aiDiscoveryFeed,
+    apiCatalog,
   };
 }

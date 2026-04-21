@@ -2,13 +2,13 @@ import { useNavigate } from 'react-router-dom';
 
 const BlogNextPrev = () => {
 
-    const navigate = useNavigate(); 
-    
+    const navigate = useNavigate();
+
     return (
         <>
             <div className="blog-nextPrev flx-between gap-3">
                 <div className="blog-nextPrev__item flx-align">
-                    <button type="button" className="blog-nextPrev__button" onClick={()=>navigate(-1)}> 
+                    <button type="button" className="blog-nextPrev__button" onClick={()=>navigate(-1)}>
                         <i className="fas fa-arrow-left"></i> 
                     </button>
                     <div className="blog-nextPrev__content">

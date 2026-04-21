@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
@@ -88,7 +88,7 @@ MediaTabButton.propTypes = {
 };
 
 const PropertyDetailsSection = ({ property }) => {
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
   const images = Array.isArray(property?.images) ? property.images : [];
   const galleryImages = useMemo(
     () => images.filter((i) => i?.image_url && !/kuula\.co/i.test(i.image_url)),
