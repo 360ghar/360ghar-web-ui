@@ -5,27 +5,27 @@
     <link>https://360ghar.com</link>
     <description>Index of all 360Ghar RSS feeds: blog, properties, and localities</description>
     <language>en-in</language>
-    <lastBuildDate>Tue, 21 Apr 2026 18:07:04 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 28 Apr 2026 15:55:30 GMT</lastBuildDate>
     <atom:link href="https://360ghar.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>360Ghar Blog</title>
       <link>https://360ghar.com/rss/blog.xml</link>
       <description>Real estate guides, buying tips, locality deep-dives, and market updates</description>
-      <pubDate>Tue, 21 Apr 2026 18:07:04 GMT</pubDate>
+      <pubDate>Tue, 28 Apr 2026 15:55:30 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/blog.xml</guid>
     </item>
     <item>
       <title>360Ghar Properties</title>
       <link>https://360ghar.com/rss/properties.xml</link>
       <description>Latest verified property listings in Gurugram and Delhi NCR</description>
-      <pubDate>Sun, 25 Jan 2026 15:56:32 GMT</pubDate>
+      <pubDate>Thu, 23 Apr 2026 13:22:41 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/properties.xml</guid>
     </item>
     <item>
       <title>360Ghar Localities</title>
       <link>https://360ghar.com/rss/localities.xml</link>
       <description>Locality guides and neighbourhood intelligence for Gurugram and Delhi NCR</description>
-      <pubDate>Tue, 21 Apr 2026 00:00:00 GMT</pubDate>
+      <pubDate>Tue, 28 Apr 2026 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/localities.xml</guid>
     </item>
   </channel>

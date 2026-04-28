@@ -1,0 +1,52 @@
+[
+  {
+    "id": "exteriorHero",
+    "label": "Apartment exterior",
+    "source": "Pexels 27085225"
+  },
+  {
+    "id": "exteriorBalconies",
+    "label": "Balcony facade",
+    "source": "Pexels 10209711"
+  },
+  {
+    "id": "exteriorStreet",
+    "label": "Urban apartments",
+    "source": "Pexels 13247091"
+  },
+  {
+    "id": "interiorLiving",
+    "label": "Indian interior",
+    "source": "Pexels 33559373"
+  },
+  {
+    "id": "coupleHome",
+    "label": "Indian couple at home",
+    "source": "Pexels 4307799"
+  },
+  {
+    "id": "coupleCouch",
+    "label": "Indian couple with devices at home",
+    "source": "Pexels 4307939"
+  },
+  {
+    "id": "womanOffice",
+    "label": "South Asian businesswoman",
+    "source": "Pexels 32251449"
+  },
+  {
+    "id": "womanDesk",
+    "label": "Indian woman at office desk",
+    "source": "Pexels 32252228"
+  },
+  {
+    "id": "manPortrait",
+    "label": "South Asian man portrait",
+    "source": "Pexels 1067622"
+  },
+  {
+    "id": "officeTeam",
+    "label": "Office team group",
+    "source": "Pexels 3184398"
+  }
+]

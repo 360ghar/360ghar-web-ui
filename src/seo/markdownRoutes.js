@@ -39,7 +39,11 @@ export function shouldServeMarkdownRoute({ pathname, search = '' }) {
 }
 
 export function isInternalMarkdownPath(pathname) {
-  return typeof pathname === 'string' && pathname.startsWith(MARKDOWN_NAMESPACE_PREFIX);
+  return (
+    typeof pathname === 'string' &&
+    pathname.startsWith(MARKDOWN_NAMESPACE_PREFIX) &&
+    !pathname.includes('..')
+  );
 }
 
 export function getMarkdownAssetPath(route) {
@@ -49,6 +53,10 @@ export function getMarkdownAssetPath(route) {
 
   if (typeof route !== 'string' || !route.startsWith('/')) {
     throw new Error(`Expected an absolute route path, received: ${route}`);
+  }
+
+  if (route.includes('..')) {
+    throw new Error(`Path traversal detected in route: ${route}`);
   }
 
   return `/__markdown${route.replace(/\/+$/, '')}/index.md`;

@@ -1,7 +1,7 @@
 import { lazy } from 'react';
-import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
-import { I18nLink } from '../../i18n/I18nLink';const TruthPage = lazy(() => import('./TruthPage'));
+
+const TruthPage = lazy(() => import('./TruthPage'));
 
 const ZoloTruth = () => {
   const competitor = competitors.zolo;

@@ -1,0 +1,1104 @@
+{
+  "generatedAt": "2026-04-21T20:59:08.171Z",
+  "entryCount": 60,
+  "entries": [
+    {
+      "path": "/assets/images/blog/gurugram-guide.jpg",
+      "usage": [
+        "src/pages/core/GurugramGuide.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/blog/gurugram-guide.jpg",
+      "format": "jpeg",
+      "dimensions": {
+        "width": 1600,
+        "height": 900
+      },
+      "aspectRatio": "1600:900",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Editorial hero for the Gurugram guide: NCR residential skyline or apartment facade that signals the local market clearly without looking like generic international stock."
+    },
+    {
+      "path": "/assets/images/thumbs/about-img.png",
+      "usage": [
+        "src/data/HomeOneData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/about-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 460,
+        "height": 490
+      },
+      "aspectRatio": "460:490",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Trust-building lifestyle image: Indian buyers or advisors in a modern Indian home context, natural expressions, no western sale-sign tropes, warm daylight and credible wardrobe."
+    },
+    {
+      "path": "/assets/images/thumbs/about-three-img.png",
+      "usage": [
+        "src/components/layout/AboutThree.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/about-three-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 520,
+        "height": 535
+      },
+      "aspectRatio": "520:535",
+      "transparentBackgroundRequired": true,
+      "currentHasAlpha": true,
+      "priorityTier": "P0",
+      "replacementBrief": "Trust-building lifestyle image: Indian buyers or advisors in a modern Indian home context, natural expressions, no western sale-sign tropes, warm daylight and credible wardrobe."
+    },
+    {
+      "path": "/assets/images/thumbs/about-two-img.png",
+      "usage": [
+        "src/data/HomeTwoData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/about-two-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 600,
+        "height": 516
+      },
+      "aspectRatio": "600:516",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Trust-building lifestyle image: Indian buyers or advisors in a modern Indian home context, natural expressions, no western sale-sign tropes, warm daylight and credible wardrobe."
+    },
+    {
+      "path": "/assets/images/thumbs/banner-img.png",
+      "usage": [
+        "src/data/HomeOneData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/banner-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 590,
+        "height": 590
+      },
+      "aspectRatio": "590:590",
+      "transparentBackgroundRequired": true,
+      "currentHasAlpha": true,
+      "priorityTier": "P0",
+      "replacementBrief": "Hero exterior for Gurugram/NCR: realistic Indian residential tower or builder-floor facade in daylight, premium but believable, cropped safely inside the existing hero composition."
+    },
+    {
+      "path": "/assets/images/thumbs/banner-img.webp",
+      "usage": [
+        "src/pages/localities/LocalityTemplate.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/banner-img.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 590,
+        "height": 590
+      },
+      "aspectRatio": "590:590",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Hero exterior for Gurugram/NCR: realistic Indian residential tower or builder-floor facade in daylight, premium but believable, cropped safely inside the existing hero composition."
+    },
+    {
+      "path": "/assets/images/thumbs/banner-three-1024w.webp",
+      "usage": [
+        "src/components/ui/BannerThree.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/banner-three-1024w.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 1024,
+        "height": 930
+      },
+      "aspectRatio": "1024:930",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Hero exterior for Gurugram/NCR: realistic Indian residential tower or builder-floor facade in daylight, premium but believable, cropped safely inside the existing hero composition."
+    },
+    {
+      "path": "/assets/images/thumbs/banner-three-320w.webp",
+      "usage": [
+        "src/components/ui/BannerThree.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/banner-three-320w.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 320,
+        "height": 290
+      },
+      "aspectRatio": "320:290",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Hero exterior for Gurugram/NCR: realistic Indian residential tower or builder-floor facade in daylight, premium but believable, cropped safely inside the existing hero composition."
+    },
+    {
+      "path": "/assets/images/thumbs/banner-three-640w.webp",
+      "usage": [
+        "src/components/ui/BannerThree.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/banner-three-640w.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 640,
+        "height": 581
+      },
+      "aspectRatio": "640:581",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Hero exterior for Gurugram/NCR: realistic Indian residential tower or builder-floor facade in daylight, premium but believable, cropped safely inside the existing hero composition."
+    },
+    {
+      "path": "/assets/images/thumbs/banner-three-768w.webp",
+      "usage": [
+        "src/components/ui/BannerThree.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/banner-three-768w.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 768,
+        "height": 697
+      },
+      "aspectRatio": "768:697",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Hero exterior for Gurugram/NCR: realistic Indian residential tower or builder-floor facade in daylight, premium but believable, cropped safely inside the existing hero composition."
+    },
+    {
+      "path": "/assets/images/thumbs/banner-three.png",
+      "usage": [
+        "src/data/HomeThreeData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/banner-three.png",
+      "format": "png",
+      "dimensions": {
+        "width": 629,
+        "height": 571
+      },
+      "aspectRatio": "629:571",
+      "transparentBackgroundRequired": true,
+      "currentHasAlpha": true,
+      "priorityTier": "P0",
+      "replacementBrief": "Hero exterior for Gurugram/NCR: realistic Indian residential tower or builder-floor facade in daylight, premium but believable, cropped safely inside the existing hero composition."
+    },
+    {
+      "path": "/assets/images/thumbs/banner-two-filter-bg.png",
+      "usage": [
+        "src/components/ui/BannerTwo.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/banner-two-filter-bg.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1290,
+        "height": 538
+      },
+      "aspectRatio": "1290:538",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Replace with a realistic India-first residential or people image that preserves the current crop, lighting balance, and layout role."
+    },
+    {
+      "path": "/assets/images/thumbs/blog-showcase.png",
+      "usage": [
+        "src/common/blog/BlogShowcase.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/blog-showcase.png",
+      "format": "png",
+      "dimensions": {
+        "width": 300,
+        "height": 213
+      },
+      "aspectRatio": "300:213",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Replace with a realistic India-first residential or people image that preserves the current crop, lighting balance, and layout role."
+    },
+    {
+      "path": "/assets/images/thumbs/blog-testi.png",
+      "usage": [
+        "src/common/blog/BlogTesti.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/blog-testi.png",
+      "format": "png",
+      "dimensions": {
+        "width": 45,
+        "height": 45
+      },
+      "aspectRatio": "45:45",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/blog1.png",
+      "usage": [
+        "src/common/listing/SidebarRecentPost.jsx",
+        "src/components/blog/Blog.jsx",
+        "src/components/blog/BlogClassicItem.jsx",
+        "src/components/blog/BlogFeed.jsx",
+        "src/components/blog/BlogThree.jsx",
+        "src/components/blog/BlogTwo.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/blog1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 630,
+        "height": 350
+      },
+      "aspectRatio": "630:350",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/comment1.png",
+      "usage": [
+        "src/common/blog/Comment.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/comment1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 95,
+        "height": 95
+      },
+      "aspectRatio": "95:95",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/comment2.png",
+      "usage": [
+        "src/common/blog/Comment.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/comment2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 95,
+        "height": 95
+      },
+      "aspectRatio": "95:95",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/cta-img.png",
+      "usage": [
+        "src/components/ui/Cta.jsx",
+        "src/components/ui/OwnerCta.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/cta-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 349,
+        "height": 327
+      },
+      "aspectRatio": "349:327",
+      "transparentBackgroundRequired": true,
+      "currentHasAlpha": true,
+      "priorityTier": "P0",
+      "replacementBrief": "Owner onboarding support visual on transparent canvas: realistic Indian owner or advisor moment, shaped to preserve the floating CTA slot without introducing a hard-edged rectangle."
+    },
+    {
+      "path": "/assets/images/thumbs/faq-img.png",
+      "usage": [
+        "src/components/layout/Faq.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/faq-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 915,
+        "height": 721
+      },
+      "aspectRatio": "915:721",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Replace with a realistic India-first residential or people image that preserves the current crop, lighting balance, and layout role."
+    },
+    {
+      "path": "/assets/images/thumbs/faq-two-img.png",
+      "usage": [
+        "src/components/layout/FaqTwo.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/faq-two-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 627,
+        "height": 538
+      },
+      "aspectRatio": "627:538",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Replace with a realistic India-first residential or people image that preserves the current crop, lighting balance, and layout role."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery-img1.png",
+      "usage": [
+        "src/data/HomeTwoData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery-img1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 467
+      },
+      "aspectRatio": "410:467",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery-img2.png",
+      "usage": [
+        "src/data/HomeTwoData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery-img2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 850,
+        "height": 467
+      },
+      "aspectRatio": "850:467",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery-img3.png",
+      "usage": [
+        "src/data/HomeTwoData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery-img3.png",
+      "format": "png",
+      "dimensions": {
+        "width": 850,
+        "height": 467
+      },
+      "aspectRatio": "850:467",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery-img4.png",
+      "usage": [
+        "src/data/HomeTwoData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery-img4.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 467
+      },
+      "aspectRatio": "410:467",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery1.png",
+      "usage": [
+        "src/components/layout/Gallery.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 67,
+        "height": 67
+      },
+      "aspectRatio": "67:67",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery2.png",
+      "usage": [
+        "src/components/layout/Gallery.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 66,
+        "height": 67
+      },
+      "aspectRatio": "66:67",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery3.png",
+      "usage": [
+        "src/components/layout/Gallery.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery3.png",
+      "format": "png",
+      "dimensions": {
+        "width": 67,
+        "height": 67
+      },
+      "aspectRatio": "67:67",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery4.png",
+      "usage": [
+        "src/components/layout/Gallery.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery4.png",
+      "format": "png",
+      "dimensions": {
+        "width": 66,
+        "height": 67
+      },
+      "aspectRatio": "66:67",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery5.png",
+      "usage": [
+        "src/components/layout/Gallery.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery5.png",
+      "format": "png",
+      "dimensions": {
+        "width": 67,
+        "height": 67
+      },
+      "aspectRatio": "67:67",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/gallery6.png",
+      "usage": [
+        "src/components/layout/Gallery.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/gallery6.png",
+      "format": "png",
+      "dimensions": {
+        "width": 67,
+        "height": 67
+      },
+      "aspectRatio": "67:67",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/login-img.avif",
+      "usage": [
+        "src/components/forms/LoginRegister.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/login-img.avif",
+      "format": "heif",
+      "dimensions": {
+        "width": 626,
+        "height": 470
+      },
+      "aspectRatio": "626:470",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Login/register support image: Indian home-search or onboarding moment in a clean modern interior, calm natural light, welcoming but not staged."
+    },
+    {
+      "path": "/assets/images/thumbs/message-img.png",
+      "usage": [
+        "src/components/layout/Message.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/message-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1165,
+        "height": 801
+      },
+      "aspectRatio": "1165:801",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/newsletter-bg.png",
+      "usage": [
+        "src/components/ui/Newsletter.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/newsletter-bg.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1290,
+        "height": 440
+      },
+      "aspectRatio": "1290:440",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/portfolio1.png",
+      "usage": [
+        "src/data/HomeOneData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/portfolio1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 520,
+        "height": 630
+      },
+      "aspectRatio": "520:630",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/portfolio2.png",
+      "usage": [
+        "src/data/HomeOneData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/portfolio2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 520,
+        "height": 630
+      },
+      "aspectRatio": "520:630",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/portfolio3.png",
+      "usage": [
+        "src/data/HomeOneData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/portfolio3.png",
+      "format": "png",
+      "dimensions": {
+        "width": 520,
+        "height": 630
+      },
+      "aspectRatio": "520:630",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/portfolio4.png",
+      "usage": [
+        "src/data/HomeOneData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/portfolio4.png",
+      "format": "png",
+      "dimensions": {
+        "width": 520,
+        "height": 630
+      },
+      "aspectRatio": "520:630",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Support image for marketing content: India-first residential lifestyle or interior scene, realistic materials and lighting, aligned with the existing card or background crop."
+    },
+    {
+      "path": "/assets/images/thumbs/project-details.webp",
+      "usage": [
+        "src/pages/localities/LocalityTemplate.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/project-details.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 1290,
+        "height": 671
+      },
+      "aspectRatio": "1290:671",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/project-img1.png",
+      "usage": [
+        "src/components/project/ProjectDetailsSection.jsx",
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/project-img1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 630,
+        "height": 521
+      },
+      "aspectRatio": "630:521",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/project-img2.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/project-img2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 630,
+        "height": 521
+      },
+      "aspectRatio": "630:521",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/project-img3.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/project-img3.png",
+      "format": "png",
+      "dimensions": {
+        "width": 630,
+        "height": 521
+      },
+      "aspectRatio": "630:521",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/project-img4.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/project-img4.png",
+      "format": "png",
+      "dimensions": {
+        "width": 630,
+        "height": 521
+      },
+      "aspectRatio": "630:521",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-1.png",
+      "usage": [
+        "src/common/listing/SidebarProperty.jsx",
+        "src/components/account/AccountMyPropertyTab.jsx",
+        "src/components/map/PropertyInfoWindow.jsx",
+        "src/components/property/PropertyDetailsSection.jsx",
+        "src/components/property/PropertyItem.jsx",
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 250
+      },
+      "aspectRatio": "410:250",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-2.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 250
+      },
+      "aspectRatio": "410:250",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-3.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-3.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 250
+      },
+      "aspectRatio": "410:250",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-4.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-4.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 250
+      },
+      "aspectRatio": "410:250",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-details-1.png",
+      "usage": [
+        "src/data/OthersPageData.jsx",
+        "src/pages/localities/LocalityTemplate.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-details-1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1290,
+        "height": 584
+      },
+      "aspectRatio": "1290:584",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-details-2.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-details-2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 475
+      },
+      "aspectRatio": "410:475",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-details-2.webp",
+      "usage": [
+        "src/pages/localities/LocalityTemplate.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-details-2.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 410,
+        "height": 475
+      },
+      "aspectRatio": "410:475",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-details-3.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-details-3.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 475
+      },
+      "aspectRatio": "410:475",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-details-3.webp",
+      "usage": [
+        "src/pages/localities/LocalityTemplate.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-details-3.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 410,
+        "height": 475
+      },
+      "aspectRatio": "410:475",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-details-4.png",
+      "usage": [
+        "src/data/OthersPageData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-details-4.png",
+      "format": "png",
+      "dimensions": {
+        "width": 410,
+        "height": 475
+      },
+      "aspectRatio": "410:475",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/property-details-4.webp",
+      "usage": [
+        "src/pages/localities/LocalityTemplate.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/property-details-4.webp",
+      "format": "webp",
+      "dimensions": {
+        "width": 410,
+        "height": 475
+      },
+      "aspectRatio": "410:475",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Property fallback/gallery image: realistic Gurugram/NCR apartment exteriors or Indian interiors, no western suburb cues, balanced daylight, and enough negative space for overlay UI."
+    },
+    {
+      "path": "/assets/images/thumbs/team1.png",
+      "usage": [
+        "src/components/account/AccountProfileTab.jsx",
+        "src/data/OthersPageData.jsx",
+        "src/data/authors.js",
+        "src/pages/core/AboutUs.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/team1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "aspectRatio": "1024:1024",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/team2.png",
+      "usage": [
+        "src/data/OthersPageData.jsx",
+        "src/pages/core/AboutUs.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/team2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "aspectRatio": "1024:1024",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/team3.png",
+      "usage": [
+        "src/data/OthersPageData.jsx",
+        "src/pages/core/AboutUs.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/team3.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "aspectRatio": "1024:1024",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/testimonial-img.png",
+      "usage": [
+        "src/components/ui/Testimonial.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/testimonial-img.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "aspectRatio": "1024:1024",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P1",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/user-img1.png",
+      "usage": [
+        "src/data/HomeThreeData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/user-img1.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "aspectRatio": "1024:1024",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/user-img2.png",
+      "usage": [
+        "src/data/HomeThreeData.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/user-img2.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "aspectRatio": "1024:1024",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": false,
+      "priorityTier": "P0",
+      "replacementBrief": "Portrait-led people image: Indian professionals, buyers, or residents with natural skin tones, business-casual styling, authentic expression, and tight safe-crop for avatar or testimonial framing."
+    },
+    {
+      "path": "/assets/images/thumbs/video-popup.png",
+      "usage": [
+        "src/components/ui/VideoPopup.jsx"
+      ],
+      "exists": true,
+      "localPath": "/Users/sakshammittal/Documents/360ghar/github/360ghar/frontend/public/assets/images/thumbs/video-popup.png",
+      "format": "png",
+      "dimensions": {
+        "width": 1290,
+        "height": 507
+      },
+      "aspectRatio": "1290:507",
+      "transparentBackgroundRequired": false,
+      "currentHasAlpha": true,
+      "priorityTier": "P2",
+      "replacementBrief": "Replace with a realistic India-first residential or people image that preserves the current crop, lighting balance, and layout role."
+    }
+  ]
+}

@@ -4,7 +4,7 @@ export const authors = {
     slug: 'saksham-mittal',
     title: 'Founder & CEO',
     bio: 'Saksham Mittal is the founder of 360Ghar, India\'s first AI + VR-first real estate platform. With deep expertise in PropTech and the Gurugram real estate market, he leads product strategy and technology innovation.',
-    image: '/assets/images/team/team1.png',
+    image: '/assets/images/thumbs/team1.png',
     linkedin: 'https://www.linkedin.com/in/saksham360/',
     credentials: 'Real Estate Technology, AI/ML, Product Strategy',
     organization: '360Ghar Technologies Pvt Ltd',

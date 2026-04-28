@@ -236,7 +236,7 @@ function App() {
             {/* Hindi routes — /hi/* prefix */}
             <Route path="/hi" element={<LocaleGate locale="hi" />}>
               <Route index element={<Home />} />
-              {routeGroups.map((route) => {
+              {routeGroups.filter((route) => route.path !== '/').map((route) => {
                 const strippedPath = route.path.startsWith('/') ? route.path.slice(1) : route.path;
                 return (
                   <Route key={`hi-${route.path}`} path={strippedPath} element={route.element} />

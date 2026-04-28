@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -81,13 +82,13 @@ const AccountDeletionRequest = () => {
                                     {t('deletion.successDesc')}
                                 </p>
                                 <div className="mt-4">
-                                    <a
-                                        href="/"
+                                    <I18nLink
+                                        to="/"
                                         className="btn btn-main"
                                     >
                                         <i className="fas fa-home me-2"></i>
                                         {t('deletion.returnHome')}
-                                    </a>
+                                    </I18nLink>
                                 </div>
                             </div>
                         </div>

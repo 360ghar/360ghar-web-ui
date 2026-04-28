@@ -202,7 +202,7 @@ const NavMenu = (props) => {
                     <ul className="nav-menu nav-menu--measure" aria-hidden="true">
                         {navMenus.map((menu, index) => (
                             <li className={`nav-menu__item ${menu.submenus?.length ? 'has-submenu' : ''}`} key={`measure-${index}`} ref={(element) => { measureItemRefs.current[index] = element; }}>
-                                <span className="nav-menu__link">{menu.text}</span>
+                                <span className="nav-menu__link">{menu.textKey ? t(menu.textKey) : menu.text}</span>
                             </li>
                         ))}
                         <li className="nav-menu__item has-submenu nav-menu__item--more" ref={moreMeasureRef}>

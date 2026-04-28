@@ -38,12 +38,6 @@ export function useI18nNavigate() {
 }
 
 /**
- * Deprecated alias for useI18nNavigate.
- * @deprecated Use useI18nNavigate instead.
- */
-export const useLocaleNavigate = useI18nNavigate;
-
-/**
  * Prepend /hi/ to a path when locale is Hindi.
  * Handles root path, relative paths, and full URLs.
  */

@@ -29,11 +29,16 @@ const OffCanvas = () => {
                 <ul className="address-list mt-5">
                     {offCanvasInfos.map((offCanvasInfo, index) => {
                         const text = t(offCanvasInfo.textKey);
+                        const isExternalLink = offCanvasInfo.link && (offCanvasInfo.link.startsWith('mailto:') || offCanvasInfo.link.startsWith('tel:') || offCanvasInfo.link.startsWith('http://') || offCanvasInfo.link.startsWith('https://'));
                         return (
                             <li className="address-list__item flx-align flex-nowrap" key={index}>
                                 <span className="address-list__icon"> { offCanvasInfo.icon } </span>
                                 <div className="address-list__content">
-                                    {offCanvasInfo.link ? (
+                                    {isExternalLink ? (
+                                        <a href={`${offCanvasInfo.link}${text}`} className="address-list__text">
+                                            {text}
+                                        </a>
+                                    ) : offCanvasInfo.link ? (
                                         <I18nLink to={`${offCanvasInfo.link}${text}`} className="address-list__text">
                                             {text}
                                         </I18nLink>
