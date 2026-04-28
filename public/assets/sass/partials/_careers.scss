@@ -1,0 +1,44 @@
+// Careers section styles
+// Override global breadcrumb styles (dark bar + huge padding) for inline use
+.careers-inline-breadcrumb {
+  .breadcrumb {
+    background-color: transparent !important;
+    padding: 0 !important;
+  }
+}
+
+.careers-wrapper {
+  .badge-internship {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 0.25rem;
+    background-color: #0d6efd;
+    color: #fff;
+  }
+
+  .careers-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12) !important;
+    }
+
+    &__header {
+      height: 4px;
+      background: linear-gradient(90deg, #0d6efd, #6610f2);
+    }
+
+    &__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 0.5rem;
+      background-color: #e8f0fe;
+      color: var(--bs-primary);
+      font-size: 1rem;
+    }
+  }
+}

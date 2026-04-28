@@ -374,6 +374,10 @@ export const footerUsefulLinks = [
         text: '360Ghar vs 99acres',
         link: '/vs/99acres'
     },
+    {
+        text: 'Careers',
+        link: '/careers'
+    },
 ]
 
 
