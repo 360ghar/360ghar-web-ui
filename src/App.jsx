@@ -52,6 +52,8 @@ const AIAgent = lazy(() => import('./pages/core/AIAgent'));
 const LocalityTemplate = lazy(() => import('./pages/localities/LocalityTemplate'));
 const LocalitiesDirectory = lazy(() => import('./pages/localities/LocalitiesDirectory'));
 const ReferAndEarn = lazy(() => import('./pages/core/ReferAndEarn'));
+const Careers = lazy(() => import('./pages/core/Careers'));
+const CareerDetails = lazy(() => import('./pages/core/CareerDetails'));
 const ChatBot = lazy(() => import('./components/chatbot/ChatBot'));
 
 const VsNoBroker = lazy(() => import('./pages/compare/vs-nobroker'));
@@ -169,6 +171,11 @@ const truthRoutes = [
   { path: '/truth/zolo-issues', element: <TruthZolo /> },
 ];
 
+const careersRoutes = [
+  { path: '/careers', element: <Careers /> },
+  { path: '/careers/:slug', element: <CareerDetails /> },
+];
+
 const programmaticRoutes = [
   { path: '/:citySlug/:intent/:type/:bhk', element: <FacetLanding /> },
   { path: '/:citySlug/:intent/:type/budget/:budget', element: <FacetLanding /> },
@@ -185,6 +192,7 @@ const routeGroups = [
   ...comparisonRoutes,
   ...truthRoutes,
   ...programmaticRoutes,
+  ...careersRoutes,
 ];
 
 // Scrolls window to top on every route change

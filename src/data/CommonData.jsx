@@ -372,6 +372,10 @@ export const footerUsefulLinks = [
         textKey: 'common:footer.vs99acres',
         link: '/vs/99acres'
     },
+    {
+        textKey: 'common:footer.careers',
+        link: '/careers'
+    },
 ]
 
 

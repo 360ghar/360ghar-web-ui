@@ -53,6 +53,7 @@ export const indexableStaticRoutes = [
   '/truth/99acres-fake',
   '/truth/nestaway-collapse',
   '/truth/zolo-issues',
+  '/careers',
 ];
 
 export const noindexPrerenderRoutes = [
