@@ -1,0 +1,272 @@
+[
+  {
+    "slug": "dlf-phase-1",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "DLF Phase 1 Metro", "type": "metro", "distance": "0.5 km" },
+      { "name": "MG Road", "type": "road", "distance": "1 km" },
+      { "name": "DLF Galleria Market", "type": "market", "distance": "0.8 km" },
+      { "name": "Artemis Hospital", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "golf-course-road",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "Sector 55-56 Metro", "type": "metro", "distance": "1 km" },
+      { "name": "Golf Course Road", "type": "road", "distance": "0 km" },
+      { "name": "South Point Mall", "type": "mall", "distance": "2 km" },
+      { "name": "Fortis Memorial Research Institute", "type": "hospital", "distance": "4 km" }
+    ]
+  },
+  {
+    "slug": "sushant-lok-1",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "IFFCO Chowk Metro", "type": "metro", "distance": "1.5 km" },
+      { "name": "MG Road", "type": "road", "distance": "0.5 km" },
+      { "name": "Sushant Lok Market", "type": "market", "distance": "0.3 km" },
+      { "name": "Max Hospital", "type": "hospital", "distance": "2 km" }
+    ]
+  },
+  {
+    "slug": "sohna-road",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "Sector 55-56 Metro", "type": "metro", "distance": "3 km" },
+      { "name": "Sohna Road", "type": "road", "distance": "0 km" },
+      { "name": "Omaxe World Street", "type": "mall", "distance": "2 km" },
+      { "name": "Medanta - The Medicity", "type": "hospital", "distance": "5 km" }
+    ]
+  },
+  {
+    "slug": "dlf-phase-5",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "DLF Phase 1 Metro", "type": "metro", "distance": "1.5 km" },
+      { "name": "Golf Course Road", "type": "road", "distance": "1 km" },
+      { "name": "DLF Supermart", "type": "market", "distance": "0.5 km" },
+      { "name": "Fortis Memorial Research Institute", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "sector-49",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "Huda City Centre Metro", "type": "metro", "distance": "3 km" },
+      { "name": "Sohna Road", "type": "road", "distance": "1 km" },
+      { "name": "Omaxe World Street", "type": "mall", "distance": "1.5 km" },
+      { "name": "Artemis Hospital", "type": "hospital", "distance": "4 km" }
+    ]
+  },
+  {
+    "slug": "sector-56",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "Sector 55-56 Metro", "type": "metro", "distance": "0.5 km" },
+      { "name": "Golf Course Extension Road", "type": "road", "distance": "1 km" },
+      { "name": "Sector 56 Market", "type": "market", "distance": "0.3 km" },
+      { "name": "Medanta - The Medicity", "type": "hospital", "distance": "6 km" }
+    ]
+  },
+  {
+    "slug": "palam-vihar",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "Sector 10 Metro (under construction)", "type": "metro", "distance": "2 km" },
+      { "name": "Dwarka Expressway", "type": "road", "distance": "2 km" },
+      { "name": "Palam Vihar Market", "type": "market", "distance": "0.5 km" },
+      { "name": "Columbia Asia Hospital", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "mg-road-gurgaon",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "MG Road Metro", "type": "metro", "distance": "0.5 km" },
+      { "name": "MG Road", "type": "road", "distance": "0 km" },
+      { "name": "MGF Metropolitan Mall", "type": "mall", "distance": "1 km" },
+      { "name": "Max Hospital", "type": "hospital", "distance": "4 km" }
+    ]
+  },
+  {
+    "slug": "sector-43",
+    "city": "Gurgaon",
+    "landmarks": [
+      { "name": "Huda City Centre Metro", "type": "metro", "distance": "1 km" },
+      { "name": "Golf Course Road", "type": "road", "distance": "0.5 km" },
+      { "name": "Sector 43 Market", "type": "market", "distance": "0.3 km" },
+      { "name": "Fortis Memorial Research Institute", "type": "hospital", "distance": "2 km" }
+    ]
+  },
+  {
+    "slug": "sector-62-noida",
+    "city": "Noida",
+    "landmarks": [
+      { "name": "Noida Sector 62 Metro", "type": "metro", "distance": "0.5 km" },
+      { "name": "NH-24", "type": "road", "distance": "1 km" },
+      { "name": "Sector 62 Market", "type": "market", "distance": "0.3 km" },
+      { "name": "Kailash Hospital", "type": "hospital", "distance": "2 km" }
+    ]
+  },
+  {
+    "slug": "sector-137-noida",
+    "city": "Noida",
+    "landmarks": [
+      { "name": "Noida Sector 137 Metro", "type": "metro", "distance": "0.3 km" },
+      { "name": "Noida-Greater Noida Expressway", "type": "road", "distance": "0.5 km" },
+      { "name": "Advant Navik Business Park", "type": "commercial", "distance": "1 km" },
+      { "name": "Yatharth Hospital", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "sector-78-noida",
+    "city": "Noida",
+    "landmarks": [
+      { "name": "Noida Sector 50-51 Metro", "type": "metro", "distance": "2 km" },
+      { "name": "Noida-Greater Noida Expressway", "type": "road", "distance": "1.5 km" },
+      { "name": "Gaur City Mall", "type": "mall", "distance": "3 km" },
+      { "name": "Felix Hospital", "type": "hospital", "distance": "4 km" }
+    ]
+  },
+  {
+    "slug": "sector-50-noida",
+    "city": "Noida",
+    "landmarks": [
+      { "name": "Noida Sector 50-51 Metro", "type": "metro", "distance": "0.5 km" },
+      { "name": "City Centre Marg", "type": "road", "distance": "1 km" },
+      { "name": "Sector 18 Market", "type": "market", "distance": "2 km" },
+      { "name": "Max Hospital", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "expressway-sectors-noida",
+    "city": "Noida",
+    "landmarks": [
+      { "name": "Noida-Greater Noida Expressway", "type": "road", "distance": "0 km" },
+      { "name": "Aqua Line Metro", "type": "metro", "distance": "1 km" },
+      { "name": "Gautam Buddha University", "type": "commercial", "distance": "5 km" },
+      { "name": "Yatharth Hospital", "type": "hospital", "distance": "5 km" }
+    ]
+  },
+  {
+    "slug": "dwarka-delhi",
+    "city": "Delhi",
+    "landmarks": [
+      { "name": "Dwarka Sector 21 Metro", "type": "metro", "distance": "1 km" },
+      { "name": "Dwarka Expressway", "type": "road", "distance": "2 km" },
+      { "name": "Pacific D21 Mall", "type": "mall", "distance": "1.5 km" },
+      { "name": "Ayushman Hospital", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "rohini-delhi",
+    "city": "Delhi",
+    "landmarks": [
+      { "name": "Rohini West Metro", "type": "metro", "distance": "0.5 km" },
+      { "name": "Outer Ring Road", "type": "road", "distance": "1 km" },
+      { "name": "Rohini Sector 7 Market", "type": "market", "distance": "0.5 km" },
+      { "name": "Bhagwan Mahavir Hospital", "type": "hospital", "distance": "2 km" }
+    ]
+  },
+  {
+    "slug": "vasant-kunj-delhi",
+    "city": "Delhi",
+    "landmarks": [
+      { "name": "Chattarpur Metro", "type": "metro", "distance": "3 km" },
+      { "name": "MG Road", "type": "road", "distance": "1 km" },
+      { "name": "Vasant Kunj Market", "type": "market", "distance": "0.5 km" },
+      { "name": "Fortis Vasant Kunj", "type": "hospital", "distance": "1 km" }
+    ]
+  },
+  {
+    "slug": "janakpuri-delhi",
+    "city": "Delhi",
+    "landmarks": [
+      { "name": "Janakpuri West Metro", "type": "metro", "distance": "0.5 km" },
+      { "name": "Outer Ring Road", "type": "road", "distance": "0.5 km" },
+      { "name": "Janakpuri District Centre", "type": "market", "distance": "1 km" },
+      { "name": "Deen Dayal Upadhyay Hospital", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "lajpat-nagar-delhi",
+    "city": "Delhi",
+    "landmarks": [
+      { "name": "Lajpat Nagar Metro", "type": "metro", "distance": "0.3 km" },
+      { "name": "Ring Road", "type": "road", "distance": "0.5 km" },
+      { "name": "Lajpat Nagar Market", "type": "market", "distance": "0 km" },
+      { "name": "AIIMS", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "sector-14-faridabad",
+    "city": "Faridabad",
+    "landmarks": [
+      { "name": "Old Faridabad Metro", "type": "metro", "distance": "2 km" },
+      { "name": "Mathura Road (NH-44)", "type": "road", "distance": "0.5 km" },
+      { "name": "Sector 14 Market", "type": "market", "distance": "0.3 km" },
+      { "name": "Asian Hospital", "type": "hospital", "distance": "2 km" }
+    ]
+  },
+  {
+    "slug": "surajkund-faridabad",
+    "city": "Faridabad",
+    "landmarks": [
+      { "name": "Badarpur Metro", "type": "metro", "distance": "5 km" },
+      { "name": "MB Road", "type": "road", "distance": "1 km" },
+      { "name": "Surajkund Mela Ground", "type": "commercial", "distance": "1 km" },
+      { "name": "Sarvodaya Hospital", "type": "hospital", "distance": "4 km" }
+    ]
+  },
+  {
+    "slug": "nit-faridabad",
+    "city": "Faridabad",
+    "landmarks": [
+      { "name": "Neelam Chowk Metro", "type": "metro", "distance": "1 km" },
+      { "name": "Mathura Road (NH-44)", "type": "road", "distance": "0.5 km" },
+      { "name": "NIT Market", "type": "market", "distance": "0.3 km" },
+      { "name": " Escorts Hospital", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "indirapuram-ghaziabad",
+    "city": "Ghaziabad",
+    "landmarks": [
+      { "name": "Vaishali Metro", "type": "metro", "distance": "2 km" },
+      { "name": "NH-24", "type": "road", "distance": "1 km" },
+      { "name": "Shipra Mall", "type": "mall", "distance": "1 km" },
+      { "name": "Shanti Gopal Hospital", "type": "hospital", "distance": "3 km" }
+    ]
+  },
+  {
+    "slug": "vaishali-ghaziabad",
+    "city": "Ghaziabad",
+    "landmarks": [
+      { "name": "Vaishali Metro", "type": "metro", "distance": "0.5 km" },
+      { "name": "NH-58", "type": "road", "distance": "1 km" },
+      { "name": "Pacific Mall", "type": "mall", "distance": "2 km" },
+      { "name": "Max Hospital Vaishali", "type": "hospital", "distance": "2 km" }
+    ]
+  },
+  {
+    "slug": "crossing-republik-ghaziabad",
+    "city": "Ghaziabad",
+    "landmarks": [
+      { "name": "Vaishali Metro (shuttle)", "type": "metro", "distance": "5 km" },
+      { "name": "NH-24", "type": "road", "distance": "0.5 km" },
+      { "name": "Crossing Republik Market", "type": "market", "distance": "0.3 km" },
+      { "name": "Columbia Asia Hospital", "type": "hospital", "distance": "5 km" }
+    ]
+  },
+  {
+    "slug": "raj-nagar-extension-ghaziabad",
+    "city": "Ghaziabad",
+    "landmarks": [
+      { "name": "Ghaziabad Railway Station", "type": "road", "distance": "3 km" },
+      { "name": "NH-58", "type": "road", "distance": "0.5 km" },
+      { "name": "Raj Nagar Market", "type": "market", "distance": "1 km" },
+      { "name": "Sarthak Hospital", "type": "hospital", "distance": "2 km" }
+    ]
+  }
+]

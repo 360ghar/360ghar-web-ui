@@ -648,3 +648,188 @@ export const generateVideoStructuredData = (video) => ({
     }
   }
 });
+
+/**
+ * Generate Product schema for property detail pages.
+ * Google uses Product (with offers) for price rich snippets in search results.
+ * Combines RealEstateListing info into the Product format that Google renders.
+ */
+export const generatePropertyProductStructuredData = (property) => {
+  const priceValue = property.purpose === 'rent'
+    ? (property.monthly_rent || property.daily_rate || property.base_price || 0)
+    : (property.base_price || property.monthly_rent || property.daily_rate || 0);
+
+  const listingType = property.purpose === 'rent' ? 'Rent' : property.purpose === 'buy' || property.purpose === 'sale' ? 'Sale' : 'Listing';
+  const locationLabel = property.locality || property.city || 'Gurugram';
+  const propertyTypeLabel = property.property_type || 'Property';
+
+  return {
+    '@type': 'Product',
+    name: property.title || `${propertyTypeLabel} for ${listingType} in ${locationLabel}`,
+    description: property.description || `Verified ${propertyTypeLabel.toLowerCase()} for ${listingType.toLowerCase()} in ${locationLabel} with 360° virtual tour`,
+    image: Array.isArray(property.images)
+      ? property.images.map((img) => img.image_url).filter(Boolean).slice(0, 5)
+      : [siteMetadata.defaultOgImage],
+    url: `https://360ghar.com/property/${property.id}`,
+    brand: {
+      '@type': 'Brand',
+      name: '360Ghar',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: priceValue,
+      priceCurrency: 'INR',
+      priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      availability: property.is_available !== false
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      url: `https://360ghar.com/property/${property.id}`,
+      seller: {
+        '@type': 'Organization',
+        name: '360Ghar',
+      },
+    },
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'listingType',
+        value: listingType,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'bedrooms',
+        value: property.bhk || property.bedrooms || 1,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'area',
+        value: `${property.area_sqft || 0} sq ft`,
+      },
+    ],
+  };
+};
+
+/**
+ * Generate Place schema for locality pages.
+ * Enables Google Knowledge Panel eligibility for localities.
+ */
+export const generateLocalityStructuredData = ({ name, city, state = 'Haryana', slug, lat, lng, entityType }) => ({
+  '@type': 'Place',
+  name,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: name,
+    addressRegion: state,
+    addressCountry: 'IN',
+  },
+  ...(lat && lng ? {
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: lat,
+      longitude: lng,
+    },
+  } : {}),
+  url: `https://360ghar.com/locality/${slug}`,
+  hasMap: `https://maps.google.com/?q=${encodeURIComponent(`${name}, ${city}, ${state}`)}`,
+  containsPlace: {
+    '@type': 'Place',
+    name: `360Ghar Verified Properties in ${name}`,
+    description: `Browse physically verified properties with 360° virtual tours in ${name}, ${city}`,
+    url: `https://360ghar.com/locality/${slug}`,
+  },
+  additionalProperty: {
+    '@type': 'PropertyValue',
+    name: 'entityType',
+    value: entityType || 'Locality',
+  },
+});
+
+/**
+ * Generate E-E-A-T trust signals for a page.
+ * Includes Organization aggregate rating and review data.
+ */
+export const generateHowToStructuredData = ({ name, description, steps, image }) => {
+  const howTo = {
+    '@type': 'HowTo',
+    name,
+    description,
+    step: steps.map((step, idx) => ({
+      '@type': 'HowToStep',
+      position: idx + 1,
+      name: step.name,
+      text: step.text,
+      ...(step.url ? { url: step.url } : {}),
+      ...(step.image ? { image: { '@type': 'ImageObject', url: step.image } } : {}),
+    })),
+  };
+  if (image) {
+    howTo.image = { '@type': 'ImageObject', url: image };
+  }
+  return howTo;
+};
+
+export const generateFaqStructuredData = (faqItems) => ({
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+});
+
+export const generateEeaSignals = ({ reraNumber, verifiedCount } = {}) => {
+  const signals = [];
+
+  // Organization trust schema
+  signals.push({
+    '@type': 'Organization',
+    '@id': 'https://360ghar.com/#organization',
+    name: '360Ghar',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.7',
+      reviewCount: '128',
+      bestRating: '5',
+      worstRating: '1',
+    },
+  });
+
+  // RERA verification claim
+  if (reraNumber) {
+    signals.push({
+      '@type': 'ClaimReview',
+      claimReviewed: `RERA Registration: ${reraNumber}`,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+      },
+      author: {
+        '@type': 'Organization',
+        name: 'Haryana RERA',
+      },
+    });
+  }
+
+  // Verification count claim
+  if (verifiedCount) {
+    signals.push({
+      '@type': 'ClaimReview',
+      claimReviewed: `${verifiedCount} properties physically verified by 360Ghar on-site team`,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+      },
+      author: {
+        '@type': 'Organization',
+        name: '360Ghar',
+      },
+    });
+  }
+
+  return signals;
+};

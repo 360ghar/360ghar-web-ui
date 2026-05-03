@@ -5,7 +5,8 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
+import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 
 import {
   PuterAuthPrompt,
@@ -26,6 +27,21 @@ import {
 
 import puterService from '../../services/puterService';
 import './AIDesignStudio.scss';
+
+const AI_DESIGN_FAQS = [
+  { question: 'How does AI Design Studio work?', answer: 'AI Design Studio uses advanced image generation AI to create photorealistic interior and exterior designs. You can either describe your vision in text or upload a photo of an existing room to reimagine it in different styles.' },
+  { question: 'Is AI Design Studio free to use?', answer: 'Yes, AI Design Studio is completely free to use on 360Ghar. Generate as many designs as you need to visualize your dream space.' },
+  { question: 'Can I upload my own room photo?', answer: 'Yes! Use the image-to-image mode to upload a photo of your existing room. The AI will reimagine it while preserving the room layout and structure.' },
+  { question: 'What design styles are available?', answer: 'Choose from Modern, Minimalist, Scandinavian, Industrial, Bohemian, Traditional Indian, and many more style presets. Each generates a unique look tailored to the selected room type.' },
+  { question: 'How is AI Design Studio different from other design tools?', answer: 'Unlike static planning tools, AI Design Studio generates photorealistic renders in seconds. Combined with 360Ghar\'s verified property listings and 360° virtual tours, you can design your ideal space before moving in.' },
+];
+
+const AI_DESIGN_HOW_TO_STEPS = [
+  { name: 'Choose generation mode', text: 'Select text-to-image to describe your vision, or image-to-image to reimagine an existing room.' },
+  { name: 'Select room type and style', text: 'Pick the room type (bedroom, living room, kitchen, etc.) and a design style preset.' },
+  { name: 'Add your prompt or upload photo', text: 'Type a custom description or upload a room photo for the AI to work with.' },
+  { name: 'Generate and save', text: 'Click generate to create your design. Save results to your gallery for later reference.' },
+];
 
 /**
  * Build the full prompt from user selections
@@ -313,11 +329,20 @@ const AIDesignStudio = () => {
         keywords="AI interior design, AI exterior design, room design generator, home design AI, interior decorator AI, 360ghar, free design tool"
         canonical="/ai-design-studio"
         type="website"
-        structuredData={generateBreadcrumbStructuredData([
-          { name: 'Home', url: 'https://360ghar.com/' },
-          { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
-          { name: 'AI Design Studio', url: 'https://360ghar.com/ai-design-studio' }
-        ])}
+        structuredData={[
+          generateToolSchema(toolSchemas.aiDesignStudio),
+          generateBreadcrumbStructuredData([
+            { name: 'Home', url: 'https://360ghar.com/' },
+            { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+            { name: 'AI Design Studio', url: 'https://360ghar.com/ai-design-studio' }
+          ]),
+          generateFaqStructuredData(AI_DESIGN_FAQS),
+          generateHowToStructuredData({
+            name: 'How to Generate AI Room Designs',
+            description: 'Step-by-step guide to creating photorealistic room designs with AI.',
+            steps: AI_DESIGN_HOW_TO_STEPS,
+          }),
+        ]}
       />
       <OffCanvas />
       <MobileMenu />

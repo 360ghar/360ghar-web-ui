@@ -9,8 +9,8 @@ const SquareYardsCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs Square Yards | Transparent Property Search in Gurugram"
-      pageDescription="Compare 360 Ghar with Square Yards. See why unbiased recommendations and transparent pricing make 360 Ghar the better choice for property seekers."
+      pageTitle="Square Yards Alternative | 360 Ghar vs SquareYards"
+      pageDescription="Compare 360 Ghar vs SquareYards for Gurgaon real estate. Zero spam calls, verified listings with 360° virtual tours, and dedicated relationship managers."
       canonicalPath="/vs/squareyards"
     />
   );

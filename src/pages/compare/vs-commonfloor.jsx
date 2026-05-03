@@ -9,8 +9,8 @@ const CommonFloorCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs CommonFloor | Modern Property Search in Gurugram"
-      pageDescription="Compare 360 Ghar with CommonFloor. See why 360 Ghar's modern features, AI-powered search, and verified listings are the better choice for Gurugram property seekers."
+      pageTitle="CommonFloor Alternative | 360 Ghar vs CommonFloor Comparison"
+      pageDescription="Compare 360 Ghar vs CommonFloor for Gurgaon real estate. See how 360 Ghar's verified listings, 360° virtual tours, and dedicated relationship managers compare."
       canonicalPath="/vs/commonfloor"
     />
   );

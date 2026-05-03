@@ -9,8 +9,8 @@ const MagicBricksCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs MagicBricks | Best Alternative to MagicBricks in Gurugram"
-      pageDescription="Find out why 360 Ghar is the best MagicBricks alternative for Gurugram property search. Compare verified listings, virtual tours, and zero spam experience."
+      pageTitle="MagicBricks Spam Calls? 360 Ghar vs MagicBricks Alternative"
+      pageDescription="Tired of MagicBricks spam calls? Compare 360 Ghar vs MagicBricks — verified listings, 360° VR tours, and no tele-calling. Make an informed choice for Gurgaon real estate."
       canonicalPath="/vs/magicbricks"
     />
   );

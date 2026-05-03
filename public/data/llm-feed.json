@@ -2,11 +2,168 @@
   "name": "360Ghar",
   "homepage": "https://360ghar.com/",
   "description": "Real estate platform for Buy, Rent and PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.",
+  "metadata": {
+    "last_updated": "2026-05-03",
+    "coverage": [
+      "Gurugram",
+      "Delhi",
+      "Noida",
+      "Faridabad",
+      "Ghaziabad"
+    ],
+    "property_types": [
+      "apartment",
+      "villa",
+      "builder_floor",
+      "house",
+      "plot",
+      "penthouse",
+      "studio"
+    ],
+    "total_localities": 3212,
+    "total_societies": 179
+  },
   "search": {
     "endpoint": "https://360ghar.com/properties",
     "query_param": "q",
     "example": "https://360ghar.com/properties?q=2%20BHK%20in%20Gurugram"
   },
+  "price_snapshots": {
+    "gurgaon": {
+      "buy": {
+        "apartment": "85 lakhs - 3.5 crore",
+        "villa": "2.5 - 8 crore",
+        "builder_floor": "65 lakhs - 2.5 crore",
+        "house": "1.5 - 6 crore",
+        "plot": "50 lakhs - 4 crore",
+        "penthouse": "3 - 12 crore",
+        "studio": "40 lakhs - 80 lakhs",
+        "default": "70 lakhs - 4 crore"
+      },
+      "rent": {
+        "apartment": "15,000 - 85,000/month",
+        "villa": "60,000 - 3 lakh/month",
+        "builder_floor": "12,000 - 55,000/month",
+        "house": "25,000 - 1.5 lakh/month",
+        "studio": "10,000 - 25,000/month",
+        "penthouse": "1.5 - 5 lakh/month",
+        "default": "12,000 - 1 lakh/month"
+      },
+      "pg": {
+        "default": "7,000 - 25,000/month"
+      }
+    },
+    "delhi": {
+      "buy": {
+        "apartment": "50 lakhs - 4 crore",
+        "villa": "3 - 15 crore",
+        "builder_floor": "40 lakhs - 3 crore",
+        "house": "1 - 8 crore",
+        "plot": "1 - 10 crore",
+        "studio": "30 lakhs - 70 lakhs",
+        "default": "40 lakhs - 5 crore"
+      },
+      "rent": {
+        "apartment": "10,000 - 80,000/month",
+        "villa": "80,000 - 5 lakh/month",
+        "builder_floor": "8,000 - 50,000/month",
+        "house": "20,000 - 2 lakh/month",
+        "studio": "8,000 - 20,000/month",
+        "default": "8,000 - 70,000/month"
+      },
+      "pg": {
+        "default": "6,000 - 20,000/month"
+      }
+    },
+    "noida": {
+      "buy": {
+        "apartment": "40 lakhs - 2.5 crore",
+        "villa": "1.5 - 5 crore",
+        "builder_floor": "35 lakhs - 1.5 crore",
+        "house": "80 lakhs - 4 crore",
+        "plot": "30 lakhs - 2 crore",
+        "studio": "25 lakhs - 50 lakhs",
+        "default": "35 lakhs - 3 crore"
+      },
+      "rent": {
+        "apartment": "10,000 - 50,000/month",
+        "villa": "40,000 - 1.5 lakh/month",
+        "builder_floor": "8,000 - 35,000/month",
+        "house": "15,000 - 80,000/month",
+        "studio": "7,000 - 18,000/month",
+        "default": "8,000 - 45,000/month"
+      },
+      "pg": {
+        "default": "5,000 - 18,000/month"
+      }
+    },
+    "faridabad": {
+      "buy": {
+        "apartment": "30 lakhs - 1.5 crore",
+        "villa": "1 - 4 crore",
+        "builder_floor": "25 lakhs - 1 crore",
+        "house": "50 lakhs - 3 crore",
+        "plot": "20 lakhs - 1.5 crore",
+        "studio": "20 lakhs - 40 lakhs",
+        "default": "25 lakhs - 2 crore"
+      },
+      "rent": {
+        "apartment": "8,000 - 35,000/month",
+        "villa": "25,000 - 80,000/month",
+        "builder_floor": "7,000 - 25,000/month",
+        "house": "12,000 - 50,000/month",
+        "studio": "6,000 - 15,000/month",
+        "default": "7,000 - 30,000/month"
+      },
+      "pg": {
+        "default": "5,000 - 15,000/month"
+      }
+    },
+    "ghaziabad": {
+      "buy": {
+        "apartment": "30 lakhs - 1.2 crore",
+        "villa": "80 lakhs - 3 crore",
+        "builder_floor": "25 lakhs - 90 lakhs",
+        "house": "40 lakhs - 2.5 crore",
+        "plot": "20 lakhs - 1 crore",
+        "studio": "18 lakhs - 35 lakhs",
+        "default": "25 lakhs - 1.5 crore"
+      },
+      "rent": {
+        "apartment": "8,000 - 30,000/month",
+        "villa": "20,000 - 70,000/month",
+        "builder_floor": "7,000 - 22,000/month",
+        "house": "10,000 - 40,000/month",
+        "studio": "5,000 - 12,000/month",
+        "default": "7,000 - 25,000/month"
+      },
+      "pg": {
+        "default": "5,000 - 12,000/month"
+      }
+    }
+  },
+  "search_examples": [
+    {
+      "query": "2 BHK for rent in Gurgaon",
+      "url": "https://360ghar.com/gurgaon/rent/flats"
+    },
+    {
+      "query": "Flats for sale in Gurgaon",
+      "url": "https://360ghar.com/gurgaon/buy/flats"
+    },
+    {
+      "query": "Villa for sale in Gurgaon",
+      "url": "https://360ghar.com/gurgaon/buy/villa"
+    },
+    {
+      "query": "Builder floor for sale in Gurgaon",
+      "url": "https://360ghar.com/gurgaon/buy/builder-floor"
+    },
+    {
+      "query": "PG in Gurgaon",
+      "url": "https://360ghar.com/gurgaon/pg/flats"
+    }
+  ],
   "important_pages": [
     {
       "title": "Home",
@@ -57,16 +214,890 @@
       "url": "https://360ghar.com/builder-reputation"
     },
     {
-      "title": "Compare: 360Ghar vs NoBroker",
-      "url": "https://360ghar.com/vs/nobroker"
-    },
-    {
       "title": "Contact",
       "url": "https://360ghar.com/contact"
+    },
+    {
+      "title": "360Ghar vs NoBroker",
+      "url": "https://360ghar.com/vs/nobroker",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs MagicBricks",
+      "url": "https://360ghar.com/vs/magicbricks",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs 99acres",
+      "url": "https://360ghar.com/vs/99acres",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs Housing.com",
+      "url": "https://360ghar.com/vs/housing",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs CommonFloor",
+      "url": "https://360ghar.com/vs/commonfloor",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs PropTiger",
+      "url": "https://360ghar.com/vs/proptiger",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs SquareYards",
+      "url": "https://360ghar.com/vs/squareyards",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs NestAway",
+      "url": "https://360ghar.com/vs/nestaway",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs Zolo",
+      "url": "https://360ghar.com/vs/zolo",
+      "category": "comparisons"
+    },
+    {
+      "title": "360Ghar vs Stanza Living",
+      "url": "https://360ghar.com/vs/stanza-living",
+      "category": "comparisons"
+    },
+    {
+      "title": "Truth: NoBroker Listings",
+      "url": "https://360ghar.com/truth/nobroker-listings",
+      "category": "truth"
+    },
+    {
+      "title": "Truth: MagicBricks Spam",
+      "url": "https://360ghar.com/truth/magicbricks-spam",
+      "category": "truth"
+    },
+    {
+      "title": "Truth: 99acres Fake Listings",
+      "url": "https://360ghar.com/truth/99acres-fake",
+      "category": "truth"
+    },
+    {
+      "title": "Truth: NestAway Collapse",
+      "url": "https://360ghar.com/truth/nestaway-collapse",
+      "category": "truth"
+    },
+    {
+      "title": "Truth: Zolo Issues",
+      "url": "https://360ghar.com/truth/zolo-issues",
+      "category": "truth"
+    },
+    {
+      "title": "Area Converter",
+      "url": "https://360ghar.com/area-converter",
+      "category": "tools"
+    },
+    {
+      "title": "Area Calculator",
+      "url": "https://360ghar.com/area-calculator",
+      "category": "tools"
+    },
+    {
+      "title": "Loan Eligibility Calculator",
+      "url": "https://360ghar.com/loan-eligibility-calculator",
+      "category": "tools"
+    },
+    {
+      "title": "Capital Gains Tax Calculator",
+      "url": "https://360ghar.com/capital-gains-tax-calculator",
+      "category": "tools"
+    },
+    {
+      "title": "Property Document Checklist",
+      "url": "https://360ghar.com/property-document-checklist",
+      "category": "tools"
+    },
+    {
+      "title": "Vastu Checker",
+      "url": "https://360ghar.com/vastu-checker",
+      "category": "tools"
+    },
+    {
+      "title": "3D Blueprint Designer",
+      "url": "https://360ghar.com/design-blueprint",
+      "category": "tools"
+    },
+    {
+      "title": "AI Design Studio",
+      "url": "https://360ghar.com/ai-design-studio",
+      "category": "tools"
+    },
+    {
+      "title": "Verify Ownership",
+      "url": "https://360ghar.com/verify-ownership",
+      "category": "tools"
+    },
+    {
+      "title": "RERA Projects",
+      "url": "https://360ghar.com/rera-projects",
+      "category": "dataHub"
+    },
+    {
+      "title": "Zone Checker",
+      "url": "https://360ghar.com/zone-checker",
+      "category": "dataHub"
+    },
+    {
+      "title": "Regulatory Updates",
+      "url": "https://360ghar.com/regulatory-updates",
+      "category": "dataHub"
+    },
+    {
+      "title": "Flats for Sale in Gurgaon",
+      "url": "https://360ghar.com/gurgaon/buy/flats",
+      "category": "landing"
+    },
+    {
+      "title": "Flats for Rent in Gurgaon",
+      "url": "https://360ghar.com/gurgaon/rent/flats",
+      "category": "landing"
+    },
+    {
+      "title": "PG in Gurgaon",
+      "url": "https://360ghar.com/gurgaon/pg/flats",
+      "category": "landing"
+    },
+    {
+      "title": "Delhi Real Estate Hub",
+      "url": "https://360ghar.com/delhi",
+      "category": "landing"
+    },
+    {
+      "title": "Noida Real Estate Hub",
+      "url": "https://360ghar.com/noida",
+      "category": "landing"
+    },
+    {
+      "title": "Faridabad Real Estate Hub",
+      "url": "https://360ghar.com/faridabad",
+      "category": "landing"
+    },
+    {
+      "title": "Ghaziabad Real Estate Hub",
+      "url": "https://360ghar.com/ghaziabad",
+      "category": "landing"
+    },
+    {
+      "title": "DLF Phase 1, Gurgaon",
+      "url": "https://360ghar.com/locality/dlf-phase-1-gurgaon",
+      "category": "locality"
+    },
+    {
+      "title": "Golf Course Road, Gurgaon",
+      "url": "https://360ghar.com/locality/golf-course-road-gurgaon",
+      "category": "locality"
+    },
+    {
+      "title": "Sushant Lok 1, Gurgaon",
+      "url": "https://360ghar.com/locality/sushant-lok-1-gurgaon",
+      "category": "locality"
+    },
+    {
+      "title": "Sohna Road, Gurgaon",
+      "url": "https://360ghar.com/locality/sohna-road-gurgaon",
+      "category": "locality"
+    },
+    {
+      "title": "Sector 49, Gurgaon",
+      "url": "https://360ghar.com/locality/sector-49-gurgaon",
+      "category": "locality"
     }
   ],
+  "categories": {
+    "comparisons": [
+      {
+        "title": "360Ghar vs NoBroker",
+        "url": "https://360ghar.com/vs/nobroker",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs MagicBricks",
+        "url": "https://360ghar.com/vs/magicbricks",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs 99acres",
+        "url": "https://360ghar.com/vs/99acres",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs Housing.com",
+        "url": "https://360ghar.com/vs/housing",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs CommonFloor",
+        "url": "https://360ghar.com/vs/commonfloor",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs PropTiger",
+        "url": "https://360ghar.com/vs/proptiger",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs SquareYards",
+        "url": "https://360ghar.com/vs/squareyards",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs NestAway",
+        "url": "https://360ghar.com/vs/nestaway",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs Zolo",
+        "url": "https://360ghar.com/vs/zolo",
+        "category": "comparisons"
+      },
+      {
+        "title": "360Ghar vs Stanza Living",
+        "url": "https://360ghar.com/vs/stanza-living",
+        "category": "comparisons"
+      }
+    ],
+    "truth": [
+      {
+        "title": "Truth: NoBroker Listings",
+        "url": "https://360ghar.com/truth/nobroker-listings",
+        "category": "truth"
+      },
+      {
+        "title": "Truth: MagicBricks Spam",
+        "url": "https://360ghar.com/truth/magicbricks-spam",
+        "category": "truth"
+      },
+      {
+        "title": "Truth: 99acres Fake Listings",
+        "url": "https://360ghar.com/truth/99acres-fake",
+        "category": "truth"
+      },
+      {
+        "title": "Truth: NestAway Collapse",
+        "url": "https://360ghar.com/truth/nestaway-collapse",
+        "category": "truth"
+      },
+      {
+        "title": "Truth: Zolo Issues",
+        "url": "https://360ghar.com/truth/zolo-issues",
+        "category": "truth"
+      }
+    ],
+    "tools": [
+      {
+        "title": "Area Converter",
+        "url": "https://360ghar.com/area-converter",
+        "category": "tools"
+      },
+      {
+        "title": "Area Calculator",
+        "url": "https://360ghar.com/area-calculator",
+        "category": "tools"
+      },
+      {
+        "title": "Loan Eligibility Calculator",
+        "url": "https://360ghar.com/loan-eligibility-calculator",
+        "category": "tools"
+      },
+      {
+        "title": "Capital Gains Tax Calculator",
+        "url": "https://360ghar.com/capital-gains-tax-calculator",
+        "category": "tools"
+      },
+      {
+        "title": "Property Document Checklist",
+        "url": "https://360ghar.com/property-document-checklist",
+        "category": "tools"
+      },
+      {
+        "title": "Vastu Checker",
+        "url": "https://360ghar.com/vastu-checker",
+        "category": "tools"
+      },
+      {
+        "title": "3D Blueprint Designer",
+        "url": "https://360ghar.com/design-blueprint",
+        "category": "tools"
+      },
+      {
+        "title": "AI Design Studio",
+        "url": "https://360ghar.com/ai-design-studio",
+        "category": "tools"
+      },
+      {
+        "title": "Verify Ownership",
+        "url": "https://360ghar.com/verify-ownership",
+        "category": "tools"
+      }
+    ],
+    "dataHub": [
+      {
+        "title": "RERA Projects",
+        "url": "https://360ghar.com/rera-projects",
+        "category": "dataHub"
+      },
+      {
+        "title": "Zone Checker",
+        "url": "https://360ghar.com/zone-checker",
+        "category": "dataHub"
+      },
+      {
+        "title": "Regulatory Updates",
+        "url": "https://360ghar.com/regulatory-updates",
+        "category": "dataHub"
+      }
+    ],
+    "landing": [
+      {
+        "title": "Flats for Sale in Gurgaon",
+        "url": "https://360ghar.com/gurgaon/buy/flats",
+        "category": "landing"
+      },
+      {
+        "title": "Flats for Rent in Gurgaon",
+        "url": "https://360ghar.com/gurgaon/rent/flats",
+        "category": "landing"
+      },
+      {
+        "title": "PG in Gurgaon",
+        "url": "https://360ghar.com/gurgaon/pg/flats",
+        "category": "landing"
+      },
+      {
+        "title": "Delhi Real Estate Hub",
+        "url": "https://360ghar.com/delhi",
+        "category": "landing"
+      },
+      {
+        "title": "Noida Real Estate Hub",
+        "url": "https://360ghar.com/noida",
+        "category": "landing"
+      },
+      {
+        "title": "Faridabad Real Estate Hub",
+        "url": "https://360ghar.com/faridabad",
+        "category": "landing"
+      },
+      {
+        "title": "Ghaziabad Real Estate Hub",
+        "url": "https://360ghar.com/ghaziabad",
+        "category": "landing"
+      }
+    ],
+    "locality": [
+      {
+        "title": "DLF Phase 1, Gurgaon",
+        "url": "https://360ghar.com/locality/dlf-phase-1-gurgaon",
+        "category": "locality"
+      },
+      {
+        "title": "Golf Course Road, Gurgaon",
+        "url": "https://360ghar.com/locality/golf-course-road-gurgaon",
+        "category": "locality"
+      },
+      {
+        "title": "Sushant Lok 1, Gurgaon",
+        "url": "https://360ghar.com/locality/sushant-lok-1-gurgaon",
+        "category": "locality"
+      },
+      {
+        "title": "Sohna Road, Gurgaon",
+        "url": "https://360ghar.com/locality/sohna-road-gurgaon",
+        "category": "locality"
+      },
+      {
+        "title": "Sector 49, Gurgaon",
+        "url": "https://360ghar.com/locality/sector-49-gurgaon",
+        "category": "locality"
+      }
+    ]
+  },
   "contact": {
     "email": "info@360ghar.com",
     "telephone": "+91-8178340031"
-  }
+  },
+  "top_localities": [
+    {
+      "name": "1000 trees sai kripa floors 10",
+      "slug": "1000-trees-sai-kripa-floors-10",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/1000-trees-sai-kripa-floors-10"
+    },
+    {
+      "name": "102 eden state",
+      "slug": "102-eden-state",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/102-eden-state"
+    },
+    {
+      "name": "102A",
+      "slug": "102a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/102a"
+    },
+    {
+      "name": "103A",
+      "slug": "103a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/103a"
+    },
+    {
+      "name": "104A",
+      "slug": "104a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/104a"
+    },
+    {
+      "name": "107A",
+      "slug": "107a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/107a"
+    },
+    {
+      "name": "10A",
+      "slug": "10a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/10a"
+    },
+    {
+      "name": "11 estate harpreet floors 1",
+      "slug": "11-estate-harpreet-floors-1",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/11-estate-harpreet-floors-1"
+    },
+    {
+      "name": "2s ub sushant lok 1",
+      "slug": "2s-ub-sushant-lok-1",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/2s-ub-sushant-lok-1"
+    },
+    {
+      "name": "32 lemon street",
+      "slug": "32-lemon-street",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/32-lemon-street"
+    },
+    {
+      "name": "37A",
+      "slug": "37a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/37a"
+    },
+    {
+      "name": "37B",
+      "slug": "37b",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/37b"
+    },
+    {
+      "name": "37C",
+      "slug": "37c",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/37c"
+    },
+    {
+      "name": "37D",
+      "slug": "37d",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/37d"
+    },
+    {
+      "name": "3d ventures floors",
+      "slug": "3d-ventures-floors",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/3d-ventures-floors"
+    },
+    {
+      "name": "4 directions floors 1",
+      "slug": "4-directions-floors-1",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/4-directions-floors-1"
+    },
+    {
+      "name": "4 directions floors 2",
+      "slug": "4-directions-floors-2",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/4-directions-floors-2"
+    },
+    {
+      "name": "4 directions floors 3",
+      "slug": "4-directions-floors-3",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/4-directions-floors-3"
+    },
+    {
+      "name": "4s aradhya homes",
+      "slug": "4s-aradhya-homes",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/4s-aradhya-homes"
+    },
+    {
+      "name": "82A",
+      "slug": "82a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/82a"
+    },
+    {
+      "name": "83 avenue oodles sky walk",
+      "slug": "83-avenue-oodles-sky-walk",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/83-avenue-oodles-sky-walk"
+    },
+    {
+      "name": "88A",
+      "slug": "88a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/88a"
+    },
+    {
+      "name": "88B",
+      "slug": "88b",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/88b"
+    },
+    {
+      "name": "89A",
+      "slug": "89a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/89a"
+    },
+    {
+      "name": "95A",
+      "slug": "95a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/95a"
+    },
+    {
+      "name": "95B",
+      "slug": "95b",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/95b"
+    },
+    {
+      "name": "99A",
+      "slug": "99a",
+      "city": "Gurgaon",
+      "entityType": "locality",
+      "url": "https://360ghar.com/locality/99a"
+    },
+    {
+      "name": "a3s homes 1",
+      "slug": "a3s-homes-1",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/a3s-homes-1"
+    },
+    {
+      "name": "a3s homes 2",
+      "slug": "a3s-homes-2",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/a3s-homes-2"
+    },
+    {
+      "name": "aaa vision floors 1",
+      "slug": "aaa-vision-floors-1",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/aaa-vision-floors-1"
+    },
+    {
+      "name": "aadhar r k homes 1",
+      "slug": "aadhar-r-k-homes-1",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/aadhar-r-k-homes-1"
+    },
+    {
+      "name": "aakriti vastus",
+      "slug": "aakriti-vastus",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/aakriti-vastus"
+    },
+    {
+      "name": "aaron ville",
+      "slug": "aaron-ville",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/aaron-ville"
+    },
+    {
+      "name": "aashirwad homes",
+      "slug": "aashirwad-homes",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/aashirwad-homes"
+    },
+    {
+      "name": "aashrya chgs",
+      "slug": "aashrya-chgs",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/aashrya-chgs"
+    },
+    {
+      "name": "abhas apartment",
+      "slug": "abhas-apartment",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abhas-apartment"
+    },
+    {
+      "name": "abhinandan cghs",
+      "slug": "abhinandan-cghs",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abhinandan-cghs"
+    },
+    {
+      "name": "abhinav apartment",
+      "slug": "abhinav-apartment",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abhinav-apartment"
+    },
+    {
+      "name": "abl prime",
+      "slug": "abl-prime",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abl-prime"
+    },
+    {
+      "name": "abs vayusena enclave plot",
+      "slug": "abs-vayusena-enclave-plot",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abs-vayusena-enclave-plot"
+    },
+    {
+      "name": "abw aditya niketan",
+      "slug": "abw-aditya-niketan",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abw-aditya-niketan"
+    },
+    {
+      "name": "abw la lagune",
+      "slug": "abw-la-lagune",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abw-la-lagune"
+    },
+    {
+      "name": "abw palash floors",
+      "slug": "abw-palash-floors",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abw-palash-floors"
+    },
+    {
+      "name": "abw verona hills",
+      "slug": "abw-verona-hills",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abw-verona-hills"
+    },
+    {
+      "name": "abw verona villas",
+      "slug": "abw-verona-villas",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/abw-verona-villas"
+    },
+    {
+      "name": "ac tower",
+      "slug": "ac-tower",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/ac-tower"
+    },
+    {
+      "name": "ace palm floors",
+      "slug": "ace-palm-floors",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/ace-palm-floors"
+    },
+    {
+      "name": "adani aangan",
+      "slug": "adani-aangan",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/adani-aangan"
+    },
+    {
+      "name": "adani brahma samsara vilasa",
+      "slug": "adani-brahma-samsara-vilasa",
+      "city": "Gurgaon",
+      "entityType": "project",
+      "url": "https://360ghar.com/locality/adani-brahma-samsara-vilasa"
+    },
+    {
+      "name": "Adani Lushlands",
+      "slug": "adani-lushlands",
+      "city": "Gurgaon",
+      "entityType": "society",
+      "url": "https://360ghar.com/locality/adani-lushlands"
+    }
+  ],
+  "top_societies": [
+    {
+      "name": "Adani Lushlands",
+      "slug": "adani-lushlands",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/adani-lushlands"
+    },
+    {
+      "name": "Adani Oyster Grande",
+      "slug": "adani-oyster-grande",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/adani-oyster-grande"
+    },
+    {
+      "name": "Adani Samsara",
+      "slug": "adani-samsara",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/adani-samsara"
+    },
+    {
+      "name": "Adani Samsara Ivana",
+      "slug": "adani-samsara-ivana",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/adani-samsara-ivana"
+    },
+    {
+      "name": "Adani Samsara Vilasa",
+      "slug": "adani-samsara-vilasa",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/adani-samsara-vilasa"
+    },
+    {
+      "name": "Adani Tatva Estates",
+      "slug": "adani-tatva-estates",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/adani-tatva-estates"
+    },
+    {
+      "name": "Adani Veris",
+      "slug": "adani-veris",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/adani-veris"
+    },
+    {
+      "name": "Adani Watermark",
+      "slug": "adani-watermark",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/adani-watermark"
+    },
+    {
+      "name": "Apex Apartments",
+      "slug": "apex-apartments",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/apex-apartments"
+    },
+    {
+      "name": "Apex Our Homes",
+      "slug": "apex-our-homes",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/apex-our-homes"
+    },
+    {
+      "name": "Apex Our Homes 1",
+      "slug": "apex-our-homes-1",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/apex-our-homes-1"
+    },
+    {
+      "name": "ATS Grandstand",
+      "slug": "ats-grandstand",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/ats-grandstand"
+    },
+    {
+      "name": "ATS Kocoon",
+      "slug": "ats-kocoon",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/ats-kocoon"
+    },
+    {
+      "name": "ATS Marigold",
+      "slug": "ats-marigold",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/ats-marigold"
+    },
+    {
+      "name": "ATS Tourmaline",
+      "slug": "ats-tourmaline",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/ats-tourmaline"
+    },
+    {
+      "name": "ATS Triumph",
+      "slug": "ats-triumph",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/ats-triumph"
+    },
+    {
+      "name": "Aura World",
+      "slug": "aura-world",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/aura-world"
+    },
+    {
+      "name": "Bestech Altura",
+      "slug": "bestech-altura",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/bestech-altura"
+    },
+    {
+      "name": "Bestech Park View Ananda",
+      "slug": "bestech-park-view-ananda",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/bestech-park-view-ananda"
+    },
+    {
+      "name": "Bestech Park View City",
+      "slug": "bestech-park-view-city",
+      "city": "Gurgaon",
+      "url": "https://360ghar.com/locality/bestech-park-view-city"
+    }
+  ]
 }

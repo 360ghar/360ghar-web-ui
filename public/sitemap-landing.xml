@@ -2,428 +2,747 @@
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://360ghar.com/gurgaon/buy/flats</loc>
+    <loc>https://360ghar.com/gurgaon</loc>
+    <lastmod>2026-05-03</lastmod>
     <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/buy/flats</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/buy/flats/budget/under-50-lakhs</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/buy/flats/budget/under-80-lakhs</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/buy/flats/budget/under-1-crore</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/gurgaon/rent/flats/budget/under-20k</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/pg/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/delhi</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://360ghar.com/delhi/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/delhi/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/delhi/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://360ghar.com/delhi/buy/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://360ghar.com/delhi/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/delhi/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/delhi/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://360ghar.com/delhi/rent/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/delhi/pg/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/noida</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://360ghar.com/noida/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/noida/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/noida/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://360ghar.com/noida/buy/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://360ghar.com/noida/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/noida/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/noida/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://360ghar.com/noida/rent/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/noida/pg/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/faridabad</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://360ghar.com/faridabad/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/faridabad/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/faridabad/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://360ghar.com/faridabad/buy/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://360ghar.com/faridabad/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/faridabad/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/faridabad/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://360ghar.com/faridabad/rent/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/pg/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/ghaziabad</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://360ghar.com/ghaziabad/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/ghaziabad/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/ghaziabad/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://360ghar.com/ghaziabad/buy/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://360ghar.com/ghaziabad/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/ghaziabad/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://360ghar.com/ghaziabad/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://360ghar.com/ghaziabad/rent/independent-house</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/builder-floor</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/villa</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/plots</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/land</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/office-space</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/shop</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/pg/flats</loc>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 </urlset>

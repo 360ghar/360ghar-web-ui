@@ -34,3 +34,6 @@ current-home-loader.png
 
 # Source maps in public
 public/assets/css/*.css.map
+
+# Repomix output
+repomix-output.*

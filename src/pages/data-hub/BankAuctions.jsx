@@ -4,11 +4,34 @@ import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
 import Pagination from '../../common/ui/Pagination';
 import AuctionCard from '../../components/data-hub/AuctionCard';
 import AuctionAlertModal from '../../components/data-hub/AuctionAlertModal';
 import { dataHubService } from '../../services/dataHubService';
+
+const FAQS = [
+  {
+    question: 'What are SARFAESI auctions?',
+    answer: 'SARFAESI auctions are property auctions conducted by banks and financial institutions under the Securitisation and Reconstruction of Financial Assets and Enforcement of Security Interest (SARFAESI) Act, 2002. When a borrower defaults on a loan, the bank can recover dues by auctioning the secured property without court intervention, provided the default exceeds the threshold set by the RBI.',
+  },
+  {
+    question: 'Can I get a loan for a bank-auctioned property?',
+    answer: 'Yes, most banks offer loans for auctioned properties, but the process differs from regular home loans. You typically need to arrange 20-25% as earnest money deposit (EMD) upfront to participate in the auction. After winning the bid, you can apply for a loan for the balance amount. Some banks like SBI and Bank of Baroda have specific products for auction property financing.',
+  },
+  {
+    question: 'Are bank auction properties cheaper than market price?',
+    answer: 'Bank auction properties are often listed at reserve prices that can be 10-30% below prevailing market rates, especially if the bank wants a quick recovery. However, the final price depends on bidding competition. Properties with legal disputes or unclear titles may sell at deeper discounts but carry higher risk. Always verify the title and encumbrance status before bidding.',
+  },
+  {
+    question: 'What are the risks of buying property through bank auctions?',
+    answer: 'Key risks include: (1) The property may have pending legal disputes or litigations from the previous owner. (2) Physical possession may be difficult to obtain if occupants refuse to vacate. (3) There is usually no warranty on the property condition. (4) Outstanding dues like property tax, maintenance, or utility bills may be your responsibility. Always conduct thorough due diligence before bidding.',
+  },
+  {
+    question: 'How can I participate in a bank auction in Haryana?',
+    answer: 'To participate: (1) Check auction notices on bank websites or portals like e-auctions of India. (2) Download the auction notification and read the terms carefully. (3) Submit the Earnest Money Deposit (EMD) and required documents before the deadline. (4) Attend the auction (in-person or online). (5) If you win, pay the balance within the stipulated period (usually 15-30 days). Ensure you verify the property title and possession status beforehand.',
+  },
+];
 
 const PROPERTY_TYPES = ['residential', 'commercial', 'plot', 'industrial'];
 const SOURCE_TYPES = [
@@ -34,6 +57,7 @@ const BankAuctions = () => {
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
   const [error, setError] = useState(null);
 
   // Alert modal state
@@ -113,6 +137,7 @@ const BankAuctions = () => {
             url: 'https://360ghar.com/bank-auctions',
             numberOfItems: total,
           },
+          generateFaqStructuredData(FAQS),
         ]}
       />
       <OffCanvas />
@@ -287,6 +312,26 @@ const BankAuctions = () => {
                   </>
                 )}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="pb-60">
+          <div className="container">
+            <h2 className="fs-24 fw-600 mb-20">Frequently Asked Questions</h2>
+            <div className="accordion">
+              {FAQS.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div className="accordion-item border-0 border-bottom" key={faq.question}>
+                    <h3 className="accordion-header" id={`dhFaqHeading${idx}`}>
+                      <button className={`accordion-button ${isOpen ? '' : 'collapsed'}`} type="button" aria-expanded={isOpen} onClick={() => setOpenFaqIndex(cur => cur === idx ? -1 : idx)}>{faq.question}</button>
+                    </h3>
+                    <div className={`accordion-collapse collapse ${isOpen ? 'show' : ''}`}><div className="accordion-body text-muted">{faq.answer}</div></div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

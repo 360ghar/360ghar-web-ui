@@ -9,8 +9,8 @@ const NoBrokerCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs NoBroker | Why 360 Ghar is Better for Gurugram Property Search"
-      pageDescription="Discover why 360 Ghar is the better alternative to NoBroker. Compare features, read user reviews, and see why thousands choose 360 Ghar for verified properties with 360° virtual tours in Gurugram."
+      pageTitle="NoBroker Alternatives Gurgaon | 360 Ghar vs NoBroker Comparison"
+      pageDescription="Comparing 360 Ghar vs NoBroker for Gurgaon property search. See why users switch from NoBroker to 360 Ghar for verified listings with 360° virtual tours and zero spam calls."
       canonicalPath="/vs/nobroker"
     />
   );

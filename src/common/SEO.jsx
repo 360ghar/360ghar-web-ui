@@ -23,9 +23,9 @@ const SEO = ({
   articleSection,
 }) => {
   const location = useLocation();
-  const path = location.pathname || '';
-  const computedUrl = absoluteUrl(url || path);
-  const canonicalUrl = absoluteUrl(canonical || path);
+  const rawPath = (location.pathname || '').replace(/\/+$/, '') || '/';
+  const computedUrl = absoluteUrl(url || rawPath);
+  const canonicalUrl = absoluteUrl((canonical || rawPath).replace(/\/+$/, '') || '/');
 
   const metaTitle = title || siteMetadata.defaultTitle;
   const metaDesc = description || siteMetadata.defaultDescription;

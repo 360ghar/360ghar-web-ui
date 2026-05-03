@@ -193,6 +193,62 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/careers",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/celebrity-homes",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/nri-property-guide",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/list-property-free",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/glossary",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/check-fake-listing",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/cyber-city",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/udyog-vihar",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/golf-course-road-corporate",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/millennium-city-centre",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/medanta",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/delhi",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/noida",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/login",
     "waitForSelector": "main",
     "waitForTitle": "Login | 360Ghar"
@@ -254,10 +310,74 @@
     "waitForTitle": "Sushant Lok 1 Gurgaon | properties | 360Ghar"
   },
   {
+    "route": "/locality/sohna-road-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sector-49-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sector-56-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/palam-vihar-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/mg-road-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sector-43-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/dlf-phase-1-gurgaon/buy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/dlf-phase-1-gurgaon/rent",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/golf-course-road-gurgaon/buy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sushant-lok-1-gurgaon/buy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sohna-road-gurgaon/buy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/delhi",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/noida",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/faridabad",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/ghaziabad",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/gurgaon/buy/flats",
     "waitForSelector": "main",
     "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Buy in Gurgaon | Gurgaon Real Estate | 360Ghar"
+    "waitForTitle": "Apartment for Sale in Gurgaon [360° VR Tour] | Gurgaon Real Estate | 360Ghar"
   },
   {
     "route": "/gurgaon/rent/flats",
@@ -272,15 +392,59 @@
     "waitForTitle": "PG in Gurgaon | Gurgaon Paying Guest & Co-living | 360Ghar"
   },
   {
+    "route": "/gurgaon/buy/villa",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/builder-floor",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/plots",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/flats/2-bhk",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/flats/3-bhk",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/rent/flats/1-bhk",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/delhi/buy/flats",
     "waitForSelector": "main",
     "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Buy in Delhi | Delhi Real Estate | 360Ghar"
+    "waitForTitle": "Apartment for Sale in Delhi [360° VR Tour] | Delhi Real Estate | 360Ghar"
+  },
+  {
+    "route": "/delhi/rent/flats",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/delhi/buy/flats/2-bhk",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/noida/buy/flats",
+    "waitForSelector": "main"
   },
   {
     "route": "/noida/rent/flats",
     "waitForSelector": "main",
     "waitForText": "Why 360Ghar?",
     "waitForTitle": "Apartment for Rent in Noida | Noida Real Estate | 360Ghar"
+  },
+  {
+    "route": "/faridabad/buy/flats",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/ghaziabad/buy/flats",
+    "waitForSelector": "main"
   }
 ]

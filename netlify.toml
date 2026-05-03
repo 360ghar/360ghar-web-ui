@@ -15,11 +15,12 @@
   status = 301
   force = true
 
-# Trailing slash normalization
+# Trailing slash normalization — force=true ensures this fires before the SPA catch-all
 [[redirects]]
   from = "/*/"
   to = "/:splat"
   status = 301
+  force = true
 
 # City slug normalization: gurugram → gurgaon
 [[redirects]]

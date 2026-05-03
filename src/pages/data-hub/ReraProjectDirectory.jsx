@@ -4,13 +4,36 @@ import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
 import Pagination from '../../common/ui/Pagination';
 import { dataHubService } from '../../services/dataHubService';
 
 const PROPERTY_TYPES = ['residential', 'commercial', 'mixed', 'plotted'];
 const STATUS_OPTIONS = ['registered', 'expired', 'lapsed'];
 const PAGE_LIMIT = 12;
+
+const FAQS = [
+  {
+    question: 'Is RERA registration mandatory in Haryana?',
+    answer: 'Yes, RERA registration is mandatory for all real estate projects in Haryana where the land area exceeds 500 square metres or the number of apartments exceeds 8. Even ongoing projects that have not received a completion certificate must register with HRERA. Projects by government authorities and those on very small plots are exempt, but these exemptions are narrow and must be verified.',
+  },
+  {
+    question: 'Is it safe to buy a property that is not RERA registered?',
+    answer: 'Buying a non-RERA registered project carries significant risk. Unregistered projects may lack the consumer protections that RERA provides, such as escrow accounts (70% of funds) for construction, mandatory quarterly progress updates, and access to the RERA complaint mechanism. If a project should be registered but is not, the developer may face penalties, and buyers could face difficulties with delivery timelines and quality.',
+  },
+  {
+    question: 'How can I verify a RERA project in Haryana?',
+    answer: 'You can verify a RERA project on the HRERA website (hrera.org.in) by searching the project name or registration number. Check that the registration number format matches the official pattern (e.g., HRERA-PKL-GGM-XXXX-XXX). You can also use our Quick RERA Verify tool above to instantly check any registration number. Always cross-verify the project status, developer details, and possession dates on the HRERA portal.',
+  },
+  {
+    question: 'What rights do buyers have under RERA in Haryana?',
+    answer: 'Under RERA, buyers have the right to: (1) Receive possession as per the agreement date, with compensation for delays. (2) Access project information including sanctioned plans, approvals, and quarterly progress updates. (3) Claim refund with interest if the developer fails to deliver. (4) File complaints with HRERA for any violation, with disputes resolved within 60 days. (5) 5-year structural defect warranty from the developer.',
+  },
+  {
+    question: 'How do I file a RERA complaint in Haryana?',
+    answer: 'File a complaint on the HRERA website (hrera.org.in) by registering as a complainant, filling out the complaint form, paying the fee (Rs. 1,000 for individuals), and uploading supporting documents (allotment letter, payment receipts, communication with the developer). HRERA benches in Panchkula and Gurugram hear cases. The authority aims to dispose of complaints within 60 days of the hearing.',
+  },
+];
 
 const statusBadgeStyle = (status) => {
   const s = (status || '').toLowerCase();
@@ -30,6 +53,7 @@ const ReraProjectDirectory = () => {
   const [filters, setFilters] = useState({ search: '', status: '', property_type: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   // RERA Verify widget state
   const [verifyInput, setVerifyInput] = useState('');
@@ -92,6 +116,7 @@ const ReraProjectDirectory = () => {
             url: 'https://360ghar.com/rera-projects',
             numberOfItems: total,
           },
+          generateFaqStructuredData(FAQS),
         ]}
       />
       <OffCanvas />
@@ -274,6 +299,26 @@ const ReraProjectDirectory = () => {
                 />
               </>
             )}
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="pb-60">
+          <div className="container">
+            <h2 className="fs-24 fw-600 mb-20">Frequently Asked Questions</h2>
+            <div className="accordion">
+              {FAQS.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div className="accordion-item border-0 border-bottom" key={faq.question}>
+                    <h3 className="accordion-header" id={`dhFaqHeading${idx}`}>
+                      <button className={`accordion-button ${isOpen ? '' : 'collapsed'}`} type="button" aria-expanded={isOpen} onClick={() => setOpenFaqIndex(cur => cur === idx ? -1 : idx)}>{faq.question}</button>
+                    </h3>
+                    <div className={`accordion-collapse collapse ${isOpen ? 'show' : ''}`}><div className="accordion-body text-muted">{faq.answer}</div></div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 

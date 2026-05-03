@@ -1,0 +1,172 @@
+{
+  "gurgaon": {
+    "buy": {
+      "apartment": {
+        "topSocieties": ["DLF Phase 1-5", "Sobha International City", "Emaar Palm Springs", "M3M Golf Estate", "IREO Victory Valley"],
+        "typicalConfiguration": "2-4 BHK, 1200-3500 sq ft",
+        "priceBands": [
+          { "label": "Budget", "range": "50L-1.5Cr", "localities": "Sohna Road, Sector 49-56" },
+          { "label": "Mid", "range": "1.5-3.5Cr", "localities": "DLF Phase 1-5, Golf Course Road" },
+          { "label": "Premium", "range": "3.5Cr+", "localities": "Golf Course Extension, MG Road" }
+        ],
+        "metroAccess": "Sector 55-56, IFFCO Chowk, and Huda City Centre metro stations serve most apartment hubs in Gurgaon.",
+        "officeHubAccess": "Cyber City (5-15 min from DLF/GCR), Sohna Road IT corridor (10-20 min from Sector 49-56).",
+        "reraNote": "All new-launch apartments in Gurgaon require H-RERA registration. Verify the project RERA number on hreraprojects.in before booking.",
+        "localityFaqs": [
+          { "q": "Which sectors in Gurgaon have the best apartment infrastructure?", "a": "Sectors 49-56 and DLF Phase 1-5 offer the most mature apartment infrastructure with metro, schools, and hospitals within walking distance." },
+          { "q": "What is the difference between society flats and builder floors in Gurgaon?", "a": "Society flats come with common amenities (gym, pool, security) and monthly maintenance charges. Builder floors offer more privacy and no society charges but fewer shared amenities." },
+          { "q": "Are Gurgaon apartments a good investment in 2026?", "a": "Gurgaon apartments have seen 8-12% annual appreciation in established sectors. Proximity to Cyber City and metro corridors drives consistent rental demand and resale value." }
+        ]
+      },
+      "villa": {
+        "topSocieties": ["DLF Phase 1 Enclave", "Laburnum", "Heritage Grove", "Emaar Palm Drive Villas", "Tata Raisina Residency"],
+        "typicalConfiguration": "3-5 BHK, 2500-6000 sq ft",
+        "priceBands": [
+          { "label": "Mid", "range": "2.5-5Cr", "localities": "Sohna Road, Sector 49" },
+          { "label": "Premium", "range": "5-8Cr", "localities": "DLF Phase 1-5, Golf Course Road" },
+          { "label": "Ultra Luxury", "range": "8Cr+", "localities": "Golf Course Extension, DLF Phase 1" }
+        ],
+        "metroAccess": "Most villa enclaves are 3-8 km from metro stations. DLF Phase 1 and Golf Course Road villas have the best access.",
+        "officeHubAccess": "Cyber City (10-20 min from DLF/GCR villas), Golf Course Road offices (walkable from GCR villas).",
+        "reraNote": "Villa projects in Gurgaon require H-RERA registration. Verify plot/villa RERA status, approved building plans, and FAR utilization before purchase.",
+        "localityFaqs": [
+          { "q": "Are independent villas in Gurgaon available in gated communities?", "a": "Yes, most Gurgaon villas are within gated communities with 24/7 security, clubhouses, and maintained greens. DLF, Emaar, and Tata offer prominent villa enclaves." },
+          { "q": "What is the maintenance cost for villa communities in Gurgaon?", "a": "Villa community maintenance ranges from Rs 5,000-15,000/month depending on amenities. DLF Phase 1-5 villas charge Rs 8,000-12,000/month." }
+        ]
+      },
+      "builder_floor": {
+        "topSocieties": ["Sushant Lok 1-2", "Palam Vihar", "Sector 43", "Sector 49", "Sector 56"],
+        "typicalConfiguration": "2-3 BHK per floor, 800-1800 sq ft",
+        "priceBands": [
+          { "label": "Budget", "range": "65L-1.2Cr", "localities": "Sohna Road, Sector 49-56" },
+          { "label": "Mid", "range": "1.2-2.5Cr", "localities": "Sushant Lok, Palam Vihar, Sector 43" }
+        ],
+        "metroAccess": "Builder floors in Sushant Lok and Sector 43-56 have excellent metro access (1-2 km from stations).",
+        "officeHubAccess": "IFFCO Chowk and MG Road offices are within 10 minutes from Sushant Lok builder floors.",
+        "reraNote": "Builder floors in Gurgaon need H-RERA registration if part of a licensed colony. Verify change of land use (CLU) and building plan approvals.",
+        "localityFaqs": [
+          { "q": "What is the difference between a builder floor and a society flat in Gurgaon?", "a": "Builder floors are independent units on each floor of a low-rise (typically 4 floors) with no common amenities. Society flats have shared facilities like gym, pool, and security but charge monthly maintenance." },
+          { "q": "Are builder floors a good buy in Gurgaon?", "a": "Builder floors offer more privacy, lower maintenance, and often better per-sq-ft value. However, they lack society amenities. Sushant Lok and Palam Vihar have the best builder floor inventory." }
+        ]
+      },
+      "house": {
+        "topSocieties": ["DLF Phase 1-5", "Sushant Lok 1", "South City 1", "Malibu Towne", "Nirvana Country"],
+        "typicalConfiguration": "3-5 BHK, 1500-4000 sq ft built-up",
+        "priceBands": [
+          { "label": "Budget", "range": "1.5-3Cr", "localities": "Sohna Road, Sector 49-56" },
+          { "label": "Mid", "range": "3-6Cr", "localities": "Sushant Lok, South City, DLF Phase 3-5" },
+          { "label": "Premium", "range": "6Cr+", "localities": "DLF Phase 1-2" }
+        ],
+        "metroAccess": "Independent houses in Sushant Lok and DLF Phase 1-2 are 0.5-2 km from metro stations.",
+        "officeHubAccess": "Sushant Lok and DLF houses are 5-15 min from Cyber City and MG Road commercial zones.",
+        "reraNote": "Independent houses in licensed colonies require H-RERA registration for new construction. Verify property on Haryana land records (Jamabandi) and check for any litigation.",
+        "localityFaqs": [
+          { "q": "What is the difference between an independent house and a villa in Gurgaon?", "a": "Independent houses (kothi) are standalone residential units in plotted colonies, often older constructions. Villas are newer, planned community units with modern amenities and uniform design standards." },
+          { "q": "Which areas in Gurgaon have the best independent houses?", "a": "DLF Phase 1-5, Sushant Lok 1, and South City 1 have the most established independent house inventory with mature infrastructure." }
+        ]
+      },
+      "plot": {
+        "topSocieties": ["DLF Phase 1-5 plots", "Sushant Lok plots", "Sector 43-57 HUDA plots", "Sohna Road plotted developments", "Dwarka Expressway sectors"],
+        "typicalConfiguration": "100-500 sq yards, residential zoning",
+        "priceBands": [
+          { "label": "Budget", "range": "50L-2Cr", "localities": "Sohna Road, Dwarka Expressway" },
+          { "label": "Mid", "range": "2-4Cr", "localities": "Sushant Lok, Sector 43-57" },
+          { "label": "Premium", "range": "4Cr+", "localities": "DLF Phase 1-5" }
+        ],
+        "metroAccess": "Plotted colonies near Sector 55-56 metro and Huda City Centre have the best connectivity.",
+        "officeHubAccess": "Sector 43-56 plots have 10-20 min access to Cyber City and Sohna Road IT hubs.",
+        "reraNote": "Plotted developments in Gurgaon require H-RERA registration. Always verify HUDA/DTCP license, CLU, and freehold status before purchasing a plot.",
+        "localityFaqs": [
+          { "q": "Can I build a house on any residential plot in Gurgaon?", "a": "Only on freehold residential plots with approved building plans. Check HUDA/DTCP licensing and FAR limits before purchase. DLF and HUDA sectors have specific building bylaws." },
+          { "q": "Are plots in Gurgaon a good investment?", "a": "Plots in established DLF sectors and Sushant Lok have shown consistent appreciation. Dwarka Expressway plots offer lower entry prices with higher upside as connectivity improves." }
+        ]
+      }
+    },
+    "rent": {
+      "apartment": {
+        "topSocieties": ["DLF Phase 1-5", "Sushant Lok 1", "Sector 49-56", "Sohna Road", "Sector 43"],
+        "typicalConfiguration": "1-3 BHK, 600-2000 sq ft",
+        "priceBands": [
+          { "label": "Budget", "range": "10K-25K/mo", "localities": "Sohna Road, Sector 49-56" },
+          { "label": "Mid", "range": "25K-55K/mo", "localities": "DLF Phase 3-5, Sushant Lok" },
+          { "label": "Premium", "range": "55K+/mo", "localities": "Golf Course Road, DLF Phase 1" }
+        ],
+        "metroAccess": "Apartments near Sector 55-56, IFFCO Chowk, and MG Road metro have the highest rental demand.",
+        "officeHubAccess": "Cyber City and MG Road offices drive 60% of apartment rental demand in Gurgaon.",
+        "reraNote": "Rental agreements in Haryana should be registered for terms over 12 months. Security deposit is typically 2 months rent.",
+        "localityFaqs": [
+          { "q": "Which areas in Gurgaon have the highest rental demand for apartments?", "a": "DLF Phase 1-5, Sushant Lok 1, and sectors near Cyber City have the highest demand due to corporate office proximity and metro access." },
+          { "q": "What is the standard security deposit for apartments in Gurgaon?", "a": "Typically 2 months rent for unfurnished apartments, 1 month for PG/co-living. Some premium societies may ask for 3 months." }
+        ]
+      },
+      "villa": {
+        "topSocieties": ["DLF Phase 1-5", "Laburnum", "Heritage Grove", "Nirvana Country", "South City 1"],
+        "typicalConfiguration": "3-5 BHK, 2500-5000 sq ft",
+        "priceBands": [
+          { "label": "Mid", "range": "60K-1.5L/mo", "localities": "Sushant Lok, South City" },
+          { "label": "Premium", "range": "1.5L-4L/mo", "localities": "DLF Phase 1-2, Golf Course Road" }
+        ],
+        "metroAccess": "Most villa communities are 3-6 km from metro stations. DLF Phase 1-2 villas are closest.",
+        "officeHubAccess": "Corporate executives working in Cyber City and Golf Course Road offices prefer villa rentals in DLF Phase 1-5.",
+        "reraNote": "Villa rental agreements should include maintenance charge provisions. Confirm if club membership is included in rent.",
+        "localityFaqs": [
+          { "q": "Are furnished villas available for rent in Gurgaon?", "a": "Yes, many villa communities in DLF Phase 1-5 and Golf Course Road offer fully furnished and semi-furnished rental options, typically at 30-40% premium over unfurnished." }
+        ]
+      },
+      "builder_floor": {
+        "topSocieties": ["Sushant Lok 1-2", "Palam Vihar", "Sector 43", "Sector 56", "DLF Phase 3"],
+        "typicalConfiguration": "2-3 BHK per floor, 800-1500 sq ft",
+        "priceBands": [
+          { "label": "Budget", "range": "12K-25K/mo", "localities": "Sohna Road, Sector 49" },
+          { "label": "Mid", "range": "25K-45K/mo", "localities": "Sushant Lok, Palam Vihar" }
+        ],
+        "metroAccess": "Builder floors in Sushant Lok and Sector 43-56 have excellent metro access (1-2 km from stations).",
+        "officeHubAccess": "10-15 min from Cyber City, IFFCO Chowk, and MG Road offices from Sushant Lok builder floors.",
+        "reraNote": "Rental agreements for builder floors should include parking allocation and water supply terms. No society maintenance applies.",
+        "localityFaqs": [
+          { "q": "Do builder floors in Gurgaon include parking?", "a": "Some builder floors include dedicated parking; others do not. Always confirm parking availability before signing the agreement." }
+        ]
+      }
+    }
+  },
+  "delhi": {
+    "buy": {
+      "apartment": {
+        "topSocieties": ["Dwarka DDA Flats", "Rohini Sector 8-14", "Vasant Kunj Apartments", "Janakpuri CGHS", "Lajpat Nagar"],
+        "typicalConfiguration": "2-3 BHK, 800-1800 sq ft",
+        "priceBands": [
+          { "label": "Budget", "range": "40L-1Cr", "localities": "Dwarka, Rohini, Janakpuri" },
+          { "label": "Mid", "range": "1-3Cr", "localities": "Vasant Kunj, Saket, Lajpat Nagar" },
+          { "label": "Premium", "range": "3Cr+", "localities": "Greater Kailash, Hauz Khas, Vasant Vihar" }
+        ],
+        "metroAccess": "Delhi Metro covers all major residential hubs. Dwarka, Rohini, and Janakpuri have dedicated metro lines.",
+        "officeHubAccess": "Connaught Place (15-30 min), Nehru Place (10-20 min from South Delhi), various central business districts.",
+        "reraNote": "Delhi does not yet have a fully operational RERA. Verify DDA/CGHS society status and MCD approvals before purchase.",
+        "localityFaqs": [
+          { "q": "What is the difference between DDA flats and CGHS apartments in Delhi?", "a": "DDA flats are government-built and allocated via lottery or resale. CGHS (Cooperative Group Housing Society) flats are built by registered societies and may offer better amenities." },
+          { "q": "Is stamp duty lower for women buyers in Delhi?", "a": "Yes, Delhi charges 4% stamp duty for women and 6% for men. Registering in a woman's name saves 2% of property value." }
+        ]
+      }
+    }
+  },
+  "noida": {
+    "buy": {
+      "apartment": {
+        "topSocieties": ["Sector 137 ATS Village", "Sector 62 Purvanchal Royal Park", "Sector 78 Godrej Garden Estate", "Sector 50 Assotech Nest", "Expressway Jaypee Wishtown"],
+        "typicalConfiguration": "2-3 BHK, 1000-2500 sq ft",
+        "priceBands": [
+          { "label": "Budget", "range": "35L-80L", "localities": "Sector 78, Expressway sectors" },
+          { "label": "Mid", "range": "80L-1.5Cr", "localities": "Sector 62, Sector 50" },
+          { "label": "Premium", "range": "1.5Cr+", "localities": "Sector 137, Sector 44" }
+        ],
+        "metroAccess": "Sector 62, Sector 50, and Sector 137 have dedicated metro stations on the Noida-Greater Noida corridor.",
+        "officeHubAccess": "Noida Expressway IT corridor (10-20 min from Sector 137-143), Sector 62 commercial hub.",
+        "reraNote": "UP-RERA covers all Noida projects. Always verify the project RERA number on up-rera.in before booking.",
+        "localityFaqs": [
+          { "q": "Are Noida apartments cheaper than Gurgaon?", "a": "Yes, Noida apartments are typically 20-30% cheaper per sq ft than comparable Gurgaon options. However, Gurgaon offers closer proximity to Cyber City offices." },
+          { "q": "What is the Noida Authority transfer fee on resale?", "a": "Noida Authority charges approximately Rs 500-1000/sq ft as transfer fee on resale apartments. Budget for this additional cost." }
+        ]
+      }
+    }
+  }
+}

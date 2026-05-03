@@ -9,8 +9,8 @@ const StanzaCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs Stanza Living | Better Managed Accommodation"
-      pageDescription="Compare 360 Ghar with Stanza Living. See why consistent quality, transparent pricing, and responsive maintenance make 360 Ghar the better choice."
+      pageTitle="Stanza Living Alternative | 360 Ghar vs Stanza Living"
+      pageDescription="Compare 360 Ghar vs Stanza Living for co-living in Gurgaon. Verified properties, 360° virtual tours, and end-to-end service vs managed dormitories."
       canonicalPath="/vs/stanza-living"
     />
   );

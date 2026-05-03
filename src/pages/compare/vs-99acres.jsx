@@ -9,8 +9,8 @@ const AcresCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs 99acres | Why 360 Ghar is the Better Property Platform"
-      pageDescription="Compare 360 Ghar with 99acres. See why 360 Ghar offers better property verification, zero spam calls, and verified 360° virtual tours in Gurugram."
+      pageTitle="Are 99acres Listings Fake? 360 Ghar vs 99acres Comparison"
+      pageDescription="Investigate whether 99acres listings are verified. Compare 360 Ghar vs 99acres — physically verified properties with 360° virtual tours vs unverified portal listings in Gurgaon."
       canonicalPath="/vs/99acres"
     />
   );

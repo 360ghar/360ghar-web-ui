@@ -9,8 +9,8 @@ const ZoloCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs Zolo Stays | Better Co-living Option in Gurugram"
-      pageDescription="Compare 360 Ghar with Zolo Stays. See why verified listings, transparent pricing, and no hidden charges make 360 Ghar the better co-living choice."
+      pageTitle="Zolo Stays Alternative | 360 Ghar vs Zolo Comparison"
+      pageDescription="Looking for a Zolo Stays alternative? Compare 360 Ghar vs Zolo — verified PG listings with 360° virtual tours, no hidden charges, and dedicated support."
       canonicalPath="/vs/zolo"
     />
   );

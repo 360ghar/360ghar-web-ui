@@ -1,0 +1,114 @@
+{
+  "gurgaon": {
+    "buy": {
+      "apartment": "85 lakhs - 3.5 crore",
+      "villa": "2.5 - 8 crore",
+      "builder_floor": "65 lakhs - 2.5 crore",
+      "house": "1.5 - 6 crore",
+      "plot": "50 lakhs - 4 crore",
+      "penthouse": "3 - 12 crore",
+      "studio": "40 lakhs - 80 lakhs",
+      "default": "70 lakhs - 4 crore"
+    },
+    "rent": {
+      "apartment": "15,000 - 85,000/month",
+      "villa": "60,000 - 3 lakh/month",
+      "builder_floor": "12,000 - 55,000/month",
+      "house": "25,000 - 1.5 lakh/month",
+      "studio": "10,000 - 25,000/month",
+      "penthouse": "1.5 - 5 lakh/month",
+      "default": "12,000 - 1 lakh/month"
+    },
+    "pg": {
+      "default": "7,000 - 25,000/month"
+    }
+  },
+  "delhi": {
+    "buy": {
+      "apartment": "50 lakhs - 4 crore",
+      "villa": "3 - 15 crore",
+      "builder_floor": "40 lakhs - 3 crore",
+      "house": "1 - 8 crore",
+      "plot": "1 - 10 crore",
+      "studio": "30 lakhs - 70 lakhs",
+      "default": "40 lakhs - 5 crore"
+    },
+    "rent": {
+      "apartment": "10,000 - 80,000/month",
+      "villa": "80,000 - 5 lakh/month",
+      "builder_floor": "8,000 - 50,000/month",
+      "house": "20,000 - 2 lakh/month",
+      "studio": "8,000 - 20,000/month",
+      "default": "8,000 - 70,000/month"
+    },
+    "pg": {
+      "default": "6,000 - 20,000/month"
+    }
+  },
+  "noida": {
+    "buy": {
+      "apartment": "40 lakhs - 2.5 crore",
+      "villa": "1.5 - 5 crore",
+      "builder_floor": "35 lakhs - 1.5 crore",
+      "house": "80 lakhs - 4 crore",
+      "plot": "30 lakhs - 2 crore",
+      "studio": "25 lakhs - 50 lakhs",
+      "default": "35 lakhs - 3 crore"
+    },
+    "rent": {
+      "apartment": "10,000 - 50,000/month",
+      "villa": "40,000 - 1.5 lakh/month",
+      "builder_floor": "8,000 - 35,000/month",
+      "house": "15,000 - 80,000/month",
+      "studio": "7,000 - 18,000/month",
+      "default": "8,000 - 45,000/month"
+    },
+    "pg": {
+      "default": "5,000 - 18,000/month"
+    }
+  },
+  "faridabad": {
+    "buy": {
+      "apartment": "30 lakhs - 1.5 crore",
+      "villa": "1 - 4 crore",
+      "builder_floor": "25 lakhs - 1 crore",
+      "house": "50 lakhs - 3 crore",
+      "plot": "20 lakhs - 1.5 crore",
+      "studio": "20 lakhs - 40 lakhs",
+      "default": "25 lakhs - 2 crore"
+    },
+    "rent": {
+      "apartment": "8,000 - 35,000/month",
+      "villa": "25,000 - 80,000/month",
+      "builder_floor": "7,000 - 25,000/month",
+      "house": "12,000 - 50,000/month",
+      "studio": "6,000 - 15,000/month",
+      "default": "7,000 - 30,000/month"
+    },
+    "pg": {
+      "default": "5,000 - 15,000/month"
+    }
+  },
+  "ghaziabad": {
+    "buy": {
+      "apartment": "30 lakhs - 1.2 crore",
+      "villa": "80 lakhs - 3 crore",
+      "builder_floor": "25 lakhs - 90 lakhs",
+      "house": "40 lakhs - 2.5 crore",
+      "plot": "20 lakhs - 1 crore",
+      "studio": "18 lakhs - 35 lakhs",
+      "default": "25 lakhs - 1.5 crore"
+    },
+    "rent": {
+      "apartment": "8,000 - 30,000/month",
+      "villa": "20,000 - 70,000/month",
+      "builder_floor": "7,000 - 22,000/month",
+      "house": "10,000 - 40,000/month",
+      "studio": "5,000 - 12,000/month",
+      "default": "7,000 - 25,000/month"
+    },
+    "pg": {
+      "default": "5,000 - 12,000/month"
+    }
+  }
+}

@@ -7,13 +7,44 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 import FloorPlanUpload from '../../components/vastu/FloorPlanUpload';
 import DirectionSelector from '../../components/vastu/DirectionSelector';
 import VastuLoadingState from '../../components/vastu/VastuLoadingState';
 import VastuReport from '../../components/vastu/VastuReport';
+import { ToolFaq, ToolRelatedLinks } from '../../components/tools/ToolContentSections';
 import { analyzeFloorPlan } from '../../services/vastuService';
 import './VastuChecker.scss';
+
+const VASTU_FAQS = [
+  {
+    question: 'How to check Vastu of a flat online for free?',
+    answer: 'Upload your floor plan image on 360Ghar\'s free Vastu Checker, select the North direction, and get an instant AI-powered analysis with a score (0-100), room-by-room evaluation, and practical remedies. No registration required. Supports JPEG, PNG, and WebP images up to 5MB.',
+  },
+  {
+    question: 'What is a good Vastu score for a flat?',
+    answer: 'A Vastu score above 70 is considered good, above 85 is excellent. Scores below 50 indicate significant Vastu concerns that may need remedies. However, perfect Vastu compliance (100) is rare in modern apartments. Focus on the main entrance, kitchen, master bedroom, and Brahmasthan (center) for maximum impact.',
+  },
+  {
+    question: 'Which direction should the main entrance face as per Vastu?',
+    answer: 'North and East-facing entrances are considered most auspicious in Vastu Shastra. North brings wealth and career growth. East brings health and enlightenment. South-facing entrances can be acceptable with proper remedies. West-facing is less preferred but manageable. Avoid entrances in the South-West corner.',
+  },
+  {
+    question: 'Can Vastu defects be fixed without renovation?',
+    answer: 'Yes, many Vastu defects can be remedied without structural changes: use mirrors to redirect energy, place specific colors and elements in affected zones, use Vastu pyramids and crystals, keep the Brahmasthan (center) clutter-free, add plants in the North/East, and use salt water remedies for negative zones. Our AI analysis provides specific, practical remedies for each defect found.',
+  },
+  {
+    question: 'Is Vastu Shastra scientifically proven?',
+    answer: 'Vastu Shastra combines traditional spatial planning principles with natural element positioning. While not empirically validated by modern science, it incorporates principles of natural light, ventilation, and ergonomic space planning. Many homeowners report improved well-being after implementing Vastu guidelines. Our AI tool provides an objective score-based analysis.',
+  },
+];
+
+const HOW_TO_STEPS = [
+  { name: 'Upload Your Floor Plan', text: 'Take a photo or screenshot of your floor plan and upload it. Ensure the image is clear with visible room labels. Supported formats: JPEG, PNG, WebP (max 5MB).' },
+  { name: 'Set the North Direction', text: 'Indicate which side of the image faces North using our direction selector. This is critical for accurate zone analysis — Vastu recommendations depend on the cardinal orientation of each room.' },
+  { name: 'Add Notes (Optional)', text: 'Mention specific concerns like "health issues" or "financial growth" so the AI can prioritize relevant remedies.' },
+  { name: 'Get Your Vastu Report', text: 'In 30-60 seconds, receive a comprehensive report with: overall Vastu score (0-100), room-by-room analysis, identified defects, and practical remedies with Vastu products and colors.' },
+];
 
 const VastuChecker = () => {
     // Form state
@@ -128,9 +159,9 @@ const VastuChecker = () => {
     return (
         <>
             <SEO
-                title="Free Vastu Checker - AI Floor Plan Analysis | 360Ghar"
-                description="Get instant AI-powered Vastu Shastra analysis for your floor plan. Upload your floor plan and receive a comprehensive Vastu score, room-by-room analysis, and practical remedies. Free online Vastu checker."
-                keywords="vastu checker, vastu analysis, floor plan vastu, vastu shastra, vastu score, vastu remedies, 360ghar, free vastu analysis, vastu consultant, vastu for home, vastu tips, vastu dosh, vastu shastra in hindi"
+                title="Free AI Vastu Checker 2026 | Upload Floor Plan & Get Instant Score | 360Ghar"
+                description="Check Vastu of your flat or house online for free. Upload your floor plan and get an instant AI-powered Vastu score (0-100), room-by-room analysis, and practical remedies. No registration required. Trusted by 15,000+ homeowners."
+                keywords="vastu checker free, ai vastu check online, floor plan vastu analysis, vastu shastra checker, vastu score calculator, vastu for flat online, vastu remedies, check vastu of house free, 360ghar vastu"
                 canonical="/vastu-checker"
                 image={siteMetadata.defaultOgImage}
                 type="website"
@@ -140,7 +171,13 @@ const VastuChecker = () => {
                         { name: 'Home', url: 'https://360ghar.com/' },
                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
                         { name: toolSchemas.vastuChecker.name, url: 'https://360ghar.com/vastu-checker' }
-                    ])
+                    ]),
+                    generateFaqStructuredData(VASTU_FAQS),
+                    generateHowToStructuredData({
+                      name: 'How to Check Vastu of Your Floor Plan Online',
+                      description: 'Step-by-step guide to get an AI-powered Vastu analysis for your home.',
+                      steps: HOW_TO_STEPS,
+                    }),
                 ]}
             />
 
@@ -156,12 +193,12 @@ const VastuChecker = () => {
                         {/* Hero Section - only show on input state */}
                         {appState === 'input' && (
                             <div className="section-heading text-center mb-6">
-                                <h2 className="section-title">
+                                <h1 className="section-title">
                                     <span className="vastu-icon-wrapper">
                                         <i className="fas fa-compass text-main"></i>
                                     </span>
-                                    AI-Powered Vastu Checker
-                                </h2>
+                                    Free AI Vastu Checker 2026 — Upload Floor Plan & Get Score
+                                </h1>
                                 <p className="section-desc">
                                     Upload your floor plan and receive a comprehensive Vastu Shastra analysis
                                     with personalized recommendations and practical remedies.
@@ -391,6 +428,30 @@ const VastuChecker = () => {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* FAQ and Related Tools - only show on input state */}
+                {appState === 'input' && (
+                    <section className="padding-y-60">
+                        <div className="container">
+                            <div className="row justify-content-center">
+                                <div className="col-lg-8">
+                                    <ToolFaq faqs={VASTU_FAQS} heading="Vastu Checker — Frequently Asked Questions" />
+                                    <ToolRelatedLinks
+                                        heading="Related Tools & Resources"
+                                        links={[
+                                            { to: '/area-calculator', label: 'Carpet Area Calculator', icon: 'fas fa-ruler-combined' },
+                                            { to: '/area-converter', label: 'Area Unit Converter', icon: 'fas fa-exchange-alt' },
+                                            { to: '/emi-calculator', label: 'EMI Calculator', icon: 'fas fa-calculator' },
+                                            { to: '/property-document-checklist', label: 'Property Document Checklist', icon: 'fas fa-clipboard-list' },
+                                            { to: '/design-blueprint', label: '3D Blueprint Designer', icon: 'fas fa-drafting-compass' },
+                                            { to: '/blog', label: 'Real Estate Blog', icon: 'fas fa-blog' },
+                                        ]}
+                                    />
                                 </div>
                             </div>
                         </div>

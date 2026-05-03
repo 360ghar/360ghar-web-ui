@@ -5,12 +5,35 @@ import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
 import Pagination from '../../common/ui/Pagination';
 import ScoreWheel from '../../components/data-hub/ScoreWheel';
 import { dataHubService } from '../../services/dataHubService';
 
 const PAGE_LIMIT = 20;
+
+const FAQS = [
+  {
+    question: 'What is a good builder reputation score?',
+    answer: 'A builder reputation score of 70 or above is considered good. This indicates the builder has a strong track record with HRERA-registered projects, minimal complaints, and timely delivery. Scores between 40 and 69 are average, suggesting some concerns around project delivery or complaints. Scores below 40 indicate poor reputation with multiple pending complaints or regulatory violations.',
+  },
+  {
+    question: 'How is the builder reputation score calculated?',
+    answer: 'The builder reputation score is calculated using data from HRERA (Haryana Real Estate Regulatory Authority) records. Key factors include the number of RERA-registered projects, complaint history, project completion status, on-time delivery record, and any penalties or regulatory actions. The scoring algorithm weights recent data more heavily to reflect current performance.',
+  },
+  {
+    question: 'Why is it important to check a builder\'s reputation before buying?',
+    answer: 'Checking a builder\'s reputation helps you avoid investing with developers who have a history of project delays, legal disputes, or poor construction quality. In Gurugram, where numerous projects have been delayed by years, a reputation check can save you from significant financial risk and emotional distress. It also helps you negotiate better terms with reputable builders.',
+  },
+  {
+    question: 'What does RERA compliance mean for a builder?',
+    answer: 'RERA compliance means the builder has registered all applicable projects with the Haryana Real Estate Regulatory Authority (HRERA) and follows the rules set by RERA. This includes maintaining a separate escrow account for each project (70% of funds), submitting quarterly updates on project progress, and adhering to the approved building plans. Non-compliance can result in penalties, project deregistration, or imprisonment.',
+  },
+  {
+    question: 'How do I file a complaint against a builder in Haryana?',
+    answer: 'You can file a complaint with HRERA through their official website (hrera.org.in) or by visiting the HRERA office in Panchkula or Gurugram. You need to fill out the complaint form, pay the prescribed fee (currently Rs. 1,000), and provide supporting documents like the allotment letter, payment receipts, and evidence of the grievance. HRERA typically disposes of complaints within 60 days.',
+  },
+];
 
 const SORT_OPTIONS = [
   { value: 'score_desc', label: 'Score (High to Low)' },
@@ -46,6 +69,7 @@ const BuilderReputation = () => {
   const [sortBy, setSortBy] = useState('score_desc');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const totalPages = Math.ceil(total / PAGE_LIMIT);
 
@@ -89,6 +113,7 @@ const BuilderReputation = () => {
             url: 'https://360ghar.com/builder-reputation',
             numberOfItems: total,
           },
+          generateFaqStructuredData(FAQS),
         ]}
       />
       <OffCanvas />
@@ -273,6 +298,26 @@ const BuilderReputation = () => {
                   Data sourced from publicly available HRERA records. 360Ghar does not guarantee accuracy of regulatory data.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="pb-60">
+          <div className="container">
+            <h2 className="fs-24 fw-600 mb-20">Frequently Asked Questions</h2>
+            <div className="accordion">
+              {FAQS.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div className="accordion-item border-0 border-bottom" key={faq.question}>
+                    <h3 className="accordion-header" id={`dhFaqHeading${idx}`}>
+                      <button className={`accordion-button ${isOpen ? '' : 'collapsed'}`} type="button" aria-expanded={isOpen} onClick={() => setOpenFaqIndex(cur => cur === idx ? -1 : idx)}>{faq.question}</button>
+                    </h3>
+                    <div className={`accordion-collapse collapse ${isOpen ? 'show' : ''}`}><div className="accordion-body text-muted">{faq.answer}</div></div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

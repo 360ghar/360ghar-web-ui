@@ -13,7 +13,7 @@ import CircleRateBanner from '../../components/data-hub/CircleRateBanner';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
-import { generateBreadcrumbStructuredData, generateVideoStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateVideoStructuredData, generatePropertyProductStructuredData, generateEeaSignals } from '../../seo/structuredData';
 import { usePropertyStore } from '../../store/propertyStore';
 import {
     getAccommodationSchemaType,
@@ -119,6 +119,8 @@ const PropertyDetails = () => {
         const structuredDataArray = [
             basePropertySchema,
             listingSchema,
+            generatePropertyProductStructuredData(propertyData),
+            ...generateEeaSignals({ reraNumber: propertyData.rera_number }),
             generateBreadcrumbStructuredData(breadcrumbData)
         ];
 
@@ -138,6 +140,16 @@ const PropertyDetails = () => {
                     contentUrl: virtualTourUrl,
                 })
             );
+            structuredDataArray.push({
+                '@type': '3DModel',
+                name: `360° Virtual Tour — ${propertyData.title || 'Property in Gurugram'}`,
+                description: 'Interactive 3D virtual walkthrough of this property',
+                encoding: {
+                    '@type': 'MediaObject',
+                    contentUrl: virtualTourUrl,
+                    encodingFormat: 'text/html',
+                },
+            });
         }
 
         return structuredDataArray;

@@ -248,7 +248,7 @@ const CareerDetails = () => {
                 {/* Requirements */}
                 <div className="card border-0 shadow-sm rounded-4 mb-4">
                   <div className="card-body p-4 p-lg-5">
-                    <h2 className="h5 fw-bold mb-3">What We're Looking For</h2>
+                    <h2 className="h5 fw-bold mb-3">What We&apos;re Looking For</h2>
                     <ul className="list-unstyled mb-0">
                       {opening.requirements.map((req, index) => (
                         <li key={index} className="d-flex align-items-start gap-3 py-2">
@@ -260,10 +260,10 @@ const CareerDetails = () => {
                   </div>
                 </div>
 
-                {/* What You'll Learn */}
+                {/* What You&apos;ll Learn */}
                 <div className="card border-0 shadow-sm rounded-4 mb-4">
                   <div className="card-body p-4 p-lg-5">
-                    <h2 className="h5 fw-bold mb-3">What You'll Learn</h2>
+                    <h2 className="h5 fw-bold mb-3">What You&apos;ll Learn</h2>
                     <p className="text-secondary lh-lg">
                       At 360Ghar, interns work on real products with real impact. You will gain hands-on experience,
                       receive direct mentorship from the founding team, and build a portfolio piece that users actually use.

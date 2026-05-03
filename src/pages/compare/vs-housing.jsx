@@ -9,8 +9,8 @@ const HousingCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs Housing.com | Better Alternative for Gurugram Property Search"
-      pageDescription="Compare 360 Ghar with Housing.com. See why verified properties, 360° virtual tours, and dedicated relationship managers make 360 Ghar the better choice."
+      pageTitle="Housing.com Alternative Gurgaon | 360 Ghar vs Housing Comparison"
+      pageDescription="Looking for a Housing.com alternative in Gurgaon? Compare 360 Ghar vs Housing.com on verification, virtual tours, spam calls, and end-to-end service."
       canonicalPath="/vs/housing"
     />
   );

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "input": {
+    "maxFileSize": 500000
+  },
+  "output": {
+    "filePath": "repomix-output.md",
+    "style": "markdown",
+    "compress": true,
+    "instructionFilePath": "CLAUDE.md",
+    "fileSummary": true,
+    "directoryStructure": true,
+    "files": true,
+    "removeComments": false,
+    "removeEmptyLines": true,
+    "showLineNumbers": false,
+    "truncateBase64": true,
+    "topFilesLength": 5,
+    "git": {
+      "sortByChanges": true,
+      "sortByChangesMaxCommits": 100
+    }
+  },
+  "include": [
+    "src/**/*",
+    "scripts/**/*",
+    "scripts/reports/pseo-quality.json",
+    "public/_redirects",
+    "public/robots.txt",
+    "CLAUDE.md",
+    "package.json",
+    "vite.config.js",
+    "netlify.toml",
+    ".env.example"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDotIgnore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "src/data/localities.json",
+      "src/data/locality-landing-crossref.json",
+      "src/data/localities-index.json",
+      "src/data/locality-landmarks.json",
+      "src/data/priceContext.json",
+      "src/data/pseo-prune-list.json",
+      "output/**",
+      "dist/**",
+      "test-results/**",
+      "out/**",
+      "public/blueprint3d/**",
+      "public/assets/images/**",
+      "public/assets/webfonts/**",
+      "public/assets/fonts/**",
+      "public/assets/css/*.css.map",
+      "gsc_report/**",
+      "public/sitemap*.xml",
+      "scripts/reports/entity-raw.json",
+      "scripts/reports/entity-coverage.json",
+      "*.tmp.html",
+      "*.tmp.xml",
+      ".tmp_*",
+      ".opencode/**"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  },
+  "tokenCount": {
+    "encoding": "o200k_base"
+  }
+}

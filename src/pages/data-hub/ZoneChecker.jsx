@@ -5,7 +5,7 @@ import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
 import { dataHubService } from '../../services/dataHubService';
 
 const LAND_USE_COLORS = {
@@ -18,6 +18,29 @@ const LAND_USE_COLORS = {
 
 const PAGE_SIZE = 12;
 const COLONY_PAGE_SIZE = 10;
+
+const FAQS = [
+  {
+    question: 'What is CLU in Gurugram?',
+    answer: 'CLU stands for Change of Land Use. It is an approval from the Town and Country Planning Department, Haryana, that allows conversion of land from one use (e.g., agricultural) to another (e.g., residential or commercial). Without CLU approval, you cannot legally develop or construct on land that is zoned differently from your intended use. CLU applications involve fees, documentation, and compliance with the Master Plan.',
+  },
+  {
+    question: 'Can I convert residential property to commercial in Gurugram?',
+    answer: 'Yes, but you need CLU approval from the Department of Town and Country Planning (DTCP), Haryana. The process involves submitting an application with the current property documents, proposed commercial use details, and applicable fees. Approval depends on the Master Plan zoning of the area. Properties on designated commercial belts or mixed-use zones have a higher chance of approval. Conversion in purely residential zones is typically denied.',
+  },
+  {
+    question: 'How do I check the zoning status of a property in Gurugram?',
+    answer: 'You can check zoning status through the Haryana DTCP portal or by visiting the DTCP office in Gurugram. The Master Plan 2031 (and the upcoming Master Plan 2041) classifies all sectors into zones like residential, commercial, industrial, and institutional. You can also use our Zone Checker tool above to look up land use, FAR, and height restrictions for specific sectors.',
+  },
+  {
+    question: 'What is MCG approval and is it different from DTCP?',
+    answer: 'MCG (Municipal Corporation of Gurugram) approval is required for building plan sanctions, occupation certificates, and property tax within MCG limits. DTCP (Department of Town and Country Planning) handles land use zoning and CLU approvals. They are separate authorities. For most construction projects, you need both DTCP zoning clearance and MCG building plan approval. Licensed colonies get DTCP approval, while MCG handles infrastructure and civic permissions.',
+  },
+  {
+    question: 'What is the difference between R-zone and S-zone in Haryana?',
+    answer: 'In Haryana zoning terminology, R-zone (Residential zone) designates areas primarily for residential development, including plotted housing, group housing, and mixed-use along designated commercial belts. S-zone (Special zone) typically refers to areas with special development regulations, often near SEZs, industrial corridors, or areas requiring environmental clearances. S-zone may allow mixed development but with stricter density and height controls. Always verify the specific development norms for your zone with DTCP.',
+  },
+];
 
 const LandUseBadge = ({ landUse }) => {
   const config = LAND_USE_COLORS[landUse?.toLowerCase()] || { bg: '#6c757d', label: landUse || 'Unknown' };
@@ -51,6 +74,7 @@ const ZoneChecker = () => {
   const [zonePage, setZonePage] = useState(1);
   const [zonesLoading, setZonesLoading] = useState(true);
   const [zonesError, setZonesError] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const [colonies, setColonies] = useState([]);
   const [colonyMeta, setColonyMeta] = useState({ total: 0, page: 1, pages: 1 });
@@ -117,6 +141,7 @@ const ZoneChecker = () => {
             keywords: 'zone checker Gurugram, land use Gurugram, FAR Gurgaon, Master Plan Haryana',
             author: { '@type': 'Organization', name: '360Ghar' },
           },
+          generateFaqStructuredData(FAQS),
         ]}
       />
       <OffCanvas />
@@ -303,6 +328,26 @@ const ZoneChecker = () => {
                   </>
                 )}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="pb-60">
+          <div className="container">
+            <h2 className="fs-24 fw-600 mb-20">Frequently Asked Questions</h2>
+            <div className="accordion">
+              {FAQS.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div className="accordion-item border-0 border-bottom" key={faq.question}>
+                    <h3 className="accordion-header" id={`dhFaqHeading${idx}`}>
+                      <button className={`accordion-button ${isOpen ? '' : 'collapsed'}`} type="button" aria-expanded={isOpen} onClick={() => setOpenFaqIndex(cur => cur === idx ? -1 : idx)}>{faq.question}</button>
+                    </h3>
+                    <div className={`accordion-collapse collapse ${isOpen ? 'show' : ''}`}><div className="accordion-body text-muted">{faq.answer}</div></div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

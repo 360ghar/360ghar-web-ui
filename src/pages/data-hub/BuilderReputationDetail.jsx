@@ -177,10 +177,10 @@ const BuilderReputationDetail = () => {
               : undefined,
             aggregateRating: {
               '@type': 'AggregateRating',
-              ratingValue: score,
-              bestRating: 100,
-              worstRating: 0,
-              reviewCount: builder?.total_complaints ?? 0,
+              ratingValue: (score / 20).toFixed(1),
+              bestRating: '5',
+              worstRating: '1',
+              reviewCount: builder?.total_projects ?? 1,
             },
             description: `${builderName} — RERA reputation score: ${score}/100. ${builder?.total_projects ?? 0} registered projects, ${builder?.total_complaints ?? 0} complaints.`,
           },
@@ -209,7 +209,17 @@ const BuilderReputationDetail = () => {
                 <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, padding: '24px 28px' }}>
                   <div className="d-flex align-items-start flex-wrap gap-20">
                     <div style={{ flex: 1, minWidth: 200 }}>
-                      <h1 className="fs-28 fw-700 mb-6" style={{ color: '#111827' }}>{builderName}</h1>
+                      <div className="d-flex align-items-start flex-wrap gap-2">
+                        <h1 className="fs-28 fw-700 mb-6" style={{ color: '#111827' }}>{builderName}</h1>
+                        <a
+                          href={`https://wa.me/?text=${encodeURIComponent(`Check ${builderName}'s RERA reputation score on 360Ghar ${window.location.origin}${window.location.pathname}?utm_source=whatsapp&utm_medium=share&utm_campaign=builder_share`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-sm btn-outline-success ms-2"
+                        >
+                          <i className="fab fa-whatsapp me-1" />Share
+                        </a>
+                      </div>
                       {builder?.city && (
                         <p style={{ margin: '0 0 12px', fontSize: 14, color: '#6b7280' }}>
                           <i className="fas fa-map-marker-alt me-1"></i>

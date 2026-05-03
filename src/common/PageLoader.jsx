@@ -2,7 +2,7 @@ import './PageLoader.css';
 
 const PageLoader = () => {
   return (
-    <div className="page-loader">
+    <div className="page-loader" role="status" aria-live="polite" aria-label="Loading 360Ghar">
       {/* Animated Background Elements */}
       <div className="loader-bg-elements">
         <div className="bg-circle bg-circle--1"></div>
@@ -89,8 +89,6 @@ const PageLoader = () => {
           <div className="particle-3d particle-3d--1"></div>
           <div className="particle-3d particle-3d--2"></div>
           <div className="particle-3d particle-3d--3"></div>
-          <div className="particle-3d particle-3d--4"></div>
-          <div className="particle-3d particle-3d--5"></div>
         </div>
 
         {/* Loading Text */}
@@ -100,14 +98,17 @@ const PageLoader = () => {
             <span className="brand-ghar">Ghar</span>
           </h1>
           <p className="loader-message-3d">
-            Finding your dream home
-            <span className="loading-dots-3d">
-              <span></span>
-              <span></span>
-              <span></span>
+            <span aria-hidden="true">
+              Finding your dream home
+              <span className="loading-dots-3d">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
             </span>
+            <span className="sr-only">Loading, please wait</span>
           </p>
-          <div className="loader-progress-3d">
+          <div className="loader-progress-3d" aria-hidden="true">
             <div className="loader-progress-bar-3d"></div>
           </div>
         </div>

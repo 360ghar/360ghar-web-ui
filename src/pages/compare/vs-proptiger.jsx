@@ -9,8 +9,8 @@ const PropTigerCompare = () => {
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="360 Ghar vs PropTiger | Better Real Estate Advisory in Gurugram"
-      pageDescription="Compare 360 Ghar with PropTiger. See why transparent pricing, verified properties, and no-pressure approach make 360 Ghar the better property platform."
+      pageTitle="PropTiger Alternative Gurgaon | 360 Ghar vs PropTiger"
+      pageDescription="Compare 360 Ghar vs PropTiger for property search in Gurgaon. Verified listings, 360° VR tours, and end-to-end assistance vs data-only platform."
       canonicalPath="/vs/proptiger"
     />
   );

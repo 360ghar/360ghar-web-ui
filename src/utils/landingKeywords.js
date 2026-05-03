@@ -4,6 +4,8 @@
 
 const BRAND_KEYWORDS = ['verified properties', '360 virtual tours', 'AI property search', 'on-site verified'];
 
+const INTENT_DISPLAY = { buy: 'sale', rent: 'rent', pg: 'pg' };
+
 /**
  * Returns property type synonyms for a given facet string.
  * @param {string} lcFacet - Lowercased facet/property type string
@@ -47,8 +49,8 @@ export const buildLandingKeywords = ({ facet, city, validIntent }) => {
   const intentSyn = getIntentSynonyms(validIntent);
 
   const basePhrases = [
-    `${facet} for ${validIntent} in ${city}`,
-    `${facet} ${validIntent} ${city}`,
+    `${facet} for ${INTENT_DISPLAY[validIntent] || validIntent} in ${city}`,
+    `${facet} ${INTENT_DISPLAY[validIntent] || validIntent} ${city}`,
     `${facet} in ${city}`,
     ...typeSyn.flatMap((t) => intentSyn.map((i) => `${t} ${i} ${city}`)),
     isRes ? `1 BHK ${facet} ${validIntent} in ${city}` : null,
@@ -87,11 +89,11 @@ export const buildFacetKeywords = ({ facetText, validCity, validIntent, isBhk, b
   const budgetSyn = isBudget ? [budgetText, budgetText.replace('under', 'below')] : [];
 
   const base = [
-    `${facetText} for ${validIntent} in ${validCity}`,
+    `${facetText} for ${INTENT_DISPLAY[validIntent] || validIntent} in ${validCity}`,
     ...tSyn.flatMap((t) => iSyn.map((i) => `${t} ${i} ${validCity}`)),
-    ...bhkSyn.map((b) => `${b} ${lcFacet} ${validIntent} in ${validCity}`),
-    ...budgetSyn.map((b) => `${lcFacet} ${validIntent} ${b} in ${validCity}`),
-    isAmenity ? `${pretty(amenity)} ${lcFacet} ${validIntent} in ${validCity}` : null,
+    ...bhkSyn.map((b) => `${b} ${lcFacet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${validCity}`),
+    ...budgetSyn.map((b) => `${lcFacet} ${INTENT_DISPLAY[validIntent] || validIntent} ${b} in ${validCity}`),
+    isAmenity ? `${pretty(amenity)} ${lcFacet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${validCity}` : null,
     'near metro', 'pet friendly', 'ready to move', 'no broker',
     ...BRAND_KEYWORDS,
   ];

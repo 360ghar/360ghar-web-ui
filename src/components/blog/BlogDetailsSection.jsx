@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -10,6 +10,7 @@ import { getAuthor, getAuthorSchema } from '../../data/authors';
 import SEO from '../../common/SEO';
 import { generateBlogStructuredData, generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { siteMetadata } from '../../seo/siteMetadata';
+import { ToolRelatedLinks } from '../../components/tools/ToolContentSections';
 import './BlogDetails.scss';
 
 /**
@@ -208,8 +209,21 @@ const BlogDetailsSection = () => {
 
     // SEO metadata derived from fetched post
     const seoMeta = useMemo(() => {
-        const titleText = post?.title || 'Real Estate Blog | 360Ghar';
-        const descText = post?.excerpt || post?.summary || 'Read insights on buying, renting, PGs, locality guides, and investment trends in Gurugram and Delhi NCR.';
+        const rawTitle = post?.title || 'Real Estate Blog | 360Ghar';
+        const year = new Date().getFullYear();
+        // Enhance title: add year and brand suffix if not already present
+        const titleText = rawTitle.includes('360Ghar')
+            ? rawTitle
+            : `${rawTitle} (${year}) | 360Ghar`;
+        // Enhance description: add freshness signal, trust prefix for legal topics, and CTA
+        const rawDesc = post?.excerpt || post?.summary || '';
+        const isLegalTopic = ['document', 'checklist', 'legal', 'loan against property', 'registration', 'mutation', 'rera', 'stamp duty'].some(
+            kw => (rawTitle + ' ' + rawDesc).toLowerCase().includes(kw)
+        );
+        const trustPrefix = isLegalTopic ? 'Verified guide: ' : '';
+        const descText = rawDesc
+            ? `${trustPrefix}${rawDesc.length > 150 ? `${rawDesc.slice(0, 147)}...` : rawDesc}`
+            : `Read verified insights on buying, renting, PGs, locality guides, and investment trends in Gurugram and Delhi NCR (${year}).`;
         const image = post?.thumbnail_url || post?.cover_image_url
             || post?.featured_image || post?.image_url || post?.image
             || extractFirstMarkdownImage(post?.content || '')
@@ -231,9 +245,20 @@ const BlogDetailsSection = () => {
         const breadcrumb = generateBreadcrumbStructuredData([
             { name: 'Home', url: 'https://360ghar.com/' },
             { name: 'Blog', url: 'https://360ghar.com/blog' },
-            { name: titleText, url: url ? `${siteMetadata.siteUrl}${url}` : 'https://360ghar.com/blog' }
+            { name: rawTitle, url: url ? `${siteMetadata.siteUrl}${url}` : 'https://360ghar.com/blog' }
         ]);
-        return { titleText, descText, image, url, ld, breadcrumb };
+        return {
+            titleText,
+            descText,
+            image,
+            url,
+            ld,
+            breadcrumb,
+            publishedAt: post?.published_at,
+            updatedAt: post?.updated_at || post?.published_at,
+            section: post?.categories?.[0]?.name,
+            tags: (post?.tags || []).map((t) => t.name).filter(Boolean),
+        };
     }, [post]);
 
     // Detect content type and prepare for rendering
@@ -277,6 +302,10 @@ const BlogDetailsSection = () => {
                 type="article"
                 structuredData={[seoMeta.ld, seoMeta.breadcrumb]}
                 noindex={!loading && (!post || error)}
+                articlePublishedTime={seoMeta.publishedAt}
+                articleModifiedTime={seoMeta.updatedAt}
+                articleSection={seoMeta.section}
+                articleTags={seoMeta.tags}
             />
             <div className="blog-details-section padding-y-120">
                 <div className="container container-two">
@@ -350,7 +379,17 @@ const BlogDetailsSection = () => {
                                         )}
 
                                         {/* Title */}
-                                        <h2 className="blog-details__title">{title}</h2>
+                                        <div className="d-flex align-items-start flex-wrap gap-2">
+                                          <h2 className="blog-details__title">{title}</h2>
+                                          <a
+                                            href={`https://wa.me/?text=${encodeURIComponent(title + ' — ' + window.location.origin + window.location.pathname + '?utm_source=whatsapp&utm_medium=share&utm_campaign=blog_share')}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="btn btn-sm btn-outline-success ms-2"
+                                          >
+                                            <i className="fab fa-whatsapp me-1" />Share
+                                          </a>
+                                        </div>
 
                                         {/* Excerpt / Lead paragraph */}
                                         {excerpt && (
@@ -388,6 +427,34 @@ const BlogDetailsSection = () => {
                                                 </div>
                                             </div>
                                         )}
+
+                                        {/* Related Tools — contextual links to calculators */}
+                                        {(() => {
+                                          const TOOL_CONTEXT_MAP = [
+                                            { kw: 'emi', to: '/emi-calculator', label: 'EMI Calculator', icon: 'fas fa-calculator' },
+                                            { kw: 'loan', to: '/loan-eligibility-calculator', label: 'Loan Eligibility Calculator', icon: 'fas fa-university' },
+                                            { kw: 'area', to: '/area-calculator', label: 'Carpet Area Calculator', icon: 'fas fa-ruler-combined' },
+                                            { kw: 'capital gain', to: '/capital-gains-tax-calculator', label: 'Capital Gains Tax Calculator', icon: 'fas fa-receipt' },
+                                            { kw: 'stamp duty', to: '/stamp-duty-calculator', label: 'Stamp Duty Calculator', icon: 'fas fa-stamp' },
+                                            { kw: 'document', to: '/property-document-checklist', label: 'Property Document Checklist', icon: 'fas fa-clipboard-list' },
+                                            { kw: 'checklist', to: '/property-document-checklist', label: 'Property Document Checklist', icon: 'fas fa-clipboard-list' },
+                                            { kw: 'vastu', to: '/vastu-checker', label: 'AI Vastu Checker', icon: 'fas fa-compass' },
+                                            { kw: 'floor plan', to: '/design-blueprint', label: '3D Blueprint Designer', icon: 'fas fa-drafting-compass' },
+                                            { kw: 'circle rate', to: '/circle-rates', label: 'Circle Rates', icon: 'fas fa-rupee-sign' },
+                                          ];
+                                          const content = (title + ' ' + tags.map(t => t.name).join(' ')).toLowerCase();
+                                          const relatedTools = TOOL_CONTEXT_MAP
+                                            .filter((tool) => content.includes(tool.kw))
+                                            .slice(0, 3);
+                                          return relatedTools.length > 0 ? (
+                                            <div className="mt-5 pt-4 border-top">
+                                              <ToolRelatedLinks
+                                                heading="Related Tools"
+                                                links={relatedTools}
+                                              />
+                                            </div>
+                                          ) : null;
+                                        })()}
 
                                         {/* Back to blog link */}
                                         <div className="mt-5 pt-4 border-top">

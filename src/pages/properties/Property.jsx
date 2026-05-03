@@ -12,6 +12,8 @@ import { realEstateStructuredData, generateBreadcrumbStructuredData } from '../.
 const popularSearches = [
     { label: 'Flats for rent in Gurugram', to: '/gurgaon/rent/flats' },
     { label: 'Apartments for sale in Gurugram', to: '/gurgaon/buy/flats' },
+    { label: '2 BHK Flats for Sale in Gurgaon', to: '/gurgaon/buy/flats/2-bhk' },
+    { label: 'Flats for Rent Under 20K', to: '/gurgaon/rent/flats/budget/under-20k' },
     { label: 'PG in Gurugram', to: '/gurgaon/pg/flats' },
     { label: 'Explore localities', to: '/localities' },
 ];
@@ -39,8 +41,8 @@ const Property = () => {
     return (
         <>
         <SEO
-          title="Properties in Gurugram | AI-Powered Search & Verified Listings | 360Ghar"
-          description="Browse verified properties in Gurugram with 360° virtual tours. Find apartments, flats, builder floors, independent houses, and PGs in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City. All properties verified by on-site team."
+          title="Flats in Gurgaon | Verified Properties for Sale & Rent | 360Ghar"
+          description="Browse verified flats, apartments & villas in Gurgaon. 360Ghar offers physically verified listings with 360° virtual tours in DLF Phase, Golf Course Road, Sohna Road & 500+ localities. Buy, rent or PG — zero fake listings."
           keywords="Gurugram properties, Gurgaon real estate, AI property search Gurugram, buy property Gurugram, sell property Gurgaon, rent apartments Gurugram, verified properties India, on-site verified listings, flats for sale in Gurgaon, flats for rent in Gurgaon, 1 BHK 2 BHK 3 BHK, ready to move flats, new launch projects, resale apartments, PG in Gurgaon, girls PG, co-living Gurugram, DLF Phase properties, Golf Course Road apartments, Sohna Road flats, Cyber City office space, near metro apartments, no broker, direct owner, verified listings, 360 virtual tours"
           canonical={canonical}
           image={siteMetadata.defaultOgImage}

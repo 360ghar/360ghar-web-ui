@@ -14,6 +14,7 @@ import { useAuthStore } from '../../store';
 import LazyImage from '../../common/ui/LazyImage';
 import PropertyActions from './PropertyActions';
 import PropertyItem from './PropertyItem';
+import LazyVRPlayer from './LazyVRPlayer';
 import WhatsAppButton from '../ui/WhatsAppButton';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import { propertyAPIService } from '../../services/propertyAPIService';
@@ -564,13 +565,10 @@ const PropertyDetailsSection = ({ property }) => {
               {/* Media Content */}
               {mediaTab === 'tour' && virtualTourUrl && (
                 <div className="virtual-tour-container" ref={tourRef}>
-                  <iframe
-                    src={virtualTourUrl}
-                    allow="accelerometer; magnetometer; gyroscope; xr-spatial-tracking; vr; fullscreen"
-                    allowFullScreen
-                    loading="lazy"
-                    title="360° Virtual Tour"
-                    style={{ width: '100%', height: '100%', border: 0 }}
+                  <LazyVRPlayer
+                    virtualTourUrl={virtualTourUrl}
+                    thumbnailUrl={mainImage}
+                    title={title}
                   />
                 </div>
               )}

@@ -7,7 +7,39 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
+import { ToolFaq, ToolRelatedLinks } from '../../components/tools/ToolContentSections';
+
+const EMI_CALCULATOR_FAQS = [
+  {
+    question: 'How is home loan EMI calculated?',
+    answer: 'EMI = [P × R × (1+R)^N] / [(1+R)^N - 1], where P = principal loan amount, R = monthly interest rate (annual rate / 12 / 100), N = total months (tenure × 12). For example, a ₹50 lakh loan at 8.5% for 20 years: EMI ≈ ₹43,691/month.',
+  },
+  {
+    question: 'What is the current home loan interest rate in India (2026)?',
+    answer: 'As of 2026, home loan rates range from 8.40% to 10.50% depending on the bank and borrower profile. SBI offers 8.50%–10.15%, HDFC offers 8.70%–10.30%, and Bank of Baroda offers 8.40%–10.05%. Women borrowers often get 0.05–0.10% lower rates.',
+  },
+  {
+    question: 'How can I reduce my home loan EMI?',
+    answer: '5 ways to reduce EMI: (1) Negotiate a lower interest rate — even 0.25% saves lakhs over 20 years, (2) Increase tenure from 20 to 25-30 years (but you pay more total interest), (3) Make partial prepayments to reduce principal, (4) Choose a lender with lower processing fees, (5) Improve credit score (750+) to unlock best rates.',
+  },
+  {
+    question: 'What is an amortization schedule?',
+    answer: 'An amortization schedule is a table showing the breakdown of each EMI into principal and interest components over the loan tenure. In the initial years, most of your EMI goes toward interest (e.g., ~75% in year 1 of a 20-year loan). Over time, the principal component increases while interest decreases.',
+  },
+  {
+    question: 'Should I choose a shorter or longer loan tenure?',
+    answer: 'Shorter tenure (15-20 years) = higher EMI but much less total interest paid. Longer tenure (25-30 years) = lower EMI but significantly more total interest. For a ₹50 lakh loan at 8.5%: 20-year EMI is ₹43,691 (total interest ₹54.9L), while 30-year EMI is ₹38,459 (total interest ₹88.5L). Choose based on your monthly budget and financial goals.',
+  },
+];
+
+const EMI_HOW_TO_STEPS = [
+  { name: 'Enter Loan Amount', text: 'Input the total home loan amount you need (e.g., ₹50,00,000). This is the principal borrowed from the bank.' },
+  { name: 'Set Interest Rate', text: 'Enter the annual interest rate offered by your bank (e.g., 8.5% for SBI/HDFC in 2026). Check your bank\'s website for the latest rate.' },
+  { name: 'Choose Loan Tenure', text: 'Select the repayment period in years. Common tenures are 20-25 years. Longer tenure = lower EMI but more total interest.' },
+  { name: 'Review EMI Results', text: 'The calculator shows your monthly EMI, total interest, and total payment. Use the breakdown to understand how much goes to interest vs principal.' },
+  { name: 'Compare Across Banks', text: 'Repeat with different interest rates from SBI, HDFC, ICICI, and Bank of Baroda. Even 0.25% difference saves lakhs over 20 years.' },
+];
 
 const EmiCalculator = () => {
     const resultsRef = useRef(null);
@@ -54,8 +86,8 @@ const EmiCalculator = () => {
     return (
         <>
         <SEO
-          title="Home Loan EMI Calculator India | Calculate Mortgage EMI | 360Ghar"
-          description="Calculate your Home Loan EMI instantly with 360Ghar's free EMI Calculator. Plan your budget, check monthly installments, and view amortization schedule for properties in Gurugram & India."
+          title="EMI Calculator Gurgaon | Home Loan EMI for Gurugram Property | 360Ghar"
+          description="Free home loan EMI calculator for India. Calculate monthly EMI for SBI, HDFC, ICICI home loans instantly. View amortization schedule, payment breakdown, and compare interest rates for properties in Gurugram & Delhi NCR."
           keywords="home loan EMI calculator India, housing loan calculator, mortgage calculator India, loan repayment schedule, SBI home loan EMI, HDFC home loan EMI, real estate finance tool, 360ghar financial tools"
           canonical="/emi-calculator"
           image={siteMetadata.defaultOgImage}
@@ -66,7 +98,13 @@ const EmiCalculator = () => {
                 { name: 'Home', url: 'https://360ghar.com/' },
                 { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
                 { name: toolSchemas.emiCalculator.name, url: 'https://360ghar.com/emi-calculator' }
-            ])
+            ]),
+            generateFaqStructuredData(EMI_CALCULATOR_FAQS),
+            generateHowToStructuredData({
+              name: 'How to Calculate Home Loan EMI',
+              description: 'Step-by-step guide to calculating your monthly EMI for a home loan in India.',
+              steps: EMI_HOW_TO_STEPS,
+            }),
           ]}
         />
             <OffCanvas/>
@@ -82,10 +120,9 @@ const EmiCalculator = () => {
                         <div className="row justify-content-center">
                             <div className="col-lg-10">
                                 <div className="section-heading text-center mb-5">
-                                    <h2 className="section-title">Calculate Your Home Loan EMI</h2>
+                                    <h1>Home Loan EMI Calculator India (2026)</h1>
                                     <p className="section-desc">
-                                        Use our comprehensive EMI calculator to plan your home loan better.
-                                        Get instant calculations for monthly installments, total interest, and total payment.
+                                        Free EMI calculator for SBI, HDFC, ICICI home loans. Get monthly installments, total interest, and amortization breakdown instantly.
                                     </p>
                                 </div>
 
@@ -347,6 +384,27 @@ const EmiCalculator = () => {
                                         Contact Us
                                     </a>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="padding-y-60">
+                    <div className="container">
+                        <div className="row justify-content-center">
+                            <div className="col-lg-8">
+                                <ToolFaq faqs={EMI_CALCULATOR_FAQS} heading="Home Loan EMI — Frequently Asked Questions" />
+                                <ToolRelatedLinks
+                                    heading="Related Calculators & Tools"
+                                    links={[
+                                        { to: '/loan-eligibility-calculator', label: 'Loan Eligibility Calculator', icon: 'fas fa-university' },
+                                        { to: '/area-calculator', label: 'Carpet Area Calculator', icon: 'fas fa-ruler-combined' },
+                                        { to: '/area-converter', label: 'Area Unit Converter', icon: 'fas fa-exchange-alt' },
+                                        { to: '/capital-gains-tax-calculator', label: 'Capital Gains Tax Calculator', icon: 'fas fa-receipt' },
+                                        { to: '/stamp-duty-calculator', label: 'Stamp Duty Calculator', icon: 'fas fa-stamp' },
+                                        { to: '/vastu-checker', label: 'Vastu Checker', icon: 'fas fa-compass' },
+                                    ]}
+                                />
                             </div>
                         </div>
                     </div>

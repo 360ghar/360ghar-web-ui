@@ -64,16 +64,18 @@ const LazySection = ({ children, rootMargin = '200px', minHeight = '0px', animat
 
   if (animate && !hasAnimated) {
     return (
-      <div 
-        className="lazy-section lazy-section--animating" 
+      <div
+        className="lazy-section lazy-section--animating"
         style={{ minHeight }}
+        role="region"
+        aria-label="Content loading"
       >
         {children}
       </div>
     );
   }
 
-  return <div className="lazy-section">{children}</div>;
+  return <div className="lazy-section" role="region">{children}</div>;
 };
 
 export default LazySection;
