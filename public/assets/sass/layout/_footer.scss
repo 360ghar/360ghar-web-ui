@@ -28,7 +28,7 @@
     &__title {
         margin-bottom: clampCal(16, 40);
         font-family: var(--poppins-font);
-        color: hsl(var(--white));
+        color: hsl(var(--white)) !important;
         font-weight: 500;
     }
 }
@@ -164,6 +164,41 @@
         left: 0 ;
     }
 }
+/* Footer Trust Badges */
+.footer-trust-badges {
+    &__inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+    }
+    .trust-badges {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+    .trust-badge {
+        position: static;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px 18px;
+        border-radius: 10px;
+        box-shadow: none;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        transition: background 0.2s ease;
+        i {
+            font-size: 1rem;
+        }
+        &:hover {
+            transform: none;
+            background: rgba(255, 255, 255, 0.18);
+        }
+    }
+    .footer-contact-quick {
+        flex-shrink: 0;
+    }
+}
+
 /* ============= Footer End Here ======================= */
 
 /* ============= Bottom Footer End Here ======================= */

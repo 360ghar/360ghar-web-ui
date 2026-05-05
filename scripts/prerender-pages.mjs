@@ -117,6 +117,14 @@ async function waitForRoute(page, routeConfig) {
     const canonical = document.querySelector('link[rel="canonical"]');
     return Boolean(canonical && canonical.getAttribute('href'));
   }, { timeout: ROUTE_WAIT_TIMEOUT });
+
+  // Wait for structured data to be injected by Helmet
+  await page.waitForFunction(() => {
+    const ldJson = document.querySelectorAll('script[type="application/ld+json"]');
+    return ldJson.length > 0;
+  }, { timeout: 5000 }).catch(() => {
+    // Not all pages have structured data; this is non-fatal
+  });
 }
 
 async function prerenderRoute(baseUrl, routeConfig, browser) {

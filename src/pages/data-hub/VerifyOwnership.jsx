@@ -6,10 +6,17 @@ import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 import { generateToolSchema } from '../../seo/toolSchemas';
 import { toolSchemas } from '../../seo/toolSchemas';
 import { dataHubService } from '../../services/dataHubService';
+
+const VERIFY_OWNERSHIP_HOW_TO_STEPS = [
+  { name: 'Select district and tehsil', text: 'Choose the district and tehsil where the property is located from the dropdown.' },
+  { name: 'Enter village name and khasra number', text: 'Type the village name and the Khasra number identifying the specific land parcel.' },
+  { name: 'Complete captcha verification', text: 'Load and solve the CAPTCHA to verify you are human, as required by the Jamabandi portal.' },
+  { name: 'View property ownership records', text: 'Review ownership details, mutation status, encumbrance, and area from official Haryana land records.' },
+];
 
 const TEHSIL_OPTIONS = [
   'Gurgaon',
@@ -102,7 +109,7 @@ const VerifyOwnership = () => {
   return (
     <>
       <SEO
-        title="Verify Property Ownership Gurugram | Jamabandi Land Records | 360Ghar"
+        title="Verify Property Ownership Gurgaon | Jamabandi Haryana Land Records | 360Ghar"
         description="Verify property ownership using official Haryana land records (Jamabandi). Look up Khasra numbers, owner names, mutation status, and encumbrance details for plots in Gurugram."
         keywords="verify property ownership Gurugram, Jamabandi Haryana land records, Khasra number lookup, mutation status Haryana, property ownership check Gurgaon"
         canonical="/verify-ownership"
@@ -117,6 +124,11 @@ const VerifyOwnership = () => {
             toolSchemas.verifyOwnership.keywords,
             toolSchemas.verifyOwnership.category,
           ),
+          generateHowToStructuredData({
+            name: 'How to Verify Property Ownership',
+            description: 'Look up official Haryana Jamabandi land records by tehsil, village, and khasra number to verify property ownership.',
+            steps: VERIFY_OWNERSHIP_HOW_TO_STEPS,
+          }),
         ]}
       />
       <OffCanvas />

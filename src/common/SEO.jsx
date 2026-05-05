@@ -44,11 +44,11 @@ const SEO = ({
 }) => {
   const location = useLocation();
   const storeLocale = useLocaleStore((s) => s.locale);
-  const path = location.pathname || '';
-  const locale = storeLocale === 'hi' || inferLocaleFromPath(path) === 'hi' ? 'hi' : 'en';
-  const localizedPath = localizeSeoPath(path, locale);
+  const rawPath = (location.pathname || '').replace(/\/+$/, '') || '/';
+  const locale = storeLocale === 'hi' || inferLocaleFromPath(rawPath) === 'hi' ? 'hi' : 'en';
+  const localizedPath = localizeSeoPath(rawPath, locale);
   const computedUrl = absoluteUrl(localizeSeoPath(url || localizedPath, locale));
-  const canonicalUrl = absoluteUrl(localizeSeoPath(canonical || localizedPath, locale));
+  const canonicalUrl = absoluteUrl(localizeSeoPath((canonical || localizedPath).replace(/\/+$/, '') || '/', locale));
 
   const metaTitle = title || siteMetadata.defaultTitle;
   const metaDesc = description || siteMetadata.defaultDescription;

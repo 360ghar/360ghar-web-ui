@@ -34,6 +34,12 @@ export const dataHubService = {
   getAuctionBanks: () =>
     publicApi.get('/data-hub/auctions/banks').then(r => r.data),
 
+  getAuctionCities: () =>
+    publicApi.get('/data-hub/auctions/cities').then(r => r.data),
+
+  getAuctionSourceCategories: () =>
+    publicApi.get('/data-hub/auctions/source-categories').then(r => r.data),
+
   // Alert CRUD (auth required)
   createAuctionAlert: (data) =>
     api.post('/data-hub/auctions/alerts', data).then(r => r.data),

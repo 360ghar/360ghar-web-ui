@@ -1,0 +1,50 @@
+.lazy-vr-player {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 12px;
+  min-height: 300px;
+
+  &__thumb {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    min-height: 300px;
+  }
+
+  &__placeholder {
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+    transition: background 0.2s ease;
+  }
+
+  &:hover &__overlay {
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  &__content {
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  &__iframe {
+    width: 100%;
+    height: 500px;
+    border: 0;
+    border-radius: 12px;
+  }
+}

@@ -4,33 +4,44 @@ import compression from "vite-plugin-compression";
 import { visualizer } from "rollup-plugin-visualizer";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { VitePWA } from "vite-plugin-pwa";
-import Critters from "critters";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readFileSync, writeFileSync } from "node:fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Custom plugin to inline critical CSS and defer the rest
-const criticalCssPlugin = () => ({
-  name: "critical-css",
+// Custom plugin to defer the main entry CSS chunk so it does not block first paint.
+// The critical above-the-fold styles are already inlined in index.html.
+const deferEntryCssPlugin = () => ({
+  name: "defer-entry-css",
+  transformIndexHtml(html) {
+    // Convert the main entry CSS chunk (<link rel="stylesheet" href="/assets/index-*.css">)
+    // to a non-blocking preload pattern.
+    return html.replace(
+      /<link rel="stylesheet"([^>]*)href="(\/assets\/index-[a-zA-Z0-9_-]+\.css)"([^>]*)>/,
+      (match, before, href, after) => {
+        return `<link rel="preload" as="style"${before}href="${href}"${after} onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet"${before}href="${href}"${after}></noscript>`;
+      }
+    );
+  },
+});
+
+// Make PWA service-worker registration non-blocking
+const asyncRegisterSW = () => ({
+  name: "async-register-sw",
   apply: "build",
-  async closeBundle() {
+  closeBundle() {
     const indexPath = path.join(__dirname, "dist", "index.html");
     let html;
     try {
       html = readFileSync(indexPath, "utf-8");
     } catch {
-      return; // No index.html yet (prerender mode)
+      return;
     }
-    const critters = new Critters({
-      path: path.join(__dirname, "dist"),
-      publicPath: "/",
-      preload: "swap",
-      pruneSource: false,
-      logLevel: "warn",
-    });
-    const processed = await critters.process(html);
+    const processed = html.replace(
+      /<script id="vite-plugin-pwa:register-sw" src="\/registerSW\.js"><\/script>/,
+      `<script id="vite-plugin-pwa:register-sw" src="/registerSW.js" async></script>`
+    );
     writeFileSync(indexPath, processed);
   },
 });
@@ -57,8 +68,12 @@ export default defineConfig(({ mode }) => {
   plugins: [
     react(),
 
-    // Inline critical CSS and defer the rest (eliminates CSS render-blocking)
-    criticalCssPlugin(),
+    // Defer the bulky entry CSS so it does not block first paint.
+    // Critical above-the-fold styles are inlined in index.html.
+    deferEntryCssPlugin(),
+
+    // Make PWA SW registration non-blocking
+    asyncRegisterSW(),
 
     // Optimize modulepreload hints (remove heavy rarely-used chunks)
     optimizeModulepreload(),

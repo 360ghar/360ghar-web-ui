@@ -6,8 +6,32 @@ import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
 import { dataHubService } from '../../services/dataHubService';
+import { ToolFaq } from '../../components/tools/ToolContentSections';
+
+const FAQS = [
+  {
+    question: 'What are circle rates in Gurugram?',
+    answer: 'Circle rates (also called DLC rates or collector rates) are the minimum property valuation rates set by the Haryana government for each sector and colony. They are used to calculate stamp duty on property registrations. No property sale can be registered below the circle rate for that area.',
+  },
+  {
+    question: 'How are circle rates different from market rates?',
+    answer: 'Circle rates are government-set minimum values used for stamp duty calculation, while market rates are the actual prices at which properties are bought and sold. Market rates are typically 20-50% higher than circle rates in prime areas. Circle rates serve as a floor price for registration purposes.',
+  },
+  {
+    question: 'Do circle rates affect stamp duty?',
+    answer: 'Yes, stamp duty is calculated on the higher of the circle rate or the actual transaction value. If you buy a property below the circle rate, you still pay stamp duty based on the circle rate. This ensures the government collects a minimum amount of stamp duty on every property transaction.',
+  },
+  {
+    question: 'How often do circle rates change in Haryana?',
+    answer: 'Circle rates in Haryana are revised periodically by the IGRS (Inspector General of Registration and Stamps). Revisions typically happen every 1-2 years, though there is no fixed schedule. The government issues gazette notifications when new rates come into effect.',
+  },
+  {
+    question: 'Can I negotiate below circle rate?',
+    answer: 'You can negotiate the actual purchase price, but the property cannot be registered below the circle rate. Even if you buy below circle rate, stamp duty will be calculated on the circle rate value. Effectively, the government treats the circle rate as the minimum declared value for that property.',
+  },
+];
 import StampDutyWidget from '../../components/data-hub/StampDutyWidget';
 
 const CircleRateDirectory = () => {
@@ -58,6 +82,7 @@ const CircleRateDirectory = () => {
             url: 'https://360ghar.com/circle-rates',
             numberOfItems: total,
           },
+          generateFaqStructuredData(FAQS),
         ]}
       />
       <OffCanvas />
@@ -152,6 +177,8 @@ const CircleRateDirectory = () => {
                 <StampDutyWidget />
               </div>
             </div>
+
+            <ToolFaq faqs={FAQS} />
           </div>
         </section>
         <Footer />

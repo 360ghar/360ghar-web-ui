@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>360Ghar | India's First AI-Enabled & Virtual Tour First Real Estate Platform | Verified Properties</title>
+  <title>360Ghar – VR Home Tours & Property in Gurugram</title>
   <meta name="description" content="360Ghar helps you buy, rent, and compare verified properties in Gurugram with 360° virtual tours, locality intelligence, and AI-assisted real estate workflows." />
   <meta name="theme-color" content="#ff6b00" />
   <meta property="og:title" content="360Ghar | Verified Properties in Gurugram" />
@@ -17,6 +17,16 @@
   <meta name="twitter:title" content="360Ghar | Verified Properties in Gurugram" />
   <meta name="twitter:description" content="Browse verified properties, research localities, and use AI-ready real estate tools on 360Ghar." />
   <meta name="twitter:image" content="https://360ghar.com/og-image-home.jpg" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0S1Q7466MM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-0S1Q7466MM');
+  </script>
 
   <link rel="shortcut icon" href="%BASE_URL%assets/images/logo/favicon.png">
   <link rel="alternate" type="application/rss+xml" title="360Ghar All Feeds" href="/rss.xml">
@@ -47,11 +57,21 @@
   <!-- Performance: preconnect for external resources -->
   <link rel="preconnect" href="https://api.360ghar.com">
   <link rel="dns-prefetch" href="https://api.360ghar.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://www.google-analytics.com">
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
 
-  <!-- Self-hosted brand fonts -->
+  <!-- Self-hosted brand fonts (inlined to eliminate render-blocking request) -->
   <link rel="preload" href="%BASE_URL%assets/fonts/josefin-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="%BASE_URL%assets/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="%BASE_URL%assets/css/fonts.css">
+  <style>
+    @font-face { font-family: 'Cinzel'; font-style: normal; font-weight: 400; font-display: swap; src: url('%BASE_URL%assets/fonts/cinzel-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Josefin Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url('%BASE_URL%assets/fonts/josefin-sans-latin.woff2') format('woff2'); }
+  </style>
+
+  <!-- Preload LCP hero image (responsive) -->
+  <link rel="preload" as="image" href="%BASE_URL%assets/images/thumbs/banner-three.webp" imagesrcset="%BASE_URL%assets/images/thumbs/banner-three-320w.webp 320w, %BASE_URL%assets/images/thumbs/banner-three-640w.webp 640w, %BASE_URL%assets/images/thumbs/banner-three-768w.webp 768w, %BASE_URL%assets/images/thumbs/banner-three-1024w.webp 1024w" imagesizes="(max-width: 768px) 100vw, 50vw">
 
   <!-- Preload critical assets -->
   <link rel="preload" href="%BASE_URL%assets/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>

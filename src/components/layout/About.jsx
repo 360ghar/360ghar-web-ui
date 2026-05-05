@@ -45,7 +45,7 @@ const About = () => {
                                 
                                 <div className="about-box d-flex">
                                     <div className="about-box__icon">
-                                        <LazyImage src={aboutContent.icon} alt="" />
+                                        <LazyImage src={aboutContent.icon} alt="360Ghar expert guidance icon" />
                                     </div>
                                     <div className="about-box__content">
                                         <h6 className="about-box__title">{aboutContent.title}</h6>

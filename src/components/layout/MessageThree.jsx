@@ -28,7 +28,7 @@ const MessageThree = () => {
                                 <div className="contact-content__box">
                                     <div className=" d-flex align-items-center gap-3">
                                         <div className="contact-content__icon">
-                                            <LazyImage src={messageThreeContents.icon} alt=""/>
+                                            <LazyImage src={messageThreeContents.icon} alt="Owner support customer service icon"/>
                                         </div>
                                         <div className="contact-content__infos">
                                             <span className="contact-content__text">Owners, need help?</span> 

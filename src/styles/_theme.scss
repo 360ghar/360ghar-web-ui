@@ -103,8 +103,30 @@
    --border-color-light: #{$border-color};
    --border-color-dark: #{$border-color-dark};
 
-   // Background colors
-   --bg-light: #{$bg-light};
-   --bg-white: #{$bg-white};
-   --bg-dark: #{$bg-dark};
- }
+    // Background colors
+    --bg-light: #{$bg-light};
+    --bg-white: #{$bg-white};
+    --bg-dark: #{$bg-dark};
+  }
+
+// =============================================================================
+// Utility Classes
+// =============================================================================
+.bg-main {
+  background-color: var(--main-color) !important;
+}
+
+.text-main {
+  color: var(--main-color) !important;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--main-color) 0%, var(--main-color-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.border-main {
+  border-color: var(--main-color) !important;
+}

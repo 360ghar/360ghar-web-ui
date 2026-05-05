@@ -8,7 +8,7 @@ const CounterThree = () => {
     return (
         <>
             <section className="counter-three padding-y-120">
-                <LazyImage src={CounterBg} alt="" className="counter-three__bg"/>
+                <LazyImage src={CounterBg} alt="Decorative counter section background" className="counter-three__bg"/>
                 <div className="container container-two">
                     <div className="counter-three-wrapper">
                         {

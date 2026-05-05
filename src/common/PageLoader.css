@@ -1,223 +1,94 @@
-/* PageLoader - Enhanced 3D Rotating House Animation */
+/* PageLoader — House Reveal (lightweight, GPU-friendly, on-brand) */
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Root ── */
 .page-loader {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   min-height: 100vh;
   width: 100%;
   background: linear-gradient(135deg, #fafafa 0%, #f0f4f8 100%);
   position: relative;
   overflow: hidden;
+  contain: strict;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
-.page-loader::before {
-  content: '';
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Radial glow ── */
+.loader-glow {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:
-    radial-gradient(circle at 20% 80%, rgba(255, 107, 0, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(204, 85, 0, 0.05) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-/* Animated Background Circles */
-.loader-bg-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.bg-circle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.4;
-}
-
-.bg-circle--1 {
-  width: 400px;
-  height: 400px;
-  background: linear-gradient(135deg, var(--main-color-light) 0%, transparent 70%);
-  top: -100px;
-  right: -100px;
-  animation: floatCircle1 8s ease-in-out infinite;
-}
-
-.bg-circle--2 {
-  width: 300px;
-  height: 300px;
-  background: linear-gradient(135deg, var(--main-color) 0%, transparent 70%);
-  bottom: -50px;
-  left: -50px;
-  animation: floatCircle2 10s ease-in-out infinite;
-}
-
-.bg-circle--3 {
-  width: 200px;
-  height: 200px;
-  background: linear-gradient(135deg, var(--main-color-dark) 0%, transparent 70%);
   top: 50%;
   left: 50%;
+  width: 320px;
+  height: 320px;
   transform: translate(-50%, -50%);
-  animation: floatCircle3 12s ease-in-out infinite;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.12) 0%, transparent 70%);
+  animation: glowPulse 3s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
-@keyframes floatCircle1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-30px, 30px) scale(1.1); }
+@keyframes glowPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  50%       { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
 }
 
-@keyframes floatCircle2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(20px, -20px) scale(1.05); }
-}
-
-@keyframes floatCircle3 {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-  50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.5; }
-}
-
-.loader-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  z-index: 1;
-}
-
-/* 3D House Container */
-.house-wrapper {
+/* ── House + Pin container ── */
+.loader-center {
   position: relative;
-  width: 200px;
-  height: 200px;
-  perspective: 800px;
-}
-
-.house-3d {
-  position: absolute;
-  top: 50%;
-  left: 50%;
   width: 140px;
-  height: 140px;
-  transform: translate(-50%, -50%) rotateY(15deg);
-  animation: houseRotate 6s ease-in-out infinite;
-  transform-style: preserve-3d;
+  height: 160px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
-@keyframes houseRotate {
-  0%, 100% { transform: translate(-50%, -50%) rotateY(15deg) rotateX(0deg); }
-  25% { transform: translate(-50%, -50%) rotateY(-15deg) rotateX(5deg); }
-  50% { transform: translate(-50%, -50%) rotateY(-15deg) rotateX(0deg); }
-  75% { transform: translate(-50%, -50%) rotateY(15deg) rotateX(-5deg); }
-}
-
-.house-face {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
+/* House SVG */
 .house-svg {
-  width: 100%;
-  height: 100%;
+  width: 120px;
+  height: 120px;
   overflow: visible;
 }
 
-.house-body-path {
-  fill: rgba(255, 107, 0, 0.1);
-  stroke: var(--main-color);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  animation: bodyGlow 2s ease-in-out infinite;
+.house-path {
+  stroke-dasharray: 520;
+  stroke-dashoffset: 520;
+  animation: drawHouse 1.6s ease-out 0.2s forwards;
 }
 
-@keyframes bodyGlow {
-  0%, 100% { filter: drop-shadow(0 0 5px var(--main-color-light)); }
-  50% { filter: drop-shadow(0 0 15px var(--main-color)); }
+@keyframes drawHouse {
+  to { stroke-dashoffset: 0; }
 }
 
-.window {
-  fill: transparent;
-  stroke: var(--main-color);
-  stroke-width: 1.5;
-}
-
-.window--left,
-.window--right {
-  animation: windowGlow 2s ease-in-out infinite;
-}
-
-@keyframes windowGlow {
-  0%, 100% { fill: transparent; }
-  50% { fill: rgba(255, 107, 0, 0.3); }
-}
-
-.door-new {
-  fill: transparent;
-  stroke: var(--main-color);
-  stroke-width: 1.5;
-  animation: doorPulse 2s ease-in-out infinite;
-}
-
-@keyframes doorPulse {
-  0%, 100% { fill: transparent; }
-  50% { fill: rgba(255, 107, 0, 0.2); }
-}
-
-/* Roof */
-.house-roof {
+/* Pin */
+.pin-wrapper {
   position: absolute;
-  top: -15px;
+  top: -8px;
   left: 50%;
-  transform: translateX(-50%);
-  width: 160px;
-  height: 60px;
-  animation: roofFloat 3s ease-in-out infinite;
-}
-
-@keyframes roofFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-3px); }
-}
-
-.roof-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.roof-path {
-  fill: url(#roofGradient);
-  stroke: var(--main-color-dark);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 4px 8px rgba(255, 107, 0, 0.3));
-}
-
-/* Location Pin 3D */
-.location-pin-3d {
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 50px;
-  animation: pinFloat 2s ease-in-out infinite;
-}
-
-@keyframes pinFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-8px); }
+  width: 28px;
+  height: 38px;
+  transform: translateX(-50%) translateY(-20px);
+  opacity: 0;
+  animation: pinDrop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1.4s forwards;
 }
 
 .pin-svg {
@@ -226,170 +97,30 @@
   overflow: visible;
 }
 
-.pin-path {
-  fill: url(#pinGradientNew);
-  filter: drop-shadow(0 4px 10px rgba(255, 107, 0, 0.4));
-}
-
 .pin-dot {
-  fill: white;
+  animation: pinDotPulse 2s ease-in-out 2s infinite;
 }
 
-.pin-glow {
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 10px;
-  background: radial-gradient(ellipse, var(--main-color-light) 0%, transparent 70%);
-  opacity: 0.6;
-  animation: glowPulse 1.5s ease-in-out infinite;
+@keyframes pinDrop {
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
 }
 
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
-  50% { opacity: 0.8; transform: translateX(-50%) scale(1.2); }
+@keyframes pinDotPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
 }
 
-/* Orbiting Elements */
-.orbit {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border: 1px dashed rgba(255, 107, 0, 0.2);
-  border-radius: 50%;
-  animation: orbitRotate 8s linear infinite;
-}
-
-.orbit--1 {
-  width: 180px;
-  height: 180px;
-  transform: translate(-50%, -50%) rotate(0deg);
-  animation-duration: 10s;
-}
-
-.orbit--2 {
-  width: 220px;
-  height: 220px;
-  transform: translate(-50%, -50%) rotate(60deg);
-  animation-duration: 14s;
-  animation-direction: reverse;
-}
-
-.orbit--3 {
-  width: 260px;
-  height: 260px;
-  transform: translate(-50%, -50%) rotate(120deg);
-  animation-duration: 18s;
-}
-
-@keyframes orbitRotate {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-.orbit-dot {
-  position: absolute;
-  top: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 8px;
-  background: var(--main-color);
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--main-color);
-}
-
-.orbit--1 .orbit-dot { animation: orbitDotPulse 1s ease-in-out infinite; }
-.orbit--2 .orbit-dot { animation: orbitDotPulse 1.2s ease-in-out infinite; animation-delay: 0.3s; }
-.orbit--3 .orbit-dot { animation: orbitDotPulse 1.4s ease-in-out infinite; animation-delay: 0.6s; }
-
-@keyframes orbitDotPulse {
-  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
-  50% { transform: translateX(-50%) scale(1.5); opacity: 0.7; }
-}
-
-/* Floating Particles 3D */
-.particles-3d {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  perspective: 500px;
-}
-
-.particle-3d {
-  position: absolute;
-  background: linear-gradient(135deg, var(--main-color) 0%, var(--main-color-light) 100%);
-  border-radius: 50%;
-  opacity: 0;
-  animation: particleFloat3d 4s ease-in-out infinite;
-}
-
-.particle-3d--1 {
-  width: 8px;
-  height: 8px;
-  top: 20%;
-  left: 10%;
-  animation-delay: 0s;
-}
-
-.particle-3d--2 {
-  width: 6px;
-  height: 6px;
-  top: 30%;
-  right: 15%;
-  animation-delay: 0.5s;
-}
-
-.particle-3d--3 {
-  width: 10px;
-  height: 10px;
-  bottom: 25%;
-  left: 20%;
-  animation-delay: 1s;
-}
-
-.particle-3d--4 {
-  width: 5px;
-  height: 5px;
-  bottom: 35%;
-  right: 10%;
-  animation-delay: 1.5s;
-}
-
-.particle-3d--5 {
-  width: 7px;
-  height: 7px;
-  top: 50%;
-  left: 5%;
-  animation-delay: 2s;
-}
-
-@keyframes particleFloat3d {
-  0% { opacity: 0; transform: translateZ(0) translateY(0) scale(0.5); }
-  20% { opacity: 0.8; }
-  50% { opacity: 0.5; transform: translateZ(50px) translateY(-30px) scale(1.2); }
-  80% { opacity: 0.3; }
-  100% { opacity: 0; transform: translateZ(100px) translateY(0) scale(0.8); }
-}
-
-/* Loader Text */
+/* ── Text ── */
 .loader-text {
   text-align: center;
-  opacity: 0;
-  animation: fadeInUp 0.6s ease-out 0.5s forwards;
+  margin-top: 1.5rem;
+  z-index: 1;
 }
 
-@keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-.brand-name-3d {
+.brand-name {
   font-family: 'Cinzel', serif;
   font-size: 2.5rem;
   display: flex;
@@ -398,6 +129,8 @@
   gap: 0.15em;
   margin: 0 0 0.5rem 0;
   letter-spacing: 0.02em;
+  opacity: 0;
+  animation: fadeUp 0.6s ease-out 0.4s forwards;
 }
 
 .brand-number {
@@ -405,7 +138,6 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 30px rgba(255, 107, 0, 0.3);
 }
 
 .brand-ghar {
@@ -413,127 +145,117 @@
   font-weight: 600;
 }
 
-.loader-message-3d {
+.brand-message {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 1rem;
   color: var(--text-secondary);
   margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  min-height: 1.5em;
+  opacity: 0;
+  animation: fadeUp 0.5s ease-out 0.7s forwards;
 }
 
-/* Loading dots 3D */
-.loading-dots-3d {
-  display: inline-flex;
-  gap: 4px;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.loading-dots-3d span {
-  width: 5px;
-  height: 5px;
-  background: var(--main-color);
-  border-radius: 50%;
-  animation: dotPulse 1.4s ease-in-out infinite;
-}
-
-.loading-dots-3d span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.loading-dots-3d span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes dotPulse {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
-  40% { transform: scale(1); opacity: 1; }
-}
-
-/* Progress bar 3D */
-.loader-progress-3d {
+/* ── Progress bar ── */
+.loader-progress {
   width: 200px;
   height: 4px;
-  background: rgba(255, 107, 0, 0.15);
+  background: rgba(255, 107, 0, 0.12);
   border-radius: 4px;
   overflow: hidden;
-  margin-top: 1rem;
-  position: relative;
+  margin: 1rem auto 0;
+  opacity: 0;
+  animation: fadeUp 0.5s ease-out 0.9s forwards;
 }
 
-.loader-progress-3d::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
-  animation: shimmer 2s infinite;
-}
-
-.loader-progress-bar-3d {
+.loader-progress-bar {
   height: 100%;
+  width: 40%;
   background: linear-gradient(90deg, var(--main-color) 0%, var(--main-color-light) 50%, var(--main-color) 100%);
   background-size: 200% 100%;
   border-radius: 4px;
-  animation: progressSlide 1.5s ease-in-out infinite, gradientShift 2s linear infinite;
+  animation: progressSlide 2s ease-in-out infinite, gradientShift 1.5s linear infinite;
 }
 
 @keyframes progressSlide {
-  0% { width: 0%; margin-left: 0; }
-  50% { width: 70%; margin-left: 0; }
-  100% { width: 0%; margin-left: 100%; }
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(150%); }
+  100% { transform: translateX(-100%); }
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
+  0%   { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .page-loader,
+  .page-loader * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loader-glow {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .house-path {
+    stroke-dashoffset: 0;
+  }
+
+  .pin-wrapper {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .brand-name,
+  .brand-message,
+  .loader-progress {
+    opacity: 1;
+    transform: none;
+  }
+
+  .loader-progress-bar {
+    animation: none;
+    transform: none;
+    width: 50%;
+  }
 }
 
-/* Responsive adjustments */
+/* ── Responsive ── */
 @media (max-width: 576px) {
-  .house-wrapper {
-    width: 160px;
-    height: 160px;
-  }
-
-  .house-3d {
+  .loader-center {
     width: 110px;
-    height: 110px;
+    height: 130px;
   }
 
-  .house-roof {
-    width: 130px;
-    height: 50px;
-    top: -12px;
+  .house-svg {
+    width: 100px;
+    height: 100px;
   }
 
-  .location-pin-3d {
-    width: 32px;
-    height: 40px;
-    top: -24px;
+  .pin-wrapper {
+    width: 22px;
+    height: 30px;
+    top: -4px;
   }
 
-  .orbit--1 { width: 140px; height: 140px; }
-  .orbit--2 { width: 170px; height: 170px; }
-  .orbit--3 { width: 200px; height: 200px; }
-
-  .brand-name-3d {
+  .brand-name {
     font-size: 2rem;
   }
 
-  .loader-message-3d {
+  .brand-message {
     font-size: 0.9rem;
   }
 
-  .loader-progress-3d {
+  .loader-progress {
     width: 160px;
   }
 }

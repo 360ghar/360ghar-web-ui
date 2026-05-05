@@ -9,7 +9,7 @@ const PropertyTypeThreeItem = ({ propertyTypeItem }) => {
         <>
             <div className="property-type-three-item d-flex align-items-start">
                 <span className="property-type-three-item__icon flex-shrink-0">
-                    <LazyImage src={icon} alt=""/>
+                    <LazyImage src={icon} alt={`${title} icon`}/>
                 </span>
                 <div className="property-type-three-item__content">
                     <h6 className="property-type-three-item__title">{title}</h6>

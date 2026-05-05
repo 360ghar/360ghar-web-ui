@@ -1,0 +1,29 @@
+{
+  "protocol_version": "1.0",
+  "services": [
+    {
+      "name": "property_listings",
+      "type": "informational",
+      "description": "Browse and search verified property listings"
+    },
+    {
+      "name": "visit_scheduling",
+      "type": "informational",
+      "description": "Schedule property visits with owners"
+    },
+    {
+      "name": "property_tools",
+      "type": "informational",
+      "description": "Free real estate calculators and analysis tools"
+    }
+  ],
+  "capabilities": {
+    "content_types": ["text/html", "application/json", "text/markdown"],
+    "authentication": ["openid-connect"]
+  },
+  "endpoints": {
+    "api": "https://api.360ghar.com/api/v1",
+    "mcp": "https://api.360ghar.com/mcp",
+    "docs": "https://360ghar.com/for-ai"
+  }
+}

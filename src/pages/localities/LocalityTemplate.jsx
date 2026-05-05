@@ -8,7 +8,7 @@ import OffCanvas from '../../common/layout/OffCanvas';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateLocalityStructuredData, generateEeaSignals } from '../../seo/structuredData';
 import PropertyTwo from '../../components/property/PropertyTwo';
 import Cta from '../../components/ui/Cta';
 import LocalityHero from '../../components/locality/LocalityHero';
@@ -16,6 +16,7 @@ import LocalityAmenities from '../../components/locality/LocalityAmenities';
 import ConnectivitySection from '../../components/locality/ConnectivitySection';
 import NearbyLocalities from '../../components/locality/NearbyLocalities';
 import LocalityFaq, { defaultFaqBuilder } from '../../components/locality/LocalityFaq';
+import { getLocalityLandingLinks } from '../../utils/internalLinks';
 
 let localitiesDataPromise = null;
 let cachedLocalitiesData = null;
@@ -608,17 +609,14 @@ const LocalityTemplate = () => {
 
     const localityStructuredData = [
         generateBreadcrumbStructuredData(breadcrumbs),
-        {
-            '@type': 'Place',
-            name: `${computed.localityName}, ${computed.city}`,
-            description: computed.description,
-            address: {
-                '@type': 'PostalAddress',
-                addressLocality: computed.city,
-                addressRegion: 'Haryana',
-                addressCountry: 'IN'
-            }
-        },
+        generateLocalityStructuredData({
+            name: computed.localityName,
+            city: computed.city,
+            slug: `${computed.localitySlug}-gurgaon`,
+            lat: localityInfo?.geo?.lat,
+            lng: localityInfo?.geo?.lng,
+            entityType: computed.entityType,
+        }),
         {
             '@type': 'WebPage',
             name: `${computed.localityName}, ${computed.city}`,
@@ -635,15 +633,16 @@ const LocalityTemplate = () => {
                     text: faq.answer
                 }
             }))
-        }
+        },
+        ...generateEeaSignals({ verifiedCount: 500 }),
     ];
 
     return (
         <>
             <SEO
-                title={localityInfo?.seo?.title || `${computed.localityName}, ${computed.city} | Real Estate Guide | 360Ghar`}
-                description={localityInfo?.seo?.description || computed.description}
-                keywords={localityInfo?.seo?.keywords || `${computed.localityName} ${computed.city} real estate, properties in ${computed.localityName}`}
+                title={localityInfo?.seo?.title || `${computed.localityName} ${computed.city} - Property Prices, Reviews & Locality Guide | 360 Ghar`}
+                description={localityInfo?.seo?.description || `Explore ${computed.localityName}, ${computed.city} — verified property listings, price trends, amenities, connectivity, and locality reviews. Find your next home with 360Ghar.`}
+                keywords={localityInfo?.seo?.keywords || `${computed.localityName} ${computed.city} real estate, properties in ${computed.localityName}, ${computed.localityName} prices, ${computed.localityName} reviews, flats in ${computed.localityName}`}
                 canonical={`/locality/${computed.localitySlug}-gurgaon`}
                 image={siteMetadata.defaultOgImage}
                 type="website"
@@ -672,6 +671,21 @@ const LocalityTemplate = () => {
                     stats={computed.heroStats}
                     marketStatus={computed.marketStatus.label}
                 />
+
+                {/* WhatsApp Share */}
+                <section className="pt-20 pb-0">
+                    <div className="container container-two text-end">
+                        {(() => {
+                            const shareText = `Check out ${computed.localityName} on 360Ghar - verified properties with 360° virtual tours`;
+                            const shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + window.location.origin + window.location.pathname + '?utm_source=whatsapp&utm_medium=share&utm_campaign=locality_share')}`;
+                            return (
+                                <a href={shareUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-success">
+                                    <i className="fab fa-whatsapp me-1" />Share
+                                </a>
+                            );
+                        })()}
+                    </div>
+                </section>
 
                 <section className="locality-anchor-strip">
                     <div className="container container-two">
@@ -755,35 +769,24 @@ const LocalityTemplate = () => {
 
                                 <LocalityFaq localityName={computed.localityName} entityType={computed.entityType} />
 
-                                {/* Browse Properties — cross-link to landing page */}
+                                {/* Browse Properties — cross-link to landing pages using centralized utility */}
                                 <section className="locality-section mt-5">
                                   <span className="locality-section__eyebrow">Explore</span>
                                   <h2 className="locality-section__title mb-3">Browse Properties in {computed.city}</h2>
                                   <div className="d-flex flex-wrap gap-2">
-                                    <I18nLink
-                                      to={`/${canonicalCitySlug}/buy/flats`}
-                                      className="btn btn-outline-main btn-sm rounded-pill"
-                                    >
-                                      Flats for Sale in {computed.city}
-                                    </I18nLink>
-                                    <I18nLink
-                                      to={`/${canonicalCitySlug}/rent/flats`}
-                                      className="btn btn-outline-main btn-sm rounded-pill"
-                                    >
-                                      Flats for Rent in {computed.city}
-                                    </I18nLink>
-                                    <I18nLink
-                                      to={`/${canonicalCitySlug}/buy/flats/2-bhk`}
-                                      className="btn btn-outline-main btn-sm rounded-pill"
-                                    >
-                                      2 BHK in {computed.city}
-                                    </I18nLink>
-                                    <I18nLink
-                                      to={`/${canonicalCitySlug}/buy/flats/3-bhk`}
-                                      className="btn btn-outline-main btn-sm rounded-pill"
-                                    >
-                                      3 BHK in {computed.city}
-                                    </I18nLink>
+                                    {getLocalityLandingLinks({
+                                      citySlug: canonicalCitySlug,
+                                      localityName: computed.localityName,
+                                      limit: 6,
+                                    }).map((link) => (
+                                      <I18nLink
+                                        key={link.to}
+                                        to={link.to}
+                                        className="btn btn-outline-main btn-sm rounded-pill"
+                                      >
+                                        {link.label}
+                                      </I18nLink>
+                                    ))}
                                     <I18nLink
                                       to="/properties"
                                       className="btn btn-outline-main btn-sm rounded-pill"
@@ -827,6 +830,10 @@ const LocalityTemplate = () => {
                                                 <I18nLink to={`/${canonicalCitySlug}/buy/flats`} className="btn btn-outline-main btn-sm rounded-pill">
                                                     <i className="fas fa-building me-1" />
                                                     Flats for Sale in {computed.city}
+                                                </I18nLink>
+                                                <I18nLink to={`/${canonicalCitySlug}`} className="btn btn-outline-main btn-sm rounded-pill">
+                                                    <i className="fas fa-city me-1" />
+                                                    {computed.city} Real Estate Hub
                                                 </I18nLink>
                                             </div>
                                         </article>

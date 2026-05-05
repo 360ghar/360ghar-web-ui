@@ -1,0 +1,155 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "360Ghar API",
+    "description": "Real estate platform API for property search, visit scheduling, and management",
+    "version": "1.0.0",
+    "contact": {
+      "name": "360Ghar",
+      "email": "info@360ghar.com",
+      "url": "https://360ghar.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.360ghar.com/api/v1",
+      "description": "Production"
+    }
+  ],
+  "x-service-info": {
+    "categories": ["real_estate", "property_search", "tools"]
+  },
+  "paths": {
+    "/properties/": {
+      "get": {
+        "summary": "Search properties",
+        "description": "Search and filter verified property listings",
+        "operationId": "searchProperties",
+        "tags": ["Properties"],
+        "parameters": [
+          { "name": "q", "in": "query", "schema": { "type": "string" }, "description": "Text search query" },
+          { "name": "city", "in": "query", "schema": { "type": "string" }, "description": "City filter" },
+          { "name": "purpose", "in": "query", "schema": { "type": "string", "enum": ["buy", "rent", "pg"] } },
+          { "name": "price_min", "in": "query", "schema": { "type": "number" } },
+          { "name": "price_max", "in": "query", "schema": { "type": "number" } },
+          { "name": "bedrooms_min", "in": "query", "schema": { "type": "integer" } },
+          { "name": "bedrooms_max", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Paginated property results" }
+        },
+        "x-payment-info": {
+          "intent": "charge",
+          "method": "free",
+          "amount": 0,
+          "currency": "INR",
+          "description": "Free property search"
+        }
+      }
+    },
+    "/properties/{id}/": {
+      "get": {
+        "summary": "Get property details",
+        "operationId": "getPropertyById",
+        "tags": ["Properties"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Property details" }
+        },
+        "x-payment-info": {
+          "intent": "charge",
+          "method": "free",
+          "amount": 0,
+          "currency": "INR"
+        }
+      }
+    },
+    "/visits/": {
+      "get": {
+        "summary": "List visits",
+        "operationId": "listVisits",
+        "tags": ["Visits"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "List of visits" }
+        }
+      },
+      "post": {
+        "summary": "Schedule a visit",
+        "operationId": "scheduleVisit",
+        "tags": ["Visits"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["property_id", "scheduled_date"],
+                "properties": {
+                  "property_id": { "type": "string" },
+                  "scheduled_date": { "type": "string", "format": "date" },
+                  "special_requirements": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Visit scheduled" }
+        },
+        "x-payment-info": {
+          "intent": "charge",
+          "method": "free",
+          "amount": 0,
+          "currency": "INR",
+          "description": "Free visit scheduling"
+        }
+      }
+    },
+    "/vastu/analyze": {
+      "post": {
+        "summary": "Analyze floor plan for Vastu compliance",
+        "operationId": "analyzeVastu",
+        "tags": ["Tools"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["image"],
+                "properties": {
+                  "image": { "type": "string", "format": "binary" },
+                  "north_direction": { "type": "string", "enum": ["up", "down", "left", "right", "unknown"] }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Vastu analysis result" }
+        },
+        "x-payment-info": {
+          "intent": "charge",
+          "method": "free",
+          "amount": 0,
+          "currency": "INR",
+          "description": "Free AI-powered Vastu analysis"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Supabase JWT access token"
+      }
+    }
+  }
+}

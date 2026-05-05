@@ -1,6 +1,6 @@
 
 // Banner Three
-import BannerThreeThumb from '/assets/images/thumbs/banner-three.png'
+import BannerThreeThumb from '/assets/images/thumbs/banner-three.webp'
 export const bannerThreeContent = {
     subtitle: 'INDIA\'S FIRST AI + VR REAL ESTATE PLATFORM',
     title: 'India\'s VR-First Way to ',

@@ -48,3 +48,6 @@ scripts/prerender-routes.json
 scripts/reports/
 src/data/localities.json
 src/data/localities-index.json
+
+# Repomix output
+repomix-output.*

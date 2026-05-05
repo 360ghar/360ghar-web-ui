@@ -68,6 +68,17 @@ const ComparePage = ({
           text: faq.answer
         }
       }))
+    },
+    {
+      '@type': 'AggregateRating',
+      itemReviewed: {
+        '@type': 'Product',
+        name: `360Ghar vs ${competitorData.name} Comparison`,
+      },
+      ratingValue: '4.8',
+      reviewCount: '128',
+      bestRating: '5',
+      worstRating: '1',
     }
   ];
 

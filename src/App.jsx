@@ -10,7 +10,7 @@ import PageLoader from './common/PageLoader';
 import ScrollToTop from './common/layout/ScrollToTop';
 import SEO from './common/SEO';
 import UIScrollLockEffect from './common/UIScrollLockEffect';
-import { realEstateStructuredData } from './seo/structuredData';
+import { realEstateStructuredData, generateSpeakableStructuredData } from './seo/structuredData';
 
 const Home = lazy(() => import('./pages/Home'));
 const PropertySidebar = lazy(() => import('./pages/properties/PropertySidebar'));
@@ -43,6 +43,7 @@ const DesignBlueprint = lazy(() => import('./pages/tools/DesignBlueprint'));
 const VastuChecker = lazy(() => import('./pages/tools/VastuChecker'));
 const AIDesignStudio = lazy(() => import('./pages/tools/AIDesignStudio'));
 const Landing = lazy(() => import('./pages/landing/Landing'));
+const CityHub = lazy(() => import('./pages/landing/CityHub'));
 const GurugramGuide = lazy(() => import('./pages/core/GurugramGuide'));
 const PropertyInvestment = lazy(() => import('./pages/core/PropertyInvestment'));
 const ForAI = lazy(() => import('./pages/core/ForAI'));
@@ -54,7 +55,17 @@ const LocalitiesDirectory = lazy(() => import('./pages/localities/LocalitiesDire
 const ReferAndEarn = lazy(() => import('./pages/core/ReferAndEarn'));
 const Careers = lazy(() => import('./pages/core/Careers'));
 const CareerDetails = lazy(() => import('./pages/core/CareerDetails'));
+const CelebrityHomesHub = lazy(() => import('./pages/core/CelebrityHomesHub'));
+const NriPropertyGuide = lazy(() => import('./pages/core/NriPropertyGuide'));
+const ListPropertyFree = lazy(() => import('./pages/core/ListPropertyFree'));
+const Glossary = lazy(() => import('./pages/core/Glossary'));
+const FakeListingChecker = lazy(() => import('./pages/tools/FakeListingChecker'));
 const ChatBot = lazy(() => import('./components/chatbot/ChatBot'));
+
+const NearOfficePage = lazy(() => import('./pages/landing/NearOfficePage'));
+const SocietyLanding = lazy(() => import('./pages/localities/SocietyLanding'));
+const VirtualTourPage = lazy(() => import('./pages/properties/VirtualTourPage'));
+const PriceIndexPage = lazy(() => import('./pages/data-hub/PriceIndexPage'));
 
 const VsNoBroker = lazy(() => import('./pages/compare/vs-nobroker'));
 const VsMagicBricks = lazy(() => import('./pages/compare/vs-magicbricks'));
@@ -79,6 +90,7 @@ const StampDutyCalculator = lazy(() => import('./pages/data-hub/StampDutyCalcula
 const ReraProjectDirectory = lazy(() => import('./pages/data-hub/ReraProjectDirectory'));
 const BankAuctions = lazy(() => import('./pages/data-hub/BankAuctions'));
 const BankAuctionDetail = lazy(() => import('./pages/data-hub/BankAuctionDetail'));
+const AuctionSources = lazy(() => import('./pages/data-hub/AuctionSources'));
 const VerifyOwnership = lazy(() => import('./pages/data-hub/VerifyOwnership'));
 const ZoneChecker = lazy(() => import('./pages/data-hub/ZoneChecker'));
 const ZoneCheckerDetail = lazy(() => import('./pages/data-hub/ZoneCheckerDetail'));
@@ -90,6 +102,7 @@ const propertyRoutes = [
   { path: '/properties', element: <Property /> },
   { path: '/property-sidebar', element: <PropertySidebar /> },
   { path: '/property/:id', element: <PropertyDetails /> },
+  { path: '/property/:id/virtual-tour', element: <VirtualTourPage /> },
   { path: '/add-new-listing', element: <AddListing /> },
   { path: '/post-property', element: <PostProperty /> },
   { path: '/map-location', element: <MapLocation /> },
@@ -119,8 +132,13 @@ const contentRoutes = [
   { path: '/refer-and-earn', element: <ReferAndEarn /> },
   { path: '/for-ai', element: <ForAI /> },
   { path: '/ai-agent', element: <AIAgent /> },
+  { path: '/celebrity-homes', element: <CelebrityHomesHub /> },
+  { path: '/nri-property-guide', element: <NriPropertyGuide /> },
+  { path: '/list-property-free', element: <ListPropertyFree /> },
+  { path: '/glossary', element: <Glossary /> },
   { path: '/localities', element: <LocalitiesDirectory /> },
   { path: '/locality/:slug', element: <LocalityTemplate /> },
+  { path: '/locality/:slug/:intent', element: <SocietyLanding /> },
 ];
 
 const toolRoutes = [
@@ -133,6 +151,7 @@ const toolRoutes = [
   { path: '/design-blueprint', element: <DesignBlueprint /> },
   { path: '/vastu-checker', element: <VastuChecker /> },
   { path: '/ai-design-studio', element: <AIDesignStudio /> },
+  { path: '/check-fake-listing', element: <FakeListingChecker /> },
 ];
 
 const dataHubRoutes = [
@@ -142,12 +161,14 @@ const dataHubRoutes = [
   { path: '/rera-projects', element: <ReraProjectDirectory /> },
   { path: '/bank-auctions', element: <BankAuctions /> },
   { path: '/bank-auctions/:id', element: <BankAuctionDetail /> },
+  { path: '/auction-sources', element: <AuctionSources /> },
   { path: '/verify-ownership', element: <VerifyOwnership /> },
   { path: '/zone-checker', element: <ZoneChecker /> },
   { path: '/zone-checker/:slug', element: <ZoneCheckerDetail /> },
   { path: '/regulatory-updates', element: <RegulatoryUpdates /> },
   { path: '/builder-reputation', element: <BuilderReputation /> },
   { path: '/builder-reputation/:slug', element: <BuilderReputationDetail /> },
+  { path: '/price-index/:citySlug', element: <PriceIndexPage /> },
 ];
 
 const comparisonRoutes = [
@@ -177,10 +198,12 @@ const careersRoutes = [
 ];
 
 const programmaticRoutes = [
+  { path: '/near/:slug', element: <NearOfficePage /> },
   { path: '/:citySlug/:intent/:type/:bhk', element: <FacetLanding /> },
   { path: '/:citySlug/:intent/:type/budget/:budget', element: <FacetLanding /> },
   { path: '/:citySlug/:intent/:type/amenity/:amenity', element: <FacetLanding /> },
   { path: '/:citySlug/:intent/:type', element: <Landing /> },
+  { path: '/:citySlug', element: <CityHub /> },
 ];
 
 const routeGroups = [
@@ -228,9 +251,20 @@ function App() {
     initializeAuth();
   }, [initializeLocation, initializeAuth]);
 
-  // Global schemas applied to every page
+  // Global schemas applied to every page for maximum AI discoverability
   const globalSchemas = [
     realEstateStructuredData.organization,
+    realEstateStructuredData.website,
+    realEstateStructuredData.localBusiness,
+    realEstateStructuredData.knowledgePanel,
+    realEstateStructuredData.mobileApplication,
+    realEstateStructuredData.person,
+    realEstateStructuredData.podcast,
+    realEstateStructuredData.course,
+    realEstateStructuredData.qaPage,
+    generateSpeakableStructuredData({
+      cssSelectors: ['.speakable-summary', '.speakable-highlights', 'h1', 'h2'],
+    }),
   ];
 
   return (

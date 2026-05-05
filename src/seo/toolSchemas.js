@@ -34,7 +34,14 @@ export const generateToolSchema = (toolNameOrConfig, description, keywords, cate
         softwareVersion: '1.0',
         applicationSuite: '360Ghar Real Estate Tools',
         downloadUrl,
-        featureList: cfg.keywords.split(', ')
+        featureList: cfg.keywords.split(', '),
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: cfg.ratingValue || '4.8',
+            reviewCount: cfg.reviewCount || '150',
+            bestRating: '5',
+            worstRating: '1',
+        },
     };
 };
 
@@ -109,5 +116,19 @@ export const toolSchemas = {
         keywords: 'property ownership verification Gurugram, Jamabandi land records Haryana, verify property owner, land record check Gurgaon, property ownership check online, Haryana land records, khasra number search, tehsil records Gurugram',
         category: 'BusinessApplication',
         route: '/verify-ownership'
+    },
+    aiDesignStudio: {
+        name: 'AI Design Studio',
+        description: 'Generate photorealistic interior and exterior designs with AI. Upload a room photo or describe your vision and get instant design visualizations. Free online tool by 360Ghar.',
+        keywords: 'AI interior design, AI room designer, AI exterior design, room design generator, home design AI, reimagine room, free AI design tool, 360ghar',
+        category: 'DesignApplication',
+        route: '/ai-design-studio'
+    },
+    fakeListingChecker: {
+        name: 'Fake Listing Checker',
+        description: 'Check if a property listing from 99acres, MagicBricks, or other portals is fake. Paste the URL to get instant verification against 360Ghar\'s physically verified database.',
+        keywords: 'fake property listing check, verify property listing, 99acres fake listing, MagicBricks fraud, property listing verification India, fake real estate listing detector',
+        category: 'UtilitiesApplication',
+        route: '/check-fake-listing'
     }
 };

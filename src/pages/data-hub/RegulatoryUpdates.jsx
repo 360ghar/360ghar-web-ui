@@ -5,12 +5,35 @@ import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
 import Pagination from '../../common/ui/Pagination';
 import GazetteItem from '../../components/data-hub/GazetteItem';
 import { dataHubService } from '../../services/dataHubService';
 
 const PAGE_LIMIT = 20;
+
+const FAQS = [
+  {
+    question: 'What are Haryana gazette notifications for real estate?',
+    answer: 'Haryana gazette notifications are official government publications that announce changes in laws, rules, and policies affecting real estate. These include circle rate revisions, land acquisition notices, CLU (Change of Land Use) policy changes, building code amendments, and RERA rule modifications. Once published in the gazette, these changes have legal force and must be followed by all stakeholders.',
+  },
+  {
+    question: 'How does a CLU notification affect property value?',
+    answer: 'A CLU (Change of Land Use) notification can significantly affect property value. When agricultural or institutional land is approved for residential or commercial use, property values typically increase substantially because the land can now be developed for higher-value purposes. Conversely, if a CLU is denied or revoked, it can decrease property value. Investors and developers closely monitor CLU notifications for investment opportunities.',
+  },
+  {
+    question: 'What recent policy changes have affected Gurugram real estate?',
+    answer: 'Recent policy changes affecting Gurugram real estate include revisions to the Haryana Building Code, updates to the Affordable Housing Policy, amendments to the Deen Dayal Jan Awas Yojna (DDJAY) plot sizes, and changes in the licensing fee structure for commercial and mixed-use developments. The government has also eased conversion norms for commercial activities along designated roads. Check our regulatory updates above for the latest notifications.',
+  },
+  {
+    question: 'Where can I find official Haryana real estate regulations?',
+    answer: 'Official Haryana real estate regulations can be found on the Department of Town and Country Planning (DTCP) website (tcpharyana.gov.in), the HRERA website (hrera.org.in), the Haryana Revenue Department for stamp duty and circle rates, and the India E-Gazette portal (egazette.nic.in). You can also check our Regulatory Updates page for curated notifications specific to Gurugram real estate.',
+  },
+  {
+    question: 'How can I stay updated on Haryana real estate regulatory changes?',
+    answer: 'To stay updated: (1) Bookmark the HRERA and DTCP websites for project and zoning updates. (2) Subscribe to the India E-Gazette for official notifications. (3) Follow our Regulatory Updates page on 360Ghar, where we curate and explain notifications relevant to Gurugram real estate. (4) Set up Google Alerts for key terms like "HRERA notification" or "Gurugram circle rate revision". (5) Consult a real estate lawyer for significant regulatory changes affecting your property.',
+  },
+];
 
 const RegulatoryUpdates = () => {
   const { t } = useTranslation('data-hub');
@@ -20,6 +43,7 @@ const RegulatoryUpdates = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const totalPages = Math.ceil(total / PAGE_LIMIT);
 
@@ -69,6 +93,7 @@ const RegulatoryUpdates = () => {
             description: 'Official notifications from the Haryana Government affecting real estate in Gurugram.',
             url: 'https://360ghar.com/regulatory-updates',
           },
+          generateFaqStructuredData(FAQS),
         ]}
       />
       <OffCanvas />
@@ -157,6 +182,26 @@ const RegulatoryUpdates = () => {
                 />
               </>
             )}
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="pb-60">
+          <div className="container">
+            <h2 className="fs-24 fw-600 mb-20">Frequently Asked Questions</h2>
+            <div className="accordion">
+              {FAQS.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div className="accordion-item border-0 border-bottom" key={faq.question}>
+                    <h3 className="accordion-header" id={`dhFaqHeading${idx}`}>
+                      <button className={`accordion-button ${isOpen ? '' : 'collapsed'}`} type="button" aria-expanded={isOpen} onClick={() => setOpenFaqIndex(cur => cur === idx ? -1 : idx)}>{faq.question}</button>
+                    </h3>
+                    <div className={`accordion-collapse collapse ${isOpen ? 'show' : ''}`}><div className="accordion-body text-muted">{faq.answer}</div></div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 

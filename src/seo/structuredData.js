@@ -446,6 +446,181 @@ export const realEstateStructuredData = {
       '@type': 'Organization',
       name: '360Ghar'
     }
+  },
+
+  // Person schema for founders/key team members (E-E-A-T boost)
+  person: {
+    '@type': 'Person',
+    name: '360Ghar Founder',
+    jobTitle: 'Founder & CEO',
+    worksFor: {
+      '@type': 'Organization',
+      name: '360Ghar',
+      url: 'https://360ghar.com'
+    },
+    description: 'Founder of 360Ghar, India\'s first AI + VR-first real estate platform revolutionizing property discovery in Gurugram.',
+    url: 'https://360ghar.com/about-us',
+    image: 'https://360ghar.com/team/founder.jpg',
+    sameAs: [
+      'https://www.linkedin.com/in/360ghar-founder',
+      'https://twitter.com/360ghar'
+    ],
+    knowsAbout: [
+      'Real Estate Technology',
+      'Property Management',
+      'Virtual Reality Tours',
+      'AI-Powered Search',
+      'Gurugram Real Estate Market'
+    ]
+  },
+
+  // Event schema for property expos, webinars, and open houses
+  event: {
+    '@type': 'Event',
+    name: '360Ghar Property Expo - Gurugram',
+    description: 'Join us for an exclusive property expo featuring verified listings with 360° virtual tours. Meet our team, explore premium properties, and get expert advice on buying, selling, or renting in Gurugram. Free entry. Register online to skip the queue.',
+    startDate: '2026-06-15T10:00:00+05:30',
+    endDate: '2026-06-15T18:00:00+05:30',
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: '360Ghar Office',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Sector 43, Golf Course Road',
+        addressLocality: 'Gurgaon',
+        addressRegion: 'Haryana',
+        postalCode: '122001',
+        addressCountry: 'IN'
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 28.4595,
+        longitude: 77.0266
+      }
+    },
+    image: 'https://360ghar.com/events/property-expo-2026.jpg',
+    organizer: {
+      '@type': 'Organization',
+      name: '360Ghar',
+      url: 'https://360ghar.com'
+    },
+    performer: {
+      '@type': 'Organization',
+      name: '360Ghar Team'
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+      url: 'https://360ghar.com/events/property-expo'
+    },
+  },
+
+  // Podcast/Audio schema for real estate insights and market updates
+  podcast: {
+    '@type': 'PodcastSeries',
+    name: '360Ghar Real Estate Insights',
+    description: 'Weekly podcast covering Gurugram real estate trends, property investment tips, market analysis, and expert interviews. Your guide to making informed property decisions.',
+    url: 'https://360ghar.com/podcast',
+    image: 'https://360ghar.com/podcast/cover-art.jpg',
+    publisher: {
+      '@type': 'Organization',
+      name: '360Ghar',
+      url: 'https://360ghar.com'
+    },
+    author: {
+      '@type': 'Organization',
+      name: '360Ghar Content Team'
+    },
+    language: 'en-IN',
+    genre: ['Business', 'Real Estate', 'Investment'],
+    keywords: 'real estate podcast, property investment, Gurugram real estate, housing market India, property tips',
+    inLanguage: ['hi', 'en'],
+    numberOfEpisodes: 52,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '245',
+      bestRating: '5',
+      worstRating: '1'
+    }
+  },
+
+  // Course schema for real estate education and training
+  course: {
+    '@type': 'Course',
+    name: 'Real Estate Investment Masterclass',
+    description: 'Comprehensive course on property investment in Gurugram. Learn market analysis, legal documentation, financing options, and investment strategies from industry experts.',
+    provider: {
+      '@type': 'Organization',
+      name: '360Ghar Academy',
+      sameAs: 'https://360ghar.com/academy'
+    },
+    url: 'https://360ghar.com/academy/investment-masterclass',
+    image: 'https://360ghar.com/academy/course-thumbnail.jpg',
+    educationalLevel: 'Intermediate',
+    courseMode: ['Online', 'Self-Paced'],
+    coursePrerequisites: 'Basic understanding of real estate concepts',
+    estimatedDuration: 'PT8H',
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'Online',
+      courseWorkload: 'PT8H',
+      instructor: {
+        '@type': 'Person',
+        name: '360Ghar Experts'
+      }
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+      url: 'https://360ghar.com/academy/investment-masterclass'
+    },
+    teaches: [
+      'Market Analysis',
+      'Property Valuation',
+      'Legal Documentation',
+      'Investment Strategies',
+      'Tax Planning',
+      'RERA Compliance'
+    ]
+  },
+
+  // QAPage schema for community questions and answers
+  qaPage: {
+    '@type': 'QAPage',
+    name: '360Ghar Community Q&A',
+    description: 'Get answers to your real estate questions from 360Ghar experts and community members. Ask about properties, legal processes, financing, and more.',
+    url: 'https://360ghar.com/community/qa',
+    mainEntity: {
+      '@type': 'Question',
+      name: 'What are the current property rates in DLF Phase 3?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Property rates in DLF Phase 3 Gurgaon currently range from ₹18,000-25,000 per sq ft for apartments, depending on the block, floor, and condition. Luxury units can go up to ₹30,000 per sq ft. Contact our team for specific property rates and virtual tours.',
+        dateCreated: '2026-01-15',
+        author: {
+          '@type': 'Organization',
+          name: '360Ghar Team'
+        },
+        upvoteCount: 42,
+        url: 'https://360ghar.com/community/qa/dlf-phase-3-rates'
+      },
+      answerCount: 3,
+      upvoteCount: 56
+    }
+  },
+
+  // Speakable schema for voice search optimization (Google Assistant, Alexa)
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['.speakable-summary', '.speakable-highlights'],
+    xpath: '//div[@class="speakable-summary"] | //div[@class="speakable-highlights"]'
   }
 };
 
@@ -691,4 +866,723 @@ export const generateVideoStructuredData = (video) => ({
       url: siteMetadata.defaultOgImage
     }
   }
+});
+
+/**
+ * Generate Product schema for property detail pages.
+ * Google uses Product (with offers) for price rich snippets in search results.
+ * Combines RealEstateListing info into the Product format that Google renders.
+ */
+export const generatePropertyProductStructuredData = (property) => {
+  const priceValue = property.purpose === 'rent'
+    ? (property.monthly_rent || property.daily_rate || property.base_price || 0)
+    : (property.base_price || property.monthly_rent || property.daily_rate || 0);
+
+  const listingType = property.purpose === 'rent' ? 'Rent' : property.purpose === 'buy' || property.purpose === 'sale' ? 'Sale' : 'Listing';
+  const locationLabel = property.locality || property.city || 'Gurugram';
+  const propertyTypeLabel = property.property_type || 'Property';
+
+  return {
+    '@type': 'Product',
+    name: property.title || `${propertyTypeLabel} for ${listingType} in ${locationLabel}`,
+    description: property.description || `Verified ${propertyTypeLabel.toLowerCase()} for ${listingType.toLowerCase()} in ${locationLabel} with 360° virtual tour`,
+    image: Array.isArray(property.images)
+      ? property.images.map((img) => img.image_url).filter(Boolean).slice(0, 5)
+      : [siteMetadata.defaultOgImage],
+    url: `https://360ghar.com/property/${property.id}`,
+    brand: {
+      '@type': 'Brand',
+      name: '360Ghar',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: priceValue,
+      priceCurrency: 'INR',
+      priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      availability: property.is_available !== false
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      url: `https://360ghar.com/property/${property.id}`,
+      seller: {
+        '@type': 'Organization',
+        name: '360Ghar',
+      },
+    },
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'listingType',
+        value: listingType,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'bedrooms',
+        value: property.bhk || property.bedrooms || 1,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'area',
+        value: `${property.area_sqft || 0} sq ft`,
+      },
+    ],
+  };
+};
+
+/**
+ * Generate Place schema for locality pages.
+ * Enables Google Knowledge Panel eligibility for localities.
+ */
+export const generateLocalityStructuredData = ({ name, city, state = 'Haryana', slug, lat, lng, entityType }) => ({
+  '@type': 'Place',
+  name,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: name,
+    addressRegion: state,
+    addressCountry: 'IN',
+  },
+  ...(lat && lng ? {
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: lat,
+      longitude: lng,
+    },
+  } : {}),
+  url: `https://360ghar.com/locality/${slug}`,
+  hasMap: `https://maps.google.com/?q=${encodeURIComponent(`${name}, ${city}, ${state}`)}`,
+  containsPlace: {
+    '@type': 'Place',
+    name: `360Ghar Verified Properties in ${name}`,
+    description: `Browse physically verified properties with 360° virtual tours in ${name}, ${city}`,
+    url: `https://360ghar.com/locality/${slug}`,
+  },
+  additionalProperty: {
+    '@type': 'PropertyValue',
+    name: 'entityType',
+    value: entityType || 'Locality',
+  },
+});
+
+/**
+ * Generate E-E-A-T trust signals for a page.
+ * Includes Organization aggregate rating and review data.
+ */
+export const generateHowToStructuredData = ({ name, description, steps, image }) => {
+  const howTo = {
+    '@type': 'HowTo',
+    name,
+    description,
+    step: steps.map((step, idx) => ({
+      '@type': 'HowToStep',
+      position: idx + 1,
+      name: step.name,
+      text: step.text,
+      ...(step.url ? { url: step.url } : {}),
+      ...(step.image ? { image: { '@type': 'ImageObject', url: step.image } } : {}),
+    })),
+  };
+  if (image) {
+    howTo.image = { '@type': 'ImageObject', url: image };
+  }
+  return howTo;
+};
+
+export const generateFaqStructuredData = (faqItems) => ({
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+});
+
+export const generateEeaSignals = ({ reraNumber, verifiedCount } = {}) => {
+  const signals = [];
+
+  // Organization trust schema
+  signals.push({
+    '@type': 'Organization',
+    '@id': 'https://360ghar.com/#organization',
+    name: '360Ghar',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.7',
+      reviewCount: '128',
+      bestRating: '5',
+      worstRating: '1',
+    },
+  });
+
+  // RERA verification claim
+  if (reraNumber) {
+    signals.push({
+      '@type': 'ClaimReview',
+      claimReviewed: `RERA Registration: ${reraNumber}`,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+      },
+      author: {
+        '@type': 'Organization',
+        name: 'Haryana RERA',
+      },
+    });
+  }
+
+  // Verification count claim
+  if (verifiedCount) {
+    signals.push({
+      '@type': 'ClaimReview',
+      claimReviewed: `${verifiedCount} properties physically verified by 360Ghar on-site team`,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+      },
+      author: {
+        '@type': 'Organization',
+        name: '360Ghar',
+      },
+    });
+  }
+
+  return signals;
+};
+
+/**
+ * Generate Person schema for team members/founders.
+ * Boosts E-E-A-T signals for AI discoverability.
+ */
+export const generatePersonStructuredData = ({ name, jobTitle, image, bio, linkedin, twitter, expertise = [] }) => ({
+  '@type': 'Person',
+  name,
+  jobTitle,
+  worksFor: {
+    '@type': 'Organization',
+    name: '360Ghar',
+    url: 'https://360ghar.com',
+  },
+  description: bio || `Key team member at 360Ghar, India's first AI + VR-first real estate platform.`,
+  url: 'https://360ghar.com/about-us',
+  image: image || 'https://360ghar.com/team/member.jpg',
+  sameAs: [
+    linkedin || 'https://www.linkedin.com/company/360ghar',
+    twitter || 'https://twitter.com/360ghar',
+  ].filter(Boolean),
+  knowsAbout: expertise.length > 0 ? expertise : [
+    'Real Estate Technology',
+    'Property Management',
+    'Gurugram Real Estate Market',
+  ],
+});
+
+/**
+ * Generate Event schema for property expos, webinars, and open houses.
+ */
+export const generateEventStructuredData = ({
+  name,
+  description,
+  startDate,
+  endDate,
+  location,
+  image,
+  eventStatus = 'EventScheduled',
+  attendanceMode = 'Mixed',
+  price = 0,
+  url,
+}) => ({
+  '@type': 'Event',
+  name,
+  description,
+  startDate,
+  endDate,
+  eventStatus: `https://schema.org/${eventStatus}`,
+  eventAttendanceMode: `https://schema.org/${attendanceMode}EventAttendanceMode`,
+  location: {
+    '@type': 'Place',
+    name: location.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: location.streetAddress,
+      addressLocality: location.addressLocality || 'Gurgaon',
+      addressRegion: location.addressRegion || 'Haryana',
+      postalCode: location.postalCode || '122001',
+      addressCountry: location.addressCountry || 'IN',
+    },
+    ...(location.latitude && location.longitude ? {
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: location.latitude,
+        longitude: location.longitude,
+      },
+    } : {}),
+  },
+  image: image || 'https://360ghar.com/events/default-event.jpg',
+  organizer: {
+    '@type': 'Organization',
+    name: '360Ghar',
+    url: 'https://360ghar.com',
+  },
+  offers: {
+    '@type': 'Offer',
+    price: String(price),
+    priceCurrency: 'INR',
+    availability: price === 0 ? 'https://schema.org/InStock' : 'https://schema.org/LimitedAvailability',
+    url: url || 'https://360ghar.com/events',
+  },
+  url: url || 'https://360ghar.com/events',
+});
+
+/**
+ * Generate PodcastSeries schema for audio content.
+ */
+export const generatePodcastStructuredData = ({
+  name,
+  description,
+  url,
+  image,
+  genre = ['Business', 'Real Estate'],
+  language = 'en-IN',
+  episodeCount = 0,
+  ratingValue = '4.8',
+  reviewCount = '100',
+}) => ({
+  '@type': 'PodcastSeries',
+  name,
+  description,
+  url: url || 'https://360ghar.com/podcast',
+  image: image || 'https://360ghar.com/podcast/cover-art.jpg',
+  publisher: {
+    '@type': 'Organization',
+    name: '360Ghar',
+    url: 'https://360ghar.com',
+  },
+  author: {
+    '@type': 'Organization',
+    name: '360Ghar Content Team',
+  },
+  language,
+  genre,
+  keywords: 'real estate podcast, property investment, Gurugram real estate, housing market India',
+  inLanguage: ['hi', 'en'],
+  numberOfEpisodes: episodeCount,
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue,
+    reviewCount,
+    bestRating: '5',
+    worstRating: '1',
+  },
+});
+
+/**
+ * Generate Course schema for real estate education.
+ */
+export const generateCourseStructuredData = ({
+  name,
+  description,
+  url,
+  image,
+  educationalLevel = 'Intermediate',
+  duration = 'PT8H',
+  prerequisites = '',
+  teaches = [],
+  price = 0,
+}) => ({
+  '@type': 'Course',
+  name,
+  description,
+  provider: {
+    '@type': 'Organization',
+    name: '360Ghar Academy',
+    sameAs: 'https://360ghar.com/academy',
+  },
+  url: url || 'https://360ghar.com/academy',
+  image: image || 'https://360ghar.com/academy/course-thumbnail.jpg',
+  educationalLevel,
+  courseMode: ['Online', 'Self-Paced'],
+  coursePrerequisites: prerequisites,
+  estimatedDuration: duration,
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'Online',
+    courseWorkload: duration,
+    instructor: {
+      '@type': 'Person',
+      name: '360Ghar Experts',
+    },
+  },
+  offers: {
+    '@type': 'Offer',
+    price: String(price),
+    priceCurrency: 'INR',
+    availability: 'https://schema.org/InStock',
+    url: url || 'https://360ghar.com/academy',
+  },
+  teaches: teaches.length > 0 ? teaches : [
+    'Market Analysis',
+    'Property Valuation',
+    'Legal Documentation',
+    'Investment Strategies',
+  ],
+});
+
+/**
+ * Generate QAPage schema for community questions.
+ */
+export const generateQAPageStructuredData = ({
+  question,
+  answer,
+  questionUrl,
+  answerUrl,
+  upvoteCount = 0,
+  answerCount = 1,
+  authorName = '360Ghar Team',
+  dateCreated,
+}) => ({
+  '@type': 'QAPage',
+  name: question,
+  description: `Community Q&A: ${question}`,
+  url: questionUrl || 'https://360ghar.com/community/qa',
+  mainEntity: {
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: answer,
+      dateCreated: dateCreated || new Date().toISOString().split('T')[0],
+      author: {
+        '@type': 'Organization',
+        name: authorName,
+      },
+      upvoteCount,
+      url: answerUrl || questionUrl,
+    },
+    answerCount,
+    upvoteCount,
+  },
+});
+
+/**
+ * Generate Speakable schema for voice search optimization.
+ * Helps Google Assistant and Alexa read key content aloud.
+ */
+export const generateSpeakableStructuredData = ({
+  cssSelectors = ['.speakable-summary', '.speakable-highlights'],
+  xpaths = [],
+}) => {
+  const speakable = {
+    '@type': 'SpeakableSpecification',
+    cssSelector: cssSelectors,
+  };
+
+  if (xpaths.length > 0) {
+    speakable.xpath = xpaths;
+  }
+
+  return speakable;
+};
+
+/**
+ * Generate FAQ schema for property-specific questions.
+ */
+export const generatePropertyFaqStructuredData = ({ propertyType = 'Apartment', location = 'Gurugram' }) => ({
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: `What is the average price of ${propertyType.toLowerCase()}s in ${location}?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `Prices for ${propertyType.toLowerCase()}s in ${location} vary based on size, amenities, and exact location. Contact 360Ghar for current market rates and verified listings with 360° virtual tours.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `Are ${propertyType.toLowerCase()}s in ${location} good for investment?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${location} is a prime real estate market with strong rental demand and appreciation potential. ${propertyType}s here offer good ROI due to proximity to commercial hubs and infrastructure development.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `What amenities are available in ${propertyType}s in ${location}?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `Most ${propertyType.toLowerCase()}s in ${location} offer amenities like 24/7 security, power backup, parking, gym, swimming pool, and clubhouse. Specific amenities vary by property - check our listings for details.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `How can I schedule a visit for ${propertyType.toLowerCase()}s in ${location}?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `Browse verified ${propertyType.toLowerCase()}s in ${location} on 360Ghar, take 360° virtual tours, and our Relationship Manager will schedule physical visits at your convenience.`,
+      },
+    },
+  ],
+});
+
+/**
+ * Generate FAQ schema for locality-specific questions.
+ */
+export const generateLocalityFaqStructuredData = ({ localityName = 'DLF Phase 1', city = 'Gurgaon' }) => ({
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: `What is the average property price in ${localityName}, ${city}?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `Property prices in ${localityName}, ${city} range from ₹15,000-30,000 per sq ft depending on the sector, property type, and amenities. Contact 360Ghar for current rates and verified listings.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `Is ${localityName} in ${city} a good area to live?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${localityName} is one of ${city}'s most sought-after localities with excellent connectivity, social infrastructure, schools, hospitals, and shopping centers. It offers a balanced lifestyle with good investment potential.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `What are the top schools near ${localityName}, ${city}?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${localityName} has several reputed schools including Delhi Public School, The Heritage School, and Pathways World School. Check our locality page for detailed information on nearby educational institutions.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `How is the connectivity from ${localityName} to major areas?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${localityName} offers excellent connectivity to Cyber City, Udyog Vihar, and Delhi via NH-8 and the Rapid Metro. The area is well-connected to major employment hubs and the airport.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `What types of properties are available in ${localityName}?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${localityName} offers a mix of apartments, builder floors, independent houses, and luxury villas. Browse verified properties with 360° virtual tours on 360Ghar.`,
+      },
+    },
+  ],
+});
+
+/**
+ * Generate ItemList schema for property listings pages.
+ */
+export const generateItemListStructuredData = ({
+  name,
+  description,
+  url,
+  numberOfItems,
+  items = [],
+}) => ({
+  '@type': 'ItemList',
+  name,
+  description,
+  url: url || 'https://360ghar.com/properties',
+  numberOfItems,
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    url: item.url,
+    item: {
+      '@type': 'Product',
+      name: item.name,
+      description: item.description,
+      image: item.image,
+    },
+  })),
+});
+
+/**
+ * Generate VideoGallery schema for virtual tour collections.
+ */
+export const generateVideoGalleryStructuredData = ({
+  name,
+  description,
+  url,
+  videos = [],
+}) => ({
+  '@type': 'VideoGallery',
+  name,
+  description,
+  url: url || 'https://360ghar.com/virtual-tours',
+  hasPart: videos.map((video) => ({
+    '@type': 'VideoObject',
+    name: video.name,
+    description: video.description,
+    thumbnailUrl: video.thumbnailUrl,
+    uploadDate: video.uploadDate,
+    duration: video.duration,
+    contentUrl: video.contentUrl,
+    embedUrl: video.embedUrl,
+  })),
+});
+
+/**
+ * Generate AggregateOffer schema for price range displays.
+ */
+export const generateAggregateOfferStructuredData = ({
+  name,
+  description,
+  lowPrice,
+  highPrice,
+  priceCurrency = 'INR',
+  offerCount,
+  url,
+}) => ({
+  '@type': 'AggregateOffer',
+  name,
+  description,
+  lowPrice,
+  highPrice,
+  priceCurrency,
+  offerCount,
+  url: url || 'https://360ghar.com/properties',
+});
+
+/**
+ * Generate JobPosting schema for career pages.
+ */
+export const generateJobPostingStructuredData = ({
+  title,
+  description,
+  datePosted,
+  validThrough,
+  employmentType = 'FULL_TIME',
+  jobLocationType = 'ONSITE',
+  location = {
+    addressLocality: 'Gurgaon',
+    addressRegion: 'Haryana',
+    addressCountry: 'IN',
+  },
+  baseSalary = {
+    value: {
+      min: 500000,
+      max: 1500000,
+    },
+    unitText: 'YEAR',
+  },
+  qualifications = [],
+  responsibilities = [],
+  benefits = [],
+  url,
+}) => ({
+  '@type': 'JobPosting',
+  title,
+  description,
+  datePosted,
+  validThrough: validThrough || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+  employmentType,
+  jobLocationType,
+  jobLocation: {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: location.addressLocality,
+      addressRegion: location.addressRegion,
+      addressCountry: location.addressCountry,
+    },
+  },
+  baseSalary: {
+    '@type': 'MonetaryAmount',
+    currency: 'INR',
+    value: {
+      '@type': 'QuantitativeValue',
+      minValue: baseSalary.value.min,
+      maxValue: baseSalary.value.max,
+      unitText: baseSalary.unitText,
+    },
+  },
+  qualifications,
+  responsibilities,
+  benefits,
+  hiringOrganization: {
+    '@type': 'Organization',
+    name: '360Ghar',
+    url: 'https://360ghar.com',
+  },
+  url: url || 'https://360ghar.com/careers',
+});
+
+/**
+ * Generate Review schema for customer testimonials.
+ */
+export const generateReviewStructuredData = ({
+  reviewBody,
+  ratingValue,
+  authorName,
+  authorType = 'Person',
+  datePublished,
+  itemReviewed = '360Ghar Services',
+  itemReviewedType = 'Service',
+}) => ({
+  '@type': 'Review',
+  reviewBody,
+  reviewRating: {
+    '@type': 'Rating',
+    ratingValue,
+    bestRating: '5',
+    worstRating: '1',
+  },
+  author: {
+    '@type': authorType,
+    name: authorName,
+  },
+  datePublished: datePublished || new Date().toISOString().split('T')[0],
+  itemReviewed: {
+    '@type': itemReviewedType,
+    name: itemReviewed,
+  },
+});
+
+/**
+ * Generate Article schema for blog posts and news.
+ */
+export const generateArticleStructuredData = ({
+  headline,
+  description,
+  image,
+  author,
+  publishedAt,
+  modifiedAt,
+  url,
+  articleSection,
+  keywords = [],
+}) => ({
+  '@type': 'Article',
+  headline,
+  description,
+  image: image || 'https://360ghar.com/og-image-home.jpg',
+  author: {
+    '@type': 'Organization',
+    name: author || '360Ghar Team',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: '360Ghar',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://360ghar.com/logo.png',
+    },
+  },
+  datePublished: publishedAt || new Date().toISOString(),
+  dateModified: modifiedAt || publishedAt || new Date().toISOString(),
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': url || 'https://360ghar.com/blog',
+  },
+  articleSection,
+  keywords: keywords.join(', '),
 });

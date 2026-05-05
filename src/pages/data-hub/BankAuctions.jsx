@@ -1,18 +1,72 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
 import Pagination from '../../common/ui/Pagination';
 import AuctionCard from '../../components/data-hub/AuctionCard';
 import AuctionAlertModal from '../../components/data-hub/AuctionAlertModal';
 import { dataHubService } from '../../services/dataHubService';
 
+const FAQS = [
+  {
+    question: 'What are SARFAESI auctions?',
+    answer: 'SARFAESI auctions are property auctions conducted by banks and financial institutions under the Securitisation and Reconstruction of Financial Assets and Enforcement of Security Interest (SARFAESI) Act, 2002. When a borrower defaults on a loan, the bank can recover dues by auctioning the secured property without court intervention, provided the default exceeds the threshold set by the RBI.',
+  },
+  {
+    question: 'Can I get a loan for a bank-auctioned property?',
+    answer: 'Yes, most banks offer loans for auctioned properties, but the process differs from regular home loans. You typically need to arrange 20-25% as earnest money deposit (EMD) upfront to participate in the auction. After winning the bid, you can apply for a loan for the balance amount. Some banks like SBI and Bank of Baroda have specific products for auction property financing.',
+  },
+  {
+    question: 'Are bank auction properties cheaper than market price?',
+    answer: 'Bank auction properties are often listed at reserve prices that can be 10-30% below prevailing market rates, especially if the bank wants a quick recovery. However, the final price depends on bidding competition. Properties with legal disputes or unclear titles may sell at deeper discounts but carry higher risk. Always verify the title and encumbrance status before bidding.',
+  },
+  {
+    question: 'What are the risks of buying property through bank auctions?',
+    answer: 'Key risks include: (1) The property may have pending legal disputes or litigations from the previous owner. (2) Physical possession may be difficult to obtain if occupants refuse to vacate. (3) There is usually no warranty on the property condition. (4) Outstanding dues like property tax, maintenance, or utility bills may be your responsibility. Always conduct thorough due diligence before bidding.',
+  },
+  {
+    question: 'How can I participate in a bank auction in Delhi NCR?',
+    answer: 'To participate: (1) Check auction notices on bank websites or portals like IBAPI, BankEAuctions, or eAuctionsIndia. (2) Download the auction notification and read the terms carefully. (3) Submit the Earnest Money Deposit (EMD) and required documents before the deadline. (4) Attend the auction (in-person or online). (5) If you win, pay the balance within the stipulated period (usually 15-30 days). Ensure you verify the property title and possession status beforehand.',
+  },
+  {
+    question: 'What is the difference between SARFAESI, DRT, and IBC auctions?',
+    answer: 'SARFAESI auctions are conducted by banks directly under the SARFAESI Act 2002 for NPA recovery. DRT (Debt Recovery Tribunal) auctions happen through court proceedings under the RDDBFI Act. IBC (Insolvency and Bankruptcy Code) auctions occur when a company goes through corporate insolvency resolution or liquidation, managed by insolvency professionals under IBBI oversight. Each has different timelines, processes, and buyer protections.',
+  },
+  {
+    question: 'What are HSVP (formerly HUDA) e-auctions in Haryana?',
+    answer: 'Haryana Shehri Vikas Pradhikaran (HSVP), formerly known as HUDA, conducts e-auctions for residential, commercial, industrial, and institutional plots across Haryana cities including Gurugram, Faridabad, and Panchkula. These are direct government auctions with no middlemen, often offering plots at below-market reserve prices. Auctions are held periodically through the HSVP e-Auction portal or the Procure247 platform.',
+  },
+  {
+    question: 'How do DDA e-auctions work in Delhi?',
+    answer: 'The Delhi Development Authority (DDA) periodically holds e-auctions (Mega e-Auction phases) for residential, commercial, and industrial plots across Delhi sectors through the DDA Bhoomi Portal (eservices.dda.org.in). You need to register on the portal, pay the earnest money online, and participate in the online bidding. DDA auctions are transparent and the allotment is done through the highest bidder system.',
+  },
+  {
+    question: 'What is IBAPI and why is it important for bank auction properties?',
+    answer: 'IBAPI (Indian Banks Auction Properties Information) is an RBI-mandated platform where all public sector banks — SBI, PNB, Bank of Baroda, Canara Bank, Union Bank, and others — are required to list their NPA auction properties. It is the single most comprehensive source for bank auction properties in India, with filters for city, bank, and property type. Since April 2025, IBBI also mandates listing insolvency liquidation assets exclusively on BaankNet/eBKray.',
+  },
+];
+
 const PROPERTY_TYPES = ['residential', 'commercial', 'plot', 'industrial'];
+const AUCTION_TYPE_OPTIONS = [
+  { label: 'All Types', value: '' },
+  { label: 'Bank (SARFAESI)', value: 'bank' },
+  { label: 'Court Ordered', value: 'court' },
+];
 const PAGE_LIMIT = 12;
+
+const CITY_LABELS = {
+  '': 'All Cities',
+  'Delhi': 'Delhi',
+  'Gurugram': 'Gurugram',
+  'Meerut': 'Meerut',
+  'Greater Noida': 'Greater Noida',
+  'Delhi NCR': 'Delhi NCR',
+};
 
 const BankAuctions = () => {
   const { t } = useTranslation('data-hub');
@@ -20,6 +74,7 @@ const BankAuctions = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [banks, setBanks] = useState([]);
+  const [cities, setCities] = useState([]);
   const [filters, setFilters] = useState({
     bank_name: '',
     property_type: '',
@@ -27,21 +82,25 @@ const BankAuctions = () => {
     price_max: '',
     date_from: '',
     date_to: '',
-    source_type: '',
+    auction_type: '',
+    city: '',
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
   const [error, setError] = useState(null);
 
-  // Alert modal state
   const [alertModal, setAlertModal] = useState({ isOpen: false, initialData: {} });
 
   const totalPages = Math.ceil(total / PAGE_LIMIT);
+  const selectedCityLabel = CITY_LABELS[filters.city] || filters.city || 'Delhi NCR';
 
-  // Fetch bank list once
   useEffect(() => {
     dataHubService.getAuctionBanks()
       .then((data) => setBanks(Array.isArray(data) ? data : []))
+      .catch(() => {});
+    dataHubService.getAuctionCities()
+      .then((data) => setCities(Array.isArray(data) ? data : []))
       .catch(() => {});
   }, []);
 
@@ -53,11 +112,11 @@ const BankAuctions = () => {
     if (filters.price_max) params.max_price = Number(filters.price_max);
     if (filters.date_from) params.date_from = filters.date_from;
     if (filters.date_to) params.date_to = filters.date_to;
-    if (filters.source_type) params.type = filters.source_type;
+    if (filters.auction_type) params.type = filters.auction_type;
+    if (filters.city) params.city = filters.city;
 
     dataHubService.getAuctions(params)
       .then((data) => {
-        // Sort by auction_date ascending
         const items = data?.items || [];
         items.sort((a, b) => {
           if (!a.auction_date) return 1;
@@ -77,7 +136,7 @@ const BankAuctions = () => {
   };
 
   const clearFilters = () => {
-    setFilters({ bank_name: '', property_type: '', price_min: '', price_max: '', date_from: '', date_to: '', source_type: '' });
+    setFilters({ bank_name: '', property_type: '', price_min: '', price_max: '', date_from: '', date_to: '', auction_type: '', city: '' });
     setPage(1);
   };
 
@@ -100,9 +159,9 @@ const BankAuctions = () => {
   return (
     <>
       <SEO
-        title="Bank & Court Auctions Gurugram | Property Auctions | 360Ghar"
-        description="Browse bank auctions (SARFAESI) and court-ordered property auctions in Gurugram. Find foreclosed properties from SBI, HDFC, ICICI and other lenders at reserve prices."
-        keywords="bank auctions Gurugram, SARFAESI auctions, court ordered property auction, foreclosure properties Gurgaon, bank auction flats, property auction Haryana"
+        title={`Bank & Govt Property Auctions ${selectedCityLabel} | 360Ghar`}
+        description={`Browse bank auctions (SARFAESI), court-ordered, and government authority property auctions in ${selectedCityLabel}. Find foreclosed properties from SBI, HDFC, ICICI, HSVP, DDA and other sources at reserve prices.`}
+        keywords="bank auctions Delhi NCR, SARFAESI auctions, HSVP e-auction Gurgaon, DDA auction Delhi, court ordered property auction, foreclosure properties, bank auction flats, property auction Haryana"
         canonical="/bank-auctions"
         structuredData={[
           generateBreadcrumbStructuredData([
@@ -111,11 +170,12 @@ const BankAuctions = () => {
           ]),
           {
             '@type': 'ItemList',
-            name: 'Bank & Court Property Auctions — Gurugram',
-            description: 'SARFAESI auctions and court-ordered property sales in Gurugram.',
+            name: `Bank & Govt Property Auctions — ${selectedCityLabel}`,
+            description: `SARFAESI auctions, court-ordered sales, and government authority property auctions in ${selectedCityLabel}.`,
             url: 'https://360ghar.com/bank-auctions',
             numberOfItems: total,
           },
+          generateFaqStructuredData(FAQS),
         ]}
       />
       <OffCanvas />
@@ -129,7 +189,8 @@ const BankAuctions = () => {
               <div className="col-12">
                 <h1 className="fs-28 fw-600 mb-10">{t('bankAuctions.title')}</h1>
                 <p className="mb-0 color-text-3">
-                  {t('bankAuctions.description')}
+                  {t('bankAuctions.description')}{' '}
+                  <I18nLink to="/auction-sources" style={{ color: '#2563eb' }}>Learn about all auction sources →</I18nLink>
                 </p>
               </div>
             </div>
@@ -148,17 +209,32 @@ const BankAuctions = () => {
 
                   {sidebarOpen && (
                     <div style={{ padding: 16 }}>
-                      {/* Source type radio */}
+                      {/* City filter */}
+                      <div style={{ marginBottom: 16 }}>
+                        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('bankAuctions.city')}</label>
+                        <select
+                          className="form-select form-select-sm"
+                          value={filters.city}
+                          onChange={(e) => handleFilterChange('city', e.target.value)}
+                        >
+                          <option value="">{t('bankAuctions.allCities')}</option>
+                          {cities.map(c => (
+                            <option key={c} value={c}>{CITY_LABELS[c] || c}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Auction type radio */}
                       <div style={{ marginBottom: 16 }}>
                         <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('bankAuctions.sourceType')}</label>
-                        {SOURCE_TYPES.map(({ label, value }) => (
+                        {AUCTION_TYPE_OPTIONS.map(({ label, value }) => (
                           <label key={value} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, fontSize: 13, cursor: 'pointer' }}>
                             <input
                               type="radio"
-                              name="source_type"
+                              name="auction_type"
                               value={value}
-                              checked={filters.source_type === value}
-                              onChange={() => handleFilterChange('source_type', value)}
+                              checked={filters.auction_type === value}
+                              onChange={() => handleFilterChange('auction_type', value)}
                             />
                             {label}
                           </label>
@@ -294,6 +370,26 @@ const BankAuctions = () => {
           </div>
         </section>
 
+        {/* FAQ Section */}
+        <section className="pb-60">
+          <div className="container">
+            <h2 className="fs-24 fw-600 mb-20">Frequently Asked Questions</h2>
+            <div className="accordion">
+              {FAQS.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div className="accordion-item border-0 border-bottom" key={faq.question}>
+                    <h3 className="accordion-header" id={`dhFaqHeading${idx}`}>
+                      <button className={`accordion-button ${isOpen ? '' : 'collapsed'}`} type="button" aria-expanded={isOpen} onClick={() => setOpenFaqIndex(cur => cur === idx ? -1 : idx)}>{faq.question}</button>
+                    </h3>
+                    <div className={`accordion-collapse collapse ${isOpen ? 'show' : ''}`}><div className="accordion-body text-muted">{faq.answer}</div></div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="cta-section bg-main text-white padding-y-60">
           <div className="container">
@@ -303,7 +399,7 @@ const BankAuctions = () => {
                 <p className="mb-4">{t('bankAuctions.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
                   <a href="/properties" className="btn btn-white btn-main">{t('bankAuctions.cta.browseProperties')}</a>
-                  <a href="/contact" className="btn btn-outline-white">{t('bankAuctions.cta.contactUs')}</a>
+                  <I18nLink to="/auction-sources" className="btn btn-outline-white">{t('bankAuctions.cta.auctionSources')}</I18nLink>
                 </div>
               </div>
             </div>

@@ -21,7 +21,8 @@
    };
  
    const shareWhatsApp = () => {
-     const url = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + propertyUrl)}`;
+     const utmUrl = `${propertyUrl}?utm_source=whatsapp&utm_medium=share&utm_campaign=property_share`;
+     const url = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + utmUrl)}`;
      window.open(url, '_blank', 'noopener,noreferrer');
      setShareOpen(false);
    };

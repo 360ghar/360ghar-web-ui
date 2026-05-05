@@ -14,6 +14,8 @@ const BRAND_KEYWORDS = [
   'property in gurugram',
 ];
 
+const INTENT_DISPLAY = { buy: 'sale', rent: 'rent', pg: 'pg' };
+
 /**
  * Returns property type synonyms for a given facet string.
  * Includes Hindi/Hinglish terms to capture Indian-language search traffic.
@@ -85,8 +87,8 @@ export const buildLandingKeywords = ({ facet, city, validIntent }) => {
   const intentSyn = getIntentSynonyms(validIntent);
 
   const basePhrases = [
-    `${facet} for ${validIntent} in ${city}`,
-    `${facet} ${validIntent} ${city}`,
+    `${facet} for ${INTENT_DISPLAY[validIntent] || validIntent} in ${city}`,
+    `${facet} ${INTENT_DISPLAY[validIntent] || validIntent} ${city}`,
     `${facet} in ${city}`,
     ...typeSyn.flatMap((t) => intentSyn.map((i) => `${t} ${i} ${city}`)),
     isRes ? `1 BHK ${facet} ${validIntent} in ${city}` : null,
@@ -154,7 +156,7 @@ export const buildFacetKeywords = ({ facetText, validCity, validIntent, isBhk, b
       : null;
 
   const base = [
-    `${facetText} for ${validIntent} in ${validCity}`,
+    `${facetText} for ${INTENT_DISPLAY[validIntent] || validIntent} in ${validCity}`,
     ...tSyn.flatMap((t) => iSyn.map((i) => `${t} ${i} ${validCity}`)),
     ...bhkSyn.map((b) => `${b} ${lcFacet} ${validIntent} in ${validCity}`),
     ...hindiBhkSyn.map((b) => `${b} ${lcFacet} ${validIntent} in ${validCity}`),

@@ -71,11 +71,11 @@ const Careers = () => {
             <div className="row justify-content-center">
               <div className="col-lg-9 text-center">
                 <p className="text-uppercase text-primary fw-semibold mb-2" style={{ fontSize: '0.85rem', letterSpacing: '0.08em' }}>
-                  We're Hiring
+                  We&apos;re Hiring
                 </p>
                 <h1 className="display-5 fw-bold mb-3">Internships at 360Ghar</h1>
                 <p className="text-secondary fs-6 mb-4 mx-auto" style={{ maxWidth: '600px' }}>
-                  We are looking for curious, driven interns to help build India's most trusted property platform.
+                  We are looking for curious, driven interns to help build India&apos;s most trusted property platform.
                   Work on real products, ship features that users care about, and grow alongside a passionate team in Gurugram.
                 </p>
                 <div className="row g-3 justify-content-center mt-4">
@@ -155,7 +155,7 @@ const Careers = () => {
           <div className="container px-lg-5">
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center">
-                <h2 className="fw-bold mb-4">What You'll Get</h2>
+                <h2 className="fw-bold mb-4">What You&apos;ll Get</h2>
                 <div className="row g-4">
                   {[
                     { icon: 'fas fa-laptop-code', title: 'Real Ownership', desc: 'Ship features used by thousands of users, not just side projects.' },

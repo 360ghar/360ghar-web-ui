@@ -97,9 +97,9 @@ const LocalitiesDirectory = () => {
     return (
         <>
             <SEO
-                title="Discover Localities in Gurugram | 360Ghar"
-                description="Explore all sectors, colonies, and prime areas in Gurugram. Get locality insights, verified inventory, and neighborhood intelligence in one place."
-                keywords="Gurgaon localities, Gurugram localities, sectors in Gurgaon, sectors in Gurugram, colony search Gurgaon, Gurugram neighborhood guide"
+                title="Gurgaon Localities Directory 2026: 500+ Areas with Prices & Reviews | 360Ghar"
+                description="Explore 500+ Gurgaon localities — sectors, societies & neighborhoods — with latest property prices, connectivity scores, and verified listings. Compare DLF Phase, Golf Course Road, Sohna Road & more. Free directory by 360Ghar."
+                keywords="Gurgaon localities, Gurugram localities directory, sectors in Gurgaon, Gurgaon locality prices, Gurugram neighborhood guide, best areas in Gurgaon, property prices Gurgaon sectors"
                 canonical="/localities"
                 image={siteMetadata.defaultOgImage}
                 type="website"

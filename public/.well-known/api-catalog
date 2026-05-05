@@ -1,0 +1,24 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://api.360ghar.com/api/v1",
+      "service-desc": [
+        {
+          "href": "https://api.360ghar.com/docs",
+          "type": "text/html"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://360ghar.com/for-ai",
+          "type": "text/html"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://api.360ghar.com/health"
+        }
+      ]
+    }
+  ]
+}

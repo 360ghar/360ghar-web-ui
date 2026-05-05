@@ -5,11 +5,18 @@ import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 import { generateToolSchema } from '../../seo/toolSchemas';
 import { toolSchemas } from '../../seo/toolSchemas';
 import { dataHubService } from '../../services/dataHubService';
 import { useDataHubStore } from '../../store/dataHubStore';
+
+const STAMP_DUTY_HOW_TO_STEPS = [
+  { name: 'Enter property value in rupees', text: 'Input the total property value or consideration amount in Indian Rupees.' },
+  { name: 'Select buyer type (male/female/joint)', text: 'Choose the buyer category to apply the correct stamp duty rate: 7% for male, 5% for female, or 6% for joint buyers.' },
+  { name: 'Optionally select sector for circle rates', text: 'Pick a sector in Gurugram to compare the stamp duty against circle rates for that area.' },
+  { name: 'View calculated stamp duty and registration charges', text: 'See the breakdown of stamp duty, 1% registration fee, and total registration cost instantly.' },
+];
 
 const BUYER_TYPES = [
   { value: 'male', label: 'Male', rate: 7 },
@@ -49,7 +56,7 @@ const StampDutyCalculator = () => {
   return (
     <>
       <SEO
-        title="Haryana Stamp Duty Calculator 2024 | Gurugram Property Registration Cost | 360Ghar"
+        title="Stamp Duty Calculator Gurgaon | Haryana Registration Charges 2026 | 360Ghar"
         description="Calculate stamp duty and registration charges for property in Gurugram, Haryana. Male: 7%, Female: 5%, Joint: 6%. Includes circle rate comparison and EMI estimation."
         keywords="Haryana stamp duty calculator, Gurugram property registration charges, DLC rate stamp duty, stamp duty female buyer Haryana, property registration cost Gurgaon"
         canonical="/stamp-duty-calculator"
@@ -64,6 +71,11 @@ const StampDutyCalculator = () => {
             toolSchemas.stampDutyCalculator.keywords,
             toolSchemas.stampDutyCalculator.category,
           ),
+          generateHowToStructuredData({
+            name: 'How to Calculate Stamp Duty in Haryana',
+            description: 'Calculate stamp duty and registration charges for property registration in Gurugram, Haryana based on buyer type and property value.',
+            steps: STAMP_DUTY_HOW_TO_STEPS,
+          }),
         ]}
       />
       <OffCanvas />

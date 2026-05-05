@@ -1,0 +1,9 @@
+{
+  "resource": "https://api.360ghar.com",
+  "authorization_servers": [
+    "https://pezjtoivkrmepydqminz.supabase.co/auth/v1"
+  ],
+  "scopes_supported": ["read", "write"],
+  "bearer_methods_supported": ["header"],
+  "resource_documentation": "https://360ghar.com/for-ai"
+}

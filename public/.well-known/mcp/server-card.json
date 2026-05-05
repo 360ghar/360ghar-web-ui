@@ -1,0 +1,12 @@
+{
+  "serverInfo": {
+    "name": "360Ghar MCP Server",
+    "version": "1.0.0"
+  },
+  "endpoint": "https://api.360ghar.com/mcp",
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false
+  }
+}

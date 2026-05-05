@@ -56,7 +56,7 @@ const routeOverrides = new Map([
   }],
   ['/gurgaon/buy/flats', {
     waitForText: 'Why 360Ghar?',
-    waitForTitle: 'Apartment for Buy in Gurgaon | Gurgaon Real Estate | 360Ghar',
+    waitForTitle: 'Apartment for Sale in Gurgaon [360° VR Tour] | Gurgaon Real Estate | 360Ghar',
   }],
   ['/gurgaon/rent/flats', {
     waitForText: 'Why 360Ghar?',
@@ -68,7 +68,7 @@ const routeOverrides = new Map([
   }],
   ['/delhi/buy/flats', {
     waitForText: 'Why 360Ghar?',
-    waitForTitle: 'Apartment for Buy in Delhi | Delhi Real Estate | 360Ghar',
+    waitForTitle: 'Apartment for Sale in Delhi [360° VR Tour] | Delhi Real Estate | 360Ghar',
   }],
   ['/noida/rent/flats', {
     waitForText: 'Why 360Ghar?',

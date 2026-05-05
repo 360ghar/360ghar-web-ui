@@ -1,0 +1,454 @@
+[
+  {
+    "route": "/",
+    "waitForSelector": "main",
+    "waitForTitle": "360Ghar – VR Home Tours & Property in Gurugram"
+  },
+  {
+    "route": "/properties",
+    "waitForSelector": "main",
+    "waitForText": "Verified Property Search in Gurugram",
+    "waitForTitle": "Properties in Gurugram | AI-Powered Search & Verified Listings | 360Ghar"
+  },
+  {
+    "route": "/about-us",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/contact",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/faq",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/project",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/blog",
+    "waitForSelector": "main",
+    "waitForText": "Real Estate Guides for Gurugram and Delhi NCR",
+    "waitForTitle": "Real Estate Blog | 360Ghar Insights"
+  },
+  {
+    "route": "/policies",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/refer-and-earn",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurugram-real-estate-guide",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/property-investment-gurugram",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/for-ai",
+    "waitForSelector": "main",
+    "waitForText": "For AI Assistants",
+    "waitForTitle": "For AI Assistants | 360Ghar"
+  },
+  {
+    "route": "/ai-agent",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/localities",
+    "waitForSelector": "main",
+    "waitForText": "Explore Gurugram Localities with Verified Insights",
+    "waitForTitle": "Discover Localities in Gurugram | 360Ghar"
+  },
+  {
+    "route": "/emi-calculator",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/area-converter",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/area-calculator",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/loan-eligibility-calculator",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/capital-gains-tax-calculator",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/property-document-checklist",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/design-blueprint",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vastu-checker",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/ai-design-studio",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/circle-rates",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/stamp-duty-calculator",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/rera-projects",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/bank-auctions",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/auction-sources",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/verify-ownership",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/zone-checker",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/regulatory-updates",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/builder-reputation",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/nobroker",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/magicbricks",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/99acres",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/housing",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/commonfloor",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/proptiger",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/squareyards",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/nestaway",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/zolo",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/vs/stanza-living",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/truth/nobroker-listings",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/truth/magicbricks-spam",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/truth/99acres-fake",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/truth/nestaway-collapse",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/truth/zolo-issues",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/careers",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/celebrity-homes",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/nri-property-guide",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/list-property-free",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/glossary",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/check-fake-listing",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/cyber-city",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/udyog-vihar",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/golf-course-road-corporate",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/millennium-city-centre",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/medanta",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/delhi",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/noida",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/login",
+    "waitForSelector": "main",
+    "waitForTitle": "Login | 360Ghar"
+  },
+  {
+    "route": "/register",
+    "waitForSelector": "main",
+    "waitForTitle": "Register | 360Ghar"
+  },
+  {
+    "route": "/account",
+    "waitForSelector": "main",
+    "waitForTitle": "Account | 360Ghar"
+  },
+  {
+    "route": "/delete-account",
+    "waitForSelector": "main",
+    "waitForTitle": "Account Deletion Request | 360Ghar"
+  },
+  {
+    "route": "/post-property",
+    "waitForSelector": "main",
+    "waitForTitle": "Post a Property | 360Ghar"
+  },
+  {
+    "route": "/add-new-listing",
+    "waitForSelector": "main",
+    "waitForTitle": "Add Listing | 360Ghar"
+  },
+  {
+    "route": "/mcp/login",
+    "waitForSelector": "main",
+    "waitForTitle": "Connect AI Assistant | 360Ghar"
+  },
+  {
+    "route": "/map-location",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/property-sidebar",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/dlf-phase-1-gurgaon",
+    "waitForSelector": "main",
+    "waitForText": "DLF Phase 1",
+    "waitForTitle": "DLF Phase 1 Gurgaon | properties | 360Ghar"
+  },
+  {
+    "route": "/locality/golf-course-road-gurgaon",
+    "waitForSelector": "main",
+    "waitForText": "Golf Course Road",
+    "waitForTitle": "Golf Course Road Gurgaon | properties | 360Ghar"
+  },
+  {
+    "route": "/locality/sushant-lok-1-gurgaon",
+    "waitForSelector": "main",
+    "waitForText": "Sushant Lok 1",
+    "waitForTitle": "Sushant Lok 1 Gurgaon | properties | 360Ghar"
+  },
+  {
+    "route": "/locality/sohna-road-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sector-49-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sector-56-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/palam-vihar-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/mg-road-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sector-43-gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/dlf-phase-1-gurgaon/buy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/dlf-phase-1-gurgaon/rent",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/golf-course-road-gurgaon/buy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sushant-lok-1-gurgaon/buy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/locality/sohna-road-gurgaon/buy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/delhi",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/noida",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/faridabad",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/ghaziabad",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/flats",
+    "waitForSelector": "main",
+    "waitForText": "Why 360Ghar?",
+    "waitForTitle": "Apartment for Sale in Gurgaon [360° VR Tour] | Gurgaon Real Estate | 360Ghar"
+  },
+  {
+    "route": "/gurgaon/rent/flats",
+    "waitForSelector": "main",
+    "waitForText": "Why 360Ghar?",
+    "waitForTitle": "Apartment for Rent in Gurgaon | Gurgaon Real Estate | 360Ghar"
+  },
+  {
+    "route": "/gurgaon/pg/flats",
+    "waitForSelector": "main",
+    "waitForText": "Why 360Ghar?",
+    "waitForTitle": "PG in Gurgaon | Gurgaon Paying Guest & Co-living | 360Ghar"
+  },
+  {
+    "route": "/gurgaon/buy/villa",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/builder-floor",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/plots",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/flats/2-bhk",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/buy/flats/3-bhk",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/gurgaon/rent/flats/1-bhk",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/delhi/buy/flats",
+    "waitForSelector": "main",
+    "waitForText": "Why 360Ghar?",
+    "waitForTitle": "Apartment for Sale in Delhi [360° VR Tour] | Delhi Real Estate | 360Ghar"
+  },
+  {
+    "route": "/delhi/rent/flats",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/delhi/buy/flats/2-bhk",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/noida/buy/flats",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/noida/rent/flats",
+    "waitForSelector": "main",
+    "waitForText": "Why 360Ghar?",
+    "waitForTitle": "Apartment for Rent in Noida | Noida Real Estate | 360Ghar"
+  },
+  {
+    "route": "/faridabad/buy/flats",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/ghaziabad/buy/flats",
+    "waitForSelector": "main"
+  }
+]

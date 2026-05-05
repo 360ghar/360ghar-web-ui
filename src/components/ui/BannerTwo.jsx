@@ -17,7 +17,7 @@ const BannerTwo = () => {
                             <p className="contact-content__desc font-18">{bannerTwoContent.desc}</p>
                             <div className="d-flex align-items-center gap-3">
                                 <div className="contact-content__icon">
-                                    <LazyImage src={bannerTwoContent.icon} alt=""/>
+                                    <LazyImage src={bannerTwoContent.icon} alt="Contact support phone icon"/>
                                 </div>
                                 <div className="contact-content__infos">
                                     <span className="contact-content__text">{bannerTwoContent.text}</span> 

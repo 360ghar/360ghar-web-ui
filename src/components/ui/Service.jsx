@@ -14,7 +14,7 @@ const Service = () => {
                                     <div className="col-lg-4 col-sm-6 col-xs-6" key={index}>
                                         <div className="service-item">
                                             <span className="service-item__icon">
-                                                <LazyImage src={service.icon} alt=""/>
+                                                <LazyImage src={service.icon} alt={`${service.title} service icon`}/>
                                             </span>
                                             <h6 className="service-item__title">{service.title}</h6>
                                             <span className="service-item__text font-18 d-block">{service.text}</span>

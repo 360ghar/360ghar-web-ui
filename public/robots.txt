@@ -57,6 +57,15 @@ Allow: /sitemap-static.xml
 Allow: /sitemap-landing.xml
 Allow: /sitemap-localities.xml
 Allow: /.well-known/ai.txt
+Allow: /.well-known/api-catalog
+Allow: /.well-known/openid-configuration
+Allow: /.well-known/oauth-authorization-server
+Allow: /.well-known/oauth-protected-resource
+Allow: /.well-known/mcp/server-card.json
+Allow: /.well-known/agent-skills/
+Allow: /.well-known/acp.json
+Allow: /.well-known/ucp
+Allow: /openapi.json
 Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /data/llm-feed.json
@@ -73,3 +82,6 @@ Sitemap: https://360ghar.com/sitemap.xml
 Sitemap: https://360ghar.com/sitemap-static.xml
 Sitemap: https://360ghar.com/sitemap-landing.xml
 Sitemap: https://360ghar.com/sitemap-localities.xml
+Sitemap: https://360ghar.com/sitemap-blog.xml
+Sitemap: https://360ghar.com/sitemap-projects.xml
+Sitemap: https://360ghar.com/sitemap-properties.xml

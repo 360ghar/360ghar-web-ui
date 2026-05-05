@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:entities && npm run build:ai-discovery && npm run build:sitemaps && npm run build:rss && vite build && npm run build:prerender && npm run build:markdown-pages && node scripts/purge-bootstrap.mjs",
+    "build": "npm run build:entities && npm run build:ai-discovery && npm run build:sitemaps && npm run build:rss && node scripts/generate-og-image.mjs && vite build && node scripts/purge-main-css.mjs && npm run build:prerender && npm run build:markdown-pages && node scripts/purge-bootstrap.mjs",
     "build:entities": "node scripts/ingest-gurgaon-entities.mjs && node scripts/merge-entities.mjs && node scripts/build-localities-json.mjs && node scripts/build-localities-index.mjs && node scripts/generate-locality-sitemap.mjs",
     "build:ai-discovery": "node scripts/write-ai-discovery.mjs",
     "build:markdown-pages": "node scripts/generate-markdown-pages.mjs",
@@ -19,6 +19,7 @@
     "build:prerender-routes": "node scripts/generate-prerender-routes.mjs",
     "build:image-refresh-manifest": "node scripts/generate-image-refresh-manifest.mjs",
     "test:node": "node --test scripts/__tests__ functions",
+    "validate:schemas": "node scripts/validate-structured-data.mjs",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives",
     "test": "npm run test:node && vitest run src",
     "preview": "vite preview"

@@ -13,7 +13,7 @@ const TestimonialItem = ({ testimonial }) => {
                         <h6 className="testimonial-item__name">{name}</h6>
                         <span className="testimonial-item__designation">{designation}</span>
                     </div>
-                    <LazyImage src={quote} alt=""/>
+                    <LazyImage src={quote} alt="Customer testimonial quote icon"/>
                 </div>
                 <p className="testimonial-item__desc">{desc}</p>
 

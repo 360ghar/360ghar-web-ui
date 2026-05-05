@@ -1,0 +1,16 @@
+{
+  "protocol": {
+    "name": "acp",
+    "version": "0.1.0"
+  },
+  "api_base_url": "https://api.360ghar.com",
+  "transports": ["https"],
+  "capabilities": {
+    "services": [
+      "property_search",
+      "visit_scheduling",
+      "property_management",
+      "vastu_analysis"
+    ]
+  }
+}

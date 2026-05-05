@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "property-search",
+      "type": "skill-md",
+      "description": "Search verified property listings on 360Ghar by city, type, budget, and amenities",
+      "url": "https://360ghar.com/.well-known/agent-skills/property-search/SKILL.md",
+      "digest": "sha256:d4a461c3ff14b70a04358025db44fc5a5ed234d7a9ef966ade167f51e05ba3dc"
+    },
+    {
+      "name": "visit-scheduling",
+      "type": "skill-md",
+      "description": "Schedule, reschedule, and cancel property visits on 360Ghar",
+      "url": "https://360ghar.com/.well-known/agent-skills/visit-scheduling/SKILL.md",
+      "digest": "sha256:839727d0d11b00ef0a30e14143bc30855e12449d0a14a214a472da7297d3e384"
+    },
+    {
+      "name": "property-tools",
+      "type": "skill-md",
+      "description": "Free real estate calculators and tools: EMI, area converter, Vastu checker, and more",
+      "url": "https://360ghar.com/.well-known/agent-skills/property-tools/SKILL.md",
+      "digest": "sha256:8028fc984525706db83a6b82f611983e12bb9fb63756699a495b9ae0952bb08d"
+    },
+    {
+      "name": "locality-intelligence",
+      "type": "skill-md",
+      "description": "Access locality data, neighborhood intelligence, and price trends for Gurugram and Delhi NCR",
+      "url": "https://360ghar.com/.well-known/agent-skills/locality-intelligence/SKILL.md",
+      "digest": "sha256:d73056e95417b891d8859edbbfae669aad11d5974089516b147339883fa3f66f"
+    }
+  ]
+}

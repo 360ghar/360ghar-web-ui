@@ -22,7 +22,7 @@ describe('Landing FAQ interactions', () => {
     renderLanding();
 
     const button = screen.getByRole('button', {
-      name: /What is the average price range for apartment for buying gurgaon\?/i,
+      name: /What is the average price range for apartment for sale gurgaon\?/i,
     });
 
     expect(button).toHaveAttribute('aria-expanded', 'true');

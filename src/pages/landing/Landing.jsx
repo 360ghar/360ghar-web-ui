@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -17,91 +18,18 @@ import {
 } from '../../utils/propertyTaxonomy';
 import { buildLandingKeywords } from '../../utils/landingKeywords';
 import { I18nLink } from '../../i18n/I18nLink';
-import localitiesIndex from '../../data/localities-index.json';
+import LandingPageContent from '../../components/landing/LandingPageContent';
+import AiFactSheet from '../../components/seo/AiFactSheet';
+import {
+  normalizeCitySlug,
+  getCityLocalities,
+  getPriceRange,
+  getRelatedLandingLinks,
+} from '../../utils/internalLinks';
 
 const pretty = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
 
 const VALID_INTENTS = ['buy', 'rent', 'pg'];
-
-const INTENT_ALTERNATES = {
-  buy: ['rent', 'pg'],
-  rent: ['buy', 'pg'],
-  pg: ['rent', 'buy'],
-};
-
-const RELATED_TYPES = {
-  apartment: ['builder_floor', 'villa', 'studio'],
-  builder_floor: ['apartment', 'house', 'villa'],
-  house: ['villa', 'builder_floor', 'apartment'],
-  villa: ['house', 'apartment', 'penthouse'],
-  plot: ['house', 'villa', 'builder_floor'],
-  studio: ['apartment', 'pg', 'flatmate'],
-  pg: ['flatmate', 'apartment', 'studio'],
-  flatmate: ['pg', 'apartment', 'studio'],
-  condo: ['apartment', 'penthouse', 'villa'],
-  penthouse: ['apartment', 'villa', 'condo'],
-  loft: ['studio', 'apartment', 'condo'],
-  room: ['pg', 'flatmate', 'studio'],
-  office: ['shop', 'warehouse'],
-  shop: ['office', 'warehouse'],
-  warehouse: ['office', 'shop'],
-};
-
-/** Price context ranges by city + intent for Indian real estate. */
-const PRICE_CONTEXT = {
-  gurgaon: {
-    buy: { apartment: '85 lakhs - 3.5 crore', villa: '2.5 - 8 crore', builder_floor: '65 lakhs - 2.5 crore', house: '1.5 - 6 crore', plot: '50 lakhs - 4 crore', default: '70 lakhs - 4 crore' },
-    rent: { apartment: '15,000 - 85,000/month', villa: '60,000 - 3 lakh/month', builder_floor: '12,000 - 55,000/month', house: '25,000 - 1.5 lakh/month', default: '12,000 - 1 lakh/month' },
-    pg: { default: '7,000 - 25,000/month' },
-  },
-  delhi: {
-    buy: { apartment: '50 lakhs - 4 crore', default: '40 lakhs - 5 crore' },
-    rent: { apartment: '10,000 - 80,000/month', default: '8,000 - 70,000/month' },
-    pg: { default: '6,000 - 20,000/month' },
-  },
-  noida: {
-    buy: { apartment: '40 lakhs - 2.5 crore', default: '35 lakhs - 3 crore' },
-    rent: { apartment: '10,000 - 50,000/month', default: '8,000 - 45,000/month' },
-    pg: { default: '5,000 - 18,000/month' },
-  },
-  faridabad: {
-    buy: { apartment: '30 lakhs - 1.5 crore', default: '25 lakhs - 2 crore' },
-    rent: { apartment: '8,000 - 35,000/month', default: '7,000 - 30,000/month' },
-    pg: { default: '5,000 - 15,000/month' },
-  },
-  ghaziabad: {
-    buy: { apartment: '30 lakhs - 1.2 crore', default: '25 lakhs - 1.5 crore' },
-    rent: { apartment: '8,000 - 30,000/month', default: '7,000 - 25,000/month' },
-    pg: { default: '5,000 - 12,000/month' },
-  },
-};
-
-const CITY_TO_LOCALITY_CITY = {
-  gurgaon: 'Gurgaon',
-  gurugram: 'Gurgaon',
-  delhi: 'Delhi',
-  noida: 'Noida',
-  faridabad: 'Faridabad',
-  ghaziabad: 'Ghaziabad',
-};
-
-const getCityLocalities = (citySlug, limit = 5) => {
-  const cityName = CITY_TO_LOCALITY_CITY[citySlug];
-  if (!cityName) return [];
-  const typePriority = { sector: 0, society: 1, locality: 2, phase: 3, project: 4, road: 5, township: 6, village: 7 };
-  return localitiesIndex
-    .filter((l) => l.city === cityName)
-    .sort((a, b) => (typePriority[a.entityType] ?? 9) - (typePriority[b.entityType] ?? 9) || a.name.localeCompare(b.name))
-    .slice(0, limit);
-};
-
-const getPriceRange = (citySlug, intent, canonicalType) => {
-  const cityPrices = PRICE_CONTEXT[citySlug];
-  if (!cityPrices) return null;
-  const intentPrices = cityPrices[intent];
-  if (!intentPrices) return null;
-  return intentPrices[canonicalType] || intentPrices.default || null;
-};
 
 const buildLandingFaqs = (t, city, facet, validIntent) => {
   const verb = validIntent === 'rent' ? 'renting' : validIntent === 'pg' ? 'staying in a PG in' : 'buying';
@@ -158,9 +86,9 @@ const buildLandingFaqs = (t, city, facet, validIntent) => {
 const Landing = () => {
   const { t } = useTranslation('landing');
   const { citySlug, intent, type } = useParams();
-  const canonicalCitySlug = citySlug === 'gurugram' ? 'gurgaon' : citySlug;
+  const canonicalCitySlug = normalizeCitySlug(citySlug);
   const shouldIndex = isIndexableCitySlug(canonicalCitySlug);
-  const city = pretty(citySlug);
+  const city = pretty(canonicalCitySlug);
   const validIntent = VALID_INTENTS.includes(intent) ? intent : 'buy';
   const canonicalType = validIntent === 'pg'
     ? 'pg'
@@ -168,21 +96,15 @@ const Landing = () => {
   const canonicalTypeSlug = getPropertyRouteSlug(canonicalType, validIntent);
   const canonicalPath = `/${canonicalCitySlug}/${validIntent}/${canonicalTypeSlug}`;
   const facet = getPropertyTypeLabel(canonicalType);
-  const intentLabel = validIntent === 'pg' ? 'PG' : pretty(validIntent);
   const browseQuery = buildPropertySearchQuery({
     city,
     purpose: validIntent === 'pg' ? 'rent' : validIntent,
     property_type: [canonicalType],
   });
 
-  const citySearchUrl = (() => {
-    const u = new URL('https://360ghar.com/properties');
-    u.searchParams.set('city', city);
-    u.searchParams.set('intent', validIntent);
-    return u.toString();
-  })();
-
-  const verb = validIntent === 'rent' ? 'Rent' : validIntent === 'pg' ? 'PG' : 'Buy';
+  const intentLabel = validIntent === 'rent' ? 'Rent' : validIntent === 'pg' ? 'PG' : 'Sale';
+  const verb = validIntent === 'rent' ? 'renting' : validIntent === 'pg' ? 'staying in a PG in' : 'buying';
+  const vrHook = validIntent === 'buy' ? ' [360° VR Tour]' : '';
   const title = validIntent === 'pg'
     ? t('landing:seo.titlePg', { city })
     : t('landing:seo.titleBuyRent', { facet, verb, city });
@@ -210,37 +132,39 @@ const Landing = () => {
 
   const breadcrumbs = [
     { name: 'Home', url: 'https://360ghar.com/' },
-    { name: city, url: citySearchUrl },
+    { name: city, url: `https://360ghar.com/${canonicalCitySlug}` },
     { name: `${facet} - ${intentLabel}`, url: `https://360ghar.com${canonicalPath}` },
   ];
 
   // --- Enrichment data ---
 
-  const popularLocalities = getCityLocalities(canonicalCitySlug, 5);
+  const popularLocalities = getCityLocalities(canonicalCitySlug, { limit: 5, preferTypes: [canonicalType] });
 
   const priceRange = getPriceRange(canonicalCitySlug, validIntent, canonicalType);
 
   const faqItems = buildLandingFaqs(t, city, facet, validIntent);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
+  const [typeFaqs, setTypeFaqs] = useState([]);
 
-  const relatedSearches = [];
-  (INTENT_ALTERNATES[validIntent] || []).forEach((altIntent) => {
-    relatedSearches.push({
-      to: `/${canonicalCitySlug}/${altIntent}/${canonicalTypeSlug}`,
-      label: t('landing:relatedSearches.label', { facet, intentLabel: pretty(altIntent), city }),
-    });
+  const visibleRelatedSearches = getRelatedLandingLinks({
+    citySlug: canonicalCitySlug,
+    intent: validIntent,
+    typeSlug: canonicalTypeSlug,
+    canonicalType,
+    limit: 4,
   });
-  (RELATED_TYPES[canonicalType] || []).slice(0, 2).forEach((rt) => {
-    relatedSearches.push({
-      to: `/${canonicalCitySlug}/${validIntent}/${getPropertyRouteSlug(rt, validIntent)}`,
-      label: t('landing:relatedSearches.label', { facet: getPropertyTypeLabel(rt), intentLabel, city }),
-    });
-  });
-  const visibleRelatedSearches = relatedSearches.slice(0, 4);
+
+  const allFaqItems = [
+    ...faqItems,
+    ...(typeFaqs || []).map((faq) => ({
+      question: faq.q,
+      answer: faq.a,
+    })),
+  ];
 
   const faqStructuredData = {
     '@type': 'FAQPage',
-    mainEntity: faqItems.map((faq) => ({
+    mainEntity: allFaqItems.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
       acceptedAnswer: { '@type': 'Answer', text: faq.answer },
@@ -270,8 +194,22 @@ const Landing = () => {
             inLanguage: ['en-IN', 'hi-IN'],
           },
           faqStructuredData,
+          {
+            '@type': 'ItemList',
+            name: title,
+            description,
+            url: `https://360ghar.com${canonicalPath}`,
+            numberOfItems: validIntent === 'buy' ? 50 : validIntent === 'rent' ? 30 : 20,
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, url: `https://360ghar.com/properties?${browseQuery}` },
+            ],
+          },
         ]}
       />
+      {/* Preload hero resources for LCP optimization */}
+      <Helmet>
+        <link rel="preload" href="/assets/images/thumbs/banner-img.webp" as="image" fetchPriority="high" />
+      </Helmet>
       <OffCanvas />
       <MobileMenu />
 
@@ -290,7 +228,7 @@ const Landing = () => {
           <div className="container container-two">
             {/* Hero */}
             <div className="section-heading text-center mb-4">
-              <h1 className="section-heading__title">{title}</h1>
+              <h1 className="section-heading__title">{title.replace(' | 360Ghar', '').replace(' [360° VR Tour]', '')}</h1>
               <p className="section-heading__desc">{description}</p>
             </div>
 
@@ -312,6 +250,28 @@ const Landing = () => {
                 </p>
               </div>
             )}
+
+            {/* Market Snapshot — quick stats */}
+            <div className="row g-3 mt-4">
+              <div className="col-md-4">
+                <div className="p-3 rounded-3 bg-white border text-center h-100">
+                  <strong className="d-block text-main fs-5">{priceRange || 'Contact for prices'}</strong>
+                  <small className="text-muted">Average price range</small>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="p-3 rounded-3 bg-white border text-center h-100">
+                  <strong className="d-block text-main fs-5">{popularLocalities.length}+ localities</strong>
+                  <small className="text-muted">Verified areas in {city}</small>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="p-3 rounded-3 bg-white border text-center h-100">
+                  <strong className="d-block text-main fs-5">360° Tours</strong>
+                  <small className="text-muted">Virtual walkthroughs</small>
+                </div>
+              </div>
+            </div>
 
             {/* Why 360Ghar */}
             <div className="mt-5">
@@ -392,7 +352,7 @@ const Landing = () => {
                 {popularLocalities.map((loc) => (
                   <div className="col-sm-6 col-lg-4 col-xl" key={loc.slug}>
                     <I18nLink
-                      to={`/locality/${loc.slug}-gurgaon`}
+                      to={`/locality/${loc.slug}-${canonicalCitySlug}`}
                       className="d-block p-3 rounded-3 bg-white border text-decoration-none text-center"
                       style={{ color: 'inherit' }}
                     >
@@ -422,6 +382,18 @@ const Landing = () => {
             </div>
           </section>
         )}
+
+        {/* Content depth sections for helpful content compliance */}
+        <LandingPageContent
+          citySlug={canonicalCitySlug}
+          city={city}
+          intent={validIntent}
+          facet={facet}
+          canonicalType={canonicalType}
+          onTypeFaqs={setTypeFaqs}
+        />
+
+        <AiFactSheet context="landing" />
 
         <Cta ctaClass="" />
 
