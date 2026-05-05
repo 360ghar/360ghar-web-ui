@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
 import { fileURLToPath } from 'node:url';
-import { fetchPaginatedCollection, fetchPaginatedCollectionWithFallbacks } from './lib/paginatedApi.mjs';
+import { fetchPaginatedCollectionParallel, fetchPaginatedCollectionWithFallbacksParallel } from './lib/paginatedApi.mjs';
 
 const require = createRequire(import.meta.url);
 
@@ -34,7 +34,7 @@ const toRfc2822 = (dateStr) => {
 // --- Fetchers ---
 
 async function fetchBlogPosts() {
-  return fetchPaginatedCollectionWithFallbacks({
+  return fetchPaginatedCollectionWithFallbacksParallel({
     baseUrl: API_BASE,
     path: '/blog/posts',
     pageSizes: [50, 25],
@@ -42,7 +42,7 @@ async function fetchBlogPosts() {
 }
 
 async function fetchProperties() {
-  return fetchPaginatedCollection({
+  return fetchPaginatedCollectionParallel({
     baseUrl: API_BASE,
     path: '/properties/',
   });
@@ -152,22 +152,29 @@ async function main() {
 
   let blogPosts = [];
   let blogFetchOk = true;
-  try {
-    blogPosts = await fetchBlogPosts();
-    console.log(`generate-rss: fetched ${blogPosts.length} blog posts`);
-  } catch (err) {
-    blogFetchOk = false;
-    console.warn(`generate-rss: failed to fetch blog posts (${err.message})`);
-  }
-
   let properties = [];
   let propertiesFetchOk = true;
-  try {
-    properties = await fetchProperties();
+
+  // Fetch blog posts and properties in parallel
+  const [blogResult, propertiesResult] = await Promise.allSettled([
+    fetchBlogPosts(),
+    fetchProperties(),
+  ]);
+
+  if (blogResult.status === 'fulfilled') {
+    blogPosts = blogResult.value;
+    console.log(`generate-rss: fetched ${blogPosts.length} blog posts`);
+  } else {
+    blogFetchOk = false;
+    console.warn(`generate-rss: failed to fetch blog posts (${blogResult.reason?.message})`);
+  }
+
+  if (propertiesResult.status === 'fulfilled') {
+    properties = propertiesResult.value;
     console.log(`generate-rss: fetched ${properties.length} properties`);
-  } catch (err) {
+  } else {
     propertiesFetchOk = false;
-    console.warn(`generate-rss: failed to fetch properties (${err.message})`);
+    console.warn(`generate-rss: failed to fetch properties (${propertiesResult.reason?.message})`);
   }
 
   console.log(`generate-rss: ${localityEntries.length} localities from static index`);
