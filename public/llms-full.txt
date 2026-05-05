@@ -24,6 +24,7 @@
 ## Discovery Assets
 
 - AI Assistant Integration Guide: https://360ghar.com/for-ai
+- API Catalog: https://360ghar.com/.well-known/api-catalog
 - AI Crawler Policy: https://360ghar.com/.well-known/ai.txt
 - llms.txt: https://360ghar.com/llms.txt
 - llm-feed.json: https://360ghar.com/data/llm-feed.json

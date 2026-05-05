@@ -461,7 +461,7 @@ const BuilderReputationDetail = () => {
                 <h2 className="cta-title mb-3">{t('builderReputation.detail.cta.title')}</h2>
                 <p className="mb-4">{t('builderReputation.detail.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">{t('builderReputation.detail.cta.browseProperties')}</a>
+                  <I18nLink to="/properties" className="btn btn-white btn-main">{t('builderReputation.detail.cta.browseProperties')}</I18nLink>
                   <I18nLink to="/builder-reputation" className="btn btn-outline-white">{t('builderReputation.detail.cta.backToDirectory')}</I18nLink>
                 </div>
               </div>

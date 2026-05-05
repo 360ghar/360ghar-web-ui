@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { usePropertyStore } from '../../store/propertyStore';
 import { useLocationStore } from '../../store/locationStore';
 import {
@@ -13,6 +14,7 @@ import {
 } from '../../utils/propertyTaxonomy';
 
 const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer }) => {
+  const { t } = useTranslation('properties');
   const {
     filters,
     updateFilter,
@@ -76,7 +78,8 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
     // Purpose
     if (filters.purpose) {
-      const purposeLabel = purposes.find(p => p.value === filters.purpose)?.label;
+      const purposeOption = purposes.find(p => p.value === filters.purpose);
+      const purposeLabel = purposeOption ? t(purposeOption.labelKey) : null;
       if (purposeLabel) {
         chips.push({
           id: 'purpose',
@@ -103,15 +106,16 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
       chips.push({
         id: `type-${type}`,
         label: 'Type',
-        value: getPropertyTypeLabel(type),
+        value: getPropertyTypeLabel(type, t),
         onRemove: () => handlePropertyTypeChange(type, false)
       });
     });
 
     if (filters.gender_preference) {
-      const genderLabel = GENDER_PREFERENCE_OPTIONS.find(
+      const genderOption = GENDER_PREFERENCE_OPTIONS.find(
         (option) => option.value === filters.gender_preference
-      )?.label;
+      );
+      const genderLabel = genderOption ? t(genderOption.labelKey) : null;
       if (genderLabel) {
         chips.push({
           id: 'gender-preference',
@@ -123,9 +127,10 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
     }
 
     if (filters.sharing_type) {
-      const sharingLabel = SHARING_TYPE_OPTIONS.find(
+      const sharingOption = SHARING_TYPE_OPTIONS.find(
         (option) => option.value === filters.sharing_type
-      )?.label;
+      );
+      const sharingLabel = sharingOption ? t(sharingOption.labelKey) : null;
       if (sharingLabel) {
         chips.push({
           id: 'sharing-type',
@@ -404,7 +409,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
                 style={{ width: '16px', height: '16px', marginTop: '2px', cursor: 'pointer' }}
               />
               <label className="form-check-label" htmlFor={`purpose-${purpose.value || 'all'}`}>
-                {purpose.label}
+                {t(purpose.labelKey)}
               </label>
             </div>
           ))}
@@ -430,7 +435,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
                 style={{ width: '16px', height: '16px', marginTop: '2px', cursor: 'pointer' }}
               />
               <label className="form-check-label" htmlFor={`type-${type.value}`}>
-                {type.label}
+                {t(type.labelKey)}
               </label>
             </div>
           ))}
@@ -656,9 +661,9 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
                   value={filters.gender_preference || ''}
                   onChange={(e) => updateFilter('gender_preference', e.target.value)}
                 >
-                  {GENDER_PREFERENCE_OPTIONS.map((option) => (
+                    {GENDER_PREFERENCE_OPTIONS.map((option) => (
                     <option key={option.value || 'gender-any'} value={option.value}>
-                      {option.label}
+                      {t(option.labelKey)}
                     </option>
                   ))}
                 </select>
@@ -670,9 +675,9 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
                   value={filters.sharing_type || ''}
                   onChange={(e) => updateFilter('sharing_type', e.target.value)}
                 >
-                  {SHARING_TYPE_OPTIONS.map((option) => (
+                    {SHARING_TYPE_OPTIONS.map((option) => (
                     <option key={option.value || 'sharing-any'} value={option.value}>
-                      {option.label}
+                      {t(option.labelKey)}
                     </option>
                   ))}
                 </select>

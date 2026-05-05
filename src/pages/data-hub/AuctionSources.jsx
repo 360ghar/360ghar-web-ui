@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -189,7 +189,7 @@ const AuctionSources = () => {
           <div className="container container-two">
             <nav aria-label="breadcrumb" className="mb-20">
               <ol className="breadcrumb" style={{ fontSize: 13, marginBottom: 0 }}>
-                <li className="breadcrumb-item"><Link to="/" style={{ color: '#6b7280' }}>Home</Link></li>
+                <li className="breadcrumb-item"><I18nLink to="/" style={{ color: '#6b7280' }}>Home</I18nLink></li>
                 <li className="breadcrumb-item active" aria-current="page">Auction Sources</li>
               </ol>
             </nav>
@@ -294,8 +294,8 @@ const AuctionSources = () => {
                     <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Ready to Browse Auction Properties?</h3>
                     <p style={{ color: '#4b5563', marginBottom: 16 }}>View the latest bank, court, and government authority auction listings aggregated from all these sources.</p>
                     <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
-                      <Link to="/bank-auctions" className="btn btn-main" style={{ textDecoration: 'none' }}>Browse All Auctions</Link>
-                      <Link to="/properties" className="btn btn-outline-secondary" style={{ textDecoration: 'none' }}>Browse Properties</Link>
+                      <I18nLink to="/bank-auctions" className="btn btn-main" style={{ textDecoration: 'none' }}>Browse All Auctions</I18nLink>
+                      <I18nLink to="/properties" className="btn btn-outline-secondary" style={{ textDecoration: 'none' }}>Browse Properties</I18nLink>
                     </div>
                   </div>
 

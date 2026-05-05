@@ -11,8 +11,6 @@ import RewardTiers from '../../components/referral/RewardTiers';
 import ReferralForm from '../../components/referral/ReferralForm';
 import ReferralTerms from '../../components/referral/ReferralTerms';
 
-import { I18nLink } from '../../i18n/I18nLink';
-
 const ReferAndEarn = () => {
   const { t } = useTranslation('policies');
   const pageStructuredData = [

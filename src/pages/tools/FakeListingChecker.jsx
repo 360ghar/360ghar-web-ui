@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -34,6 +35,7 @@ const HOW_TO_STEPS = [
 ];
 
 const FakeListingChecker = () => {
+  const { t } = useTranslation();
   const [url, setUrl] = useState('');
   const [checked, setChecked] = useState(false);
   const [portalInfo, setPortalInfo] = useState(null);
@@ -78,7 +80,7 @@ const FakeListingChecker = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />

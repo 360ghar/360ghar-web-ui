@@ -52,11 +52,6 @@ const FAQS = [
 ];
 
 const PROPERTY_TYPES = ['residential', 'commercial', 'plot', 'industrial'];
-const AUCTION_TYPE_OPTIONS = [
-  { label: 'All Types', value: '' },
-  { label: 'Bank (SARFAESI)', value: 'bank' },
-  { label: 'Court Ordered', value: 'court' },
-];
 const PAGE_LIMIT = 12;
 
 const CITY_LABELS = {
@@ -227,7 +222,7 @@ const BankAuctions = () => {
                       {/* Auction type radio */}
                       <div style={{ marginBottom: 16 }}>
                         <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('bankAuctions.sourceType')}</label>
-                        {AUCTION_TYPE_OPTIONS.map(({ label, value }) => (
+                        {SOURCE_TYPES.map(({ label, value }) => (
                           <label key={value} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, fontSize: 13, cursor: 'pointer' }}>
                             <input
                               type="radio"
@@ -398,7 +393,7 @@ const BankAuctions = () => {
                 <h2 className="cta-title mb-3">{t('bankAuctions.cta.title')}</h2>
                 <p className="mb-4">{t('bankAuctions.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">{t('bankAuctions.cta.browseProperties')}</a>
+                  <I18nLink to="/properties" className="btn btn-white btn-main">{t('bankAuctions.cta.browseProperties')}</I18nLink>
                   <I18nLink to="/auction-sources" className="btn btn-outline-white">{t('bankAuctions.cta.auctionSources')}</I18nLink>
                 </div>
               </div>

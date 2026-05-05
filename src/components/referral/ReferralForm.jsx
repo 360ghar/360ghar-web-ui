@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLazyToast } from '../../common/useLazyToast';
 import { PROPERTY_TYPE_OPTIONS } from '../../utils/propertyTaxonomy';
 
@@ -42,6 +43,7 @@ const INITIAL_FORM_STATE = {
 };
 
 const ReferralForm = () => {
+  const { t } = useTranslation('properties');
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
@@ -363,7 +365,7 @@ const ReferralForm = () => {
                 <option value="">Select property type</option>
                 {PROPERTY_TYPES.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.label}
+                    {t(option.labelKey)}
                   </option>
                 ))}
               </select>

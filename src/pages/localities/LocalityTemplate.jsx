@@ -1,5 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
+import { I18nLink, localizePath } from '../../i18n/I18nLink';
+import useLocaleStore from '../../store/localeStore';
 import { useState, useEffect, useMemo } from 'react';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -465,6 +467,7 @@ const buildConnectivityItems = (localityName, city, entityType = 'locality') => 
 };
 
 const LocalityTemplate = () => {
+    const { t } = useTranslation();
     const params = useParams();
     // URL param is the full slug (may include -gurgaon suffix for SEO)
     const slug = (params.slug || '').replace(/-gurgaon$/i, '');
@@ -593,7 +596,8 @@ const LocalityTemplate = () => {
     }
 
     if (!computed) {
-        return <Navigate to="/properties" replace />;
+        const locale = useLocaleStore.getState().locale;
+        return <Navigate to={localizePath('/properties', locale)} replace />;
     }
 
     const breadcrumbs = [
@@ -657,7 +661,7 @@ const LocalityTemplate = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common:header.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />

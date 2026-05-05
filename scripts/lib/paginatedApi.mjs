@@ -122,7 +122,7 @@ async function runInBatches(tasks, concurrency) {
   const results = [];
   for (let i = 0; i < tasks.length; i += concurrency) {
     const batch = tasks.slice(i, i + concurrency);
-    results.push(...await Promise.all(batch));
+    results.push(...await Promise.all(batch.map(fn => fn())));
   }
   return results;
 }

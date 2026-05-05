@@ -18,7 +18,11 @@ const TopHeader = () => {
                                         <span className="header-info__icon">{item.icon}</span>
                                         {
                                             item.link ? (
-                                                <I18nLink to={`${item.link}${t(item.textKey)}`} className="header-info__text">{t(item.textKey)}</I18nLink>
+                                                (item.link === 'tel:' || item.link === 'mailto:') ? (
+                                                    <a href={`${item.link}${t(item.textKey)}`} className="header-info__text">{t(item.textKey)}</a>
+                                                ) : (
+                                                    <I18nLink to={`${item.link}${t(item.textKey)}`} className="header-info__text">{t(item.textKey)}</I18nLink>
+                                                )
                                             ) : (
                                                 <p className="header-info__text">{t(item.textKey)}</p>
                                             )

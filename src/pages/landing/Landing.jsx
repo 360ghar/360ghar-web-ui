@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import Header from '../../common/layout/Header';
@@ -95,7 +95,7 @@ const Landing = () => {
     : normalizePropertyTypeToken(type)[0] || 'apartment';
   const canonicalTypeSlug = getPropertyRouteSlug(canonicalType, validIntent);
   const canonicalPath = `/${canonicalCitySlug}/${validIntent}/${canonicalTypeSlug}`;
-  const facet = getPropertyTypeLabel(canonicalType);
+  const facet = getPropertyTypeLabel(canonicalType, t);
   const browseQuery = buildPropertySearchQuery({
     city,
     purpose: validIntent === 'pg' ? 'rent' : validIntent,
@@ -219,7 +219,7 @@ const Landing = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -255,20 +255,20 @@ const Landing = () => {
             <div className="row g-3 mt-4">
               <div className="col-md-4">
                 <div className="p-3 rounded-3 bg-white border text-center h-100">
-                  <strong className="d-block text-main fs-5">{priceRange || 'Contact for prices'}</strong>
-                  <small className="text-muted">Average price range</small>
+                  <strong className="d-block text-main fs-5">{priceRange || t('landing:marketSnapshot.contactForPrices')}</strong>
+                  <small className="text-muted">{t('landing:marketSnapshot.averagePriceRange')}</small>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="p-3 rounded-3 bg-white border text-center h-100">
                   <strong className="d-block text-main fs-5">{popularLocalities.length}+ localities</strong>
-                  <small className="text-muted">Verified areas in {city}</small>
+                  <small className="text-muted">{t('landing:marketSnapshot.verifiedAreasIn', { city })}</small>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="p-3 rounded-3 bg-white border text-center h-100">
-                  <strong className="d-block text-main fs-5">360° Tours</strong>
-                  <small className="text-muted">Virtual walkthroughs</small>
+                  <strong className="d-block text-main fs-5">{t('landing:marketSnapshot.tours360')}</strong>
+                  <small className="text-muted">{t('landing:marketSnapshot.virtualWalkthroughs')}</small>
                 </div>
               </div>
             </div>

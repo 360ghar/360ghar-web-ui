@@ -438,5 +438,11 @@
     "loadingTip4": "Fine-tuning details for photorealism...",
     "loadingTip5": "Almost there! Polishing the final result...",
     "confirmClearGallery": "Are you sure you want to clear all saved designs?"
+  },
+  "aiDesign": {
+    "ctaTitle": "अपने सपनों का घर ढूंढ रहे हैं?",
+    "ctaDesc": "360° वर्चुअल टूर के साथ हमारे क्यूरेटेड प्रॉपर्टी संग्रह का अन्वेषण करें। अपने सपनों का घर खोजें और हमारे AI डिज़ाइन टूल से उसे विज़ुअलाइज़ करें।",
+    "browseProperties": "प्रॉपर्टी ब्राउज़ करें",
+    "contactUs": "हमसे संपर्क करें"
   }
 }

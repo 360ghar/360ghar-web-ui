@@ -91,14 +91,14 @@ export const buildLandingKeywords = ({ facet, city, validIntent }) => {
     `${facet} ${INTENT_DISPLAY[validIntent] || validIntent} ${city}`,
     `${facet} in ${city}`,
     ...typeSyn.flatMap((t) => intentSyn.map((i) => `${t} ${i} ${city}`)),
-    isRes ? `1 BHK ${facet} ${validIntent} in ${city}` : null,
-    isRes ? `2 BHK ${facet} ${validIntent} in ${city}` : null,
-    isRes ? `3 BHK ${facet} ${validIntent} in ${city}` : null,
+    isRes ? `1 BHK ${facet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${city}` : null,
+    isRes ? `2 BHK ${facet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${city}` : null,
+    isRes ? `3 BHK ${facet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${city}` : null,
     validIntent === 'rent' && isRes ? `furnished ${facet} for rent in ${city}` : null,
     validIntent === 'rent' && isRes ? `semi furnished ${facet} for rent in ${city}` : null,
     validIntent === 'buy' && isRes ? `ready to move ${facet} for sale in ${city}` : null,
     `near metro ${city}`,
-    `pet friendly ${facet} ${validIntent} in ${city}`,
+    `pet friendly ${facet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${city}`,
   ].filter(Boolean);
 
   // Task #4: Locality-based phrases for Gurgaon/Gurugram
@@ -114,7 +114,7 @@ export const buildLandingKeywords = ({ facet, city, validIntent }) => {
         `gurgaon mein ${lcFacet}`,
         `${lcFacet} gurugram`,
         `${lcFacet} गुड़गाँव`,
-        `${facet} for ${validIntent} in गुड़गाँव`,
+        `${facet} for ${INTENT_DISPLAY[validIntent] || validIntent} in गुड़गाँव`,
       ]
     : [];
 
@@ -158,11 +158,11 @@ export const buildFacetKeywords = ({ facetText, validCity, validIntent, isBhk, b
   const base = [
     `${facetText} for ${INTENT_DISPLAY[validIntent] || validIntent} in ${validCity}`,
     ...tSyn.flatMap((t) => iSyn.map((i) => `${t} ${i} ${validCity}`)),
-    ...bhkSyn.map((b) => `${b} ${lcFacet} ${validIntent} in ${validCity}`),
-    ...hindiBhkSyn.map((b) => `${b} ${lcFacet} ${validIntent} in ${validCity}`),
+    ...bhkSyn.map((b) => `${b} ${lcFacet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${validCity}`),
+    ...hindiBhkSyn.map((b) => `${b} ${lcFacet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${validCity}`),
     hinglishBhkPhrase,
-    ...budgetSyn.map((b) => `${lcFacet} ${validIntent} ${b} in ${validCity}`),
-    isAmenity ? `${pretty(amenity)} ${lcFacet} ${validIntent} in ${validCity}` : null,
+    ...budgetSyn.map((b) => `${lcFacet} ${INTENT_DISPLAY[validIntent] || validIntent} ${b} in ${validCity}`),
+    isAmenity ? `${pretty(amenity)} ${lcFacet} ${INTENT_DISPLAY[validIntent] || validIntent} in ${validCity}` : null,
     'near metro', 'pet friendly', 'ready to move', 'no broker',
     ...BRAND_KEYWORDS,
   ];

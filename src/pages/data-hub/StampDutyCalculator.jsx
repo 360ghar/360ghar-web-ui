@@ -18,20 +18,20 @@ const STAMP_DUTY_HOW_TO_STEPS = [
   { name: 'View calculated stamp duty and registration charges', text: 'See the breakdown of stamp duty, 1% registration fee, and total registration cost instantly.' },
 ];
 
-const BUYER_TYPES = [
-  { value: 'male', label: 'Male', rate: 7 },
-  { value: 'female', label: 'Female', rate: 5 },
-  { value: 'joint', label: 'Joint', rate: 6 },
+const BUYER_RATES = [
+  { value: 'male', rate: 7 },
+  { value: 'female', rate: 5 },
+  { value: 'joint', rate: 6 },
 ];
 
-const fmt = (n) => `₹${Number(n).toLocaleString('en-IN')}`;
+const fmt = (n, lang) => `₹${Number(n).toLocaleString(lang === 'hi' ? 'hi-IN' : 'en-IN')}`;
 
 const StampDutyCalculator = () => {
-  const { t } = useTranslation('data-hub');
+  const { t, i18n } = useTranslation('data-hub');
   const { circleRateSectors, fetchCircleRateSectors } = useDataHubStore();
   const [form, setForm] = useState({ property_value: '', buyer_type: 'male', sector: '', property_type: '' });
   const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => { fetchCircleRateSectors(); }, [fetchCircleRateSectors]);
 
@@ -50,6 +50,12 @@ const StampDutyCalculator = () => {
       setLoading(false);
     }
   };
+
+  const BUYER_TYPES = BUYER_RATES.map(({ value, rate }) => ({
+    value,
+    label: t(`stampDuty.buyerTypes.${value}`),
+    rate,
+  }));
 
   const selectedBuyer = BUYER_TYPES.find(b => b.value === form.buyer_type);
 
@@ -137,10 +143,10 @@ const StampDutyCalculator = () => {
                     <h3 className="fs-20 fw-600 mb-20">{t('stampDuty.result')}</h3>
                     <div className="row">
                       {[
-                        { label: t('stampDuty.propertyValueLabel'), value: fmt(result.property_value) },
-                        { label: t('stampDuty.stampDutyLabel', { rate: selectedBuyer?.rate, type: selectedBuyer?.label }), value: fmt(result.stamp_duty_amount) },
-                        { label: t('stampDuty.registrationFee'), value: fmt(result.registration_fee) },
-                        { label: t('stampDuty.totalCost'), value: fmt(result.total_cost), highlight: true },
+                        { label: t('stampDuty.propertyValueLabel'), value: fmt(result.property_value, i18n.language) },
+                        { label: t('stampDuty.stampDutyLabel', { rate: selectedBuyer?.rate, type: selectedBuyer?.label }), value: fmt(result.stamp_duty_amount, i18n.language) },
+                        { label: t('stampDuty.registrationFee'), value: fmt(result.registration_fee, i18n.language) },
+                        { label: t('stampDuty.totalCost'), value: fmt(result.total_cost, i18n.language), highlight: true },
                       ].map(({ label, value, highlight }) => (
                         <div key={label} className="col-sm-6 mb-15">
                           <div className={`p-15 border-radius-6 ${highlight ? '' : ''}`}

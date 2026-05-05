@@ -24,7 +24,7 @@ const ValidationForm = (props) => {
         }),
 
         onSubmit: (values, { resetForm }) => {
-            resetForm({ values: "" });
+            resetForm();
             toast.success(t('generic.congratsSuccess'), {
                 theme: "colored",
             });

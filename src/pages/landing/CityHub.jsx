@@ -1,5 +1,7 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -82,6 +84,7 @@ const buildCityHubFaqs = (city, meta) => [
 ];
 
 const CityHub = () => {
+  const { t } = useTranslation();
   const { citySlug } = useParams();
 
   const canonical = normalizeCitySlug(citySlug);
@@ -176,7 +179,7 @@ const CityHub = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -236,14 +239,14 @@ const CityHub = () => {
                 <div className="row g-3">
                   {links.map((link) => (
                     <div className="col-sm-6 col-lg-4 col-xl" key={link.to}>
-                      <Link
+                      <I18nLink
                         to={link.to}
                         className="d-block p-3 rounded-3 bg-light border text-decoration-none text-center"
                         style={{ color: 'inherit' }}
                       >
                         <i className="fas fa-building text-gradient me-1" />
                         <span className="fw-medium">{link.label}</span>
-                      </Link>
+                      </I18nLink>
                     </div>
                   ))}
                 </div>
@@ -261,14 +264,14 @@ const CityHub = () => {
                   <h2 className="h5 mb-1">Top Localities in {city}</h2>
                   <p className="text-muted mb-0">Explore verified properties in {city}&apos;s most popular neighborhoods.</p>
                 </div>
-                <Link to="/localities" className="btn btn-outline-main btn-sm rounded-pill">
+                <I18nLink to="/localities" className="btn btn-outline-main btn-sm rounded-pill">
                   Browse All
-                </Link>
+                </I18nLink>
               </div>
               <div className="row g-3">
                 {topLocalities.map((loc) => (
                   <div className="col-sm-6 col-lg-3" key={loc.slug}>
-                    <Link
+                    <I18nLink
                       to={`/locality/${loc.slug}-${canonical}`}
                       className="d-block p-3 rounded-3 bg-white border text-decoration-none"
                       style={{ color: 'inherit' }}
@@ -276,7 +279,7 @@ const CityHub = () => {
                       <i className="fas fa-map-marker-alt text-gradient me-1" />
                       <span className="fw-medium">{pretty(loc.name)}</span>
                       <small className="d-block text-muted text-uppercase mt-1">{loc.entityType}</small>
-                    </Link>
+                    </I18nLink>
                   </div>
                 ))}
               </div>
@@ -291,14 +294,14 @@ const CityHub = () => {
             <div className="row g-3">
               {toolLinks.map((tool) => (
                 <div className="col-sm-6 col-lg-4 col-xl" key={tool.to}>
-                  <Link
+                  <I18nLink
                     to={tool.to}
                     className="d-block p-3 rounded-3 bg-light border text-decoration-none text-center"
                     style={{ color: 'inherit' }}
                   >
                     <i className={`fas ${tool.icon} text-gradient me-1`} />
                     <span className="fw-medium">{tool.label}</span>
-                  </Link>
+                  </I18nLink>
                 </div>
               ))}
             </div>
@@ -312,14 +315,14 @@ const CityHub = () => {
             <div className="row g-3">
               {comparisonLinks.map((link) => (
                 <div className="col-sm-6 col-lg-3" key={link.to}>
-                  <Link
+                  <I18nLink
                     to={link.to}
                     className="d-block p-3 rounded-3 bg-white border text-decoration-none text-center"
                     style={{ color: 'inherit' }}
                   >
                     <i className="fas fa-scale-balanced text-gradient me-1" />
                     <span className="fw-medium">{link.label}</span>
-                  </Link>
+                  </I18nLink>
                 </div>
               ))}
             </div>

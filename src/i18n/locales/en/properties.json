@@ -411,5 +411,50 @@
     "bedroom4": "4+ Bedrooms",
     "applyFilters": "Apply Filters",
     "kmRadius": "{{km}} km"
+  },
+  "taxonomy": {
+    "purpose": {
+      "all": "All",
+      "buy": "For Sale",
+      "rent": "For Rent",
+      "short_stay": "Short Stay"
+    },
+    "propertyType": {
+      "house": "House",
+      "apartment": "Apartment",
+      "builder_floor": "Builder Floor",
+      "room": "Room",
+      "villa": "Villa",
+      "plot": "Plot / Land",
+      "condo": "Condo",
+      "penthouse": "Penthouse",
+      "studio": "Studio",
+      "loft": "Loft",
+      "pg": "PG",
+      "flatmate": "Flatmate",
+      "office": "Office",
+      "shop": "Shop",
+      "warehouse": "Warehouse",
+      "commercial": "Commercial"
+    },
+    "genderPreference": {
+      "any": "Any gender",
+      "open": "Open to all",
+      "male": "Male only",
+      "female": "Female only"
+    },
+    "sharingType": {
+      "any": "Any room type",
+      "private_room": "Private room",
+      "shared_room": "Shared room"
+    },
+    "listingLabel": {
+      "pg": "PG",
+      "flatmate": "Flatmate",
+      "rent": "For Rent",
+      "buy": "For Sale",
+      "short_stay": "Short Stay"
+    },
+    "defaultPropertyType": "Property"
   }
 }

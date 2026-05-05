@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -10,6 +12,7 @@ import { propertyAPIService } from '../../services/propertyAPIService';
 import { siteMetadata } from '../../seo/siteMetadata';
 
 const VirtualTourPage = () => {
+    const { t } = useTranslation();
     const { id } = useParams();
     const [propertyData, setPropertyData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -158,7 +161,7 @@ const VirtualTourPage = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common:header.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />
@@ -183,10 +186,10 @@ const VirtualTourPage = () => {
                                 <i className="fas fa-exclamation-triangle fa-2x text-danger"></i>
                                 <h4 className="mt-3 text-danger">Property not found</h4>
                                 <p>The property you are looking for does not exist or has been removed.</p>
-                                <Link to="/properties" className="btn btn-main mt-3">
+                                <I18nLink to="/properties" className="btn btn-main mt-3">
                                     <span className="icon-left"><i className="fas fa-arrow-left"></i></span>
                                     Browse Properties
-                                </Link>
+                                </I18nLink>
                             </div>
                         </div>
                     </section>
@@ -199,10 +202,10 @@ const VirtualTourPage = () => {
                                 <i className="fas fa-home fa-2x text-muted"></i>
                                 <h4 className="mt-3">Property not found</h4>
                                 <p>The property you are looking for does not exist or has been removed.</p>
-                                <Link to="/properties" className="btn btn-main mt-3">
+                                <I18nLink to="/properties" className="btn btn-main mt-3">
                                     <span className="icon-left"><i className="fas fa-arrow-left"></i></span>
                                     Browse Properties
-                                </Link>
+                                </I18nLink>
                             </div>
                         </div>
                     </section>
@@ -216,9 +219,9 @@ const VirtualTourPage = () => {
                             <div className="container container-two">
                                 <nav aria-label="breadcrumb">
                                     <ol className="breadcrumb mb-0" style={{ background: 'transparent', padding: 0 }}>
-                                        <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                                        <li className="breadcrumb-item"><Link to="/properties">Properties</Link></li>
-                                        <li className="breadcrumb-item"><Link to={`/property/${propertyData.id}`}>{propertyTitle}</Link></li>
+                                        <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
+                                        <li className="breadcrumb-item"><I18nLink to="/properties">Properties</I18nLink></li>
+                                        <li className="breadcrumb-item"><I18nLink to={`/property/${propertyData.id}`}>{propertyTitle}</I18nLink></li>
                                         <li className="breadcrumb-item active" aria-current="page">Virtual Tour</li>
                                     </ol>
                                 </nav>
@@ -243,9 +246,9 @@ const VirtualTourPage = () => {
                                         <i className="fas fa-vr-cardboard fa-3x text-muted mb-3"></i>
                                         <h4>Virtual Tour Not Available</h4>
                                         <p className="text-muted">This property does not yet have a 360° virtual tour.</p>
-                                        <Link to={`/property/${propertyData.id}`} className="btn btn-main mt-2">
+                                        <I18nLink to={`/property/${propertyData.id}`} className="btn btn-main mt-2">
                                             View Property Details
-                                        </Link>
+                                        </I18nLink>
                                     </div>
                                 )}
                             </div>
@@ -259,9 +262,9 @@ const VirtualTourPage = () => {
                                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
                                             <div>
                                                 <h3 className="mb-1" style={{ fontSize: '1.25rem', fontWeight: 600 }}>
-                                                    <Link to={`/property/${propertyData.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                                                    <I18nLink to={`/property/${propertyData.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                                                         {propertyTitle}
-                                                    </Link>
+                                                    </I18nLink>
                                                 </h3>
                                                 <div className="d-flex flex-wrap gap-3 text-muted" style={{ fontSize: '0.9rem' }}>
                                                     {bhkLabel && (
@@ -278,10 +281,10 @@ const VirtualTourPage = () => {
                                                     )}
                                                 </div>
                                             </div>
-                                            <Link to={`/property/${propertyData.id}`} className="btn btn-outline-main">
+                                            <I18nLink to={`/property/${propertyData.id}`} className="btn btn-outline-main">
                                                 <span className="icon-left"><i className="fas fa-arrow-left"></i></span>
                                                 Back to Property
-                                            </Link>
+                                            </I18nLink>
                                         </div>
                                     </div>
                                 </div>
@@ -323,10 +326,10 @@ const VirtualTourPage = () => {
                         {virtualTourUrl && (
                             <section className="padding-y-40">
                                 <div className="container container-two text-center">
-                                    <Link to={`/property/${propertyData.id}`} className="btn btn-main btn-lg">
+                                    <I18nLink to={`/property/${propertyData.id}`} className="btn btn-main btn-lg">
                                         <span className="icon-left"><i className="fas fa-arrow-left"></i></span>
                                         Back to Property Details
-                                    </Link>
+                                    </I18nLink>
                                 </div>
                             </section>
                         )}

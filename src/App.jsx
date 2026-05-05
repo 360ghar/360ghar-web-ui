@@ -1,4 +1,4 @@
-import { useEffect, Suspense, lazy } from 'react';
+import { useEffect, useLayoutEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Outlet } from 'react-router-dom';
 import './App.css';
 // Toast CSS is now lazy-loaded via LazyToast.jsx
@@ -231,7 +231,7 @@ function RouteScrollToTop() {
 function LocaleGate({ locale }) {
   const setLocale = useLocaleStore((s) => s.setLocale);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setLocale(locale);
     if (i18n.language !== locale) {
       i18n.changeLanguage(locale);
@@ -259,9 +259,6 @@ function App() {
     realEstateStructuredData.knowledgePanel,
     realEstateStructuredData.mobileApplication,
     realEstateStructuredData.person,
-    realEstateStructuredData.podcast,
-    realEstateStructuredData.course,
-    realEstateStructuredData.qaPage,
     generateSpeakableStructuredData({
       cssSelectors: ['.speakable-summary', '.speakable-highlights', 'h1', 'h2'],
     }),

@@ -12,7 +12,7 @@
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
  const LoanEligibilityCalculator = () => {
-     const { t } = useTranslation('tools');
+      const { t, i18n } = useTranslation('tools');
      const [income, setIncome] = useState(50000);
      const [existingEmi, setExistingEmi] = useState(0);
      const [interestRate, setInterestRate] = useState(8.5);
@@ -57,11 +57,11 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
      }, [income, existingEmi, interestRate, tenure, otherExpenses]);
  
      const formatCurrency = (val) => {
-         return new Intl.NumberFormat('en-IN', {
-             style: 'currency',
-             currency: 'INR',
-             maximumFractionDigits: 0
-         }).format(val);
+          return new Intl.NumberFormat(i18n.language === 'hi' ? 'hi-IN' : 'en-IN', {
+              style: 'currency',
+              currency: 'INR',
+              maximumFractionDigits: 0
+          }).format(val);
      };
  
      return (

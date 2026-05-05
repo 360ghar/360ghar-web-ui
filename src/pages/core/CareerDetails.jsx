@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -41,6 +43,7 @@ const getExpandedDescription = (title) => {
 
 const CareerDetails = () => {
   const { slug } = useParams();
+  const { t } = useTranslation();
 
   const opening = useMemo(
     () => careerOpenings.find((o) => o.slug === slug) ?? null,
@@ -69,7 +72,7 @@ const CareerDetails = () => {
             headerMenusClass="mx-auto"
             btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
             btnLink="/post-property"
-            btnText="Post Property"
+            btnText={t('common:header.postProperty')}
             spanClass="icon-right text-gradient"
             showContactNumber={false}
           />
@@ -85,10 +88,10 @@ const CareerDetails = () => {
                   <p className="text-secondary mb-4">
                     The position you are looking for may have been filled or does not exist.
                   </p>
-                  <Link to="/careers" className="btn btn-outline-main px-4">
+                  <I18nLink to="/careers" className="btn btn-outline-main px-4">
                     <i className="fas fa-arrow-left me-2"></i>
                     Browse All Openings
-                  </Link>
+                  </I18nLink>
                 </div>
               </div>
             </div>
@@ -156,7 +159,7 @@ const CareerDetails = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -166,10 +169,10 @@ const CareerDetails = () => {
             <nav aria-label="Breadcrumb" className="mb-4 careers-inline-breadcrumb">
               <ol className="breadcrumb mb-0">
                 <li className="breadcrumb-item">
-                  <Link to="/" className="text-decoration-none">Home</Link>
+                  <I18nLink to="/" className="text-decoration-none">Home</I18nLink>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link to="/careers" className="text-decoration-none">Careers</Link>
+                  <I18nLink to="/careers" className="text-decoration-none">Careers</I18nLink>
                 </li>
                 <li className="breadcrumb-item active text-muted" aria-current="page">
                   {opening.title}
@@ -323,10 +326,10 @@ const CareerDetails = () => {
               <div className="col-lg-8 text-center">
                 <h3 className="h5 fw-bold mb-2">Interested in other roles?</h3>
                 <p className="text-secondary mb-3">Check out all our open internships.</p>
-                <Link to="/careers" className="btn btn-outline-main px-4">
+                <I18nLink to="/careers" className="btn btn-outline-main px-4">
                   <i className="fas fa-arrow-left me-2"></i>
                   Browse All Openings
-                </Link>
+                </I18nLink>
               </div>
             </div>
           </div>

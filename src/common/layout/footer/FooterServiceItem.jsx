@@ -6,7 +6,7 @@ const FooterServiceItem = () => {
     const { t } = useTranslation();
     return (
         <div className="footer-item">
-            <h6 className="footer-item__title">Services</h6>
+            <h6 className="footer-item__title">{t('common:footer.services')}</h6>
             <ul className="footer-menu">
                 {footerServiceLinks.map((link, index) => (
                     <li className="footer-menu__item" key={index}>

@@ -60,6 +60,7 @@
 - Sushant Lok 1, Gurgaon: https://360ghar.com/locality/sushant-lok-1-gurgaon
 - Sohna Road, Gurgaon: https://360ghar.com/locality/sohna-road-gurgaon
 - Sector 49, Gurgaon: https://360ghar.com/locality/sector-49-gurgaon
+- API Catalog: https://360ghar.com/.well-known/api-catalog
 - llm-feed.json: https://360ghar.com/data/llm-feed.json
 - ai.txt: https://360ghar.com/.well-known/ai.txt
 

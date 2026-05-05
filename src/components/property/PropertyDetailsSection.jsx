@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useI18nNavigate } from '../../i18n/I18nLink';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
@@ -89,6 +90,7 @@ MediaTabButton.propTypes = {
 };
 
 const PropertyDetailsSection = ({ property }) => {
+  const { t } = useTranslation('properties');
   const navigate = useI18nNavigate();
   const images = Array.isArray(property?.images) ? property.images : [];
   const galleryImages = useMemo(
@@ -168,11 +170,11 @@ const PropertyDetailsSection = ({ property }) => {
 
   const features = Array.isArray(property?.features) ? property.features : [];
   const listingPreferences = property?.listing_preferences || {};
-  const propertyTypeLabel = getPropertyTypeLabel(property?.property_type);
+  const propertyTypeLabel = getPropertyTypeLabel(property?.property_type, t);
   const listingLabel = getListingLabel({
     propertyType: property?.property_type,
     purpose: property?.purpose || property?.price_type,
-  });
+  }, t);
 
   const keyDetails = useMemo(() => ([
     { label: 'Property Type', value: propertyTypeLabel },

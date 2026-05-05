@@ -675,20 +675,19 @@ const AIDesignStudio = () => {
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center">
-                <h2 className="cta-title mb-3">Looking for Your Dream Home?</h2>
+                <h2 className="cta-title mb-3">{t('tools:aiDesign.ctaTitle')}</h2>
                 <p className="cta-desc mb-4">
-                  Explore our curated collection of properties with 360° virtual tours.
-                  Find your perfect home and visualize it with our AI design tools.
+                  {t('tools:aiDesign.ctaDesc')}
                 </p>
                 <div className="cta-buttons d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">
+                  <I18nLink to="/properties" className="btn btn-white btn-main">
                     <i className="fas fa-home me-2"></i>
-                    Browse Properties
-                  </a>
-                  <a href="/contact" className="btn btn-outline-white">
+                    {t('tools:aiDesign.browseProperties')}
+                  </I18nLink>
+                  <I18nLink to="/contact" className="btn btn-outline-white">
                     <i className="fas fa-phone me-2"></i>
-                    Contact Us
-                  </a>
+                    {t('tools:aiDesign.contactUs')}
+                  </I18nLink>
                 </div>
               </div>
             </div>

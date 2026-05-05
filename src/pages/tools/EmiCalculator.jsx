@@ -44,7 +44,7 @@ const EMI_HOW_TO_STEPS = [
 ];
 
 const EmiCalculator = () => {
-    const { t } = useTranslation('tools');
+    const { t, i18n } = useTranslation('tools');
     const resultsRef = useRef(null);
     const [loanAmount, setLoanAmount] = useState(1000000);
     const [interestRate, setInterestRate] = useState(8.5);
@@ -69,7 +69,7 @@ const EmiCalculator = () => {
     }, [loanAmount, interestRate, loanTenure]);
 
     const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('en-IN', {
+        return new Intl.NumberFormat(i18n.language === 'hi' ? 'hi-IN' : 'en-IN', {
             style: 'currency',
             currency: 'INR',
             maximumFractionDigits: 0
@@ -77,7 +77,7 @@ const EmiCalculator = () => {
     };
 
     const formatNumber = (num) => {
-        return new Intl.NumberFormat('en-IN').format(num);
+        return new Intl.NumberFormat(i18n.language === 'hi' ? 'hi-IN' : 'en-IN').format(num);
     };
 
     const handleReset = () => {

@@ -39,11 +39,11 @@ const PropertyDetails = () => {
         }
     }, [id, fetchPropertyById]);
 
-    const propertyTypeLabel = getPropertyTypeLabel(propertyData?.property_type);
+    const propertyTypeLabel = getPropertyTypeLabel(propertyData?.property_type, t);
     const listingLabel = getListingLabel({
         propertyType: propertyData?.property_type,
         purpose: propertyData?.purpose,
-    });
+    }, t);
     const locationLabel = propertyData?.locality || propertyData?.city || 'Gurugram';
     const priceValue = propertyData?.purpose === 'rent'
         ? (propertyData?.monthly_rent || propertyData?.daily_rate || propertyData?.base_price || 0)
@@ -189,7 +189,7 @@ const PropertyDetails = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common:header.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />

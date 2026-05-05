@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { useI18nNavigate } from '../../i18n/I18nLink';
 import { useLocationStore } from '../../store/locationStore';
 import GooglePlacesInput from '../../common/search/GooglePlacesInput';
@@ -17,6 +18,7 @@ import {
 import { buildPropertySearchQuery } from '../../utils/propertyFilters';
 
 const AdvancedPropertyFilter = ({ buttonText = "Search Properties" }) => {
+  const { t } = useTranslation('properties');
   const { location, setLocation } = useLocationStore();
   const navigate = useI18nNavigate();
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -234,7 +236,7 @@ const AdvancedPropertyFilter = ({ buttonText = "Search Properties" }) => {
                 >
                   <option value="all">All Purposes</option>
                   {purposes.map(purpose => (
-                    <option key={purpose.value} value={purpose.value}>{purpose.label}</option>
+                    <option key={purpose.value} value={purpose.value}>{t(purpose.labelKey)}</option>
                   ))}
                 </select>
               </div>
@@ -274,7 +276,7 @@ const AdvancedPropertyFilter = ({ buttonText = "Search Properties" }) => {
                           onChange={(e) => handlePropertyTypeChange(type.value, e.target.checked)}
                         />
                         <label className="form-check-label" htmlFor={`type-${type.value}`}>
-                          {type.label}
+                          {t(type.labelKey)}
                         </label>
                       </div>
                     </div>
@@ -511,7 +513,7 @@ const AdvancedPropertyFilter = ({ buttonText = "Search Properties" }) => {
                       >
                         {GENDER_PREFERENCE_OPTIONS.map((option) => (
                           <option key={option.value || 'gender-any'} value={option.value}>
-                            {option.label}
+                            {t(option.labelKey)}
                           </option>
                         ))}
                       </select>
@@ -526,7 +528,7 @@ const AdvancedPropertyFilter = ({ buttonText = "Search Properties" }) => {
                       >
                         {SHARING_TYPE_OPTIONS.map((option) => (
                           <option key={option.value || 'sharing-any'} value={option.value}>
-                            {option.label}
+                            {t(option.labelKey)}
                           </option>
                         ))}
                       </select>

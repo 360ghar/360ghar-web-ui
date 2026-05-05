@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -358,11 +358,11 @@ const AccountDeletionRequest = () => {
                                             <ul>
                                                 <li>
                                                     <i className="fas fa-check-circle me-2"></i>
-                                                    <span dangerouslySetInnerHTML={{ __html: t('deletion.noticeIrreversible') }} />
+                                                    <Trans i18nKey="deletion.noticeIrreversible" components={{ 0: <strong /> }} />
                                                 </li>
                                                 <li>
                                                     <i className="fas fa-check-circle me-2"></i>
-                                                    <span dangerouslySetInnerHTML={{ __html: t('deletion.noticePermanentlyRemoved') }} />
+                                                    <Trans i18nKey="deletion.noticePermanentlyRemoved" components={{ 0: <strong /> }} />
                                                 </li>
                                                 <li>
                                                     <i className="fas fa-check-circle me-2"></i>

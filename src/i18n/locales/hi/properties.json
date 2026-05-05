@@ -411,5 +411,50 @@
     "bedroom4": "4+ बेडरूम",
     "applyFilters": "फ़िल्टर लागू करें",
     "kmRadius": "{{km}} किमी"
+  },
+  "taxonomy": {
+    "purpose": {
+      "all": "सभी",
+      "buy": "बिक्री के लिए",
+      "rent": "किराये पर",
+      "short_stay": "लघु ठहराव"
+    },
+    "propertyType": {
+      "house": "मकान",
+      "apartment": "अपार्टमेंट",
+      "builder_floor": "बिल्डर फ्लोर",
+      "room": "कमरा",
+      "villa": "विला",
+      "plot": "प्लॉट / भूमि",
+      "condo": "कॉन्डो",
+      "penthouse": "पेंटहाउस",
+      "studio": "स्टूडियो",
+      "loft": "लॉफ्ट",
+      "pg": "PG",
+      "flatmate": "फ्लैटमेट",
+      "office": "कार्यालय",
+      "shop": "दुकान",
+      "warehouse": "गोदाम",
+      "commercial": "कमर्शियल"
+    },
+    "genderPreference": {
+      "any": "कोई भी लिंग",
+      "open": "सभी के लिए खुला",
+      "male": "केवल पुरुष",
+      "female": "केवल महिला"
+    },
+    "sharingType": {
+      "any": "कोई भी कमरा प्रकार",
+      "private_room": "प्राइवेट रूम",
+      "shared_room": "शेयर्ड रूम"
+    },
+    "listingLabel": {
+      "pg": "PG",
+      "flatmate": "फ्लैटमेट",
+      "rent": "किराये पर",
+      "buy": "बिक्री के लिए",
+      "short_stay": "लघु ठहराव"
+    },
+    "defaultPropertyType": "प्रॉपर्टी"
   }
 }

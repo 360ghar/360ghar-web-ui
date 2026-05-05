@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -52,6 +54,7 @@ const buildSocietyFaqs = (societyName, city, intent) => {
 };
 
 const SocietyLanding = () => {
+  const { t } = useTranslation();
   const { slug, intent } = useParams();
   const validIntent = VALID_INTENTS.includes(intent) ? intent : 'buy';
   const intentLabel = validIntent === 'rent' ? 'Rent' : 'Sale';
@@ -77,7 +80,7 @@ const SocietyLanding = () => {
             headerMenusClass="mx-auto"
             btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
             btnLink="/post-property"
-            btnText="Post Property"
+            btnText={t('common:header.postProperty')}
             spanClass="icon-right text-gradient"
             showContactNumber={false}
           />
@@ -87,9 +90,9 @@ const SocietyLanding = () => {
               <p className="text-muted mb-4">
                 The society you are looking for does not exist or has been removed.
               </p>
-              <Link to="/localities" className="btn btn-main">
+              <I18nLink to="/localities" className="btn btn-main">
                 Browse All Localities
-              </Link>
+              </I18nLink>
             </div>
           </section>
           <Footer />
@@ -191,7 +194,7 @@ const SocietyLanding = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -208,12 +211,12 @@ const SocietyLanding = () => {
 
             {/* Property listings link buttons */}
             <div className="text-center d-flex flex-wrap justify-content-center gap-3">
-              <Link to={`/properties?${browseQueryBuy}`} className="btn btn-main">
+              <I18nLink to={`/properties?${browseQueryBuy}`} className="btn btn-main">
                 Browse for Sale
-              </Link>
-              <Link to={`/properties?${browseQueryRent}`} className="btn btn-outline-main">
+              </I18nLink>
+              <I18nLink to={`/properties?${browseQueryRent}`} className="btn btn-outline-main">
                 Browse for Rent
-              </Link>
+              </I18nLink>
             </div>
           </div>
         </section>
@@ -299,45 +302,45 @@ const SocietyLanding = () => {
             <h2 className="h5 mb-3">Explore More</h2>
             <div className="d-flex flex-wrap gap-2">
               {validIntent !== 'buy' && (
-                <Link
+                <I18nLink
                   to={`/locality/${canonicalSlug}/buy`}
                   className="btn btn-outline-main btn-sm rounded-pill"
                 >
                   Flats for Sale in {societyName}
-                </Link>
+                </I18nLink>
               )}
               {validIntent !== 'rent' && (
-                <Link
+                <I18nLink
                   to={`/locality/${canonicalSlug}/rent`}
                   className="btn btn-outline-main btn-sm rounded-pill"
                 >
                   Flats for Rent in {societyName}
-                </Link>
+                </I18nLink>
               )}
-              <Link
+              <I18nLink
                 to={`/${canonicalCitySlug}/buy/apartment`}
                 className="btn btn-outline-main btn-sm rounded-pill"
               >
                 Flats for Sale in {city}
-              </Link>
-              <Link
+              </I18nLink>
+              <I18nLink
                 to={`/${canonicalCitySlug}/rent/apartment`}
                 className="btn btn-outline-main btn-sm rounded-pill"
               >
                 Flats for Rent in {city}
-              </Link>
-              <Link
+              </I18nLink>
+              <I18nLink
                 to={`/locality/${canonicalSlug}-gurgaon`}
                 className="btn btn-outline-main btn-sm rounded-pill"
               >
                 {societyName} Locality Guide
-              </Link>
-              <Link
+              </I18nLink>
+              <I18nLink
                 to="/properties"
                 className="btn btn-outline-main btn-sm rounded-pill"
               >
                 All Properties
-              </Link>
+              </I18nLink>
             </div>
           </div>
         </section>

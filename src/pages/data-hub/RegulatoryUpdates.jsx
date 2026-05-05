@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -213,8 +214,8 @@ const RegulatoryUpdates = () => {
                 <h2 className="cta-title mb-3">{t('regulatoryUpdates.cta.title')}</h2>
                 <p className="mb-4">{t('regulatoryUpdates.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/contact" className="btn btn-white btn-main">{t('regulatoryUpdates.cta.talkToExpert')}</a>
-                  <a href="/properties" className="btn btn-outline-white">{t('regulatoryUpdates.cta.browseProperties')}</a>
+                  <I18nLink to="/contact" className="btn btn-white btn-main">{t('regulatoryUpdates.cta.talkToExpert')}</I18nLink>
+                  <I18nLink to="/properties" className="btn btn-outline-white">{t('regulatoryUpdates.cta.browseProperties')}</I18nLink>
                 </div>
               </div>
             </div>

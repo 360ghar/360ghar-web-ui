@@ -1,4 +1,6 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -22,6 +24,7 @@ const TYPE_LABELS = {
 };
 
 const NearOfficePage = () => {
+  const { t } = useTranslation();
   const { slug } = useParams();
   const landmark = officeLandmarks.find((l) => l.slug === slug);
 
@@ -34,7 +37,7 @@ const NearOfficePage = () => {
             <div className="container container-two text-center">
               <h1>Location Not Found</h1>
               <p className="text-muted">We could not find the office location you are looking for.</p>
-              <Link to="/properties" className="btn btn-main mt-3">Browse All Properties</Link>
+              <I18nLink to="/properties" className="btn btn-main mt-3">Browse All Properties</I18nLink>
             </div>
           </section>
         </main>
@@ -108,7 +111,7 @@ const NearOfficePage = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -121,12 +124,12 @@ const NearOfficePage = () => {
             </div>
 
             <div className="text-center d-flex gap-2 justify-content-center flex-wrap">
-              <Link to={`/properties?${browseQuery}`} className="btn btn-main">
+              <I18nLink to={`/properties?${browseQuery}`} className="btn btn-main">
                 Browse for Sale
-              </Link>
-              <Link to={`/properties?${rentQuery}`} className="btn btn-outline-main">
+              </I18nLink>
+              <I18nLink to={`/properties?${rentQuery}`} className="btn btn-outline-main">
                 Browse for Rent
-              </Link>
+              </I18nLink>
             </div>
 
             {/* Landmark Info */}
@@ -184,12 +187,12 @@ const NearOfficePage = () => {
               <div className="row g-3">
                 {otherLandmarks.map((l) => (
                   <div className="col-md-6 col-lg-4" key={l.slug}>
-                    <Link to={`/near/${l.slug}`} className="text-decoration-none">
+                    <I18nLink to={`/near/${l.slug}`} className="text-decoration-none">
                       <div className="p-3 rounded-3 bg-white border h-100">
                         <h3 className="h6 mb-1">{l.name}</h3>
                         <small className="text-muted">{TYPE_LABELS[l.type] || l.type}</small>
                       </div>
-                    </Link>
+                    </I18nLink>
                   </div>
                 ))}
               </div>

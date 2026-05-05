@@ -50,7 +50,9 @@
     "password": "Password",
     "signingIn": "Signing in...",
     "signInConnect": "Sign in & connect",
-    "consent": "By continuing, you allow 360Ghar tools to access your saved properties, swipes, and visits so the AI assistant can personalize recommendations for you."
+    "consent": "By continuing, you allow 360Ghar tools to access your saved properties, swipes, and visits so the AI assistant can personalize recommendations for you.",
+    "invalidRedirect": "Unauthorized redirect URI",
+    "invalidRedirectDesc": "The redirect URI provided is not authorized. Please open this page from a valid AI assistant connection flow."
   },
   "deletion": {
     "title": "Account Deletion Request | 360Ghar",
@@ -80,8 +82,8 @@
     "detailsLabel": "Additional Details",
     "detailsPlaceholder": "Please provide any additional information about your deletion request...",
     "importantNotice": "Important Notice",
-    "noticeIrreversible": "Account deletion is <strong>irreversible</strong>",
-    "noticePermanentlyRemoved": "All your data will be <strong>permanently removed</strong>",
+    "noticeIrreversible": "Account deletion is <0>irreversible</0>",
+    "noticePermanentlyRemoved": "All your data will be <0>permanently removed</0>",
     "noticeLoseAccess": "You will lose access to saved properties, messages, and account settings",
     "noticeVerifyIdentity": "We will verify your identity before processing the request",
     "submitting": "Submitting...",

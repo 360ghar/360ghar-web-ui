@@ -1,12 +1,12 @@
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import BlogDetailsSection from '../../components/blog/BlogDetailsSection';
-import { useTranslation } from 'react-i18next';
-
 const BlogDetails = () => {
+    const { t } = useTranslation();
     return (
         <>
             <OffCanvas />
@@ -18,7 +18,7 @@ const BlogDetails = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common:header.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />

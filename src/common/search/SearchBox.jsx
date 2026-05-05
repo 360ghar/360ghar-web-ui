@@ -100,7 +100,7 @@ const SearchBox = () => {
                     <option value="All">{t('searchBox.allTypes')}</option>
                     {quickSearchTypeOptions.map((option) => (
                       <option key={option.value} value={option.value}>
-                        {option.label}
+                        {t(option.labelKey)}
                       </option>
                     ))}
                   </select>
@@ -114,7 +114,7 @@ const SearchBox = () => {
                   >
                     {PURPOSE_OPTIONS.map((option) => (
                       <option key={option.value || 'all'} value={option.value || 'all'}>
-                        {option.label}
+                        {t(option.labelKey)}
                       </option>
                     ))}
                   </select>
@@ -210,7 +210,7 @@ const SearchBox = () => {
                   <option value="All">{t('searchBox.allTypes')}</option>
                   {quickSearchTypeOptions.map((option) => (
                     <option key={option.value} value={option.value}>
-                      {option.label}
+                      {t(option.labelKey)}
                     </option>
                   ))}
                 </select>
@@ -224,7 +224,7 @@ const SearchBox = () => {
                 >
                   {PURPOSE_OPTIONS.map((option) => (
                     <option key={option.value || 'all'} value={option.value || 'all'}>
-                      {option.label}
+                      {t(option.labelKey)}
                     </option>
                   ))}
                 </select>

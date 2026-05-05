@@ -76,7 +76,7 @@ const HOW_TO_STEPS = [
 ];
 
 const CapitalGainsCalculator = () => {
-    const { t } = useTranslation('tools');
+    const { t, i18n } = useTranslation('tools');
     const [salePrice, setSalePrice] = useState(5000000);
     const [purchasePrice, setPurchasePrice] = useState(2000000);
     const [purchaseYear, setPurchaseYear] = useState('2015-2016');
@@ -110,7 +110,7 @@ const CapitalGainsCalculator = () => {
     }, [improvementCost, purchasePrice, purchaseYear, salePrice, saleYear, transferExpenses]);
 
     const formatCurrency = (val) => {
-        return new Intl.NumberFormat('en-IN', {
+        return new Intl.NumberFormat(i18n.language === 'hi' ? 'hi-IN' : 'en-IN', {
             style: 'currency',
             currency: 'INR',
             maximumFractionDigits: 0

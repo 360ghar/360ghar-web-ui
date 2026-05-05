@@ -93,5 +93,21 @@
     "item4": "{{city}} में रेडी टू मूव {{facetText}} {{readyPreposition}}",
     "item5": "{{city}} में नो ब्रोकर {{facetText}} {{readyPreposition}}",
     "item6": "{{city}} में 360\u00B0 वर्चुअल टूर्स के साथ वेरिफाइड {{facetText}}"
+  },
+  "marketSnapshot": {
+    "averagePriceRange": "औसत मूल्य श्रेणी",
+    "verifiedAreasIn": "{{city}} में वेरिफाइड क्षेत्र",
+    "tours360": "360° टूर",
+    "virtualWalkthroughs": "वर्चुअल वॉकथ्रू",
+    "contactForPrices": "मूल्य के लिए संपर्क करें"
+  },
+  "budgetEnrichment": {
+    "affordabilityInsights": "{{city}} के लिए किफ़ायती अंतर्दृष्टि",
+    "typicalPrices": "{{city}} में सामान्य {{facetTextLower}} की कीमतें: <strong>{{priceRange}}</strong>।",
+    "budgetFilterNarrows": "यह बजट फ़िल्टर परिणामों को {{budgetText}} विकल्पों तक सीमित करता है।",
+    "useEmiCalculator": "इस बजट के लिए मासिक भुगतान जांचने के लिए हमारे <1>EMI कैलकुलेटर</1> का उपयोग करें, या <3>लोन पात्रता जांचें</3>।",
+    "aboutAmenity": "{{city}} में {{amenityPretty}} के बारे में",
+    "amenityHighDemand": "{{city}} में <strong>{{amenityPretty}}</strong> वाली प्रॉपर्टीज़ की मांग अधिक है, विशेष रूप से परिवारों और कामकाजी पेशेवरों के बीच।",
+    "amenityVerifyNote": "360Ghar ऑन-साइट निरीक्षण के दौरान हर सुविधा दावे को सत्यापित करता है। वर्चुअल टूर आपको विज़िट शेड्यूल करने से पहले {{amenityPretty}} की पुष्टि करने देते हैं।"
   }
 }

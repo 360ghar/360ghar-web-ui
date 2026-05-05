@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -36,6 +37,7 @@ const GLOSSARY_FAQS = GLOSSARY_ENTRIES.map(e => ({
 }));
 
 const Glossary = () => {
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [openIndex, setOpenIndex] = useState(-1);
 
@@ -68,7 +70,7 @@ const Glossary = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -131,8 +133,8 @@ const Glossary = () => {
             <div className="row justify-content-center mt-5">
               <div className="col-lg-8 text-center">
                 <h2 className="h5 mb-3">Ready to explore verified properties?</h2>
-                <Link to="/properties?city=Gurgaon" className="btn btn-main me-2">Browse Listings</Link>
-                <Link to="/emi-calculator" className="btn btn-outline-main">EMI Calculator</Link>
+                <I18nLink to="/properties?city=Gurgaon" className="btn btn-main me-2">Browse Listings</I18nLink>
+                <I18nLink to="/emi-calculator" className="btn btn-outline-main">EMI Calculator</I18nLink>
               </div>
             </div>
           </div>

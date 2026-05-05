@@ -438,5 +438,11 @@
     "loadingTip4": "Fine-tuning details for photorealism...",
     "loadingTip5": "Almost there! Polishing the final result...",
     "confirmClearGallery": "Are you sure you want to clear all saved designs?"
+  },
+  "aiDesign": {
+    "ctaTitle": "Looking for Your Dream Home?",
+    "ctaDesc": "Explore our curated collection of properties with 360° virtual tours. Find your perfect home and visualize it with our AI design tools.",
+    "browseProperties": "Browse Properties",
+    "contactUs": "Contact Us"
   }
 }

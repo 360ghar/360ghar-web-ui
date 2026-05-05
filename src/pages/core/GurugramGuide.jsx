@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -42,9 +43,9 @@ const GurugramGuide = () => {
   return (
     <>
       <SEO
-        title="Complete Guide to Real Estate in Gurugram 2024 | Buy, Sell, Rent Properties"
-        description="Comprehensive guide to buying, selling, and renting properties in Gurugram. Learn about top locations, property prices, market trends, and investment opportunities with 360° virtual tours."
-        keywords="Gurugram real estate guide, property buying Gurugram, real estate investment Gurugram, Gurugram property market, DLF Phase guide, Golf Course Road properties, Sohna Road real estate, Cyber City apartments"
+        title={t('gurugramGuide.seoTitle')}
+        description={t('gurugramGuide.seoDescription')}
+        keywords={t('gurugramGuide.seoKeywords')}
         canonical="/gurugram-real-estate-guide"
         structuredData={structuredData}
       />
@@ -58,7 +59,7 @@ const GurugramGuide = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -67,16 +68,15 @@ const GurugramGuide = () => {
           <div className="container container-two">
             <nav aria-label="breadcrumb" className="mb-4">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="/">{t('gurugramGuide.breadcrumbHome')}</a></li>
+                <li className="breadcrumb-item"><I18nLink to="/">{t('gurugramGuide.breadcrumbHome')}</I18nLink></li>
                 <li className="breadcrumb-item active" aria-current="page">{t('gurugramGuide.breadcrumbCurrent')}</li>
               </ol>
             </nav>
 
             <div className="section-heading text-center mb-5">
-              <h1 className="section-heading__title">Complete Guide to Real Estate in Gurugram 2024</h1>
+              <h1 className="section-heading__title">{t('gurugramGuide.pageTitle')}</h1>
               <p className="section-heading__desc">
-                Your comprehensive resource for buying, selling, and renting properties in Gurugram.
-                Discover top locations, current market trends, and investment opportunities.
+                {t('gurugramGuide.pageDesc')}
               </p>
             </div>
 
@@ -96,60 +96,52 @@ const GurugramGuide = () => {
                   </div>
 
                   <div className="blog-details__content">
-                    <h2>Why Invest in Gurugram Real Estate?</h2>
+                    <h2>{t('gurugramGuide.whyInvestTitle')}</h2>
                     <p>
-                      Gurugram, also known as Gurgaon, has emerged as one of India&apos;s premier real estate markets.
-                      Located in the National Capital Region (NCR), it offers excellent connectivity, world-class infrastructure,
-                      and a booming economy driven by IT, BPO, and corporate offices.
+                      {t('gurugramGuide.whyInvestDesc')}
                     </p>
 
-                    <h3>Key Advantages:</h3>
+                    <h3>{t('gurugramGuide.keyAdvantages')}</h3>
                     <ul>
-                      <li><strong>Strategic Location:</strong> Just 30 minutes from Delhi International Airport and Delhi</li>
-                      <li><strong>Economic Hub:</strong> Home to over 500 Fortune 500 companies</li>
-                      <li><strong>Infrastructure:</strong> Metro connectivity, expressways, and modern amenities</li>
-                      <li><strong>High ROI:</strong> Consistent property appreciation of 8-12% annually</li>
-                      <li><strong>Lifestyle:</strong> Premium malls, international schools, and healthcare facilities</li>
+                      <li>{t('gurugramGuide.advantageLocation')}</li>
+                      <li>{t('gurugramGuide.advantageEconomic')}</li>
+                      <li>{t('gurugramGuide.advantageInfrastructure')}</li>
+                      <li>{t('gurugramGuide.advantageROI')}</li>
+                      <li>{t('gurugramGuide.advantageLifestyle')}</li>
                     </ul>
 
-                    <h2>Top Locations in Gurugram</h2>
+                    <h2>{t('gurugramGuide.topLocations')}</h2>
 
-                    <h3>DLF Phase 1-5</h3>
+                    <h3>{t('gurugramGuide.dlfTitle')}</h3>
                     <p>
-                      The most prestigious residential areas in Gurugram. These phases offer luxury apartments,
-                      villas, and plotted developments with world-class amenities. Property prices range from
-                      ₹2-15 crores for apartments and ₹5-50 crores for independent houses.
+                      {t('gurugramGuide.dlfDesc')}
                     </p>
 
-                    <h3>Golf Course Road</h3>
+                    <h3>{t('gurugramGuide.golfCourseTitle')}</h3>
                     <p>
-                      Known for its premium lifestyle, Golf Course Road features luxury high-rises,
-                      shopping malls, and fine dining. This area caters to the upper-income segment with
-                      properties priced between ₹3-25 crores.
+                      {t('gurugramGuide.golfCourseDesc')}
                     </p>
 
-                    <h3>Sohna Road</h3>
+                    <h3>{t('gurugramGuide.sohnaTitle')}</h3>
                     <p>
-                      Offers more affordable options compared to other prime areas. Popular among young
-                      professionals and growing families. Property prices range from ₹50 lakhs to ₹3 crores.
+                      {t('gurugramGuide.sohnaDesc')}
                     </p>
 
-                    <h3>Cyber City & MG Road</h3>
+                    <h3>{t('gurugramGuide.cyberCityTitle')}</h3>
                     <p>
-                      Commercial hub with modern office spaces and residential complexes.
-                      Ideal for working professionals. Properties available from ₹1-8 crores.
+                      {t('gurugramGuide.cyberCityDesc')}
                     </p>
 
-                    <h2>Current Property Prices in Gurugram</h2>
+                    <h2>{t('gurugramGuide.priceTitle')}</h2>
                     <div className="table-responsive mb-4">
                       <table className="table table-bordered">
                         <thead>
                           <tr>
-                            <th>Location</th>
-                            <th>2BHK (Buy)</th>
-                            <th>3BHK (Buy)</th>
-                            <th>2BHK (Rent)</th>
-                            <th>3BHK (Rent)</th>
+                            <th>{t('gurugramGuide.thLocation')}</th>
+                            <th>{t('gurugramGuide.th2bhkBuy')}</th>
+                            <th>{t('gurugramGuide.th3bhkBuy')}</th>
+                            <th>{t('gurugramGuide.th2bhkRent')}</th>
+                            <th>{t('gurugramGuide.th3bhkRent')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -185,42 +177,42 @@ const GurugramGuide = () => {
                       </table>
                     </div>
 
-                    <h2>Market Trends 2024</h2>
+                    <h2>{t('gurugramGuide.marketTrends')}</h2>
                     <ul>
-                      <li><strong>Rising Demand:</strong> Increased interest from NRI investors and corporate employees</li>
-                      <li><strong>Affordable Housing:</strong> Government schemes driving demand in mid-segment properties</li>
-                      <li><strong>Virtual Tours:</strong> Technology adoption for remote property viewing</li>
-                      <li><strong>Sustainability:</strong> Green building certifications gaining importance</li>
-                      <li><strong>Co-living Spaces:</strong> Growing demand for furnished rentals and PGs</li>
+                      <li>{t('gurugramGuide.trendDemand')}</li>
+                      <li>{t('gurugramGuide.trendAffordable')}</li>
+                      <li>{t('gurugramGuide.trendVirtual')}</li>
+                      <li>{t('gurugramGuide.trendGreen')}</li>
+                      <li>{t('gurugramGuide.trendColiving')}</li>
                     </ul>
 
-                    <h2>Investment Opportunities</h2>
+                    <h2>{t('gurugramGuide.investmentTitle')}</h2>
                     <p>
-                      Gurugram offers excellent investment potential with:
+                      {t('gurugramGuide.investmentDesc')}
                     </p>
                     <ul>
-                      <li>Under-construction projects with assured returns</li>
-                      <li>Rental yields of 3-5% in prime locations</li>
-                      <li>Capital appreciation of 8-12% annually</li>
-                      <li>Commercial properties with long-term leases</li>
-                      <li>Land banking opportunities in developing areas</li>
+                      <li>{t('gurugramGuide.investUnderConstruction')}</li>
+                      <li>{t('gurugramGuide.investRentalYield')}</li>
+                      <li>{t('gurugramGuide.investAppreciation')}</li>
+                      <li>{t('gurugramGuide.investCommercial')}</li>
+                      <li>{t('gurugramGuide.investLandBanking')}</li>
                     </ul>
 
-                    <h2>How 360Ghar Can Help</h2>
+                    <h2>{t('gurugramGuide.howHelpTitle')}</h2>
                     <p>
-                      At 360Ghar, we provide:
+                      {t('gurugramGuide.howHelpDesc')}
                     </p>
                     <ul>
-                      <li>Verified property listings with authentic details</li>
-                      <li>360° virtual tours for remote property viewing</li>
-                      <li>Detailed market insights and price trends</li>
-                      <li>Expert guidance from real estate professionals</li>
-                      <li>Free property listing for owners</li>
+                      <li>{t('gurugramGuide.helpVerified')}</li>
+                      <li>{t('gurugramGuide.helpVirtualTours')}</li>
+                      <li>{t('gurugramGuide.helpMarketInsights')}</li>
+                      <li>{t('gurugramGuide.helpExpertGuidance')}</li>
+                      <li>{t('gurugramGuide.helpFreeListing')}</li>
                     </ul>
 
                     <div className="text-center mt-5">
-                      <a href="/properties" className="btn btn-main me-3">Browse Properties</a>
-                      <a href="/post-property" className="btn btn-outline-main">List Your Property</a>
+                      <I18nLink to="/properties" className="btn btn-main me-3">{t('gurugramGuide.browseProperties')}</I18nLink>
+                      <I18nLink to="/post-property" className="btn btn-outline-main">{t('gurugramGuide.listYourProperty')}</I18nLink>
                     </div>
                   </div>
                 </article>

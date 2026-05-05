@@ -111,7 +111,7 @@ const FacetLanding = () => {
 
   const baseCanonicalPath = `/${canonicalCitySlug}/${validIntent}/${canonicalTypeSlug}`;
 
-  const facetText = getPropertyTypeLabel(canonicalType);
+  const facetText = getPropertyTypeLabel(canonicalType, t);
   const bhkText = isBhk ? bhk.replace('-bhk', ' BHK').toUpperCase() : '';
   const budgetText = isBudget ? budget.replace(/-/g,' ') : '';
   const browseQuery = buildPropertySearchQuery({
@@ -225,7 +225,6 @@ const FacetLanding = () => {
 
   // Preposition helpers for popular searches
   const intentDisplay = validIntent === 'pg' ? '' : validIntent;
-  const intentDisplayPg = validIntent === 'pg' ? '' : validIntent;
   const readyPreposition = validIntent === 'pg' ? 'in' : `for ${validIntent} in`;
 
   return (
@@ -271,7 +270,7 @@ const FacetLanding = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -294,8 +293,8 @@ const FacetLanding = () => {
                   ? t('landing:facetPopularSearches.item1Pg', { facetText, city: validCity })
                   : t('landing:facetPopularSearches.item1', { facetText, intentDisplay, city: validCity })
                 }</li>
-                {isBhk && <li>{t('landing:facetPopularSearches.item2', { bhkText, facetText, intentDisplayPg, city: validCity })}</li>}
-                {isBudget && <li>{t('landing:facetPopularSearches.item3', { facetText, intentDisplayPg, budgetText, city: validCity })}</li>}
+                {isBhk && <li>{t('landing:facetPopularSearches.item2', { bhkText, facetText, intentDisplay, city: validCity })}</li>}
+                {isBudget && <li>{t('landing:facetPopularSearches.item3', { facetText, intentDisplay, budgetText, city: validCity })}</li>}
                 <li>{t('landing:facetPopularSearches.item4', { facetText, readyPreposition, city: validCity })}</li>
                 <li>{t('landing:facetPopularSearches.item5', { facetText, readyPreposition, city: validCity })}</li>
                 <li>{t('landing:facetPopularSearches.item6', { facetText, city: validCity })}</li>
@@ -304,16 +303,21 @@ const FacetLanding = () => {
               {/* Budget enrichment */}
               {isBudget && (
                 <div className="mt-4 p-4 bg-light rounded-3 border">
-                  <h2 className="h6 mb-2">Affordability Insights for {validCity}</h2>
+                  <h2 className="h6 mb-2">{t('landing:budgetEnrichment.affordabilityInsights', { city: validCity })}</h2>
                   {priceRange && (
                     <p className="mb-2">
-                      Typical {facetText.toLowerCase()} prices in {validCity}: <strong>{priceRange}</strong>.
-                      This budget filter narrows results to options {budgetText.replace('under ', 'under ')}.
+                      {t('landing:budgetEnrichment.typicalPrices', { facetTextLower: facetText.toLowerCase(), city: validCity, priceRange })}
+                      {' '}{t('landing:budgetEnrichment.budgetFilterNarrows', { budgetText: budgetText.replace('under ', 'under ') })}
                     </p>
                   )}
                   <p className="mb-0 text-muted" style={{ fontSize: '0.875rem' }}>
-                    Use our <I18nLink to="/emi-calculator" className="text-decoration-underline">EMI Calculator</I18nLink> to check
-                    monthly payments for this budget, or <I18nLink to="/loan-eligibility-calculator" className="text-decoration-underline">check loan eligibility</I18nLink>.
+                    {t('landing:budgetEnrichment.useEmiCalculator', {
+                      interpolations: { budgetText },
+                      components: {
+                        1: <I18nLink to="/emi-calculator" className="text-decoration-underline" key="emi" />,
+                        3: <I18nLink to="/loan-eligibility-calculator" className="text-decoration-underline" key="loan" />,
+                      }
+                    })}
                   </p>
                 </div>
               )}
@@ -321,14 +325,14 @@ const FacetLanding = () => {
               {/* Amenity enrichment */}
               {isAmenity && (
                 <div className="mt-4 p-4 bg-light rounded-3 border">
-                  <h2 className="h6 mb-2">About {pretty(amenity)} in {validCity}</h2>
-                  <p className="mb-2">
-                    Properties with <strong>{pretty(amenity)}</strong> are in high demand in {validCity},
-                    especially among families and working professionals.
-                  </p>
+                  <h2 className="h6 mb-2">{t('landing:budgetEnrichment.aboutAmenity', { amenityPretty: pretty(amenity), city: validCity })}</h2>
+                  <p className="mb-2"
+                    dangerouslySetInnerHTML={{
+                      __html: t('landing:budgetEnrichment.amenityHighDemand', { amenityPretty: pretty(amenity), city: validCity }),
+                    }}
+                  />
                   <p className="mb-0 text-muted" style={{ fontSize: '0.875rem' }}>
-                    360Ghar verifies every amenity claim during on-site inspection. Virtual tours let you
-                    confirm {pretty(amenity)} before scheduling a visit.
+                    {t('landing:budgetEnrichment.amenityVerifyNote', { amenityPretty: pretty(amenity) })}
                   </p>
                 </div>
               )}
@@ -403,7 +407,7 @@ const FacetLanding = () => {
         {popularLocalities.length > 0 && (
           <section className="padding-y-60 bg-white">
             <div className="container container-two">
-              <h2 className="h5 mb-3">Popular Localities in {validCity}</h2>
+              <h2 className="h5 mb-3">{t('landing:localities.heading', { city: validCity })}</h2>
               <div className="row g-3">
                 {popularLocalities.map((loc) => (
                   <div className="col-sm-6 col-lg-3" key={loc.slug}>

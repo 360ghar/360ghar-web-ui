@@ -21,7 +21,7 @@ const PostPropertyForm = () => {
 
     const postPropertyTypeOptions = [
         ...PROPERTY_TYPE_OPTIONS,
-        { value: 'other', label: t('postProperty.otherType') }
+        { value: 'other', label: t('postProperty.otherType'), labelKey: 'postProperty.otherType' }
     ];
 
     const listingTypeOptions = [
@@ -214,7 +214,7 @@ const PostPropertyForm = () => {
                                             <option value="">{t('postProperty.selectPropertyType')}</option>
                                             {postPropertyTypeOptions.map((option) => (
                                                 <option key={option.value} value={option.value}>
-                                                    {option.label}
+                                                    {t(option.labelKey)}
                                                 </option>
                                             ))}
                                         </select>

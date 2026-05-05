@@ -35,7 +35,7 @@ const VerifyOwnership = () => {
   const [captchaToken, setCaptchaToken] = useState('');
   const [captchaUrl, setCaptchaUrl] = useState(null);
   const [captchaLoading, setCaptchaLoading] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const captchaBlobRef = useRef(null);

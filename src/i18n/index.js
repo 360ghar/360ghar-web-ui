@@ -20,7 +20,7 @@ const namespaces = [
   'blog',
 ];
 
-// Statically import English translations so they're bundled at build time
+// Statically import English translations
 import enCommon from './locales/en/common.json';
 import enHome from './locales/en/home.json';
 import enProperties from './locales/en/properties.json';
@@ -35,6 +35,22 @@ import enCompare from './locales/en/compare.json';
 import enTruth from './locales/en/truth.json';
 import enPolicies from './locales/en/policies.json';
 import enBlog from './locales/en/blog.json';
+
+// Statically import Hindi translations so crawlers see Hindi content on /hi/* pages
+import hiCommon from './locales/hi/common.json';
+import hiHome from './locales/hi/home.json';
+import hiProperties from './locales/hi/properties.json';
+import hiProjects from './locales/hi/projects.json';
+import hiTools from './locales/hi/tools.json';
+import hiDataHub from './locales/hi/data-hub.json';
+import hiAccount from './locales/hi/account.json';
+import hiSeo from './locales/hi/seo.json';
+import hiForms from './locales/hi/forms.json';
+import hiLanding from './locales/hi/landing.json';
+import hiCompare from './locales/hi/compare.json';
+import hiTruth from './locales/hi/truth.json';
+import hiPolicies from './locales/hi/policies.json';
+import hiBlog from './locales/hi/blog.json';
 
 const enResources = {
   common: enCommon,
@@ -53,39 +69,22 @@ const enResources = {
   blog: enBlog,
 };
 
-// Map of lazy-loaded Hindi translation modules
-const hiLoaders = {
-  common: () => import('./locales/hi/common.json'),
-  home: () => import('./locales/hi/home.json'),
-  properties: () => import('./locales/hi/properties.json'),
-  projects: () => import('./locales/hi/projects.json'),
-  tools: () => import('./locales/hi/tools.json'),
-  'data-hub': () => import('./locales/hi/data-hub.json'),
-  account: () => import('./locales/hi/account.json'),
-  seo: () => import('./locales/hi/seo.json'),
-  forms: () => import('./locales/hi/forms.json'),
-  landing: () => import('./locales/hi/landing.json'),
-  compare: () => import('./locales/hi/compare.json'),
-  truth: () => import('./locales/hi/truth.json'),
-  policies: () => import('./locales/hi/policies.json'),
-  blog: () => import('./locales/hi/blog.json'),
+const hiResources = {
+  common: hiCommon,
+  home: hiHome,
+  properties: hiProperties,
+  projects: hiProjects,
+  tools: hiTools,
+  'data-hub': hiDataHub,
+  account: hiAccount,
+  seo: hiSeo,
+  forms: hiForms,
+  landing: hiLanding,
+  compare: hiCompare,
+  truth: hiTruth,
+  policies: hiPolicies,
+  blog: hiBlog,
 };
-
-// Cache for loaded Hindi translations
-const hiCache = {};
-
-/**
- * Load a Hindi namespace on demand via dynamic import().
- * Vite splits each JSON into its own chunk for lazy loading.
- */
-async function loadHindiNamespace(ns) {
-  if (hiCache[ns]) return hiCache[ns];
-  const loader = hiLoaders[ns];
-  if (!loader) return {};
-  const mod = await loader();
-  hiCache[ns] = mod.default || mod;
-  return hiCache[ns];
-}
 
 i18n
   .use({
@@ -95,29 +94,11 @@ i18n
     detect: urlPathDetector.lookup,
     cacheUserLanguage: urlPathDetector.cacheUserLanguage,
   })
-  .use({
-    type: 'backend',
-    init: () => {},
-    read: async (language, namespace, callback) => {
-      if (language === 'en') {
-        // English is bundled statically — should already be in resources
-        return callback(null, {});
-      }
-      if (language === 'hi') {
-        try {
-          const data = await loadHindiNamespace(namespace);
-          return callback(null, data);
-        } catch (err) {
-          return callback(err, null);
-        }
-      }
-      return callback(null, {});
-    },
-  })
   .use(initReactI18next)
   .init({
     resources: {
       en: enResources,
+      hi: hiResources,
     },
     fallbackLng: 'en',
     supportedLngs: ['en', 'hi'],

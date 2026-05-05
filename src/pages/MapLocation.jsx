@@ -34,7 +34,7 @@ const MapLocation = () => {
                 headerMenusClass="mx-auto"
                 btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                 btnLink="/post-property"
-                btnText="Post Property"
+                btnText={t('common:header.postProperty')}
                 spanClass="icon-right text-gradient"
                 showContactNumber={false}
             />

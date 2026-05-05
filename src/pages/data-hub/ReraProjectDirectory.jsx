@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -332,8 +333,8 @@ const ReraProjectDirectory = () => {
                 <h2 className="cta-title mb-3">{t('rera.cta.title')}</h2>
                 <p className="mb-4">{t('rera.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">{t('rera.cta.browseProperties')}</a>
-                  <a href="/contact" className="btn btn-outline-white">{t('rera.cta.contactUs')}</a>
+                  <I18nLink to="/properties" className="btn btn-white btn-main">{t('rera.cta.browseProperties')}</I18nLink>
+                  <I18nLink to="/contact" className="btn btn-outline-white">{t('rera.cta.contactUs')}</I18nLink>
                 </div>
               </div>
             </div>

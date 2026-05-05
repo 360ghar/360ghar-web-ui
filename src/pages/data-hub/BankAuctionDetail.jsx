@@ -310,8 +310,8 @@ const BankAuctionDetail = () => {
                 <h2 className="cta-title mb-3">{t('bankAuctions.detail.cta.title')}</h2>
                 <p className="mb-4">{t('bankAuctions.detail.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">{t('bankAuctions.detail.cta.browseProperties')}</a>
-                  <a href="/rera-projects" className="btn btn-outline-white">{t('bankAuctions.detail.cta.reraProjects')}</a>
+                  <I18nLink to="/properties" className="btn btn-white btn-main">{t('bankAuctions.detail.cta.browseProperties')}</I18nLink>
+                  <I18nLink to="/rera-projects" className="btn btn-outline-white">{t('bankAuctions.detail.cta.reraProjects')}</I18nLink>
                 </div>
               </div>
             </div>

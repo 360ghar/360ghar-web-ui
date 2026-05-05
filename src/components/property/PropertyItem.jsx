@@ -77,12 +77,11 @@ const generatePropertyAltText = (property, t) => {
   }
 
   // Add property type
-  const propertyType = getPropertyTypeLabel(property.property_type);
+  const propertyType = getPropertyTypeLabel(property.property_type, t);
   parts.push(propertyType);
 
-  // Add purpose
   if (property.purpose) {
-    parts.push(getListingLabel({ propertyType: property.property_type, purpose: property.purpose }) || 'in');
+    parts.push(getListingLabel({ propertyType: property.property_type, purpose: property.purpose }, t) || 'in');
   }
 
   // Add location
@@ -176,7 +175,7 @@ const PropertyItem = ({
   const normalizedPurpose = getListingLabel({
     propertyType: property.property_type,
     purpose: property.purpose,
-  });
+  }, t);
   const resolvedBadgeText = property.is_verified ? t('propertyItem.verifiedProperty') : (badgeText || normalizedPurpose);
   const shouldRenderBadge = Boolean(resolvedBadgeText);
 
@@ -303,7 +302,7 @@ const PropertyItem = ({
             )}
             {property.property_type && (
               <span className="badge bg-secondary">
-                {getPropertyTypeLabel(property.property_type)}
+                {getPropertyTypeLabel(property.property_type, t)}
               </span>
             )}
           </div>

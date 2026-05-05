@@ -8,6 +8,25 @@ import SEO from '../../common/SEO';
 import { useAuthStore } from '../../store/authStore';
 import { getSupabaseAccessToken } from '../../services/supabaseClient';
 
+const ALLOWED_MCP_ORIGINS = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'https://claude.ai',
+  'https://chatgpt.com',
+  'https://chat.openai.com',
+  'https://cursor.sh',
+  'https://app.factory.ai',
+];
+
+function isAllowedRedirect(uri) {
+  try {
+    const { origin } = new URL(uri);
+    return ALLOWED_MCP_ORIGINS.includes(origin);
+  } catch {
+    return false;
+  }
+}
+
 /**
  * MCP-specific login flow.
  *
@@ -24,6 +43,7 @@ const McpLogin = () => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [redirectError, setRedirectError] = useState(false);
 
   const redirectUri = useMemo(
     () => searchParams.get('redirect_uri'),
@@ -34,13 +54,25 @@ const McpLogin = () => {
     [searchParams]
   );
 
+  const isRedirectAllowed = useMemo(
+    () => !redirectUri || isAllowedRedirect(redirectUri),
+    [redirectUri]
+  );
+
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       if (!redirectUri || submitting) return;
 
+      if (!isAllowedRedirect(redirectUri)) {
+        setRedirectError(true);
+        setSubmitting(false);
+        return;
+      }
+
       setSubmitting(true);
       clearError();
+      setRedirectError(false);
 
       const ok = await login(phone, password);
       if (!ok) {
@@ -106,6 +138,45 @@ const McpLogin = () => {
     );
   }
 
+  if (!isRedirectAllowed) {
+    return (
+      <>
+        <SEO
+          title={t('mcp.title')}
+          description={t('mcp.description')}
+          canonical="/mcp/login"
+          noindex
+        />
+        <main className="body-bg">
+          <Header
+            headerClass="dark-header has-border"
+            headerMenusClass="mx-auto"
+            btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
+            btnLink="/add-new-listing"
+            btnText={t('common.postProperty')}
+            spanClass="icon-right text-gradient"
+            showContactNumber={false}
+          />
+
+          <section className="section-padding">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-lg-6">
+                  <div className="card shadow-sm p-4 text-center">
+                    <h1 className="mb-3">{t('mcp.invalidRedirect')}</h1>
+                    <p className="text-muted mb-0">
+                      {t('mcp.invalidRedirectDesc')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </>
+    );
+  }
+
   return (
     <>
       <SEO
@@ -135,9 +206,9 @@ const McpLogin = () => {
                     {t('mcp.signInToConnectDesc')}
                   </p>
 
-                  {error && (
+                  {(error || redirectError) && (
                     <div className="alert alert-danger" role="alert">
-                      {error}
+                      {redirectError ? t('mcp.invalidRedirect') : error}
                     </div>
                   )}
 

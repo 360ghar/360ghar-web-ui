@@ -5,8 +5,6 @@ import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { aiDiscoveryFeed } from '../../seo/aiDiscovery';
 
-import { I18nLink } from '../../i18n/I18nLink';
-
 const ForAI = () => {
   const { t } = useTranslation('policies');
   const title = 'For AI Assistants | 360Ghar';

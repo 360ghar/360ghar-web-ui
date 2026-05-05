@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -56,9 +57,9 @@ const PriceIndexPage = () => {
                 <p className="color-text-3 mb-20">
                   We don&apos;t have price index data for this city yet.
                 </p>
-                <Link to="/" className="btn btn-main">
+                <I18nLink to="/" className="btn btn-main">
                   Back to Home
-                </Link>
+                </I18nLink>
               </div>
             </div>
           </section>
@@ -142,8 +143,8 @@ const PriceIndexPage = () => {
             {/* Breadcrumb */}
             <nav aria-label="breadcrumb" className="mb-20">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                <li className="breadcrumb-item"><Link to={`/price-index/${citySlug}`}>{cityName}</Link></li>
+                <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
+                <li className="breadcrumb-item"><I18nLink to={`/price-index/${citySlug}`}>{cityName}</I18nLink></li>
                 <li className="breadcrumb-item active">Price Index</li>
               </ol>
             </nav>
@@ -240,9 +241,9 @@ const PriceIndexPage = () => {
                             </span>
                           </td>
                           <td>
-                            <Link to={`/locality/${loc.slug}`} className="fs-13">
+                            <I18nLink to={`/locality/${loc.slug}`} className="fs-13">
                               View <i className="fas fa-arrow-right ms-1"></i>
-                            </Link>
+                            </I18nLink>
                           </td>
                         </tr>
                       ))}
@@ -280,44 +281,44 @@ const PriceIndexPage = () => {
               </h2>
               <div className="row g-3">
                 <div className="col-md-3 col-sm-6">
-                  <Link
+                  <I18nLink
                     to="/circle-rates"
                     className="d-block p-15 bg-white rounded-2 text-center text-decoration-none"
                     style={{ border: '1px solid #e5e7eb' }}
                   >
                     <i className="fas fa-file-invoice-dollar fs-20 text-main d-block mb-8"></i>
                     <span className="fw-600 color-text-1">Circle Rates</span>
-                  </Link>
+                  </I18nLink>
                 </div>
                 <div className="col-md-3 col-sm-6">
-                  <Link
+                  <I18nLink
                     to="/stamp-duty-calculator"
                     className="d-block p-15 bg-white rounded-2 text-center text-decoration-none"
                     style={{ border: '1px solid #e5e7eb' }}
                   >
                     <i className="fas fa-calculator fs-20 text-main d-block mb-8"></i>
                     <span className="fw-600 color-text-1">Stamp Duty Calculator</span>
-                  </Link>
+                  </I18nLink>
                 </div>
                 <div className="col-md-3 col-sm-6">
-                  <Link
+                  <I18nLink
                     to={`/${citySlug}/buy/flats`}
                     className="d-block p-15 bg-white rounded-2 text-center text-decoration-none"
                     style={{ border: '1px solid #e5e7eb' }}
                   >
                     <i className="fas fa-home fs-20 text-main d-block mb-8"></i>
                     <span className="fw-600 color-text-1">Buy Flats in {cityName}</span>
-                  </Link>
+                  </I18nLink>
                 </div>
                 <div className="col-md-3 col-sm-6">
-                  <Link
+                  <I18nLink
                     to={`/${citySlug}/rent/flats`}
                     className="d-block p-15 bg-white rounded-2 text-center text-decoration-none"
                     style={{ border: '1px solid #e5e7eb' }}
                   >
                     <i className="fas fa-key fs-20 text-main d-block mb-8"></i>
                     <span className="fw-600 color-text-1">Rent Flats in {cityName}</span>
-                  </Link>
+                  </I18nLink>
                 </div>
               </div>
             </div>
@@ -344,7 +345,7 @@ const PriceIndexPage = () => {
 
             {/* Back link */}
             <div className="mt-10">
-              <Link to="/" className="btn-outline">← Back to Home</Link>
+              <I18nLink to="/" className="btn-outline">← Back to Home</I18nLink>
             </div>
           </div>
         </section>

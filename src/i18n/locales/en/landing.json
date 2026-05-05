@@ -93,5 +93,21 @@
     "item4": "Ready to move {{facetText}} {{readyPreposition}} {{city}}",
     "item5": "No broker {{facetText}} {{readyPreposition}} {{city}}",
     "item6": "Verified {{facetText}} with 360\u00B0 virtual tours in {{city}}"
+  },
+  "marketSnapshot": {
+    "averagePriceRange": "Average price range",
+    "verifiedAreasIn": "Verified areas in {{city}}",
+    "tours360": "360° Tours",
+    "virtualWalkthroughs": "Virtual walkthroughs",
+    "contactForPrices": "Contact for prices"
+  },
+  "budgetEnrichment": {
+    "affordabilityInsights": "Affordability Insights for {{city}}",
+    "typicalPrices": "Typical {{facetTextLower}} prices in {{city}}: <strong>{{priceRange}}</strong>.",
+    "budgetFilterNarrows": "This budget filter narrows results to options {{budgetText}}.",
+    "useEmiCalculator": "Use our <1>EMI Calculator</1> to check monthly payments for this budget, or <3>check loan eligibility</3>.",
+    "aboutAmenity": "About {{amenityPretty}} in {{city}}",
+    "amenityHighDemand": "Properties with <strong>{{amenityPretty}}</strong> are in high demand in {{city}}, especially among families and working professionals.",
+    "amenityVerifyNote": "360Ghar verifies every amenity claim during on-site inspection. Virtual tours let you confirm {{amenityPretty}} before scheduling a visit."
   }
 }
