@@ -34,3 +34,17 @@ current-home-loader.png
 
 # Source maps in public
 public/assets/css/*.css.map
+
+# Build-generated files
+public/rss/
+public/rss.xml
+public/sitemap*.xml
+public/.well-known/ai.txt
+public/.well-known/api-catalog
+public/llms.txt
+public/llms-full.txt
+public/data/llm-feed.json
+scripts/prerender-routes.json
+scripts/reports/
+src/data/localities.json
+src/data/localities-index.json
