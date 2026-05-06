@@ -9,10 +9,25 @@
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 
  const AreaCalculator = () => {
      const { t } = useTranslation('tools');
+
+     const AREA_CALCULATOR_FAQS = [
+         { question: t('areaCalculator.faqs.q1.question'), answer: t('areaCalculator.faqs.q1.answer') },
+         { question: t('areaCalculator.faqs.q2.question'), answer: t('areaCalculator.faqs.q2.answer') },
+         { question: t('areaCalculator.faqs.q3.question'), answer: t('areaCalculator.faqs.q3.answer') },
+         { question: t('areaCalculator.faqs.q4.question'), answer: t('areaCalculator.faqs.q4.answer') },
+     ];
+
+     const AREA_CALCULATOR_HOW_TO_STEPS = [
+         { name: t('areaCalculator.howToSteps.step1.name'), text: t('areaCalculator.howToSteps.step1.text') },
+         { name: t('areaCalculator.howToSteps.step2.name'), text: t('areaCalculator.howToSteps.step2.text') },
+         { name: t('areaCalculator.howToSteps.step3.name'), text: t('areaCalculator.howToSteps.step3.text') },
+         { name: t('areaCalculator.howToSteps.step4.name'), text: t('areaCalculator.howToSteps.step4.text') },
+     ];
+
      const [superArea, setSuperArea] = useState(1000);
      const [loading, setLoading] = useState(30);
      const { carpetArea, builtUpArea } = useMemo(() => {
@@ -34,14 +49,20 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                  canonical="/area-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
-                 structuredData={[
-                    generateToolSchema(toolSchemas.areaCalculator),
-                    generateBreadcrumbStructuredData([
-                        { name: 'Home', url: 'https://360ghar.com/' },
-                        { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
-                        { name: toolSchemas.areaCalculator.name, url: 'https://360ghar.com/area-calculator' }
-                    ])
-                 ]}
+                  structuredData={[
+                     generateToolSchema(toolSchemas.areaCalculator),
+                     generateBreadcrumbStructuredData([
+                         { name: 'Home', url: 'https://360ghar.com/' },
+                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: toolSchemas.areaCalculator.name, url: 'https://360ghar.com/area-calculator' }
+                     ]),
+                     generateFaqStructuredData(AREA_CALCULATOR_FAQS),
+                     generateHowToStructuredData({
+                         name: 'How to Calculate Property Area',
+                         description: 'Calculate carpet area, built-up area, and super built-up area step by step',
+                         steps: AREA_CALCULATOR_HOW_TO_STEPS,
+                     }),
+                  ]}
              />
 
              <OffCanvas />

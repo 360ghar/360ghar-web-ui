@@ -119,6 +119,7 @@ const FAQ_DATA = {
 
 const Home = () => {
     const { t } = useTranslation('home');
+    const [tSeo] = useTranslation('seo');
     const homeStructuredData = [
         realEstateStructuredData.website,
         realEstateStructuredData.localBusiness,
@@ -131,8 +132,8 @@ const Home = () => {
     return (
         <>
             <SEO
-                title={siteMetadata.defaultTitle}
-                description={siteMetadata.defaultDescription}
+                title={tSeo('home.title')}
+                description={tSeo('home.description')}
                 keywords={siteMetadata.defaultKeywords}
                 canonical="/"
                 image={siteMetadata.defaultOgImage}
@@ -147,6 +148,9 @@ const Home = () => {
                 {/* Above-fold — eagerly loaded */}
                 <Header />
                 <BannerThree />
+                <div className="speakable-summary" style={{ display: 'none' }} aria-hidden="true">
+                    360Ghar is India&apos;s first AI and VR-first real estate platform. We convert every property listing into a studio-quality 360 degree virtual walkthrough, allowing buyers to explore properties remotely before scheduling a physical visit. We verify all properties to connect buyers and tenants directly to owners. Zero upfront fees. No fake listings. AI-powered search across Gurugram and Delhi NCR.
+                </div>
                 <AboutThree />
 
                 {/* Below-fold — lazy-loaded as user scrolls */}

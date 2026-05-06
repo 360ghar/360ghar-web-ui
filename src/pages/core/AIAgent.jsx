@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -16,6 +17,7 @@ import { siteMetadata } from '../../seo/siteMetadata';
 import './AIAgent.scss';
 
 const AIAgent = () => {
+    const [tSeo] = useTranslation('seo');
     const structuredData = [
         {
             '@type': 'Service',
@@ -57,8 +59,8 @@ const AIAgent = () => {
     return (
         <>
             <SEO
-                title="AI Real Estate Assistant | 360Ghar - Smart Property Search & Management"
-                description="Meet your AI-powered real estate assistant. Find properties, book visits, and manage rentals through natural conversation. Connect via MCP server with Claude, ChatGPT, and more."
+                title={tSeo('aiAgent.title')}
+                description={tSeo('aiAgent.description')}
                 keywords="AI real estate assistant, MCP server, ChatGPT real estate, AI property search, smart property management, AI landlord assistant, conversational property search"
                 canonical="/ai-agent"
                 image={siteMetadata.defaultOgImage}

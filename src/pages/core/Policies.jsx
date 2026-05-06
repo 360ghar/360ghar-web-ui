@@ -66,6 +66,7 @@ const extractSummary = (page, fallbackDescription) => {
 
 const Policies = () => {
   const { t } = useTranslation('policies');
+  const [tSeo] = useTranslation('seo');
   const [fetchedPolicies, setFetchedPolicies] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -136,8 +137,8 @@ const Policies = () => {
   return (
     <>
       <SEO
-        title="360Ghar Policies | Terms, Privacy, and Guidelines"
-        description="Browse 360Ghar's official policies including our Terms of Service, Privacy Policy, Content Guidelines, Takedown Policy, and Grievance Redressal process."
+        title={tSeo('policies.title')}
+        description={tSeo('policies.description')}
         keywords="360Ghar policies, terms of service, privacy policy, content guidelines"
         canonical="/policies"
         image={siteMetadata.defaultOgImage}

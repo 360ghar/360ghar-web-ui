@@ -9,10 +9,25 @@
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 
  const AreaConverter = () => {
      const { t } = useTranslation('tools');
+
+     const AREA_CONVERTER_FAQS = [
+         { question: t('areaConverter.faqs.q1.question'), answer: t('areaConverter.faqs.q1.answer') },
+         { question: t('areaConverter.faqs.q2.question'), answer: t('areaConverter.faqs.q2.answer') },
+         { question: t('areaConverter.faqs.q3.question'), answer: t('areaConverter.faqs.q3.answer') },
+         { question: t('areaConverter.faqs.q4.question'), answer: t('areaConverter.faqs.q4.answer') },
+     ];
+
+     const AREA_CONVERTER_HOW_TO_STEPS = [
+         { name: t('areaConverter.howToSteps.step1.name'), text: t('areaConverter.howToSteps.step1.text') },
+         { name: t('areaConverter.howToSteps.step2.name'), text: t('areaConverter.howToSteps.step2.text') },
+         { name: t('areaConverter.howToSteps.step3.name'), text: t('areaConverter.howToSteps.step3.text') },
+         { name: t('areaConverter.howToSteps.step4.name'), text: t('areaConverter.howToSteps.step4.text') },
+     ];
+
      const [amount, setAmount] = useState(1);
      const [fromUnit, setFromUnit] = useState('sq_ft');
      const [toUnit, setToUnit] = useState('sq_yard');
@@ -73,13 +88,19 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                  image={siteMetadata.defaultOgImage}
                  type="website"
                  structuredData={[
-                    generateToolSchema(toolSchemas.areaConverter),
-                    generateBreadcrumbStructuredData([
-                        { name: 'Home', url: 'https://360ghar.com/' },
-                        { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
-                        { name: toolSchemas.areaConverter.name, url: 'https://360ghar.com/area-converter' }
-                    ])
-                 ]}
+                     generateToolSchema(toolSchemas.areaConverter),
+                     generateBreadcrumbStructuredData([
+                         { name: 'Home', url: 'https://360ghar.com/' },
+                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: toolSchemas.areaConverter.name, url: 'https://360ghar.com/area-converter' }
+                     ]),
+                     generateFaqStructuredData(AREA_CONVERTER_FAQS),
+                     generateHowToStructuredData({
+                         name: 'How to Use the Area Converter',
+                         description: 'Convert between Indian and international area units step by step',
+                         steps: AREA_CONVERTER_HOW_TO_STEPS,
+                     }),
+                  ]}
              />
 
              <OffCanvas />

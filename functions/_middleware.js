@@ -37,9 +37,33 @@ function notFoundResponse() {
   });
 }
 
+const LOCALE_COOKIE = '__locale';
+const LOCALE_REDIRECTED = 'redirected';
+
 export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
+
+  if (url.pathname !== '/' && !url.pathname.startsWith('/.well-known')) {
+    return context.next();
+  }
+
+  if (url.pathname === '/') {
+    const cookie = request.headers.get('Cookie') || '';
+    const hasLocaleCookie = cookie.includes(`${LOCALE_COOKIE}=`);
+    if (!hasLocaleCookie) {
+      const acceptLang = request.headers.get('Accept-Language') || '';
+      if (/^hi(?:[-,;]|$)/i.test(acceptLang) || acceptLang.includes('hi-IN') || acceptLang.includes('hi_IN')) {
+        return new Response(null, {
+          status: 302,
+          headers: {
+            Location: '/hi',
+            'Set-Cookie': `${LOCALE_COOKIE}=${LOCALE_REDIRECTED}; Path=/; Max-Age=31536000; SameSite=Lax`,
+          },
+        });
+      }
+    }
+  }
 
   if (isInternalMarkdownPath(url.pathname)) {
     if (request.headers.get(MARKDOWN_INTERNAL_HEADER) !== MARKDOWN_INTERNAL_HEADER_VALUE) {

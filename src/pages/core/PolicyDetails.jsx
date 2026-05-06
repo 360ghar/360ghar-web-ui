@@ -41,6 +41,7 @@ const MARKDOWN_COMPONENTS = {
 
 const PolicyDetails = () => {
   const { t } = useTranslation('policies');
+  const [tSeo] = useTranslation('seo');
   const { slug } = useParams();
   const [page, setPage] = useState(null);
   const [error, setError] = useState(null);
@@ -77,8 +78,8 @@ const PolicyDetails = () => {
   return (
     <>
       <SEO
-        title={`${title} | 360Ghar`}
-        description={`${title} page for 360Ghar.`}
+        title={tSeo('policyDetails.title', { title })}
+        description={tSeo('policyDetails.description', { title })}
         keywords={`360Ghar, ${title}`}
         canonical={`/policies/${slug}`}
         image={siteMetadata.defaultOgImage}

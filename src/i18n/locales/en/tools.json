@@ -37,6 +37,30 @@
     "title": "Land Area Converter India | Sq Ft, Gaj, Bigha, Acre Converter | 360Ghar",
     "description": "Convert land area units instantly. Support for Sq Ft, Sq Yard (Gaj), Bigha, Acre, Hectare, Guntha, and more. Essential tool for buying land or plots in India.",
     "keywords": "land area converter India, sq ft to gaj converter, bigha to sq ft, acre to hectare converter, plot size converter, real estate unit converter, 360ghar tools, land measurement India",
+    "faqs": {
+      "q1": {
+        "question": "How do I convert square feet to square meters?",
+        "answer": "Multiply square feet by 0.0929. For example, 1000 sq ft = 92.9 sq m. Use our area converter for instant, accurate results."
+      },
+      "q2": {
+        "question": "What is 1 bigha in square feet?",
+        "answer": "1 bigha equals approximately 27,000 sq ft in Haryana and 27,220 sq ft in Uttar Pradesh. Bigha varies by state — always verify the local measurement standard."
+      },
+      "q3": {
+        "question": "How many square feet in 1 kanal?",
+        "answer": "1 kanal equals 5,445 sq ft. This is standard across Punjab, Haryana, and Himachal Pradesh."
+      },
+      "q4": {
+        "question": "What is the difference between carpet area and built-up area?",
+        "answer": "Carpet area is the net usable floor area inside walls. Built-up area includes carpet area plus walls and balconies. Super built-up area adds common areas like corridors and lobbies."
+      }
+    },
+    "howToSteps": {
+      "step1": { "name": "Select input unit", "text": "Choose the unit you want to convert from — sq ft, sq m, bigha, kanal, marla, acre, hectare, or others." },
+      "step2": { "name": "Enter the area value", "text": "Type the numeric value of the area you want to convert." },
+      "step3": { "name": "Select output unit", "text": "Choose the unit you want to convert to. The result updates instantly." },
+      "step4": { "name": "Copy or note the result", "text": "The converted value is displayed immediately. You can copy it for use in property documents or calculations." }
+    },
     "headingTitle": "Land Area Converter",
     "headingDesc": "Compare properties easily by converting between local and standard measurement units.",
     "from": "From",
@@ -63,6 +87,30 @@
     "title": "Carpet Area Calculator India | RERA Super Built-up vs Carpet Area | 360Ghar",
     "description": "Calculate actual Carpet Area from Super Built-up Area using our RERA-compliant calculator. Understand loading factor and usable space for properties in Gurugram and Delhi NCR.",
     "keywords": "carpet area calculator India, super built up area vs carpet area, RERA area calculator, loading factor calculator, apartment area calculator, flat size calculator, 360ghar tools",
+    "faqs": {
+      "q1": {
+        "question": "How do I calculate the area of a room?",
+        "answer": "Measure length and width in feet or meters, then multiply them. Area = Length × Width. For irregular shapes, break the room into rectangles and add the areas."
+      },
+      "q2": {
+        "question": "What is carpet area?",
+        "answer": "Carpet area is the net usable floor area inside the walls of an apartment. It excludes walls, balconies, and common areas. RERA mandates that developers disclose carpet area."
+      },
+      "q3": {
+        "question": "How is super built-up area calculated?",
+        "answer": "Super built-up area = Built-up area + Proportionate common area. The loading factor (usually 25-35%) is applied to carpet area to arrive at super area."
+      },
+      "q4": {
+        "question": "What is the difference between RERA carpet area and usable area?",
+        "answer": "RERA carpet area includes the area enclosed by walls (up to the inner face). Usable area may exclude some wall portions. RERA definition is more generous than the older 'carpet area' standard."
+      }
+    },
+    "howToSteps": {
+      "step1": { "name": "Measure room dimensions", "text": "Measure the length and width of each room in feet or meters using a measuring tape or laser distance meter." },
+      "step2": { "name": "Calculate carpet area", "text": "Multiply length × width for each room. Add all room areas to get total carpet area." },
+      "step3": { "name": "Add walls for built-up area", "text": "Add 10-15% to carpet area for walls and balconies to get built-up area." },
+      "step4": { "name": "Calculate super built-up area", "text": "Add the loading factor (25-35%) to built-up area to get super built-up area. This includes common areas like corridors and lobbies." }
+    },
     "enterPropertyDetails": "Enter Property Details",
     "superBuiltupArea": "Super Built-up Area (Sq. Ft.)",
     "superBuiltupHint": "Total area advertised by builder",
@@ -88,6 +136,30 @@
     "title": "Home Loan Eligibility Calculator India | Check Max Loan Amount | 360Ghar",
     "description": "Check your Home Loan Eligibility instantly. Calculate the maximum loan amount you can get based on your salary, existing EMIs, and tenure. Plan your home purchase budget.",
     "keywords": "home loan eligibility calculator India, how much home loan can I get, housing loan eligibility check, salary based home loan calculator, 360ghar financial tools",
+    "faqs": {
+      "q1": {
+        "question": "How much home loan can I get on my salary?",
+        "answer": "Most banks offer 60 times your monthly income as the maximum loan amount. For a ₹1 lakh/month salary, you may qualify for ₹60 lakhs. Your existing EMIs, credit score, and property value also affect eligibility."
+      },
+      "q2": {
+        "question": "What is the FOIR for home loans?",
+        "answer": "FOIR (Fixed Obligation to Income Ratio) is the percentage of income used for debt repayment. Banks typically allow 40-50% FOIR. Lower FOIR means higher loan eligibility."
+      },
+      "q3": {
+        "question": "Does credit score affect loan eligibility?",
+        "answer": "Yes. A CIBIL score above 750 increases eligibility and gets better interest rates. Scores below 650 may result in loan rejection or higher rates."
+      },
+      "q4": {
+        "question": "Can I increase my home loan eligibility?",
+        "answer": "Yes. Add a co-applicant with income, close existing loans, increase loan tenure, or improve your credit score. A higher down payment also reduces the required loan amount."
+      }
+    },
+    "howToSteps": {
+      "step1": { "name": "Enter your monthly income", "text": "Enter your gross monthly income including salary, business income, and any other regular income sources." },
+      "step2": { "name": "Add existing obligations", "text": "Enter your current EMIs, credit card payments, and any other fixed monthly debt obligations." },
+      "step3": { "name": "Check the eligibility result", "text": "The calculator shows your maximum eligible loan amount based on FOIR, income multiplier, and other factors." },
+      "step4": { "name": "Compare with property value", "text": "Banks fund 75-90% of property value. Ensure your eligible amount covers the required portion after your down payment." }
+    },
     "financialDetails": "Your Financial Details",
     "netMonthlyIncome": "Net Monthly Income (₹)",
     "existingEmis": "Existing Monthly EMIs (₹)",
@@ -132,6 +204,30 @@
     "title": "Property Documents Checklist India | Home Buying Legal Checklist | 360Ghar",
     "description": "Essential document checklist for buying property in India. Ensure you have all legal papers: Title Deed, EC, Occupancy Certificate, etc. Verified by 360Ghar experts.",
     "keywords": "property document checklist India, documents for buying flat, home loan documents list, property legal verification checklist, real estate documents India, 360ghar guide",
+    "faqs": {
+      "q1": {
+        "question": "What documents are needed to buy a flat?",
+        "answer": "Key documents include sale deed, property registration, encumbrance certificate, tax receipts, building approval plan, occupancy certificate, and society transfer papers. Our checklist covers 40+ documents."
+      },
+      "q2": {
+        "question": "What is an encumbrance certificate?",
+        "answer": "An encumbrance certificate (EC) records all financial transactions on a property — mortgages, liens, and transfers. It proves the property has a clear title. Get it from the sub-registrar office."
+      },
+      "q3": {
+        "question": "Do I need a lawyer for property purchase?",
+        "answer": "While not legally required, hiring a property lawyer is strongly recommended for title verification, agreement review, and due diligence. The cost (₹10,000-50,000) is negligible compared to the property value at risk."
+      },
+      "q4": {
+        "question": "What is an occupancy certificate?",
+        "answer": "An occupancy certificate (OC) is issued by the local authority confirming the building is complete and fit for occupation. Without OC, the property may be illegal and face demolition risk."
+      }
+    },
+    "howToSteps": {
+      "step1": { "name": "Select property type", "text": "Choose whether you're buying a flat, plot, villa, or commercial property. The checklist adjusts based on property type." },
+      "step2": { "name": "Review required documents", "text": "Browse the complete checklist of 40+ documents organized by category — identity, property, legal, financial." },
+      "step3": { "name": "Track document status", "text": "Mark each document as collected, pending, or not applicable. Track your progress through the property purchase." },
+      "step4": { "name": "Download or share the checklist", "text": "Export your checklist progress or share it with your lawyer or family members for collaborative tracking." }
+    },
     "yourProgress": "Your Progress",
     "completed": "% Completed",
     "catLegalDocuments": "Legal Documents (Pre-Purchase)",
@@ -314,7 +410,31 @@
     "staircase": "Staircase",
     "centerBrahmasthan": "Center (Brahmasthan)",
     "detectedRooms": "Detected Rooms ({{count}})",
-    "compassDetected": "Compass/North indicator detected in floor plan"
+    "compassDetected": "Compass/North indicator detected in floor plan",
+    "faqs": {
+      "q1": {
+        "question": "What is Vastu Shastra?",
+        "answer": "Vastu Shastra is an ancient Indian science of architecture that guides building orientation, room placement, and spatial arrangement for positive energy flow. It combines earth's magnetic fields, sun direction, and cosmic energy principles."
+      },
+      "q2": {
+        "question": "Which direction should the main entrance face?",
+        "answer": "North, northeast, or east-facing entrances are considered auspicious in Vastu. South-facing entrances are generally avoided but can be corrected with remedies."
+      },
+      "q3": {
+        "question": "Is Vastu important for apartments?",
+        "answer": "Yes, Vastu principles apply to apartments too. Key factors include entrance direction, kitchen placement (southeast), master bedroom (southwest), and pooja room (northeast)."
+      },
+      "q4": {
+        "question": "Can Vastu defects be corrected without demolition?",
+        "answer": "Yes. Many Vastu defects can be corrected using mirrors, colors, metals, pyramids, and specific placement of objects. Professional Vastu consultants can suggest non-structural remedies."
+      }
+    },
+    "howToSteps": {
+      "step1": { "name": "Upload your floor plan", "text": "Upload an image or photo of your property's floor plan. Our AI will analyze the layout." },
+      "step2": { "name": "Mark the compass directions", "text": "Ensure the floor plan shows north direction correctly. The analysis depends on accurate orientation." },
+      "step3": { "name": "Review Vastu analysis", "text": "The AI checker identifies Vastu-compliant and non-compliant zones in your floor plan." },
+      "step4": { "name": "Apply Vastu remedies", "text": "For non-compliant areas, the tool suggests remedies like color changes, mirror placement, or room reassignment." }
+    }
   },
   "aiDesignStudio": {
     "title": "AI Design Studio - Interior & Exterior Design Generator | 360Ghar",

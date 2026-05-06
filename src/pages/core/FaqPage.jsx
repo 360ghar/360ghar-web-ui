@@ -14,11 +14,12 @@ import { faqs } from '../../data/HomeThreeData';
 
 const FaqPage = () => {
     const { t } = useTranslation('policies');
+    const [tSeo] = useTranslation('seo');
     return (
         <>
             <SEO
-                title="360Ghar FAQ | Virtual Tours, Buying & Renting"
-                description="Answers to common questions about 360Ghar's verified 360° tours, owner onboarding (no upfront fee), and renting/buying in Gurugram."
+                title={tSeo('faq.title')}
+                description={tSeo('faq.description')}
                 keywords="360Ghar FAQ, virtual tours FAQ, property FAQ, Gurugram, Gurgaon"
                 canonical="/faq"
                 image={siteMetadata.defaultOgImage}

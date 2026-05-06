@@ -13,6 +13,7 @@ import ReferralTerms from '../../components/referral/ReferralTerms';
 
 const ReferAndEarn = () => {
   const { t } = useTranslation('policies');
+  const [tSeo] = useTranslation('seo');
   const pageStructuredData = [
     {
       '@type': 'WebPage',
@@ -30,8 +31,8 @@ const ReferAndEarn = () => {
   return (
     <>
       <SEO
-        title="Refer & Earn | Earn up to ₹10,000 with 360Ghar Referral Program"
-        description="Know someone selling or renting property? Refer them to 360Ghar and earn ₹100 on successful listing + up to ₹10,000 when the deal completes. No login required."
+        title={tSeo('referAndEarn.title')}
+        description={tSeo('referAndEarn.description')}
         keywords="360Ghar referral, earn money, property referral, refer and earn, real estate referral program, Gurgaon property referral"
         canonical="/refer-and-earn"
         image={siteMetadata.defaultOgImage}

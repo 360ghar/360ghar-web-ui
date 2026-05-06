@@ -9,10 +9,24 @@
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 
  const PropertyChecklist = () => {
      const { t } = useTranslation('tools');
+
+     const PROPERTY_CHECKLIST_FAQS = [
+         { question: t('propertyChecklist.faqs.q1.question'), answer: t('propertyChecklist.faqs.q1.answer') },
+         { question: t('propertyChecklist.faqs.q2.question'), answer: t('propertyChecklist.faqs.q2.answer') },
+         { question: t('propertyChecklist.faqs.q3.question'), answer: t('propertyChecklist.faqs.q3.answer') },
+         { question: t('propertyChecklist.faqs.q4.question'), answer: t('propertyChecklist.faqs.q4.answer') },
+     ];
+
+     const PROPERTY_CHECKLIST_HOW_TO_STEPS = [
+         { name: t('propertyChecklist.howToSteps.step1.name'), text: t('propertyChecklist.howToSteps.step1.text') },
+         { name: t('propertyChecklist.howToSteps.step2.name'), text: t('propertyChecklist.howToSteps.step2.text') },
+         { name: t('propertyChecklist.howToSteps.step3.name'), text: t('propertyChecklist.howToSteps.step3.text') },
+         { name: t('propertyChecklist.howToSteps.step4.name'), text: t('propertyChecklist.howToSteps.step4.text') },
+     ];
 
      const checklistData = {
          [t('propertyChecklist.catLegalDocuments')]: [
@@ -62,14 +76,20 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                  canonical="/property-document-checklist"
                  image={siteMetadata.defaultOgImage}
                  type="website"
-                 structuredData={[
-                    generateToolSchema(toolSchemas.propertyChecklist),
-                    generateBreadcrumbStructuredData([
-                        { name: 'Home', url: 'https://360ghar.com/' },
-                        { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
-                        { name: toolSchemas.propertyChecklist.name, url: 'https://360ghar.com/property-document-checklist' }
-                    ])
-                 ]}
+                  structuredData={[
+                     generateToolSchema(toolSchemas.propertyChecklist),
+                     generateBreadcrumbStructuredData([
+                         { name: 'Home', url: 'https://360ghar.com/' },
+                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: toolSchemas.propertyChecklist.name, url: 'https://360ghar.com/property-document-checklist' }
+                     ]),
+                     generateFaqStructuredData(PROPERTY_CHECKLIST_FAQS),
+                     generateHowToStructuredData({
+                         name: 'How to Use the Property Document Checklist',
+                         description: 'Track all documents needed for property purchase step by step',
+                         steps: PROPERTY_CHECKLIST_HOW_TO_STEPS,
+                     }),
+                  ]}
              />
 
              <OffCanvas />

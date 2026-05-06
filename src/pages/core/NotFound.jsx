@@ -8,12 +8,13 @@ import OffCanvas from '../../common/layout/OffCanvas';
 
 const NotFound = () => {
     const { t } = useTranslation('policies');
+    const [tSeo] = useTranslation('seo');
     
     return (
         <>
             <SEO
-                title="404 Not Found | 360Ghar"
-                description="The page you are looking for does not exist."
+                title={tSeo('notFound.title')}
+                description={tSeo('notFound.description')}
                 canonical={undefined}
                 noindex={true}
                 type="website"

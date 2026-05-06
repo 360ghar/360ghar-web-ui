@@ -1,4 +1,5 @@
 import { siteMetadata } from './siteMetadata';
+import { authors } from '../data/authors';
 
 // Real Estate focused structured data for LLM optimization
 export const realEstateStructuredData = {
@@ -8,7 +9,8 @@ export const realEstateStructuredData = {
     '@id': 'https://360ghar.com/#organization',
     name: '360Ghar',
     alternateName: ['360 Ghar', '360Ghar.com', 'Three Sixty Ghar', '३६०घर', '360 Ghar Hindi'],
-    legalName: '360Ghar Technologies Pvt Ltd',
+    legalName: '360 Ghar',
+    inLanguage: ['en-IN', 'hi-IN'],
     description: "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. We eliminate fake and misleading property listings in Gurugram with studio-quality 360° guided walkthroughs and physically verified property details. Buy, sell, or rent with zero upfront fees and AI-powered matching.",
     url: 'https://360ghar.com',
     logo: {
@@ -46,7 +48,8 @@ export const realEstateStructuredData = {
       'https://www.facebook.com/360ghar',
       'https://www.linkedin.com/company/360ghar',
       'https://twitter.com/360ghar',
-      'https://www.youtube.com/@360ghar'
+      'https://www.youtube.com/@360ghar',
+      'https://share.google/DgcLFqSyBgz7kBwKe',
     ],
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
@@ -139,6 +142,14 @@ export const realEstateStructuredData = {
       }
     ],
     hasMap: 'https://maps.google.com/?q=360Ghar+Gurgaon',
+    sameAs: [
+      'https://www.instagram.com/360ghar',
+      'https://www.facebook.com/360ghar',
+      'https://www.linkedin.com/company/360ghar',
+      'https://twitter.com/360ghar',
+      'https://www.youtube.com/@360ghar',
+      'https://share.google/DgcLFqSyBgz7kBwKe',
+    ],
     areaServed: 'Gurgaon, Haryana, India'
   },
 
@@ -360,6 +371,7 @@ export const realEstateStructuredData = {
     logo: siteMetadata.defaultOgImage,
     image: siteMetadata.defaultOgImage,
     foundingDate: '2025',
+    inLanguage: ['en-IN', 'hi-IN'],
     sameAs: [
       'https://www.facebook.com/360ghar',
       'https://www.instagram.com/360ghar',
@@ -426,6 +438,7 @@ export const realEstateStructuredData = {
     name: '360Ghar - Property Management & Search',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Android',
+    inLanguage: ['en-IN', 'hi-IN'],
     offers: {
       '@type': 'Offer',
       price: '0',
@@ -451,27 +464,21 @@ export const realEstateStructuredData = {
   // Person schema for founders/key team members (E-E-A-T boost)
   person: {
     '@type': 'Person',
-    name: '360Ghar Founder',
-    jobTitle: 'Founder & CEO',
+    name: authors['saksham-mittal'].name,
+    jobTitle: authors['saksham-mittal'].title,
     worksFor: {
       '@type': 'Organization',
       name: '360Ghar',
       url: 'https://360ghar.com'
     },
-    description: 'Founder of 360Ghar, India\'s first AI + VR-first real estate platform revolutionizing property discovery in Gurugram.',
-    url: 'https://360ghar.com/about-us',
-    image: 'https://360ghar.com/team/founder.jpg',
+    description: authors['saksham-mittal'].bio,
+    url: authors['saksham-mittal'].linkedin,
+    image: `https://360ghar.com${authors['saksham-mittal'].image}`,
     sameAs: [
-      'https://www.linkedin.com/in/360ghar-founder',
+      authors['saksham-mittal'].linkedin,
       'https://twitter.com/360ghar'
     ],
-    knowsAbout: [
-      'Real Estate Technology',
-      'Property Management',
-      'Virtual Reality Tours',
-      'AI-Powered Search',
-      'Gurugram Real Estate Market'
-    ]
+    knowsAbout: authors['saksham-mittal'].credentials.split(', ').map(s => s.trim())
   },
 
   // Speakable schema for voice search optimization (Google Assistant, Alexa)
@@ -670,7 +677,7 @@ export const generatePropertyStructuredData = (property) => ({
 });
 
 // Blog post structured data generator
-export const generateBlogStructuredData = ({ authorSchema, ...blog }) => ({
+export const generateBlogStructuredData = ({ authorSchema, inLanguage, ...blog }) => ({
   '@type': 'BlogPosting',
   headline: blog.title || 'Real Estate Blog',
   description: blog.description || 'Latest real estate insights and tips',
@@ -689,6 +696,7 @@ export const generateBlogStructuredData = ({ authorSchema, ...blog }) => ({
   },
   datePublished: blog.publishedAt || new Date().toISOString(),
   dateModified: blog.updatedAt || new Date().toISOString(),
+  inLanguage: inLanguage || ['en-IN', 'hi-IN'],
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': blog.url || `${siteMetadata.siteUrl}/blog/${blog.slug}`
@@ -790,7 +798,7 @@ export const generatePropertyProductStructuredData = (property) => {
  * Generate Place schema for locality pages.
  * Enables Google Knowledge Panel eligibility for localities.
  */
-export const generateLocalityStructuredData = ({ name, city, state = 'Haryana', slug, lat, lng, entityType }) => ({
+export const generateLocalityStructuredData = ({ name, city, state = 'Haryana', slug, lat, lng, entityType, inLanguage }) => ({
   '@type': 'Place',
   name,
   address: {
@@ -819,6 +827,7 @@ export const generateLocalityStructuredData = ({ name, city, state = 'Haryana', 
     name: 'entityType',
     value: entityType || 'Locality',
   },
+  inLanguage: inLanguage || ['en-IN', 'hi-IN'],
 });
 
 /**
@@ -850,10 +859,13 @@ export const generateFaqStructuredData = (faqItems) => ({
   mainEntity: faqItems.map((item) => ({
     '@type': 'Question',
     name: item.question,
+    text: item.question,
     acceptedAnswer: {
       '@type': 'Answer',
       text: item.answer,
     },
+    author: item.author || { '@type': 'Organization', name: '360Ghar' },
+    datePublished: item.datePublished || new Date().toISOString().split('T')[0],
   })),
 });
 
@@ -1100,7 +1112,9 @@ export const generateQAPageStructuredData = ({
   upvoteCount = 0,
   answerCount = 1,
   authorName = '360Ghar Team',
+  authorUrl = 'https://360ghar.com/about',
   dateCreated,
+  datePublished,
 }) => ({
   '@type': 'QAPage',
   name: question,
@@ -1109,13 +1123,21 @@ export const generateQAPageStructuredData = ({
   mainEntity: {
     '@type': 'Question',
     name: question,
+    text: question,
+    author: {
+      '@type': 'Organization',
+      name: authorName,
+      url: authorUrl,
+    },
+    datePublished: datePublished || new Date().toISOString(),
     acceptedAnswer: {
       '@type': 'Answer',
       text: answer,
-      dateCreated: dateCreated || new Date().toISOString().split('T')[0],
+      dateCreated: dateCreated || new Date().toISOString(),
       author: {
         '@type': 'Organization',
         name: authorName,
+        url: authorUrl,
       },
       upvoteCount,
       url: answerUrl || questionUrl,

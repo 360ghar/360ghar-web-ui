@@ -8,7 +8,7 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 import FloorPlanUpload from '../../components/vastu/FloorPlanUpload';
 import DirectionSelector from '../../components/vastu/DirectionSelector';
 import VastuLoadingState from '../../components/vastu/VastuLoadingState';
@@ -19,6 +19,20 @@ import './VastuChecker.scss';
 
 const VastuChecker = () => {
     const { t } = useTranslation('tools');
+
+    const VASTU_CHECKER_FAQS = [
+        { question: t('vastu.faqs.q1.question'), answer: t('vastu.faqs.q1.answer') },
+        { question: t('vastu.faqs.q2.question'), answer: t('vastu.faqs.q2.answer') },
+        { question: t('vastu.faqs.q3.question'), answer: t('vastu.faqs.q3.answer') },
+        { question: t('vastu.faqs.q4.question'), answer: t('vastu.faqs.q4.answer') },
+    ];
+
+    const VASTU_CHECKER_HOW_TO_STEPS = [
+        { name: t('vastu.howToSteps.step1.name'), text: t('vastu.howToSteps.step1.text') },
+        { name: t('vastu.howToSteps.step2.name'), text: t('vastu.howToSteps.step2.text') },
+        { name: t('vastu.howToSteps.step3.name'), text: t('vastu.howToSteps.step3.text') },
+        { name: t('vastu.howToSteps.step4.name'), text: t('vastu.howToSteps.step4.text') },
+    ];
 
     // Form state
     const [selectedFile, setSelectedFile] = useState(null);
@@ -138,14 +152,20 @@ const VastuChecker = () => {
                 canonical="/vastu-checker"
                 image={siteMetadata.defaultOgImage}
                 type="website"
-                structuredData={[
-                    generateToolSchema(toolSchemas.vastuChecker),
-                    generateBreadcrumbStructuredData([
-                        { name: 'Home', url: 'https://360ghar.com/' },
-                        { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
-                        { name: toolSchemas.vastuChecker.name, url: 'https://360ghar.com/vastu-checker' }
-                    ])
-                ]}
+                 structuredData={[
+                     generateToolSchema(toolSchemas.vastuChecker),
+                     generateBreadcrumbStructuredData([
+                         { name: 'Home', url: 'https://360ghar.com/' },
+                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: toolSchemas.vastuChecker.name, url: 'https://360ghar.com/vastu-checker' }
+                     ]),
+                     generateFaqStructuredData(VASTU_CHECKER_FAQS),
+                     generateHowToStructuredData({
+                         name: 'How to Check Vastu for Your Home',
+                         description: 'Analyze your floor plan for Vastu compliance step by step',
+                         steps: VASTU_CHECKER_HOW_TO_STEPS,
+                     }),
+                 ]}
             />
 
             <OffCanvas />

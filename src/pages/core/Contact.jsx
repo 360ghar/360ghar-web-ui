@@ -12,12 +12,13 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
 const Contact = () => {
   const { t } = useTranslation('policies');
+  const [tSeo] = useTranslation('seo');
 
   return (
     <>
       <SEO
         title={t('contact.title')}
-        description="Get in touch with 360Ghar for property queries, listing support, or Relationship Manager assistance. We serve buyers, tenants, and owners across Gurugram and NCR."
+        description={tSeo('contact.description')}
         keywords="contact 360Ghar, relationship manager, real estate contact, Gurgaon, Gurugram, virtual tours, verified properties, AI real estate platform"
         canonical="/contact"
         image={siteMetadata.defaultOgImage}

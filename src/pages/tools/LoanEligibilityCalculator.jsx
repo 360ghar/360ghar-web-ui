@@ -9,10 +9,25 @@
  import Cta from '../../components/ui/Cta';
  import { siteMetadata } from '../../seo/siteMetadata';
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 
  const LoanEligibilityCalculator = () => {
       const { t, i18n } = useTranslation('tools');
+
+     const LOAN_ELIGIBILITY_FAQS = [
+         { question: t('loanEligibility.faqs.q1.question'), answer: t('loanEligibility.faqs.q1.answer') },
+         { question: t('loanEligibility.faqs.q2.question'), answer: t('loanEligibility.faqs.q2.answer') },
+         { question: t('loanEligibility.faqs.q3.question'), answer: t('loanEligibility.faqs.q3.answer') },
+         { question: t('loanEligibility.faqs.q4.question'), answer: t('loanEligibility.faqs.q4.answer') },
+     ];
+
+     const LOAN_ELIGIBILITY_HOW_TO_STEPS = [
+         { name: t('loanEligibility.howToSteps.step1.name'), text: t('loanEligibility.howToSteps.step1.text') },
+         { name: t('loanEligibility.howToSteps.step2.name'), text: t('loanEligibility.howToSteps.step2.text') },
+         { name: t('loanEligibility.howToSteps.step3.name'), text: t('loanEligibility.howToSteps.step3.text') },
+         { name: t('loanEligibility.howToSteps.step4.name'), text: t('loanEligibility.howToSteps.step4.text') },
+     ];
+
      const [income, setIncome] = useState(50000);
      const [existingEmi, setExistingEmi] = useState(0);
      const [interestRate, setInterestRate] = useState(8.5);
@@ -73,14 +88,20 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
                  canonical="/loan-eligibility-calculator"
                  image={siteMetadata.defaultOgImage}
                  type="website"
-                 structuredData={[
-                    generateToolSchema(toolSchemas.loanEligibility),
-                    generateBreadcrumbStructuredData([
-                        { name: 'Home', url: 'https://360ghar.com/' },
-                        { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
-                        { name: toolSchemas.loanEligibility.name, url: 'https://360ghar.com/loan-eligibility-calculator' }
-                    ])
-                 ]}
+                  structuredData={[
+                     generateToolSchema(toolSchemas.loanEligibility),
+                     generateBreadcrumbStructuredData([
+                         { name: 'Home', url: 'https://360ghar.com/' },
+                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: toolSchemas.loanEligibility.name, url: 'https://360ghar.com/loan-eligibility-calculator' }
+                     ]),
+                     generateFaqStructuredData(LOAN_ELIGIBILITY_FAQS),
+                     generateHowToStructuredData({
+                         name: 'How to Check Your Home Loan Eligibility',
+                         description: 'Calculate how much home loan you can get based on income and obligations',
+                         steps: LOAN_ELIGIBILITY_HOW_TO_STEPS,
+                     }),
+                  ]}
              />
 
              <OffCanvas />

@@ -11,51 +11,62 @@ import OwnerCta from '../../components/ui/OwnerCta';
 import Team from '../../components/ui/Team';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
-import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { generateBreadcrumbStructuredData, generatePersonStructuredData, realEstateStructuredData } from '../../seo/structuredData';
 
 const AboutUs = () => {
     const { t } = useTranslation('policies');
-    // Enhanced structured data for About page
+    const [tSeo] = useTranslation('seo');
     const aboutStructuredData = [
+        realEstateStructuredData.organization,
         {
             '@type': 'AboutPage',
             name: 'About 360Ghar - Gurugram Real Estate Platform',
             url: `${siteMetadata.siteUrl}/about-us`,
             description: 'Learn about 360Ghar, Gurugram premier real estate platform offering verified properties with 360° virtual tours',
             isPartOf: { '@type': 'WebSite', name: siteMetadata.siteName, url: siteMetadata.siteUrl },
+            mainEntity: {
+                '@type': 'Organization',
+                '@id': 'https://360ghar.com/#organization',
+                name: '360Ghar',
+                url: 'https://360ghar.com',
+            },
         },
         generateBreadcrumbStructuredData([
             { name: 'Home', url: 'https://360ghar.com/' },
             { name: 'About Us', url: 'https://360ghar.com/about-us' }
         ]),
-        {
-            '@type': 'Person',
-            name: 'Arjun Mehta',
-            jobTitle: 'President of Sales',
-            worksFor: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
+        generatePersonStructuredData({
+            name: 'Saksham Mittal',
+            jobTitle: 'Founder & CEO',
             image: 'https://360ghar.com/assets/images/thumbs/team1.png',
-        },
-        {
-            '@type': 'Person',
+            bio: 'Saksham Mittal is the founder of 360Ghar, India\'s first AI + VR-first real estate platform. With deep expertise in PropTech and the Gurugram real estate market, he leads product strategy and technology innovation.',
+            linkedin: 'https://www.linkedin.com/in/saksham360/',
+            twitter: 'https://twitter.com/360ghar',
+            expertise: ['Real Estate Technology', 'AI/ML', 'Product Strategy', 'Gurugram Real Estate Market'],
+        }),
+        generatePersonStructuredData({
             name: 'Priya Singh',
             jobTitle: 'Manager of Sales',
-            worksFor: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
             image: 'https://360ghar.com/assets/images/thumbs/team2.png',
-        },
-        {
-            '@type': 'Person',
+            bio: 'Real estate sales leader at 360Ghar with expertise in verified property transactions across Gurugram.',
+            linkedin: 'https://www.linkedin.com/company/360ghar',
+            expertise: ['Property Sales', 'Client Relations', 'Gurugram Properties'],
+        }),
+        generatePersonStructuredData({
             name: 'Vikram Malhotra',
             jobTitle: 'Director of Sales',
-            worksFor: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
             image: 'https://360ghar.com/assets/images/thumbs/team3.png',
-        },
+            bio: 'Sales director at 360Ghar leading the relationship manager team for seamless property buying and renting experiences in Delhi NCR.',
+            linkedin: 'https://www.linkedin.com/company/360ghar',
+            expertise: ['Sales Strategy', 'Real Estate Operations', 'Team Leadership'],
+        }),
     ];
 
     return (
         <>
             <SEO
-                title="About 360Ghar | India's VR-First Way to Find a Home"
-                description="Learn how 360Ghar eliminates fake property listings in Gurugram with studio-quality 360° guided walkthroughs and physically verified details. India's first AI + VR real estate platform."
+                title={tSeo('about.title')}
+                description={tSeo('about.description')}
                 keywords="about 360Ghar, India first AI enabled real estate platform, virtual tour first real estate, Gurugram real estate platform, property portal Gurgaon, virtual tours, on-site verified properties, relationship manager real estate, transparent brokerage, DLF Phase properties, Golf Course Road real estate, verified property listings"
                 canonical="/about-us"
                 image={siteMetadata.defaultOgImage}
