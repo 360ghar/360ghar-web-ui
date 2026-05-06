@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { I18nLink } from '../../i18n/I18nLink';
 import { useTranslation } from 'react-i18next';
@@ -11,8 +11,21 @@ import SEO from '../../common/SEO';
 import AiFactSheet from '../../components/seo/AiFactSheet';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { buildPropertySearchQuery } from '../../utils/propertyFilters';
-import localities from '../../data/localities.json';
 import localityLandmarks from '../../data/locality-landmarks.json';
+
+let localitiesDataPromise = null;
+let cachedLocalitiesData = null;
+
+async function getLocalitiesData() {
+  if (cachedLocalitiesData) return cachedLocalitiesData;
+  if (!localitiesDataPromise) {
+    localitiesDataPromise = import('../../data/localities.json').then((m) => {
+      cachedLocalitiesData = m.default;
+      return cachedLocalitiesData;
+    });
+  }
+  return localitiesDataPromise;
+}
 
 const pretty = (s) => (s || '').replace(/[-_]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
 
@@ -60,7 +73,25 @@ const SocietyLanding = () => {
   const validIntent = VALID_INTENTS.includes(intent) ? intent : 'buy';
   const intentLabel = validIntent === 'rent' ? 'Rent' : 'Sale';
 
-  // Find entity by slug or slug with -gurgaon suffix
+  const [localities, setLocalities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    getLocalitiesData().then((data) => {
+      if (!cancelled) {
+        setLocalities(data);
+        setIsLoading(false);
+      }
+    }).catch(() => {
+      if (!cancelled) {
+        setLocalities([]);
+        setIsLoading(false);
+      }
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   const entity = localities.find(
     (l) => l.slug === slug || l.slug === slug.replace(/-gurgaon$/i, '') + '-gurgaon'
   ) || localities.find(
@@ -68,6 +99,35 @@ const SocietyLanding = () => {
   );
 
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
+
+  if (isLoading) {
+    return (
+      <>
+        <SEO title={tSeo('societyLanding.notFoundTitle')} noindex />
+        <OffCanvas />
+        <MobileMenu />
+        <main className="body-bg">
+          <Header
+            headerClass="dark-header has-border"
+            headerMenusClass="mx-auto"
+            btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
+            btnLink="/post-property"
+            btnText={t('common:header.postProperty')}
+            spanClass="icon-right text-gradient"
+            showContactNumber={false}
+          />
+          <section className="padding-y-60">
+            <div className="container container-two text-center">
+              <div className="spinner-border text-main" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </section>
+          <Footer />
+        </main>
+      </>
+    );
+  }
 
   if (!entity) {
     return (
