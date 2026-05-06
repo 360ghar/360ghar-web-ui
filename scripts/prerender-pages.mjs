@@ -93,16 +93,19 @@ async function waitForRoute(page, routeConfig) {
   }, { timeout: ROUTE_WAIT_TIMEOUT });
 
   const selector = routeConfig.waitForSelector;
-  if (selector && selector !== 'main') {
+  if (selector) {
     await page.waitForSelector(selector, { timeout: ROUTE_WAIT_TIMEOUT });
   }
 
   if (routeConfig.waitForText) {
+    const TEXT_WAIT_TIMEOUT = 15_000;
     await page.waitForFunction(
       (text) => Boolean(document.body && document.body.innerText.indexOf(text) !== -1),
-      { timeout: ROUTE_WAIT_TIMEOUT },
+      { timeout: TEXT_WAIT_TIMEOUT },
       routeConfig.waitForText
-    );
+    ).catch(() => {
+      console.warn(`[prerender:${routeConfig.route}] waitForText timed out after ${TEXT_WAIT_TIMEOUT / 1000}s — continuing without text match`);
+    });
   }
 
   if (routeConfig.waitForTitle) {

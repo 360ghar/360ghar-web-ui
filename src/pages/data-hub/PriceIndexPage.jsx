@@ -7,7 +7,7 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
-import priceContext from '../../data/priceContext.json';
+import priceContext from '../../data/priceContext.json' with { type: 'json' };
 import localitiesIndex from '../../data/localities-index.json';
 
 const pretty = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
