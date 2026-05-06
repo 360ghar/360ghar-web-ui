@@ -1,56 +1,67 @@
 User-agent: OAI-SearchBot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: GPTBot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: ChatGPT-User
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: ClaudeBot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Claude-SearchBot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Claude-User
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Googlebot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Google-Extended
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: GoogleOther
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Bingbot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Applebot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: PerplexityBot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Perplexity-User
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
-User-agent: *
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: PetalBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CohereBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: KagiBot
 Allow: /
 Allow: /sitemap.xml
 Allow: /sitemap-static.xml
@@ -69,7 +80,6 @@ Allow: /openapi.json
 Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /data/llm-feed.json
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 # Explicitly disallow private or system paths
 Disallow: /admin/

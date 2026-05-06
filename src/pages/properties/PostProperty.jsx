@@ -363,10 +363,11 @@ const PostPropertyForm = () => {
 
 const PostProperty = () => {
     const { t } = useTranslation('properties');
+    const [tSeo] = useTranslation('seo');
 
     return (
         <>
-            <SEO title="Post a Property | 360Ghar" description="Request assistance to post your property on 360Ghar." canonical="/post-property" noindex />
+            <SEO title={tSeo('postProperty.title')} description={tSeo('postProperty.description')} canonical="/post-property" noindex />
             <OffCanvas />
             <MobileMenu />
 

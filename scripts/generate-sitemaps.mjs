@@ -63,6 +63,21 @@ const slug = (s) => String(s || '')
 
 const staticRoutes = [...indexableStaticRoutes];
 
+const REDIRECT_PATTERNS = [
+  { pattern: '/gurugram/', reason: 'gurugram→gurgaon redirect' },
+  { pattern: '/apartments', reason: 'apartments→flats redirect' },
+];
+
+function validateSitemapUrl(urlPath) {
+  for (const { pattern, reason } of REDIRECT_PATTERNS) {
+    if (urlPath.includes(pattern)) {
+      console.warn(`[sitemap] Skipping redirected URL: ${urlPath} (${reason})`);
+      return false;
+    }
+  }
+  return true;
+}
+
 // Cities and facets for programmatic landing pages
 const cities = approvedIndexableCitySlugs.map((citySlug) => ({
   slug: citySlug,
@@ -145,7 +160,7 @@ const staticXml = [
   xmlHeader,
   `<urlset ${URLSET_NS}>`,
   ...staticRoutes
-    .filter((r) => !isPruned(r))
+    .filter((r) => !isPruned(r) && validateSitemapUrl(r))
     .flatMap((r) => {
       const alts = buildAlternates(r);
       const priority = r === '/' ? '1.0' : '0.7';
@@ -167,7 +182,7 @@ const today = new Date().toISOString().split('T')[0];
 const landingXml = [
   xmlHeader,
   `<urlset ${URLSET_NS}>`,
-  ...filteredLandingUrls.flatMap((r) => {
+  ...filteredLandingUrls.filter(validateSitemapUrl).flatMap((r) => {
     const isHub = /^\/[a-z]+$/.test(r);
     const isBhkFacet = /\/\d-bhk$/.test(r);
     const priority = isHub ? '0.9' : isBhkFacet ? '0.75' : '0.8';

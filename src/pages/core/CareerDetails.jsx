@@ -44,6 +44,7 @@ const getExpandedDescription = (title) => {
 const CareerDetails = () => {
   const { slug } = useParams();
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
 
   const opening = useMemo(
     () => careerOpenings.find((o) => o.slug === slug) ?? null,
@@ -56,8 +57,8 @@ const CareerDetails = () => {
     return (
       <>
         <SEO
-          title="Career Not Found | 360Ghar"
-          description="The career opening you are looking for could not be found."
+          title={tSeo('careerDetails.notFoundTitle')}
+          description={tSeo('careerDetails.notFoundDescription')}
           canonical={`/careers/${slug}`}
           image={siteMetadata.defaultOgImage}
           type="website"
@@ -141,8 +142,8 @@ const CareerDetails = () => {
   return (
     <>
       <SEO
-        title={`${opening.title} at 360Ghar | Internships`}
-        description={`${opening.title} internship at 360Ghar in ${opening.location}. Duration: ${opening.duration}. Apply now.`}
+        title={tSeo('careerDetails.titleTemplate', { title: opening.title })}
+        description={tSeo('careerDetails.descriptionTemplate', { title: opening.title, location: opening.location })}
         keywords={`360Ghar careers, ${opening.title} internship, ${opening.location} jobs, 360Ghar hiring`}
         canonical={`/careers/${opening.slug}`}
         image={siteMetadata.defaultOgImage}

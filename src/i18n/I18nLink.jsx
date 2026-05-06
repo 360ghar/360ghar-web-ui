@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import useLocaleStore from '../store/localeStore';
 
 function splitPathSuffix(path) {
@@ -14,14 +14,16 @@ function splitPathSuffix(path) {
   };
 }
 
-/**
- * Language-aware <Link> wrapper.
- * Automatically prepends /hi/ to paths when the current locale is Hindi.
- */
 export function I18nLink({ to, ...rest }) {
   const locale = useLocaleStore((s) => s.locale);
   const localizedTo = localizePath(to, locale);
   return <Link to={localizedTo} {...rest} />;
+}
+
+export function I18nNavLink({ to, ...rest }) {
+  const locale = useLocaleStore((s) => s.locale);
+  const localizedTo = localizePath(to, locale);
+  return <NavLink to={localizedTo} {...rest} />;
 }
 
 /**

@@ -41,6 +41,7 @@ const formatCurrency = (amount) => {
 
 const BuilderReputationDetail = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const { slug } = useParams();
 
   const [builder, setBuilder] = useState(null);
@@ -118,7 +119,7 @@ const BuilderReputationDetail = () => {
   if (notFound) {
     return (
       <>
-        <SEO noindex={true} title="Not Found | 360Ghar" />
+        <SEO noindex={true} title={tSeo('builderReputationDetail.notFoundTitle')} />
         <OffCanvas />
         <MobileMenu />
         <main className="body-bg">
@@ -139,7 +140,7 @@ const BuilderReputationDetail = () => {
   if (error) {
     return (
       <>
-        <SEO noindex={true} title="Error | 360Ghar" />
+        <SEO noindex={true} title={tSeo('builderReputationDetail.errorTitle')} />
         <OffCanvas />
         <MobileMenu />
         <main className="body-bg">
@@ -162,8 +163,8 @@ const BuilderReputationDetail = () => {
   return (
     <>
       <SEO
-        title={`${builderName} RERA Score & Complaints | 360Ghar`}
-        description={`Check ${builderName}'s RERA reputation score, registered projects, and complaint history in Gurugram. Data sourced from HRERA public records.`}
+        title={tSeo('builderReputationDetail.titleTemplate', { builder: builderName })}
+        description={tSeo('builderReputationDetail.descriptionTemplate', { builder: builderName })}
         keywords={`${builderName} RERA score, ${builderName} complaints, builder reputation Gurugram, HRERA ${builderName}`}
         canonical={`/builder-reputation/${slug}`}
         structuredData={[

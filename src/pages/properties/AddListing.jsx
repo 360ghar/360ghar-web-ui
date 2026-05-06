@@ -9,10 +9,11 @@ import { useTranslation } from 'react-i18next';
 
 const AddListing = () => {
     const { t } = useTranslation('properties');
+    const [tSeo] = useTranslation('seo');
 
     return (
         <>
-        <SEO title="Add Listing | 360Ghar" description="Add a new property listing." canonical="/add-new-listing" noindex />
+        <SEO title={tSeo('addListing.title')} description={tSeo('addListing.description')} canonical="/add-new-listing" noindex />
         <main className="body-bg">
 
             {/* Header */}

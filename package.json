@@ -10,7 +10,7 @@
     "build:entities": "node scripts/ingest-gurgaon-entities.mjs && node scripts/merge-entities.mjs && node scripts/build-localities-json.mjs && node scripts/build-localities-index.mjs && node scripts/generate-locality-sitemap.mjs",
     "build:ai-discovery": "node scripts/write-ai-discovery.mjs",
     "build:markdown-pages": "node scripts/generate-markdown-pages.mjs",
-    "build:sitemaps": "node scripts/generate-sitemaps.mjs && node scripts/generate-locality-sitemap.mjs && node scripts/generate-dynamic-sitemaps.mjs",
+    "build:sitemaps": "node scripts/generate-sitemaps.mjs && node scripts/generate-locality-sitemap.mjs && node scripts/generate-datahub-sitemap.mjs && node scripts/generate-dynamic-sitemaps.mjs",
     "build:prerender": "npm run build:prerender-routes && node scripts/prerender-pages.mjs",
     "build:rss": "node scripts/generate-rss.mjs",
     "build:sitemaps:static": "node scripts/generate-sitemaps.mjs",

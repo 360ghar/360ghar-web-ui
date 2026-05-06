@@ -23,13 +23,9 @@
 /workbox-*.js
   Cache-Control: no-cache, no-store, must-revalidate
 
+/404.html
+  X-Robots-Tag: noindex, nofollow
+
 /__markdown/*
   Cache-Control: public, max-age=0, must-revalidate
   X-Robots-Tag: noindex, nofollow
-  X-Content-Type-Options: nosniff
-
-/*
-  Cache-Control: public, max-age=0, must-revalidate
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block

@@ -1,5 +1,5 @@
 import { useForm, ValidationError } from '@formspree/react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 
 const ContactUsSection = () => {
@@ -16,7 +16,9 @@ const ContactUsSection = () => {
                                 <span className="text-gradient fw-semibold">{t('contact.formSubtitle')}</span>
                             </span>
                             <h2 className="section-heading__title">{t('contact.formTitle')}</h2>
-                            <p className="contact-item__desc">We&apos;re here! Head to our <I18nLink to="/faq" className="text-main text-decoration-underline">{t('contact.faqLink')}</I18nLink> {t('contact.formDescSuccess')}</p>
+                            <p className="contact-item__desc">
+                                <Trans i18nKey="contact.formDescSuccess" t={t} components={[<I18nLink key="faq" to="/faq" className="text-main text-decoration-underline" />]} />
+                            </p>
                         </div>
                     </div>
                 </div>

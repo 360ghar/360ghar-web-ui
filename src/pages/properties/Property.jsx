@@ -11,17 +11,18 @@ import { useTranslation } from 'react-i18next';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { realEstateStructuredData, generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
-const popularSearches = [
-    { label: 'Flats for rent in Gurugram', to: '/gurgaon/rent/flats' },
-    { label: 'Apartments for sale in Gurugram', to: '/gurgaon/buy/flats' },
-    { label: '2 BHK Flats for Sale in Gurgaon', to: '/gurgaon/buy/flats/2-bhk' },
-    { label: 'Flats for Rent Under 20K', to: '/gurgaon/rent/flats/budget/under-20k' },
-    { label: 'PG in Gurugram', to: '/gurgaon/pg/flats' },
-    { label: 'Explore localities', to: '/localities' },
+const popularSearchesConfig = [
+    { labelKey: 'popularSearches.flatsRentGurugram', to: '/gurgaon/rent/flats' },
+    { labelKey: 'popularSearches.apartmentsSaleGurugram', to: '/gurgaon/buy/flats' },
+    { labelKey: 'popularSearches.twoBhkFlatsSaleGurgaon', to: '/gurgaon/buy/flats/2-bhk' },
+    { labelKey: 'popularSearches.flatsRentUnder20k', to: '/gurgaon/rent/flats/budget/under-20k' },
+    { labelKey: 'popularSearches.pgGurugram', to: '/gurgaon/pg/flats' },
+    { labelKey: 'popularSearches.exploreLocalities', to: '/localities' },
 ];
 
 const Property = () => {
     const { t } = useTranslation('properties');
+    const [tSeo] = useTranslation('seo');
     const [searchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page'), 10) || 1;
 
@@ -44,8 +45,8 @@ const Property = () => {
     return (
         <>
         <SEO
-          title="Flats in Gurgaon | Verified Properties for Sale & Rent | 360Ghar"
-          description="Browse verified flats, apartments & villas in Gurgaon. 360Ghar offers physically verified listings with 360° virtual tours in DLF Phase, Golf Course Road, Sohna Road & 500+ localities. Buy, rent or PG — zero fake listings."
+          title={tSeo('properties.title')}
+          description={tSeo('properties.description')}
           keywords="Gurugram properties, Gurgaon real estate, AI property search Gurugram, buy property Gurugram, sell property Gurgaon, rent apartments Gurugram, verified properties India, on-site verified listings, flats for sale in Gurgaon, flats for rent in Gurgaon, 1 BHK 2 BHK 3 BHK, ready to move flats, new launch projects, resale apartments, PG in Gurgaon, girls PG, co-living Gurugram, DLF Phase properties, Golf Course Road apartments, Sohna Road flats, Cyber City office space, near metro apartments, no broker, direct owner, verified listings, 360 virtual tours"
           canonical={canonical}
           image={siteMetadata.defaultOgImage}
@@ -86,9 +87,9 @@ const Property = () => {
                             <div className="locality-stat-card h-100">
                                 <span className="locality-stat-card__label">{t('listing.popularSearches')}</span>
                                 <div className="d-flex flex-wrap gap-2 mb-3">
-                                    {popularSearches.map((search) => (
+                                    {popularSearchesConfig.map((search) => (
                                         <I18nLink key={search.to} to={search.to} className="btn btn-outline-main btn-sm">
-                                            {search.label}
+                                            {t(search.labelKey)}
                                         </I18nLink>
                                     ))}
                                 </div>

@@ -51,6 +51,7 @@ const sourceBadgeStyle = (source, caseNumber) => {
 
 const BankAuctionDetail = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const { id } = useParams();
   const [auction, setAuction] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -80,7 +81,7 @@ const BankAuctionDetail = () => {
 
   const pageTitle = auction
     ? `${auction.property_description || auction.property_type || 'Property'} — Auction | 360Ghar`
-    : 'Auction Detail | 360Ghar';
+    : tSeo('bankAuctionDetail.fallbackTitle');
 
   return (
     <>

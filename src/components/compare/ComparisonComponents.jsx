@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import SectionHeading from '../../common/ui/SectionHeading';
 import { ourAdvantages } from '../../data/competitors';

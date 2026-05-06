@@ -15,6 +15,7 @@ import { I18nLink } from '../../i18n/I18nLink';
 
 const NriPropertyGuide = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const breadcrumbs = [
@@ -102,8 +103,8 @@ const NriPropertyGuide = () => {
   return (
     <>
       <SEO
-        title="NRI Buy Property Gurgaon | Legal Guide & VR Tours | 360 Ghar"
-        description="Complete guide for NRIs buying property in Gurgaon. Legal requirements, FEMA compliance, Power of Attorney, TDS rules, and 360° virtual tours for remote property viewing."
+        title={tSeo('nriPropertyGuide.title')}
+        description={tSeo('nriPropertyGuide.description')}
         keywords="NRI buy property Gurgaon, NRI property guide, FEMA NRI property, Power of Attorney NRI, TDS NRI property sale, NRI home loan India, virtual tour property Gurgaon, NRI real estate investment"
         canonical="/nri-property-guide"
         structuredData={structuredData}

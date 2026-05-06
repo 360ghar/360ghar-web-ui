@@ -38,6 +38,7 @@ const GLOSSARY_FAQS = GLOSSARY_ENTRIES.map(e => ({
 
 const Glossary = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const [search, setSearch] = useState('');
   const [openIndex, setOpenIndex] = useState(-1);
 
@@ -49,8 +50,8 @@ const Glossary = () => {
   return (
     <>
       <SEO
-        title="Real Estate Glossary & AI Knowledge Base | Gurgaon Property Guide | 360 Ghar"
-        description="Complete real estate glossary for Gurgaon property buyers. Answers to common questions about carpet area, RERA, stamp duty, TDS, NRI rules, virtual tours, and more. Optimized for AI and voice search."
+        title={tSeo('glossary.title')}
+        description={tSeo('glossary.description')}
         keywords="real estate glossary India, property terms explained, Gurgaon real estate FAQ, RERA meaning, carpet area meaning, stamp duty Haryana, NRI property guide, virtual tour real estate"
         canonical="/glossary"
         structuredData={[

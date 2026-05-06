@@ -468,6 +468,7 @@ const buildConnectivityItems = (localityName, city, entityType = 'locality') => 
 
 const LocalityTemplate = () => {
     const { t } = useTranslation();
+    const [tSeo] = useTranslation('seo');
     const params = useParams();
     // URL param is the full slug (may include -gurgaon suffix for SEO)
     const slug = (params.slug || '').replace(/-gurgaon$/i, '');
@@ -644,8 +645,8 @@ const LocalityTemplate = () => {
     return (
         <>
             <SEO
-                title={localityInfo?.seo?.title || `${computed.localityName} ${computed.city} - Property Prices, Reviews & Locality Guide | 360 Ghar`}
-                description={localityInfo?.seo?.description || `Explore ${computed.localityName}, ${computed.city} — verified property listings, price trends, amenities, connectivity, and locality reviews. Find your next home with 360Ghar.`}
+                title={localityInfo?.seo?.title || tSeo('localityTemplate.title', { localityName: computed.localityName, city: computed.city })}
+                description={localityInfo?.seo?.description || tSeo('localityTemplate.description', { localityName: computed.localityName, city: computed.city })}
                 keywords={localityInfo?.seo?.keywords || `${computed.localityName} ${computed.city} real estate, properties in ${computed.localityName}, ${computed.localityName} prices, ${computed.localityName} reviews, flats in ${computed.localityName}`}
                 canonical={`/locality/${computed.localitySlug}-gurgaon`}
                 image={siteMetadata.defaultOgImage}

@@ -45,6 +45,7 @@ const StatusBadge = ({ status }) => {
 
 const ZoneCheckerDetail = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const { slug } = useParams();
   const [zone, setZone] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -68,7 +69,7 @@ const ZoneCheckerDetail = () => {
 
   const sectorName = zone?.sector_name || zone?.sector || slug;
   const pageTitle = zone
-    ? `${sectorName} Gurugram Zoning | FAR Master Plan | 360Ghar`
+    ? tSeo('zoneCheckerDetail.titleTemplate', { sector: sectorName })
     : 'Zone Details Gurugram | FAR Master Plan | 360Ghar';
 
   const formatValue = (val) => (val != null ? val : '—');

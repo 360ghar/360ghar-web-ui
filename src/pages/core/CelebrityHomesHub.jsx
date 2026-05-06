@@ -125,6 +125,7 @@ const CELEBRITY_HOMES = [
 
 const CelebrityHomesHub = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const breadcrumbSchema = generateBreadcrumbStructuredData([
     { name: 'Home', url: 'https://360ghar.com/' },
     { name: 'Celebrity Homes', url: 'https://360ghar.com/celebrity-homes' },
@@ -133,8 +134,8 @@ const CelebrityHomesHub = () => {
   return (
     <>
       <SEO
-        title="Celebrity Homes in India 2026 | Inside Bollywood & Cricket Stars' Houses | 360Ghar"
-        description="Explore verified insights into celebrity homes — Akshay Kumar, Allu Arjun, Hardik Pandya, Nayanthara, and more. Get location details, property values, and real estate investment lessons from India's biggest stars."
+        title={tSeo('celebrityHomes.title')}
+        description={tSeo('celebrityHomes.description')}
         keywords="celebrity homes India, Bollywood star houses, cricketer homes, Akshay Kumar house, Allu Arjun mansion, Hardik Pandya property, celebrity real estate India, 360Ghar celebrity homes"
         canonical="/celebrity-homes"
         type="website"

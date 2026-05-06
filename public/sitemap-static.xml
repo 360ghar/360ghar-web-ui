@@ -130,6 +130,86 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies" />
   </url>
   <url>
+    <loc>https://360ghar.com/policies/terms-of-service</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/terms-of-service" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/policies/terms-of-service</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/terms-of-service" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/policies/privacy-policy</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/privacy-policy" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/policies/privacy-policy</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/privacy-policy" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/policies/content-guidelines</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/content-guidelines" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/content-guidelines" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/content-guidelines" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/policies/content-guidelines</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/content-guidelines" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/content-guidelines" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/content-guidelines" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/policies/content-takedown-policy</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/content-takedown-policy" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/content-takedown-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/content-takedown-policy" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/policies/content-takedown-policy</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/content-takedown-policy" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/content-takedown-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/content-takedown-policy" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/policies/grievance-redressal-mechanism</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/grievance-redressal-mechanism" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/grievance-redressal-mechanism" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/grievance-redressal-mechanism" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/policies/grievance-redressal-mechanism</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/policies/grievance-redressal-mechanism" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/policies/grievance-redressal-mechanism" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/policies/grievance-redressal-mechanism" />
+  </url>
+  <url>
     <loc>https://360ghar.com/refer-and-earn</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -770,6 +850,54 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers" />
   </url>
   <url>
+    <loc>https://360ghar.com/careers/content-creator-internship</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/content-creator-internship" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/content-creator-internship" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/content-creator-internship" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/careers/content-creator-internship</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/content-creator-internship" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/content-creator-internship" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/content-creator-internship" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/careers/real-estate-agent</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/real-estate-agent" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/real-estate-agent" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/real-estate-agent" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/careers/real-estate-agent</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/real-estate-agent" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/real-estate-agent" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/real-estate-agent" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/careers/software-developer</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/software-developer" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/software-developer" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/software-developer" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/careers/software-developer</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/software-developer" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/software-developer" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/software-developer" />
+  </url>
+  <url>
     <loc>https://360ghar.com/celebrity-homes</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -930,6 +1058,86 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/medanta" />
   </url>
   <url>
+    <loc>https://360ghar.com/near/artemis</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/artemis" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/artemis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/artemis" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/near/artemis</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/artemis" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/artemis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/artemis" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/near/sector-55-56-metro</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/sector-55-56-metro" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/sector-55-56-metro" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/sector-55-56-metro" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/near/sector-55-56-metro</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/sector-55-56-metro" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/sector-55-56-metro" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/sector-55-56-metro" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/near/dlf-cyber-park</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/dlf-cyber-park" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/dlf-cyber-park" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/dlf-cyber-park" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/near/dlf-cyber-park</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/dlf-cyber-park" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/dlf-cyber-park" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/dlf-cyber-park" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/near/ambience-mall</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/ambience-mall" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/ambience-mall" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/ambience-mall" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/near/ambience-mall</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/ambience-mall" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/ambience-mall" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/ambience-mall" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/near/hero-honda-chowk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/hero-honda-chowk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/hero-honda-chowk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/hero-honda-chowk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/near/hero-honda-chowk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/near/hero-honda-chowk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/near/hero-honda-chowk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/near/hero-honda-chowk" />
+  </url>
+  <url>
     <loc>https://360ghar.com/price-index/gurgaon</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -976,5 +1184,37 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/price-index/noida" />
     <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/price-index/noida" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/price-index/noida" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/price-index/faridabad</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/price-index/faridabad" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/price-index/faridabad" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/price-index/faridabad" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/price-index/faridabad</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/price-index/faridabad" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/price-index/faridabad" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/price-index/faridabad" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/price-index/ghaziabad</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/price-index/ghaziabad" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/price-index/ghaziabad" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/price-index/ghaziabad" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/price-index/ghaziabad</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/price-index/ghaziabad" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/price-index/ghaziabad" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/price-index/ghaziabad" />
   </url>
 </urlset>

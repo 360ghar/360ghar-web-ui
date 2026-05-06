@@ -96,7 +96,7 @@ const BlogClassic = () => {
           keywords="real estate blog, property tips, buying guide, renting guide, PG accommodation advice, investment in real estate, Gurgaon property market, Gurugram property market, Delhi NCR real estate, price trends, locality guides"
           canonical={canonical}
           image={siteMetadata.defaultOgImage}
-          type="blog"
+          type="website"
           noindex={isFiltered}
           prevUrl={prevUrl}
           nextUrl={nextUrl}

@@ -13,6 +13,7 @@ import localitiesIndex from '../../data/localities-index.json';
 
 const LocalitiesDirectory = () => {
     const { t } = useTranslation();
+    const [tSeo] = useTranslation('seo');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedType, setSelectedType] = useState('all');
 
@@ -99,8 +100,8 @@ const LocalitiesDirectory = () => {
     return (
         <>
             <SEO
-                title="Gurgaon Localities Directory 2026: 500+ Areas with Prices & Reviews | 360Ghar"
-                description="Explore 500+ Gurgaon localities — sectors, societies & neighborhoods — with latest property prices, connectivity scores, and verified listings. Compare DLF Phase, Golf Course Road, Sohna Road & more. Free directory by 360Ghar."
+                title={tSeo('localitiesDirectory.title')}
+                description={tSeo('localitiesDirectory.description')}
                 keywords="Gurgaon localities, Gurugram localities directory, sectors in Gurgaon, Gurgaon locality prices, Gurugram neighborhood guide, best areas in Gurgaon, property prices Gurgaon sectors"
                 canonical="/localities"
                 image={siteMetadata.defaultOgImage}

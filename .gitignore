@@ -51,3 +51,4 @@ src/data/localities-index.json
 
 # Repomix output
 repomix-output.*
+gsc_report/

@@ -412,6 +412,14 @@
     "applyFilters": "फ़िल्टर लागू करें",
     "kmRadius": "{{km}} किमी"
   },
+  "popularSearches": {
+    "flatsRentGurugram": "गुरुग्राम में किराये पर फ्लैट",
+    "apartmentsSaleGurugram": "गुरुग्राम में बिक्री के लिए अपार्टमेंट",
+    "twoBhkFlatsSaleGurgaon": "गुरुग्राम में 2 BHK फ्लैट बिक्री के लिए",
+    "flatsRentUnder20k": "20K के अंतर्गत किराये पर फ्लैट",
+    "pgGurugram": "गुरुग्राम में PG",
+    "exploreLocalities": "लोकैलिटीज़ एक्सप्लोर करें"
+  },
   "taxonomy": {
     "purpose": {
       "all": "सभी",

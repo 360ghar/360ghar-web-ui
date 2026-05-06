@@ -31,9 +31,9 @@ export const siteMetadata = {
   organization: {
     name: '360Ghar',
     email: 'info@360ghar.com',
-    telephone: '+91-8178340031',
+    telephone: '+91-9999900876',
     address: {
-      streetAddress: 'Sector 43, Golf Course Road',
+      streetAddress: 'Sector 50, Gurugram',
       addressLocality: 'Gurgaon',
       addressRegion: 'Haryana',
       postalCode: '122001',

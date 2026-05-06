@@ -98,6 +98,7 @@ const buildRssXml = (items, channelOpts = {}) => {
     link = SITE_URL,
     description = 'Properties, projects, localities, and real estate insights from 360Ghar',
     selfHref = `${SITE_URL}/rss.xml`,
+    language = 'en-in',
   } = channelOpts;
   const buildDate = new Date().toUTCString();
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -106,7 +107,7 @@ const buildRssXml = (items, channelOpts = {}) => {
     <title>${escapeXml(title)}</title>
     <link>${link}</link>
     <description>${escapeXml(description)}</description>
-    <language>en-in</language>
+    <language>${language}</language>
     <lastBuildDate>${buildDate}</lastBuildDate>
     <atom:link href="${selfHref}" rel="self" type="application/rss+xml"/>
 ${items.map(toRssItem).join('\n')}
@@ -193,6 +194,20 @@ async function main() {
     isFresh: blogFetchOk,
   });
 
+  const hiBlogItems = blogItems.map(item => ({ ...item, link: item.link.replace(`${SITE_URL}/blog/`, `${SITE_URL}/hi/blog/`) }));
+  const hiBlogXml = buildRssXml(hiBlogItems, {
+    title: '360Ghar ब्लॉग',
+    description: '360Ghar से रियल एस्टेट गाइड, खरीद टिप्स, लोकैलिटी गाइड और बाज़ार अपडेट',
+    selfHref: `${SITE_URL}/rss/hi-blog.xml`,
+    language: 'hi-in',
+  });
+  writeFeedOrPreserveExisting({
+    filePath: path.join(rssDir, 'hi-blog.xml'),
+    xml: hiBlogXml,
+    label: `${hiBlogItems.length} Hindi blog items`,
+    isFresh: blogFetchOk,
+  });
+
   // --- Sub-feed: Properties ---
   const propertyItems = properties.map(propertyItem);
   const propertiesXml = buildRssXml(propertyItems, {
@@ -207,6 +222,20 @@ async function main() {
     isFresh: propertiesFetchOk,
   });
 
+  const hiPropertyItems = propertyItems.map(item => ({ ...item, link: item.link.replace(`${SITE_URL}/property/`, `${SITE_URL}/hi/property/`) }));
+  const hiPropertiesXml = buildRssXml(hiPropertyItems, {
+    title: '360Ghar प्रॉपर्टी',
+    description: 'गुरुग्राम और दिल्ली NCR में 360Ghar से नवीनतम वेरिफाइड प्रॉपर्टी लिस्टिंग',
+    selfHref: `${SITE_URL}/rss/hi-properties.xml`,
+    language: 'hi-in',
+  });
+  writeFeedOrPreserveExisting({
+    filePath: path.join(rssDir, 'hi-properties.xml'),
+    xml: hiPropertiesXml,
+    label: `${hiPropertyItems.length} Hindi property items`,
+    isFresh: propertiesFetchOk,
+  });
+
   // --- Sub-feed: Localities ---
   const localityItems = localityEntries.map(localityItem);
   const localitiesXml = buildRssXml(localityItems, {
@@ -215,6 +244,15 @@ async function main() {
     selfHref: `${SITE_URL}/rss/localities.xml`,
   });
   writeRssFile(path.join(rssDir, 'localities.xml'), localitiesXml, `${localityItems.length} locality items`);
+
+  const hiLocalityItems = localityItems.map(item => ({ ...item, link: item.link.replace(`${SITE_URL}/locality/`, `${SITE_URL}/hi/locality/`) }));
+  const hiLocalitiesXml = buildRssXml(hiLocalityItems, {
+    title: '360Ghar लोकैलिटी',
+    description: 'गुरुग्राम और दिल्ली NCR के लिए लोकैलिटी गाइड और पड़ोस इंटेलिजेंस',
+    selfHref: `${SITE_URL}/rss/hi-localities.xml`,
+    language: 'hi-in',
+  });
+  writeRssFile(path.join(rssDir, 'hi-localities.xml'), hiLocalitiesXml, `${hiLocalityItems.length} Hindi locality items`);
 
   // --- Main index feed: lists each sub-feed as an item ---
   const indexItems = [
@@ -235,6 +273,24 @@ async function main() {
       link: `${SITE_URL}/rss/localities.xml`,
       desc: 'Locality guides and neighbourhood intelligence for Gurugram and Delhi NCR',
       date: localityItems.length ? localityItems[0].date : new Date().toISOString(),
+    },
+    {
+      title: '360Ghar ब्लॉग (Hindi)',
+      link: `${SITE_URL}/rss/hi-blog.xml`,
+      desc: 'रियल एस्टेट गाइड, खरीद टिप्स, लोकैलिटी गाइड और बाज़ार अपडेट',
+      date: hiBlogItems.length ? hiBlogItems[0].date : new Date().toISOString(),
+    },
+    {
+      title: '360Ghar प्रॉपर्टी (Hindi)',
+      link: `${SITE_URL}/rss/hi-properties.xml`,
+      desc: 'गुरुग्राम और दिल्ली NCR में नवीनतम वेरिफाइड प्रॉपर्टी लिस्टिंग',
+      date: hiPropertyItems.length ? hiPropertyItems[0].date : new Date().toISOString(),
+    },
+    {
+      title: '360Ghar लोकैलिटी (Hindi)',
+      link: `${SITE_URL}/rss/hi-localities.xml`,
+      desc: 'लोकैलिटी गाइड और पड़ोस इंटेलिजेंस',
+      date: hiLocalityItems.length ? hiLocalityItems[0].date : new Date().toISOString(),
     },
   ];
   const indexXml = buildRssXml(indexItems, {

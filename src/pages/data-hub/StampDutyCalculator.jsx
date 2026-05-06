@@ -28,6 +28,7 @@ const fmt = (n, lang) => `₹${Number(n).toLocaleString(lang === 'hi' ? 'hi-IN' 
 
 const StampDutyCalculator = () => {
   const { t, i18n } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const { circleRateSectors, fetchCircleRateSectors } = useDataHubStore();
   const [form, setForm] = useState({ property_value: '', buyer_type: 'male', sector: '', property_type: '' });
   const [result, setResult] = useState(null);
@@ -62,8 +63,8 @@ const StampDutyCalculator = () => {
   return (
     <>
       <SEO
-        title="Stamp Duty Calculator Gurgaon | Haryana Registration Charges 2026 | 360Ghar"
-        description="Calculate stamp duty and registration charges for property in Gurugram, Haryana. Male: 7%, Female: 5%, Joint: 6%. Includes circle rate comparison and EMI estimation."
+        title={tSeo('stampDuty.title')}
+        description={tSeo('stampDuty.description')}
         keywords="Haryana stamp duty calculator, Gurugram property registration charges, DLC rate stamp duty, stamp duty female buyer Haryana, property registration cost Gurgaon"
         canonical="/stamp-duty-calculator"
         structuredData={[

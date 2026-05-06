@@ -29,6 +29,7 @@ const TEHSIL_OPTIONS = [
 
 const VerifyOwnership = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [tehsil, setTehsil] = useState('');
   const [village, setVillage] = useState('');
   const [khasraNumber, setKhasraNumber] = useState('');
@@ -109,8 +110,8 @@ const VerifyOwnership = () => {
   return (
     <>
       <SEO
-        title="Verify Property Ownership Gurgaon | Jamabandi Haryana Land Records | 360Ghar"
-        description="Verify property ownership using official Haryana land records (Jamabandi). Look up Khasra numbers, owner names, mutation status, and encumbrance details for plots in Gurugram."
+        title={tSeo('verifyOwnership.title')}
+        description={tSeo('verifyOwnership.description')}
         keywords="verify property ownership Gurugram, Jamabandi Haryana land records, Khasra number lookup, mutation status Haryana, property ownership check Gurgaon"
         canonical="/verify-ownership"
         structuredData={[

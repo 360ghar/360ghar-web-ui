@@ -25,6 +25,7 @@ const TYPE_LABELS = {
 
 const NearOfficePage = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const { slug } = useParams();
   const landmark = officeLandmarks.find((l) => l.slug === slug);
 
@@ -64,8 +65,8 @@ const NearOfficePage = () => {
     radius: 5,
   });
 
-  const title = `Property near ${name}, ${city} | 360Ghar`;
-  const description = `Find verified flats, apartments, and offices near ${name}, ${city}. ${typeLabel} area with properties within 5 km. 360° virtual tours and on-site verification by 360Ghar.`;
+  const title = tSeo('nearOffice.titleTemplate', { name, city });
+  const description = tSeo('nearOffice.descriptionTemplate', { name, city });
 
   const breadcrumbs = [
     { name: 'Home', url: 'https://360ghar.com/' },

@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -39,12 +40,13 @@ const FAQS = (city) => [
 
 const PriceIndexPage = () => {
   const { citySlug } = useParams();
+  const [tSeo] = useTranslation('seo');
   const city = priceContext[citySlug];
 
   if (!city) {
     return (
       <>
-        <SEO noindex={true} title="City Not Found | 360Ghar" />
+        <SEO noindex={true} title={tSeo('priceIndex.notFoundTitle')} />
         <OffCanvas />
         <MobileMenu />
         <main className="body-bg">
@@ -89,8 +91,8 @@ const PriceIndexPage = () => {
 
   const faqs = FAQS(cityName);
 
-  const seoTitle = `${cityName} Property Price Index — May 2026 | 360Ghar`;
-  const seoDescription = `Latest property prices in ${cityName}. Browse verified price ranges by property type and locality. Updated May 2026 with circle rates, stamp duty, and market insights.`;
+  const seoTitle = tSeo('priceIndex.titleTemplate', { city: cityName });
+  const seoDescription = tSeo('priceIndex.descriptionTemplate', { city: cityName });
 
   return (
     <>

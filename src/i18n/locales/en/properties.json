@@ -412,6 +412,14 @@
     "applyFilters": "Apply Filters",
     "kmRadius": "{{km}} km"
   },
+  "popularSearches": {
+    "flatsRentGurugram": "Flats for rent in Gurugram",
+    "apartmentsSaleGurugram": "Apartments for sale in Gurugram",
+    "twoBhkFlatsSaleGurgaon": "2 BHK Flats for Sale in Gurgaon",
+    "flatsRentUnder20k": "Flats for Rent Under 20K",
+    "pgGurugram": "PG in Gurugram",
+    "exploreLocalities": "Explore localities"
+  },
   "taxonomy": {
     "purpose": {
       "all": "All",

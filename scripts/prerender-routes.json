@@ -37,6 +37,26 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/policies/terms-of-service",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/policies/privacy-policy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/policies/content-guidelines",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/policies/content-takedown-policy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/policies/grievance-redressal-mechanism",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/refer-and-earn",
     "waitForSelector": "main"
   },
@@ -201,6 +221,18 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/careers/content-creator-internship",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/careers/real-estate-agent",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/careers/software-developer",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/celebrity-homes",
     "waitForSelector": "main"
   },
@@ -241,6 +273,26 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/near/artemis",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/sector-55-56-metro",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/dlf-cyber-park",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/ambience-mall",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/hero-honda-chowk",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/price-index/gurgaon",
     "waitForSelector": "main"
   },
@@ -250,6 +302,14 @@
   },
   {
     "route": "/price-index/noida",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/faridabad",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/ghaziabad",
     "waitForSelector": "main"
   },
   {

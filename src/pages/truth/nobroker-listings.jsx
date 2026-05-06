@@ -1,9 +1,11 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
 
 const TruthPage = lazy(() => import('./TruthPage'));
 
 const NoBrokerTruth = () => {
+  const [tSeo] = useTranslation('seo');
   const competitor = competitors.nobroker;
   
   const keyIssues = [
@@ -32,8 +34,8 @@ const NoBrokerTruth = () => {
   return (
     <TruthPage
       competitor={competitor}
-      pageTitle="Why NoBroker Listings Are Misleading | The Truth About NoBroker"
-      pageDescription="The truth about NoBroker listings revealed. Learn about hidden charges, fake listings, and refund issues that NoBroker doesn't want you to know."
+      pageTitle={tSeo('truth.nobroker.title')}
+      pageDescription={tSeo('truth.nobroker.description')}
       canonicalPath="/truth/nobroker-listings"
       truthTitle="The Truth About NoBroker Listings"
       introText="Despite their marketing promises, NoBroker has transformed from a zero-brokerage platform to a subscription-based service with numerous user complaints."

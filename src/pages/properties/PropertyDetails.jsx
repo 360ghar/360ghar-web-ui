@@ -25,6 +25,7 @@ import {
 
 const PropertyDetails = () => {
     const { t } = useTranslation('properties');
+    const [tSeo] = useTranslation('seo');
     const { id } = useParams();
     const {
         currentProperty: propertyData,
@@ -168,14 +169,15 @@ const PropertyDetails = () => {
                     ? [bhkLabel, propertyTypeLabel, listingLabel, 'in', locationLabel, `| ₹${priceValue}`, '| 360Ghar']
                         .filter(Boolean)
                         .join(' ')
-                    : 'Property Details | 360Ghar - Best Real Estate Platform'
+                    : tSeo('propertyDetails.fallbackTitle')
                 }
                 description={propertyData?.description
                     ? `${propertyData.description.slice(0, 160)} Verified by on-site team with 360° virtual tour in ${locationLabel}. ${listingLabel || 'Browse'} directly from owner.`
-                    : siteMetadata.defaultDescription
+                    : tSeo('propertyDetails.fallbackDescription')
                 }
                 image={mainImage}
                 type="product"
+                video={propertyData?.virtual_tour_url || propertyData?.tour_url || undefined}
                 structuredData={generatePropertyStructured()}
                 noindex={isNotFound}
             />

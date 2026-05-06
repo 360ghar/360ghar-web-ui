@@ -13,6 +13,7 @@ import StampDutyWidget from '../../components/data-hub/StampDutyWidget';
 
 const CircleRateDetail = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const { slug } = useParams();
   const [rate, setRate] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -34,7 +35,7 @@ const CircleRateDetail = () => {
 
   if (error || !rate) return (
     <>
-      <SEO noindex={true} title="Not Found | 360Ghar" />
+      <SEO noindex={true} title={tSeo('circleRateDetail.notFoundTitle')} />
       <OffCanvas /><MobileMenu />
       <main className="body-bg"><Header /><section className="pt-60 pb-60"><div className="container">
         <h1>{t('circleRates.detail.notFound')}</h1>
@@ -46,8 +47,8 @@ const CircleRateDetail = () => {
   return (
     <>
       <SEO
-        title={`${rate.sector} Circle Rates ${rate.revision_year} | DLC Rate ${rate.property_type} | 360Ghar`}
-        description={`Official circle rates for ${rate.sector}, Gurugram for ${rate.property_type} properties. Rate: ₹${rate.rate_per_sqyd}/sq yd for ${rate.revision_year}. Calculate stamp duty.`}
+        title={tSeo('circleRateDetail.titleTemplate', { sector: rate.sector, year: rate.revision_year, propertyType: rate.property_type })}
+        description={tSeo('circleRateDetail.descriptionTemplate', { sector: rate.sector, propertyType: rate.property_type, rate: rate.rate_per_sqyd, year: rate.revision_year })}
         keywords={`${rate.sector} circle rate, DLC rate ${rate.sector}, stamp duty ${rate.sector} Gurugram`}
         canonical={`/circle-rate/${slug}`}
         structuredData={[

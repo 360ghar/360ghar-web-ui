@@ -1,9 +1,11 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
 
 const TruthPage = lazy(() => import('./TruthPage'));
 
 const MagicBricksTruth = () => {
+  const [tSeo] = useTranslation('seo');
   const competitor = competitors.magicbricks;
   
   const keyIssues = [
@@ -32,8 +34,8 @@ const MagicBricksTruth = () => {
   return (
     <TruthPage
       competitor={competitor}
-      pageTitle="Why MagicBricks Spam Calls Are a Nightmare | The Truth About MagicBricks"
-      pageDescription="Discover why MagicBricks spam calls are legendary in the property market. Learn how your data is sold and why verified listings mean nothing."
+      pageTitle={tSeo('truth.magicbricks.title')}
+      pageDescription={tSeo('truth.magicbricks.description')}
       canonicalPath="/truth/magicbricks-spam"
       truthTitle="The Truth About MagicBricks Spam Calls"
       introText="MagicBricks has perfected the art of selling your data to brokers. What starts as a simple property search becomes a nightmare of spam calls."

@@ -7,7 +7,7 @@ export const authors = {
     image: '/assets/images/thumbs/team1.png',
     linkedin: 'https://www.linkedin.com/in/saksham360/',
     credentials: 'Real Estate Technology, AI/ML, Product Strategy',
-    organization: '360Ghar Technologies Pvt Ltd',
+    organization: '360 Ghar',
   },
   '360ghar-team': {
     name: '360Ghar Team',
@@ -15,7 +15,7 @@ export const authors = {
     title: 'Real Estate Research Team',
     bio: 'The 360Ghar research team covers property market trends, locality guides, and verified listing insights across Gurugram and Delhi NCR. Every insight is backed by on-ground verification.',
     image: '/assets/images/logo/logo.png',
-    organization: '360Ghar Technologies Pvt Ltd',
+    organization: '360 Ghar',
   },
 };
 

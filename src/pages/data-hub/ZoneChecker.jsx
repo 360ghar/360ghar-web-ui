@@ -70,6 +70,7 @@ const StatusBadge = ({ status }) => {
 
 const ZoneChecker = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [zones, setZones] = useState([]);
@@ -125,8 +126,8 @@ const ZoneChecker = () => {
   return (
     <>
       <SEO
-        title="Zone Checker Gurugram | Land Use FAR Master Plan | 360Ghar"
-        description="Check zoning regulations for Gurugram sectors. View land use classification, Floor Area Ratio (FAR), maximum height, and setback rules from Haryana Master Plan."
+        title={tSeo('zoneChecker.title')}
+        description={tSeo('zoneChecker.description')}
         keywords="zone checker Gurugram, land use Gurugram, FAR Gurgaon, Master Plan Haryana, sector zoning Gurugram, residential commercial zone"
         canonical="/zone-checker"
         structuredData={[

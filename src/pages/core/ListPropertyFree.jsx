@@ -15,6 +15,7 @@ import { I18nLink } from '../../i18n/I18nLink';
 
 const ListPropertyFree = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const breadcrumbs = [
@@ -97,8 +98,8 @@ const ListPropertyFree = () => {
   return (
     <>
       <SEO
-        title="List Property Online for Free | No Spam Calls | 360 Ghar"
-        description="List your property for free on 360Ghar — no spam calls, no upfront fees. Physically verified listings with 360° virtual tours. Standard brokerage only when deal closes."
+        title={tSeo('listPropertyFree.title')}
+        description={tSeo('listPropertyFree.description')}
         keywords="list property free, post property free, sell property online, no spam calls property, 360Ghar vs MagicBricks, free property listing Gurgaon, virtual tour property listing"
         canonical="/list-property-free"
         structuredData={structuredData}

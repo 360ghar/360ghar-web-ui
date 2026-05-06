@@ -41,6 +41,7 @@ const SEO = ({
   articleModifiedTime,
   articleTags,
   articleSection,
+  video,
 }) => {
   const location = useLocation();
   const storeLocale = useLocaleStore((s) => s.locale);
@@ -102,6 +103,12 @@ const SEO = ({
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content={siteMetadata.siteName} />
 
+      {/* OG Video (for VR tour / video pages) */}
+      {video && <meta property="og:video" content={video} />}
+      {video && <meta property="og:video:type" content="text/html" />}
+      {video && <meta property="og:video:width" content="1280" />}
+      {video && <meta property="og:video:height" content="720" />}
+
       {/* OG Article extensions (only when type === 'article') */}
       {isArticle && articlePublishedTime && (
         <meta property="article:published_time" content={articlePublishedTime} />
@@ -125,6 +132,11 @@ const SEO = ({
       <meta name="twitter:url" content={computedUrl} />
       <meta name="twitter:site" content="@360ghar" />
       <meta name="twitter:creator" content="@360ghar" />
+
+      {/* Twitter Player (for VR tour / video pages) */}
+      {video && <meta name="twitter:player" content={video} />}
+      {video && <meta name="twitter:player:width" content="1280" />}
+      {video && <meta name="twitter:player:height" content="720" />}
 
       {/* Structured Data */}
       {ldBlocks.map((ld, idx) => (

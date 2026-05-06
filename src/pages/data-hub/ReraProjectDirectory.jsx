@@ -50,6 +50,7 @@ const statusBadgeStyle = (status) => {
 
 const ReraProjectDirectory = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [projects, setProjects] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -103,8 +104,8 @@ const ReraProjectDirectory = () => {
   return (
     <>
       <SEO
-        title="RERA Projects Gurugram | Verified Builders | 360Ghar"
-        description="Browse all RERA-registered real estate projects in Gurugram. Verify project registration numbers, check developer details, possession dates, and project status."
+        title={tSeo('reraProjectDirectory.title')}
+        description={tSeo('reraProjectDirectory.description')}
         keywords="RERA projects Gurugram, HRERA registered projects, builder RERA number, Haryana RERA, verified developers Gurgaon"
         canonical="/rera-projects"
         structuredData={[

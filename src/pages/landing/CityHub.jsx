@@ -85,6 +85,7 @@ const buildCityHubFaqs = (city, meta) => [
 
 const CityHub = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const { citySlug } = useParams();
 
   const canonical = normalizeCitySlug(citySlug);
@@ -105,8 +106,8 @@ const CityHub = () => {
     byIntent[intent.key] = landingLinks.filter((l) => l.intent === intent.key);
   }
 
-  const title = `${city} Real Estate | Buy, Rent & PG in ${city} | 360Ghar`;
-  const description = `Explore verified properties in ${city} to buy, rent, or find PG. All listings verified by 360Ghar's on-site team with 360° virtual tours. Dedicated Relationship Manager for end-to-end service.`;
+  const title = tSeo('cityHub.titleTemplate', { city });
+  const description = tSeo('cityHub.descriptionTemplate', { city });
   const keywords = buildLandingKeywords({ facet: 'Properties', city, validIntent: 'buy' });
 
   const canonicalPath = `/${canonical}`;

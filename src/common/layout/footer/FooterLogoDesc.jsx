@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LogoWhite from '../../LogoWhite';
 import { offCanvasInfos } from '../../../data/CommonData';
-import { I18nLink } from '../../../i18n/I18nLink';
+
 
 const FooterLogoDesc = () => {
     const { t } = useTranslation('common');
@@ -55,7 +55,7 @@ const FooterLogoDesc = () => {
                         <input
                             type="email"
                             className="form-control rounded-start-pill border-0 px-3"
-                            placeholder="{t('footer.enterYourEmail')}"
+                            placeholder={t('footer.enterYourEmail')}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required

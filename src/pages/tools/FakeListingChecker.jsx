@@ -36,6 +36,7 @@ const HOW_TO_STEPS = [
 
 const FakeListingChecker = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const [url, setUrl] = useState('');
   const [checked, setChecked] = useState(false);
   const [portalInfo, setPortalInfo] = useState(null);
@@ -52,8 +53,8 @@ const FakeListingChecker = () => {
   return (
     <>
       <SEO
-        title="Check if a Property Listing is Fake | 360 Ghar"
-        description="Paste a listing URL from 99acres, MagicBricks, or any portal to check if it's fake. Compare with 360Ghar's physically verified properties with 360° virtual tours."
+        title={tSeo('fakeListingChecker.title')}
+        description={tSeo('fakeListingChecker.description')}
         keywords="fake property listing check, verify property listing, 99acres fake listing, MagicBricks fraud, property scam detector, real estate listing verification India"
         canonical="/check-fake-listing"
         structuredData={[

@@ -9,12 +9,13 @@ import { useTranslation } from 'react-i18next';
 
 const Property = () => {
     const { t } = useTranslation('properties');
+    const [tSeo] = useTranslation('seo');
 
     return (
         <>
             <SEO
-                title="Properties with Filter Sidebar | 360Ghar"
-                description="Filter and search verified properties in Gurugram on 360Ghar's property portal."
+                title={tSeo('propertySidebar.title')}
+                description={tSeo('propertySidebar.description')}
                 canonical="/property-sidebar"
                 noindex
             />

@@ -790,6 +790,6 @@ Before upgrading any devDependency to a new major version:
 - **Name:** 360Ghar
 - **Location:** Gurugram, Haryana, India (122001)
 - **Email:** info@360ghar.com
-- **Phone:** 8178340031
+- **Phone:** 9999900876
 - **Website:** https://360ghar.com
 - **Social:** Facebook, Twitter, LinkedIn, Instagram

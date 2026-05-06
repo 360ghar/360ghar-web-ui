@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import DOMPurify from 'dompurify';
 import ReactMarkdown from 'react-markdown';
@@ -184,6 +185,8 @@ const SANITIZE_OPTIONS = {
 
 const BlogDetailsSection = () => {
     const { title: slug } = useParams();
+    const { t } = useTranslation();
+    const [tSeo] = useTranslation('seo');
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -210,7 +213,7 @@ const BlogDetailsSection = () => {
 
     // SEO metadata derived from fetched post
     const seoMeta = useMemo(() => {
-        const rawTitle = post?.title || 'Real Estate Blog | 360Ghar';
+        const rawTitle = post?.title || tSeo('blog.fallbackTitle');
         const year = new Date().getFullYear();
         // Enhance title: add year and brand suffix if not already present
         const titleText = rawTitle.includes('360Ghar')
@@ -224,7 +227,7 @@ const BlogDetailsSection = () => {
         const trustPrefix = isLegalTopic ? 'Verified guide: ' : '';
         const descText = rawDesc
             ? `${trustPrefix}${rawDesc.length > 150 ? `${rawDesc.slice(0, 147)}...` : rawDesc}`
-            : `Read verified insights on buying, renting, PGs, locality guides, and investment trends in Gurugram and Delhi NCR (${year}).`;
+            : tSeo('blog.fallbackDescription');
         const image = post?.thumbnail_url || post?.cover_image_url
             || post?.featured_image || post?.image_url || post?.image
             || extractFirstMarkdownImage(post?.content || '')

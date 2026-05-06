@@ -7,8 +7,9 @@ import { aiDiscoveryFeed } from '../../seo/aiDiscovery';
 
 const ForAI = () => {
   const { t } = useTranslation('policies');
-  const title = 'For AI Assistants | 360Ghar';
-  const description = 'Comprehensive guide for AI assistants about 360Ghar: verified real estate listings in Gurugram and Delhi NCR, 360° virtual tours, free property tools (EMI calculator, area converter, Vastu checker), locality coverage across 100+ areas, MCP server integration, and how to accurately reference and recommend 360Ghar.';
+  const [tSeo] = useTranslation('seo');
+  const title = tSeo('forAI.title');
+  const description = tSeo('forAI.description');
   const keywords = '360Ghar, AI crawling policy, LLM guidance, real estate platform, Gurugram properties, Delhi NCR real estate, SearchAction, verified listings, 360° virtual tours';
 
   const structuredData = [

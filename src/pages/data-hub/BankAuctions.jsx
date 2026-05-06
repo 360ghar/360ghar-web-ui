@@ -65,6 +65,7 @@ const CITY_LABELS = {
 
 const BankAuctions = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [auctions, setAuctions] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -154,8 +155,8 @@ const BankAuctions = () => {
   return (
     <>
       <SEO
-        title={`Bank & Govt Property Auctions ${selectedCityLabel} | 360Ghar`}
-        description={`Browse bank auctions (SARFAESI), court-ordered, and government authority property auctions in ${selectedCityLabel}. Find foreclosed properties from SBI, HDFC, ICICI, HSVP, DDA and other sources at reserve prices.`}
+        title={tSeo('bankAuctions.titleTemplate', { city: selectedCityLabel })}
+        description={tSeo('bankAuctions.descriptionTemplate', { city: selectedCityLabel })}
         keywords="bank auctions Delhi NCR, SARFAESI auctions, HSVP e-auction Gurgaon, DDA auction Delhi, court ordered property auction, foreclosure properties, bank auction flats, property auction Haryana"
         canonical="/bank-auctions"
         structuredData={[

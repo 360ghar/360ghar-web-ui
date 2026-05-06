@@ -3,7 +3,7 @@
   "homepage": "https://360ghar.com/",
   "description": "Real estate platform for Buy, Rent and PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.",
   "metadata": {
-    "last_updated": "2026-05-05",
+    "last_updated": "2026-05-06",
     "coverage": [
       "Gurugram",
       "Delhi",
@@ -20,9 +20,13 @@
       "penthouse",
       "studio"
     ],
-    "total_localities": 3212,
+    "total_localities": 3213,
     "total_societies": 179
   },
+  "inLanguage": [
+    "en-IN",
+    "hi-IN"
+  ],
   "search": {
     "endpoint": "https://360ghar.com/properties",
     "query_param": "q",
@@ -162,6 +166,18 @@
     {
       "query": "PG in Gurgaon",
       "url": "https://360ghar.com/gurgaon/pg/flats"
+    },
+    {
+      "query": "गुड़गाँव में 2 BHK किराये पर",
+      "url": "https://360ghar.com/hi/gurgaon/rent/flats"
+    },
+    {
+      "query": "गुरुग्राम में फ्लैट खरीदें",
+      "url": "https://360ghar.com/hi/gurgaon/buy/flats"
+    },
+    {
+      "query": "गुरुग्राम में PG",
+      "url": "https://360ghar.com/hi/gurgaon/pg/flats"
     }
   ],
   "important_pages": [
@@ -411,6 +427,41 @@
       "title": "Sector 49, Gurgaon",
       "url": "https://360ghar.com/locality/sector-49-gurgaon",
       "category": "locality"
+    },
+    {
+      "title": "मुख्य पृष्ठ (Hindi)",
+      "url": "https://360ghar.com/hi/",
+      "category": "hindi"
+    },
+    {
+      "title": "प्रॉपर्टी (Hindi)",
+      "url": "https://360ghar.com/hi/properties",
+      "category": "hindi"
+    },
+    {
+      "title": "लोकैलिटी (Hindi)",
+      "url": "https://360ghar.com/hi/localities",
+      "category": "hindi"
+    },
+    {
+      "title": "ब्लॉग (Hindi)",
+      "url": "https://360ghar.com/hi/blog",
+      "category": "hindi"
+    },
+    {
+      "title": "EMI कैलकुलेटर (Hindi)",
+      "url": "https://360ghar.com/hi/emi-calculator",
+      "category": "hindi"
+    },
+    {
+      "title": "सर्कल रेट (Hindi)",
+      "url": "https://360ghar.com/hi/circle-rates",
+      "category": "hindi"
+    },
+    {
+      "title": "संपर्क करें (Hindi)",
+      "url": "https://360ghar.com/hi/contact",
+      "category": "hindi"
     }
   ],
   "categories": {
@@ -620,11 +671,48 @@
         "url": "https://360ghar.com/locality/sector-49-gurgaon",
         "category": "locality"
       }
+    ],
+    "hindi": [
+      {
+        "title": "मुख्य पृष्ठ (Hindi)",
+        "url": "https://360ghar.com/hi/",
+        "category": "hindi"
+      },
+      {
+        "title": "प्रॉपर्टी (Hindi)",
+        "url": "https://360ghar.com/hi/properties",
+        "category": "hindi"
+      },
+      {
+        "title": "लोकैलिटी (Hindi)",
+        "url": "https://360ghar.com/hi/localities",
+        "category": "hindi"
+      },
+      {
+        "title": "ब्लॉग (Hindi)",
+        "url": "https://360ghar.com/hi/blog",
+        "category": "hindi"
+      },
+      {
+        "title": "EMI कैलकुलेटर (Hindi)",
+        "url": "https://360ghar.com/hi/emi-calculator",
+        "category": "hindi"
+      },
+      {
+        "title": "सर्कल रेट (Hindi)",
+        "url": "https://360ghar.com/hi/circle-rates",
+        "category": "hindi"
+      },
+      {
+        "title": "संपर्क करें (Hindi)",
+        "url": "https://360ghar.com/hi/contact",
+        "category": "hindi"
+      }
     ]
   },
   "contact": {
     "email": "info@360ghar.com",
-    "telephone": "+91-8178340031"
+    "telephone": "+91-9999900876"
   },
   "top_localities": [
     {

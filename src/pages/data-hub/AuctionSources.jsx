@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -143,12 +144,13 @@ const TAG_COLORS = {
 
 const AuctionSources = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
+  const [tSeo] = useTranslation('seo');
 
   return (
     <>
       <SEO
-        title="Government & Bank Auction Properties in Delhi NCR — Complete Guide | 360Ghar"
-        description="Complete guide to government and bank property auction portals in Delhi NCR. Covers IBAPI, DDA, HSVP, MDA, YEIDA, BaankNet, DRT, and 20+ aggregator and bank sources. Learn how to participate in SARFAESI, IBC, and government authority auctions."
+        title={tSeo('auctionSources.title')}
+        description={tSeo('auctionSources.description')}
         keywords="government property auctions Delhi, bank auction portals, IBAPI, DDA auction, HSVP e-auction, BaankNet, SARFAESI auction Delhi NCR, MDA auction Meerut, YEIDA auction, bank auction guide India"
         canonical="/auction-sources"
         structuredData={[

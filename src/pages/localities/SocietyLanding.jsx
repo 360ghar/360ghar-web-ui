@@ -55,6 +55,7 @@ const buildSocietyFaqs = (societyName, city, intent) => {
 
 const SocietyLanding = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const { slug, intent } = useParams();
   const validIntent = VALID_INTENTS.includes(intent) ? intent : 'buy';
   const intentLabel = validIntent === 'rent' ? 'Rent' : 'Sale';
@@ -71,7 +72,7 @@ const SocietyLanding = () => {
   if (!entity) {
     return (
       <>
-        <SEO title="Society Not Found | 360Ghar" noindex />
+        <SEO title={tSeo('societyLanding.notFoundTitle')} noindex />
         <OffCanvas />
         <MobileMenu />
         <main className="body-bg">

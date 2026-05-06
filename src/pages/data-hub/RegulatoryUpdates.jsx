@@ -38,6 +38,7 @@ const FAQS = [
 
 const RegulatoryUpdates = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [activeTab, setActiveTab] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [total, setTotal] = useState(0);
@@ -79,8 +80,8 @@ const RegulatoryUpdates = () => {
   return (
     <>
       <SEO
-        title="Regulatory Updates Gurugram | Haryana Gazette Notifications | 360Ghar"
-        description="Stay updated with official Haryana Gazette notifications affecting Gurugram real estate. Land acquisition notices, circle rate revisions, policy changes, and CLU updates."
+        title={tSeo('regulatoryUpdates.title')}
+        description={tSeo('regulatoryUpdates.description')}
         keywords="Haryana Gazette notifications, Gurugram regulatory updates, land acquisition notices, circle rate revision, CLU change Gurgaon, HRERA policy update, 360Ghar data hub"
         canonical="/regulatory-updates"
         structuredData={[

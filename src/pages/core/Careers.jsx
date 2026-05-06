@@ -17,11 +17,12 @@ const CAREER_VALUES = [
 
 const Careers = () => {
   const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   return (
     <>
       <SEO
-        title="Internships & Careers at 360Ghar | Grow With Us"
-        description="Explore internship opportunities at 360Ghar. Open roles in Content Creation, Real Estate, and Software Development in Gurugram."
+        title={tSeo('careers.title')}
+        description={tSeo('careers.description')}
         keywords="360Ghar careers, internships in Gurugram, content creator internship, real estate agent internship, software developer internship, 360Ghar hiring"
         canonical="/careers"
         image={siteMetadata.defaultOgImage}

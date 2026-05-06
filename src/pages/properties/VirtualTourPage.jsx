@@ -13,6 +13,7 @@ import { siteMetadata } from '../../seo/siteMetadata';
 
 const VirtualTourPage = () => {
     const { t } = useTranslation();
+    const [tSeo] = useTranslation('seo');
     const { id } = useParams();
     const [propertyData, setPropertyData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +64,7 @@ const VirtualTourPage = () => {
     // SEO
     const seoTitle = propertyData
         ? `${propertyTitle} - 360° Virtual Tour | 360Ghar`
-        : '360° Virtual Tour | 360Ghar';
+        : tSeo('virtualTour.fallbackTitle');
     const seoDescription = propertyData
         ? `Take a 360° virtual tour of ${propertyTitle} in ${locality}. Walk through living room, kitchen, bedrooms, and society amenities before scheduling a visit.`
         : siteMetadata.defaultDescription;
@@ -148,6 +149,7 @@ const VirtualTourPage = () => {
                 title={seoTitle}
                 description={seoDescription}
                 image={mainImage}
+                video={virtualTourUrl || undefined}
                 structuredData={structuredData}
                 noindex={!propertyData}
             />

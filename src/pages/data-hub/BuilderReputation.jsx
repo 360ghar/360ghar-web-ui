@@ -63,6 +63,7 @@ const scoreBadgeStyle = (score) => ({
 
 const BuilderReputation = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [builders, setBuilders] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -106,8 +107,8 @@ const BuilderReputation = () => {
   return (
     <>
       <SEO
-        title="Builder Reputation Gurugram | RERA Score Checker | 360Ghar"
-        description="Check builder reputation scores for Gurugram developers. Based on HRERA registered projects, complaint history, and penalties. Find reliable builders before you invest."
+        title={tSeo('builderReputation.title')}
+        description={tSeo('builderReputation.description')}
         keywords="builder reputation Gurugram, RERA score builder, Gurgaon developer complaints, HRERA builder check, builder score checker, reliable builders Gurgaon 360Ghar"
         canonical="/builder-reputation"
         structuredData={[

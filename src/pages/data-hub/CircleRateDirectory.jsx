@@ -36,6 +36,7 @@ import StampDutyWidget from '../../components/data-hub/StampDutyWidget';
 
 const CircleRateDirectory = () => {
   const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [rates, setRates] = useState([]);
   const [sectors, setSectors] = useState([]);
   const [total, setTotal] = useState(0);
@@ -66,8 +67,8 @@ const CircleRateDirectory = () => {
   return (
     <>
       <SEO
-        title="Gurugram Circle Rates 2024 | Sector-wise DLC Rates | 360Ghar"
-        description="Official circle rates (DLC rates) for all sectors in Gurugram. Check IGRS Haryana stamp duty rates for residential, commercial, and plot properties sector-by-sector."
+        title={tSeo('circleRateDirectory.title')}
+        description={tSeo('circleRateDirectory.description')}
         keywords="Gurugram circle rates, DLC rates Gurugram, IGRS Haryana rates, stamp duty circle rate, sector wise circle rate Gurgaon 2024"
         canonical="/circle-rates"
         structuredData={[

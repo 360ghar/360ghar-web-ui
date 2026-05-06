@@ -33,6 +33,7 @@ export const generateToolSchema = (toolNameOrConfig, description, keywords, cate
         browserRequirements: 'Requires JavaScript. Requires HTML5.',
         softwareVersion: '1.0',
         applicationSuite: '360Ghar Real Estate Tools',
+        inLanguage: ['en-IN', 'hi-IN'],
         downloadUrl,
         featureList: cfg.keywords.split(', '),
         aggregateRating: {
