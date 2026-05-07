@@ -154,7 +154,7 @@ The app uses Zustand for state management with the following stores:
 
 The frontend integrates with the 360Ghar backend API:
 
-- **Development**: Proxied through Vite to `http://localhost:8000/api/v1`
+- **Development**: Proxied through Vite to `http://localhost:3600/api/v1`
 - **Production**: `https://api.360ghar.com`
 
 ### Authentication

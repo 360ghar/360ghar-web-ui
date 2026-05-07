@@ -686,7 +686,7 @@ Located in `abstracts/_variable.scss`:
 ## API Integration
 
 ### Backend Configuration
-- **Development:** `http://localhost:8000/api/v1` (via Vite proxy)
+- **Development:** `http://localhost:3600/api/v1` (via Vite proxy)
 - **Production:** `https://api.360ghar.com`
 
 ### Vite Proxy (`vite.config.js`)
@@ -694,7 +694,7 @@ Located in `abstracts/_variable.scss`:
 server: {
   proxy: {
     '/api': {
-      target: 'http://localhost:8000',
+      target: 'http://localhost:3600',
       changeOrigin: true,
       rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
     },
