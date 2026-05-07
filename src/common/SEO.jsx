@@ -63,7 +63,7 @@ const SEO = ({
   const isArticle = type === 'article';
 
   return (
-    <Helmet>
+    <Helmet defer={false}>
       <html lang={locale || 'en'} />
       {/* Primary */}
       <title>{metaTitle}</title>

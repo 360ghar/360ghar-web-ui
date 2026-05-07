@@ -5,6 +5,8 @@
 [build.environment]
   PUPPETEER_CACHE_DIR = "./node_modules/.cache/puppeteer"
   NODE_VERSION = "20"
+  VITE_API_SERVER = "https://api.360ghar.com"
+  VITE_API_BASE_URL = "https://api.360ghar.com/api/v1"
 
 # ── Server-side redirects (processed top-to-bottom, BEFORE the SPA catch-all) ──
 

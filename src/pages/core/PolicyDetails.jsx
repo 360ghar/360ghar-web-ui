@@ -103,47 +103,49 @@ const PolicyDetails = () => {
       />
 
       
-      <section className="policy-wrapper pt-100 pb-120">
-        <div className="container px-lg-5">
-          {isLoading ? (
-            <div className="row justify-content-center py-5">
-              <div className="col-lg-6 text-center">
-                <div className="spinner-border text-main mb-3" role="status" aria-live="polite">
-                  <span className="visually-hidden">{t('policyDetails.loadingAria')}</span>
-                </div>
-                <p className="mb-0 text-secondary">{t('policyDetails.loading')}</p>
-              </div>
-            </div>
-          ) : error ? (
-            <div className="alert alert-warning" role="alert">
-              <p className="mb-0">{t('policyDetails.unableToLoad')}</p>
-            </div>
-          ) : (
-            <div className="row justify-content-center">
-              <div className="col-lg-9">
-                <article className="card border-0 shadow-sm rounded-4">
-                  <div className="card-body p-4 p-lg-5">
-                    <h3 className="mb-3">{title}</h3>
-                    {lastUpdated && (
-                      <p className="small text-muted mb-3">
-                        Last updated:{' '}
-                        {new Date(lastUpdated).toLocaleDateString(undefined, {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        })}
-                      </p>
-                    )}
-                    <div className="policy-markdown">
-                      <ReactMarkdown components={MARKDOWN_COMPONENTS}>{content}</ReactMarkdown>
-                    </div>
+      <main className="body-bg">
+        <section className="policy-wrapper pt-100 pb-120">
+          <div className="container px-lg-5">
+            {isLoading ? (
+              <div className="row justify-content-center py-5">
+                <div className="col-lg-6 text-center">
+                  <div className="spinner-border text-main mb-3" role="status" aria-live="polite">
+                    <span className="visually-hidden">{t('policyDetails.loadingAria')}</span>
                   </div>
-                </article>
+                  <p className="mb-0 text-secondary">{t('policyDetails.loading')}</p>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </section>
+            ) : error ? (
+              <div className="alert alert-warning" role="alert">
+                <p className="mb-0">{t('policyDetails.unableToLoad')}</p>
+              </div>
+            ) : (
+              <div className="row justify-content-center">
+                <div className="col-lg-9">
+                  <article className="card border-0 shadow-sm rounded-4">
+                    <div className="card-body p-4 p-lg-5">
+                      <h3 className="mb-3">{title}</h3>
+                      {lastUpdated && (
+                        <p className="small text-muted mb-3">
+                          Last updated:{' '}
+                          {new Date(lastUpdated).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </p>
+                      )}
+                      <div className="policy-markdown">
+                        <ReactMarkdown components={MARKDOWN_COMPONENTS}>{content}</ReactMarkdown>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
 
       <Footer />
       <MobileMenu />

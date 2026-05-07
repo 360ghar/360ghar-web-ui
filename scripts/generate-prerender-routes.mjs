@@ -9,6 +9,7 @@ import {
   seedLocalityPrerenderRoutes,
 } from '../src/seo/indexationPolicy.js';
 import { siteMetadata } from '../src/seo/siteMetadata.js';
+import seoCopy from '../src/i18n/locales/en/seo.json' with { type: 'json' };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,7 +22,7 @@ const routeOverrides = new Map([
   }],
   ['/properties', {
     waitForText: 'Verified Property Search in Gurugram',
-    waitForTitle: 'Properties in Gurugram | AI-Powered Search & Verified Listings | 360Ghar',
+    waitForTitle: seoCopy.properties.title,
   }],
   ['/blog', {
     waitForText: 'Real Estate Guides for Gurugram and Delhi NCR',
@@ -29,7 +30,7 @@ const routeOverrides = new Map([
   }],
   ['/localities', {
     waitForText: 'Explore Gurugram Localities with Verified Insights',
-    waitForTitle: 'Discover Localities in Gurugram | 360Ghar',
+    waitForTitle: seoCopy.localitiesDirectory.title,
   }],
   ['/for-ai', {
     waitForText: 'For AI Assistants',
@@ -56,23 +57,18 @@ const routeOverrides = new Map([
   }],
   ['/gurgaon/buy/flats', {
     waitForText: 'Why 360Ghar?',
-    waitForTitle: 'Apartment for Sale in Gurgaon [360° VR Tour] | Gurgaon Real Estate | 360Ghar',
   }],
   ['/gurgaon/rent/flats', {
     waitForText: 'Why 360Ghar?',
-    waitForTitle: 'Apartment for Rent in Gurgaon | Gurgaon Real Estate | 360Ghar',
   }],
   ['/gurgaon/pg/flats', {
     waitForText: 'Why 360Ghar?',
-    waitForTitle: 'PG in Gurgaon | Gurgaon Paying Guest & Co-living | 360Ghar',
   }],
   ['/delhi/buy/flats', {
     waitForText: 'Why 360Ghar?',
-    waitForTitle: 'Apartment for Sale in Delhi [360° VR Tour] | Delhi Real Estate | 360Ghar',
   }],
   ['/noida/rent/flats', {
     waitForText: 'Why 360Ghar?',
-    waitForTitle: 'Apartment for Rent in Noida | Noida Real Estate | 360Ghar',
   }],
 ]);
 

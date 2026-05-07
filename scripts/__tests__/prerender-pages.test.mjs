@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import net from 'node:net';
 import routeManifest from '../prerender-routes.json' with { type: 'json' };
+import seoCopy from '../../src/i18n/locales/en/seo.json' with { type: 'json' };
 import { siteMetadata } from '../../src/seo/siteMetadata.js';
 import {
   buildRouteManifest,
@@ -11,6 +12,7 @@ import {
   PREVIEW_HOST,
   PREVIEW_PORT,
   resolvePreviewPort,
+  throwIfPrerenderFailed,
 } from '../prerender-pages.mjs';
 
 test('buildRouteManifest keeps the homepage title in sync with site metadata', () => {
@@ -29,6 +31,28 @@ test('route manifest includes noindex/auth routes and seed GEO routes for source
   assert.ok(routes.includes('/account'));
   assert.ok(routes.includes('/locality/dlf-phase-1-gurgaon'));
   assert.ok(routes.includes('/gurgaon/buy/flats'));
+});
+
+test('route manifest title waits stay synchronized with SEO copy', () => {
+  const routes = new Map(routeManifest.map((routeConfig) => [routeConfig.route, routeConfig]));
+
+  assert.equal(routes.get('/properties')?.waitForTitle, seoCopy.properties.title);
+  assert.equal(routes.get('/localities')?.waitForTitle, seoCopy.localitiesDirectory.title);
+});
+
+test('seed landing routes use page content readiness instead of literal SEO titles', () => {
+  const routes = new Map(routeManifest.map((routeConfig) => [routeConfig.route, routeConfig]));
+
+  for (const route of [
+    '/gurgaon/buy/flats',
+    '/gurgaon/rent/flats',
+    '/gurgaon/pg/flats',
+    '/delhi/buy/flats',
+    '/noida/rent/flats',
+  ]) {
+    assert.equal(routes.get(route)?.waitForText, 'Why 360Ghar?');
+    assert.equal(routes.get(route)?.waitForTitle, undefined);
+  }
 });
 
 test('getPreviewServerArgs enforces a strict preview port binding', () => {
@@ -124,4 +148,13 @@ test('prerenderRoutes reuses one browser instance across all routes', async () =
   assert.deepEqual(calls.map((call) => call.route), ['/', '/about-us']);
   assert.ok(calls.every((call) => call.browser === browser));
   assert.equal(browser.closeCalls, 1);
+});
+
+test('throwIfPrerenderFailed turns route failures into build failures', () => {
+  assert.throws(
+    () => throwIfPrerenderFailed([
+      { route: '/property-sidebar', error: new Error('Waiting failed: 60000ms exceeded') },
+    ]),
+    /Prerender failed for 1 route/
+  );
 });

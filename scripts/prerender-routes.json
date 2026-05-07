@@ -8,7 +8,7 @@
     "route": "/properties",
     "waitForSelector": "main",
     "waitForText": "Verified Property Search in Gurugram",
-    "waitForTitle": "Properties in Gurugram | AI-Powered Search & Verified Listings | 360Ghar"
+    "waitForTitle": "Flats in Gurgaon | Verified Properties for Sale & Rent | 360Ghar"
   },
   {
     "route": "/about-us",
@@ -82,7 +82,7 @@
     "route": "/localities",
     "waitForSelector": "main",
     "waitForText": "Explore Gurugram Localities with Verified Insights",
-    "waitForTitle": "Discover Localities in Gurugram | 360Ghar"
+    "waitForTitle": "Gurgaon Localities Directory 2026: 500+ Areas with Prices & Reviews | 360Ghar"
   },
   {
     "route": "/emi-calculator",
@@ -440,20 +440,17 @@
   {
     "route": "/gurgaon/buy/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Sale in Gurgaon [360° VR Tour] | Gurgaon Real Estate | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/gurgaon/rent/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Rent in Gurgaon | Gurgaon Real Estate | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/gurgaon/pg/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "PG in Gurgaon | Gurgaon Paying Guest & Co-living | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/gurgaon/buy/villa",
@@ -482,8 +479,7 @@
   {
     "route": "/delhi/buy/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Sale in Delhi [360° VR Tour] | Delhi Real Estate | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/delhi/rent/flats",
@@ -500,8 +496,7 @@
   {
     "route": "/noida/rent/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Rent in Noida | Noida Real Estate | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/faridabad/buy/flats",

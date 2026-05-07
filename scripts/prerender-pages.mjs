@@ -194,6 +194,18 @@ export async function prerenderRoutes(baseUrl, routeConfigs, options = {}) {
   return { failed };
 }
 
+export function throwIfPrerenderFailed(failed) {
+  if (!failed.length) {
+    return;
+  }
+
+  const details = failed
+    .map(({ route, error }) => `  - ${route}: ${error.message}`)
+    .join('\n');
+
+  throw new Error(`Prerender failed for ${failed.length} route(s):\n${details}`);
+}
+
 export async function resolvePreviewPort(preferredPort = PREVIEW_PORT) {
   const tryPort = (requestedPort) =>
     new Promise((resolve, reject) => {
@@ -292,7 +304,8 @@ async function main() {
   await waitForPreviewServer(baseUrl, previewProcess);
 
   try {
-    await prerenderRoutes(baseUrl, ROUTE_MANIFEST);
+    const { failed } = await prerenderRoutes(baseUrl, ROUTE_MANIFEST);
+    throwIfPrerenderFailed(failed);
   } finally {
     await stopPreviewServer(previewProcess);
   }

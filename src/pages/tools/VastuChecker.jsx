@@ -135,7 +135,17 @@ const VastuChecker = () => {
         setAppState('input');
         setErrorMessage('');
         setErrorType('general');
-    }, [previewUrl]);
+    }, [
+        previewUrl,
+        setAnalysisResult,
+        setAppState,
+        setErrorMessage,
+        setErrorType,
+        setNorthDirection,
+        setNotes,
+        setPreviewUrl,
+        setSelectedFile,
+    ]);
 
     const handleRetry = useCallback(() => {
         setAppState('input');
