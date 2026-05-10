@@ -11,12 +11,18 @@ const localizeSeoPath = (pathOrUrl, locale) => localizePath(pathOrUrl, locale);
 /**
  * Build hreflang alternates for the current page.
  * English: bare path, Hindi: /hi/ prefixed, x-default: bare path.
+ * Extracts the origin dynamically from the passed canonicalUrl to support
+ * deployments behind a CDN with a different external origin.
  */
 const buildHreflangs = (canonicalUrl) => {
-  const { pathname, search, hash } = new URL(canonicalUrl, siteMetadata.siteUrl);
+  // Parse using the hardcoded origin as base; if canonicalUrl is already absolute
+  // (which absoluteUrl() guarantees), the origin from canonicalUrl wins.
+  const parsed = new URL(canonicalUrl, siteMetadata.siteUrl);
+  const origin = parsed.origin === 'null' ? siteMetadata.siteUrl : parsed.origin;
+  const { pathname, search, hash } = parsed;
   const barePath = stripLocalePrefix(`${pathname}${search}${hash}`);
-  const enUrl = absoluteUrl(barePath);
-  const hiUrl = absoluteUrl(localizePath(barePath, 'hi'));
+  const enUrl = `${origin}${barePath}`;
+  const hiUrl = `${origin}${localizePath(barePath, 'hi')}`;
   return [
     { hrefLang: 'en', href: enUrl },
     { hrefLang: 'hi', href: hiUrl },
@@ -46,7 +52,10 @@ const SEO = ({
   const location = useLocation();
   const storeLocale = useLocaleStore((s) => s.locale);
   const rawPath = (location.pathname || '').replace(/\/+$/, '') || '/';
-  const locale = storeLocale === 'hi' || inferLocaleFromPath(rawPath) === 'hi' ? 'hi' : 'en';
+  const pathLocale = inferLocaleFromPath(rawPath);
+  // Prefer store locale when explicitly set; fall back to path inference to handle
+  // the initial render before LocaleGate's useLayoutEffect fires in concurrent mode.
+  const locale = pathLocale === 'hi' ? 'hi' : (storeLocale === 'hi' ? 'hi' : 'en');
   const localizedPath = localizeSeoPath(rawPath, locale);
   const computedUrl = absoluteUrl(localizeSeoPath(url || localizedPath, locale));
   const canonicalUrl = absoluteUrl(localizeSeoPath((canonical || localizedPath).replace(/\/+$/, '') || '/', locale));
@@ -64,7 +73,7 @@ const SEO = ({
 
   return (
     <Helmet defer={false}>
-      <html lang={locale || 'en'} />
+      <html lang={locale} />
       {/* Primary */}
       <title>{metaTitle}</title>
       {metaDesc && <meta name="description" content={metaDesc} />}

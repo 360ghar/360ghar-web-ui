@@ -15,13 +15,9 @@ const URL_PATH_DETECTOR = {
     return 'en';
   },
 
-  cacheUserLanguage(lng) {
-    try {
-      localStorage.setItem('i18nextLng', lng);
-    } catch {
-      // localStorage unavailable (SSR, privacy mode)
-    }
-  },
+  // No cacheUserLanguage — the URL path is the sole source of truth for locale
+  // detection. This ensures SEO-correct canonical URLs and avoids localStorage
+  // diverging from the actual detected language.
 };
 
 export default URL_PATH_DETECTOR;

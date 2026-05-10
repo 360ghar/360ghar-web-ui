@@ -86,12 +86,25 @@ function uniqueRoutes(routes) {
   return [...new Set(routes)];
 }
 
-const routes = uniqueRoutes([
+const englishRoutes = uniqueRoutes([
   ...indexableStaticRoutes,
   ...noindexPrerenderRoutes,
   ...seedLocalityPrerenderRoutes,
   ...seedLandingPrerenderRoutes,
 ]).map(buildRouteConfig);
 
+const hindiRoutes = englishRoutes.map((routeConfig) => {
+  const hiConfig = {
+    route: routeConfig.route === '/' ? '/hi' : `/hi${routeConfig.route}`,
+    // Wait for html[lang="hi"] to confirm i18n has loaded before capturing
+    waitForSelector: 'html[lang="hi"] main',
+  };
+  // Don't carry over English waitForTitle/waitForText — Hindi pages will have
+  // different text. The html[lang="hi"] selector is sufficient to confirm i18n loaded.
+  return hiConfig;
+});
+
+const routes = [...englishRoutes, ...hindiRoutes];
+
 fs.writeFileSync(outFile, JSON.stringify(routes, null, 2), 'utf8');
-console.log(`Wrote ${routes.length} prerender routes to ${outFile}`);
+console.log(`Wrote ${routes.length} prerender routes (${englishRoutes.length} EN + ${hindiRoutes.length} HI) to ${outFile}`);

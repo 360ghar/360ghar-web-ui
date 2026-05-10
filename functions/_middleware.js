@@ -44,25 +44,9 @@ export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
 
-  if (url.pathname !== '/' && !url.pathname.startsWith('/.well-known')) {
+  // Well-known paths and markdown-internal paths skip all processing
+  if (url.pathname.startsWith('/.well-known')) {
     return context.next();
-  }
-
-  if (url.pathname === '/') {
-    const cookie = request.headers.get('Cookie') || '';
-    const hasLocaleCookie = cookie.includes(`${LOCALE_COOKIE}=`);
-    if (!hasLocaleCookie) {
-      const acceptLang = request.headers.get('Accept-Language') || '';
-      if (/^hi(?:[-,;]|$)/i.test(acceptLang) || acceptLang.includes('hi-IN') || acceptLang.includes('hi_IN')) {
-        return new Response(null, {
-          status: 302,
-          headers: {
-            Location: '/hi',
-            'Set-Cookie': `${LOCALE_COOKIE}=${LOCALE_REDIRECTED}; Path=/; Max-Age=31536000; SameSite=Lax`,
-          },
-        });
-      }
-    }
   }
 
   if (isInternalMarkdownPath(url.pathname)) {
@@ -72,6 +56,28 @@ export async function onRequest(context) {
     return env.ASSETS.fetch(request);
   }
 
+  // Locale redirect: Hindi-speaking first-time visitors on non-Hindi paths
+  if (!url.pathname.startsWith('/hi')) {
+    const cookie = request.headers.get('Cookie') || '';
+    const hasLocaleCookie = cookie.includes(`${LOCALE_COOKIE}=`);
+    if (!hasLocaleCookie) {
+      const acceptLang = request.headers.get('Accept-Language') || '';
+      // Only redirect when Hindi is the primary (first) language tag
+      const firstTag = acceptLang.split(',')[0].split(';')[0].trim();
+      if (/^hi(?:[-_]|$)/i.test(firstTag)) {
+        const hindiPath = url.pathname === '/' ? '/hi' : `/hi${url.pathname}`;
+        return new Response(null, {
+          status: 302,
+          headers: {
+            Location: hindiPath + (url.search || ''),
+            'Set-Cookie': `${LOCALE_COOKIE}=${LOCALE_REDIRECTED}; Path=/; Max-Age=31536000; SameSite=Lax`,
+          },
+        });
+      }
+    }
+  }
+
+  // Markdown serving for AI crawlers (works for both en and /hi/ routes)
   if (!requestAcceptsMarkdown(request.headers.get('Accept'))) {
     return context.next();
   }

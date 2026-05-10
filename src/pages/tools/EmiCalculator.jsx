@@ -293,6 +293,7 @@ const EmiCalculator = () => {
                                                 </div>
 
                                                 {/* Breakdown Chart */}
+                                                {emiBreakdown.totalPayment > 0 && (
                                                 <div className="breakdown-chart mt-4">
                                                     <h5 className="chart-title mb-3">{t('emi.paymentBreakdown')}</h5>
                                                     <div className="breakdown-visual">
@@ -326,6 +327,7 @@ const EmiCalculator = () => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

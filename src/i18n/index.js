@@ -36,7 +36,12 @@ import enTruth from './locales/en/truth.json';
 import enPolicies from './locales/en/policies.json';
 import enBlog from './locales/en/blog.json';
 
-// Statically import Hindi translations so crawlers see Hindi content on /hi/* pages
+// Statically import Hindi translations so crawlers see Hindi content on /hi/* pages.
+// Trade-off: Both English (~20KB) and Hindi (~20KB) JSON are in the main bundle
+// (~40-80KB gzipped total for all 14 namespaces × 2 languages).
+// If /hi/ routes are added to prerender (see scripts/generate-prerender-routes.mjs),
+// this eager import can be revisited — crawlers would get their Hindi content from
+// prerendered HTML, and the second language could be lazy-loaded.
 import hiCommon from './locales/hi/common.json';
 import hiHome from './locales/hi/home.json';
 import hiProperties from './locales/hi/properties.json';

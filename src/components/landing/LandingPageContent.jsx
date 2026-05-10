@@ -3,7 +3,7 @@
  * Renders neighborhood guides, price trends, buying tips, and legal checklists.
  */
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { getPriceRange } from '../../utils/internalLinks';
 import landingTypeContext from '../../data/landingTypeContext.json';
 
@@ -281,15 +281,15 @@ const LandingPageContent = ({ citySlug, city, intent, facet, canonicalType, onTy
               }
             </p>
             <div className="d-flex flex-wrap gap-2">
-              <Link to="/emi-calculator" className="btn btn-outline-main btn-sm rounded-pill">
+              <I18nLink to="/emi-calculator" className="btn btn-outline-main btn-sm rounded-pill">
                 <i className="fas fa-calculator me-1" /> Calculate EMI
-              </Link>
-              <Link to="/circle-rates" className="btn btn-outline-main btn-sm rounded-pill">
+              </I18nLink>
+              <I18nLink to="/circle-rates" className="btn btn-outline-main btn-sm rounded-pill">
                 <i className="fas fa-indian-rupee-sign me-1" /> Check Circle Rates
-              </Link>
-              <Link to="/stamp-duty-calculator" className="btn btn-outline-main btn-sm rounded-pill">
+              </I18nLink>
+              <I18nLink to="/stamp-duty-calculator" className="btn btn-outline-main btn-sm rounded-pill">
                 <i className="fas fa-file-invoice me-1" /> Stamp Duty Calculator
-              </Link>
+              </I18nLink>
             </div>
           </div>
         </section>

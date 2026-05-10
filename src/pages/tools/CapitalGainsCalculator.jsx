@@ -85,9 +85,17 @@ const CapitalGainsCalculator = () => {
     const [improvementCost] = useState(0);
 
     const taxSummary = useMemo(() => {
-        const pYear = parseInt(purchaseYear.split('-')[0]);
-        const sYear = parseInt(saleYear.split('-')[0]);
-        const isLongTerm = (sYear - pYear) >= 2;
+        const pYearParts = purchaseYear.split('-');
+        const sYearParts = saleYear.split('-');
+        const pYear = parseInt(pYearParts[0]);
+        const sYear = parseInt(sYearParts[0]);
+        // Use the end year of purchase FY to avoid false LTCG at FY boundaries.
+        // e.g. Purchase FY 2022-2023 (pEndYear=2023), Sale FY 2024-2025 (sYear=2024)
+        // gives 2024-2023=1 < 2 → STCG (correct, holding could be ~13 months).
+        // For LTCG the minimum gap must be 2: pEndYear=2021, sYear=2024 → 3 >= 2 → LTCG
+        // (min holding: April 2024 - March 2022 = ~25 months → definitely LTCG).
+        const pEndYear = pYearParts[1] ? parseInt(pYearParts[1]) : pYear;
+        const isLongTerm = (sYear - pEndYear) >= 2;
         const gainType = isLongTerm ? 'Long Term Capital Asset (LTCG)' : 'Short Term Capital Asset (STCG)';
 
         const finalCost = isLongTerm ? (() => {

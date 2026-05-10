@@ -62,7 +62,13 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
              // EMI Formula: E = P * r * (1+r)^n / ((1+r)^n - 1)
              // P = E * ((1+r)^n - 1) / (r * (1+r)^n)
              
-             const principal = maxMonthlyPayment * (Math.pow(1 + r, n) - 1) / (r * Math.pow(1 + r, n));
+             // Guard: when interest rate is 0, principal = payment * n
+             let principal;
+             if (r === 0) {
+                 principal = maxMonthlyPayment * n;
+             } else {
+                 principal = maxMonthlyPayment * (Math.pow(1 + r, n) - 1) / (r * Math.pow(1 + r, n));
+             }
              
              setMaxLoan(Math.round(principal));
              setEligibleEmi(Math.round(maxMonthlyPayment));

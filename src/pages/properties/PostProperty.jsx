@@ -9,7 +9,7 @@ import SEO from '../../common/SEO';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import { PROPERTY_TYPE_OPTIONS } from '../../utils/propertyTaxonomy';
 
@@ -311,25 +311,13 @@ const PostPropertyForm = () => {
                                         />
                                         <div className="form-check-label">
                                             <label htmlFor="terms_agreement">
-                                                {t('postProperty.termsAgreement').split('Terms of Service').map((part, i) =>
-                                                    i === 0 ? (
-                                                        <span key={i}>{part}</span>
-                                                    ) : (
-                                                        <span key={i}>
-                                                            <I18nLink to="/policies/terms-of-service" className="text-decoration-underline text-main">{t('postProperty.termsOfService')}</I18nLink>
-                                                            {part.split('Privacy Policy').map((p2, j) =>
-                                                                j === 0 ? (
-                                                                    <span key={j}>{p2}</span>
-                                                                ) : (
-                                                                    <span key={j}>
-                                                                        <I18nLink to="/policies/privacy-policy" className="text-decoration-underline text-main">{t('postProperty.privacyPolicy')}</I18nLink>
-                                                                        {p2}
-                                                                    </span>
-                                                                )
-                                                            )}
-                                                        </span>
-                                                    )
-                                                )}
+                                                <Trans
+                                                    i18nKey="postProperty.termsAgreement"
+                                                    components={{
+                                                        termsLink: <I18nLink to="/policies/terms-of-service" className="text-decoration-underline text-main" />,
+                                                        privacyLink: <I18nLink to="/policies/privacy-policy" className="text-decoration-underline text-main" />,
+                                                    }}
+                                                />
                                             </label>
                                         </div>
                                     </div>

@@ -329,7 +329,7 @@
     "shortStay": "Short Stay",
     "propertyDescription": "Property Description",
     "descriptionPlaceholder": "Brief description of your property (optional)",
-    "termsAgreement": "I agree to the Terms of Service and Privacy Policy. I understand that 360Ghar team will contact me to discuss property listing details.",
+    "termsAgreement": "I agree to the <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>. I understand that 360Ghar team will contact me to discuss property listing details.",
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
     "validation": {

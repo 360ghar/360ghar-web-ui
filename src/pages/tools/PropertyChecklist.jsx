@@ -51,8 +51,12 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
      };
  
      const [checkedItems, setCheckedItems] = useState(() => {
-         const saved = localStorage.getItem('propertyChecklist');
-         return saved ? JSON.parse(saved) : {};
+         try {
+             const saved = localStorage.getItem('propertyChecklist');
+             return saved ? JSON.parse(saved) : {};
+         } catch {
+             return {};
+         }
      });
  
      const handleCheck = (id) => {

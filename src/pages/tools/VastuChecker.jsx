@@ -25,6 +25,7 @@ const VastuChecker = () => {
         { question: t('vastu.faqs.q2.question'), answer: t('vastu.faqs.q2.answer') },
         { question: t('vastu.faqs.q3.question'), answer: t('vastu.faqs.q3.answer') },
         { question: t('vastu.faqs.q4.question'), answer: t('vastu.faqs.q4.answer') },
+        { question: t('vastu.faqs.q5.question'), answer: t('vastu.faqs.q5.answer') },
     ];
 
     const VASTU_CHECKER_HOW_TO_STEPS = [
@@ -107,7 +108,7 @@ const VastuChecker = () => {
                 message = t('vastu.errorFileFormat');
             } else if (error.response?.status === 422) {
                 type = 'validation';
-                message = error.response?.data?.detail || 'Invalid request. Please check your input and try again.';
+                message = error.response?.data?.detail || t('vastu.errorDefault');
             } else if (error.response?.status >= 500) {
                 type = 'general';
                 message = t('vastu.errorServerMsg');
@@ -190,12 +191,12 @@ const VastuChecker = () => {
                         {/* Hero Section - only show on input state */}
                         {appState === 'input' && (
                             <div className="section-heading text-center mb-6">
-                                <h2 className="section-title">
+                                <h1 className="section-title">
                                     <span className="vastu-icon-wrapper">
                                         <i className="fas fa-compass text-main"></i>
                                     </span>
                                     {t('vastu.heroTitle')}
-                                </h2>
+                                </h1>
                                 <p className="section-desc">
                                     {t('vastu.heroDesc')}
                                 </p>

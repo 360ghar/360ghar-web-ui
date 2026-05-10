@@ -1,4 +1,7 @@
+// I18nLink is the localization-aware replacement for react-router-dom's Link.
+/* eslint-disable no-restricted-imports */
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+/* eslint-enable no-restricted-imports */
 import useLocaleStore from '../store/localeStore';
 
 function splitPathSuffix(path) {
@@ -32,9 +35,9 @@ export function I18nNavLink({ to, ...rest }) {
  */
 export function useI18nNavigate() {
   const navigate = useNavigate();
-  const locale = useLocaleStore((s) => s.locale);
 
   return (to, options) => {
+    const locale = useLocaleStore.getState().locale;
     navigate(localizePath(to, locale), options);
   };
 }

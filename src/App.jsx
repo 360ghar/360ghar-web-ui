@@ -7,6 +7,7 @@ import { useAuthStore } from './store';
 import useLocaleStore from './store/localeStore';
 import i18n from './i18n';
 import PageLoader from './common/PageLoader';
+import ErrorBoundary from './common/ErrorBoundary';
 import ScrollToTop from './common/layout/ScrollToTop';
 import SEO from './common/SEO';
 import UIScrollLockEffect from './common/UIScrollLockEffect';
@@ -270,8 +271,9 @@ function App() {
         <RouteScrollToTop />
         <UIScrollLockEffect />
         <SEO structuredData={globalSchemas} />
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
             {/* Hindi routes — /hi/* prefix */}
             <Route path="/hi" element={<LocaleGate locale="hi" />}>
               <Route index element={<Home />} />
@@ -292,7 +294,8 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
-        </Suspense>
+          </Suspense>
+        </ErrorBoundary>
         <Suspense fallback={null}>
           <ChatBot />
         </Suspense>

@@ -1,5 +1,4 @@
 import { galleries } from '../../data/HomeTwoData';
-import { I18nLink } from '../../i18n/I18nLink';
 import SectionHeading from '../../common/ui/SectionHeading';
 
 import LazyImage from '../../common/ui/LazyImage';
@@ -28,9 +27,9 @@ const Gallery = () => {
                                 <div className={` ${galleryIndex === 1 || galleryIndex === 2 ? 'col-lg-8 col-sm-7 col-xs-6' : 'col-lg-4 col-sm-5 col-xs-6'}`} key={galleryIndex}>
                                     <div className="gallery-thumb">
                                         <LazyImage src={gallery.image} alt={gallery.title || 'Gallery image'} className="cover-img" width={400} height={300}/>
-                                        <I18nLink to={gallery.image} className="gallery-thumb__link gallery-popup">
+                                        <a href={gallery.image} className="gallery-thumb__link gallery-popup">
                                             {gallery.icon}
-                                        </I18nLink>
+                                        </a>
                                     </div>
                                 </div>
                             )

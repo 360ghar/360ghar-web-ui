@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -6,13 +7,15 @@ import Cta from '../../components/ui/Cta';
 import BlogClassicSection from '../../components/blog/BlogClassicSection';
 import SEO from '../../common/SEO';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
-import { I18nLink } from '../../i18n/I18nLink';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import { I18nLink, localizePath, stripLocalePrefix } from '../../i18n/I18nLink';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
+import { blogService } from '../../services/blogService';
 
 const BlogClassic = () => {
     const { t } = useTranslation('blog');
+    const location = useLocation();
     const [searchParams] = useSearchParams();
 
     // Category / tag / page awareness
@@ -20,6 +23,24 @@ const BlogClassic = () => {
     const tag = searchParams.get('tag') || '';
     const page = parseInt(searchParams.get('page'), 10) || 1;
     const isFiltered = Boolean(category || tag);
+
+    const POSTS_PER_PAGE = 10;
+    const [totalPages, setTotalPages] = useState(1);
+
+    useEffect(() => {
+        const params = { page: 1, limit: POSTS_PER_PAGE };
+        if (category) params.category = category;
+        if (tag) params.tag = tag;
+        blogService.getPosts(params)
+            .then(data => {
+                const tp = data.total_pages || Math.ceil((data.total || 0) / POSTS_PER_PAGE) || 1;
+                setTotalPages(tp);
+            })
+            .catch(() => {});
+    }, [category, tag]);
+
+    const rawLocale = location.pathname.startsWith('/hi') ? 'hi' : 'en';
+    const barePath = stripLocalePrefix(location.pathname);
 
     // Featured guides derived from translation keys
     const featuredGuides = [
@@ -65,11 +86,15 @@ const BlogClassic = () => {
             : baseDescription;
 
     // Canonical: /blog for page 1, /blog?page=N for page > 1
-    const canonical = page > 1 ? `/blog?page=${page}` : '/blog';
+    const canonical = page > 1 ? `${barePath}?page=${page}` : barePath;
 
-    // Prev/next for pagination
-    const prevUrl = page > 1 ? (page === 2 ? '/blog' : `/blog?page=${page - 1}`) : undefined;
-    const nextUrl = page > 1 ? `/blog?page=${page + 1}` : undefined;
+    // Prev/next for pagination — prefix with /hi/ when on Hindi route
+    const prevUrl = page > 1
+        ? (page === 2 ? localizePath(barePath, rawLocale) : `${localizePath(barePath, rawLocale)}?page=${page - 1}`)
+        : undefined;
+    const nextUrl = page < totalPages
+        ? `${localizePath(barePath, rawLocale)}?page=${page + 1}`
+        : undefined;
 
     // Generate CollectionPage schema for blog listings
     const blogCollectionSchema = {

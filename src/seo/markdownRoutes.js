@@ -35,7 +35,8 @@ export function shouldServeMarkdownRoute({ pathname, search = '' }) {
     return false;
   }
 
-  return search.length === 0 && markdownRouteSet.has(pathname);
+  const normalizedPathname = pathname === '/hi' ? '/' : pathname.replace(/^\/hi\//, '/');
+  return search.length === 0 && markdownRouteSet.has(normalizedPathname);
 }
 
 export function isInternalMarkdownPath(pathname) {
@@ -47,19 +48,21 @@ export function isInternalMarkdownPath(pathname) {
 }
 
 export function getMarkdownAssetPath(route) {
-  if (route === '/') {
+  const normalizedRoute = route === '/hi' ? '/' : route.replace(/^\/hi\//, '/');
+
+  if (normalizedRoute === '/') {
     return '/__markdown/index.md';
   }
 
-  if (typeof route !== 'string' || !route.startsWith('/')) {
+  if (typeof normalizedRoute !== 'string' || !normalizedRoute.startsWith('/')) {
     throw new Error(`Expected an absolute route path, received: ${route}`);
   }
 
-  if (route.includes('..')) {
+  if (normalizedRoute.includes('..')) {
     throw new Error(`Path traversal detected in route: ${route}`);
   }
 
-  return `/__markdown${route.replace(/\/+$/, '')}/index.md`;
+  return `/__markdown${normalizedRoute.replace(/\/+$/, '')}/index.md`;
 }
 
 export function getMarkdownOutputPath(route) {

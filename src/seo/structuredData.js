@@ -877,13 +877,6 @@ export const generateEeaSignals = ({ reraNumber, verifiedCount } = {}) => {
     '@type': 'Organization',
     '@id': 'https://360ghar.com/#organization',
     name: '360Ghar',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.7',
-      reviewCount: '128',
-      bestRating: '5',
-      worstRating: '1',
-    },
   });
 
   // RERA verification claim
