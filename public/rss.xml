@@ -5,13 +5,13 @@
     <link>https://360ghar.com</link>
     <description>Index of all 360Ghar RSS feeds: blog, properties, and localities</description>
     <language>en-in</language>
-    <lastBuildDate>Thu, 07 May 2026 04:04:30 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 10 May 2026 17:36:24 GMT</lastBuildDate>
     <atom:link href="https://360ghar.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>360Ghar Blog</title>
       <link>https://360ghar.com/rss/blog.xml</link>
       <description>Real estate guides, buying tips, locality deep-dives, and market updates</description>
-      <pubDate>Thu, 07 May 2026 04:04:30 GMT</pubDate>
+      <pubDate>Sun, 10 May 2026 17:36:24 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/blog.xml</guid>
     </item>
     <item>
@@ -25,14 +25,14 @@
       <title>360Ghar Localities</title>
       <link>https://360ghar.com/rss/localities.xml</link>
       <description>Locality guides and neighbourhood intelligence for Gurugram and Delhi NCR</description>
-      <pubDate>Thu, 07 May 2026 00:00:00 GMT</pubDate>
+      <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/localities.xml</guid>
     </item>
     <item>
       <title>360Ghar ब्लॉग (Hindi)</title>
       <link>https://360ghar.com/rss/hi-blog.xml</link>
       <description>रियल एस्टेट गाइड, खरीद टिप्स, लोकैलिटी गाइड और बाज़ार अपडेट</description>
-      <pubDate>Thu, 07 May 2026 04:04:30 GMT</pubDate>
+      <pubDate>Sun, 10 May 2026 17:36:24 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/hi-blog.xml</guid>
     </item>
     <item>
@@ -46,7 +46,7 @@
       <title>360Ghar लोकैलिटी (Hindi)</title>
       <link>https://360ghar.com/rss/hi-localities.xml</link>
       <description>लोकैलिटी गाइड और पड़ोस इंटेलिजेंस</description>
-      <pubDate>Thu, 07 May 2026 00:00:00 GMT</pubDate>
+      <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/hi-localities.xml</guid>
     </item>
   </channel>

@@ -233,6 +233,10 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/careers/software-developer-intern",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/celebrity-homes",
     "waitForSelector": "main"
   },
@@ -728,6 +732,10 @@
   },
   {
     "route": "/hi/careers/software-developer",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/careers/software-developer-intern",
     "waitForSelector": "html[lang=\"hi\"] main"
   },
   {

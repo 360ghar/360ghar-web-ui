@@ -898,6 +898,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/software-developer" />
   </url>
   <url>
+    <loc>https://360ghar.com/careers/software-developer-intern</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/software-developer-intern" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/software-developer-intern" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/software-developer-intern" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/careers/software-developer-intern</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/software-developer-intern" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/software-developer-intern" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/software-developer-intern" />
+  </url>
+  <url>
     <loc>https://360ghar.com/celebrity-homes</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
