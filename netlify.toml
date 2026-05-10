@@ -10,12 +10,18 @@
 
 # ── Server-side redirects (processed top-to-bottom, BEFORE the SPA catch-all) ──
 
-# Trailing slash normalization — 200 rewrite serves prerendered content directly
-# (canonical tags in HTML consolidate SEO to the no-slash URL)
+# WWW → non-www (consolidate authority)
+[[redirects]]
+  from = "https://www.360ghar.com/*"
+  to = "https://360ghar.com/:splat"
+  status = 301
+  force = true
+
+# Trailing slash normalization — force=true ensures this fires before the SPA catch-all
 [[redirects]]
   from = "/*/"
   to = "/:splat"
-  status = 200
+  status = 301
   force = true
 
 # City slug normalization: gurugram → gurgaon
@@ -67,18 +73,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-# ── Global security headers (applied to ALL paths, merged with specific blocks below) ──
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "0"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=(self)"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://js.puter.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://360ghar.com https://api.360ghar.com https://play-lh.googleusercontent.com https://play.google.com https://api.qrserver.com https://maps.googleapis.com https://maps.gstatic.com https://maps.google.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.360ghar.com https://pezjtoivkrmepydqminz.supabase.co wss://pezjtoivkrmepydqminz.supabase.co https://us.i.posthog.com https://www.google-analytics.com https://www.googletagmanager.com https://maps.googleapis.com https://api.qrserver.com https://js.puter.com; frame-src 'self' https://www.google.com https://www.youtube.com https://player.vimeo.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
 # Hashed JS chunks — content-addressed, safe to cache forever
 [[headers]]
@@ -132,12 +126,17 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "0"
 
 # Root index.html — with Link headers for agent discovery (RFC 8288)
 [[headers]]
   for = "/"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
     Link = '''</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </for-ai>; rel="service-doc"; type="text/html", </data/llm-feed.json>; rel="service-meta"; type="application/json", </.well-known/mcp/server-card.json>; rel="mcp-server", </.well-known/agent-skills/index.json>; rel="agent-skills", </llms.txt>; rel="llms-txt", </.well-known/openid-configuration>; rel="openid-configuration"'''
 
 # ── .well-known agent discovery files ──────────────────────────────────────
