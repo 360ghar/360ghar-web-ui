@@ -17,53 +17,53 @@ export const CANONICAL_PROPERTY_TYPES = [
 ];
 
 export const PURPOSE_OPTIONS = [
-  { value: '', label: 'All' },
-  { value: 'buy', label: 'For Sale' },
-  { value: 'rent', label: 'For Rent' },
-  { value: 'short_stay', label: 'Short Stay' },
+  { value: '', label: 'All', labelKey: 'properties:taxonomy.purpose.all' },
+  { value: 'buy', label: 'For Sale', labelKey: 'properties:taxonomy.purpose.buy' },
+  { value: 'rent', label: 'For Rent', labelKey: 'properties:taxonomy.purpose.rent' },
+  { value: 'short_stay', label: 'Short Stay', labelKey: 'properties:taxonomy.purpose.short_stay' },
 ];
 
 export const PROPERTY_TYPE_OPTIONS = [
-  { value: 'house', label: 'House' },
-  { value: 'apartment', label: 'Apartment' },
-  { value: 'builder_floor', label: 'Builder Floor' },
-  { value: 'room', label: 'Room' },
-  { value: 'villa', label: 'Villa' },
-  { value: 'plot', label: 'Plot / Land' },
-  { value: 'condo', label: 'Condo' },
-  { value: 'penthouse', label: 'Penthouse' },
-  { value: 'studio', label: 'Studio' },
-  { value: 'loft', label: 'Loft' },
-  { value: 'pg', label: 'PG' },
-  { value: 'flatmate', label: 'Flatmate' },
-  { value: 'office', label: 'Office' },
-  { value: 'shop', label: 'Shop' },
-  { value: 'warehouse', label: 'Warehouse' },
+  { value: 'house', label: 'House', labelKey: 'properties:taxonomy.propertyType.house' },
+  { value: 'apartment', label: 'Apartment', labelKey: 'properties:taxonomy.propertyType.apartment' },
+  { value: 'builder_floor', label: 'Builder Floor', labelKey: 'properties:taxonomy.propertyType.builder_floor' },
+  { value: 'room', label: 'Room', labelKey: 'properties:taxonomy.propertyType.room' },
+  { value: 'villa', label: 'Villa', labelKey: 'properties:taxonomy.propertyType.villa' },
+  { value: 'plot', label: 'Plot / Land', labelKey: 'properties:taxonomy.propertyType.plot' },
+  { value: 'condo', label: 'Condo', labelKey: 'properties:taxonomy.propertyType.condo' },
+  { value: 'penthouse', label: 'Penthouse', labelKey: 'properties:taxonomy.propertyType.penthouse' },
+  { value: 'studio', label: 'Studio', labelKey: 'properties:taxonomy.propertyType.studio' },
+  { value: 'loft', label: 'Loft', labelKey: 'properties:taxonomy.propertyType.loft' },
+  { value: 'pg', label: 'PG', labelKey: 'properties:taxonomy.propertyType.pg' },
+  { value: 'flatmate', label: 'Flatmate', labelKey: 'properties:taxonomy.propertyType.flatmate' },
+  { value: 'office', label: 'Office', labelKey: 'properties:taxonomy.propertyType.office' },
+  { value: 'shop', label: 'Shop', labelKey: 'properties:taxonomy.propertyType.shop' },
+  { value: 'warehouse', label: 'Warehouse', labelKey: 'properties:taxonomy.propertyType.warehouse' },
 ];
 
 export const PROPERTY_TYPE_FILTER_OPTIONS = [
-  { value: 'apartment', label: 'Apartment' },
-  { value: 'house', label: 'House' },
-  { value: 'builder_floor', label: 'Builder Floor' },
-  { value: 'room', label: 'Room' },
-  { value: 'villa', label: 'Villa' },
-  { value: 'plot', label: 'Plot / Land' },
-  { value: 'pg', label: 'PG' },
-  { value: 'flatmate', label: 'Flatmate' },
-  { value: 'commercial', label: 'Commercial' },
+  { value: 'apartment', label: 'Apartment', labelKey: 'properties:taxonomy.propertyType.apartment' },
+  { value: 'house', label: 'House', labelKey: 'properties:taxonomy.propertyType.house' },
+  { value: 'builder_floor', label: 'Builder Floor', labelKey: 'properties:taxonomy.propertyType.builder_floor' },
+  { value: 'room', label: 'Room', labelKey: 'properties:taxonomy.propertyType.room' },
+  { value: 'villa', label: 'Villa', labelKey: 'properties:taxonomy.propertyType.villa' },
+  { value: 'plot', label: 'Plot / Land', labelKey: 'properties:taxonomy.propertyType.plot' },
+  { value: 'pg', label: 'PG', labelKey: 'properties:taxonomy.propertyType.pg' },
+  { value: 'flatmate', label: 'Flatmate', labelKey: 'properties:taxonomy.propertyType.flatmate' },
+  { value: 'commercial', label: 'Commercial', labelKey: 'properties:taxonomy.propertyType.commercial' },
 ];
 
 export const GENDER_PREFERENCE_OPTIONS = [
-  { value: '', label: 'Any gender' },
-  { value: 'any', label: 'Open to all' },
-  { value: 'male', label: 'Male only' },
-  { value: 'female', label: 'Female only' },
+  { value: '', label: 'Any gender', labelKey: 'properties:taxonomy.genderPreference.any' },
+  { value: 'any', label: 'Open to all', labelKey: 'properties:taxonomy.genderPreference.open' },
+  { value: 'male', label: 'Male only', labelKey: 'properties:taxonomy.genderPreference.male' },
+  { value: 'female', label: 'Female only', labelKey: 'properties:taxonomy.genderPreference.female' },
 ];
 
 export const SHARING_TYPE_OPTIONS = [
-  { value: '', label: 'Any room type' },
-  { value: 'private_room', label: 'Private room' },
-  { value: 'shared_room', label: 'Shared room' },
+  { value: '', label: 'Any room type', labelKey: 'properties:taxonomy.sharingType.any' },
+  { value: 'private_room', label: 'Private room', labelKey: 'properties:taxonomy.sharingType.private_room' },
+  { value: 'shared_room', label: 'Shared room', labelKey: 'properties:taxonomy.sharingType.shared_room' },
 ];
 
 const PROPERTY_TYPE_ALIASES = {
@@ -158,7 +158,12 @@ export const isCommercialSelection = (propertyTypes = []) =>
 export const includesPgOrFlatmateType = (propertyTypes = []) =>
   propertyTypes.some((type) => type === 'pg' || type === 'flatmate');
 
-export const getPropertyTypeLabel = (propertyType) => {
+export const getPropertyTypeLabel = (propertyType, t) => {
+  if (t) {
+    const key = `properties:taxonomy.propertyType.${propertyType}`;
+    const translated = t(key);
+    if (translated !== key) return translated;
+  }
   const labels = {
     house: 'House',
     apartment: 'Apartment',
@@ -194,7 +199,14 @@ export const getPropertyRouteSlug = (propertyType, intent = 'buy') => {
   return routeSlugs[propertyType] || String(propertyType || 'flats').replace(/_/g, '-');
 };
 
-export const getListingLabel = ({ propertyType, purpose }) => {
+export const getListingLabel = ({ propertyType, purpose }, t) => {
+  if (t) {
+    if (propertyType === 'pg') return t('properties:taxonomy.listingLabel.pg');
+    if (propertyType === 'flatmate') return t('properties:taxonomy.listingLabel.flatmate');
+    if (purpose === 'rent') return t('properties:taxonomy.listingLabel.rent');
+    if (purpose === 'buy' || purpose === 'sale') return t('properties:taxonomy.listingLabel.buy');
+    if (purpose === 'short_stay') return t('properties:taxonomy.listingLabel.short_stay');
+  }
   if (propertyType === 'pg') return 'PG';
   if (propertyType === 'flatmate') return 'Flatmate';
   if (purpose === 'rent') return 'For Rent';

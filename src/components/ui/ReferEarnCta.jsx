@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const ReferEarnCta = () => {
   return (
@@ -38,10 +38,10 @@ const ReferEarnCta = () => {
             </div>
             <div className="col-lg-5">
               <div className="refer-earn-cta__action text-lg-end">
-                <Link to="/refer-and-earn" className="btn btn-main btn-lg">
+                <I18nLink to="/refer-and-earn" className="btn btn-main btn-lg">
                   <i className="fas fa-paper-plane me-2"></i>
                   Start Referring Now
-                </Link>
+                </I18nLink>
                 <p className="refer-earn-cta__note mt-2 mb-0">
                   <i className="fas fa-info-circle me-1"></i>
                   Open to all. No account needed.

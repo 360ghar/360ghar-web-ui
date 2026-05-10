@@ -15,7 +15,7 @@ const REQUIRED_PROPERTIES = {
   Product: ['@type', 'name', 'offers'],
   Offer: ['@type', 'price', 'priceCurrency', 'availability'],
   FAQPage: ['@type', 'mainEntity'],
-  Question: ['@type', 'name', 'acceptedAnswer'],
+  Question: ['@type', 'name', 'text', 'acceptedAnswer', 'author', 'datePublished'],
   Answer: ['@type', 'text'],
   BreadcrumbList: ['@type', 'itemListElement'],
   ListItem: ['@type', 'position', 'name', 'item'],

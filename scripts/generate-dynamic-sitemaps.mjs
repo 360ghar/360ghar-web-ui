@@ -16,14 +16,26 @@ const writeFile = (p, content) => {
 
 const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
 
-const urlTag = (loc, lastmod, changefreq, priority) =>
-  `  <url>\n    <loc>${loc}</loc>\n${
+const URLSET_NS = 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"';
+
+const urlTag = (loc, lastmod, changefreq, priority, alternates) => {
+  const altTags = (alternates || []).map(
+    (a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`
+  ).join('\n');
+  return `  <url>\n    <loc>${loc}</loc>\n${
     lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''
   }${
     changefreq ? `    <changefreq>${changefreq}</changefreq>\n` : ''
   }${
     priority ? `    <priority>${priority}</priority>\n` : ''
-  }  </url>`;
+  }${altTags ? `${altTags}\n` : ''}  </url>`;
+};
+
+const buildAlternates = (enPath) => [
+  { hreflang: 'en', href: `${SITE_URL}${enPath}` },
+  { hreflang: 'hi', href: `${SITE_URL}/hi${enPath}` },
+  { hreflang: 'x-default', href: `${SITE_URL}${enPath}` },
+];
 
 // Format date for sitemap
 const formatDate = (dateString) => {
@@ -86,7 +98,7 @@ export function getProjectSitemapEntries() {
 function buildSitemapXml(urls) {
   return [
     xmlHeader,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    `<urlset ${URLSET_NS}>`,
     ...urls,
     '</urlset>\n'
   ].join('\n');
@@ -118,15 +130,16 @@ async function generatePropertiesSitemap() {
     return null;
   }
 
-  const urls = properties.map(prop => {
+  const urls = properties.flatMap(prop => {
     const id = prop.id || prop.slug;
     const lastmod = formatDate(prop.updated_at || prop.created_at);
-    return urlTag(
-      `${SITE_URL}/property/${id}`,
-      lastmod,
-      'weekly',
-      '0.8'
-    );
+    const enPath = `/property/${id}`;
+    const hiPath = `/hi/property/${id}`;
+    const alts = buildAlternates(enPath);
+    return [
+      urlTag(`${SITE_URL}${enPath}`, lastmod, 'weekly', '0.8', alts),
+      urlTag(`${SITE_URL}${hiPath}`, lastmod, 'weekly', '0.8', alts),
+    ];
   });
 
   writeFile(filePath, buildSitemapXml(urls));
@@ -150,15 +163,16 @@ async function generateBlogSitemap() {
     return null;
   }
 
-  const urls = posts.map(post => {
+  const urls = posts.flatMap(post => {
     const slug = post.slug || post.id;
     const lastmod = formatDate(post.updated_at || post.published_at);
-    return urlTag(
-      `${SITE_URL}/blog/${slug}`,
-      lastmod,
-      'weekly',
-      '0.7'
-    );
+    const enPath = `/blog/${slug}`;
+    const hiPath = `/hi/blog/${slug}`;
+    const alts = buildAlternates(enPath);
+    return [
+      urlTag(`${SITE_URL}${enPath}`, lastmod, 'weekly', '0.7', alts),
+      urlTag(`${SITE_URL}${hiPath}`, lastmod, 'weekly', '0.7', alts),
+    ];
   });
 
   writeFile(filePath, buildSitemapXml(urls));
@@ -182,14 +196,15 @@ async function generateProjectsSitemap() {
     return null;
   }
 
-  const urls = projects.map(proj => {
+  const urls = projects.flatMap(proj => {
     const lastmod = formatDate(proj.updated_at || proj.created_at);
-    return urlTag(
-      `${SITE_URL}/project/${proj.slug}`,
-      lastmod,
-      'weekly',
-      '0.7'
-    );
+    const enPath = `/project/${proj.slug}`;
+    const hiPath = `/hi/project/${proj.slug}`;
+    const alts = buildAlternates(enPath);
+    return [
+      urlTag(`${SITE_URL}${enPath}`, lastmod, 'weekly', '0.7', alts),
+      urlTag(`${SITE_URL}${hiPath}`, lastmod, 'weekly', '0.7', alts),
+    ];
   });
 
   writeFile(filePath, buildSitemapXml(urls));
@@ -202,6 +217,7 @@ function updateSitemapIndex(dynamicSitemaps) {
     `${SITE_URL}/sitemap-static.xml`,
     `${SITE_URL}/sitemap-landing.xml`,
     `${SITE_URL}/sitemap-localities.xml`,
+    `${SITE_URL}/sitemap-datahub.xml`,
   ];
 
   const allSitemaps = [...staticSitemaps, ...dynamicSitemaps.filter(Boolean)];

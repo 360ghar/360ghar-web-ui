@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -10,11 +11,14 @@ import { siteMetadata, absoluteUrl } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 
 const Contact = () => {
+  const { t } = useTranslation('policies');
+  const [tSeo] = useTranslation('seo');
+
   return (
     <>
       <SEO
-        title="Contact 360Ghar | Gurugram Real Estate Help & Support"
-        description="Get in touch with 360Ghar for property queries, listing support, or Relationship Manager assistance. We serve buyers, tenants, and owners across Gurugram and NCR."
+        title={t('contact.title')}
+        description={tSeo('contact.description')}
         keywords="contact 360Ghar, relationship manager, real estate contact, Gurgaon, Gurugram, virtual tours, verified properties, AI real estate platform"
         canonical="/contact"
         image={siteMetadata.defaultOgImage}
@@ -110,7 +114,7 @@ const Contact = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />

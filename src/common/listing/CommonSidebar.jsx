@@ -1,10 +1,9 @@
 import { useEffect, useState }  from 'react';
-import { useNavigate } from 'react-router-dom';
 import SidebarCategoryList from './SidebarCategoryList';
 import SidebarRecentPost from './SidebarRecentPost';
 import SidebarProperty from './SidebarProperty';
-import { Link } from 'react-router-dom';
 import { blogService } from '../../services/blogService';
+import { I18nLink, useI18nNavigate } from '../../i18n/I18nLink';
 
 /**
  * CommonSidebar component for blog pages
@@ -21,7 +20,7 @@ const CommonSidebar = ({
     onSearch,
     searchValue = ''
 }) => {
-    const navigate = useNavigate();
+    const navigate = useI18nNavigate();
     const [tags, setTags] = useState([]);
     const [tagsLoading, setTagsLoading] = useState(false);
     const [tagsError, setTagsError] = useState(null);
@@ -155,12 +154,12 @@ const CommonSidebar = ({
                         )}
                         {!tagsLoading && !tagsError && tags.map((tag, i) => (
                             <li className="tag-list__item" key={tag.id || i}>
-                                <Link
+                                <I18nLink
                                     to={`/blog?tag=${tag.slug || tag.id}`}
                                     className="tag-list__link"
                                 >
                                     {tag.name || tag.title}
-                                </Link>
+                                </I18nLink>
                             </li>
                         ))}
                     </ul>

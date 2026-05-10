@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -27,13 +28,15 @@ const TEHSIL_OPTIONS = [
 ];
 
 const VerifyOwnership = () => {
+  const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [tehsil, setTehsil] = useState('');
   const [village, setVillage] = useState('');
   const [khasraNumber, setKhasraNumber] = useState('');
   const [captchaToken, setCaptchaToken] = useState('');
   const [captchaUrl, setCaptchaUrl] = useState(null);
   const [captchaLoading, setCaptchaLoading] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const captchaBlobRef = useRef(null);
@@ -61,7 +64,7 @@ const VerifyOwnership = () => {
       setCaptchaUrl(url);
       setCaptchaToken('');
     } catch {
-      setError({ type: 'captcha', message: 'Failed to load CAPTCHA. Please try again.' });
+      setError({ type: 'captcha', message: t('verifyOwnership.captchaFailed') });
     } finally {
       setCaptchaLoading(false);
     }
@@ -82,13 +85,13 @@ const VerifyOwnership = () => {
     } catch (err) {
       const status = err?.response?.status;
       if (status === 422 || (err?.message || '').toLowerCase().includes('captcha')) {
-        setError({ type: 'captcha', message: 'CAPTCHA was incorrect. Please refresh and try again.' });
+        setError({ type: 'captcha', message: t('verifyOwnership.captchaIncorrect') });
         // Reload captcha automatically
         loadCaptcha();
       } else if (status === 404) {
-        setError({ type: 'notfound', message: 'No land record found for the given Tehsil, Village, and Khasra Number.' });
+        setError({ type: 'notfound', message: t('verifyOwnership.notFound') });
       } else {
-        setError({ type: 'generic', message: 'Unable to fetch land records at this time. Please try again later.' });
+        setError({ type: 'generic', message: t('verifyOwnership.genericError') });
       }
     } finally {
       setLoading(false);
@@ -107,8 +110,8 @@ const VerifyOwnership = () => {
   return (
     <>
       <SEO
-        title="Verify Property Ownership Gurgaon | Jamabandi Haryana Land Records | 360Ghar"
-        description="Verify property ownership using official Haryana land records (Jamabandi). Look up Khasra numbers, owner names, mutation status, and encumbrance details for plots in Gurugram."
+        title={tSeo('verifyOwnership.title')}
+        description={tSeo('verifyOwnership.description')}
         keywords="verify property ownership Gurugram, Jamabandi Haryana land records, Khasra number lookup, mutation status Haryana, property ownership check Gurgaon"
         canonical="/verify-ownership"
         structuredData={[
@@ -138,14 +141,14 @@ const VerifyOwnership = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h1 className="fs-28 fw-600 mb-10">Verify Property Ownership</h1>
+                <h1 className="fs-28 fw-600 mb-10">{t('verifyOwnership.title')}</h1>
                 <p className="mb-10 color-text-3">
-                  Verify property ownership using Haryana land records (Jamabandi). Enter the Tehsil, Village, and Khasra Number to look up the official record.
+                  {t('verifyOwnership.description')}
                 </p>
                 <div className="alert alert-warning d-flex align-items-start gap-10 mb-30" role="alert">
                   <i className="fas fa-shield-alt mt-1"></i>
                   <span>
-                    <strong>Important:</strong> You must solve the CAPTCHA yourself. We do not bypass security mechanisms of the Haryana Jamabandi portal.
+                    {t('verifyOwnership.important')}
                   </span>
                 </div>
               </div>
@@ -155,62 +158,62 @@ const VerifyOwnership = () => {
               {/* Lookup Form */}
               <div className="col-lg-6 mb-40">
                 <div className="bg-white p-4 rounded-3 shadow-sm">
-                  <h2 className="fs-20 fw-600 mb-20">Land Record Lookup</h2>
+                  <h2 className="fs-20 fw-600 mb-20">{t('verifyOwnership.landRecordLookup')}</h2>
                   <form onSubmit={handleSubmit}>
 
                     {/* Tehsil */}
                     <div className="mb-15">
-                      <label className="form-label fw-500">Tehsil <span className="color-danger">*</span></label>
+                      <label className="form-label fw-500">{t('verifyOwnership.tehsil')} <span className="color-danger">*</span></label>
                       <select
                         className="form-select"
                         value={tehsil}
                         onChange={(e) => { setTehsil(e.target.value); setVillage(''); setKhasraNumber(''); setResult(null); setError(null); }}
                         required
                       >
-                        <option value="">Select Tehsil</option>
-                        {TEHSIL_OPTIONS.map((t) => (
-                          <option key={t} value={t}>{t}</option>
+                        <option value="">{t('verifyOwnership.selectTehsil')}</option>
+                        {TEHSIL_OPTIONS.map((th) => (
+                          <option key={th} value={th}>{th}</option>
                         ))}
                       </select>
                     </div>
 
                     {/* Village */}
                     <div className="mb-15">
-                      <label className="form-label fw-500">Village <span className="color-danger">*</span></label>
+                      <label className="form-label fw-500">{t('verifyOwnership.village')} <span className="color-danger">*</span></label>
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Enter village name"
+                        placeholder={t('verifyOwnership.enterVillage')}
                         value={village}
                         onChange={(e) => { setVillage(e.target.value); setKhasraNumber(''); setResult(null); setError(null); }}
                         disabled={!tehsil}
                         required
                       />
                       {!tehsil && (
-                        <small className="text-muted">Select a Tehsil first</small>
+                        <small className="text-muted">{t('verifyOwnership.selectTehsilFirst')}</small>
                       )}
                     </div>
 
                     {/* Khasra Number */}
                     <div className="mb-20">
-                      <label className="form-label fw-500">Khasra Number <span className="color-danger">*</span></label>
+                      <label className="form-label fw-500">{t('verifyOwnership.khasraNumber')} <span className="color-danger">*</span></label>
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="e.g. 123/4"
+                        placeholder={t('verifyOwnership.khasraPlaceholder')}
                         value={khasraNumber}
                         onChange={(e) => { setKhasraNumber(e.target.value); setResult(null); setError(null); }}
                         disabled={!village}
                         required
                       />
                       {!village && (
-                        <small className="text-muted">Enter a Village first</small>
+                        <small className="text-muted">{t('verifyOwnership.enterVillageFirst')}</small>
                       )}
                     </div>
 
                     {/* CAPTCHA */}
                     <div className="mb-20">
-                      <label className="form-label fw-500">CAPTCHA Verification <span className="color-danger">*</span></label>
+                      <label className="form-label fw-500">{t('verifyOwnership.captchaVerification')} <span className="color-danger">*</span></label>
                       <div className="d-flex align-items-center gap-10 mb-10">
                         {captchaUrl ? (
                           <img
@@ -223,7 +226,7 @@ const VerifyOwnership = () => {
                             style={{ height: '52px', width: '160px', border: '1px dashed #dee2e6', borderRadius: '4px', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                             className="fs-13 color-text-3"
                           >
-                            No CAPTCHA loaded
+                            {t('verifyOwnership.noCaptcha')}
                           </div>
                         )}
                         <button
@@ -233,18 +236,18 @@ const VerifyOwnership = () => {
                           disabled={captchaLoading}
                         >
                           {captchaLoading ? (
-                            <><span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Loading…</>
+                            <><span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>{t('verifyOwnership.lookingUp')}</>
                           ) : captchaUrl ? (
-                            <><i className="fas fa-sync-alt me-1"></i>Refresh</>
+                            <><i className="fas fa-sync-alt me-1"></i>{t('verifyOwnership.refresh')}</>
                           ) : (
-                            <><i className="fas fa-image me-1"></i>Load CAPTCHA</>
+                            <><i className="fas fa-image me-1"></i>{t('verifyOwnership.loadCaptcha')}</>
                           )}
                         </button>
                       </div>
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Enter CAPTCHA text"
+                        placeholder={t('verifyOwnership.enterCaptcha')}
                         value={captchaToken}
                         onChange={(e) => setCaptchaToken(e.target.value)}
                         disabled={!captchaUrl}
@@ -254,7 +257,7 @@ const VerifyOwnership = () => {
                         autoCapitalize="off"
                       />
                       {!captchaUrl && (
-                        <small className="text-muted">Click &quot;Load CAPTCHA&quot; to get a CAPTCHA image</small>
+                        <small className="text-muted">{t('verifyOwnership.clickLoadCaptcha')}</small>
                       )}
                     </div>
 
@@ -270,7 +273,7 @@ const VerifyOwnership = () => {
                             onClick={loadCaptcha}
                             disabled={captchaLoading}
                           >
-                            Refresh CAPTCHA
+                            {t('verifyOwnership.refreshCaptcha')}
                           </button>
                         )}
                       </div>
@@ -282,9 +285,9 @@ const VerifyOwnership = () => {
                       disabled={loading || !tehsil || !village || !khasraNumber || !captchaToken}
                     >
                       {loading ? (
-                        <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Looking up…</>
+                        <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>{t('verifyOwnership.lookingUp')}</>
                       ) : (
-                        <><i className="fas fa-search me-2"></i>Lookup Land Record</>
+                        <><i className="fas fa-search me-2"></i>{t('verifyOwnership.lookupRecord')}</>
                       )}
                     </button>
                   </form>
@@ -296,14 +299,14 @@ const VerifyOwnership = () => {
                 {result ? (
                   <div className="bg-white p-4 rounded-3 shadow-sm">
                     <div className="d-flex align-items-center justify-content-between mb-20">
-                      <h2 className="fs-20 fw-600 mb-0">Ownership Record</h2>
-                      <span className="badge bg-success">Found</span>
+                      <h2 className="fs-20 fw-600 mb-0">{t('verifyOwnership.ownershipRecord')}</h2>
+                      <span className="badge bg-success">{t('verifyOwnership.found')}</span>
                     </div>
 
                     <table className="table table-sm table-borderless mb-20">
                       <tbody>
                         <tr>
-                          <th className="color-text-3 fw-500 w-40">Owner(s)</th>
+                          <th className="color-text-3 fw-500 w-40">{t('verifyOwnership.owners')}</th>
                           <td className="fw-600">
                             {Array.isArray(result.owners) && result.owners.length > 0
                               ? result.owners.join(', ')
@@ -311,13 +314,13 @@ const VerifyOwnership = () => {
                           </td>
                         </tr>
                         <tr>
-                          <th className="color-text-3 fw-500">Area</th>
+                          <th className="color-text-3 fw-500">{t('verifyOwnership.area')}</th>
                           <td>
                             {result.area ? `${result.area}${result.area_unit ? ' ' + result.area_unit : ''}` : '—'}
                           </td>
                         </tr>
                         <tr>
-                          <th className="color-text-3 fw-500">Mutation Status</th>
+                          <th className="color-text-3 fw-500">{t('verifyOwnership.mutationStatus')}</th>
                           <td>
                             {result.mutation_status
                               ? result.mutation_status.charAt(0).toUpperCase() + result.mutation_status.slice(1).replace(/_/g, ' ')
@@ -325,19 +328,19 @@ const VerifyOwnership = () => {
                           </td>
                         </tr>
                         <tr>
-                          <th className="color-text-3 fw-500">Encumbrance</th>
+                          <th className="color-text-3 fw-500">{t('verifyOwnership.encumbrance')}</th>
                           <td>
                             {result.encumbrance !== undefined && result.encumbrance !== null
                               ? (result.encumbrance ? (
-                                <span className="badge bg-danger">Encumbered</span>
+                                <span className="badge bg-danger">{t('verifyOwnership.encumbered')}</span>
                               ) : (
-                                <span className="badge bg-success">Clear</span>
+                                <span className="badge bg-success">{t('verifyOwnership.clear')}</span>
                               ))
                               : '—'}
                           </td>
                         </tr>
                         <tr>
-                          <th className="color-text-3 fw-500">Last Updated</th>
+                          <th className="color-text-3 fw-500">{t('verifyOwnership.lastUpdated')}</th>
                           <td>{formatDate(result.last_updated || result.updated_at)}</td>
                         </tr>
                       </tbody>
@@ -345,13 +348,13 @@ const VerifyOwnership = () => {
 
                     <div className="alert alert-light fs-13 mb-0" role="note">
                       <i className="fas fa-info-circle me-2 color-text-3"></i>
-                      Data sourced from the <strong>Haryana Jamabandi portal</strong>. Always verify with official records before making property decisions.
+                      {t('verifyOwnership.dataSourced')}
                     </div>
                   </div>
                 ) : (
                   <div className="bg-white p-4 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center text-center" style={{ minHeight: '300px' }}>
                     <i className="fas fa-file-alt fs-40 color-text-3 mb-15"></i>
-                    <p className="color-text-3 mb-0">Fill in the form and submit to view land ownership details.</p>
+                    <p className="color-text-3 mb-0">{t('verifyOwnership.fillForm')}</p>
                   </div>
                 )}
               </div>
@@ -363,29 +366,28 @@ const VerifyOwnership = () => {
                 <div className="bg-white p-4 rounded-3 shadow-sm">
                   <h3 className="fs-18 fw-600 mb-15">
                     <i className="fas fa-info-circle text-main me-2"></i>
-                    About Jamabandi Land Records
+                    {t('verifyOwnership.aboutJamabandi.title')}
                   </h3>
                   <p className="color-text-3 mb-10">
-                    Jamabandi is the official land record maintained by the Revenue Department of Haryana. It contains details of ownership, cultivation rights, and encumbrances on agricultural and non-agricultural land parcels identified by Khasra numbers.
+                    {t('verifyOwnership.aboutJamabandi.description')}
                   </p>
                   <ul className="color-text-3 mb-0" style={{ paddingLeft: '20px' }}>
-                    <li>Verify ownership before buying a plot or agricultural land</li>
-                    <li>Check for any pending litigations or encumbrances</li>
-                    <li>Confirm mutation (intkal) has been completed after purchase</li>
-                    <li>Official data is periodically updated by Patwaris</li>
+                    {t('verifyOwnership.aboutJamabandi.tips', { returnObjects: true }).map((tip, idx) => (
+                      <li key={idx}>{tip}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
               <div className="col-lg-4 mt-20 mt-lg-0">
                 <div className="bg-main text-white p-4 rounded-3 h-100 d-flex flex-column justify-content-center">
-                  <h4 className="fs-18 fw-600 mb-10">Looking for plots in Gurugram?</h4>
+                  <h4 className="fs-18 fw-600 mb-10">{t('verifyOwnership.plotsCta.title')}</h4>
                   <p className="mb-15" style={{ opacity: 0.9 }}>
-                    Browse verified residential plots and properties listed on 360Ghar.
+                    {t('verifyOwnership.plotsCta.description')}
                   </p>
-                  <Link to="/properties" className="btn btn-white btn-main align-self-start">
+                  <I18nLink to="/properties" className="btn btn-white btn-main align-self-start">
                     <i className="fas fa-home me-2"></i>
-                    Browse Properties
-                  </Link>
+                    {t('verifyOwnership.plotsCta.browseProperties')}
+                  </I18nLink>
                 </div>
               </div>
             </div>

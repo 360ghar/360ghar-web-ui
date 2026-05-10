@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { aiAgentShowcaseContent, aiAgentFeatures } from '../../data/AIAgentData';
 import './AIAgentShowcase.scss';
 
@@ -135,12 +135,12 @@ const AIAgentShowcase = () => {
                 </div>
 
                 <div className="ai-agent-showcase__cta">
-                    <Link to="/ai-agent" className="ai-agent-showcase__cta-btn ai-agent-showcase__cta-btn--primary">
+                    <I18nLink to="/ai-agent" className="ai-agent-showcase__cta-btn ai-agent-showcase__cta-btn--primary">
                         <span>Learn More</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                    </Link>
+                    </I18nLink>
                     <a 
                         href={aiAgentShowcaseContent.mcpUrl} 
                         target="_blank" 

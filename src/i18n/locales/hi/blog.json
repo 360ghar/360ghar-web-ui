@@ -1,0 +1,97 @@
+{
+  "blogClassic": {
+    "subtitle": "रिसर्च हब",
+    "title": "गुरुग्राम और दिल्ली NCR के लिए रियल एस्टेट गाइड",
+    "desc": "खरीद गाइड, किराया चेकलिस्ट, लोकैलिटी रिसर्च, निवेश नोट्स और प्रॉपर्टी-प्लानिंग टूल के लिए इस हब का उपयोग करें। नवीनतम पोस्ट डायनामिक रूप से लोड होते हैं, लेकिन यह पृष्ठ हमेशा मुख्य रिसर्च पाथ को क्रॉलेबल और आसानी से पहुंचने योग्य रखता है।",
+    "browseLatest": "नवीनतम पोस्ट ब्राउज़ करें",
+    "exploreLocalities": "लोकैलिटी एक्सप्लोर करें",
+    "baseTitle": "रियल एस्टेट ब्लॉग | 360Ghar इनसाइट्स",
+    "baseDescription": "गुरुग्राम और दिल्ली NCR में खरीद, किराए, PG, निवेश ट्रेंड, लोकैलिटी डीप-डाइव और बाज़ार अपडेट पर गाइड और अंतर्दृष्टि।",
+    "collectionName": "रियल एस्टेट लेख",
+    "collectionDesc": "गुरुग्राम में प्रॉपर्टी खरीद, किराए और निवेश पर नवीनतम अंतर्दृष्टि"
+  },
+  "featuredGuides": {
+    "marketReports": {
+      "title": "बाज़ार रिपोर्ट",
+      "description": "शॉर्टलिस्ट करने से पहले गुरुग्राम खरीद, किराए और लोकैलिटी ट्रेंड ट्रैक करें।",
+      "guideLabel": "गुरुग्राम रियल एस्टेट गाइड",
+      "investmentLabel": "गुरुग्राम में प्रॉपर्टी निवेश"
+    },
+    "localityResearch": {
+      "title": "लोकैलिटी रिसर्च",
+      "description": "व्यापक शहर खोज से लोकैलिटी-स्तरीय इंटेलिजेंस और मूल्य संदर्भ तक जाएं।",
+      "directoryLabel": "लोकैलिटी डायरेक्टरी",
+      "searchLabel": "प्रॉपर्टी खोज"
+    },
+    "planningTools": {
+      "title": "प्लानिंग टूल",
+      "description": "गाइड पढ़ते समय कैलकुलेटर और चेकलिस्ट का उपयोग करें ताकि निर्णय आधारित रहें।",
+      "emiLabel": "EMI कैलकुलेटर",
+      "checklistLabel": "प्रॉपर्टी चेकलिस्ट"
+    }
+  },
+  "classicSection": {
+    "loading": "पोस्ट लोड हो रहे हैं...",
+    "loadingAria": "लोड हो रहा है...",
+    "searchLabel": "खोजें: {{query}}",
+    "categoryLabel": "श्रेणी: {{category}}",
+    "tagLabel": "टैग: {{tag}}",
+    "resultCount": "{{count}} परिणाम मिला",
+    "resultCountPlural": "{{count}} परिणाम मिले",
+    "clearFilters": "फ़िल्टर हटाएं",
+    "retry": "पुनः प्रयास",
+    "noPostsTitle": "कोई पोस्ट नहीं मिली",
+    "noPostsFiltered": "अपनी खोज या फ़िल्टर समायोजित करें",
+    "noPostsEmpty": "नई सामग्री के लिए बाद में जांचें",
+    "showing": "{{start}} - {{end}} / {{total}} पोस्ट दिखा रहे हैं",
+    "errorPrefix": "पोस्ट लोड करने में विफल"
+  },
+  "blogDetails": {
+    "loading": "लेख लोड हो रहा है...",
+    "loadingAria": "लोड हो रहा है...",
+    "errorTitle": "लेख लोड करने में विफल",
+    "tryAgain": "पुनः प्रयास करें",
+    "backToBlog": "ब्लॉग पर वापस जाएं",
+    "notFoundTitle": "लेख नहीं मिला",
+    "notFoundDesc": "आप जो लेख खोज रहे हैं वह मौजूद नहीं है।",
+    "defaultTitle": "ब्लॉग विवरण",
+    "defaultSeoTitle": "रियल एस्टेट ब्लॉग | 360Ghar",
+    "defaultSeoDesc": "गुरुग्राम और दिल्ली NCR में खरीद, किराए, PG, लोकैलिटी गाइड और निवेश ट्रेंड पर अंतर्दृष्टि पढ़ें।",
+    "by": "द्वारा",
+    "tagsLabel": "टैग:"
+  },
+  "blogShowcase": {
+    "title": "हमारे पोर्टफोलियो के साथ अपनी प्रतिभा प्रदर्शित करें",
+    "desc": "Aliquam eros justo, posuere loborti viverra laoreet matti ullamcorper posuere viverra .Aliquam eros justo, posuere lobortis, viverra laoreet augue mattis fermentum ullamcorper viverra laoreet Aliquam eros justo, posuere lobortis, viverra laoreet augue mattis ferment ullamcorer viverra laoreet Aliquam eros justo, posuere loborti viverra laoreet matti ullamcorper posuere viverra .Aliquam eros justo, posuere",
+    "check1": "आपका विश्वसनीय रियल एस्टेट पार्टनर",
+    "check2": "आपके नए घर का दरवाज़ा खोलना",
+    "check3": "किफ़ायती दामों पर लग्ज़री जीवन",
+    "check4": "घर की मालिकाना की आपकी यात्रा यहीं से शुरू होती है",
+    "bottomDesc": "रियल एस्टेट एक लाभदायक उद्योग है जिसमें प्रॉपर्टी की खरीद, बिक्री और किराए पर लेना शामिल है। इसमें आवासीय, व्यावसायिक और औद्योगिक प्रॉपर्टी शामिल हैं। रियल एस्टेट एजेंट लेन-देन में सुविधा प्रदान करने में महत्वपूर्ण भूमिका निभाते हैं।"
+  },
+  "blogNextPrev": {
+    "prevLabel": "पिछली पोस्ट",
+    "nextLabel": "अगली पोस्ट",
+    "placeholderTitle": "अपनी शांति का बीमा करें"
+  },
+  "blogTesti": {
+    "desc": "रियल एस्टेट एक लाभदायक उद्योग है जिसमें प्रॉपर्टी की खरीद, बिक्री और किराए पर लेना शामिल है। इसमें आवासीय, व्यावसायिक और औद्योगिक प्रॉपर्टी शामिल हैं। रियल एस्टेट एजेंट लेन-देन में सुविधा प्रदान करने में महत्वपूर्ण भूमिका निभाते हैं।",
+    "author": "मार्क वुड"
+  },
+  "blogKeyword": {
+    "label": "कीवर्ड: ",
+    "keyword1": "गुरुग्राम रियल एस्टेट",
+    "keyword2": "गुरुग्राम में PG",
+    "keyword3": "360\u00b0 टूर"
+  },
+  "blogClassicPage": {
+    "baseTitle": "रियल एस्टेट ब्लॉग | 360Ghar इनसाइट्स",
+    "baseDescription": "गुरुग्राम और दिल्ली NCR में खरीद, किराए, PG, निवेश ट्रेंड, लोकैलिटी डीप-डाइव और बाज़ार अपडेट पर गाइड और अंतर्दृष्टि।",
+    "collectionName": "रियल एस्टेट लेख",
+    "collectionDesc": "गुरुग्राम में प्रॉपर्टी खरीद, किराए और निवेश पर नवीनतम अंतर्दृष्टि",
+    "categoryArticles": "{{category}} लेख ब्राउज़ करें। {{baseDescription}}",
+    "taggedPosts": "\"{{tag}}\" टैग वाले पोस्ट। {{baseDescription}}",
+    "breadcrumbHome": "होम",
+    "breadcrumbBlog": "ब्लॉग"
+  }
+}

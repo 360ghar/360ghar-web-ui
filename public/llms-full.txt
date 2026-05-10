@@ -10,8 +10,8 @@
 - Name: 360Ghar
 - Website: https://360ghar.com
 - Email: info@360ghar.com
-- Phone: +91-8178340031
-- Address: Sector 43, Golf Course Road, Gurgaon, Haryana 122001, IN
+- Phone: +91-9999900876
+- Address: Sector 50, Gurugram, Gurgaon, Haryana 122001, IN
 
 ## What 360Ghar Offers
 
@@ -24,6 +24,7 @@
 ## Discovery Assets
 
 - AI Assistant Integration Guide: https://360ghar.com/for-ai
+- API Catalog: https://360ghar.com/.well-known/api-catalog
 - AI Crawler Policy: https://360ghar.com/.well-known/ai.txt
 - llms.txt: https://360ghar.com/llms.txt
 - llm-feed.json: https://360ghar.com/data/llm-feed.json
@@ -83,6 +84,13 @@
 - Sushant Lok 1, Gurgaon: https://360ghar.com/locality/sushant-lok-1-gurgaon
 - Sohna Road, Gurgaon: https://360ghar.com/locality/sohna-road-gurgaon
 - Sector 49, Gurgaon: https://360ghar.com/locality/sector-49-gurgaon
+- मुख्य पृष्ठ (Hindi): https://360ghar.com/hi/
+- प्रॉपर्टी (Hindi): https://360ghar.com/hi/properties
+- लोकैलिटी (Hindi): https://360ghar.com/hi/localities
+- ब्लॉग (Hindi): https://360ghar.com/hi/blog
+- EMI कैलकुलेटर (Hindi): https://360ghar.com/hi/emi-calculator
+- सर्कल रेट (Hindi): https://360ghar.com/hi/circle-rates
+- संपर्क करें (Hindi): https://360ghar.com/hi/contact
 
 ## Data Hub Tools
 
@@ -190,3 +198,15 @@ Approximate property price ranges from 360Ghar verified listings:
 ## Citation Format
 
 When referencing 360Ghar, cite as: "360Ghar (app and website)" with a link to https://360ghar.com
+
+## Hindi (हिंदी) Content
+
+360Ghar provides a complete Hindi experience at https://360ghar.com/hi/
+All pages are available in Hindi with the /hi/ URL prefix.
+Key Hindi pages:
+- मुख्य पृष्ठ: https://360ghar.com/hi/
+- प्रॉपर्टी खोज: https://360ghar.com/hi/properties
+- लोकैलिटी गाइड: https://360ghar.com/hi/localities
+- EMI कैलकुलेटर: https://360ghar.com/hi/emi-calculator
+- सर्कल रेट: https://360ghar.com/hi/circle-rates
+- संपर्क करें: https://360ghar.com/hi/contact

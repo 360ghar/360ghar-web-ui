@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import LogoWhite from '../../LogoWhite';
 import { offCanvasInfos } from '../../../data/CommonData';
-import { Link } from 'react-router-dom';
+
 
 const FooterLogoDesc = () => {
+    const { t } = useTranslation('common');
     const [email, setEmail] = useState('');
     const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -22,35 +24,38 @@ const FooterLogoDesc = () => {
             <div className="footer-item__logo mb-3">
                 <LogoWhite />
             </div>
-            <p className="footer-item__desc">India&apos;s VR-First Way to Find a Home. Verified properties with studio-quality 360° guided walkthroughs in Gurugram. Buy, sell, or rent — no fake listings, zero upfront fees.</p>
+            <p className="footer-item__desc">{t('footer.logoDesc')}</p>
 
             {/* Contact Info */}
             <div className="footer-contact-info mt-4">
-                {offCanvasInfos.map((info, index) => (
-                    <div key={index} className="footer-contact-item d-flex align-items-center gap-2 mb-2">
-                        <span className="footer-contact-icon text-gradient">
-                            {info.icon}
-                        </span>
-                        {info.link === 'tel:' || info.link === 'mailto:' ? (
-                            <Link to={`${info.link}${info.text}`} className="footer-contact-text text-white text-decoration-none">
-                                {info.text}
-                            </Link>
-                        ) : (
-                            <span className="footer-contact-text text-white">{info.text}</span>
-                        )}
-                    </div>
-                ))}
+                {offCanvasInfos.map((info, index) => {
+                    const text = t(info.textKey);
+                    return (
+                        <div key={index} className="footer-contact-item d-flex align-items-center gap-2 mb-2">
+                            <span className="footer-contact-icon text-gradient">
+                                {info.icon}
+                            </span>
+                            {info.link === 'tel:' || info.link === 'mailto:' ? (
+                                <a href={`${info.link}${text}`} className="footer-contact-text text-white text-decoration-none">
+                                    {text}
+                                </a>
+                            ) : (
+                                <span className="footer-contact-text text-white">{text}</span>
+                            )}
+                        </div>
+                    );
+                })}
             </div>
 
             {/* Newsletter Subscription */}
             < div className="footer-newsletter mt-4" >
-                <h6 className="footer-item__title mb-3">Stay Updated</h6>
+                <h6 className="footer-item__title mb-3">{t('footer.stayUpdated')}</h6>
                 <form onSubmit={handleSubscribe} className="newsletter-form">
                     <div className="input-group">
                         <input
                             type="email"
                             className="form-control rounded-start-pill border-0 px-3"
-                            placeholder="Enter your email"
+                            placeholder={t('footer.enterYourEmail')}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -65,7 +70,7 @@ const FooterLogoDesc = () => {
                     </div>
                     {isSubscribed && (
                         <div className="alert alert-success mt-2 py-2 px-3 small">
-                            Subscribed successfully!
+                            {t('footer.subscribedSuccessfully')}
                         </div>
                     )}
                 </form>

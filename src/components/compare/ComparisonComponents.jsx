@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import SectionHeading from '../../common/ui/SectionHeading';
 import { ourAdvantages } from '../../data/competitors';
 
@@ -87,12 +87,12 @@ const WhyChooseUs = ({ advantages = ourAdvantages }) => {
         </div>
         
         <div className="text-center mt-5">
-          <Link to="/properties?city=Gurgaon&intent=buy" className="btn btn-main">
+          <I18nLink to="/properties?city=Gurgaon&intent=buy" className="btn btn-main">
             Browse Verified Properties
             <span className="icon-right ms-2">
               <i className="fas fa-arrow-right"></i>
             </span>
-          </Link>
+          </I18nLink>
         </div>
       </div>
     </section>
@@ -204,7 +204,7 @@ const CompareBreadcrumb = ({ items }) => {
               className={`compare-breadcrumb-item ${index === items.length - 1 ? 'compare-breadcrumb-item--active' : ''}`}
             >
               {item.url ? (
-                <Link to={item.url}>{item.name}</Link>
+                <I18nLink to={item.url}>{item.name}</I18nLink>
               ) : (
                 item.name
               )}

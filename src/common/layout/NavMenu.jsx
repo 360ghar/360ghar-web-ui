@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState }  from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink, I18nNavLink } from '../../i18n/I18nLink';
 import { navMenus } from '../../data/CommonData';
 
 const NavMenu = (props) => {
+    const { t } = useTranslation('common');
 
     const [activeIndex, setActiveIndex] = useState(null);
     const navRef = useRef(null);
@@ -71,7 +73,7 @@ const NavMenu = (props) => {
                 return;
             }
 
-            if (window.innerWidth > 1280) {
+            if (window.innerWidth > 1920) {
                 setVisibleCount(navMenus.length);
                 return;
             }
@@ -134,16 +136,16 @@ const NavMenu = (props) => {
                         aria-expanded={activeIndex === itemKey}
                         aria-controls={`submenu-${itemKey}`}
                     >
-                        {navMenu.text}
+                        {navMenu.textKey ? t(navMenu.textKey) : navMenu.text}
                     </button>
                 ) : (
-                    <NavLink to={navMenu.path} className={getActiveClass} onClick={handleNavigate}>{navMenu.text}</NavLink>
+                    <I18nNavLink to={navMenu.path} className={getActiveClass} onClick={handleNavigate}>{navMenu.textKey ? t(navMenu.textKey) : navMenu.text}</I18nNavLink>
                 )}
                 {hasSubmenu && (
                     <ul className="nav-submenu" id={`submenu-${itemKey}`}>
                         {navMenu.submenus.map((submenu, subIndex) => (
                             <li className="nav-submenu__item" key={subIndex}>
-                                <Link to={submenu.path} className="nav-submenu__link" onClick={handleNavigate}>{submenu.text}</Link>
+                                <I18nLink to={submenu.path} className="nav-submenu__link" onClick={handleNavigate}>{submenu.textKey ? t(submenu.textKey) : submenu.text}</I18nLink>
                             </li>
                         ))}
                     </ul>
@@ -169,24 +171,24 @@ const NavMenu = (props) => {
                                     aria-expanded={activeIndex === 'more-menu'}
                                     aria-controls="submenu-more-menu"
                                 >
-                                    More
+                                    {t('nav.more', 'More')}
                                 </button>
                                 <ul className="nav-submenu nav-submenu--more" id="submenu-more-menu">
                                     {overflowMenus.map((menuItem, menuIndex) => (
                                         menuItem.submenus?.length ? (
                                             <li className="nav-submenu__item nav-submenu__item--group" key={`overflow-${menuIndex}`}>
-                                                <span className="nav-submenu__heading">{menuItem.text}</span>
+                                                <span className="nav-submenu__heading">{menuItem.textKey ? t(menuItem.textKey) : menuItem.text}</span>
                                                 <ul className="nav-submenu__nested">
                                                     {menuItem.submenus.map((submenu, subIndex) => (
                                                         <li className="nav-submenu__item" key={`overflow-sub-${subIndex}`}>
-                                                            <Link to={submenu.path} className="nav-submenu__link" onClick={handleNavigate}>{submenu.text}</Link>
+                                                            <I18nLink to={submenu.path} className="nav-submenu__link" onClick={handleNavigate}>{submenu.textKey ? t(submenu.textKey) : submenu.text}</I18nLink>
                                                         </li>
                                                     ))}
                                                 </ul>
                                             </li>
                                         ) : (
                                             <li className="nav-submenu__item" key={`overflow-${menuIndex}`}>
-                                                <Link to={menuItem.path} className="nav-submenu__link" onClick={handleNavigate}>{menuItem.text}</Link>
+                                                <I18nLink to={menuItem.path} className="nav-submenu__link" onClick={handleNavigate}>{menuItem.textKey ? t(menuItem.textKey) : menuItem.text}</I18nLink>
                                             </li>
                                         )
                                     ))}
@@ -200,11 +202,11 @@ const NavMenu = (props) => {
                     <ul className="nav-menu nav-menu--measure" aria-hidden="true">
                         {navMenus.map((menu, index) => (
                             <li className={`nav-menu__item ${menu.submenus?.length ? 'has-submenu' : ''}`} key={`measure-${index}`} ref={(element) => { measureItemRefs.current[index] = element; }}>
-                                <span className="nav-menu__link">{menu.text}</span>
+                                <span className="nav-menu__link">{menu.textKey ? t(menu.textKey) : menu.text}</span>
                             </li>
                         ))}
                         <li className="nav-menu__item has-submenu nav-menu__item--more" ref={moreMeasureRef}>
-                            <span className="nav-menu__link">More</span>
+                            <span className="nav-menu__link">{t('nav.more', 'More')}</span>
                         </li>
                     </ul>
                 )}

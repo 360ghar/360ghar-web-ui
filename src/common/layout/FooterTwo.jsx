@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import FooterBottom from './FooterBottom';
 import FooterServiceItem from './footer/FooterServiceItem';
 import FooterLogoDesc from './footer/FooterLogoDesc';
@@ -23,13 +23,13 @@ const FooterTwo = () => {
                                 <FooterInfo/>
 
                                 <div className="mt-4">
-                                    <Link
+                                    <I18nLink
                                         to="/contact"
                                         className="btn btn-main w-100 d-inline-flex justify-content-center align-items-center"
                                     >
                                         <i className="fas fa-comments me-2"></i>
                                         Contact Support
-                                    </Link>
+                                    </I18nLink>
                                 </div>
 
                             </div>

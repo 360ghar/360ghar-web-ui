@@ -1,0 +1,8 @@
+
+      <svg width="240" height="80" viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="housing-title">
+        <title id="housing-title">Housing.com</title>
+        <rect x="2" y="2" width="236" height="76" rx="18" fill="#fff5eb" stroke="#ff6b00" stroke-width="4" />
+        <circle cx="34" cy="40" r="14" fill="#ff6b00" />
+        <text x="60" y="49" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#181616">Housing.com</text>
+      </svg>
+    

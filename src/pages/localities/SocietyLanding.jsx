@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -9,8 +11,21 @@ import SEO from '../../common/SEO';
 import AiFactSheet from '../../components/seo/AiFactSheet';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { buildPropertySearchQuery } from '../../utils/propertyFilters';
-import localities from '../../data/localities.json';
 import localityLandmarks from '../../data/locality-landmarks.json';
+
+let localitiesDataPromise = null;
+let cachedLocalitiesData = null;
+
+async function getLocalitiesData() {
+  if (cachedLocalitiesData) return cachedLocalitiesData;
+  if (!localitiesDataPromise) {
+    localitiesDataPromise = import('../../data/localities.json').then((m) => {
+      cachedLocalitiesData = m.default;
+      return cachedLocalitiesData;
+    });
+  }
+  return localitiesDataPromise;
+}
 
 const pretty = (s) => (s || '').replace(/[-_]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
 
@@ -52,11 +67,31 @@ const buildSocietyFaqs = (societyName, city, intent) => {
 };
 
 const SocietyLanding = () => {
+  const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const { slug, intent } = useParams();
   const validIntent = VALID_INTENTS.includes(intent) ? intent : 'buy';
   const intentLabel = validIntent === 'rent' ? 'Rent' : 'Sale';
 
-  // Find entity by slug or slug with -gurgaon suffix
+  const [localities, setLocalities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    getLocalitiesData().then((data) => {
+      if (!cancelled) {
+        setLocalities(data);
+        setIsLoading(false);
+      }
+    }).catch(() => {
+      if (!cancelled) {
+        setLocalities([]);
+        setIsLoading(false);
+      }
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   const entity = localities.find(
     (l) => l.slug === slug || l.slug === slug.replace(/-gurgaon$/i, '') + '-gurgaon'
   ) || localities.find(
@@ -65,10 +100,10 @@ const SocietyLanding = () => {
 
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
-  if (!entity) {
+  if (isLoading) {
     return (
       <>
-        <SEO title="Society Not Found | 360Ghar" noindex />
+        <SEO title={tSeo('societyLanding.notFoundTitle')} noindex />
         <OffCanvas />
         <MobileMenu />
         <main className="body-bg">
@@ -77,7 +112,36 @@ const SocietyLanding = () => {
             headerMenusClass="mx-auto"
             btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
             btnLink="/post-property"
-            btnText="Post Property"
+            btnText={t('common:header.postProperty')}
+            spanClass="icon-right text-gradient"
+            showContactNumber={false}
+          />
+          <section className="padding-y-60">
+            <div className="container container-two text-center">
+              <div className="spinner-border text-main" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </section>
+          <Footer />
+        </main>
+      </>
+    );
+  }
+
+  if (!entity) {
+    return (
+      <>
+        <SEO title={tSeo('societyLanding.notFoundTitle')} noindex />
+        <OffCanvas />
+        <MobileMenu />
+        <main className="body-bg">
+          <Header
+            headerClass="dark-header has-border"
+            headerMenusClass="mx-auto"
+            btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
+            btnLink="/post-property"
+            btnText={t('common:header.postProperty')}
             spanClass="icon-right text-gradient"
             showContactNumber={false}
           />
@@ -87,9 +151,9 @@ const SocietyLanding = () => {
               <p className="text-muted mb-4">
                 The society you are looking for does not exist or has been removed.
               </p>
-              <Link to="/localities" className="btn btn-main">
+              <I18nLink to="/localities" className="btn btn-main">
                 Browse All Localities
-              </Link>
+              </I18nLink>
             </div>
           </section>
           <Footer />
@@ -191,7 +255,7 @@ const SocietyLanding = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -208,12 +272,12 @@ const SocietyLanding = () => {
 
             {/* Property listings link buttons */}
             <div className="text-center d-flex flex-wrap justify-content-center gap-3">
-              <Link to={`/properties?${browseQueryBuy}`} className="btn btn-main">
+              <I18nLink to={`/properties?${browseQueryBuy}`} className="btn btn-main">
                 Browse for Sale
-              </Link>
-              <Link to={`/properties?${browseQueryRent}`} className="btn btn-outline-main">
+              </I18nLink>
+              <I18nLink to={`/properties?${browseQueryRent}`} className="btn btn-outline-main">
                 Browse for Rent
-              </Link>
+              </I18nLink>
             </div>
           </div>
         </section>
@@ -299,45 +363,45 @@ const SocietyLanding = () => {
             <h2 className="h5 mb-3">Explore More</h2>
             <div className="d-flex flex-wrap gap-2">
               {validIntent !== 'buy' && (
-                <Link
+                <I18nLink
                   to={`/locality/${canonicalSlug}/buy`}
                   className="btn btn-outline-main btn-sm rounded-pill"
                 >
                   Flats for Sale in {societyName}
-                </Link>
+                </I18nLink>
               )}
               {validIntent !== 'rent' && (
-                <Link
+                <I18nLink
                   to={`/locality/${canonicalSlug}/rent`}
                   className="btn btn-outline-main btn-sm rounded-pill"
                 >
                   Flats for Rent in {societyName}
-                </Link>
+                </I18nLink>
               )}
-              <Link
+              <I18nLink
                 to={`/${canonicalCitySlug}/buy/apartment`}
                 className="btn btn-outline-main btn-sm rounded-pill"
               >
                 Flats for Sale in {city}
-              </Link>
-              <Link
+              </I18nLink>
+              <I18nLink
                 to={`/${canonicalCitySlug}/rent/apartment`}
                 className="btn btn-outline-main btn-sm rounded-pill"
               >
                 Flats for Rent in {city}
-              </Link>
-              <Link
+              </I18nLink>
+              <I18nLink
                 to={`/locality/${canonicalSlug}-gurgaon`}
                 className="btn btn-outline-main btn-sm rounded-pill"
               >
                 {societyName} Locality Guide
-              </Link>
-              <Link
+              </I18nLink>
+              <I18nLink
                 to="/properties"
                 className="btn btn-outline-main btn-sm rounded-pill"
               >
                 All Properties
-              </Link>
+              </I18nLink>
             </div>
           </div>
         </section>

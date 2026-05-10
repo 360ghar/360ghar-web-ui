@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { useBlogStore } from '../../store/blogStore';
 import { blogService } from '../../services/blogService';
 
@@ -45,9 +45,9 @@ const SidebarRecentPost = () => {
                 return (
                     <div className="latest-blog" key={post.id || idx}>
                         <div className="latest-blog__thumb">
-                            <Link to={blogURL} onClick={handleBlogClick}>
+                            <I18nLink to={blogURL} onClick={handleBlogClick}>
                                 <LazyImage src={thumb} className="cover-img" alt={title} width={80} height={60} />
-                            </Link>
+                            </I18nLink>
                         </div>
                         <div className="latest-blog__content">
                             <span className="latest-blog__category font-12 flx-align gap-1">
@@ -55,7 +55,7 @@ const SidebarRecentPost = () => {
                                 {post?.categories?.[0]?.name || 'Blog'}
                             </span>
                             <h6 className="latest-blog__title">
-                                <Link to={blogURL} onClick={handleBlogClick}>{title}</Link>
+                                <I18nLink to={blogURL} onClick={handleBlogClick}>{title}</I18nLink>
                             </h6>
                         </div>
                     </div>

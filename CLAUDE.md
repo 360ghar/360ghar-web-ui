@@ -686,7 +686,7 @@ Located in `abstracts/_variable.scss`:
 ## API Integration
 
 ### Backend Configuration
-- **Development:** `http://localhost:8000/api/v1` (via Vite proxy)
+- **Development:** `http://localhost:3600/api/v1` (via Vite proxy)
 - **Production:** `https://api.360ghar.com`
 
 ### Vite Proxy (`vite.config.js`)
@@ -694,7 +694,7 @@ Located in `abstracts/_variable.scss`:
 server: {
   proxy: {
     '/api': {
-      target: 'http://localhost:8000',
+      target: 'http://localhost:3600',
       changeOrigin: true,
       rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
     },
@@ -790,6 +790,6 @@ Before upgrading any devDependency to a new major version:
 - **Name:** 360Ghar
 - **Location:** Gurugram, Haryana, India (122001)
 - **Email:** info@360ghar.com
-- **Phone:** 8178340031
+- **Phone:** 9999900876
 - **Website:** https://360ghar.com
 - **Social:** Facebook, Twitter, LinkedIn, Instagram

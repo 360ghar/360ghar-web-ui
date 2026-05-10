@@ -634,7 +634,7 @@ export const mapLocations = [
                     {
                         icon: <i className="fas fa-phone"></i>,
                         title: 'Phone Number',
-                        address: '8178340031'
+                        address: '9999900876'
                     },
                     {
                         icon: <i className="fas fa-envelope"></i>,

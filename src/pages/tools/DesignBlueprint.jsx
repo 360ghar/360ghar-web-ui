@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -46,15 +47,16 @@ const DESIGN_BLUEPRINT_FAQS = [
 
 const DesignBlueprint = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const { t } = useTranslation('tools');
 
   const faqStructuredData = generateFaqStructuredData(DESIGN_BLUEPRINT_FAQS);
 
   return (
     <>
       <SEO
-        title="Free 3D Floor Planner & Blueprint Designer India | 360Ghar"
-        description="Free online 3D floor planner and blueprint designer by 360Ghar. Draw 2D room layouts, add furniture and doors, then visualize your home in 3D. No signup required — works in your browser. Perfect for Indian homes and Vastu-compliant designs."
-        keywords="floor planner India, 3D home design tool, online blueprint designer, free floor plan creator, interior design software India, virtual home staging, 360ghar tools, 2D 3D floor planner"
+        title={t('designBlueprint.title')}
+        description={t('designBlueprint.description')}
+        keywords={t('designBlueprint.keywords')}
         canonical="/design-blueprint"
         image={siteMetadata.defaultOgImage}
         type="website"
@@ -107,14 +109,14 @@ const DesignBlueprint = () => {
           <div className="design-blueprint-frame">
             {!isLoaded && (
               <div className="design-blueprint-loading" role="status" aria-live="polite">
-                Loading blueprint designer…
+                {t('designBlueprint.loading')}
               </div>
             )}
 
             <iframe
               className="design-blueprint-iframe"
               src={DESIGNER_SRC}
-              title="360Ghar Blueprint Designer"
+              title={t('designBlueprint.iframeTitle')}
               onLoad={() => setIsLoaded(true)}
               loading="lazy"
               allow="fullscreen; clipboard-read; clipboard-write"

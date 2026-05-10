@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -7,41 +8,43 @@ import LoginRegister from '../../components/forms/LoginRegister';
 import SEO from '../../common/SEO';
 
 const Register = () => {
+    const { t } = useTranslation('account');
+
     return (
         <>
-        <SEO title="Register | 360Ghar" description="Create your 360Ghar account." canonical="/register" noindex />
+        <SEO title={t('register.title')} description={t('register.description')} canonical="/register" noindex />
         <OffCanvas />
         <MobileMenu />
 
         <main className="body-bg">
-            
+
             {/* Header */}
             <Header
                 headerClass="dark-header has-border"
                 headerMenusClass="mx-auto"
                 btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                 btnLink="/post-property"
-                btnText="Post Property"
+                btnText={t('common.postProperty')}
                 spanClass="icon-right text-gradient"
                 showContactNumber={false}
             />
 
-    
+
             {/* Register Section */}
             <LoginRegister
-                titleText="Sign up"
-                firstNameCol="col-sm-6 col-xs-6" 
+                titleText={t('register.heading')}
+                firstNameCol="col-sm-6 col-xs-6"
                 showFirstName={true}
-                lastNameCol="col-sm-6 col-xs-6" 
+                lastNameCol="col-sm-6 col-xs-6"
                 showLastName={true}
-                passwordCol="col-sm-6 col-xs-6" 
+                passwordCol="col-sm-6 col-xs-6"
                 showConfirm={true}
-                btnText="Register"
+                btnText={t('register.btnText')}
                 showForgotRemember={false}
                 showTermCondition={true}
-                haveAccountText = "Already Have An Account? "
-                haveAccountLinkText = "Login"
-                haveAccountLink = "/login"
+                haveAccountText={t('register.haveAccountText')}
+                haveAccountLinkText={t('register.haveAccountLinkText')}
+                haveAccountLink="/login"
             />
 
             {/* Cta */}
@@ -50,7 +53,7 @@ const Register = () => {
             {/* Footer */}
             <Footer/>
 
-        </main>   
+        </main>
         </>
     );
 };

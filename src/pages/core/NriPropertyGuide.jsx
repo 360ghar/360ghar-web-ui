@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -10,9 +11,11 @@ import {
   generateFaqStructuredData,
   generateHowToStructuredData,
 } from '../../seo/structuredData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const NriPropertyGuide = () => {
+  const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const breadcrumbs = [
@@ -100,8 +103,8 @@ const NriPropertyGuide = () => {
   return (
     <>
       <SEO
-        title="NRI Buy Property Gurgaon | Legal Guide & VR Tours | 360 Ghar"
-        description="Complete guide for NRIs buying property in Gurgaon. Legal requirements, FEMA compliance, Power of Attorney, TDS rules, and 360° virtual tours for remote property viewing."
+        title={tSeo('nriPropertyGuide.title')}
+        description={tSeo('nriPropertyGuide.description')}
         keywords="NRI buy property Gurgaon, NRI property guide, FEMA NRI property, Power of Attorney NRI, TDS NRI property sale, NRI home loan India, virtual tour property Gurgaon, NRI real estate investment"
         canonical="/nri-property-guide"
         structuredData={structuredData}
@@ -116,7 +119,7 @@ const NriPropertyGuide = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -126,7 +129,7 @@ const NriPropertyGuide = () => {
           <div className="container container-two">
             <nav aria-label="breadcrumb" className="mb-4">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="/">Home</a></li>
+                <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
                 <li className="breadcrumb-item active" aria-current="page">NRI Property Guide</li>
               </ol>
             </nav>
@@ -359,12 +362,12 @@ const NriPropertyGuide = () => {
 
                   {/* CTA */}
                   <div className="text-center">
-                    <Link to="/properties" className="btn btn-main me-3">
+                    <I18nLink to="/properties" className="btn btn-main me-3">
                       Browse Properties
-                    </Link>
-                    <Link to="/contact" className="btn btn-outline-main">
+                    </I18nLink>
+                    <I18nLink to="/contact" className="btn btn-outline-main">
                       Contact Us
-                    </Link>
+                    </I18nLink>
                   </div>
                 </article>
               </div>

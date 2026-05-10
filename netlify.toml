@@ -5,6 +5,8 @@
 [build.environment]
   PUPPETEER_CACHE_DIR = "./node_modules/.cache/puppeteer"
   NODE_VERSION = "20"
+  VITE_API_SERVER = "https://api.360ghar.com"
+  VITE_API_BASE_URL = "https://api.360ghar.com/api/v1"
 
 # ── Server-side redirects (processed top-to-bottom, BEFORE the SPA catch-all) ──
 
@@ -26,6 +28,28 @@
 [[redirects]]
   from = "/gurugram/*"
   to = "/gurgaon/:splat"
+  status = 301
+
+# City slug normalization for Hindi: /hi/gurugram/ → /hi/gurgaon/
+[[redirects]]
+  from = "/hi/gurugram/*"
+  to = "/hi/gurgaon/:splat"
+  status = 301
+
+# Hindi apartments → flats redirects
+[[redirects]]
+  from = "/hi/:city/buy/apartments"
+  to = "/hi/:city/buy/flats"
+  status = 301
+
+[[redirects]]
+  from = "/hi/:city/rent/apartments"
+  to = "/hi/:city/rent/flats"
+  status = 301
+
+[[redirects]]
+  from = "/hi/:city/pg/apartments"
+  to = "/hi/:city/pg/flats"
   status = 301
 
 # Deduplicate flats/apartments: apartments → flats for all city/intent combos
@@ -104,7 +128,7 @@
     Cache-Control = "public, max-age=0, must-revalidate"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
+    X-XSS-Protection = "0"
 
 # Root index.html — with Link headers for agent discovery (RFC 8288)
 [[headers]]
@@ -113,7 +137,7 @@
     Cache-Control = "public, max-age=0, must-revalidate"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
-    Link = '''</.well-known/api-catalog>; rel="api-catalog", </for-ai>; rel="service-doc", </.well-known/mcp/server-card.json>; rel="mcp-server", </.well-known/agent-skills/index.json>; rel="agent-skills", </llms.txt>; rel="llms-txt", </.well-known/openid-configuration>; rel="openid-configuration"'''
+    Link = '''</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </for-ai>; rel="service-doc"; type="text/html", </data/llm-feed.json>; rel="service-meta"; type="application/json", </.well-known/mcp/server-card.json>; rel="mcp-server", </.well-known/agent-skills/index.json>; rel="agent-skills", </llms.txt>; rel="llms-txt", </.well-known/openid-configuration>; rel="openid-configuration"'''
 
 # ── .well-known agent discovery files ──────────────────────────────────────
 

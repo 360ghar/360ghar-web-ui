@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { usePropertyStore } from '../../store/propertyStore';
 import PropertyItem from '../property/PropertyItem';
 
 const AccountFavoritePropertyTab = () => {
   const { likedProperties, fetchLikedProperties, isLoading, error } = usePropertyStore();
+  const { t } = useTranslation('account');
 
   useEffect(() => {
     fetchLikedProperties();
@@ -14,7 +16,7 @@ const AccountFavoritePropertyTab = () => {
       <div className="overflow-auto">
         <div className="card common-card">
           <div className="card-body">
-            <h5 className="mb-3">Liked Properties</h5>
+            <h5 className="mb-3">{t('tabs.favorites.title')}</h5>
             <div className="row gy-4">
               {isLoading ? (
                 Array.from({ length: 6 }).map((_, idx) => (
@@ -31,7 +33,7 @@ const AccountFavoritePropertyTab = () => {
               ) : error ? (
                 <div className="col-12"><div className="text-danger">{error}</div></div>
               ) : likedProperties.length === 0 ? (
-                <div className="col-12"><div>No liked properties yet.</div></div>
+                <div className="col-12"><div>{t('tabs.favorites.noLiked')}</div></div>
               ) : (
                 likedProperties.map((property) => (
                   <div className="col-lg-4 col-sm-6" key={property.id}>

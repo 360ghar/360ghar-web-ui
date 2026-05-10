@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import LazyImage from '../../common/ui/LazyImage';
 const PortfolioItem = ({ portfolio }) => {
@@ -10,14 +10,14 @@ const PortfolioItem = ({ portfolio }) => {
                 <LazyImage src={thumb} alt={title || 'Portfolio item'} className="cover-img" width={400} height={300}/>
             </div>
             <div className="portfolio-item__content">
-                <Link to="/portfolio-details" className="btn btn-icon"> 
+                <I18nLink to="/portfolio-details" className="btn btn-icon"> 
                     <span className="text-gradient line-height-0">
                         {btnIcon}
                     </span> 
-                </Link>
+                </I18nLink>
                 <div className="portfolio-item__inner">
                     <h6 className="portfolio-item__title">
-                        <Link to="/portfolio-details" className="link">{title}</Link>
+                        <I18nLink to="/portfolio-details" className="link">{title}</I18nLink>
                     </h6>
                     <p className="portfolio-item__desc">{desc}</p>
                 </div>

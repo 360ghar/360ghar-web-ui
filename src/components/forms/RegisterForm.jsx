@@ -1,30 +1,33 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store';
-import { useNavigate } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
+import i18n from '../../i18n';
 
 const RegisterSchema = Yup.object().shape({
   full_name: Yup.string()
-    .min(2, 'Name is too short')
-    .max(50, 'Name is too long')
-    .required('Name is required'),
+    .min(2, () => i18n.t('forms:name.tooShortMin'))
+    .max(50, () => i18n.t('forms:name.tooLong'))
+    .required(() => i18n.t('forms:name.required')),
   email: Yup.string()
-    .email('Invalid email')
-    .required('Email is required'),
+    .email(() => i18n.t('forms:email.invalidShort'))
+    .required(() => i18n.t('forms:email.required')),
   phone: Yup.string()
-    .matches(/^\+?[0-9]{10,15}$/, 'Phone number must be valid')
-    .required('Phone number is required'),
+    .matches(/^\+?[0-9]{10,15}$/, () => i18n.t('forms:phone.mustBeValid'))
+    .required(() => i18n.t('forms:phone.genericRequired')),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .min(6, () => i18n.t('forms:password.minLength6'))
+    .required(() => i18n.t('forms:password.required')),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm password is required'),
+    .oneOf([Yup.ref('password'), null], () => i18n.t('forms:password.mustMatch'))
+    .required(() => i18n.t('forms:password.confirmRequired')),
 });
 
 const RegisterForm = ({ redirectTo = '/' }) => {
   const { register, isLoading, error, clearError } = useAuthStore();
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
+  const { t } = useTranslation('forms');
 
   const handleSubmit = async (values, { setSubmitting }) => {
     clearError();
@@ -60,56 +63,56 @@ const RegisterForm = ({ redirectTo = '/' }) => {
         {({ isSubmitting }) => (
           <Form>
             <div className="form-group mb-4">
-              <label htmlFor="full_name">Full Name</label>
+              <label htmlFor="full_name">{t('name.label')}</label>
               <Field
                 type="text"
                 name="full_name"
                 className="form-control"
-                placeholder="Your Full Name"
+                placeholder={t('name.placeholderYourName')}
               />
               <ErrorMessage name="full_name" component="div" className="text-danger" />
             </div>
 
             <div className="form-group mb-4">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{t('email.label')}</label>
               <Field
                 type="email"
                 name="email"
                 className="form-control"
-                placeholder="Your Email"
+                placeholder={t('email.placeholderYourEmail')}
               />
               <ErrorMessage name="email" component="div" className="text-danger" />
             </div>
 
             <div className="form-group mb-4">
-              <label htmlFor="phone">Phone Number</label>
+              <label htmlFor="phone">{t('phone.labelPhoneNumber')}</label>
               <Field
                 type="text"
                 name="phone"
                 className="form-control"
-                placeholder="Your Phone Number"
+                placeholder={t('phone.labelPhoneNumber')}
               />
               <ErrorMessage name="phone" component="div" className="text-danger" />
             </div>
 
             <div className="form-group mb-4">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t('password.label')}</label>
               <Field
                 type="password"
                 name="password"
                 className="form-control"
-                placeholder="Your Password"
+                placeholder={t('password.placeholderYour')}
               />
               <ErrorMessage name="password" component="div" className="text-danger" />
             </div>
 
             <div className="form-group mb-4">
-              <label htmlFor="confirmPassword">Confirm Password</label>
+              <label htmlFor="confirmPassword">{t('password.labelConfirm')}</label>
               <Field
                 type="password"
                 name="confirmPassword"
                 className="form-control"
-                placeholder="Confirm Your Password"
+                placeholder={t('password.placeholderConfirmYour')}
               />
               <ErrorMessage name="confirmPassword" component="div" className="text-danger" />
             </div>
@@ -121,7 +124,7 @@ const RegisterForm = ({ redirectTo = '/' }) => {
               className="btn btn-primary w-100"
               disabled={isSubmitting || isLoading}
             >
-              {isLoading ? 'Registering...' : 'Register'}
+              {isLoading ? t('registering') : t('registerBtn')}
             </button>
           </Form>
         )}
@@ -130,4 +133,4 @@ const RegisterForm = ({ redirectTo = '/' }) => {
   );
 };
 
-export default RegisterForm; 
+export default RegisterForm;

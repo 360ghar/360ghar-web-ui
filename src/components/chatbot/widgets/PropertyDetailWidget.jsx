@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../../i18n/I18nLink';
 
 function formatPrice(price) {
   if (!price) return 'Price on request';
@@ -29,9 +29,9 @@ export default function PropertyDetailWidget({ data }) {
           {purpose && <span className="chatbot-widget__spec chatbot-widget__spec--purpose">{purpose === 'rent' ? 'For Rent' : 'For Sale'}</span>}
         </div>
         {id && (
-          <Link to={`/property/${id}`} className="chatbot-widget__cta" target="_blank" rel="noopener noreferrer">
+          <I18nLink to={`/property/${id}`} className="chatbot-widget__cta" target="_blank" rel="noopener noreferrer">
             View Full Details →
-          </Link>
+          </I18nLink>
         )}
       </div>
     </div>

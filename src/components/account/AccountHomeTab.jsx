@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore, useVisitStore } from '../../store';
 
 const AccountHomeTab = () => {
   const { user } = useAuthStore();
   const { upcomingVisits, getUpcomingVisits } = useVisitStore();
+  const { t } = useTranslation('account');
 
   const profileCompleteness = [
     Boolean(user?.full_name),
@@ -21,15 +23,15 @@ const AccountHomeTab = () => {
     <>
       <div className="account-home-grid">
         <div className="account-alert account-alert--welcome">
-          Hello <strong className="text-heading fw-500 text-poppins">{user?.full_name || 'Guest'}</strong>
-          <span className="d-block mt-1 text-muted">Manage your profile, saved listings, and visits from one place.</span>
+          {t('tabs.home.hello')} <strong className="text-heading fw-500 text-poppins">{user?.full_name || t('tabs.home.guest')}</strong>
+          <span className="d-block mt-1 text-muted">{t('tabs.home.manageDesc')}</span>
         </div>
         <div className="account-alert account-alert--metric">
-          <span className="account-alert__label">Upcoming visits</span>
+          <span className="account-alert__label">{t('tabs.home.upcomingVisits')}</span>
           <strong className="account-alert__value">{upcomingVisits?.length || 0}</strong>
         </div>
         <div className="account-alert account-alert--metric">
-          <span className="account-alert__label">Profile completion</span>
+          <span className="account-alert__label">{t('tabs.home.profileCompletion')}</span>
           <strong className="account-alert__value">{completionPercent}%</strong>
         </div>
       </div>

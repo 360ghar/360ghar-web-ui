@@ -44952,6 +44952,30 @@
     ]
   },
   {
+    "slug": "projects-in-sector-102a",
+    "name": "projects in sector 102a",
+    "citySlug": "gurgaon",
+    "landingPaths": [
+      "/gurgaon/buy/flats",
+      "/gurgaon/buy/independent-house",
+      "/gurgaon/buy/builder-floor",
+      "/gurgaon/buy/villa",
+      "/gurgaon/buy/plots",
+      "/gurgaon/rent/flats",
+      "/gurgaon/rent/independent-house",
+      "/gurgaon/rent/builder-floor",
+      "/gurgaon/rent/villa",
+      "/gurgaon/rent/plots",
+      "/gurgaon/pg/flats",
+      "/gurgaon/buy/flats/1-bhk",
+      "/gurgaon/buy/flats/2-bhk",
+      "/gurgaon/buy/flats/3-bhk",
+      "/gurgaon/rent/flats/1-bhk",
+      "/gurgaon/rent/flats/2-bhk",
+      "/gurgaon/rent/flats/3-bhk"
+    ]
+  },
+  {
     "slug": "projects-in-sector-103",
     "name": "projects in sector 103",
     "citySlug": "gurgaon",

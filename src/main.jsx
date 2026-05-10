@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.scss'
+import './i18n'
 import { HelmetProvider } from 'react-helmet-async'
 import { reportWebVitals } from './seo/reportWebVitals'
 import LazyToastProvider from './common/LazyToast.jsx'

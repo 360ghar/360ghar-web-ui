@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import LogoWhite from '../LogoWhite';
 import { offCanvasInfos } from '../../data/CommonData';
 import SearchBox from '../search/SearchBox';
@@ -7,7 +8,8 @@ import { useUIStore } from '../../store';
 
 const OffCanvas = () => {
 
-    const { offCanvas, handleOffCanvasClose } = useUIStore(); 
+    const { offCanvas, handleOffCanvasClose } = useUIStore();
+    const { t } = useTranslation('common'); 
     
     return (
         <>
@@ -25,28 +27,28 @@ const OffCanvas = () => {
                 <SearchBox/>
 
                 <ul className="address-list mt-5">
-                    {offCanvasInfos.map((offCanvasInfo, index) => (
-                        <li className="address-list__item flx-align flex-nowrap" key={index}>
-                            <span className="address-list__icon"> { offCanvasInfo.icon } </span>
-                            <div className="address-list__content">
-                                {Array.isArray(offCanvasInfo.link) ? (
-                                    offCanvasInfo.link.map((link, linkIndex) => (
-                                        <Link to={`${link}${offCanvasInfo.text[linkIndex]}`} className="address-list__text" key={linkIndex}>
-                                            {offCanvasInfo.text[linkIndex]}
-                                        </Link>
-                                    ))
-                                ) : (
-                                    offCanvasInfo.link ? (
-                                        <Link to={`${offCanvasInfo.link}${offCanvasInfo.text}`} className="address-list__text">
-                                            {offCanvasInfo.text}
-                                        </Link>
+                    {offCanvasInfos.map((offCanvasInfo, index) => {
+                        const text = t(offCanvasInfo.textKey);
+                        const isExternalLink = offCanvasInfo.link && (offCanvasInfo.link.startsWith('mailto:') || offCanvasInfo.link.startsWith('tel:') || offCanvasInfo.link.startsWith('http://') || offCanvasInfo.link.startsWith('https://'));
+                        return (
+                            <li className="address-list__item flx-align flex-nowrap" key={index}>
+                                <span className="address-list__icon"> { offCanvasInfo.icon } </span>
+                                <div className="address-list__content">
+                                    {isExternalLink ? (
+                                        <a href={`${offCanvasInfo.link}${text}`} className="address-list__text">
+                                            {text}
+                                        </a>
+                                    ) : offCanvasInfo.link ? (
+                                        <I18nLink to={`${offCanvasInfo.link}${text}`} className="address-list__text">
+                                            {text}
+                                        </I18nLink>
                                     ) : (
-                                        <p className="address-list__text">{offCanvasInfo.text}</p>
-                                    )
-                                )}
-                            </div>
-                        </li>
-                    ))}
+                                        <p className="address-list__text">{text}</p>
+                                    )}
+                                </div>
+                            </li>
+                        );
+                    })}
                 </ul>
 
                 <div className="google-map mt-5">

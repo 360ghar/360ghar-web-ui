@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -10,9 +11,11 @@ import {
   generateFaqStructuredData,
   generateHowToStructuredData,
 } from '../../seo/structuredData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const ListPropertyFree = () => {
+  const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const breadcrumbs = [
@@ -95,8 +98,8 @@ const ListPropertyFree = () => {
   return (
     <>
       <SEO
-        title="List Property Online for Free | No Spam Calls | 360 Ghar"
-        description="List your property for free on 360Ghar — no spam calls, no upfront fees. Physically verified listings with 360° virtual tours. Standard brokerage only when deal closes."
+        title={tSeo('listPropertyFree.title')}
+        description={tSeo('listPropertyFree.description')}
         keywords="list property free, post property free, sell property online, no spam calls property, 360Ghar vs MagicBricks, free property listing Gurgaon, virtual tour property listing"
         canonical="/list-property-free"
         structuredData={structuredData}
@@ -111,7 +114,7 @@ const ListPropertyFree = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -121,7 +124,7 @@ const ListPropertyFree = () => {
           <div className="container container-two">
             <nav aria-label="breadcrumb" className="mb-4">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="/">Home</a></li>
+                <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
                 <li className="breadcrumb-item active" aria-current="page">List Property Free</li>
               </ol>
             </nav>
@@ -278,12 +281,12 @@ const ListPropertyFree = () => {
 
                   {/* CTA */}
                   <div className="text-center">
-                    <Link to="/post-property" className="btn btn-main me-3">
+                    <I18nLink to="/post-property" className="btn btn-main me-3">
                       Post Property Free
-                    </Link>
-                    <Link to="/properties" className="btn btn-outline-main">
+                    </I18nLink>
+                    <I18nLink to="/properties" className="btn btn-outline-main">
                       Browse Properties
-                    </Link>
+                    </I18nLink>
                   </div>
                 </article>
               </div>

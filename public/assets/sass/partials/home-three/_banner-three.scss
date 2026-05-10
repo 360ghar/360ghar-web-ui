@@ -16,6 +16,14 @@
         max-width: 14%;
         z-index: -1;
     }
+    // Hero-specific compact vertical padding: keep the search bar near the fold
+    // without shrinking the global .padding-y-120 utility used across major sections.
+    &__inner.padding-y-120 {
+        @media (min-width: 992px) {
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+    }
 
     .banner-thumb {
         @media (min-width: 992px) {

@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -12,41 +13,28 @@ import FloorPlanUpload from '../../components/vastu/FloorPlanUpload';
 import DirectionSelector from '../../components/vastu/DirectionSelector';
 import VastuLoadingState from '../../components/vastu/VastuLoadingState';
 import VastuReport from '../../components/vastu/VastuReport';
-import { ToolFaq, ToolRelatedLinks } from '../../components/tools/ToolContentSections';
 import { analyzeFloorPlan } from '../../services/vastuService';
+import { I18nLink } from '../../i18n/I18nLink';
 import './VastuChecker.scss';
 
-const VASTU_FAQS = [
-  {
-    question: 'How to check Vastu of a flat online for free?',
-    answer: 'Upload your floor plan image on 360Ghar\'s free Vastu Checker, select the North direction, and get an instant AI-powered analysis with a score (0-100), room-by-room evaluation, and practical remedies. No registration required. Supports JPEG, PNG, and WebP images up to 5MB.',
-  },
-  {
-    question: 'What is a good Vastu score for a flat?',
-    answer: 'A Vastu score above 70 is considered good, above 85 is excellent. Scores below 50 indicate significant Vastu concerns that may need remedies. However, perfect Vastu compliance (100) is rare in modern apartments. Focus on the main entrance, kitchen, master bedroom, and Brahmasthan (center) for maximum impact.',
-  },
-  {
-    question: 'Which direction should the main entrance face as per Vastu?',
-    answer: 'North and East-facing entrances are considered most auspicious in Vastu Shastra. North brings wealth and career growth. East brings health and enlightenment. South-facing entrances can be acceptable with proper remedies. West-facing is less preferred but manageable. Avoid entrances in the South-West corner.',
-  },
-  {
-    question: 'Can Vastu defects be fixed without renovation?',
-    answer: 'Yes, many Vastu defects can be remedied without structural changes: use mirrors to redirect energy, place specific colors and elements in affected zones, use Vastu pyramids and crystals, keep the Brahmasthan (center) clutter-free, add plants in the North/East, and use salt water remedies for negative zones. Our AI analysis provides specific, practical remedies for each defect found.',
-  },
-  {
-    question: 'Is Vastu Shastra scientifically proven?',
-    answer: 'Vastu Shastra combines traditional spatial planning principles with natural element positioning. While not empirically validated by modern science, it incorporates principles of natural light, ventilation, and ergonomic space planning. Many homeowners report improved well-being after implementing Vastu guidelines. Our AI tool provides an objective score-based analysis.',
-  },
-];
-
-const HOW_TO_STEPS = [
-  { name: 'Upload Your Floor Plan', text: 'Take a photo or screenshot of your floor plan and upload it. Ensure the image is clear with visible room labels. Supported formats: JPEG, PNG, WebP (max 5MB).' },
-  { name: 'Set the North Direction', text: 'Indicate which side of the image faces North using our direction selector. This is critical for accurate zone analysis — Vastu recommendations depend on the cardinal orientation of each room.' },
-  { name: 'Add Notes (Optional)', text: 'Mention specific concerns like "health issues" or "financial growth" so the AI can prioritize relevant remedies.' },
-  { name: 'Get Your Vastu Report', text: 'In 30-60 seconds, receive a comprehensive report with: overall Vastu score (0-100), room-by-room analysis, identified defects, and practical remedies with Vastu products and colors.' },
-];
-
 const VastuChecker = () => {
+    const { t } = useTranslation('tools');
+
+    const VASTU_CHECKER_FAQS = [
+        { question: t('vastu.faqs.q1.question'), answer: t('vastu.faqs.q1.answer') },
+        { question: t('vastu.faqs.q2.question'), answer: t('vastu.faqs.q2.answer') },
+        { question: t('vastu.faqs.q3.question'), answer: t('vastu.faqs.q3.answer') },
+        { question: t('vastu.faqs.q4.question'), answer: t('vastu.faqs.q4.answer') },
+        { question: t('vastu.faqs.q5.question'), answer: t('vastu.faqs.q5.answer') },
+    ];
+
+    const VASTU_CHECKER_HOW_TO_STEPS = [
+        { name: t('vastu.howToSteps.step1.name'), text: t('vastu.howToSteps.step1.text') },
+        { name: t('vastu.howToSteps.step2.name'), text: t('vastu.howToSteps.step2.text') },
+        { name: t('vastu.howToSteps.step3.name'), text: t('vastu.howToSteps.step3.text') },
+        { name: t('vastu.howToSteps.step4.name'), text: t('vastu.howToSteps.step4.text') },
+    ];
+
     // Form state
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -71,7 +59,7 @@ const VastuChecker = () => {
         e.preventDefault();
 
         if (!selectedFile) {
-            setErrorMessage('Please upload a floor plan image');
+            setErrorMessage(t('vastu.errorNoFile'));
             setErrorType('validation');
             setAppState('error');
             return;
@@ -103,27 +91,27 @@ const VastuChecker = () => {
             if (stepTimer) clearTimeout(stepTimer);
 
             // Determine error type and message
-            let message = 'Analysis failed. Please try again.';
+            let message = t('vastu.errorDefault');
             let type = 'general';
 
             if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
                 type = 'timeout';
-                message = 'The analysis is taking longer than expected. This may be due to high demand or a complex floor plan.';
+                message = t('vastu.errorTimeoutMsg');
             } else if (error.code === 'ERR_NETWORK' || !navigator.onLine) {
                 type = 'network';
-                message = 'Unable to connect to the server. Please check your internet connection and try again.';
+                message = t('vastu.errorNetworkMsg');
             } else if (error.response?.status === 413) {
                 type = 'validation';
-                message = 'The image file is too large. Please upload an image smaller than 5MB.';
+                message = t('vastu.errorFileSize');
             } else if (error.response?.status === 415) {
                 type = 'validation';
-                message = 'Unsupported image format. Please upload a JPEG, PNG, or WebP image.';
+                message = t('vastu.errorFileFormat');
             } else if (error.response?.status === 422) {
                 type = 'validation';
-                message = error.response?.data?.detail || 'Invalid request. Please check your input and try again.';
+                message = error.response?.data?.detail || t('vastu.errorDefault');
             } else if (error.response?.status >= 500) {
                 type = 'general';
-                message = 'Our servers are experiencing issues. Please try again in a few minutes.';
+                message = t('vastu.errorServerMsg');
             } else if (error.response?.data?.detail) {
                 message = error.response.data.detail;
             } else if (error.message) {
@@ -134,7 +122,7 @@ const VastuChecker = () => {
             setErrorType(type);
             setAppState('error');
         }
-    }, [selectedFile, northDirection, notes]);
+    }, [selectedFile, northDirection, notes, t]);
 
     const handleReset = useCallback(() => {
         if (previewUrl) {
@@ -148,7 +136,17 @@ const VastuChecker = () => {
         setAppState('input');
         setErrorMessage('');
         setErrorType('general');
-    }, [previewUrl]);
+    }, [
+        previewUrl,
+        setAnalysisResult,
+        setAppState,
+        setErrorMessage,
+        setErrorType,
+        setNorthDirection,
+        setNotes,
+        setPreviewUrl,
+        setSelectedFile,
+    ]);
 
     const handleRetry = useCallback(() => {
         setAppState('input');
@@ -159,26 +157,26 @@ const VastuChecker = () => {
     return (
         <>
             <SEO
-                title="Free AI Vastu Checker 2026 | Upload Floor Plan & Get Instant Score | 360Ghar"
-                description="Check Vastu of your flat or house online for free. Upload your floor plan and get an instant AI-powered Vastu score (0-100), room-by-room analysis, and practical remedies. No registration required. Trusted by 15,000+ homeowners."
-                keywords="vastu checker free, ai vastu check online, floor plan vastu analysis, vastu shastra checker, vastu score calculator, vastu for flat online, vastu remedies, check vastu of house free, 360ghar vastu"
+                title={t('vastu.title')}
+                description={t('vastu.description')}
+                keywords={t('vastu.keywords')}
                 canonical="/vastu-checker"
                 image={siteMetadata.defaultOgImage}
                 type="website"
-                structuredData={[
-                    generateToolSchema(toolSchemas.vastuChecker),
-                    generateBreadcrumbStructuredData([
-                        { name: 'Home', url: 'https://360ghar.com/' },
-                        { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
-                        { name: toolSchemas.vastuChecker.name, url: 'https://360ghar.com/vastu-checker' }
-                    ]),
-                    generateFaqStructuredData(VASTU_FAQS),
-                    generateHowToStructuredData({
-                      name: 'How to Check Vastu of Your Floor Plan Online',
-                      description: 'Step-by-step guide to get an AI-powered Vastu analysis for your home.',
-                      steps: HOW_TO_STEPS,
-                    }),
-                ]}
+                 structuredData={[
+                     generateToolSchema(toolSchemas.vastuChecker),
+                     generateBreadcrumbStructuredData([
+                         { name: 'Home', url: 'https://360ghar.com/' },
+                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: toolSchemas.vastuChecker.name, url: 'https://360ghar.com/vastu-checker' }
+                     ]),
+                     generateFaqStructuredData(VASTU_CHECKER_FAQS),
+                     generateHowToStructuredData({
+                         name: 'How to Check Vastu for Your Home',
+                         description: 'Analyze your floor plan for Vastu compliance step by step',
+                         steps: VASTU_CHECKER_HOW_TO_STEPS,
+                     }),
+                 ]}
             />
 
             <OffCanvas />
@@ -197,11 +195,10 @@ const VastuChecker = () => {
                                     <span className="vastu-icon-wrapper">
                                         <i className="fas fa-compass text-main"></i>
                                     </span>
-                                    Free AI Vastu Checker 2026 — Upload Floor Plan & Get Score
+                                    {t('vastu.heroTitle')}
                                 </h1>
                                 <p className="section-desc">
-                                    Upload your floor plan and receive a comprehensive Vastu Shastra analysis
-                                    with personalized recommendations and practical remedies.
+                                    {t('vastu.heroDesc')}
                                 </p>
                             </div>
                         )}
@@ -228,19 +225,19 @@ const VastuChecker = () => {
                                                 <div className="notes-input mt-4">
                                                     <label className="form-label">
                                                         <i className="fas fa-sticky-note me-2"></i>
-                                                        Additional Notes
-                                                        <span className="text-muted ms-2">(optional)</span>
+                                                        {t('vastu.additionalNotes')}
+                                                        <span className="text-muted ms-2">{t('vastu.optional')}</span>
                                                     </label>
                                                     <textarea
                                                         className="form-control"
                                                         rows={4}
                                                         value={notes}
                                                         onChange={(e) => setNotes(e.target.value)}
-                                                        placeholder="Any specific concerns about your property? E.g., 'Planning kitchen renovation', 'Health issues in family', 'Want to improve prosperity'..."
+                                                        placeholder={t('vastu.notesPlaceholder')}
                                                         maxLength={1000}
                                                     />
                                                     <small className="text-muted d-block text-end mt-1">
-                                                        {notes.length}/1000 characters
+                                                        {t('vastu.charactersCount', { count: notes.length })}
                                                     </small>
                                                 </div>
                                             </div>
@@ -254,7 +251,7 @@ const VastuChecker = () => {
                                             disabled={!selectedFile}
                                         >
                                             <i className="fas fa-magic me-2"></i>
-                                            Analyze Vastu
+                                            {t('vastu.analyzeVastu')}
                                         </button>
                                     </div>
                                 </form>
@@ -281,10 +278,10 @@ const VastuChecker = () => {
                                     )}
                                 </div>
                                 <h3 className="mb-3">
-                                    {errorType === 'network' ? 'Connection Error' :
-                                     errorType === 'timeout' ? 'Request Timeout' :
-                                     errorType === 'validation' ? 'Invalid Input' :
-                                     'Analysis Failed'}
+                                    {errorType === 'network' ? t('vastu.errorConnection') :
+                                     errorType === 'timeout' ? t('vastu.errorTimeout') :
+                                     errorType === 'validation' ? t('vastu.errorValidation') :
+                                     t('vastu.errorGeneral')}
                                 </h3>
                                 <p className="text-muted mb-4">{errorMessage}</p>
 
@@ -292,35 +289,35 @@ const VastuChecker = () => {
                                 <div className="error-suggestions bg-light p-3 rounded-3 mb-4 text-start mx-auto" style={{ maxWidth: '500px' }}>
                                     <h6 className="mb-2">
                                         <i className="fas fa-lightbulb text-warning me-2"></i>
-                                        Suggestions
+                                        {t('vastu.suggestions')}
                                     </h6>
                                     <ul className="mb-0 small text-muted">
                                         {errorType === 'network' && (
                                             <>
-                                                <li>Check your internet connection</li>
-                                                <li>Try refreshing the page</li>
-                                                <li>Disable any VPN or proxy that might be blocking the connection</li>
+                                                <li>{t('vastu.suggestionNetwork1')}</li>
+                                                <li>{t('vastu.suggestionNetwork2')}</li>
+                                                <li>{t('vastu.suggestionNetwork3')}</li>
                                             </>
                                         )}
                                         {errorType === 'timeout' && (
                                             <>
-                                                <li>Try uploading a smaller or simpler floor plan image</li>
-                                                <li>Ensure the image is clear and well-lit</li>
-                                                <li>Try again in a few minutes if the server is busy</li>
+                                                <li>{t('vastu.suggestionTimeout1')}</li>
+                                                <li>{t('vastu.suggestionTimeout2')}</li>
+                                                <li>{t('vastu.suggestionTimeout3')}</li>
                                             </>
                                         )}
                                         {errorType === 'validation' && (
                                             <>
-                                                <li>Use JPEG, PNG, or WebP image format</li>
-                                                <li>Keep the file size under 5MB</li>
-                                                <li>Ensure the image shows a clear 2D floor plan</li>
+                                                <li>{t('vastu.suggestionValidation1')}</li>
+                                                <li>{t('vastu.suggestionValidation2')}</li>
+                                                <li>{t('vastu.suggestionValidation3')}</li>
                                             </>
                                         )}
                                         {errorType === 'general' && (
                                             <>
-                                                <li>Ensure your floor plan image is clear and readable</li>
-                                                <li>Try uploading a different floor plan image</li>
-                                                <li>If the problem persists, contact support</li>
+                                                <li>{t('vastu.suggestionGeneral1')}</li>
+                                                <li>{t('vastu.suggestionGeneral2')}</li>
+                                                <li>{t('vastu.suggestionGeneral3')}</li>
                                             </>
                                         )}
                                     </ul>
@@ -329,12 +326,12 @@ const VastuChecker = () => {
                                 <div className="d-flex gap-3 justify-content-center flex-wrap">
                                     <button onClick={handleRetry} className="btn btn-main">
                                         <i className="fas fa-redo me-2"></i>
-                                        Try Again
+                                        {t('vastu.tryAgain')}
                                     </button>
                                     {errorType === 'validation' && (
                                         <button onClick={handleReset} className="btn btn-outline-main">
                                             <i className="fas fa-upload me-2"></i>
-                                            Upload Different Image
+                                            {t('vastu.uploadDifferentImage')}
                                         </button>
                                     )}
                                 </div>
@@ -359,27 +356,27 @@ const VastuChecker = () => {
                                 <div className="col-md-4">
                                     <div className="info-card bg-white h-100 text-center">
                                         <i className="fas fa-upload fa-3x text-main mb-3"></i>
-                                        <h4>1. Upload Floor Plan</h4>
+                                        <h4>{t('vastu.stepUploadTitle')}</h4>
                                         <p className="text-muted mb-0">
-                                            Upload a clear image of your floor plan (JPEG, PNG, or WebP, max 5MB)
+                                            {t('vastu.stepUploadDesc')}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="info-card bg-white h-100 text-center">
                                         <i className="fas fa-compass fa-3x text-main mb-3"></i>
-                                        <h4>2. Set North Direction</h4>
+                                        <h4>{t('vastu.stepNorthTitle')}</h4>
                                         <p className="text-muted mb-0">
-                                            Indicate which direction is North in your floor plan image
+                                            {t('vastu.stepNorthDesc')}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="info-card bg-white h-100 text-center">
                                         <i className="fas fa-file-alt fa-3x text-main mb-3"></i>
-                                        <h4>3. Get AI Report</h4>
+                                        <h4>{t('vastu.stepReportTitle')}</h4>
                                         <p className="text-muted mb-0">
-                                            Receive detailed Vastu analysis with score and practical remedies
+                                            {t('vastu.stepReportDesc')}
                                         </p>
                                     </div>
                                 </div>
@@ -395,63 +392,37 @@ const VastuChecker = () => {
                             <div className="row">
                                 <div className="col-lg-8 mx-auto">
                                     <div className="about-content text-center">
-                                        <h3 className="mb-4">What is Vastu Shastra?</h3>
+                                        <h3 className="mb-4">{t('vastu.whatIsVastu')}</h3>
                                         <p className="mb-4">
-                                            Vastu Shastra is an ancient Indian science of architecture and design that harmonizes
-                                            the five elements of nature - Earth, Water, Fire, Air, and Space - with your living space.
-                                            It provides guidelines for the layout and positioning of rooms to enhance positive energy flow.
+                                            {t('vastu.whatIsVastuDesc')}
                                         </p>
                                         <div className="row g-4 mt-4">
                                             <div className="col-md-6">
                                                 <div className="feature-item">
                                                     <i className="fas fa-check-circle text-success me-2"></i>
-                                                    <span>Entrance facing North or East brings prosperity</span>
+                                                    <span>{t('vastu.vastuTip1')}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="feature-item">
                                                     <i className="fas fa-check-circle text-success me-2"></i>
-                                                    <span>Kitchen in South-East for health and wealth</span>
+                                                    <span>{t('vastu.vastuTip2')}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="feature-item">
                                                     <i className="fas fa-check-circle text-success me-2"></i>
-                                                    <span>Master bedroom in South-West for stability</span>
+                                                    <span>{t('vastu.vastuTip3')}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="feature-item">
                                                     <i className="fas fa-check-circle text-success me-2"></i>
-                                                    <span>Center (Brahmasthan) should be open</span>
+                                                    <span>{t('vastu.vastuTip4')}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                )}
-
-                {/* FAQ and Related Tools - only show on input state */}
-                {appState === 'input' && (
-                    <section className="padding-y-60">
-                        <div className="container">
-                            <div className="row justify-content-center">
-                                <div className="col-lg-8">
-                                    <ToolFaq faqs={VASTU_FAQS} heading="Vastu Checker — Frequently Asked Questions" />
-                                    <ToolRelatedLinks
-                                        heading="Related Tools & Resources"
-                                        links={[
-                                            { to: '/area-calculator', label: 'Carpet Area Calculator', icon: 'fas fa-ruler-combined' },
-                                            { to: '/area-converter', label: 'Area Unit Converter', icon: 'fas fa-exchange-alt' },
-                                            { to: '/emi-calculator', label: 'EMI Calculator', icon: 'fas fa-calculator' },
-                                            { to: '/property-document-checklist', label: 'Property Document Checklist', icon: 'fas fa-clipboard-list' },
-                                            { to: '/design-blueprint', label: '3D Blueprint Designer', icon: 'fas fa-drafting-compass' },
-                                            { to: '/blog', label: 'Real Estate Blog', icon: 'fas fa-blog' },
-                                        ]}
-                                    />
                                 </div>
                             </div>
                         </div>
@@ -463,20 +434,19 @@ const VastuChecker = () => {
                     <div className="container">
                         <div className="row justify-content-center">
                             <div className="col-lg-8 text-center">
-                                <h2 className="cta-title mb-3">Looking for a Vastu-Compliant Home?</h2>
+                                <h2 className="cta-title mb-3">{t('vastu.ctaTitle')}</h2>
                                 <p className="cta-desc mb-4">
-                                    Explore our curated collection of properties with 360° virtual tours.
-                                    Find your perfect home with confidence.
+                                    {t('vastu.ctaDesc')}
                                 </p>
                                 <div className="cta-buttons d-flex justify-content-center gap-3 flex-wrap">
-                                    <a href="/properties" className="btn btn-white btn-main">
+                                    <I18nLink to="/properties" className="btn btn-white btn-main">
                                         <i className="fas fa-home me-2"></i>
-                                        Browse Properties
-                                    </a>
-                                    <a href="/contact" className="btn btn-outline-white">
+                                        {t('vastu.browseProperties')}
+                                    </I18nLink>
+                                    <I18nLink to="/contact" className="btn btn-outline-white">
                                         <i className="fas fa-phone me-2"></i>
-                                        Contact Us
-                                    </a>
+                                        {t('vastu.contactUs')}
+                                    </I18nLink>
                                 </div>
                             </div>
                         </div>

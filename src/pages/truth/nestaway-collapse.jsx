@@ -1,9 +1,11 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
 
 const TruthPage = lazy(() => import('./TruthPage'));
 
 const NestAwayTruth = () => {
+  const [tSeo] = useTranslation('seo');
   const competitor = competitors.nestaway;
   
   const keyIssues = [
@@ -32,8 +34,8 @@ const NestAwayTruth = () => {
   return (
     <TruthPage
       competitor={competitor}
-      pageTitle="Why NestAway Failed | The Truth About NestAway Collapse"
-      pageDescription="The shocking truth about NestAway\'s 95% valuation collapse and why their business model failed. Learn what happened to your deposits."
+      pageTitle={tSeo('truth.nestaway.title')}
+      pageDescription={tSeo('truth.nestaway.description')}
       canonicalPath="/truth/nestaway-collapse"
       truthTitle="The Truth About NestAway's Collapse"
       introText="From ₹1,800 crore to ₹90 crore - NestAway represents one of India\'s most dramatic startup failures. Here\'s what really happened."

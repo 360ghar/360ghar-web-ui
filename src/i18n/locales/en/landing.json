@@ -1,0 +1,113 @@
+{
+  "seo": {
+    "titleBuyRent": "{{facet}} for {{verb}} in {{city}} | {{city}} Real Estate | 360Ghar",
+    "titlePg": "PG in {{city}} | {{city}} Paying Guest & Co-living | 360Ghar",
+    "descPg": "Browse verified {{facetLower}} and co-living listings in {{city}}. All properties are verified by our on-site team with 360\u00B0 virtual tours and end-to-end assistance from a dedicated Relationship Manager.{{gurgaonHindi}}",
+    "descPgGurgaon": " Gurgaon mein verified PG dhundhna hua aasaan.",
+    "descBuyRent": "Browse verified {{facetLower}} in {{city}} to {{intent}}. All properties verified by our on-site team with 360\u00B0 virtual tours. Enjoy end-to-end service by dedicated Relationship Manager.{{gurgaonHindi}}",
+    "descBuyRentGurgaonBuy": " {{city}} mein verified {{facetLower}} kharidein \u2014 360Ghar ke saath.",
+    "descBuyRentGurgaonRent": " {{city}} mein verified {{facetLower}} kiraye par lein \u2014 360Ghar ke saath."
+  },
+  "facetSeo": {
+    "titlePg": "{{bhk}}{{facetText}} in {{city}}{{budget}}{{amenity}} | 360Ghar",
+    "titleBuyRent": "{{bhk}}{{facetText}} for {{intentLabel}} in {{city}}{{budget}}{{amenity}} | 360Ghar",
+    "descPg": "Explore verified {{facetTextLower}} and co-living options in {{city}}.",
+    "descBuyRent": "Explore verified {{facetTextLower}} in {{city}} to {{validIntent}}.",
+    "descBhk": "{{bhkText}} options available.",
+    "descBudget": "Budget: {{budgetText}}.",
+    "descAmenity": "Amenity: {{amenityPretty}}.",
+    "descSuffix": "Verified by our on-site team. View photos, exact locations, 360\u00B0 virtual tours. End-to-end service by dedicated Relationship Manager."
+  },
+  "hero": {
+    "browseListings": "Browse Listings"
+  },
+  "priceOverview": {
+    "heading": "{{city}} {{facet}} Price Overview",
+    "body": "Average prices for {{facetLower}} {{preposition}} {{city}} typically range from <strong>{{priceRange}}</strong>. Prices vary by locality, configuration, furnishing, and floor. Browse 360Ghar verified listings for up-to-date rates with 360\u00B0 virtual tours.",
+    "prepositionBuy": "for {{intentLabel}} in",
+    "prepositionPg": "in",
+    "prepositionDefault": "for {{intentLabel}} in"
+  },
+  "why360Ghar": {
+    "heading": "Why 360Ghar?",
+    "point1": "India's first AI-Enabled and Virtual Tour first Real Estate Platform",
+    "point2": "All properties verified by our on-site team with 360\u00B0 virtual tours",
+    "point3": "Dedicated Relationship Manager handles your end-to-end flow so you can relax",
+    "point4": "Full visibility, convenience, and transparency for the same brokerage amount"
+  },
+  "faq": {
+    "heading": "Frequently Asked Questions"
+  },
+  "landingFaqs": {
+    "q1": "What is the average price range for {{facetLower}} {{preposition}} {{city}}?",
+    "a1": "Prices for {{facetLower}} in {{city}} vary by locality and configuration. {{intentNoun}} inventory spans a broad budget range. Use 360Ghar's verified listings with 360\u00B0 virtual tours to compare actual market rates before deciding.",
+    "q2": "Which are the best localities for {{facetLower}} {{accommodation}} in {{city}}?",
+    "a2": "Top localities depend on commute preference, budget, and lifestyle priorities. 360Ghar provides verified on-ground data, locality insights, and 360\u00B0 virtual tours for each listing so you can evaluate neighborhoods before visiting.",
+    "q3": "Are properties on 360Ghar verified before listing in {{city}}?",
+    "a3": "Yes. Every property listed on 360Ghar is physically verified by our on-site team. We confirm ownership documents, capture authentic photos and 360\u00B0 virtual tours, and validate exact locations before a listing goes live.",
+    "q4": "{{city}} mein {{facetLower}} {{hindiAction}} ke liye kaun se documents chahiye?",
+    "a4": "Property {{hindiBuyRent}} ke liye aapko identity proof (Aadhar/PAN), income proof, aur bank statements chahiye. {{hindiDocSuffix}} 360Ghar ka Relationship Manager aapki poori documentation mein help karta hai.",
+    "q4DocBuy": "Sale deed, title documents, aur NOC bhi verify kiye jaate hain.",
+    "q4DocRent": "Owner agreement aur rent deed sign karni hoti hai.",
+    "q5": "How do 360\u00B0 virtual tours help me find {{facetLower}} in {{city}}?",
+    "a5": "360Ghar's virtual tours let you explore {{facetLower}} in {{city}} from your phone or laptop. Walk through rooms, check layouts, view amenities \u2014 all before a physical visit. This saves multiple site trips and helps you shortlist confidently. Every listing on 360Ghar includes a studio-quality 360\u00B0 walkthrough.",
+    "q6": "What is the brokerage or fee for {{feeIntent}} {{facetLower}} through 360Ghar in {{city}}?",
+    "a6": "360Ghar charges standard brokerage \u2014 but for the same amount you get a dedicated Relationship Manager, AI-powered search, 360\u00B0 virtual tours, on-site verified listings, and end-to-end transaction support. No hidden charges, no fake listings, zero upfront listing fees for owners.",
+    "q7": "360Ghar ka Relationship Manager kya karta hai?",
+    "a7": "360Ghar ka dedicated Relationship Manager aapki property journey mein end-to-end help karta hai \u2014 shortlisting se lekar site visits, negotiations, documentation, aur final handover tak. Aap relax karein \u2014 RM sab handle karta hai.",
+    "q8": "How is 360Ghar different from other property portals for {{facetLower}} in {{city}}?",
+    "a8": "Unlike other portals, 360Ghar physically verifies every {{facetLower}} listing in {{city}} with on-site team visits. Each listing has authentic photos, exact location, and a studio-quality 360\u00B0 virtual tour. Plus a dedicated RM who manages your entire journey. No fake listings, no outdated inventory."
+  },
+  "facetFaqs": {
+    "q1": "What is the price of {{bhkPrefix}}{{facetTextLower}} {{facetPreposition}} {{city}}{{budgetSuffix}}?",
+    "a1": "{{bhkPrefix}}{{facetTextLower}} prices in {{city}}{{budgetSuffixDetail}} vary by locality, floor, and furnishing. Use 360Ghar's verified listings to see current market rates with 360\u00B0 virtual tours.",
+    "q2": "{{bhkPrefix}}{{facetTextLower}} {{hindiAction}} {{city}} mein \u2014 kahan se shuru karein?",
+    "a2": "360Ghar par verified listings browse karein. Har listing mein 360\u00B0 virtual tour, verified photos, aur exact location hai. Apna dedicated Relationship Manager aapki poori journey mein help karta hai \u2014 bilkul free.",
+    "q3": "Are all {{bhkPrefix}}{{facetTextLower}} listings on 360Ghar verified in {{city}}?",
+    "a3": "Yes. 360Ghar's on-site team physically visits and verifies every listing \u2014 ownership documents, photos, amenities, and exact location are confirmed before publishing. No fake listings, no outdated inventory.",
+    "q4": "What documents do I need to {{verb}} a {{bhkPrefix}}{{facetTextLower}} in {{city}}?",
+    "a4Buy": "You'll need identity proof (Aadhaar/PAN), income proof, and bank statements. For purchase: title deed, sale agreement, and registration paperwork. 360Ghar's RM handles all documentation.",
+    "a4Rent": "You'll need identity proof (Aadhaar/PAN), income proof, and bank statements. For rent: rent agreement and KYC documents. Your 360Ghar RM manages the process end-to-end.",
+    "q5": "How does 360Ghar's Relationship Manager help {{verbIng}} a {{bhkPrefix}}{{facetTextLower}} in {{city}}?",
+    "a5": "Your dedicated RM shortlists properties matching your needs, schedules site visits, handles negotiations, manages paperwork, and ensures a smooth handover \u2014 all for the same standard brokerage. End-to-end service so you can relax.",
+    "q6": "Which {{facetTextLower}} in {{city}} have {{amenityPretty}}?",
+    "a6": "360Ghar lists verified {{facetTextLower}} in {{city}} with amenity filters. Browse listings with {{amenityPretty}} and take 360\u00B0 virtual tours before scheduling a visit."
+  },
+  "relatedSearches": {
+    "heading": "Related Searches",
+    "label": "{{facet}} for {{intentLabel}} in {{city}}"
+  },
+  "localities": {
+    "heading": "Popular Localities in {{city}}",
+    "description": "Explore verified properties in {{city}}'s top residential areas. Each locality page provides market insights, connectivity info, and active listings.",
+    "dataAndResearch": "Data & Research",
+    "circleRates": "Circle Rates",
+    "builderReputation": "Builder Reputation"
+  },
+  "facetPopularSearches": {
+    "heading": "Popular searches",
+    "item1": "{{facetText}} {{intentDisplay}} in {{city}}",
+    "item1Pg": "{{facetText}} near metro in {{city}}",
+    "item2": "{{bhkText}} {{facetText}} {{intentDisplayPg}} in {{city}}",
+    "item3": "{{facetText}} {{intentDisplayPg}} {{budgetText}} in {{city}}",
+    "item4": "Ready to move {{facetText}} {{readyPreposition}} {{city}}",
+    "item5": "No broker {{facetText}} {{readyPreposition}} {{city}}",
+    "item6": "Verified {{facetText}} with 360\u00B0 virtual tours in {{city}}"
+  },
+  "marketSnapshot": {
+    "averagePriceRange": "Average price range",
+    "verifiedAreasIn": "Verified areas in {{city}}",
+    "tours360": "360° Tours",
+    "virtualWalkthroughs": "Virtual walkthroughs",
+    "contactForPrices": "Contact for prices"
+  },
+  "budgetEnrichment": {
+    "affordabilityInsights": "Affordability Insights for {{city}}",
+    "typicalPrices": "Typical {{facetTextLower}} prices in {{city}}: <strong>{{priceRange}}</strong>.",
+    "budgetFilterNarrows": "This budget filter narrows results to options {{budgetText}}.",
+    "useEmiCalculator": "Use our <1>EMI Calculator</1> to check monthly payments for this budget, or <3>check loan eligibility</3>.",
+    "aboutAmenity": "About {{amenityPretty}} in {{city}}",
+    "amenityHighDemand": "Properties with <strong>{{amenityPretty}}</strong> are in high demand in {{city}}, especially among families and working professionals.",
+    "amenityVerifyNote": "360Ghar verifies every amenity claim during on-site inspection. Virtual tours let you confirm {{amenityPretty}} before scheduling a visit."
+  }
+}

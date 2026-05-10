@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { projectItems } from '../../data/OthersPageData';
 
 import LazyImage from '../../common/ui/LazyImage';
@@ -27,7 +27,7 @@ const ProjectSection = () => {
                                             <LazyImage src={thumb} alt={title || 'Project'} className="cover-img" width={400} height={300}/>
                                             <div className="project-page-content">
                                                 <h6 className="project-page-content__title">
-                                                    <Link to={projectURL} state={{ id, title, thumb, desc }} className="link">{title}</Link>
+                                                    <I18nLink to={projectURL} state={{ id, title, thumb, desc }} className="link">{title}</I18nLink>
                                                 </h6>
                                             </div>
                                         </div>

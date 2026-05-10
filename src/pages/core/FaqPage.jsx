@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -12,11 +13,13 @@ import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { faqs } from '../../data/HomeThreeData';
 
 const FaqPage = () => {
+    const { t } = useTranslation('policies');
+    const [tSeo] = useTranslation('seo');
     return (
         <>
             <SEO
-                title="360Ghar FAQ | Virtual Tours, Buying & Renting"
-                description="Answers to common questions about 360Ghar's verified 360° tours, owner onboarding (no upfront fee), and renting/buying in Gurugram."
+                title={tSeo('faq.title')}
+                description={tSeo('faq.description')}
                 keywords="360Ghar FAQ, virtual tours FAQ, property FAQ, Gurugram, Gurgaon"
                 canonical="/faq"
                 image={siteMetadata.defaultOgImage}
@@ -50,7 +53,7 @@ const FaqPage = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common:header.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />

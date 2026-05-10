@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -143,12 +144,13 @@ const TAG_COLORS = {
 
 const AuctionSources = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
+  const [tSeo] = useTranslation('seo');
 
   return (
     <>
       <SEO
-        title="Government & Bank Auction Properties in Delhi NCR — Complete Guide | 360Ghar"
-        description="Complete guide to government and bank property auction portals in Delhi NCR. Covers IBAPI, DDA, HSVP, MDA, YEIDA, BaankNet, DRT, and 20+ aggregator and bank sources. Learn how to participate in SARFAESI, IBC, and government authority auctions."
+        title={tSeo('auctionSources.title')}
+        description={tSeo('auctionSources.description')}
         keywords="government property auctions Delhi, bank auction portals, IBAPI, DDA auction, HSVP e-auction, BaankNet, SARFAESI auction Delhi NCR, MDA auction Meerut, YEIDA auction, bank auction guide India"
         canonical="/auction-sources"
         structuredData={[
@@ -189,7 +191,7 @@ const AuctionSources = () => {
           <div className="container container-two">
             <nav aria-label="breadcrumb" className="mb-20">
               <ol className="breadcrumb" style={{ fontSize: 13, marginBottom: 0 }}>
-                <li className="breadcrumb-item"><Link to="/" style={{ color: '#6b7280' }}>Home</Link></li>
+                <li className="breadcrumb-item"><I18nLink to="/" style={{ color: '#6b7280' }}>Home</I18nLink></li>
                 <li className="breadcrumb-item active" aria-current="page">Auction Sources</li>
               </ol>
             </nav>
@@ -294,8 +296,8 @@ const AuctionSources = () => {
                     <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Ready to Browse Auction Properties?</h3>
                     <p style={{ color: '#4b5563', marginBottom: 16 }}>View the latest bank, court, and government authority auction listings aggregated from all these sources.</p>
                     <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
-                      <Link to="/bank-auctions" className="btn btn-main" style={{ textDecoration: 'none' }}>Browse All Auctions</Link>
-                      <Link to="/properties" className="btn btn-outline-secondary" style={{ textDecoration: 'none' }}>Browse Properties</Link>
+                      <I18nLink to="/bank-auctions" className="btn btn-main" style={{ textDecoration: 'none' }}>Browse All Auctions</I18nLink>
+                      <I18nLink to="/properties" className="btn btn-outline-secondary" style={{ textDecoration: 'none' }}>Browse Properties</I18nLink>
                     </div>
                   </div>
 

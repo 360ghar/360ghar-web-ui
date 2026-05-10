@@ -5,13 +5,17 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import PropertySidebarSection from '../../components/property/PropertySidebarSection';
 import SEO from '../../common/SEO';
+import { useTranslation } from 'react-i18next';
 
 const Property = () => {
+    const { t } = useTranslation('properties');
+    const [tSeo] = useTranslation('seo');
+
     return (
         <>
             <SEO
-                title="Properties with Filter Sidebar | 360Ghar"
-                description="Filter and search verified properties in Gurugram on 360Ghar's property portal."
+                title={tSeo('propertySidebar.title')}
+                description={tSeo('propertySidebar.description')}
                 canonical="/property-sidebar"
                 noindex
             />
@@ -23,7 +27,7 @@ const Property = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/add-new-listing"
-                    btnText="Add Listing"
+                    btnText={t('addListing.addListing')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />

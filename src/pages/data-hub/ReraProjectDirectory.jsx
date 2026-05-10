@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -47,6 +49,8 @@ const statusBadgeStyle = (status) => {
 };
 
 const ReraProjectDirectory = () => {
+  const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [projects, setProjects] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -100,8 +104,8 @@ const ReraProjectDirectory = () => {
   return (
     <>
       <SEO
-        title="RERA Projects Gurugram | Verified Builders | 360Ghar"
-        description="Browse all RERA-registered real estate projects in Gurugram. Verify project registration numbers, check developer details, possession dates, and project status."
+        title={tSeo('reraProjectDirectory.title')}
+        description={tSeo('reraProjectDirectory.description')}
         keywords="RERA projects Gurugram, HRERA registered projects, builder RERA number, Haryana RERA, verified developers Gurgaon"
         canonical="/rera-projects"
         structuredData={[
@@ -128,9 +132,9 @@ const ReraProjectDirectory = () => {
           <div className="container">
             <div className="row mb-20">
               <div className="col-12">
-                <h1 className="fs-28 fw-600 mb-10">RERA Projects Directory — Gurugram</h1>
+                <h1 className="fs-28 fw-600 mb-10">{t('rera.title')}</h1>
                 <p className="mb-0 color-text-3">
-                  Verified real estate projects registered under HRERA (Haryana Real Estate Regulatory Authority).
+                  {t('rera.description')}
                 </p>
               </div>
             </div>
@@ -139,14 +143,14 @@ const ReraProjectDirectory = () => {
             <div className="row mb-30">
               <div className="col-lg-8">
                 <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '20px 24px' }}>
-                  <h3 className="fs-18 fw-600 mb-10">Quick RERA Verify</h3>
-                  <p className="fs-14 color-text-3 mb-15">Enter a RERA registration number to instantly verify a project.</p>
+                  <h3 className="fs-18 fw-600 mb-10">{t('rera.quickVerify')}</h3>
+                  <p className="fs-14 color-text-3 mb-15">{t('rera.quickVerifyDesc')}</p>
                   <div className="d-flex gap-10 flex-wrap">
                     <input
                       type="text"
                       className="form-control"
                       style={{ maxWidth: 320 }}
-                      placeholder="e.g. HRERA-PKL-GGM-2024-001"
+                      placeholder={t('rera.placeholder')}
                       value={verifyInput}
                       onChange={(e) => { setVerifyInput(e.target.value); setVerifyResult(null); }}
                       onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
@@ -156,7 +160,7 @@ const ReraProjectDirectory = () => {
                       onClick={handleVerify}
                       disabled={verifying || !verifyInput.trim()}
                     >
-                      {verifying ? 'Verifying...' : 'Verify'}
+                      {verifying ? t('rera.verifying') : t('rera.verify')}
                     </button>
                   </div>
                   {verifyResult && (
@@ -164,18 +168,18 @@ const ReraProjectDirectory = () => {
                       {verifyResult.found ? (
                         <div style={{ background: '#dcfce7', border: '1px solid #86efac', borderRadius: 8, padding: '12px 16px' }}>
                           <p style={{ margin: 0, color: '#166534', fontWeight: 600, fontSize: 14 }}>
-                            Verified — {verifyResult.project?.project_name || 'Project Found'}
+                            {t('rera.verified', { name: verifyResult.project?.project_name || t('rera.unnamedProject') })}
                           </p>
                           {verifyResult.project?.developer_name && (
                             <p style={{ margin: '4px 0 0', color: '#166534', fontSize: 13 }}>
-                              Developer: {verifyResult.project.developer_name}
+                              {t('rera.developer', { name: verifyResult.project.developer_name })}
                             </p>
                           )}
                         </div>
                       ) : (
                         <div style={{ background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: 8, padding: '12px 16px' }}>
                           <p style={{ margin: 0, color: '#991b1b', fontWeight: 600, fontSize: 14 }}>
-                            Not Found — No RERA project found with that registration number.
+                            {t('rera.notFound')}
                           </p>
                         </div>
                       )}
@@ -191,7 +195,7 @@ const ReraProjectDirectory = () => {
                 <input
                   type="text"
                   className="form-control form-control-sm"
-                  placeholder="Search by project name or developer..."
+                  placeholder={t('rera.searchPlaceholder')}
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                 />
@@ -202,7 +206,7 @@ const ReraProjectDirectory = () => {
                   value={filters.status}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
                 >
-                  <option value="">All Statuses</option>
+                  <option value="">{t('rera.allStatuses')}</option>
                   {STATUS_OPTIONS.map(s => (
                     <option key={s} value={s} style={{ textTransform: 'capitalize' }}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
                   ))}
@@ -214,9 +218,9 @@ const ReraProjectDirectory = () => {
                   value={filters.property_type}
                   onChange={(e) => handleFilterChange('property_type', e.target.value)}
                 >
-                  <option value="">All Property Types</option>
-                  {PROPERTY_TYPES.map(t => (
-                    <option key={t} value={t} style={{ textTransform: 'capitalize' }}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
+                  <option value="">{t('rera.allPropertyTypes')}</option>
+                  {PROPERTY_TYPES.map(pt => (
+                    <option key={pt} value={pt} style={{ textTransform: 'capitalize' }}>{pt.charAt(0).toUpperCase() + pt.slice(1)}</option>
                   ))}
                 </select>
               </div>
@@ -237,14 +241,14 @@ const ReraProjectDirectory = () => {
               </div>
             ) : error ? (
               <div className="text-center py-40">
-                <p className="color-danger fs-16">RERA data temporarily unavailable. Please try again later.</p>
+                <p className="color-danger fs-16">{t('rera.error')}</p>
               </div>
             ) : (
               <>
-                <p className="mb-20 fs-14 color-text-3">{total} project{total !== 1 ? 's' : ''} found</p>
+                <p className="mb-20 fs-14 color-text-3">{t('rera.projectsFound', { count: total, suffix: total !== 1 ? 's' : '' })}</p>
                 {projects.length === 0 ? (
                   <div className="text-center py-40">
-                    <p className="fs-16 color-text-3">No RERA projects found for the selected filters.</p>
+                    <p className="fs-16 color-text-3">{t('rera.noResults')}</p>
                   </div>
                 ) : (
                   <div className="row g-3 mb-30">
@@ -253,14 +257,14 @@ const ReraProjectDirectory = () => {
                         <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 20, background: '#fff', height: '100%' }}>
                           <div className="d-flex justify-content-between align-items-start mb-10">
                             <span style={statusBadgeStyle(project.status)}>
-                              {project.status ? project.status.charAt(0).toUpperCase() + project.status.slice(1) : 'Unknown'}
+                              {project.status ? project.status.charAt(0).toUpperCase() + project.status.slice(1) : t('rera.unknown')}
                             </span>
                             {project.property_type && (
                               <span style={{ fontSize: 11, color: '#6b7280', textTransform: 'capitalize' }}>{project.property_type}</span>
                             )}
                           </div>
                           <h3 style={{ fontSize: 15, fontWeight: 600, margin: '0 0 6px', color: '#111827' }}>
-                            {project.project_name || 'Unnamed Project'}
+                            {project.project_name || t('rera.unnamedProject')}
                           </h3>
                           {project.developer_name && (
                             <p style={{ margin: '0 0 10px', fontSize: 13, color: '#6b7280' }}>{project.developer_name}</p>
@@ -273,13 +277,13 @@ const ReraProjectDirectory = () => {
                           <div className="d-flex gap-20 flex-wrap">
                             {project.total_units != null && (
                               <div>
-                                <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>Units</span>
+                                <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>{t('rera.units')}</span>
                                 <span style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>{project.total_units}</span>
                               </div>
                             )}
                             {project.possession_date && (
                               <div>
-                                <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>Possession</span>
+                                <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>{t('rera.possession')}</span>
                                 <span style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>
                                   {new Date(project.possession_date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
                                 </span>
@@ -327,11 +331,11 @@ const ReraProjectDirectory = () => {
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center">
-                <h2 className="cta-title mb-3">Looking for RERA-Verified Properties?</h2>
-                <p className="mb-4">Explore our curated listings from verified builders in Gurugram.</p>
+                <h2 className="cta-title mb-3">{t('rera.cta.title')}</h2>
+                <p className="mb-4">{t('rera.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/properties" className="btn btn-white btn-main">Browse Properties</a>
-                  <a href="/contact" className="btn btn-outline-white">Contact Us</a>
+                  <I18nLink to="/properties" className="btn btn-white btn-main">{t('rera.cta.browseProperties')}</I18nLink>
+                  <I18nLink to="/contact" className="btn btn-outline-white">{t('rera.cta.contactUs')}</I18nLink>
                 </div>
               </div>
             </div>

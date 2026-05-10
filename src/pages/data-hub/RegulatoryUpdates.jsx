@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -8,14 +10,6 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../
 import Pagination from '../../common/ui/Pagination';
 import GazetteItem from '../../components/data-hub/GazetteItem';
 import { dataHubService } from '../../services/dataHubService';
-
-const TABS = [
-  { key: '', label: 'All' },
-  { key: 'land_acquisition', label: 'Land Acquisition' },
-  { key: 'rate_revision', label: 'Rate Revision' },
-  { key: 'policy', label: 'Policy' },
-  { key: 'clu_change', label: 'CLU Change' },
-];
 
 const PAGE_LIMIT = 20;
 
@@ -43,6 +37,8 @@ const FAQS = [
 ];
 
 const RegulatoryUpdates = () => {
+  const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const [activeTab, setActiveTab] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [total, setTotal] = useState(0);
@@ -52,6 +48,14 @@ const RegulatoryUpdates = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const totalPages = Math.ceil(total / PAGE_LIMIT);
+
+  const TABS = [
+    { key: '', label: t('regulatoryUpdates.tabs.all') },
+    { key: 'land_acquisition', label: t('regulatoryUpdates.tabs.landAcquisition') },
+    { key: 'rate_revision', label: t('regulatoryUpdates.tabs.rateRevision') },
+    { key: 'policy', label: t('regulatoryUpdates.tabs.policy') },
+    { key: 'clu_change', label: t('regulatoryUpdates.tabs.cluChange') },
+  ];
 
   useEffect(() => {
     const params = { page, limit: PAGE_LIMIT };
@@ -71,13 +75,13 @@ const RegulatoryUpdates = () => {
     setPage(1);
   };
 
-  const activeTabLabel = TABS.find(t => t.key === activeTab)?.label || 'All';
+  const activeTabLabel = TABS.find(tab => tab.key === activeTab)?.label || t('regulatoryUpdates.tabs.all');
 
   return (
     <>
       <SEO
-        title="Regulatory Updates Gurugram | Haryana Gazette Notifications | 360Ghar"
-        description="Stay updated with official Haryana Gazette notifications affecting Gurugram real estate. Land acquisition notices, circle rate revisions, policy changes, and CLU updates."
+        title={tSeo('regulatoryUpdates.title')}
+        description={tSeo('regulatoryUpdates.description')}
         keywords="Haryana Gazette notifications, Gurugram regulatory updates, land acquisition notices, circle rate revision, CLU change Gurgaon, HRERA policy update, 360Ghar data hub"
         canonical="/regulatory-updates"
         structuredData={[
@@ -103,9 +107,9 @@ const RegulatoryUpdates = () => {
           <div className="container">
             <div className="row mb-20">
               <div className="col-12">
-                <h1 className="fs-28 fw-600 mb-10">Regulatory Updates — Haryana Gazette</h1>
+                <h1 className="fs-28 fw-600 mb-10">{t('regulatoryUpdates.title')}</h1>
                 <p className="mb-0 color-text-3">
-                  Official notifications from the Haryana Government affecting real estate in Gurugram. Updated as new gazette entries are published.
+                  {t('regulatoryUpdates.description')}
                 </p>
               </div>
             </div>
@@ -153,17 +157,17 @@ const RegulatoryUpdates = () => {
               </div>
             ) : error ? (
               <div className="text-center py-40">
-                <p className="color-danger fs-16">Regulatory updates temporarily unavailable. Please try again later.</p>
+                <p className="color-danger fs-16">{t('regulatoryUpdates.error')}</p>
               </div>
             ) : (
               <>
                 <p className="mb-20 fs-14 color-text-3">
-                  {total} notification{total !== 1 ? 's' : ''} found
+                  {t('regulatoryUpdates.notificationsFound', { count: total, suffix: total !== 1 ? 's' : '' })}
                 </p>
 
                 {notifications.length === 0 ? (
                   <div className="text-center py-40">
-                    <p className="fs-16 color-text-3">No {activeTabLabel} notifications found.</p>
+                    <p className="fs-16 color-text-3">{t('regulatoryUpdates.noNotifications', { tab: activeTabLabel })}</p>
                   </div>
                 ) : (
                   <div className="d-flex flex-column gap-3 mb-30">
@@ -208,11 +212,11 @@ const RegulatoryUpdates = () => {
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center">
-                <h2 className="cta-title mb-3">Need Help Navigating Regulatory Changes?</h2>
-                <p className="mb-4">Our experts can guide you through the latest Haryana real estate regulations.</p>
+                <h2 className="cta-title mb-3">{t('regulatoryUpdates.cta.title')}</h2>
+                <p className="mb-4">{t('regulatoryUpdates.cta.description')}</p>
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <a href="/contact" className="btn btn-white btn-main">Talk to an Expert</a>
-                  <a href="/properties" className="btn btn-outline-white">Browse Properties</a>
+                  <I18nLink to="/contact" className="btn btn-white btn-main">{t('regulatoryUpdates.cta.talkToExpert')}</I18nLink>
+                  <I18nLink to="/properties" className="btn btn-outline-white">{t('regulatoryUpdates.cta.browseProperties')}</I18nLink>
                 </div>
               </div>
             </div>

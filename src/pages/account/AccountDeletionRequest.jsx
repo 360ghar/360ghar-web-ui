@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -9,6 +11,7 @@ import { useForm, ValidationError } from '@formspree/react';
 import '../../styles/account-deletion.scss';
 
 const AccountDeletionRequest = () => {
+    const { t } = useTranslation('account');
     const [state, handleSubmit] = useForm("mwpqglyb");
     const [selectedType, setSelectedType] = useState('account');
     const [selectedReason, setSelectedReason] = useState('');
@@ -47,7 +50,7 @@ const AccountDeletionRequest = () => {
     if (state.succeeded) {
         return (
             <>
-            <SEO title="Account Deletion Request | 360Ghar" description="Request deletion of your account or data." canonical="/delete-account" noindex />
+            <SEO title={t('deletion.title')} description={t('deletion.description')} canonical="/delete-account" noindex />
             <OffCanvas />
             <MobileMenu />
 
@@ -57,7 +60,7 @@ const AccountDeletionRequest = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />
@@ -72,20 +75,20 @@ const AccountDeletionRequest = () => {
                                     </div>
                                 </div>
                                 <span className="section-heading__subtitle bg-gray-100">
-                                    <span className="text-gradient fw-semibold">Request Received</span>
+                                    <span className="text-gradient fw-semibold">{t('deletion.requestReceived')}</span>
                                 </span>
-                                <h2 className="section-heading__title">Deletion Request Submitted Successfully!</h2>
+                                <h2 className="section-heading__title">{t('deletion.successTitle')}</h2>
                                 <p className="section-heading__desc">
-                                    Thank you for contacting us! We have received your account deletion request and will get back to you within 24 hours.
+                                    {t('deletion.successDesc')}
                                 </p>
                                 <div className="mt-4">
-                                    <a
-                                        href="/"
+                                    <I18nLink
+                                        to="/"
                                         className="btn btn-main"
                                     >
                                         <i className="fas fa-home me-2"></i>
-                                        Return to Home
-                                    </a>
+                                        {t('deletion.returnHome')}
+                                    </I18nLink>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +104,7 @@ const AccountDeletionRequest = () => {
 
     return (
         <>
-        <SEO title="Account Deletion Request | 360Ghar" description="Request deletion of your account or data." canonical="/delete-account" noindex />
+        <SEO title={t('deletion.title')} description={t('deletion.description')} canonical="/delete-account" noindex />
         <OffCanvas />
         <MobileMenu />
 
@@ -111,7 +114,7 @@ const AccountDeletionRequest = () => {
                 headerMenusClass="mx-auto"
                 btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                 btnLink="/post-property"
-                btnText="Post Property"
+                btnText={t('common.postProperty')}
                 spanClass="icon-right text-gradient"
                 showContactNumber={false}
             />
@@ -122,12 +125,11 @@ const AccountDeletionRequest = () => {
                     <div className="contact-form bg-white">
                         <div className="section-heading text-center">
                             <span className="section-heading__subtitle bg-gray-100">
-                                <span className="text-gradient fw-semibold">Privacy Request</span>
+                                <span className="text-gradient fw-semibold">{t('deletion.privacyRequest')}</span>
                             </span>
-                            <h2 className="section-heading__title">Account & Data Deletion</h2>
+                            <h2 className="section-heading__title">{t('deletion.heading')}</h2>
                             <p className="section-heading__desc">
-                                Request deletion of your account or personal data from our platform.
-                                We take privacy seriously and will process your request promptly.
+                                {t('deletion.description2')}
                             </p>
                         </div>
 
@@ -139,14 +141,14 @@ const AccountDeletionRequest = () => {
                                     <div className="deletion-form-group">
                                         <label htmlFor="user_email" className="form-label">
                                             <i className="fas fa-envelope me-2 text-gradient"></i>
-                                            Email Address <span className="text-danger">*</span>
+                                            {t('deletion.emailLabel')} <span className="text-danger">*</span>
                                         </label>
                                         <input
                                             type="email"
                                             id="user_email"
                                             name="user_email"
                                             className="common-input"
-                                            placeholder="Enter your registered email address"
+                                            placeholder={t('deletion.emailPlaceholder')}
                                             required
                                         />
                                         <ValidationError
@@ -159,7 +161,7 @@ const AccountDeletionRequest = () => {
                                         <input
                                             type="hidden"
                                             name="subject"
-                                            value="Account Deletion Request"
+                                            value={t('deletion.subject')}
                                         />
                                         {/* Hidden field to pass the selected deletion type */}
                                         <input
@@ -175,7 +177,7 @@ const AccountDeletionRequest = () => {
                                     <div className="deletion-form-group">
                                         <label className="form-label">
                                             <i className="fas fa-trash-alt me-2 text-gradient"></i>
-                                            What would you like to delete? <span className="text-danger">*</span>
+                                            {t('deletion.deleteWhat')} <span className="text-danger">*</span>
                                         </label>
                                         <div className="deletion-options">
                                             <div
@@ -185,7 +187,7 @@ const AccountDeletionRequest = () => {
                                                 tabIndex={0}
                                                 role="radio"
                                                 aria-checked={selectedType === 'account'}
-                                                aria-label="Full Account Deletion"
+                                                aria-label={t('deletion.fullAccount')}
                                             >
                                                 <input
                                                     type="radio"
@@ -201,8 +203,8 @@ const AccountDeletionRequest = () => {
                                                         <i className="fas fa-user-times"></i>
                                                     </div>
                                                     <div className="option-details">
-                                                        <h5>Full Account Deletion</h5>
-                                                        <p>Delete my entire account and all associated data</p>
+                                                        <h5>{t('deletion.fullAccount')}</h5>
+                                                        <p>{t('deletion.fullAccountDesc')}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -214,7 +216,7 @@ const AccountDeletionRequest = () => {
                                                 tabIndex={0}
                                                 role="radio"
                                                 aria-checked={selectedType === 'personal'}
-                                                aria-label="Personal Information Only"
+                                                aria-label={t('deletion.personalOnly')}
                                             >
                                                 <input
                                                     type="radio"
@@ -229,8 +231,8 @@ const AccountDeletionRequest = () => {
                                                         <i className="fas fa-user-shield"></i>
                                                     </div>
                                                     <div className="option-details">
-                                                        <h5>Personal Information Only</h5>
-                                                        <p>Delete only my personal information while keeping account</p>
+                                                        <h5>{t('deletion.personalOnly')}</h5>
+                                                        <p>{t('deletion.personalOnlyDesc')}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -242,7 +244,7 @@ const AccountDeletionRequest = () => {
                                                 tabIndex={0}
                                                 role="radio"
                                                 aria-checked={selectedType === 'properties'}
-                                                aria-label="Property Listings Only"
+                                                aria-label={t('deletion.propertiesOnly')}
                                             >
                                                 <input
                                                     type="radio"
@@ -257,8 +259,8 @@ const AccountDeletionRequest = () => {
                                                         <i className="fas fa-home"></i>
                                                     </div>
                                                     <div className="option-details">
-                                                        <h5>Property Listings Only</h5>
-                                                        <p>Delete only my property listings and related data</p>
+                                                        <h5>{t('deletion.propertiesOnly')}</h5>
+                                                        <p>{t('deletion.propertiesOnlyDesc')}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -270,7 +272,7 @@ const AccountDeletionRequest = () => {
                                                 tabIndex={0}
                                                 role="radio"
                                                 aria-checked={selectedType === 'specific'}
-                                                aria-label="Specific Data"
+                                                aria-label={t('deletion.specificData')}
                                             >
                                                 <input
                                                     type="radio"
@@ -285,8 +287,8 @@ const AccountDeletionRequest = () => {
                                                         <i className="fas fa-cog"></i>
                                                     </div>
                                                     <div className="option-details">
-                                                        <h5>Specific Data</h5>
-                                                        <p>Delete specific data (please specify in details below)</p>
+                                                        <h5>{t('deletion.specificData')}</h5>
+                                                        <p>{t('deletion.specificDataDesc')}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -299,7 +301,7 @@ const AccountDeletionRequest = () => {
                                     <div className="deletion-form-group">
                                         <label htmlFor="deletion_reason" className="form-label">
                                             <i className="fas fa-question-circle me-2 text-gradient"></i>
-                                            Reason for deletion <span className="text-danger">*</span>
+                                            {t('deletion.reasonLabel')} <span className="text-danger">*</span>
                                         </label>
                                         <select
                                             id="deletion_reason"
@@ -309,13 +311,13 @@ const AccountDeletionRequest = () => {
                                             onChange={handleReasonChange}
                                             required
                                         >
-                                            <option value="">Select a reason</option>
-                                            <option value="privacy">Privacy concerns</option>
-                                            <option value="inactivity">No longer using the platform</option>
-                                            <option value="duplicate">Duplicate account</option>
-                                            <option value="security">Security concerns</option>
-                                            <option value="poor_experience">Poor user experience</option>
-                                            <option value="other">Other (please specify)</option>
+                                            <option value="">{t('deletion.reasonPlaceholder')}</option>
+                                            <option value="privacy">{t('deletion.reasonPrivacy')}</option>
+                                            <option value="inactivity">{t('deletion.reasonInactivity')}</option>
+                                            <option value="duplicate">{t('deletion.reasonDuplicate')}</option>
+                                            <option value="security">{t('deletion.reasonSecurity')}</option>
+                                            <option value="poor_experience">{t('deletion.reasonPoorExperience')}</option>
+                                            <option value="other">{t('deletion.reasonOther')}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -325,14 +327,14 @@ const AccountDeletionRequest = () => {
                                     <div className="deletion-form-group">
                                         <label htmlFor="message" className="form-label">
                                             <i className="fas fa-comment-dots me-2 text-gradient"></i>
-                                            Additional Details
+                                            {t('deletion.detailsLabel')}
                                         </label>
                                         <textarea
                                             id="message"
                                             name="message"
                                             className="common-textarea"
                                             rows="5"
-                                            placeholder="Please provide any additional information about your deletion request..."
+                                            placeholder={t('deletion.detailsPlaceholder')}
                                         ></textarea>
                                         <ValidationError
                                             prefix="Message"
@@ -350,25 +352,25 @@ const AccountDeletionRequest = () => {
                                             <div className="notice-icon">
                                                 <i className="fas fa-exclamation-triangle"></i>
                                             </div>
-                                            <h4 className="notice-title">Important Notice</h4>
+                                            <h4 className="notice-title">{t('deletion.importantNotice')}</h4>
                                         </div>
                                         <div className="notice-content">
                                             <ul>
                                                 <li>
                                                     <i className="fas fa-check-circle me-2"></i>
-                                                    Account deletion is <strong>irreversible</strong>
+                                                    <Trans i18nKey="deletion.noticeIrreversible" components={{ 0: <strong /> }} />
                                                 </li>
                                                 <li>
                                                     <i className="fas fa-check-circle me-2"></i>
-                                                    All your data will be <strong>permanently removed</strong>
+                                                    <Trans i18nKey="deletion.noticePermanentlyRemoved" components={{ 0: <strong /> }} />
                                                 </li>
                                                 <li>
                                                     <i className="fas fa-check-circle me-2"></i>
-                                                    You will lose access to saved properties, messages, and account settings
+                                                    {t('deletion.noticeLoseAccess')}
                                                 </li>
                                                 <li>
                                                     <i className="fas fa-check-circle me-2"></i>
-                                                    We will verify your identity before processing the request
+                                                    {t('deletion.noticeVerifyIdentity')}
                                                 </li>
                                             </ul>
                                         </div>
@@ -385,12 +387,12 @@ const AccountDeletionRequest = () => {
                                         {state.submitting ? (
                                             <>
                                                 <i className="fas fa-spinner fa-spin me-2"></i>
-                                                Submitting...
+                                                {t('deletion.submitting')}
                                             </>
                                         ) : (
                                             <>
                                                 <i className="fas fa-paper-plane me-2"></i>
-                                                Submit Deletion Request
+                                                {t('deletion.submitBtn')}
                                             </>
                                         )}
                                     </button>

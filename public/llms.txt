@@ -60,14 +60,22 @@
 - Sushant Lok 1, Gurgaon: https://360ghar.com/locality/sushant-lok-1-gurgaon
 - Sohna Road, Gurgaon: https://360ghar.com/locality/sohna-road-gurgaon
 - Sector 49, Gurgaon: https://360ghar.com/locality/sector-49-gurgaon
+- मुख्य पृष्ठ (Hindi): https://360ghar.com/hi/
+- प्रॉपर्टी (Hindi): https://360ghar.com/hi/properties
+- लोकैलिटी (Hindi): https://360ghar.com/hi/localities
+- ब्लॉग (Hindi): https://360ghar.com/hi/blog
+- EMI कैलकुलेटर (Hindi): https://360ghar.com/hi/emi-calculator
+- सर्कल रेट (Hindi): https://360ghar.com/hi/circle-rates
+- संपर्क करें (Hindi): https://360ghar.com/hi/contact
+- API Catalog: https://360ghar.com/.well-known/api-catalog
 - llm-feed.json: https://360ghar.com/data/llm-feed.json
 - ai.txt: https://360ghar.com/.well-known/ai.txt
 
 ## Contact
 
 - Email: info@360ghar.com
-- Phone: +91-8178340031
-- Address: Sector 43, Golf Course Road, Gurgaon, Haryana 122001, IN
+- Phone: +91-9999900876
+- Address: Sector 50, Gurugram, Gurgaon, Haryana 122001, IN
 
 ## Citation Format
 

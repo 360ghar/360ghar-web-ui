@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const Button = (props) => {
     const linkProps = {
@@ -8,10 +8,10 @@ const Button = (props) => {
     };
 
     return (
-        <Link {...linkProps}>
+        <I18nLink {...linkProps}>
             {props.btnText}
             <span className={`icon ${props.spanClass}`}> <i className={`${props.iconClass}`}></i> </span>
-        </Link>
+        </I18nLink>
     );
 };
 

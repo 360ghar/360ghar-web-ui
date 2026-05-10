@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../i18n/I18nLink';
 import LazyImage from './ui/LazyImage';
 
 const Logo = () => {
     return (
-        <Link to="/" className="link">
+        <I18nLink to="/" className="link">
             <LazyImage
                 src="/assets/images/logo/logo.webp"
                 srcSet="/assets/images/logo/logo-320w.webp 320w, /assets/images/logo/logo-640w.webp 640w, /assets/images/logo/logo-768w.webp 768w"
@@ -14,7 +14,7 @@ const Logo = () => {
                 height={150}
                 style={{ height: 'auto', maxHeight: '50px', width: 'auto' }}
             />
-        </Link>
+        </I18nLink>
     );
 };
 

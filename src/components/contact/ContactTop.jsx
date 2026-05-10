@@ -1,16 +1,18 @@
+import { useTranslation } from 'react-i18next';
 import { contactTopInfos } from '../../data/OthersPageData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const ContactTop = () => {
+    const { t } = useTranslation('policies');
     return (
         <>
             <section className="contact-top padding-y-120">
                 <div className="container container-two">
                     <div className="section-heading">
-                        <span className="section-heading__subtitle bg-gray-100"> 
-                            <span className="text-gradient fw-semibold">Contact</span> 
+                        <span className="section-heading__subtitle bg-gray-100">
+                            <span className="text-gradient fw-semibold">{t('contact.subtitle')}</span>
                         </span>
-                        <h2 className="section-heading__title">Contact Us!</h2>
+                        <h2 className="section-heading__title">{t('contact.title')}</h2>
                     </div>
                     <div className="row gy-4">
                         {
@@ -25,10 +27,10 @@ const ContactTop = () => {
                                                 contactTopInfo.link ? (
                                                     <>
                                                         <p className="contact-card__text font-18">
-                                                            <Link to={`${contactTopInfo.link} ${contactTopInfo.textOne}`} className="link">{contactTopInfo.textOne}</Link>
+                                                            <I18nLink to={`${contactTopInfo.link} ${contactTopInfo.textOne}`} className="link">{contactTopInfo.textOne}</I18nLink>
                                                         </p>
                                                         <p className="contact-card__text font-18">
-                                                            <Link to={`${contactTopInfo.link} ${contactTopInfo.textTwo}`} className="link">{contactTopInfo.textTwo}</Link>
+                                                            <I18nLink to={`${contactTopInfo.link} ${contactTopInfo.textTwo}`} className="link">{contactTopInfo.textTwo}</I18nLink>
                                                         </p>
                                                     </>
 

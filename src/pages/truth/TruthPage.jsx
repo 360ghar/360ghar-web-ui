@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -25,7 +26,7 @@ function getOtherCompares(currentId, count = 3) {
   return ALL_COMPARE_SLUGS.filter((id) => id !== currentId).slice(0, count);
 }
 
-const TruthPage = ({ 
+const TruthPage = ({
   competitor,
   pageTitle,
   pageDescription,
@@ -34,6 +35,7 @@ const TruthPage = ({
   introText,
   keyIssues
 }) => {
+  const { t } = useTranslation('truth');
   const competitorData = competitor;
   
   const breadcrumbs = generateCompetitorBreadcrumbs(competitorData.id, 'truth');
@@ -103,7 +105,7 @@ const TruthPage = ({
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -117,10 +119,10 @@ const TruthPage = ({
                 {introText}
               </p>
               <div className="hero-buttons mt-4">
-                <Link to="/properties?city=Gurgaon&intent=buy" className="btn btn-white">
+                <I18nLink to="/properties?city=Gurgaon&intent=buy" className="btn btn-white">
                   Try Transparent Alternative
                   <span className="ms-2"><i className="fas fa-arrow-right"></i></span>
-                </Link>
+                </I18nLink>
               </div>
             </div>
           </div>
@@ -217,7 +219,7 @@ const TruthPage = ({
             />
             <div className="row g-3 mt-3">
               <div className="col-md-4">
-                <Link
+                <I18nLink
                   to={`/vs/${competitorData.id}`}
                   className="d-flex align-items-center gap-3 p-3 rounded-3 border text-decoration-none h-100"
                   style={{ color: 'inherit' }}
@@ -227,13 +229,13 @@ const TruthPage = ({
                     <div className="fw-semibold">360Ghar vs {competitorData.name}</div>
                     <small className="text-muted">Feature-by-feature comparison</small>
                   </div>
-                </Link>
+                </I18nLink>
               </div>
               {getOtherCompares(competitorData.id).map((otherId) => {
                 const other = competitors[otherId];
                 return (
                   <div className="col-md-4" key={otherId}>
-                    <Link
+                    <I18nLink
                       to={`/vs/${otherId}`}
                       className="d-flex align-items-center gap-3 p-3 rounded-3 border text-decoration-none h-100"
                       style={{ color: 'inherit' }}
@@ -243,7 +245,7 @@ const TruthPage = ({
                         <div className="fw-semibold">360Ghar vs {other.name}</div>
                         <small className="text-muted">See how they compare</small>
                       </div>
-                    </Link>
+                    </I18nLink>
                   </div>
                 );
               })}
@@ -257,10 +259,10 @@ const TruthPage = ({
             <h3 className="cta-title">Don&apos;t Settle for Less. Choose Transparency.</h3>
             <p className="cta-subtitle">Join thousands of happy property seekers who chose 360 Ghar</p>
             <div className="mt-4">
-              <Link to="/properties?city=Gurgaon&intent=buy" className="btn btn-main">
+              <I18nLink to="/properties?city=Gurgaon&intent=buy" className="btn btn-main">
                 Start Your Property Search
                 <span className="ms-2"><i className="fas fa-arrow-right"></i></span>
-              </Link>
+              </I18nLink>
             </div>
           </div>
         </section>

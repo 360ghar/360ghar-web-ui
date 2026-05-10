@@ -1,4 +1,7 @@
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink, localizePath } from '../../i18n/I18nLink';
+import useLocaleStore from '../../store/localeStore';
 import { useState, useEffect, useMemo } from 'react';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -464,6 +467,8 @@ const buildConnectivityItems = (localityName, city, entityType = 'locality') => 
 };
 
 const LocalityTemplate = () => {
+    const { t } = useTranslation();
+    const [tSeo] = useTranslation('seo');
     const params = useParams();
     // URL param is the full slug (may include -gurgaon suffix for SEO)
     const slug = (params.slug || '').replace(/-gurgaon$/i, '');
@@ -592,7 +597,8 @@ const LocalityTemplate = () => {
     }
 
     if (!computed) {
-        return <Navigate to="/properties" replace />;
+        const locale = useLocaleStore.getState().locale;
+        return <Navigate to={localizePath('/properties', locale)} replace />;
     }
 
     const breadcrumbs = [
@@ -639,8 +645,8 @@ const LocalityTemplate = () => {
     return (
         <>
             <SEO
-                title={localityInfo?.seo?.title || `${computed.localityName} ${computed.city} - Property Prices, Reviews & Locality Guide | 360 Ghar`}
-                description={localityInfo?.seo?.description || `Explore ${computed.localityName}, ${computed.city} — verified property listings, price trends, amenities, connectivity, and locality reviews. Find your next home with 360Ghar.`}
+                title={localityInfo?.seo?.title || tSeo('localityTemplate.title', { localityName: computed.localityName, city: computed.city })}
+                description={localityInfo?.seo?.description || tSeo('localityTemplate.description', { localityName: computed.localityName, city: computed.city })}
                 keywords={localityInfo?.seo?.keywords || `${computed.localityName} ${computed.city} real estate, properties in ${computed.localityName}, ${computed.localityName} prices, ${computed.localityName} reviews, flats in ${computed.localityName}`}
                 canonical={`/locality/${computed.localitySlug}-gurgaon`}
                 image={siteMetadata.defaultOgImage}
@@ -656,7 +662,7 @@ const LocalityTemplate = () => {
                     headerMenusClass="mx-auto"
                     btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                     btnLink="/post-property"
-                    btnText="Post Property"
+                    btnText={t('common:header.postProperty')}
                     spanClass="icon-right text-gradient"
                     showContactNumber={false}
                 />
@@ -743,7 +749,7 @@ const LocalityTemplate = () => {
                                             <h2 className="locality-section__title mb-2">Properties in {computed.localityName}</h2>
                                             <p className="locality-section__desc mb-0">Explore active inventory and shortlist the right fit with on-ground verification support.</p>
                                         </div>
-                                        <Link to="/properties" className="btn btn-outline-main rounded-pill">View Full Property Map</Link>
+                                        <I18nLink to="/properties" className="btn btn-outline-main rounded-pill">View Full Property Map</I18nLink>
                                     </div>
 
                                     <div className="locality-property-shell mt-4">
@@ -778,20 +784,20 @@ const LocalityTemplate = () => {
                                       localityName: computed.localityName,
                                       limit: 6,
                                     }).map((link) => (
-                                      <Link
+                                      <I18nLink
                                         key={link.to}
                                         to={link.to}
                                         className="btn btn-outline-main btn-sm rounded-pill"
                                       >
                                         {link.label}
-                                      </Link>
+                                      </I18nLink>
                                     ))}
-                                    <Link
+                                    <I18nLink
                                       to="/properties"
                                       className="btn btn-outline-main btn-sm rounded-pill"
                                     >
                                       All Properties
-                                    </Link>
+                                    </I18nLink>
                                   </div>
                                 </section>
                             </div>
@@ -809,7 +815,7 @@ const LocalityTemplate = () => {
                                                 </div>
                                             ))}
                                         </div>
-                                        <Link to="/contact" className="btn btn-main w-100 mt-4 rounded-pill">Get Locality Report</Link>
+                                        <I18nLink to="/contact" className="btn btn-main w-100 mt-4 rounded-pill">Get Locality Report</I18nLink>
                                     </article>
 
                                     {/* Entity-type-specific cross-links */}
@@ -818,22 +824,22 @@ const LocalityTemplate = () => {
                                             <p className="locality-sidebar-card__eyebrow">Useful Links</p>
                                             <h3 className="locality-sidebar-card__title">Research Resources</h3>
                                             <div className="d-flex flex-column gap-2 mt-3">
-                                                <Link to="/circle-rates" className="btn btn-outline-main btn-sm rounded-pill">
+                                                <I18nLink to="/circle-rates" className="btn btn-outline-main btn-sm rounded-pill">
                                                     <i className="fas fa-indian-rupee-sign me-1" />
                                                     Check Circle Rates
-                                                </Link>
-                                                <Link to="/rera-projects" className="btn btn-outline-main btn-sm rounded-pill">
+                                                </I18nLink>
+                                                <I18nLink to="/rera-projects" className="btn btn-outline-main btn-sm rounded-pill">
                                                     <i className="fas fa-file-contract me-1" />
                                                     RERA Project Lookup
-                                                </Link>
-                                                <Link to={`/${canonicalCitySlug}/buy/flats`} className="btn btn-outline-main btn-sm rounded-pill">
+                                                </I18nLink>
+                                                <I18nLink to={`/${canonicalCitySlug}/buy/flats`} className="btn btn-outline-main btn-sm rounded-pill">
                                                     <i className="fas fa-building me-1" />
                                                     Flats for Sale in {computed.city}
-                                                </Link>
-                                                <Link to={`/${canonicalCitySlug}`} className="btn btn-outline-main btn-sm rounded-pill">
+                                                </I18nLink>
+                                                <I18nLink to={`/${canonicalCitySlug}`} className="btn btn-outline-main btn-sm rounded-pill">
                                                     <i className="fas fa-city me-1" />
                                                     {computed.city} Real Estate Hub
-                                                </Link>
+                                                </I18nLink>
                                             </div>
                                         </article>
                                     )}
@@ -849,7 +855,7 @@ const LocalityTemplate = () => {
                                                 <li>Confirm power backup coverage (common areas + individual units)</li>
                                                 <li>Review society&apos;s age and upcoming major repair assessments</li>
                                             </ul>
-                                            <Link to="/contact" className="btn btn-outline-main btn-sm w-100 rounded-pill mt-3">Get Society Report</Link>
+                                            <I18nLink to="/contact" className="btn btn-outline-main btn-sm w-100 rounded-pill mt-3">Get Society Report</I18nLink>
                                         </article>
                                     )}
 
@@ -865,14 +871,14 @@ const LocalityTemplate = () => {
                                                 <li>Check for any litigation or complaints on H-RERA</li>
                                             </ul>
                                             <div className="d-flex flex-column gap-2 mt-3">
-                                                <Link to="/rera-projects" className="btn btn-outline-main btn-sm rounded-pill">
+                                                <I18nLink to="/rera-projects" className="btn btn-outline-main btn-sm rounded-pill">
                                                     <i className="fas fa-file-contract me-1" />
                                                     RERA Project Lookup
-                                                </Link>
-                                                <Link to="/builder-reputation" className="btn btn-outline-main btn-sm rounded-pill">
+                                                </I18nLink>
+                                                <I18nLink to="/builder-reputation" className="btn btn-outline-main btn-sm rounded-pill">
                                                     <i className="fas fa-hard-hat me-1" />
                                                     Check Builder Reputation
-                                                </Link>
+                                                </I18nLink>
                                             </div>
                                         </article>
                                     )}
@@ -907,8 +913,8 @@ const LocalityTemplate = () => {
                                         <p className="locality-sidebar-card__eyebrow">Need Expert Help?</p>
                                         <h3 className="locality-sidebar-card__title">Book a Personalized Consultation</h3>
                                         <p className="mb-4">Talk to our local property advisors for a curated shortlist in {computed.localityName}.</p>
-                                        <Link to="/contact" className="btn btn-outline-light w-100 rounded-pill mb-2">Talk to an Expert</Link>
-                                        <Link to="/post-property" className="btn btn-light w-100 rounded-pill">List Your Property</Link>
+                                        <I18nLink to="/contact" className="btn btn-outline-light w-100 rounded-pill mb-2">Talk to an Expert</I18nLink>
+                                        <I18nLink to="/post-property" className="btn btn-light w-100 rounded-pill">List Your Property</I18nLink>
                                     </article>
                                 </div>
                             </aside>

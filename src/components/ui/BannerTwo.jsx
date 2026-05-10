@@ -2,7 +2,7 @@
 import BannerTwoThumb from '/assets/images/thumbs/banner-two-filter-bg.png';
 import TabFilter from '../../common/forms/TabFilter';
 import { bannerTwoContent } from '../../data/HomeTwoData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import LazyImage from '../../common/ui/LazyImage';
 const BannerTwo = () => {
@@ -21,7 +21,7 @@ const BannerTwo = () => {
                                 </div>
                                 <div className="contact-content__infos">
                                     <span className="contact-content__text">{bannerTwoContent.text}</span> 
-                                    <Link to={`${bannerTwoContent.numberLink}${bannerTwoContent.number}`} className="contact-content__contact">{bannerTwoContent.number}</Link>
+                                    <I18nLink to={`${bannerTwoContent.numberLink}${bannerTwoContent.number}`} className="contact-content__contact">{bannerTwoContent.number}</I18nLink>
                                 </div>
                             </div>
                         </div>

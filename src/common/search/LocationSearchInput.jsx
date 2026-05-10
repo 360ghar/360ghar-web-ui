@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import { useLocationStore } from '../../store/locationStore';
 import GooglePlacesInput from './GooglePlacesInput';
 
 const LocationSearchInput = ({ placeholder = "Search location..." }) => {
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
   const { location, setLocation } = useLocationStore();
   const [radius, setRadius] = useState(20);
 

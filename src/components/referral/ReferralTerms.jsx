@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const TERMS_DATA = [
   {
@@ -131,14 +132,15 @@ const TERMS_DATA = [
   },
   {
     title: '12. Data & Privacy',
-    content: `
+    content: null,
+    jsxContent: (
       <ul>
         <li>By submitting a referral, you confirm that you have obtained explicit consent from the property owner to share their contact details with 360Ghar.</li>
-        <li>All personal data collected is subject to 360Ghar's <a href="/policies/privacy-policy">Privacy Policy</a>.</li>
+        <li>All personal data collected is subject to 360Ghar&apos;s <I18nLink to="/policies/privacy-policy">Privacy Policy</I18nLink>.</li>
         <li>Information provided may be used for verification, communication, and program administration.</li>
         <li>360Ghar does not sell or share personal data with third parties except as required for program fulfillment.</li>
       </ul>
-    `,
+    ),
   },
   {
     title: '13. Dispute Resolution',
@@ -192,8 +194,11 @@ const ReferralTerms = () => {
                   >
                     <div
                       className="accordion-body"
-                      dangerouslySetInnerHTML={{ __html: term.content }}
-                    />
+                    >
+                      {term.jsxContent || (
+                        <div dangerouslySetInnerHTML={{ __html: term.content }} />
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

@@ -41,7 +41,7 @@ const AboutThree = () => {
                                     buttonText="View More"
                                 />
 
-                                <ul className="check-list style-two">
+                                <ul className="check-list style-two speakable-highlights">
                                     {
                                         aboutCheckLists.map((aboutCheckList, index) => {
                                             return (

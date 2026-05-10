@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -9,6 +10,7 @@ import { siteMetadata } from '../../seo/siteMetadata';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 import { ToolFaq, ToolRelatedLinks } from '../../components/tools/ToolContentSections';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const EMI_CALCULATOR_FAQS = [
   {
@@ -42,6 +44,7 @@ const EMI_HOW_TO_STEPS = [
 ];
 
 const EmiCalculator = () => {
+    const { t, i18n } = useTranslation('tools');
     const resultsRef = useRef(null);
     const [loanAmount, setLoanAmount] = useState(1000000);
     const [interestRate, setInterestRate] = useState(8.5);
@@ -66,7 +69,7 @@ const EmiCalculator = () => {
     }, [loanAmount, interestRate, loanTenure]);
 
     const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('en-IN', {
+        return new Intl.NumberFormat(i18n.language === 'hi' ? 'hi-IN' : 'en-IN', {
             style: 'currency',
             currency: 'INR',
             maximumFractionDigits: 0
@@ -74,7 +77,7 @@ const EmiCalculator = () => {
     };
 
     const formatNumber = (num) => {
-        return new Intl.NumberFormat('en-IN').format(num);
+        return new Intl.NumberFormat(i18n.language === 'hi' ? 'hi-IN' : 'en-IN').format(num);
     };
 
     const handleReset = () => {
@@ -86,9 +89,9 @@ const EmiCalculator = () => {
     return (
         <>
         <SEO
-          title="EMI Calculator Gurgaon | Home Loan EMI for Gurugram Property | 360Ghar"
-          description="Free home loan EMI calculator for India. Calculate monthly EMI for SBI, HDFC, ICICI home loans instantly. View amortization schedule, payment breakdown, and compare interest rates for properties in Gurugram & Delhi NCR."
-          keywords="home loan EMI calculator India, housing loan calculator, mortgage calculator India, loan repayment schedule, SBI home loan EMI, HDFC home loan EMI, real estate finance tool, 360ghar financial tools"
+          title={t('emi.title')}
+          description={t('emi.description')}
+          keywords={t('emi.keywords')}
           canonical="/emi-calculator"
           image={siteMetadata.defaultOgImage}
           type="website"
@@ -120,9 +123,9 @@ const EmiCalculator = () => {
                         <div className="row justify-content-center">
                             <div className="col-lg-10">
                                 <div className="section-heading text-center mb-5">
-                                    <h1>Home Loan EMI Calculator India (2026)</h1>
+                                    <h2 className="section-title">{t('emi.headingTitle')}</h2>
                                     <p className="section-desc">
-                                        Free EMI calculator for SBI, HDFC, ICICI home loans. Get monthly installments, total interest, and amortization breakdown instantly.
+                                        {t('emi.headingDesc')}
                                     </p>
                                 </div>
 
@@ -131,12 +134,12 @@ const EmiCalculator = () => {
                                         {/* Calculator Form */}
                                         <div className="col-lg-6">
                                             <div className="calculator-form bg-white p-4 rounded-3 shadow-sm">
-                                                <h3 className="form-title mb-4">Loan Details</h3>
+                                                <h3 className="form-title mb-4">{t('emi.loanDetails')}</h3>
 
                                                 {/* Loan Amount */}
                                                 <div className="form-group mb-4">
                                                     <label htmlFor="loanAmount" className="form-label">
-                                                        Loan Amount (₹)
+                                                        {t('emi.loanAmount')}
                                                     </label>
                                                     <div className="input-group">
                                                         <span className="input-group-text">₹</span>
@@ -168,7 +171,7 @@ const EmiCalculator = () => {
                                                 {/* Interest Rate */}
                                                 <div className="form-group mb-4">
                                                     <label htmlFor="interestRate" className="form-label">
-                                                        Interest Rate (% per annum)
+                                                        {t('emi.interestRate')}
                                                     </label>
                                                     <div className="input-group">
                                                         <input
@@ -194,14 +197,14 @@ const EmiCalculator = () => {
                                                         <span className="input-group-text">%</span>
                                                     </div>
                                                     <small className="text-muted">
-                                                        {interestRate}% per annum
+                                                        {interestRate}{t('emi.perAnnum')}
                                                     </small>
                                                 </div>
 
                                                 {/* Loan Tenure */}
                                                 <div className="form-group mb-4">
                                                     <label htmlFor="loanTenure" className="form-label">
-                                                        Loan Tenure (Years)
+                                                        {t('emi.loanTenure')}
                                                     </label>
                                                     <div className="input-group">
                                                         <input
@@ -222,10 +225,10 @@ const EmiCalculator = () => {
                                                             value={loanTenure}
                                                             onChange={(e) => setLoanTenure(e.target.value)}
                                                         />
-                                                        <span className="input-group-text">Years</span>
+                                                        <span className="input-group-text">{t('emi.years')}</span>
                                                     </div>
                                                     <small className="text-muted">
-                                                        {loanTenure} years ({loanTenure * 12} months)
+                                                        {t('emi.yearsMonths', { years: loanTenure, months: loanTenure * 12 })}
                                                     </small>
                                                 </div>
 
@@ -237,7 +240,7 @@ const EmiCalculator = () => {
                                                         onClick={() => resultsRef.current?.scrollIntoView({ behavior: 'smooth' })}
                                                     >
                                                         <i className="fas fa-calculator me-2"></i>
-                                                        Calculate EMI
+                                                        {t('emi.calculateEmi')}
                                                     </button>
                                                     <button
                                                         type="button"
@@ -245,7 +248,7 @@ const EmiCalculator = () => {
                                                         onClick={handleReset}
                                                     >
                                                         <i className="fas fa-redo me-2"></i>
-                                                        Reset
+                                                        {t('emi.reset')}
                                                     </button>
                                                 </div>
                                             </div>
@@ -254,11 +257,11 @@ const EmiCalculator = () => {
                                         {/* Results Section */}
                                         <div className="col-lg-6" ref={resultsRef}>
                                             <div className="calculator-results bg-white p-4 rounded-3 shadow-sm">
-                                                <h3 className="results-title mb-4">EMI Calculation Results</h3>
+                                                <h3 className="results-title mb-4">{t('emi.resultsTitle')}</h3>
 
                                                 <div className="result-item mb-4 p-3 bg-light rounded-2">
                                                     <div className="d-flex justify-content-between align-items-center mb-2">
-                                                        <span className="result-label text-muted">Monthly EMI</span>
+                                                        <span className="result-label text-muted">{t('emi.monthlyEmi')}</span>
                                                         <span className="result-value fs-4 fw-bold text-main">
                                                         {formatCurrency(emiBreakdown.emi)}
                                                         </span>
@@ -273,7 +276,7 @@ const EmiCalculator = () => {
 
                                                 <div className="result-item mb-4 p-3 bg-light rounded-2">
                                                     <div className="d-flex justify-content-between align-items-center">
-                                                        <span className="result-label text-muted">Total Interest</span>
+                                                        <span className="result-label text-muted">{t('emi.totalInterest')}</span>
                                                         <span className="result-value fs-5 fw-bold text-warning">
                                                         {formatCurrency(emiBreakdown.totalInterest)}
                                                         </span>
@@ -282,7 +285,7 @@ const EmiCalculator = () => {
 
                                                 <div className="result-item mb-4 p-3 bg-light rounded-2">
                                                     <div className="d-flex justify-content-between align-items-center">
-                                                        <span className="result-label text-muted">Total Payment</span>
+                                                        <span className="result-label text-muted">{t('emi.totalPayment')}</span>
                                                         <span className="result-value fs-5 fw-bold text-success">
                                                         {formatCurrency(emiBreakdown.totalPayment)}
                                                         </span>
@@ -290,8 +293,9 @@ const EmiCalculator = () => {
                                                 </div>
 
                                                 {/* Breakdown Chart */}
+                                                {emiBreakdown.totalPayment > 0 && (
                                                 <div className="breakdown-chart mt-4">
-                                                    <h5 className="chart-title mb-3">Payment Breakdown</h5>
+                                                    <h5 className="chart-title mb-3">{t('emi.paymentBreakdown')}</h5>
                                                     <div className="breakdown-visual">
                                                         <div className="breakdown-bar">
                                                             <div
@@ -323,6 +327,7 @@ const EmiCalculator = () => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -334,12 +339,10 @@ const EmiCalculator = () => {
                                                 <div className="info-card bg-white p-4 rounded-3 shadow-sm h-100">
                                                     <h4 className="info-title mb-3">
                                                         <i className="fas fa-info-circle text-main me-2"></i>
-                                                        What is EMI?
+                                                        {t('emi.whatIsEmi')}
                                                     </h4>
                                                     <p className="info-text">
-                                                        EMI (Equated Monthly Installment) is a fixed payment amount made by a borrower
-                                                        to a lender at a specified date each calendar month. It consists of both principal
-                                                        and interest components.
+                                                        {t('emi.whatIsEmiDesc')}
                                                     </p>
                                                 </div>
                                             </div>
@@ -347,13 +350,13 @@ const EmiCalculator = () => {
                                                 <div className="info-card bg-white p-4 rounded-3 shadow-sm h-100">
                                                     <h4 className="info-title mb-3">
                                                         <i className="fas fa-lightbulb text-main me-2"></i>
-                                                        Tips for Home Loan
+                                                        {t('emi.tipsForHomeLoan')}
                                                     </h4>
                                                     <ul className="info-list">
-                                                        <li>Maintain a good credit score for better interest rates</li>
-                                                        <li>Choose a shorter tenure to save on interest</li>
-                                                        <li>Make prepayments when possible to reduce interest burden</li>
-                                                        <li>Compare rates from multiple lenders</li>
+                                                        <li>{t('emi.tipCreditScore')}</li>
+                                                        <li>{t('emi.tipShorterTenure')}</li>
+                                                        <li>{t('emi.tipPrepayments')}</li>
+                                                        <li>{t('emi.tipCompareRates')}</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -370,19 +373,19 @@ const EmiCalculator = () => {
                     <div className="container">
                         <div className="row justify-content-center">
                             <div className="col-lg-8 text-center">
-                                <h2 className="cta-title mb-3">Ready to Find Your Dream Home?</h2>
+                                <h2 className="cta-title mb-3">{t('emi.ctaTitle')}</h2>
                                 <p className="cta-desc mb-4">
-                                    Explore our wide range of properties and use our EMI calculator to plan your finances better.
+                                    {t('emi.ctaDesc')}
                                 </p>
                                 <div className="cta-buttons d-flex justify-content-center gap-3">
-                                    <a href="/properties" className="btn btn-white btn-main">
+                                    <I18nLink to="/properties" className="btn btn-white btn-main">
                                         <i className="fas fa-home me-2"></i>
-                                        Browse Properties
-                                    </a>
-                                    <a href="/contact" className="btn btn-outline-white">
+                                        {t('emi.browseProperties')}
+                                    </I18nLink>
+                                    <I18nLink to="/contact" className="btn btn-outline-white">
                                         <i className="fas fa-phone me-2"></i>
-                                        Contact Us
-                                    </a>
+                                        {t('emi.contactUs')}
+                                    </I18nLink>
                                 </div>
                             </div>
                         </div>

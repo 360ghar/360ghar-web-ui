@@ -110,6 +110,13 @@ describe('Structured Data Validation', () => {
         upvoteCount: 42,
       });
 
+      expect(schema.mainEntity.text).toBe('What are property rates in DLF Phase 3?');
+      expect(schema.mainEntity.author).toBeDefined();
+      expect(schema.mainEntity.author.url).toBeDefined();
+      expect(schema.mainEntity.datePublished).toBeDefined();
+      expect(schema.mainEntity.acceptedAnswer.author.url).toBeDefined();
+      expect(schema.mainEntity.acceptedAnswer.dateCreated).toContain('T');
+
       const result = validateSchema(schema, 'TestQAPage');
       expect(result.isValid).toBe(true);
     });
@@ -305,6 +312,9 @@ describe('Structured Data Validation', () => {
         answer: 'Test answer',
       });
       expect(schema['@type']).toBe('QAPage');
+      expect(schema.mainEntity.author).toBeDefined();
+      expect(schema.mainEntity.text).toBe('Test question?');
+      expect(schema.mainEntity.datePublished).toBeDefined();
     });
 
     it('includes Speakable schema for voice search', () => {

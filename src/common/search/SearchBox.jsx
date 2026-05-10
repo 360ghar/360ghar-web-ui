@@ -1,7 +1,8 @@
 import { useState }  from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { useLocationStore } from '../../store/locationStore';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import GooglePlacesInput from './GooglePlacesInput';
 import {
   PROPERTY_TYPE_FILTER_OPTIONS,
@@ -14,7 +15,8 @@ const quickSearchTypeOptions = PROPERTY_TYPE_FILTER_OPTIONS.filter(
 );
 
 const SearchBox = () => {
-  const navigate = useNavigate();
+  const { t } = useTranslation('properties');
+  const navigate = useI18nNavigate();
   const { location, setLocation } = useLocationStore();
   const [searchMode, setSearchMode] = useState('general'); // 'general' or 'location'
 
@@ -61,7 +63,7 @@ const SearchBox = () => {
               onClick={() => setSearchMode('general')}
             >
               <i className="fas fa-search me-1"></i>
-              General Search
+              {t('searchBox.generalMode')}
             </button>
             <button
               type="button"
@@ -69,7 +71,7 @@ const SearchBox = () => {
               onClick={() => setSearchMode('location')}
             >
               <i className="fas fa-map-marker-alt me-1"></i>
-              Location Search
+              {t('searchBox.locationMode')}
             </button>
           </div>
         </div>
@@ -82,7 +84,7 @@ const SearchBox = () => {
                   <input
                     type="text"
                     className="common-input common-input--light"
-                    placeholder="Search by keyword, title, or description..."
+                    placeholder={t('searchBox.keywordPlaceholder')}
                     name="keyword"
                     value={formik.values.keyword}
                     onChange={formik.handleChange}
@@ -95,10 +97,10 @@ const SearchBox = () => {
                     value={formik.values.type}
                     onChange={formik.handleChange}
                   >
-                    <option value="All">All Types</option>
+                    <option value="All">{t('searchBox.allTypes')}</option>
                     {quickSearchTypeOptions.map((option) => (
                       <option key={option.value} value={option.value}>
-                        {option.label}
+                        {t(option.labelKey)}
                       </option>
                     ))}
                   </select>
@@ -112,7 +114,7 @@ const SearchBox = () => {
                   >
                     {PURPOSE_OPTIONS.map((option) => (
                       <option key={option.value || 'all'} value={option.value || 'all'}>
-                        {option.label}
+                        {t(option.labelKey)}
                       </option>
                     ))}
                   </select>
@@ -120,7 +122,7 @@ const SearchBox = () => {
                 <div className="col-md-2 d-grid">
                   <button type="submit" className="btn btn-main w-100">
                     <i className="fas fa-search me-2"></i>
-                    Search
+                    {t('searchBox.searchBtn')}
                   </button>
                 </div>
               </>
@@ -128,7 +130,7 @@ const SearchBox = () => {
               <>
                 <div className="col-md-4">
                   <GooglePlacesInput
-                    placeholder={location.name || 'Enter location, city, or area...'}
+                    placeholder={location.name || t('searchBox.locationPlaceholder')}
                     className="common-input common-input--light w-100"
                     restrictCountry="in"
                     types={["(cities)"]}
@@ -142,18 +144,18 @@ const SearchBox = () => {
                     value={formik.values.radius}
                     onChange={formik.handleChange}
                   >
-                    <option value="5">5 km</option>
-                    <option value="10">10 km</option>
-                    <option value="20">20 km</option>
-                    <option value="50">50 km</option>
-                    <option value="100">100 km</option>
+                    <option value="5">{t('searchBox.kmRadius', { km: 5 })}</option>
+                    <option value="10">{t('searchBox.kmRadius', { km: 10 })}</option>
+                    <option value="20">{t('searchBox.kmRadius', { km: 20 })}</option>
+                    <option value="50">{t('searchBox.kmRadius', { km: 50 })}</option>
+                    <option value="100">{t('searchBox.kmRadius', { km: 100 })}</option>
                   </select>
                 </div>
                 <div className="col-md-2">
                   <input
                     type="number"
                     className="common-input common-input--light"
-                    placeholder="Min Price"
+                    placeholder={t('searchBox.minPrice')}
                     name="minPrice"
                     value={formik.values.minPrice}
                     onChange={formik.handleChange}
@@ -164,7 +166,7 @@ const SearchBox = () => {
                   <input
                     type="number"
                     className="common-input common-input--light"
-                    placeholder="Max Price"
+                    placeholder={t('searchBox.maxPrice')}
                     name="maxPrice"
                     value={formik.values.maxPrice}
                     onChange={formik.handleChange}
@@ -174,7 +176,7 @@ const SearchBox = () => {
                 <div className="col-md-2 d-grid">
                   <button type="submit" className="btn btn-main w-100">
                     <i className="fas fa-search me-2"></i>
-                    Find Nearby
+                    {t('searchBox.findNearby')}
                   </button>
                 </div>
               </>
@@ -191,11 +193,11 @@ const SearchBox = () => {
                   value={formik.values.bedrooms}
                   onChange={formik.handleChange}
                 >
-                  <option value="">Bedrooms</option>
-                  <option value="1">1+ Bedroom</option>
-                  <option value="2">2+ Bedrooms</option>
-                  <option value="3">3+ Bedrooms</option>
-                  <option value="4">4+ Bedrooms</option>
+                  <option value="">{t('searchBox.bedrooms')}</option>
+                  <option value="1">{t('searchBox.bedroom1')}</option>
+                  <option value="2">{t('searchBox.bedroom2')}</option>
+                  <option value="3">{t('searchBox.bedroom3')}</option>
+                  <option value="4">{t('searchBox.bedroom4')}</option>
                 </select>
               </div>
               <div className="col-md-3">
@@ -205,10 +207,10 @@ const SearchBox = () => {
                   value={formik.values.type}
                   onChange={formik.handleChange}
                 >
-                  <option value="All">All Types</option>
+                  <option value="All">{t('searchBox.allTypes')}</option>
                   {quickSearchTypeOptions.map((option) => (
                     <option key={option.value} value={option.value}>
-                      {option.label}
+                      {t(option.labelKey)}
                     </option>
                   ))}
                 </select>
@@ -222,7 +224,7 @@ const SearchBox = () => {
                 >
                   {PURPOSE_OPTIONS.map((option) => (
                     <option key={option.value || 'all'} value={option.value || 'all'}>
-                      {option.label}
+                      {t(option.labelKey)}
                     </option>
                   ))}
                 </select>
@@ -230,7 +232,7 @@ const SearchBox = () => {
               <div className="col-md-3">
                 <button type="submit" className="btn btn-outline-primary w-100">
                   <i className="fas fa-filter me-2"></i>
-                  Apply Filters
+                  {t('searchBox.applyFilters')}
                 </button>
               </div>
             </div>

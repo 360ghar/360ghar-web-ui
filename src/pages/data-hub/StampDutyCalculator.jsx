@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -17,19 +18,21 @@ const STAMP_DUTY_HOW_TO_STEPS = [
   { name: 'View calculated stamp duty and registration charges', text: 'See the breakdown of stamp duty, 1% registration fee, and total registration cost instantly.' },
 ];
 
-const BUYER_TYPES = [
-  { value: 'male', label: 'Male', rate: 7 },
-  { value: 'female', label: 'Female', rate: 5 },
-  { value: 'joint', label: 'Joint', rate: 6 },
+const BUYER_RATES = [
+  { value: 'male', rate: 7 },
+  { value: 'female', rate: 5 },
+  { value: 'joint', rate: 6 },
 ];
 
-const fmt = (n) => `₹${Number(n).toLocaleString('en-IN')}`;
+const fmt = (n, lang) => `₹${Number(n).toLocaleString(lang === 'hi' ? 'hi-IN' : 'en-IN')}`;
 
 const StampDutyCalculator = () => {
+  const { t, i18n } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const { circleRateSectors, fetchCircleRateSectors } = useDataHubStore();
   const [form, setForm] = useState({ property_value: '', buyer_type: 'male', sector: '', property_type: '' });
   const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => { fetchCircleRateSectors(); }, [fetchCircleRateSectors]);
 
@@ -49,13 +52,19 @@ const StampDutyCalculator = () => {
     }
   };
 
+  const BUYER_TYPES = BUYER_RATES.map(({ value, rate }) => ({
+    value,
+    label: t(`stampDuty.buyerTypes.${value}`),
+    rate,
+  }));
+
   const selectedBuyer = BUYER_TYPES.find(b => b.value === form.buyer_type);
 
   return (
     <>
       <SEO
-        title="Stamp Duty Calculator Gurgaon | Haryana Registration Charges 2026 | 360Ghar"
-        description="Calculate stamp duty and registration charges for property in Gurugram, Haryana. Male: 7%, Female: 5%, Joint: 6%. Includes circle rate comparison and EMI estimation."
+        title={tSeo('stampDuty.title')}
+        description={tSeo('stampDuty.description')}
         keywords="Haryana stamp duty calculator, Gurugram property registration charges, DLC rate stamp duty, stamp duty female buyer Haryana, property registration cost Gurgaon"
         canonical="/stamp-duty-calculator"
         structuredData={[
@@ -84,15 +93,15 @@ const StampDutyCalculator = () => {
           <div className="container">
             <div className="row">
               <div className="col-lg-7">
-                <h1 className="fs-28 fw-600 mb-10">Haryana Stamp Duty Calculator</h1>
-                <p className="mb-30 color-text-3">Calculate stamp duty and registration fees for property registration in Gurugram, Haryana.</p>
+                <h1 className="fs-28 fw-600 mb-10">{t('stampDuty.title')}</h1>
+                <p className="mb-30 color-text-3">{t('stampDuty.description')}</p>
 
                 <div className="p-30 border-radius-8 mb-30" style={{ background: '#f9fafb', border: '1px solid #e5e7eb' }}>
                   <div className="row mb-20">
                     <div className="col-12">
-                      <label className="form-label fw-500">Property Value (₹)</label>
+                      <label className="form-label fw-500">{t('stampDuty.propertyValue')}</label>
                       <input type="number" className="form-control"
-                        placeholder="e.g. 8500000"
+                        placeholder={t('stampDuty.propertyValuePlaceholder')}
                         value={form.property_value}
                         onChange={(e) => setForm(f => ({ ...f, property_value: e.target.value }))} />
                     </div>
@@ -100,7 +109,7 @@ const StampDutyCalculator = () => {
 
                   <div className="row mb-20">
                     <div className="col-12">
-                      <label className="form-label fw-500">Buyer Type</label>
+                      <label className="form-label fw-500">{t('stampDuty.buyerType')}</label>
                       <div className="d-flex gap-10">
                         {BUYER_TYPES.map(({ value, label, rate }) => (
                           <button key={value}
@@ -115,30 +124,30 @@ const StampDutyCalculator = () => {
 
                   <div className="row mb-20">
                     <div className="col-sm-6">
-                      <label className="form-label fw-500">Sector (optional)</label>
+                      <label className="form-label fw-500">{t('stampDuty.sectorOptional')}</label>
                       <select className="form-select" value={form.sector}
                         onChange={(e) => setForm(f => ({ ...f, sector: e.target.value }))}>
-                        <option value="">Select sector for circle rate comparison</option>
+                        <option value="">{t('stampDuty.selectSector')}</option>
                         {circleRateSectors.map(s => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>
                   </div>
 
                   <button className="btn btn-primary w-100" onClick={calculate} disabled={loading || !form.property_value}>
-                    {loading ? 'Calculating...' : 'Calculate Stamp Duty'}
+                    {loading ? t('stampDuty.calculating') : t('stampDuty.calculate')}
                   </button>
                 </div>
 
                 {/* Result */}
                 {result && (
                   <div className="p-30 border-radius-8" style={{ background: '#fff', border: '1px solid #d1fae5' }}>
-                    <h3 className="fs-20 fw-600 mb-20">Calculation Result</h3>
+                    <h3 className="fs-20 fw-600 mb-20">{t('stampDuty.result')}</h3>
                     <div className="row">
                       {[
-                        { label: 'Property Value', value: fmt(result.property_value) },
-                        { label: `Stamp Duty (${selectedBuyer?.rate}% — ${selectedBuyer?.label})`, value: fmt(result.stamp_duty_amount) },
-                        { label: 'Registration Fee (1%)', value: fmt(result.registration_fee) },
-                        { label: 'Total Registration Cost', value: fmt(result.total_cost), highlight: true },
+                        { label: t('stampDuty.propertyValueLabel'), value: fmt(result.property_value, i18n.language) },
+                        { label: t('stampDuty.stampDutyLabel', { rate: selectedBuyer?.rate, type: selectedBuyer?.label }), value: fmt(result.stamp_duty_amount, i18n.language) },
+                        { label: t('stampDuty.registrationFee'), value: fmt(result.registration_fee, i18n.language) },
+                        { label: t('stampDuty.totalCost'), value: fmt(result.total_cost, i18n.language), highlight: true },
                       ].map(({ label, value, highlight }) => (
                         <div key={label} className="col-sm-6 mb-15">
                           <div className={`p-15 border-radius-6 ${highlight ? '' : ''}`}
@@ -151,7 +160,7 @@ const StampDutyCalculator = () => {
                     </div>
                     {result.current_bank_rate && (
                       <p className="mt-15 fs-13 color-text-3">
-                        Current home loan rate: <strong>{result.current_bank_rate}% p.a.</strong> — You can use the <a href="/emi-calculator" className="color-primary">EMI Calculator</a> to estimate your monthly installment.
+                        {t('stampDuty.homeLoanRate', { rate: result.current_bank_rate })}
                       </p>
                     )}
                   </div>
@@ -161,16 +170,16 @@ const StampDutyCalculator = () => {
               {/* Sidebar: Rate Reference Table */}
               <div className="col-lg-5 mt-40 mt-lg-0">
                 <div className="p-25 border-radius-8" style={{ background: '#f9fafb', border: '1px solid #e5e7eb', position: 'sticky', top: 80 }}>
-                  <h3 className="fs-18 fw-600 mb-15">Haryana Stamp Duty Rates</h3>
+                  <h3 className="fs-18 fw-600 mb-15">{t('stampDuty.rateReference')}</h3>
                   <table className="table table-sm table-bordered mb-20">
-                    <thead className="table-light"><tr><th>Buyer Type</th><th>Stamp Duty</th><th>Reg. Fee</th></tr></thead>
+                    <thead className="table-light"><tr><th>{t('stampDuty.tableHeaders.buyerType')}</th><th>{t('stampDuty.tableHeaders.stampDuty')}</th><th>{t('stampDuty.tableHeaders.regFee')}</th></tr></thead>
                     <tbody>
                       {BUYER_TYPES.map(({ label, rate }) => (
                         <tr key={label}><td>{label}</td><td>{rate}%</td><td>1%</td></tr>
                       ))}
                     </tbody>
                   </table>
-                  <p className="fs-12 color-text-3">Source: Haryana Government, applicable across all districts including Gurugram.</p>
+                  <p className="fs-12 color-text-3">{t('stampDuty.source')}</p>
                 </div>
               </div>
             </div>

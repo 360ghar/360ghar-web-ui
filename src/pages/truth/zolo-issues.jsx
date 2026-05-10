@@ -1,9 +1,11 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
 
 const TruthPage = lazy(() => import('./TruthPage'));
 
 const ZoloTruth = () => {
+  const [tSeo] = useTranslation('seo');
   const competitor = competitors.zolo;
   
   const keyIssues = [
@@ -37,8 +39,8 @@ const ZoloTruth = () => {
   return (
     <TruthPage
       competitor={competitor}
-      pageTitle="Why Zolo Stays Has 1.7/5 Rating | The Truth About Zolo Service Issues"
-      pageDescription="Discover why Zolo Stays has terrible reviews - hidden charges, deposit refund issues, and ignored maintenance. The truth about co-living in India."
+      pageTitle={tSeo('truth.zolo.title')}
+      pageDescription={tSeo('truth.zolo.description')}
       canonicalPath="/truth/zolo-issues"
       truthTitle="The Truth About Zolo Stays Service Issues"
       introText="With a Trustpilot rating of 1.7/5, Zolo Stays\' premium positioning masks serious service issues reported by thousands of users."

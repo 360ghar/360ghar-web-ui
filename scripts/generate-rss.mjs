@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
 import { fileURLToPath } from 'node:url';
-import { fetchPaginatedCollection, fetchPaginatedCollectionWithFallbacks } from './lib/paginatedApi.mjs';
+import { fetchPaginatedCollectionParallel, fetchPaginatedCollectionWithFallbacksParallel } from './lib/paginatedApi.mjs';
 
 const require = createRequire(import.meta.url);
 
@@ -34,7 +34,7 @@ const toRfc2822 = (dateStr) => {
 // --- Fetchers ---
 
 async function fetchBlogPosts() {
-  return fetchPaginatedCollectionWithFallbacks({
+  return fetchPaginatedCollectionWithFallbacksParallel({
     baseUrl: API_BASE,
     path: '/blog/posts',
     pageSizes: [50, 25],
@@ -42,7 +42,7 @@ async function fetchBlogPosts() {
 }
 
 async function fetchProperties() {
-  return fetchPaginatedCollection({
+  return fetchPaginatedCollectionParallel({
     baseUrl: API_BASE,
     path: '/properties/',
   });
@@ -98,6 +98,7 @@ const buildRssXml = (items, channelOpts = {}) => {
     link = SITE_URL,
     description = 'Properties, projects, localities, and real estate insights from 360Ghar',
     selfHref = `${SITE_URL}/rss.xml`,
+    language = 'en-in',
   } = channelOpts;
   const buildDate = new Date().toUTCString();
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -106,7 +107,7 @@ const buildRssXml = (items, channelOpts = {}) => {
     <title>${escapeXml(title)}</title>
     <link>${link}</link>
     <description>${escapeXml(description)}</description>
-    <language>en-in</language>
+    <language>${language}</language>
     <lastBuildDate>${buildDate}</lastBuildDate>
     <atom:link href="${selfHref}" rel="self" type="application/rss+xml"/>
 ${items.map(toRssItem).join('\n')}
@@ -152,22 +153,29 @@ async function main() {
 
   let blogPosts = [];
   let blogFetchOk = true;
-  try {
-    blogPosts = await fetchBlogPosts();
-    console.log(`generate-rss: fetched ${blogPosts.length} blog posts`);
-  } catch (err) {
-    blogFetchOk = false;
-    console.warn(`generate-rss: failed to fetch blog posts (${err.message})`);
-  }
-
   let properties = [];
   let propertiesFetchOk = true;
-  try {
-    properties = await fetchProperties();
+
+  // Fetch blog posts and properties in parallel
+  const [blogResult, propertiesResult] = await Promise.allSettled([
+    fetchBlogPosts(),
+    fetchProperties(),
+  ]);
+
+  if (blogResult.status === 'fulfilled') {
+    blogPosts = blogResult.value;
+    console.log(`generate-rss: fetched ${blogPosts.length} blog posts`);
+  } else {
+    blogFetchOk = false;
+    console.warn(`generate-rss: failed to fetch blog posts (${blogResult.reason?.message})`);
+  }
+
+  if (propertiesResult.status === 'fulfilled') {
+    properties = propertiesResult.value;
     console.log(`generate-rss: fetched ${properties.length} properties`);
-  } catch (err) {
+  } else {
     propertiesFetchOk = false;
-    console.warn(`generate-rss: failed to fetch properties (${err.message})`);
+    console.warn(`generate-rss: failed to fetch properties (${propertiesResult.reason?.message})`);
   }
 
   console.log(`generate-rss: ${localityEntries.length} localities from static index`);
@@ -186,6 +194,20 @@ async function main() {
     isFresh: blogFetchOk,
   });
 
+  const hiBlogItems = blogItems.map(item => ({ ...item, link: item.link.replace(`${SITE_URL}/blog/`, `${SITE_URL}/hi/blog/`) }));
+  const hiBlogXml = buildRssXml(hiBlogItems, {
+    title: '360Ghar ब्लॉग',
+    description: '360Ghar से रियल एस्टेट गाइड, खरीद टिप्स, लोकैलिटी गाइड और बाज़ार अपडेट',
+    selfHref: `${SITE_URL}/rss/hi-blog.xml`,
+    language: 'hi-in',
+  });
+  writeFeedOrPreserveExisting({
+    filePath: path.join(rssDir, 'hi-blog.xml'),
+    xml: hiBlogXml,
+    label: `${hiBlogItems.length} Hindi blog items`,
+    isFresh: blogFetchOk,
+  });
+
   // --- Sub-feed: Properties ---
   const propertyItems = properties.map(propertyItem);
   const propertiesXml = buildRssXml(propertyItems, {
@@ -200,6 +222,20 @@ async function main() {
     isFresh: propertiesFetchOk,
   });
 
+  const hiPropertyItems = propertyItems.map(item => ({ ...item, link: item.link.replace(`${SITE_URL}/property/`, `${SITE_URL}/hi/property/`) }));
+  const hiPropertiesXml = buildRssXml(hiPropertyItems, {
+    title: '360Ghar प्रॉपर्टी',
+    description: 'गुरुग्राम और दिल्ली NCR में 360Ghar से नवीनतम वेरिफाइड प्रॉपर्टी लिस्टिंग',
+    selfHref: `${SITE_URL}/rss/hi-properties.xml`,
+    language: 'hi-in',
+  });
+  writeFeedOrPreserveExisting({
+    filePath: path.join(rssDir, 'hi-properties.xml'),
+    xml: hiPropertiesXml,
+    label: `${hiPropertyItems.length} Hindi property items`,
+    isFresh: propertiesFetchOk,
+  });
+
   // --- Sub-feed: Localities ---
   const localityItems = localityEntries.map(localityItem);
   const localitiesXml = buildRssXml(localityItems, {
@@ -208,6 +244,15 @@ async function main() {
     selfHref: `${SITE_URL}/rss/localities.xml`,
   });
   writeRssFile(path.join(rssDir, 'localities.xml'), localitiesXml, `${localityItems.length} locality items`);
+
+  const hiLocalityItems = localityItems.map(item => ({ ...item, link: item.link.replace(`${SITE_URL}/locality/`, `${SITE_URL}/hi/locality/`) }));
+  const hiLocalitiesXml = buildRssXml(hiLocalityItems, {
+    title: '360Ghar लोकैलिटी',
+    description: 'गुरुग्राम और दिल्ली NCR के लिए लोकैलिटी गाइड और पड़ोस इंटेलिजेंस',
+    selfHref: `${SITE_URL}/rss/hi-localities.xml`,
+    language: 'hi-in',
+  });
+  writeRssFile(path.join(rssDir, 'hi-localities.xml'), hiLocalitiesXml, `${hiLocalityItems.length} Hindi locality items`);
 
   // --- Main index feed: lists each sub-feed as an item ---
   const indexItems = [
@@ -228,6 +273,24 @@ async function main() {
       link: `${SITE_URL}/rss/localities.xml`,
       desc: 'Locality guides and neighbourhood intelligence for Gurugram and Delhi NCR',
       date: localityItems.length ? localityItems[0].date : new Date().toISOString(),
+    },
+    {
+      title: '360Ghar ब्लॉग (Hindi)',
+      link: `${SITE_URL}/rss/hi-blog.xml`,
+      desc: 'रियल एस्टेट गाइड, खरीद टिप्स, लोकैलिटी गाइड और बाज़ार अपडेट',
+      date: hiBlogItems.length ? hiBlogItems[0].date : new Date().toISOString(),
+    },
+    {
+      title: '360Ghar प्रॉपर्टी (Hindi)',
+      link: `${SITE_URL}/rss/hi-properties.xml`,
+      desc: 'गुरुग्राम और दिल्ली NCR में नवीनतम वेरिफाइड प्रॉपर्टी लिस्टिंग',
+      date: hiPropertyItems.length ? hiPropertyItems[0].date : new Date().toISOString(),
+    },
+    {
+      title: '360Ghar लोकैलिटी (Hindi)',
+      link: `${SITE_URL}/rss/hi-localities.xml`,
+      desc: 'लोकैलिटी गाइड और पड़ोस इंटेलिजेंस',
+      date: hiLocalityItems.length ? hiLocalityItems[0].date : new Date().toISOString(),
     },
   ];
   const indexXml = buildRssXml(indexItems, {

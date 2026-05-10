@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '../../store';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import AccountHomeTab from './AccountHomeTab';
 import AccountProfileTab from './AccountProfileTab';
 import AccountAddressTab from './AccountAddressTab';
@@ -12,13 +14,13 @@ import AccountFavoritePropertyTab from './AccountFavoritePropertyTab';
 import AccountChangePasswordTab from './AccountChangePasswordTab';
 
 const tabDefinitions = [
-  { key: 'home', label: 'Home', icon: 'fas fa-home', Component: AccountHomeTab },
-  { key: 'profile', label: 'Profile', icon: 'fas fa-user', Component: AccountProfileTab },
-  { key: 'address', label: 'Address', icon: 'fas fa-map-marker-alt', Component: AccountAddressTab },
-  { key: 'details', label: 'Account Details', icon: 'fas fa-id-card', Component: AccountDetailsTab },
-  { key: 'my-properties', label: 'My Properties', icon: 'fas fa-list', Component: AccountMyPropertyTab },
-  { key: 'favorites', label: 'Favorite Properties', icon: 'fas fa-heart', Component: AccountFavoritePropertyTab },
-  { key: 'change-password', label: 'Change Password', icon: 'fas fa-lock', Component: AccountChangePasswordTab },
+  { key: 'home', labelKey: 'account.tabs.home', icon: 'fas fa-home', Component: AccountHomeTab },
+  { key: 'profile', labelKey: 'account.tabs.profile', icon: 'fas fa-user', Component: AccountProfileTab },
+  { key: 'address', labelKey: 'account.tabs.address', icon: 'fas fa-map-marker-alt', Component: AccountAddressTab },
+  { key: 'details', labelKey: 'account.tabs.details', icon: 'fas fa-id-card', Component: AccountDetailsTab },
+  { key: 'my-properties', labelKey: 'account.tabs.myProperties', icon: 'fas fa-list', Component: AccountMyPropertyTab },
+  { key: 'favorites', labelKey: 'account.tabs.favorites', icon: 'fas fa-heart', Component: AccountFavoritePropertyTab },
+  { key: 'change-password', labelKey: 'account.tabs.changePassword', icon: 'fas fa-lock', Component: AccountChangePasswordTab },
 ];
 
 const aliasToKey = {
@@ -36,9 +38,10 @@ const aliasToKey = {
 };
 
 const AccountSection = () => {
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
   const [searchParams] = useSearchParams();
   const { logout } = useAuthStore();
+  const { t } = useTranslation('account');
 
   const tabKeys = useMemo(() => tabDefinitions.map((tab) => tab.key), []);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -60,7 +63,7 @@ const AccountSection = () => {
 
   const handleLogout = async () => {
     await logout();
-    toast.success('You have been logged out', { theme: 'colored' });
+    toast.success(t('account.loggedOut'), { theme: 'colored' });
     navigate('/login');
   };
 
@@ -78,7 +81,7 @@ const AccountSection = () => {
                         <span className="icon">
                           <i className={tab.icon} aria-hidden="true"></i>
                         </span>
-                        <span>{tab.label}</span>
+                        <span>{t(tab.labelKey)}</span>
                       </Tab>
                     ))}
                   </TabList>
@@ -86,7 +89,7 @@ const AccountSection = () => {
                     <span className="icon">
                       <i className="fas fa-sign-out-alt" aria-hidden="true"></i>
                     </span>
-                    <span>Logout</span>
+                    <span>{t('account.logout')}</span>
                   </button>
                 </div>
               </div>

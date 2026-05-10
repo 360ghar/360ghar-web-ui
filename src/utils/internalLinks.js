@@ -4,7 +4,7 @@
  * LocalityTemplate, and CityHub pages.
  */
 import localitiesIndex from '../data/localities-index.json';
-import priceContextData from '../data/priceContext.json';
+import priceContextData from '../data/priceContext.json' with { type: 'json' };
 
 const CITY_SLUG_MAP = {
   gurgaon: 'gurgaon',

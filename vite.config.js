@@ -205,31 +205,25 @@ export default defineConfig(({ mode }) => {
     // Manual chunk splitting for better caching
     rollupOptions: {
       output: {
-        manualChunks: {
-          // React core
-          "vendor-react": ["react", "react-dom", "react-router-dom"],
+        manualChunks(id) {
+          if (id.includes('src/data/localities.json')) return 'localities-data';
+          if (id.includes('src/data/localities-index.json')) return 'localities-index';
 
-          // Form libraries
-          "vendor-forms": ["formik", "yup"],
+          const staticChunks = {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-forms': ['formik', 'yup'],
+            'vendor-ui': ['react-slick', 'react-toastify', 'yet-another-react-lightbox'],
+            'vendor-markdown': ['react-markdown', 'remark-gfm'],
+            'vendor-utils': ['axios', 'zustand', 'dompurify'],
+            'vendor-analytics': ['posthog-js', 'web-vitals'],
+            'vendor-supabase': ['@supabase/supabase-js'],
+          };
 
-          // UI libraries
-          "vendor-ui": [
-            "react-slick",
-            "react-toastify",
-            "yet-another-react-lightbox",
-          ],
-
-          // Markdown rendering
-          "vendor-markdown": ["react-markdown", "remark-gfm"],
-
-          // Utilities
-          "vendor-utils": ["axios", "zustand", "dompurify"],
-
-          // Analytics (separate for lazy loading)
-          "vendor-analytics": ["posthog-js", "web-vitals"],
-
-          // Supabase Auth SDK (lazy-loaded, not on critical path)
-          "vendor-supabase": ["@supabase/supabase-js"],
+          for (const [chunkName, modules] of Object.entries(staticChunks)) {
+            if (modules.some((mod) => id.includes(`/node_modules/${mod}/`) || id.includes(`/node_modules/${mod}.js`))) {
+              return chunkName;
+            }
+          }
         },
       },
     },
@@ -238,7 +232,7 @@ export default defineConfig(({ mode }) => {
     minify: "terser",
     terserOptions: {
       compress: {
-        drop_console: true,
+        pure_funcs: ['console.log', 'console.debug', 'console.info'],
         drop_debugger: true,
       },
     },
@@ -247,7 +241,17 @@ export default defineConfig(({ mode }) => {
   server: {
     proxy: {
       "/api": {
-        target: env.VITE_API_SERVER || 'http://localhost:8000',
+        target: env.VITE_API_SERVER || 'http://localhost:3600',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "/api/v1"),
+      },
+    },
+  },
+
+  preview: {
+    proxy: {
+      "/api": {
+        target: apiServer,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, "/api/v1"),
       },

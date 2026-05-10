@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -5,38 +6,16 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import BlogClassicSection from '../../components/blog/BlogClassicSection';
 import SEO from '../../common/SEO';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import { I18nLink, localizePath, stripLocalePrefix } from '../../i18n/I18nLink';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
-
-const featuredGuides = [
-    {
-        title: 'Market reports',
-        description: 'Track Gurugram buying, renting, and locality trends before you shortlist.',
-        links: [
-            { label: 'Gurugram Real Estate Guide', to: '/gurugram-real-estate-guide' },
-            { label: 'Property Investment in Gurugram', to: '/property-investment-gurugram' },
-        ],
-    },
-    {
-        title: 'Locality research',
-        description: 'Move from broad city search into locality-level intelligence and price context.',
-        links: [
-            { label: 'Localities Directory', to: '/localities' },
-            { label: 'Properties Search', to: '/properties' },
-        ],
-    },
-    {
-        title: 'Planning tools',
-        description: 'Use calculators and checklists while reading guides so decisions stay grounded.',
-        links: [
-            { label: 'EMI Calculator', to: '/emi-calculator' },
-            { label: 'Property Checklist', to: '/property-document-checklist' },
-        ],
-    },
-];
+import { blogService } from '../../services/blogService';
 
 const BlogClassic = () => {
+    const { t } = useTranslation('blog');
+    const location = useLocation();
     const [searchParams] = useSearchParams();
 
     // Category / tag / page awareness
@@ -45,27 +24,77 @@ const BlogClassic = () => {
     const page = parseInt(searchParams.get('page'), 10) || 1;
     const isFiltered = Boolean(category || tag);
 
+    const POSTS_PER_PAGE = 10;
+    const [totalPages, setTotalPages] = useState(1);
+
+    useEffect(() => {
+        const params = { page: 1, limit: POSTS_PER_PAGE };
+        if (category) params.category = category;
+        if (tag) params.tag = tag;
+        blogService.getPosts(params)
+            .then(data => {
+                const tp = data.total_pages || Math.ceil((data.total || 0) / POSTS_PER_PAGE) || 1;
+                setTotalPages(tp);
+            })
+            .catch(() => {});
+    }, [category, tag]);
+
+    const rawLocale = location.pathname.startsWith('/hi') ? 'hi' : 'en';
+    const barePath = stripLocalePrefix(location.pathname);
+
+    // Featured guides derived from translation keys
+    const featuredGuides = [
+        {
+            title: t('featuredGuides.marketReports.title'),
+            description: t('featuredGuides.marketReports.description'),
+            links: [
+                { label: t('featuredGuides.marketReports.guideLabel'), to: '/gurugram-real-estate-guide' },
+                { label: t('featuredGuides.marketReports.investmentLabel'), to: '/property-investment-gurugram' },
+            ],
+        },
+        {
+            title: t('featuredGuides.localityResearch.title'),
+            description: t('featuredGuides.localityResearch.description'),
+            links: [
+                { label: t('featuredGuides.localityResearch.directoryLabel'), to: '/localities' },
+                { label: t('featuredGuides.localityResearch.searchLabel'), to: '/properties' },
+            ],
+        },
+        {
+            title: t('featuredGuides.planningTools.title'),
+            description: t('featuredGuides.planningTools.description'),
+            links: [
+                { label: t('featuredGuides.planningTools.emiLabel'), to: '/emi-calculator' },
+                { label: t('featuredGuides.planningTools.checklistLabel'), to: '/property-document-checklist' },
+            ],
+        },
+    ];
+
     // Build dynamic title and description
-    const baseTitle = 'Real Estate Blog | 360Ghar Insights';
+    const baseTitle = t('blogClassicPage.baseTitle');
     const seoTitle = category
-        ? `${category} | Real Estate Blog | 360Ghar`
+        ? `${category} | ${baseTitle}`
         : tag
-            ? `${tag} | Real Estate Blog | 360Ghar`
+            ? `${tag} | ${baseTitle}`
             : baseTitle;
 
-    const baseDescription = 'Guides and insights on buying, renting, PGs, investment trends, locality deep-dives, and market updates across Gurugram and Delhi NCR.';
+    const baseDescription = t('blogClassicPage.baseDescription');
     const seoDescription = category
-        ? `Browse ${category} articles. ${baseDescription}`
+        ? t('blogClassicPage.categoryArticles', { category, baseDescription })
         : tag
-            ? `Posts tagged "${tag}". ${baseDescription}`
+            ? t('blogClassicPage.taggedPosts', { tag, baseDescription })
             : baseDescription;
 
     // Canonical: /blog for page 1, /blog?page=N for page > 1
-    const canonical = page > 1 ? `/blog?page=${page}` : '/blog';
+    const canonical = page > 1 ? `${barePath}?page=${page}` : barePath;
 
-    // Prev/next for pagination
-    const prevUrl = page > 1 ? (page === 2 ? '/blog' : `/blog?page=${page - 1}`) : undefined;
-    const nextUrl = page > 1 ? `/blog?page=${page + 1}` : undefined;
+    // Prev/next for pagination — prefix with /hi/ when on Hindi route
+    const prevUrl = page > 1
+        ? (page === 2 ? localizePath(barePath, rawLocale) : `${localizePath(barePath, rawLocale)}?page=${page - 1}`)
+        : undefined;
+    const nextUrl = page < totalPages
+        ? `${localizePath(barePath, rawLocale)}?page=${page + 1}`
+        : undefined;
 
     // Generate CollectionPage schema for blog listings
     const blogCollectionSchema = {
@@ -79,8 +108,8 @@ const BlogClassic = () => {
         },
         mainEntity: {
             '@type': 'ItemList',
-            name: 'Real Estate Articles',
-            description: 'Latest insights on property buying, renting, and investment in Gurugram'
+            name: t('blogClassicPage.collectionName'),
+            description: t('blogClassicPage.collectionDesc')
         }
     };
 
@@ -92,15 +121,15 @@ const BlogClassic = () => {
           keywords="real estate blog, property tips, buying guide, renting guide, PG accommodation advice, investment in real estate, Gurgaon property market, Gurugram property market, Delhi NCR real estate, price trends, locality guides"
           canonical={canonical}
           image={siteMetadata.defaultOgImage}
-          type="blog"
+          type="website"
           noindex={isFiltered}
           prevUrl={prevUrl}
           nextUrl={nextUrl}
           structuredData={[
             blogCollectionSchema,
             generateBreadcrumbStructuredData([
-              { name: 'Home', url: 'https://360ghar.com/' },
-              { name: 'Blog', url: 'https://360ghar.com/blog' }
+              { name: t('blogClassicPage.breadcrumbHome'), url: 'https://360ghar.com/' },
+              { name: t('blogClassicPage.breadcrumbBlog'), url: 'https://360ghar.com/blog' }
             ])
           ]}
         />
@@ -113,7 +142,7 @@ const BlogClassic = () => {
                 headerMenusClass="mx-auto"
                 btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
                 btnLink="/post-property"
-                btnText="Post Property"
+                btnText={t('common:header.postProperty')}
                 spanClass="icon-right text-gradient"
                 showContactNumber={false}
             />
@@ -122,14 +151,14 @@ const BlogClassic = () => {
                 <div className="container container-two">
                     <div className="row g-4 align-items-start">
                         <div className="col-lg-7">
-                            <span className="subtitle bg-gray-100 px-3 py-2 rounded-pill d-inline-block mb-3">Research Hub</span>
-                            <h1 className="mb-3">Real Estate Guides for Gurugram and Delhi NCR</h1>
+                            <span className="subtitle bg-gray-100 px-3 py-2 rounded-pill d-inline-block mb-3">{t('blogClassic.subtitle')}</span>
+                            <h1 className="mb-3">{t('blogClassic.title')}</h1>
                             <p className="text-muted mb-4">
-                                Use this hub for buying guides, rental checklists, locality research, investment notes, and property-planning tools. The latest posts load dynamically, but this page always keeps key research paths crawlable and easy to reach.
+                                {t('blogClassic.desc')}
                             </p>
                             <div className="d-flex flex-wrap gap-2">
-                                <a href="#latest-posts" className="btn btn-main">Browse Latest Posts</a>
-                                <Link to="/localities" className="btn btn-outline-main">Explore Localities</Link>
+                                <a href="#latest-posts" className="btn btn-main">{t('blogClassic.browseLatest')}</a>
+                                <I18nLink to="/localities" className="btn btn-outline-main">{t('blogClassic.exploreLocalities')}</I18nLink>
                             </div>
                         </div>
                         <div className="col-lg-5">
@@ -141,9 +170,9 @@ const BlogClassic = () => {
                                             <p className="text-muted mb-3">{group.description}</p>
                                             <div className="d-flex flex-wrap gap-2">
                                                 {group.links.map((link) => (
-                                                    <Link key={link.to} to={link.to} className="btn btn-outline-main btn-sm">
+                                                    <I18nLink key={link.to} to={link.to} className="btn btn-outline-main btn-sm">
                                                         {link.label}
-                                                    </Link>
+                                                    </I18nLink>
                                                 ))}
                                             </div>
                                         </div>
@@ -154,7 +183,7 @@ const BlogClassic = () => {
                     </div>
                 </div>
             </section>
-            
+
             <section id="latest-posts">
                 <BlogClassicSection/>
             </section>

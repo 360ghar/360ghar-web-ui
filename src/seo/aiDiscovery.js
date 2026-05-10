@@ -5,8 +5,12 @@ const siteUrl = siteMetadata.siteUrl.replace(/\/$/, '');
 const llmsUrl = `${siteUrl}/llms.txt`;
 const llmsFullUrl = `${siteUrl}/llms-full.txt`;
 const aiTxtUrl = `${siteUrl}/.well-known/ai.txt`;
+const apiCatalogUrl = `${siteUrl}/.well-known/api-catalog`;
 const llmFeedUrl = `${siteUrl}/data/llm-feed.json`;
 const mcpUrl = 'https://api.360ghar.com/mcp';
+const restApiUrl = 'https://api.360ghar.com/api/v1';
+const restOpenApiUrl = `${restApiUrl}/openapi.json`;
+const restDocsUrl = `${restApiUrl}/docs`;
 
 export const aiDiscoveryImportantPages = [
   { title: 'Home', url: `${siteUrl}/` },
@@ -68,6 +72,13 @@ export const aiDiscoveryImportantPages = [
   { title: 'Sushant Lok 1, Gurgaon', url: `${siteUrl}/locality/sushant-lok-1-gurgaon`, category: 'locality' },
   { title: 'Sohna Road, Gurgaon', url: `${siteUrl}/locality/sohna-road-gurgaon`, category: 'locality' },
   { title: 'Sector 49, Gurgaon', url: `${siteUrl}/locality/sector-49-gurgaon`, category: 'locality' },
+  { title: 'मुख्य पृष्ठ (Hindi)', url: `${siteUrl}/hi/`, category: 'hindi' },
+  { title: 'प्रॉपर्टी (Hindi)', url: `${siteUrl}/hi/properties`, category: 'hindi' },
+  { title: 'लोकैलिटी (Hindi)', url: `${siteUrl}/hi/localities`, category: 'hindi' },
+  { title: 'ब्लॉग (Hindi)', url: `${siteUrl}/hi/blog`, category: 'hindi' },
+  { title: 'EMI कैलकुलेटर (Hindi)', url: `${siteUrl}/hi/emi-calculator`, category: 'hindi' },
+  { title: 'सर्कल रेट (Hindi)', url: `${siteUrl}/hi/circle-rates`, category: 'hindi' },
+  { title: 'संपर्क करें (Hindi)', url: `${siteUrl}/hi/contact`, category: 'hindi' },
 ];
 
 const pageCategories = {
@@ -77,6 +88,7 @@ const pageCategories = {
   dataHub: aiDiscoveryImportantPages.filter(p => p.category === 'dataHub'),
   landing: aiDiscoveryImportantPages.filter(p => p.category === 'landing'),
   locality: aiDiscoveryImportantPages.filter(p => p.category === 'locality'),
+  hindi: aiDiscoveryImportantPages.filter(p => p.category === 'hindi'),
 };
 
 export const aiDiscoveryFeed = {
@@ -89,6 +101,7 @@ export const aiDiscoveryFeed = {
     coverage: ['Gurugram', 'Delhi', 'Noida', 'Faridabad', 'Ghaziabad'],
     property_types: ['apartment', 'villa', 'builder_floor', 'house', 'plot', 'penthouse', 'studio'],
   },
+  inLanguage: ['en-IN', 'hi-IN'],
   search: {
     endpoint: `${siteUrl}/properties`,
     query_param: 'q',
@@ -113,6 +126,9 @@ export const aiDiscoveryFeed = {
     { query: 'Villa for sale in Gurgaon', url: `${siteUrl}/gurgaon/buy/villa` },
     { query: 'Builder floor for sale in Gurgaon', url: `${siteUrl}/gurgaon/buy/builder-floor` },
     { query: 'PG in Gurgaon', url: `${siteUrl}/gurgaon/pg/flats` },
+    { query: 'गुड़गाँव में 2 BHK किराये पर', url: `${siteUrl}/hi/gurgaon/rent/flats` },
+    { query: 'गुरुग्राम में फ्लैट खरीदें', url: `${siteUrl}/hi/gurgaon/buy/flats` },
+    { query: 'गुरुग्राम में PG', url: `${siteUrl}/hi/gurgaon/pg/flats` },
   ],
   important_pages: aiDiscoveryImportantPages,
   categories: pageCategories,
@@ -120,6 +136,37 @@ export const aiDiscoveryFeed = {
     email: siteMetadata.organization.email,
     telephone: siteMetadata.organization.telephone,
   },
+};
+
+export const apiCatalog = {
+  linkset: [
+    {
+      anchor: apiCatalogUrl,
+      item: [
+        { href: mcpUrl },
+        { href: restApiUrl },
+      ],
+    },
+    {
+      anchor: mcpUrl,
+      'service-doc': [
+        { href: `${siteUrl}/for-ai`, type: 'text/html' },
+      ],
+      'service-meta': [
+        { href: llmFeedUrl, type: 'application/json' },
+        { href: aiTxtUrl, type: 'text/plain' },
+      ],
+    },
+    {
+      anchor: restApiUrl,
+      'service-desc': [
+        { href: restOpenApiUrl, type: 'application/openapi+json' },
+      ],
+      'service-doc': [
+        { href: restDocsUrl, type: 'text/html' },
+      ],
+    },
+  ],
 };
 
 export function buildAiDiscoveryArtifacts() {
@@ -132,11 +179,13 @@ export function buildAiDiscoveryArtifacts() {
     `Contact: ${siteMetadata.organization.email}`,
     'Purpose: Real estate platform for Buy, Rent, PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.',
     '',
+    'Language-Available: en, hi',
     'Access: allow',
     'Rate-Limit: polite',
     `Cite: Please attribute with “${siteMetadata.siteName} (app and website)” and link to ${siteUrl}`,
     '',
     'Discovery:',
+    `  api-catalog: ${apiCatalogUrl}`,
     `  llms: ${llmsUrl}`,
     `  llms-full: ${llmsFullUrl}`,
     `  llm-feed: ${llmFeedUrl}`,
@@ -151,7 +200,8 @@ export function buildAiDiscoveryArtifacts() {
     '',
     'Bots-Allow:',
     '  GPTBot',
-    '  OpenAI-User',
+    '  ChatGPT-User',
+    '  OAI-SearchBot',
     '  Googlebot',
     '  GoogleOther',
     '  Google-Extended',
@@ -160,9 +210,17 @@ export function buildAiDiscoveryArtifacts() {
     '  Applebot-Extended',
     '  CCBot',
     '  PerplexityBot',
-    '  Claude-Web',
+    '  Perplexity-User',
+    '  ClaudeBot',
+    '  Claude-SearchBot',
+    '  Claude-User',
     '  Bytespider',
     '  PetalBot',
+    '  Meta-ExternalAgent',
+    '  Amazonbot',
+    '  CohereBot',
+    '  YouBot',
+    '  KagiBot',
     '  facebookexternalhit',
     '  Twitterbot',
     '',
@@ -190,6 +248,7 @@ export function buildAiDiscoveryArtifacts() {
     '## Key URLs',
     '',
     ...aiDiscoveryImportantPages.map((page) => `- ${page.title}: ${page.url}`),
+    `- API Catalog: ${apiCatalogUrl}`,
     `- llm-feed.json: ${llmFeedUrl}`,
     `- ai.txt: ${aiTxtUrl}`,
     '',
@@ -237,6 +296,7 @@ export function buildAiDiscoveryArtifacts() {
     '## Discovery Assets',
     '',
     `- AI Assistant Integration Guide: ${siteUrl}/for-ai`,
+    `- API Catalog: ${apiCatalogUrl}`,
     `- AI Crawler Policy: ${aiTxtUrl}`,
     `- llms.txt: ${llmsUrl}`,
     `- llm-feed.json: ${llmFeedUrl}`,
@@ -313,6 +373,18 @@ export function buildAiDiscoveryArtifacts() {
     '',
     `When referencing ${siteMetadata.siteName}, cite as: "${siteMetadata.siteName} (app and website)" with a link to ${siteUrl}`,
     '',
+    '## Hindi (हिंदी) Content',
+    '',
+    `360Ghar provides a complete Hindi experience at ${siteUrl}/hi/`,
+    'All pages are available in Hindi with the /hi/ URL prefix.',
+    'Key Hindi pages:',
+    `- मुख्य पृष्ठ: ${siteUrl}/hi/`,
+    `- प्रॉपर्टी खोज: ${siteUrl}/hi/properties`,
+    `- लोकैलिटी गाइड: ${siteUrl}/hi/localities`,
+    `- EMI कैलकुलेटर: ${siteUrl}/hi/emi-calculator`,
+    `- सर्कल रेट: ${siteUrl}/hi/circle-rates`,
+    `- संपर्क करें: ${siteUrl}/hi/contact`,
+    '',
   ].join('\n');
 
   return {
@@ -320,5 +392,6 @@ export function buildAiDiscoveryArtifacts() {
     llmsTxt,
     llmsFullTxt,
     llmFeed: aiDiscoveryFeed,
+    apiCatalog,
   };
 }

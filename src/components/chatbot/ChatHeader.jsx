@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useChatStore } from '../../store';
 
 const BotIcon = () => (
@@ -56,6 +57,7 @@ const CloseIcon = () => (
 );
 
 function ChatHeader() {
+  const { t } = useTranslation('common');
   const isStreaming = useChatStore((state) => state.isStreaming);
   const toggleChat = useChatStore((state) => state.toggleChat);
   const resetChat = useChatStore((state) => state.resetChat);
@@ -66,19 +68,19 @@ function ChatHeader() {
         <div className="chatbot-header__avatar">
           <BotIcon />
         </div>
-        <span className="chatbot-header__title">360Ghar AI Assistant</span>
+        <span className="chatbot-header__title">{t('chatbot.title')}</span>
       </div>
 
       <div className="chatbot-header__center">
         {isStreaming ? (
           <>
             <span className="chatbot-header__status-dot chatbot-header__status-dot--streaming"></span>
-            <span>Thinking...</span>
+            <span>{t('chatbot.thinking')}</span>
           </>
         ) : (
           <>
             <span className="chatbot-header__status-dot"></span>
-            <span>Online</span>
+            <span>{t('chatbot.online')}</span>
           </>
         )}
       </div>
@@ -87,15 +89,15 @@ function ChatHeader() {
         <button
           className="chatbot-header__btn chatbot-header__btn--reset"
           onClick={resetChat}
-          title="Start new conversation"
-          aria-label="Start new conversation"
+          title={t('chatbot.newConversation')}
+          aria-label={t('chatbot.newConversation')}
         >
           <RefreshIcon />
         </button>
         <button
           className="chatbot-header__btn chatbot-header__btn--close"
           onClick={toggleChat}
-          aria-label="Close chat"
+          aria-label={t('chatbot.closeChat')}
         >
           <CloseIcon />
         </button>

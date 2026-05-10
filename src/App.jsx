@@ -1,10 +1,13 @@
-import { useEffect, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect, useLayoutEffect, Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, useLocation, Outlet } from 'react-router-dom';
 import './App.css';
 // Toast CSS is now lazy-loaded via LazyToast.jsx
 import { useLocationStore } from './store/locationStore';
 import { useAuthStore } from './store';
+import useLocaleStore from './store/localeStore';
+import i18n from './i18n';
 import PageLoader from './common/PageLoader';
+import ErrorBoundary from './common/ErrorBoundary';
 import ScrollToTop from './common/layout/ScrollToTop';
 import SEO from './common/SEO';
 import UIScrollLockEffect from './common/UIScrollLockEffect';
@@ -225,6 +228,21 @@ function RouteScrollToTop() {
   return null;
 }
 
+// Sets up i18next + Zustand locale based on the matched route tree
+function LocaleGate({ locale }) {
+  const setLocale = useLocaleStore((s) => s.setLocale);
+
+  useLayoutEffect(() => {
+    setLocale(locale);
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale);
+    }
+    document.documentElement.lang = locale;
+  }, [locale, setLocale]);
+
+  return <Outlet />;
+}
+
 function App() {
   const initializeLocation = useLocationStore((state) => state.initializeLocation);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -242,9 +260,6 @@ function App() {
     realEstateStructuredData.knowledgePanel,
     realEstateStructuredData.mobileApplication,
     realEstateStructuredData.person,
-    realEstateStructuredData.podcast,
-    realEstateStructuredData.course,
-    realEstateStructuredData.qaPage,
     generateSpeakableStructuredData({
       cssSelectors: ['.speakable-summary', '.speakable-highlights', 'h1', 'h2'],
     }),
@@ -256,14 +271,31 @@ function App() {
         <RouteScrollToTop />
         <UIScrollLockEffect />
         <SEO structuredData={globalSchemas} />
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            {routeGroups.map((route) => (
-              <Route key={route.path} path={route.path} element={route.element} />
-            ))}
-            <Route path="*" element={<NotFound />} />
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+            {/* Hindi routes — /hi/* prefix */}
+            <Route path="/hi" element={<LocaleGate locale="hi" />}>
+              <Route index element={<Home />} />
+              {routeGroups.filter((route) => route.path !== '/').map((route) => {
+                const strippedPath = route.path.startsWith('/') ? route.path.slice(1) : route.path;
+                return (
+                  <Route key={`hi-${route.path}`} path={strippedPath} element={route.element} />
+                );
+              })}
+              <Route path="*" element={<NotFound />} />
+            </Route>
+
+            {/* Default (English) routes — no prefix */}
+            <Route path="/" element={<LocaleGate locale="en" />}>
+              {routeGroups.map((route) => (
+                <Route key={route.path} path={route.path} element={route.element} />
+              ))}
+              <Route path="*" element={<NotFound />} />
+            </Route>
           </Routes>
-        </Suspense>
+          </Suspense>
+        </ErrorBoundary>
         <Suspense fallback={null}>
           <ChatBot />
         </Suspense>

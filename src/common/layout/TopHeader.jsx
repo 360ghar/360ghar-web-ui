@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import { topHeaderInfos } from '../../data/CommonData';
 
 const TopHeader = () => {
+    const { t } = useTranslation('common');
     return (
         <>
             {/* ==================== Header Top Start Here ==================== */}
@@ -16,9 +18,13 @@ const TopHeader = () => {
                                         <span className="header-info__icon">{item.icon}</span>
                                         {
                                             item.link ? (
-                                                <Link to={`${item.link}${item.text}`} className="header-info__text">{item.text}</Link>
+                                                (item.link === 'tel:' || item.link === 'mailto:') ? (
+                                                    <a href={`${item.link}${t(item.textKey)}`} className="header-info__text">{t(item.textKey)}</a>
+                                                ) : (
+                                                    <I18nLink to={`${item.link}${t(item.textKey)}`} className="header-info__text">{t(item.textKey)}</I18nLink>
+                                                )
                                             ) : (
-                                                <p className="header-info__text">{item.text}</p>
+                                                <p className="header-info__text">{t(item.textKey)}</p>
                                             )
                                         }
                                     </div>

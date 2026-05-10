@@ -8,7 +8,7 @@
     "route": "/properties",
     "waitForSelector": "main",
     "waitForText": "Verified Property Search in Gurugram",
-    "waitForTitle": "Properties in Gurugram | AI-Powered Search & Verified Listings | 360Ghar"
+    "waitForTitle": "Flats in Gurgaon | Verified Properties for Sale & Rent | 360Ghar"
   },
   {
     "route": "/about-us",
@@ -37,6 +37,26 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/policies/terms-of-service",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/policies/privacy-policy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/policies/content-guidelines",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/policies/content-takedown-policy",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/policies/grievance-redressal-mechanism",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/refer-and-earn",
     "waitForSelector": "main"
   },
@@ -62,7 +82,7 @@
     "route": "/localities",
     "waitForSelector": "main",
     "waitForText": "Explore Gurugram Localities with Verified Insights",
-    "waitForTitle": "Discover Localities in Gurugram | 360Ghar"
+    "waitForTitle": "Gurgaon Localities Directory 2026: 500+ Areas with Prices & Reviews | 360Ghar"
   },
   {
     "route": "/emi-calculator",
@@ -201,6 +221,18 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/careers/content-creator-internship",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/careers/real-estate-agent",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/careers/software-developer",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/celebrity-homes",
     "waitForSelector": "main"
   },
@@ -241,6 +273,26 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/near/artemis",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/sector-55-56-metro",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/dlf-cyber-park",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/ambience-mall",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/near/hero-honda-chowk",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/price-index/gurgaon",
     "waitForSelector": "main"
   },
@@ -250,6 +302,14 @@
   },
   {
     "route": "/price-index/noida",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/faridabad",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/price-index/ghaziabad",
     "waitForSelector": "main"
   },
   {
@@ -380,20 +440,17 @@
   {
     "route": "/gurgaon/buy/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Sale in Gurgaon [360° VR Tour] | Gurgaon Real Estate | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/gurgaon/rent/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Rent in Gurgaon | Gurgaon Real Estate | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/gurgaon/pg/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "PG in Gurgaon | Gurgaon Paying Guest & Co-living | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/gurgaon/buy/villa",
@@ -422,8 +479,7 @@
   {
     "route": "/delhi/buy/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Sale in Delhi [360° VR Tour] | Delhi Real Estate | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/delhi/rent/flats",
@@ -440,8 +496,7 @@
   {
     "route": "/noida/rent/flats",
     "waitForSelector": "main",
-    "waitForText": "Why 360Ghar?",
-    "waitForTitle": "Apartment for Rent in Noida | Noida Real Estate | 360Ghar"
+    "waitForText": "Why 360Ghar?"
   },
   {
     "route": "/faridabad/buy/flats",
@@ -450,5 +505,485 @@
   {
     "route": "/ghaziabad/buy/flats",
     "waitForSelector": "main"
+  },
+  {
+    "route": "/hi",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/properties",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/about-us",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/contact",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/faq",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/project",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/blog",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/policies",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/policies/terms-of-service",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/policies/privacy-policy",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/policies/content-guidelines",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/policies/content-takedown-policy",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/policies/grievance-redressal-mechanism",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/refer-and-earn",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurugram-real-estate-guide",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/property-investment-gurugram",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/for-ai",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/ai-agent",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/localities",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/emi-calculator",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/area-converter",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/area-calculator",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/loan-eligibility-calculator",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/capital-gains-tax-calculator",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/property-document-checklist",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/design-blueprint",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vastu-checker",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/ai-design-studio",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/circle-rates",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/stamp-duty-calculator",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/rera-projects",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/bank-auctions",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/auction-sources",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/verify-ownership",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/zone-checker",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/regulatory-updates",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/builder-reputation",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/nobroker",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/magicbricks",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/99acres",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/housing",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/commonfloor",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/proptiger",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/squareyards",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/nestaway",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/zolo",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/vs/stanza-living",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/truth/nobroker-listings",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/truth/magicbricks-spam",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/truth/99acres-fake",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/truth/nestaway-collapse",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/truth/zolo-issues",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/careers",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/careers/content-creator-internship",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/careers/real-estate-agent",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/careers/software-developer",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/celebrity-homes",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/nri-property-guide",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/list-property-free",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/glossary",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/check-fake-listing",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/cyber-city",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/udyog-vihar",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/golf-course-road-corporate",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/millennium-city-centre",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/medanta",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/artemis",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/sector-55-56-metro",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/dlf-cyber-park",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/ambience-mall",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/near/hero-honda-chowk",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/price-index/gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/price-index/delhi",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/price-index/noida",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/price-index/faridabad",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/price-index/ghaziabad",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/login",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/register",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/account",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/delete-account",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/post-property",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/add-new-listing",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/mcp/login",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/map-location",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/property-sidebar",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/dlf-phase-1-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/golf-course-road-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/sushant-lok-1-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/sohna-road-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/sector-49-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/sector-56-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/palam-vihar-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/mg-road-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/sector-43-gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/dlf-phase-1-gurgaon/buy",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/dlf-phase-1-gurgaon/rent",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/golf-course-road-gurgaon/buy",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/sushant-lok-1-gurgaon/buy",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/locality/sohna-road-gurgaon/buy",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/delhi",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/noida",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/faridabad",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/ghaziabad",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/buy/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/rent/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/pg/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/buy/villa",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/buy/builder-floor",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/buy/plots",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/buy/flats/2-bhk",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/buy/flats/3-bhk",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/gurgaon/rent/flats/1-bhk",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/delhi/buy/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/delhi/rent/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/delhi/buy/flats/2-bhk",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/noida/buy/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/noida/rent/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/faridabad/buy/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/ghaziabad/buy/flats",
+    "waitForSelector": "html[lang=\"hi\"] main"
   }
 ]

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 import { useBlogStore } from '../../store/blogStore';
 import LazyImage from '../../common/ui/LazyImage';
 
@@ -48,13 +48,13 @@ const BlogClassicItem = ({ post }) => {
     return (
         <div className="blog-item blog-classic-item d-flex">
             <div className="blog-item__thumb d-flex position-relative">
-                <Link
+                <I18nLink
                     to={blogURL}
                     onClick={handleBlogClick}
                     className="blog-item__thumb-link"
                 >
                     <LazyImage src={thumb} className="cover-img" alt={title} />
-                </Link>
+                </I18nLink>
                 <span className="blog-item__date font-12">{formattedDate}</span>
             </div>
             <div className="blog-item__content">
@@ -67,13 +67,13 @@ const BlogClassicItem = ({ post }) => {
                     ))}
                 </ul>
                 <h5 className="blog-item__title">
-                    <Link
+                    <I18nLink
                         to={blogURL}
                         onClick={handleBlogClick}
                         className="blog-item__title-link"
                     >
                         {title}
-                    </Link>
+                    </I18nLink>
                 </h5>
 
                 {excerpt && (
@@ -82,7 +82,7 @@ const BlogClassicItem = ({ post }) => {
                     </p>
                 )}
 
-                <Link
+                <I18nLink
                     to={blogURL}
                     onClick={handleBlogClick}
                     aria-label={`Read more about: ${title}`}
@@ -92,7 +92,7 @@ const BlogClassicItem = ({ post }) => {
                     <span className="icon-right icon">
                         <i className="fas fa-arrow-right"></i>
                     </span>
-                </Link>
+                </I18nLink>
             </div>
         </div>
     );

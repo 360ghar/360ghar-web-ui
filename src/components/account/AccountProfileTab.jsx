@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useUserStore } from '../../store';
 import { toast } from 'react-toastify';
+import i18n from '../../i18n';
 
 import LazyImage from '../../common/ui/LazyImage';
+
 const AccountProfileTab = () => {
+    const { t } = useTranslation(['account', 'forms']);
     const { profile, getProfile, updateProfile, isLoading, error, clearError } = useUserStore();
     const [isEditing, setIsEditing] = useState(false);
 
@@ -14,9 +18,9 @@ const AccountProfileTab = () => {
     }, [getProfile]);
 
     const validationSchema = yup.object({
-        full_name: yup.string().min(3, "Name must be at least 3 characters").required("Name is required"),
-        email: yup.string().email("Invalid email format").required("Email is required"),
-        phone: yup.string().matches(/^[+]?\d{10,15}$/, 'Enter a valid phone number').required("Phone number is required"),
+        full_name: yup.string().min(3, () => i18n.t('forms:name.minLength')).required(() => i18n.t('forms:name.required')),
+        email: yup.string().email(() => i18n.t('forms:email.invalidFormat')).required(() => i18n.t('forms:email.required')),
+        phone: yup.string().matches(/^[+]?\d{10,15}$/, () => i18n.t('forms:phone.genericInvalid')).required(() => i18n.t('forms:phone.genericRequired')),
     });
 
     const formik = useFormik({
@@ -37,11 +41,11 @@ const AccountProfileTab = () => {
 
             if (success) {
                 setIsEditing(false);
-                toast.success("Profile updated successfully!", {
+                toast.success(t('account:tabs.profile.updateSuccess'), {
                     theme: "colored",
                 });
             } else {
-                toast.error(error || "Failed to update profile. Please try again.", {
+                toast.error(error || t('account:tabs.profile.updateFailed'), {
                     theme: "colored",
                 });
             }
@@ -54,7 +58,7 @@ const AccountProfileTab = () => {
                 <div className="spinner-border text-primary" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>
-                <p className="mt-2">Loading profile...</p>
+                <p className="mt-2">{t('account:tabs.profile.loadingProfile')}</p>
             </div>
         );
     }
@@ -73,14 +77,14 @@ const AccountProfileTab = () => {
                             />
                         </div>
                         <div className="profile-info__content">
-                            <span className="mb-1 fw-semibold text-main text-poppins font-13">Property Seeker</span>
-                            <h4 className="profile-info__title text-poppins mb-2">{profile?.full_name || 'User'}</h4>
+                            <span className="mb-1 fw-semibold text-main text-poppins font-13">{t('account:tabs.profile.propertySeeker')}</span>
+                            <h4 className="profile-info__title text-poppins mb-2">{profile?.full_name || t('account:tabs.profile.user')}</h4>
                             <div className="contact-info d-flex gap-3 align-items-center mb-2">
                                 <span className="contact-info__icon text-gradient">
                                     <i className="fas fa-envelope"></i>
                                 </span>
                                 <div className="contact-info__content">
-                                    <span className="contact-info__address">{profile?.email || 'No email provided'}</span>
+                                    <span className="contact-info__address">{profile?.email || t('account:tabs.profile.noEmail')}</span>
                                 </div>
                             </div>
                             <div className="contact-info d-flex gap-3 align-items-center mb-2">
@@ -88,7 +92,7 @@ const AccountProfileTab = () => {
                                     <i className="fas fa-phone"></i>
                                 </span>
                                 <div className="contact-info__content">
-                                    <span className="contact-info__address">{profile?.phone || 'No phone provided'}</span>
+                                    <span className="contact-info__address">{profile?.phone || t('account:tabs.profile.noPhone')}</span>
                                 </div>
                             </div>
                             {profile?.agent_id && (
@@ -97,7 +101,7 @@ const AccountProfileTab = () => {
                                         <i className="fas fa-user-tie"></i>
                                     </span>
                                     <div className="contact-info__content">
-                                        <span className="contact-info__address">Agent assigned</span>
+                                        <span className="contact-info__address">{t('account:tabs.profile.agentAssigned')}</span>
                                     </div>
                                 </div>
                             )}
@@ -109,14 +113,14 @@ const AccountProfileTab = () => {
             <div className="card common-card">
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center mb-4">
-                        <h6 className="loginRegister__title text-poppins mb-0">Profile Information</h6>
+                        <h6 className="loginRegister__title text-poppins mb-0">{t('account:tabs.profile.title')}</h6>
                         {!isEditing ? (
                             <button
                                 type="button"
                                 className="btn btn-sm btn-main"
                                 onClick={() => setIsEditing(true)}
                             >
-                                <i className="fas fa-edit me-2"></i>Edit Profile
+                                <i className="fas fa-edit me-2"></i>{t('account:tabs.profile.editProfile')}
                             </button>
                         ) : (
                             <button
@@ -127,7 +131,7 @@ const AccountProfileTab = () => {
                                     formik.resetForm();
                                 }}
                             >
-                                <i className="fas fa-times me-2"></i>Cancel
+                                <i className="fas fa-times me-2"></i>{t('account:tabs.profile.cancel')}
                             </button>
                         )}
                     </div>
@@ -137,7 +141,7 @@ const AccountProfileTab = () => {
                     <form onSubmit={formik.handleSubmit}>
                         <div className="row gy-lg-4 gy-3">
                             <div className="col-sm-6 col-xs-6">
-                                <label htmlFor="profile-full-name" className="form-label">Full Name</label>
+                                <label htmlFor="profile-full-name" className="form-label">{t('account:tabs.profile.fullName')}</label>
                                 <input
                                     id="profile-full-name"
                                     type="text"
@@ -156,7 +160,7 @@ const AccountProfileTab = () => {
                             </div>
 
                             <div className="col-sm-6 col-xs-6">
-                                <label htmlFor="profile-email" className="form-label">Email</label>
+                                <label htmlFor="profile-email" className="form-label">{t('account:tabs.profile.email')}</label>
                                 <input
                                     id="profile-email"
                                     type="email"
@@ -175,7 +179,7 @@ const AccountProfileTab = () => {
                             </div>
 
                             <div className="col-sm-6 col-xs-6">
-                                <label htmlFor="profile-phone" className="form-label">Phone</label>
+                                <label htmlFor="profile-phone" className="form-label">{t('account:tabs.profile.phone')}</label>
                                 <input
                                     id="profile-phone"
                                     type="tel"
@@ -194,7 +198,7 @@ const AccountProfileTab = () => {
                             </div>
 
                             <div className="col-sm-6 col-xs-6">
-                                <label htmlFor="profile-dob" className="form-label">Date of Birth</label>
+                                <label htmlFor="profile-dob" className="form-label">{t('account:tabs.profile.dob')}</label>
                                 <input
                                     id="profile-dob"
                                     type="date"
@@ -208,7 +212,7 @@ const AccountProfileTab = () => {
                             </div>
 
                             <div className="col-sm-12">
-                                <label htmlFor="profile-image-url" className="form-label">Profile Image URL</label>
+                                <label htmlFor="profile-image-url" className="form-label">{t('account:tabs.profile.profileImageUrl')}</label>
                                 <input
                                     id="profile-image-url"
                                     type="url"
@@ -232,11 +236,11 @@ const AccountProfileTab = () => {
                                         {formik.isSubmitting || isLoading ? (
                                             <>
                                                 <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                                Updating...
+                                                {t('account:tabs.profile.updating')}
                                             </>
                                         ) : (
                                             <>
-                                                <i className="fas fa-save me-2"></i>Save Changes
+                                                <i className="fas fa-save me-2"></i>{t('account:tabs.profile.saveChanges')}
                                             </>
                                         )}
                                     </button>

@@ -1,4 +1,5 @@
 import { siteMetadata } from './siteMetadata';
+import { authors } from '../data/authors';
 
 // Real Estate focused structured data for LLM optimization
 export const realEstateStructuredData = {
@@ -7,8 +8,9 @@ export const realEstateStructuredData = {
     '@type': ['RealEstateAgent', 'Organization'],
     '@id': 'https://360ghar.com/#organization',
     name: '360Ghar',
-    alternateName: ['360 Ghar', '360Ghar.com', 'Three Sixty Ghar'],
-    legalName: '360Ghar Technologies Pvt Ltd',
+    alternateName: ['360 Ghar', '360Ghar.com', 'Three Sixty Ghar', '३६०घर', '360 Ghar Hindi'],
+    legalName: '360 Ghar',
+    inLanguage: ['en-IN', 'hi-IN'],
     description: "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. We eliminate fake and misleading property listings in Gurugram with studio-quality 360° guided walkthroughs and physically verified property details. Buy, sell, or rent with zero upfront fees and AI-powered matching.",
     url: 'https://360ghar.com',
     logo: {
@@ -46,7 +48,8 @@ export const realEstateStructuredData = {
       'https://www.facebook.com/360ghar',
       'https://www.linkedin.com/company/360ghar',
       'https://twitter.com/360ghar',
-      'https://www.youtube.com/@360ghar'
+      'https://www.youtube.com/@360ghar',
+      'https://share.google/DgcLFqSyBgz7kBwKe',
     ],
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
@@ -79,7 +82,7 @@ export const realEstateStructuredData = {
     alternateName: '360 Ghar',
     url: 'https://360ghar.com',
     description: "India's VR-First Way to Find a Home. India's first AI + VR real estate platform with verified properties in Gurugram and studio-quality 360° guided walkthroughs.",
-    inLanguage: 'en-IN',
+    inLanguage: ['en-IN', 'hi-IN'],
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -139,6 +142,14 @@ export const realEstateStructuredData = {
       }
     ],
     hasMap: 'https://maps.google.com/?q=360Ghar+Gurgaon',
+    sameAs: [
+      'https://www.instagram.com/360ghar',
+      'https://www.facebook.com/360ghar',
+      'https://www.linkedin.com/company/360ghar',
+      'https://twitter.com/360ghar',
+      'https://www.youtube.com/@360ghar',
+      'https://share.google/DgcLFqSyBgz7kBwKe',
+    ],
     areaServed: 'Gurgaon, Haryana, India'
   },
 
@@ -313,6 +324,38 @@ export const realEstateStructuredData = {
           '@type': 'Answer',
           text: "Yes! Landlords can use the AI assistant to track rent collection, manage tenants, handle maintenance requests, and access property documents. Just ask: \"Show me this month's rent status\" or \"List all maintenance requests\"."
         }
+      },
+      {
+        '@type': 'Question',
+        name: '360Ghar kya hai?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '360Ghar India ka pehla AI aur Virtual Tour-first real estate platform hai. Yahan sabhi properties humare on-site team dwara verify ki jaati hain. Aapko milta hai dedicated Relationship Manager jo aapki poori journey handle karta hai — property search se lekar final handover tak. Same brokerage mein end-to-end visibility aur transparency.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Gurgaon mein flat kaise khariden?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '360Ghar par Gurgaon ke verified flats browse karein. AI-powered search se apni budget aur requirement ke hisaab se filter karein. Har listing mein 360° virtual tour available hai. Apna dedicated Relationship Manager shortlisting, site visits, negotiations, aur documentation mein help karta hai. Koi hidden charges nahi.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'क्या 360Ghar पर सभी प्रॉपर्टी verified हैं?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'हाँ, 360Ghar पर हर प्रॉपर्टी हमारी on-site team द्वारा physically verify की जाती है। हम ownership documents, exact location, authentic photos, और 360° virtual tour verify करते हैं। कोई fake listing नहीं, कोई outdated inventory नहीं।'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Gurugram mein kiraye par flat kaise milega?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '360Ghar par Gurugram ke verified rental flats search karein — DLF Phase, Golf Course Road, Sohna Road, Sector 56 jaise prime areas mein. Budget, BHK, aur amenity filters use karein. Har listing mein 360° virtual tour hai taaki aap ghar baithke property explore kar sakein. Relationship Manager agreement aur handover mein help karta hai.'
+        }
       }
     ]
   },
@@ -328,6 +371,7 @@ export const realEstateStructuredData = {
     logo: siteMetadata.defaultOgImage,
     image: siteMetadata.defaultOgImage,
     foundingDate: '2025',
+    inLanguage: ['en-IN', 'hi-IN'],
     sameAs: [
       'https://www.facebook.com/360ghar',
       'https://www.instagram.com/360ghar',
@@ -338,7 +382,7 @@ export const realEstateStructuredData = {
       telephone: siteMetadata.organization.telephone,
       contactType: 'customer service',
       areaServed: 'IN',
-      availableLanguage: 'English'
+      availableLanguage: ['English', 'Hindi']
     },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
@@ -377,7 +421,14 @@ export const realEstateStructuredData = {
       'PG Accommodation Gurugram',
       'Virtual Property Tours',
       'Real Estate Technology',
-      'Indian Property Market'
+      'Indian Property Market',
+      'गुड़गाँव में संपत्ति',
+      'Gurgaon mein property',
+      'मकान खरीदना',
+      'किराये पर मकान',
+      'Flat rent Gurgaon',
+      'DLF Gurgaon real estate',
+      'Verified property India'
     ]
   },
 
@@ -387,6 +438,7 @@ export const realEstateStructuredData = {
     name: '360Ghar - Property Management & Search',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Android',
+    inLanguage: ['en-IN', 'hi-IN'],
     offers: {
       '@type': 'Offer',
       price: '0',
@@ -412,169 +464,21 @@ export const realEstateStructuredData = {
   // Person schema for founders/key team members (E-E-A-T boost)
   person: {
     '@type': 'Person',
-    name: '360Ghar Founder',
-    jobTitle: 'Founder & CEO',
+    name: authors['saksham-mittal'].name,
+    jobTitle: authors['saksham-mittal'].title,
     worksFor: {
       '@type': 'Organization',
       name: '360Ghar',
       url: 'https://360ghar.com'
     },
-    description: 'Founder of 360Ghar, India\'s first AI + VR-first real estate platform revolutionizing property discovery in Gurugram.',
-    url: 'https://360ghar.com/about-us',
-    image: 'https://360ghar.com/team/founder.jpg',
+    description: authors['saksham-mittal'].bio,
+    url: authors['saksham-mittal'].linkedin,
+    image: `https://360ghar.com${authors['saksham-mittal'].image}`,
     sameAs: [
-      'https://www.linkedin.com/in/360ghar-founder',
+      authors['saksham-mittal'].linkedin,
       'https://twitter.com/360ghar'
     ],
-    knowsAbout: [
-      'Real Estate Technology',
-      'Property Management',
-      'Virtual Reality Tours',
-      'AI-Powered Search',
-      'Gurugram Real Estate Market'
-    ]
-  },
-
-  // Event schema for property expos, webinars, and open houses
-  event: {
-    '@type': 'Event',
-    name: '360Ghar Property Expo - Gurugram',
-    description: 'Join us for an exclusive property expo featuring verified listings with 360° virtual tours. Meet our team, explore premium properties, and get expert advice on buying, selling, or renting in Gurugram. Free entry. Register online to skip the queue.',
-    startDate: '2026-06-15T10:00:00+05:30',
-    endDate: '2026-06-15T18:00:00+05:30',
-    eventStatus: 'https://schema.org/EventScheduled',
-    eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
-    location: {
-      '@type': 'Place',
-      name: '360Ghar Office',
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: 'Sector 43, Golf Course Road',
-        addressLocality: 'Gurgaon',
-        addressRegion: 'Haryana',
-        postalCode: '122001',
-        addressCountry: 'IN'
-      },
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: 28.4595,
-        longitude: 77.0266
-      }
-    },
-    image: 'https://360ghar.com/events/property-expo-2026.jpg',
-    organizer: {
-      '@type': 'Organization',
-      name: '360Ghar',
-      url: 'https://360ghar.com'
-    },
-    performer: {
-      '@type': 'Organization',
-      name: '360Ghar Team'
-    },
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'INR',
-      availability: 'https://schema.org/InStock',
-      url: 'https://360ghar.com/events/property-expo'
-    },
-  },
-
-  // Podcast/Audio schema for real estate insights and market updates
-  podcast: {
-    '@type': 'PodcastSeries',
-    name: '360Ghar Real Estate Insights',
-    description: 'Weekly podcast covering Gurugram real estate trends, property investment tips, market analysis, and expert interviews. Your guide to making informed property decisions.',
-    url: 'https://360ghar.com/podcast',
-    image: 'https://360ghar.com/podcast/cover-art.jpg',
-    publisher: {
-      '@type': 'Organization',
-      name: '360Ghar',
-      url: 'https://360ghar.com'
-    },
-    author: {
-      '@type': 'Organization',
-      name: '360Ghar Content Team'
-    },
-    language: 'en-IN',
-    genre: ['Business', 'Real Estate', 'Investment'],
-    keywords: 'real estate podcast, property investment, Gurugram real estate, housing market India, property tips',
-    inLanguage: ['hi', 'en'],
-    numberOfEpisodes: 52,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '245',
-      bestRating: '5',
-      worstRating: '1'
-    }
-  },
-
-  // Course schema for real estate education and training
-  course: {
-    '@type': 'Course',
-    name: 'Real Estate Investment Masterclass',
-    description: 'Comprehensive course on property investment in Gurugram. Learn market analysis, legal documentation, financing options, and investment strategies from industry experts.',
-    provider: {
-      '@type': 'Organization',
-      name: '360Ghar Academy',
-      sameAs: 'https://360ghar.com/academy'
-    },
-    url: 'https://360ghar.com/academy/investment-masterclass',
-    image: 'https://360ghar.com/academy/course-thumbnail.jpg',
-    educationalLevel: 'Intermediate',
-    courseMode: ['Online', 'Self-Paced'],
-    coursePrerequisites: 'Basic understanding of real estate concepts',
-    estimatedDuration: 'PT8H',
-    hasCourseInstance: {
-      '@type': 'CourseInstance',
-      courseMode: 'Online',
-      courseWorkload: 'PT8H',
-      instructor: {
-        '@type': 'Person',
-        name: '360Ghar Experts'
-      }
-    },
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'INR',
-      availability: 'https://schema.org/InStock',
-      url: 'https://360ghar.com/academy/investment-masterclass'
-    },
-    teaches: [
-      'Market Analysis',
-      'Property Valuation',
-      'Legal Documentation',
-      'Investment Strategies',
-      'Tax Planning',
-      'RERA Compliance'
-    ]
-  },
-
-  // QAPage schema for community questions and answers
-  qaPage: {
-    '@type': 'QAPage',
-    name: '360Ghar Community Q&A',
-    description: 'Get answers to your real estate questions from 360Ghar experts and community members. Ask about properties, legal processes, financing, and more.',
-    url: 'https://360ghar.com/community/qa',
-    mainEntity: {
-      '@type': 'Question',
-      name: 'What are the current property rates in DLF Phase 3?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Property rates in DLF Phase 3 Gurgaon currently range from ₹18,000-25,000 per sq ft for apartments, depending on the block, floor, and condition. Luxury units can go up to ₹30,000 per sq ft. Contact our team for specific property rates and virtual tours.',
-        dateCreated: '2026-01-15',
-        author: {
-          '@type': 'Organization',
-          name: '360Ghar Team'
-        },
-        upvoteCount: 42,
-        url: 'https://360ghar.com/community/qa/dlf-phase-3-rates'
-      },
-      answerCount: 3,
-      upvoteCount: 56
-    }
+    knowsAbout: authors['saksham-mittal'].credentials.split(', ').map(s => s.trim())
   },
 
   // Speakable schema for voice search optimization (Google Assistant, Alexa)
@@ -597,7 +501,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'DLF Phase 1 properties, DLF Phase 1 apartments, DLF Phase 1 flats'
+    alternateName: 'डीएलएफ फेज 1',
+    keywords: 'DLF Phase 1 properties, DLF Phase 1 apartments, DLF Phase 1 flats, DLF Phase 1 flat for sale, DLF Phase 1 kiraye par'
   },
   {
     '@type': 'Place',
@@ -609,7 +514,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'Golf Course Road properties, Golf Course Road luxury apartments'
+    alternateName: 'गोल्फ कोर्स रोड',
+    keywords: 'Golf Course Road properties, Golf Course Road luxury apartments, Golf Course Road flat rent, Golf Course Road property'
   },
   {
     '@type': 'Place',
@@ -621,7 +527,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'Sohna Road properties, Sohna Road apartments, Sohna Road flats'
+    alternateName: 'सोहना रोड',
+    keywords: 'Sohna Road properties, Sohna Road apartments, Sohna Road flats, Sohna Road affordable flats, Sohna Road rent'
   },
   {
     '@type': 'Place',
@@ -633,7 +540,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'Cyber City properties, Cyber City apartments, Cyber City office space'
+    alternateName: 'साइबर सिटी',
+    keywords: 'Cyber City properties, Cyber City apartments, Cyber City office space, Cyber City office space rent'
   },
   {
     '@type': 'Place',
@@ -645,7 +553,8 @@ export const gurugramAreasData = [
       addressRegion: 'HR',
       addressCountry: 'IN'
     },
-    keywords: 'Sector 29 properties, Sector 29 apartments, Sector 29 flats'
+    alternateName: 'सेक्टर 29',
+    keywords: 'Sector 29 properties, Sector 29 apartments, Sector 29 flats, Sector 29 property'
   }
 ];
 
@@ -768,7 +677,7 @@ export const generatePropertyStructuredData = (property) => ({
 });
 
 // Blog post structured data generator
-export const generateBlogStructuredData = ({ authorSchema, ...blog }) => ({
+export const generateBlogStructuredData = ({ authorSchema, inLanguage, ...blog }) => ({
   '@type': 'BlogPosting',
   headline: blog.title || 'Real Estate Blog',
   description: blog.description || 'Latest real estate insights and tips',
@@ -787,6 +696,7 @@ export const generateBlogStructuredData = ({ authorSchema, ...blog }) => ({
   },
   datePublished: blog.publishedAt || new Date().toISOString(),
   dateModified: blog.updatedAt || new Date().toISOString(),
+  inLanguage: inLanguage || ['en-IN', 'hi-IN'],
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': blog.url || `${siteMetadata.siteUrl}/blog/${blog.slug}`
@@ -888,7 +798,7 @@ export const generatePropertyProductStructuredData = (property) => {
  * Generate Place schema for locality pages.
  * Enables Google Knowledge Panel eligibility for localities.
  */
-export const generateLocalityStructuredData = ({ name, city, state = 'Haryana', slug, lat, lng, entityType }) => ({
+export const generateLocalityStructuredData = ({ name, city, state = 'Haryana', slug, lat, lng, entityType, inLanguage }) => ({
   '@type': 'Place',
   name,
   address: {
@@ -917,6 +827,7 @@ export const generateLocalityStructuredData = ({ name, city, state = 'Haryana', 
     name: 'entityType',
     value: entityType || 'Locality',
   },
+  inLanguage: inLanguage || ['en-IN', 'hi-IN'],
 });
 
 /**
@@ -948,10 +859,13 @@ export const generateFaqStructuredData = (faqItems) => ({
   mainEntity: faqItems.map((item) => ({
     '@type': 'Question',
     name: item.question,
+    text: item.question,
     acceptedAnswer: {
       '@type': 'Answer',
       text: item.answer,
     },
+    author: item.author || { '@type': 'Organization', name: '360Ghar' },
+    datePublished: item.datePublished || new Date().toISOString().split('T')[0],
   })),
 });
 
@@ -963,13 +877,6 @@ export const generateEeaSignals = ({ reraNumber, verifiedCount } = {}) => {
     '@type': 'Organization',
     '@id': 'https://360ghar.com/#organization',
     name: '360Ghar',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.7',
-      reviewCount: '128',
-      bestRating: '5',
-      worstRating: '1',
-    },
   });
 
   // RERA verification claim
@@ -1198,7 +1105,9 @@ export const generateQAPageStructuredData = ({
   upvoteCount = 0,
   answerCount = 1,
   authorName = '360Ghar Team',
+  authorUrl = 'https://360ghar.com/about',
   dateCreated,
+  datePublished,
 }) => ({
   '@type': 'QAPage',
   name: question,
@@ -1207,13 +1116,21 @@ export const generateQAPageStructuredData = ({
   mainEntity: {
     '@type': 'Question',
     name: question,
+    text: question,
+    author: {
+      '@type': 'Organization',
+      name: authorName,
+      url: authorUrl,
+    },
+    datePublished: datePublished || new Date().toISOString(),
     acceptedAnswer: {
       '@type': 'Answer',
       text: answer,
-      dateCreated: dateCreated || new Date().toISOString().split('T')[0],
+      dateCreated: dateCreated || new Date().toISOString(),
       author: {
         '@type': 'Organization',
         name: authorName,
+        url: authorUrl,
       },
       upvoteCount,
       url: answerUrl || questionUrl,

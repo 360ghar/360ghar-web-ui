@@ -52,6 +52,7 @@ function main() {
   }
 
   writeFile(path.join(wellKnownDir, 'ai.txt'), artifacts.aiTxt);
+  writeFile(path.join(wellKnownDir, 'api-catalog'), `${JSON.stringify(artifacts.apiCatalog, null, 2)}\n`);
   writeFile(path.join(publicDir, 'llms.txt'), artifacts.llmsTxt);
   writeFile(path.join(publicDir, 'llms-full.txt'), artifacts.llmsFullTxt);
   writeFile(path.join(dataDir, 'llm-feed.json'), `${JSON.stringify(feed, null, 2)}\n`);

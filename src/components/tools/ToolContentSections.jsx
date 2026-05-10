@@ -1,5 +1,12 @@
-import { Link } from 'react-router-dom';
 import { useState, useId } from 'react';
+import { I18nLink } from '../../i18n/I18nLink';
+
+const DEFAULT_RELATED_LINKS = [
+  { to: '/emi-calculator', label: 'EMI Calculator', icon: 'fas fa-calculator' },
+  { to: '/property-document-checklist', label: 'Document Checklist', icon: 'fas fa-clipboard-check' },
+  { to: '/area-converter', label: 'Area Converter', icon: 'fas fa-ruler-combined' },
+  { to: '/properties', label: 'Verified Properties', icon: 'fas fa-home' },
+];
 
 export const ToolFaq = ({ faqs, heading = 'Frequently Asked Questions' }) => {
   const [openIndex, setOpenIndex] = useState(0);
@@ -38,23 +45,27 @@ export const ToolFaq = ({ faqs, heading = 'Frequently Asked Questions' }) => {
   );
 };
 
-export const ToolRelatedLinks = ({ links, heading = 'Related Tools & Resources' }) => (
-  <div className="mt-5">
-    <h2 className="h4 mb-3">{heading}</h2>
-    <div className="d-flex flex-wrap gap-2">
-      {links.map((link) => (
-        <Link
-          key={link.to}
-          to={link.to}
-          className="btn btn-sm btn-outline-main rounded-pill"
-        >
-          {link.icon && <i className={`${link.icon} me-1`} />}
-          {link.label}
-        </Link>
-      ))}
+export const ToolRelatedLinks = ({ links = DEFAULT_RELATED_LINKS, heading = 'Related Tools & Resources' }) => {
+  const relatedLinks = Array.isArray(links) ? links : DEFAULT_RELATED_LINKS;
+
+  return (
+    <div className="mt-5">
+      <h2 className="h4 mb-3">{heading}</h2>
+      <div className="d-flex flex-wrap gap-2">
+        {relatedLinks.map((link) => (
+          <I18nLink
+            key={link.to}
+            to={link.to}
+            className="btn btn-sm btn-outline-main rounded-pill"
+          >
+            {link.icon && <i className={`${link.icon} me-1`} />}
+            {link.label}
+          </I18nLink>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const ToolInfoCard = ({ title, children }) => (
   <div className="mt-4 p-4 bg-light rounded-3 border">

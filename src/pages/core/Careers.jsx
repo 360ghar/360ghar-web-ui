@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
+import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -15,11 +16,13 @@ const CAREER_VALUES = [
 ];
 
 const Careers = () => {
+  const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   return (
     <>
       <SEO
-        title="Internships & Careers at 360Ghar | Grow With Us"
-        description="Explore internship opportunities at 360Ghar. Open roles in Content Creation, Real Estate, and Software Development in Gurugram."
+        title={tSeo('careers.title')}
+        description={tSeo('careers.description')}
         keywords="360Ghar careers, internships in Gurugram, content creator internship, real estate agent internship, software developer internship, 360Ghar hiring"
         canonical="/careers"
         image={siteMetadata.defaultOgImage}
@@ -60,7 +63,7 @@ const Careers = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -138,9 +141,9 @@ const Careers = () => {
                       </div>
 
                       <div className="d-flex justify-content-end mt-auto pt-3">
-                        <Link to={`/careers/${opening.slug}`} className="btn btn-outline-main px-4">
+                        <I18nLink to={`/careers/${opening.slug}`} className="btn btn-outline-main px-4">
                           View Details
-                        </Link>
+                        </I18nLink>
                       </div>
                     </div>
                   </article>

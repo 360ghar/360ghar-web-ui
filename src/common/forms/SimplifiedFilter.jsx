@@ -1,12 +1,12 @@
 import { useCallback }  from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import { usePropertyStore } from '../../store/propertyStore';
 import { useLocationStore } from '../../store/locationStore';
 import GooglePlacesInput from '../search/GooglePlacesInput';
 import { buildPropertySearchQuery } from '../../utils/propertyFilters';
 
 const SimplifiedFilter = ({ buttonText = 'Search' }) => {
-  const navigate = useNavigate();
+  const navigate = useI18nNavigate();
   const {
     filters,
     updateFilter,

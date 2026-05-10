@@ -1,6 +1,9 @@
 import { useForm, ValidationError } from '@formspree/react';
+import { useTranslation, Trans } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 
 const ContactUsSection = () => {
+    const { t } = useTranslation('policies');
     const [state, handleSubmit] = useForm("mwpqglyb");
 
     if (state.succeeded) {
@@ -10,10 +13,12 @@ const ContactUsSection = () => {
                     <div className="contact-form bg-white">
                         <div className="section-heading">
                             <span className="section-heading__subtitle bg-gray-100">
-                                <span className="text-gradient fw-semibold">Contact us</span>
+                                <span className="text-gradient fw-semibold">{t('contact.formSubtitle')}</span>
                             </span>
-                            <h2 className="section-heading__title">Do you have any question?</h2>
-                            <p className="contact-item__desc">We&apos;re here! Head to our <a href="/FAQ" className="text-main text-decoration-underline">FAQ page</a> for answers to our most commonly asked questions.</p>
+                            <h2 className="section-heading__title">{t('contact.formTitle')}</h2>
+                            <p className="contact-item__desc">
+                                <Trans i18nKey="contact.formDescSuccess" t={t} components={[<I18nLink key="faq" to="/faq" className="text-main text-decoration-underline" />]} />
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -27,9 +32,9 @@ const ContactUsSection = () => {
                 <div className="contact-form bg-white">
                     <div className="section-heading">
                         <span className="section-heading__subtitle bg-gray-100">
-                            <span className="text-gradient fw-semibold">Contact us</span>
+                            <span className="text-gradient fw-semibold">{t('contact.formSubtitle')}</span>
                         </span>
-                        <p className="section-heading__desc">We&apos;re here to help you find your dream property in Gurugram. Our expert team is ready to assist with property search, documentation, and all your real estate needs.</p>
+                        <p className="section-heading__desc">{t('contact.formDesc')}</p>
                     </div>
                     <div className="contact-form__form">
                         <form onSubmit={handleSubmit} className="contact-form__form">
@@ -40,7 +45,7 @@ const ContactUsSection = () => {
                                         type="text"
                                         name="user_name"
                                         className="common-input"
-                                        placeholder="Your Name"
+                                        placeholder={t('contact.namePlaceholder')}
                                     />
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
@@ -49,7 +54,7 @@ const ContactUsSection = () => {
                                         type="email"
                                         name="user_email"
                                         className="common-input"
-                                        placeholder="Your E-mail"
+                                        placeholder={t('contact.emailPlaceholder')}
                                     />
                                     <ValidationError
                                         prefix="Email"
@@ -65,7 +70,7 @@ const ContactUsSection = () => {
                                         type="text"
                                         name="user_subject"
                                         className="common-input"
-                                        placeholder="Subject"
+                                        placeholder={t('contact.subjectPlaceholder')}
                                     />
                                 </div>
                                 <div className="col-12">
@@ -73,7 +78,7 @@ const ContactUsSection = () => {
                                         id="message"
                                         name="message"
                                         className="common-input"
-                                        placeholder="Your Message"
+                                        placeholder={t('contact.messagePlaceholder')}
                                     />
                                     <ValidationError
                                         prefix="Message"
@@ -84,7 +89,7 @@ const ContactUsSection = () => {
                                 </div>
                                 <div className="col-12">
                                     <button type="submit" disabled={state.submitting} className="btn btn-main w-100">
-                                        Submit Now
+                                        {t('contact.submit')}
                                     </button>
                                 </div>
                             </div>

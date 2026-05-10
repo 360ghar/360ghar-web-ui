@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../i18n/I18nLink';
 import Header from '../common/layout/Header';
 import MobileMenu from '../common/layout/MobileMenu';
 import OffCanvas from '../common/layout/OffCanvas';
@@ -117,6 +118,8 @@ const FAQ_DATA = {
 };
 
 const Home = () => {
+    const { t } = useTranslation('home');
+    const [tSeo] = useTranslation('seo');
     const homeStructuredData = [
         realEstateStructuredData.website,
         realEstateStructuredData.localBusiness,
@@ -129,8 +132,8 @@ const Home = () => {
     return (
         <>
             <SEO
-                title={siteMetadata.defaultTitle}
-                description={siteMetadata.defaultDescription}
+                title={tSeo('home.title')}
+                description={tSeo('home.description')}
                 keywords={siteMetadata.defaultKeywords}
                 canonical="/"
                 image={siteMetadata.defaultOgImage}
@@ -145,6 +148,9 @@ const Home = () => {
                 {/* Above-fold — eagerly loaded */}
                 <Header />
                 <BannerThree />
+                <div className="speakable-summary" style={{ display: 'none' }} aria-hidden="true">
+                    360Ghar is India&apos;s first AI and VR-first real estate platform. We convert every property listing into a studio-quality 360 degree virtual walkthrough, allowing buyers to explore properties remotely before scheduling a physical visit. We verify all properties to connect buyers and tenants directly to owners. Zero upfront fees. No fake listings. AI-powered search across Gurugram and Delhi NCR.
+                </div>
                 <AboutThree />
 
                 {/* Below-fold — lazy-loaded as user scrolls */}
@@ -226,32 +232,32 @@ const Home = () => {
                     <section className="padding-y-60 bg-white">
                         <div className="container container-two">
                             <div className="section-heading text-center mb-4">
-                                <h2 className="section-heading__title">Explore 360Ghar</h2>
-                                <p className="section-heading__desc">Tools, resources, and listings to help you find your perfect property</p>
+                                <h2 className="section-heading__title">{t('explore.title')}</h2>
+                                <p className="section-heading__desc">{t('explore.desc')}</p>
                             </div>
                             <div className="row g-3">
                                 {[
-                                    { to: '/localities', label: 'Browse Localities', icon: 'fa-map-marker-alt' },
-                                    { to: '/circle-rates', label: 'Circle Rates', icon: 'fa-indian-rupee-sign' },
-                                    { to: '/bank-auctions', label: 'Bank Auctions', icon: 'fa-gavel' },
-                                    { to: '/emi-calculator', label: 'EMI Calculator', icon: 'fa-calculator' },
-                                    { to: '/area-converter', label: 'Area Converter', icon: 'fa-ruler-combined' },
-                                    { to: '/about-us', label: 'About Us', icon: 'fa-building' },
-                                    { to: '/faq', label: 'FAQ', icon: 'fa-question-circle' },
-                                    { to: '/contact', label: 'Contact Us', icon: 'fa-envelope' },
-                                    { to: '/gurgaon/buy/flats', label: 'Flats for Sale in Gurgaon', icon: 'fa-home' },
-                                    { to: '/gurgaon/rent/flats', label: 'Flats for Rent in Gurgaon', icon: 'fa-key' },
-                                    { to: '/vs/nobroker', label: '360Ghar vs NoBroker', icon: 'fa-exchange-alt' },
+                                    { to: '/localities', label: t('explore.link1'), icon: 'fa-map-marker-alt' },
+                                    { to: '/circle-rates', label: t('explore.link2'), icon: 'fa-indian-rupee-sign' },
+                                    { to: '/bank-auctions', label: t('explore.link3'), icon: 'fa-gavel' },
+                                    { to: '/emi-calculator', label: t('explore.link4'), icon: 'fa-calculator' },
+                                    { to: '/area-converter', label: t('explore.link5'), icon: 'fa-ruler-combined' },
+                                    { to: '/about-us', label: t('explore.link6'), icon: 'fa-building' },
+                                    { to: '/faq', label: t('explore.link7'), icon: 'fa-question-circle' },
+                                    { to: '/contact', label: t('explore.link8'), icon: 'fa-envelope' },
+                                    { to: '/gurgaon/buy/flats', label: t('explore.link9'), icon: 'fa-home' },
+                                    { to: '/gurgaon/rent/flats', label: t('explore.link10'), icon: 'fa-key' },
+                                    { to: '/vs/nobroker', label: t('explore.link11'), icon: 'fa-exchange-alt' },
                                 ].map((link) => (
                                     <div className="col-lg-3 col-md-4 col-sm-6" key={link.to}>
-                                        <Link
+                                        <I18nLink
                                             to={link.to}
                                             className="d-flex align-items-center gap-3 p-3 rounded-3 border text-decoration-none h-100"
                                             style={{ transition: 'box-shadow 0.2s', color: 'inherit' }}
                                         >
                                             <i className={`fas ${link.icon} text-gradient`} style={{ fontSize: '1.25rem', width: '24px', textAlign: 'center' }} />
                                             <span className="fw-medium">{link.label}</span>
-                                        </Link>
+                                        </I18nLink>
                                     </div>
                                 ))}
                             </div>

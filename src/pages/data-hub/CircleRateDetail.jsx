@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -10,6 +12,8 @@ import { dataHubService } from '../../services/dataHubService';
 import StampDutyWidget from '../../components/data-hub/StampDutyWidget';
 
 const CircleRateDetail = () => {
+  const { t } = useTranslation('data-hub');
+  const [tSeo] = useTranslation('seo');
   const { slug } = useParams();
   const [rate, setRate] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,17 +29,17 @@ const CircleRateDetail = () => {
   if (loading) return (
     <>
       <OffCanvas /><MobileMenu />
-      <main className="body-bg"><Header /><section className="pt-60 pb-60"><div className="container"><p>Loading...</p></div></section><Footer /></main>
+      <main className="body-bg"><Header /><section className="pt-60 pb-60"><div className="container"><p>{t('circleRates.detail.loading')}</p></div></section><Footer /></main>
     </>
   );
 
   if (error || !rate) return (
     <>
-      <SEO noindex={true} title="Not Found | 360Ghar" />
+      <SEO noindex={true} title={tSeo('circleRateDetail.notFoundTitle')} />
       <OffCanvas /><MobileMenu />
       <main className="body-bg"><Header /><section className="pt-60 pb-60"><div className="container">
-        <h1>Circle Rate Not Found</h1>
-        <p>Data temporarily unavailable. <Link to="/circle-rates">← Back to Circle Rates</Link></p>
+        <h1>{t('circleRates.detail.notFound')}</h1>
+        <p>{t('circleRates.detail.unavailable')} <I18nLink to="/circle-rates">{t('circleRates.detail.backToCircleRates')}</I18nLink></p>
       </div></section><Footer /></main>
     </>
   );
@@ -43,8 +47,8 @@ const CircleRateDetail = () => {
   return (
     <>
       <SEO
-        title={`${rate.sector} Circle Rates ${rate.revision_year} | DLC Rate ${rate.property_type} | 360Ghar`}
-        description={`Official circle rates for ${rate.sector}, Gurugram for ${rate.property_type} properties. Rate: ₹${rate.rate_per_sqyd}/sq yd for ${rate.revision_year}. Calculate stamp duty.`}
+        title={tSeo('circleRateDetail.titleTemplate', { sector: rate.sector, year: rate.revision_year, propertyType: rate.property_type })}
+        description={tSeo('circleRateDetail.descriptionTemplate', { sector: rate.sector, propertyType: rate.property_type, rate: rate.rate_per_sqyd, year: rate.revision_year })}
         keywords={`${rate.sector} circle rate, DLC rate ${rate.sector}, stamp duty ${rate.sector} Gurugram`}
         canonical={`/circle-rate/${slug}`}
         structuredData={[
@@ -84,23 +88,23 @@ const CircleRateDetail = () => {
           <div className="container">
             <nav aria-label="breadcrumb" className="mb-20">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                <li className="breadcrumb-item"><Link to="/circle-rates">Circle Rates</Link></li>
+                <li className="breadcrumb-item"><I18nLink to="/">{t('circleRates.detail.breadcrumb.home')}</I18nLink></li>
+                <li className="breadcrumb-item"><I18nLink to="/circle-rates">{t('circleRates.detail.breadcrumb.circleRates')}</I18nLink></li>
                 <li className="breadcrumb-item active">{rate.sector}</li>
               </ol>
             </nav>
 
-            <h1 className="fs-28 fw-600 mb-5">{rate.sector} Circle Rates</h1>
+            <h1 className="fs-28 fw-600 mb-5">{t('circleRates.detail.circleRatesFor', { sector: rate.sector })}</h1>
             <p className="mb-30 color-text-3">
               {rate.property_type && <span style={{ textTransform: 'capitalize' }}>{rate.property_type} • </span>}
-              Revision Year: {rate.revision_year}
-              {rate.effective_date && ` • Effective: ${new Date(rate.effective_date).toLocaleDateString('en-IN')}`}
+              {t('circleRates.detail.revisionYear', { year: rate.revision_year })}
+              {rate.effective_date && ` • ${t('circleRates.detail.effective', { date: new Date(rate.effective_date).toLocaleDateString('en-IN') })}`}
             </p>
 
             <div className="row mb-40">
               <div className="col-md-4 col-sm-6 mb-15">
                 <div className="p-20 border-radius-8" style={{ background: '#eff6ff', border: '1px solid #bfdbfe' }}>
-                  <p className="fs-12 color-text-3 mb-5">Rate per Sq. Yard</p>
+                  <p className="fs-12 color-text-3 mb-5">{t('circleRates.detail.ratePerSqYard')}</p>
                   <p className="fs-24 fw-700 mb-0">
                     {rate.rate_per_sqyd ? `₹${Number(rate.rate_per_sqyd).toLocaleString('en-IN')}` : '—'}
                   </p>
@@ -108,7 +112,7 @@ const CircleRateDetail = () => {
               </div>
               <div className="col-md-4 col-sm-6 mb-15">
                 <div className="p-20 border-radius-8" style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-                  <p className="fs-12 color-text-3 mb-5">Rate per Sq. Ft</p>
+                  <p className="fs-12 color-text-3 mb-5">{t('circleRates.detail.ratePerSqFt')}</p>
                   <p className="fs-24 fw-700 mb-0">
                     {rate.rate_per_sqft ? `₹${Number(rate.rate_per_sqft).toLocaleString('en-IN')}` : '—'}
                   </p>
@@ -119,7 +123,7 @@ const CircleRateDetail = () => {
             {/* Stamp Duty Calculator */}
             <div className="row mb-40">
               <div className="col-lg-7">
-                <h2 className="fs-22 fw-600 mb-15">Calculate Stamp Duty for {rate.sector}</h2>
+                <h2 className="fs-22 fw-600 mb-15">{t('circleRates.detail.calculateStampDuty', { sector: rate.sector })}</h2>
                 <StampDutyWidget />
               </div>
             </div>
@@ -127,7 +131,7 @@ const CircleRateDetail = () => {
             {/* FAQ */}
             <div className="row">
               <div className="col-lg-8">
-                <h2 className="fs-20 fw-600 mb-20">FAQs about {rate.sector} Circle Rates</h2>
+                <h2 className="fs-20 fw-600 mb-20">{t('circleRates.detail.faqTitle', { sector: rate.sector })}</h2>
                 {[
                   {
                     q: `What is the circle rate for ${rate.sector}?`,
@@ -151,7 +155,7 @@ const CircleRateDetail = () => {
             </div>
 
             <div className="mt-30">
-              <Link to="/circle-rates" className="btn-outline">← Back to all Circle Rates</Link>
+              <I18nLink to="/circle-rates" className="btn-outline">{t('circleRates.detail.backToAll')}</I18nLink>
             </div>
           </div>
         </section>

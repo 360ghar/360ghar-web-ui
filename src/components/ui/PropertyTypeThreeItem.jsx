@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import LazyImage from '../../common/ui/LazyImage';
 const PropertyTypeThreeItem = ({ propertyTypeItem }) => {
@@ -14,10 +14,10 @@ const PropertyTypeThreeItem = ({ propertyTypeItem }) => {
                 <div className="property-type-three-item__content">
                     <h6 className="property-type-three-item__title">{title}</h6>
                     <p className="property-type-three-item__desc font-18">{desc}</p>
-                    <Link to={btnLink} className="simple-btn text-heading fw-semibold">
+                    <I18nLink to={btnLink} className="simple-btn text-heading fw-semibold">
                         {btnText} 
                         <span className="icon-right"> <i className="fas fa-arrow-right"></i> </span>
-                    </Link>
+                    </I18nLink>
                 </div>
             </div>   
         </>

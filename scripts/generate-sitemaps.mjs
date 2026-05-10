@@ -39,7 +39,21 @@ const writeFile = (p, content) => {
 
 const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
 
-const urlTag = (loc, lastmod, changefreq, priority) => `  <url>\n    <loc>${loc}</loc>\n${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}${changefreq ? `    <changefreq>${changefreq}</changefreq>\n` : ''}${priority ? `    <priority>${priority}</priority>\n` : ''}  </url>`;
+const URLSET_NS = 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"';
+
+const urlTag = (loc, lastmod, changefreq, priority, alternates) => {
+  const altTags = (alternates || []).map(
+    (a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`
+  ).join('\n');
+  return `  <url>\n    <loc>${loc}</loc>\n${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}${changefreq ? `    <changefreq>${changefreq}</changefreq>\n` : ''}${priority ? `    <priority>${priority}</priority>\n` : ''}${altTags ? `${altTags}\n` : ''}  </url>`;
+};
+
+/** Build hreflang alternates for an English path. */
+const buildAlternates = (enPath) => [
+  { hreflang: 'en', href: `${SITE_URL}${enPath}` },
+  { hreflang: 'hi', href: `${SITE_URL}/hi${enPath === '/' ? '' : enPath}` },
+  { hreflang: 'x-default', href: `${SITE_URL}${enPath}` },
+];
 
 const slug = (s) => String(s || '')
   .toLowerCase()
@@ -48,6 +62,21 @@ const slug = (s) => String(s || '')
   .replace(/(^-|-$)+/g, '');
 
 const staticRoutes = [...indexableStaticRoutes];
+
+const REDIRECT_PATTERNS = [
+  { pattern: '/gurugram/', reason: 'gurugram→gurgaon redirect' },
+  { pattern: '/apartments', reason: 'apartments→flats redirect' },
+];
+
+function validateSitemapUrl(urlPath) {
+  for (const { pattern, reason } of REDIRECT_PATTERNS) {
+    if (urlPath.includes(pattern)) {
+      console.warn(`[sitemap] Skipping redirected URL: ${urlPath} (${reason})`);
+      return false;
+    }
+  }
+  return true;
+}
 
 // Cities and facets for programmatic landing pages
 const cities = approvedIndexableCitySlugs.map((citySlug) => ({
@@ -126,28 +155,47 @@ if (prunedCount > 0) {
   console.log(`Pruned ${prunedCount} URLs from landing sitemap`);
 }
 
-// Generate sitemap-static.xml
+// Generate sitemap-static.xml — includes both English and Hindi URLs with hreflang alternates
 const staticXml = [
   xmlHeader,
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  `<urlset ${URLSET_NS}>`,
   ...staticRoutes
-    .filter((r) => !isPruned(r))
-    .map((r) => urlTag(`${SITE_URL}${r}`, null, r === '/' ? 'daily' : 'weekly', r === '/' ? '1.0' : '0.7')),
+    .filter((r) => !isPruned(r) && validateSitemapUrl(r))
+    .flatMap((r) => {
+      const alts = buildAlternates(r);
+      const priority = r === '/' ? '1.0' : '0.7';
+      const changefreq = r === '/' ? 'daily' : 'weekly';
+      const hiPath = r === '/' ? '/hi' : `/hi${r}`;
+      if (isPruned(hiPath)) {
+        return [urlTag(`${SITE_URL}${r}`, null, changefreq, priority, alts)];
+      }
+      return [
+        urlTag(`${SITE_URL}${r}`, null, changefreq, priority, alts),
+        urlTag(`${SITE_URL}${hiPath}`, null, changefreq, priority, alts),
+      ];
+    }),
   '</urlset>\n',
 ].join('\n');
 
-// Generate sitemap-landing.xml (includes city hubs + landing + BHK facets)
+// Generate sitemap-landing.xml — includes both English and Hindi URLs with hreflang alternates
 const today = new Date().toISOString().split('T')[0];
 const landingXml = [
   xmlHeader,
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-  ...filteredLandingUrls.map((r) => {
-    // City hub pages get higher priority
+  `<urlset ${URLSET_NS}>`,
+  ...filteredLandingUrls.filter(validateSitemapUrl).flatMap((r) => {
     const isHub = /^\/[a-z]+$/.test(r);
     const isBhkFacet = /\/\d-bhk$/.test(r);
     const priority = isHub ? '0.9' : isBhkFacet ? '0.75' : '0.8';
     const changefreq = isHub ? 'daily' : 'weekly';
-    return urlTag(`${SITE_URL}${r}`, today, changefreq, priority);
+    const alts = buildAlternates(r);
+    const hiPath = `/hi${r}`;
+    if (isPruned(hiPath)) {
+      return [urlTag(`${SITE_URL}${r}`, today, changefreq, priority, alts)];
+    }
+    return [
+      urlTag(`${SITE_URL}${r}`, today, changefreq, priority, alts),
+      urlTag(`${SITE_URL}${hiPath}`, today, changefreq, priority, alts),
+    ];
   }),
   '</urlset>\n',
 ].join('\n');
@@ -168,7 +216,7 @@ const indexXml = [
 
 writeFile(path.join(outDir, 'sitemap.xml'), indexXml);
 
-console.log(`Sitemaps generated. Landing URLs: ${filteredLandingUrls.length} (${prunedCount} pruned)`);
+console.log(`Sitemaps generated. Landing URLs: ${filteredLandingUrls.length} English + ${filteredLandingUrls.length} Hindi (${prunedCount} pruned)`);
 if (SITEMAP_BATCH > 0) {
   console.log(`Batch mode: ${SITEMAP_BATCH}, Max per city: ${SITEMAP_MAX_LANDING_PER_CITY || 'unlimited'}`);
 }

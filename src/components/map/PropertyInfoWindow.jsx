@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import {
   getListingLabel,
   getPropertyTypeLabel,
 } from '../../utils/propertyTaxonomy';
 
 const PropertyInfoWindow = ({ property, onClose }) => {
+  const { t } = useTranslation('properties');
   if (!property) return null;
 
   const formatPrice = (value) => {
@@ -22,8 +24,8 @@ const PropertyInfoWindow = ({ property, onClose }) => {
   const listingLabel = getListingLabel({
     propertyType: property.property_type,
     purpose: property.purpose,
-  });
-  const propertyTypeLabel = getPropertyTypeLabel(property.property_type);
+  }, t);
+  const propertyTypeLabel = getPropertyTypeLabel(property.property_type, t);
 
   const mainImage = property.main_image_url || property.image_url || '/assets/images/thumbs/property-1.png';
 
@@ -79,10 +81,10 @@ const PropertyInfoWindow = ({ property, onClose }) => {
           )}
         </div>
         
-        <Link to={`/property/${property.id}`} className="info-window-link">
+        <I18nLink to={`/property/${property.id}`} className="info-window-link">
           View Details
           <i className="fas fa-arrow-right ms-2"></i>
-        </Link>
+        </I18nLink>
       </div>
     </div>
   );

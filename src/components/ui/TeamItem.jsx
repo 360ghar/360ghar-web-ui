@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { socialLists } from '../../data/CommonData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import LazyImage from '../../common/ui/LazyImage';
 const TeamItem = ({ team }) => {
@@ -45,9 +45,9 @@ const TeamItem = ({ team }) => {
                             socialLists.map((iconList, iconListIndex) => {
                                 return (
                                     <li className="social-share-list__item" key={iconListIndex}>
-                                        <Link to={iconList.link} className="social-share-list__link">
+                                        <I18nLink to={iconList.link} className="social-share-list__link">
                                             {iconList.icon}
-                                        </Link>
+                                        </I18nLink>
                                     </li>
                                 )
                             })

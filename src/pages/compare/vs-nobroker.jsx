@@ -1,16 +1,20 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
+
+import { I18nLink } from '../../i18n/I18nLink';
 
 const ComparePage = lazy(() => import('./ComparePage'));
 
 const NoBrokerCompare = () => {
+  const { t } = useTranslation('compare');
   const competitor = competitors.nobroker;
-  
+
   return (
     <ComparePage
       competitor={competitor}
-      pageTitle="NoBroker Alternatives Gurgaon | 360 Ghar vs NoBroker Comparison"
-      pageDescription="Comparing 360 Ghar vs NoBroker for Gurgaon property search. See why users switch from NoBroker to 360 Ghar for verified listings with 360° virtual tours and zero spam calls."
+      pageTitle={t('nobroker.pageTitle')}
+      pageDescription={t('nobroker.pageDescription')}
       canonicalPath="/vs/nobroker"
     />
   );

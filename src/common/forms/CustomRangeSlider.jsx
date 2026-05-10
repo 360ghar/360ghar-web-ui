@@ -44,11 +44,6 @@ const CustomRangeSlider = ({ min, max, onChange }) => {
     }
   }, [maxVal, getPercent]);
 
-  // Get min and max values when their state changes
-  useEffect(() => {
-    onChange({ min: minVal, max: maxVal });
-  }, [minVal, maxVal, onChange]);
-
   return (
     <div className="range-slider">
       <input
@@ -60,6 +55,7 @@ const CustomRangeSlider = ({ min, max, onChange }) => {
         onChange={(event) => {
           const value = Math.min(+event.target.value, maxVal - 1);
           setMinVal(value);
+          onChange({ min: value, max: maxVal });
           event.target.value = value.toString();
         }}
         className={classnames("thumb thumb--zindex-3", {
@@ -75,6 +71,7 @@ const CustomRangeSlider = ({ min, max, onChange }) => {
         onChange={(event) => {
           const value = Math.max(+event.target.value, minVal + 1);
           setMaxVal(value);
+          onChange({ min: minVal, max: value });
           event.target.value = value.toString();
         }}
         className="thumb thumb--zindex-4"

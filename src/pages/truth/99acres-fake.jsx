@@ -1,9 +1,11 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
 
 const TruthPage = lazy(() => import('./TruthPage'));
 
 const AcresTruth = () => {
+  const [tSeo] = useTranslation('seo');
   const competitor = competitors['99acres'];
   
   const keyIssues = [
@@ -32,8 +34,8 @@ const AcresTruth = () => {
   return (
     <TruthPage
       competitor={competitor}
-      pageTitle="Why 99acres Fake Listings Are a Problem | The Truth About 99acres"
-      pageDescription="Learn the truth about 99acres fake listings and spam calls. See why thousands of users are switching to transparent alternatives."
+      pageTitle={tSeo('truth.99acres.title')}
+      pageDescription={tSeo('truth.99acres.description')}
       canonicalPath="/truth/99acres-fake"
       truthTitle="The Truth About 99acres Listings"
       introText="99acres promises verified properties but delivers fake listings and endless spam. Here\'s what users actually experience."

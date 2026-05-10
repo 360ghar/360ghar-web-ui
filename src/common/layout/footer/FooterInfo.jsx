@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { footerInfos } from '../../../data/CommonData';
 
 const FooterInfo = () => {
+    const { t } = useTranslation('common');
     return (
         <>
               <div className="row gy-4">
@@ -11,15 +13,15 @@ const FooterInfo = () => {
                             <div className="contact-info d-flex gap-2">
                                 <span className="contact-info__icon text-gradient">{footerInfo.icon}</span>
                                 <div className="contact-info__content">
-                                    <span className="contact-info__text text-white">{footerInfo.text}</span>
-                                    <span className="contact-info__address text-white">{footerInfo.address}</span>
+                                    <span className="contact-info__text text-white">{t(footerInfo.textKey)}</span>
+                                    <span className="contact-info__address text-white">{t(footerInfo.addressKey)}</span>
                                 </div>
                             </div>
                         </div>
                         )
                     })
                 }
-            </div>   
+            </div>
         </>
     );
 };

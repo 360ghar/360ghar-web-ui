@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -123,6 +124,8 @@ const CELEBRITY_HOMES = [
 ];
 
 const CelebrityHomesHub = () => {
+  const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const breadcrumbSchema = generateBreadcrumbStructuredData([
     { name: 'Home', url: 'https://360ghar.com/' },
     { name: 'Celebrity Homes', url: 'https://360ghar.com/celebrity-homes' },
@@ -131,8 +134,8 @@ const CelebrityHomesHub = () => {
   return (
     <>
       <SEO
-        title="Celebrity Homes in India 2026 | Inside Bollywood & Cricket Stars' Houses | 360Ghar"
-        description="Explore verified insights into celebrity homes — Akshay Kumar, Allu Arjun, Hardik Pandya, Nayanthara, and more. Get location details, property values, and real estate investment lessons from India's biggest stars."
+        title={tSeo('celebrityHomes.title')}
+        description={tSeo('celebrityHomes.description')}
         keywords="celebrity homes India, Bollywood star houses, cricketer homes, Akshay Kumar house, Allu Arjun mansion, Hardik Pandya property, celebrity real estate India, 360Ghar celebrity homes"
         canonical="/celebrity-homes"
         type="website"
@@ -147,7 +150,7 @@ const CelebrityHomesHub = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -164,7 +167,7 @@ const CelebrityHomesHub = () => {
             <div className="row g-4">
               {CELEBRITY_HOMES.map((celeb) => (
                 <div className="col-md-6 col-lg-4 col-xl-3" key={celeb.slug}>
-                  <Link
+                  <I18nLink
                     to={`/blog/${celeb.slug}`}
                     className="d-block p-4 rounded-3 bg-white border text-decoration-none h-100"
                     style={{ color: 'inherit', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
@@ -178,7 +181,7 @@ const CelebrityHomesHub = () => {
                       {celeb.location}
                     </p>
                     <p className="text-muted small mb-0">{celeb.highlights}</p>
-                  </Link>
+                  </I18nLink>
                 </div>
               ))}
             </div>

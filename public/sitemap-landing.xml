@@ -1,748 +1,2236 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://360ghar.com/gurgaon</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/flats/budget/under-50-lakhs</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/budget/under-50-lakhs" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/budget/under-50-lakhs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/budget/under-50-lakhs" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/flats/budget/under-50-lakhs</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/budget/under-50-lakhs" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/budget/under-50-lakhs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/budget/under-50-lakhs" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/flats/budget/under-80-lakhs</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/budget/under-80-lakhs" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/budget/under-80-lakhs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/budget/under-80-lakhs" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/flats/budget/under-80-lakhs</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/budget/under-80-lakhs" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/budget/under-80-lakhs" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/budget/under-80-lakhs" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/flats/budget/under-1-crore</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/budget/under-1-crore" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/budget/under-1-crore" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/budget/under-1-crore" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/flats/budget/under-1-crore</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/flats/budget/under-1-crore" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/flats/budget/under-1-crore" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/flats/budget/under-1-crore" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/land" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/buy/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/buy/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/buy/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/flats/budget/under-20k</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats/budget/under-20k" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats/budget/under-20k" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats/budget/under-20k" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/flats/budget/under-20k</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/flats/budget/under-20k" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/flats/budget/under-20k" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/flats/budget/under-20k" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/land" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/rent/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/rent/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/rent/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/gurgaon/pg/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/pg/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/gurgaon/pg/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/gurgaon/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/gurgaon/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/gurgaon/pg/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/land" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/buy/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/buy/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/buy/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/land" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/rent/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/rent/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/rent/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/delhi/pg/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/pg/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/delhi/pg/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/delhi/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/delhi/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/delhi/pg/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/noida</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/land" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/buy/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/buy/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/buy/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/land" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/rent/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/rent/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/rent/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/noida/pg/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/pg/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/noida/pg/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/noida/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/noida/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/noida/pg/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/land" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/buy/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/buy/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/buy/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/land" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/rent/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/rent/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/rent/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/faridabad/pg/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/pg/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/faridabad/pg/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/faridabad/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/faridabad/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/faridabad/pg/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/land" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/buy/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/buy/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/buy/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/buy/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/flats" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/flats/1-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/flats/1-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/flats/1-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/flats/1-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/flats/1-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/flats/2-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/flats/2-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/flats/2-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/flats/2-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/flats/2-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/flats/3-bhk</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/flats/3-bhk" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/flats/3-bhk</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/flats/3-bhk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/flats/3-bhk" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/independent-house</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/independent-house" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/independent-house</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/independent-house" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/independent-house" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/builder-floor</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/builder-floor" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/builder-floor</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/builder-floor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/builder-floor" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/villa</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/villa" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/villa</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/villa" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/plots</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/plots" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/plots</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/plots" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/plots" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/land</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/land" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/land</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/land" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/land" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/land" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/office-space</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/office-space" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/office-space</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/office-space" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/office-space" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/rent/shop</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/shop" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/rent/shop</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/rent/shop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/rent/shop" />
   </url>
   <url>
     <loc>https://360ghar.com/ghaziabad/pg/flats</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/pg/flats" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/ghaziabad/pg/flats</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/ghaziabad/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/pg/flats" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/pg/flats" />
   </url>
 </urlset>

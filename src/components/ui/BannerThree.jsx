@@ -1,6 +1,6 @@
 import TabFilter from '../../common/forms/TabFilter';
 import { bannerThreeContent } from '../../data/HomeThreeData';
-import { Link } from 'react-router-dom';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import LazyImage from '../../common/ui/LazyImage';
 
@@ -35,7 +35,7 @@ const BannerThree = () => {
                                             <span className="contact-info__icon text-gradient"><i className="fas fa-envelope"></i></span>
                                             <div className="contact-info__content">
                                                 <span className="contact-info__text fw-500">Need help?</span>
-                                                <Link to={`mailto:info@360ghar.com`} className="contact-info__address text-gradient">info@360ghar.com</Link>
+                                                <I18nLink to={`mailto:info@360ghar.com`} className="contact-info__address text-gradient">info@360ghar.com</I18nLink>
                                             </div>
                                         </div>
                                     </div>

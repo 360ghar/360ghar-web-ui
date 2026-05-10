@@ -49,6 +49,7 @@ const LazyImageBase = forwardRef(
       width,
       height,
       style,
+      alt = '360Ghar property image',
       ...rest
     },
     ref
@@ -104,6 +105,7 @@ const LazyImageBase = forwardRef(
         width={width}
         height={height}
         style={computedStyle}
+        alt={alt}
         {...fetchPriorityProps}
         {...rest}
         src={currentSrc}

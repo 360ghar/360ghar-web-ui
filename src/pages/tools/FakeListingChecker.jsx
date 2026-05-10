@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -34,6 +35,8 @@ const HOW_TO_STEPS = [
 ];
 
 const FakeListingChecker = () => {
+  const { t } = useTranslation();
+  const [tSeo] = useTranslation('seo');
   const [url, setUrl] = useState('');
   const [checked, setChecked] = useState(false);
   const [portalInfo, setPortalInfo] = useState(null);
@@ -50,8 +53,8 @@ const FakeListingChecker = () => {
   return (
     <>
       <SEO
-        title="Check if a Property Listing is Fake | 360 Ghar"
-        description="Paste a listing URL from 99acres, MagicBricks, or any portal to check if it's fake. Compare with 360Ghar's physically verified properties with 360° virtual tours."
+        title={tSeo('fakeListingChecker.title')}
+        description={tSeo('fakeListingChecker.description')}
         keywords="fake property listing check, verify property listing, 99acres fake listing, MagicBricks fraud, property scam detector, real estate listing verification India"
         canonical="/check-fake-listing"
         structuredData={[
@@ -78,7 +81,7 @@ const FakeListingChecker = () => {
           headerMenusClass="mx-auto"
           btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
           btnLink="/post-property"
-          btnText="Post Property"
+          btnText={t('common:header.postProperty')}
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
@@ -143,7 +146,7 @@ const FakeListingChecker = () => {
                         <p className="mb-2 text-muted" style={{ fontSize: '0.875rem' }}>
                           Every listing on 360Ghar is physically verified by our on-site team with 360° virtual tours. No fake listings, no spam calls.
                         </p>
-                        <Link to="/properties?city=Gurgaon" className="btn btn-sm btn-main">Browse Verified Properties</Link>
+                        <I18nLink to="/properties?city=Gurgaon" className="btn btn-sm btn-main">Browse Verified Properties</I18nLink>
                       </div>
                     </div>
                   ) : (
@@ -153,7 +156,7 @@ const FakeListingChecker = () => {
                       <p className="text-muted mb-2" style={{ fontSize: '0.875rem' }}>
                         This URL doesn&apos;t match known portals with verification gaps. However, always verify property documents and ownership before any transaction.
                       </p>
-                      <Link to="/properties?city=Gurgaon" className="btn btn-sm btn-outline-main">Browse 360Ghar Verified Listings</Link>
+                      <I18nLink to="/properties?city=Gurgaon" className="btn btn-sm btn-outline-main">Browse 360Ghar Verified Listings</I18nLink>
                     </div>
                   )}
                 </div>
