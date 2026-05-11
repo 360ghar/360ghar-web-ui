@@ -61,6 +61,7 @@ const NriPropertyGuide = lazy(() => import('./pages/core/NriPropertyGuide'));
 const ListPropertyFree = lazy(() => import('./pages/core/ListPropertyFree'));
 const Glossary = lazy(() => import('./pages/core/Glossary'));
 const FakeListingChecker = lazy(() => import('./pages/tools/FakeListingChecker'));
+const Links = lazy(() => import('./pages/core/Links'));
 const ChatBot = lazy(() => import('./components/chatbot/ChatBot'));
 
 const NearOfficePage = lazy(() => import('./pages/landing/NearOfficePage'));
@@ -137,6 +138,7 @@ const contentRoutes = [
   { path: '/nri-property-guide', element: <NriPropertyGuide /> },
   { path: '/list-property-free', element: <ListPropertyFree /> },
   { path: '/glossary', element: <Glossary /> },
+  { path: '/links', element: <Links /> },
   { path: '/localities', element: <LocalitiesDirectory /> },
   { path: '/locality/:slug', element: <LocalityTemplate /> },
   { path: '/locality/:slug/:intent', element: <SocietyLanding /> },

@@ -29,12 +29,6 @@ const CAREER_DETAILS_LAYOUT = {
       description:
         'As a Real Estate Agent Intern at 360Ghar, you will work side-by-side with our brokerage team to connect buyers, sellers, and investors with the right properties in Gurugram. You will conduct property showings, maintain client relationships, negotiate deals, and leverage AI tools for lead scoring and property matching. This is a hands-on role where you will learn the end-to-end property transaction cycle.',
     },
-    'Software Developer': {
-      icon: 'fas fa-code',
-      color: '#7c3aed',
-      description:
-        'As a Software Developer Intern at 360Ghar, you will build and maintain web applications, APIs, and internal tools that power the 360Ghar platform. You will work with React, Node.js, PostgreSQL, and Python. You will also integrate AI-powered features like smart search, recommendation engines, and content automation. This is a role for someone who wants to see their code directly impact thousands of users.',
-    },
     'Software Developer Intern': {
       icon: 'fas fa-laptop-code',
       color: '#2563eb',

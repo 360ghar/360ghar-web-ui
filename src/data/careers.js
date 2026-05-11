@@ -34,37 +34,21 @@ export const careerOpenings = [
     duration: '2-6 months (extendable based on performance)',
   },
   {
-    slug: 'software-developer',
-    icon: 'fas fa-code',
-    title: 'Software Developer',
-    description:
-      'Build and maintain web applications, APIs, and internal tools for the 360Ghar platform. You will work with React, Node.js, PostgreSQL, and Python to deliver a seamless property search and management experience for users across India. You will also integrate AI-powered features like smart search and recommendation engines.',
-    requirements: [
-      'Proficiency in Python and TypeScript with modern frameworks (React, Node.js)',
-      'Experience with RESTful APIs and relational databases (PostgreSQL)',
-      'Familiarity with AI tools and libraries applied to web development',
-      'Understanding of version control (Git) and CI/CD workflows',
-      'Problem-solving mindset with attention to code quality',
-    ],
-    location: 'Gurugram, Haryana',
-    type: 'internship',
-    duration: '2-6 months (extendable based on performance)',
-  },
-  {
     slug: 'software-developer-intern',
     icon: 'fas fa-laptop-code',
     title: 'Software Developer Intern',
     description:
-      'Kickstart your engineering career at 360Ghar by working on real-world features used by thousands of property seekers across India. You will contribute to our React frontend and Node.js/Python backend, write tested and reviewable code, and ship features that directly improve the user experience. Ideal for students or recent graduates eager to grow rapidly in a startup environment.',
+      'Build and maintain web applications, APIs, and internal tools for the 360Ghar platform. You will work with React, Node.js, PostgreSQL, and Python to deliver a seamless property search experience, and integrate AI-powered features like smart search and recommendation engines. Ideal for students or recent graduates eager to ship real features and grow rapidly in a startup environment.',
     requirements: [
       'Foundational knowledge of JavaScript/TypeScript and at least one backend language (Python or Node.js)',
       'Familiarity with React or a similar frontend framework',
-      'Basic understanding of relational databases and REST API design',
-      'Willingness to learn Git workflows, code reviews, and CI/CD pipelines',
+      'Experience with RESTful APIs and relational databases (PostgreSQL)',
+      'Understanding of version control (Git) and CI/CD workflows',
+      'Familiarity with AI tools and libraries applied to web development',
       'Curiosity, ownership mindset, and ability to work in a fast-paced team',
     ],
     location: 'Gurugram, Haryana',
     type: 'internship',
-    duration: '2-6 months',
+    duration: '2-6 months (extendable based on performance)',
   },
 ];

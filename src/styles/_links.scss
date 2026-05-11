@@ -1,0 +1,213 @@
+// =============================================================================
+// Links Page - Linktree-style social links hub
+// =============================================================================
+
+.links-page {
+  &__wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 16px 48px;
+  }
+
+  // ---- Hero ----
+  &__hero {
+    text-align: center;
+    padding: 40px 24px 32px;
+  }
+
+  &__logo {
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  &__subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  &__share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border: 2px solid var(--main-color);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--main-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--main-color);
+      color: #fff;
+    }
+
+    &--copied {
+      background: var(--success-color);
+      border-color: var(--success-color);
+      color: #fff;
+
+      &:hover {
+        background: var(--success-color);
+        color: #fff;
+      }
+    }
+  }
+
+  // ---- Link List ----
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--border-color-light);
+    border-radius: 14px;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 107, 0, 0.1);
+      border-color: var(--main-color-light);
+
+      .links-page__link-arrow {
+        transform: translateX(4px);
+        color: var(--main-color);
+      }
+    }
+
+    &--coming-soon {
+      cursor: default;
+      opacity: 0.7;
+
+      &:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: var(--border-color-light);
+      }
+    }
+  }
+
+  &__link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--main-color-lighter);
+    font-size: 1.15rem;
+    flex-shrink: 0;
+    color: var(--platform-color);
+  }
+
+  &__link-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__link-platform {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  &__link-username {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  &__link-arrow {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  // ---- Badge ----
+  &__badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 50px;
+    background: var(--warning-color);
+    color: var(--text-primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+  }
+
+  // ---- Divider ----
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 24px 0 16px;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-color-light);
+    }
+
+    span {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+  }
+}
+
+// Mobile tweaks
+@media (max-width: 576px) {
+  .links-page {
+    &__hero {
+      padding: 24px 16px 24px;
+    }
+
+    &__title {
+      font-size: 1.6rem;
+    }
+
+    &__link {
+      padding: 14px 16px;
+      gap: 12px;
+    }
+
+    &__link-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+  }
+}
