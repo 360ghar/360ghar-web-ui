@@ -5,10 +5,12 @@ import BreadcrumbImage from '/assets/images/thumbs/breadcrumb-img.png';
 import LazyImage from '../ui/LazyImage';
 const Breadcrumb = (props) => {
     const { t } = useTranslation('common');
+    const isCompact = props.variant === 'compact';
+    const sectionClass = `breadcrumb ${isCompact ? 'breadcrumb--compact' : 'padding-y-120'}`;
     return (
         <>
             {/* =============================== Breadcrumb Start ===========================    */}
-            <section className="breadcrumb padding-y-120">
+            <section className={sectionClass}>
                 <LazyImage src={BreadcrumbImage} alt="Breadcrumb Image" className="breadcrumb__img" priority />
                 <div className="container">
                     <div className="row justify-content-center">

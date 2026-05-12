@@ -47,13 +47,29 @@ const PlatformIcon = ({ icon, iconSvg, color }) => {
   return svgs[iconSvg] || <i className="fas fa-link" style={{ color }} />;
 };
 
+const SECTION_META = {
+  follow: { label: 'Follow Us', description: null },
+  review: { label: 'Review Us', description: 'Your reviews help others find us — thank you!' },
+  app: { label: 'Our App', description: 'Get 360Ghar on your phone for the best experience.' },
+};
+
 const Links = () => {
   const { t } = useTranslation('policies');
   const [tSeo] = useTranslation('seo');
   const [copied, setCopied] = useState(false);
 
-  const verifiedLinks = socialLinks.filter((l) => l.verified);
+  const verifiedFollow = socialLinks.filter((l) => l.verified && (l.category || 'follow') === 'follow');
+  const verifiedReview = socialLinks.filter((l) => l.verified && l.category === 'review');
+  const verifiedApp = socialLinks.filter((l) => l.verified && l.category === 'app');
   const comingSoonLinks = socialLinks.filter((l) => !l.verified);
+
+  const sections = [
+    { key: 'follow', links: verifiedFollow },
+    { key: 'review', links: verifiedReview },
+    { key: 'app', links: verifiedApp },
+  ].filter((s) => s.links.length > 0);
+
+  const allVerifiedUrls = socialLinks.filter((l) => l.verified && l.url).map((l) => l.url);
 
   const pageUrl = `${siteMetadata.siteUrl}/links`;
 
@@ -62,14 +78,14 @@ const Links = () => {
       '@type': 'WebPage',
       name: '360Ghar - Find Us Everywhere',
       url: pageUrl,
-      description: 'All official 360Ghar social media profiles and channels in one place.',
+      description: 'All official 360Ghar social media profiles, review pages, and app download links in one place.',
       isPartOf: { '@type': 'WebSite', name: siteMetadata.siteName, url: siteMetadata.siteUrl },
     },
     {
       '@type': 'Organization',
       name: siteMetadata.siteName,
       url: siteMetadata.siteUrl,
-      sameAs: verifiedLinks.map((l) => l.url).filter(Boolean),
+      sameAs: allVerifiedUrls,
     },
     generateBreadcrumbStructuredData([
       { name: 'Home', url: 'https://360ghar.com/' },
@@ -99,8 +115,8 @@ const Links = () => {
     <>
       <SEO
         title={tSeo('links.title', 'Find Us Everywhere - 360Ghar Social Links')}
-        description={tSeo('links.description', 'All official 360Ghar social media profiles and channels in one place. Follow us on Instagram, Facebook, YouTube, LinkedIn, and more.')}
-        keywords="360Ghar social media, 360Ghar Instagram, 360Ghar Facebook, 360Ghar YouTube, 360Ghar LinkedIn, 360Ghar links, 360ghar social profiles"
+        description={tSeo('links.description', 'All official 360Ghar social media profiles, review pages, and app download links in one place. Follow, review, and stay connected with 360Ghar.')}
+        keywords="360Ghar social media, 360Ghar Instagram, 360Ghar Facebook, 360Ghar YouTube, 360Ghar LinkedIn, 360Ghar links, 360Ghar review, 360Ghar Google review, 360Ghar Play Store, 360Ghar app download"
         canonical="/links"
         image={siteMetadata.defaultOgImage}
         type="website"
@@ -122,6 +138,7 @@ const Links = () => {
         <Breadcrumb
           pageTitle="Links"
           pageName="Links"
+          variant="compact"
         />
 
         <section className="links-page padding-y-60">
@@ -134,7 +151,7 @@ const Links = () => {
                 </div>
                 <h1 className="links-page__title">Find Us Everywhere</h1>
                 <p className="links-page__subtitle">
-                  Follow, subscribe, and stay connected with 360Ghar across all platforms.
+                  Follow, review, and stay connected with 360Ghar across all platforms.
                 </p>
                 <button
                   className={`links-page__share-btn ${copied ? 'links-page__share-btn--copied' : ''}`}
@@ -146,30 +163,50 @@ const Links = () => {
                 </button>
               </div>
 
-              {/* Verified Links */}
-              <div className="links-page__list">
-                {verifiedLinks.map((link) => (
-                  <a
-                    key={link.platform}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="links-page__link"
-                  >
-                    <span
-                      className="links-page__link-icon"
-                      style={{ '--platform-color': link.color }}
-                    >
-                      <PlatformIcon icon={link.icon} iconSvg={link.iconSvg} color={link.color} />
-                    </span>
-                    <span className="links-page__link-info">
-                      <span className="links-page__link-platform">{link.platform}</span>
-                      <span className="links-page__link-username">{link.username}</span>
-                    </span>
-                    <i className="fas fa-arrow-right links-page__link-arrow" />
-                  </a>
-                ))}
-              </div>
+              {/* Grouped Sections: Follow Us, Review Us, Our App */}
+              {sections.map((section) => {
+                const meta = SECTION_META[section.key];
+                return (
+                  <div key={section.key}>
+                    <div className="links-page__divider">
+                      <span>{meta.label}</span>
+                    </div>
+                    {meta.description && (
+                      <p className="links-page__section-desc">{meta.description}</p>
+                    )}
+                    <div className="links-page__list">
+                      {section.links.map((link) => (
+                        <a
+                          key={link.platform}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`links-page__link${section.key === 'review' ? ' links-page__link--review' : ''}${section.key === 'app' ? ' links-page__link--app' : ''}`}
+                        >
+                          <span
+                            className="links-page__link-icon"
+                            style={{ '--platform-color': link.color }}
+                          >
+                            <PlatformIcon icon={link.icon} iconSvg={link.iconSvg} color={link.color} />
+                          </span>
+                          <span className="links-page__link-info">
+                            <span className="links-page__link-platform">
+                              {link.platform}
+                              {section.key === 'review' && (
+                                <span className="links-page__badge links-page__badge--star">
+                                  <i className="fas fa-star" /> Review
+                                </span>
+                              )}
+                            </span>
+                            <span className="links-page__link-username">{link.username}</span>
+                          </span>
+                          <i className="fas fa-arrow-right links-page__link-arrow" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
 
               {/* Coming Soon Links */}
               {comingSoonLinks.length > 0 && (

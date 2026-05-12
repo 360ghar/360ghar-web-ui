@@ -2,7 +2,40 @@
 // Links Page - Linktree-style social links hub
 // =============================================================================
 
+// ---- Compact breadcrumb variant (only used on links page) ----
+.breadcrumb--compact {
+  padding-top: 16px;
+  padding-bottom: 16px;
+
+  @media (min-width: 576px) {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .breadcrumb__title {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+
+    @media (min-width: 576px) {
+      font-size: 1.6rem;
+    }
+  }
+
+  .breadcrumb__list {
+    gap: 12px;
+  }
+}
+
 .links-page {
+  // Reduce top padding for the links section so links appear in viewport
+  &.padding-y-60 {
+    padding-top: 8px;
+
+    @media (min-width: 576px) {
+      padding-top: 12px;
+    }
+  }
+
   &__wrapper {
     max-width: 600px;
     margin: 0 auto;
@@ -12,38 +45,38 @@
   // ---- Hero ----
   &__hero {
     text-align: center;
-    padding: 40px 24px 32px;
+    padding: 20px 16px 14px;
   }
 
   &__logo {
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     display: inline-block;
   }
 
   &__title {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 
   &__subtitle {
     color: var(--text-muted);
-    font-size: 1.05rem;
-    margin-bottom: 24px;
-    line-height: 1.6;
+    font-size: 0.92rem;
+    margin-bottom: 14px;
+    line-height: 1.5;
   }
 
   &__share-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 24px;
+    padding: 8px 20px;
     border: 2px solid var(--main-color);
     border-radius: 50px;
     background: transparent;
     color: var(--main-color);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -69,14 +102,14 @@
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   &__link {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 16px 20px;
+    gap: 14px;
+    padding: 14px 18px;
     background: #fff;
     border: 1px solid var(--border-color-light);
     border-radius: 14px;
@@ -111,11 +144,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     background: var(--main-color-lighter);
-    font-size: 1.15rem;
+    font-size: 1rem;
     flex-shrink: 0;
     color: var(--platform-color);
   }
@@ -129,14 +162,14 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-primary);
   }
 
   &__link-username {
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
     margin-top: 2px;
   }
@@ -160,6 +193,35 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     line-height: 1.4;
+
+    &--star {
+      background: var(--main-color-lighter);
+      color: var(--main-color);
+
+      i {
+        margin-right: 2px;
+        font-size: 0.6rem;
+      }
+    }
+  }
+
+  // ---- Section description ----
+  &__section-desc {
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin: -4px 0 10px;
+    line-height: 1.5;
+  }
+
+  // ---- Review link variant ----
+  &__link--review {
+    border-left: 3px solid var(--main-color);
+  }
+
+  // ---- App link variant ----
+  &__link--app {
+    border-left: 3px solid var(--success-color);
   }
 
   // ---- Divider ----
@@ -167,7 +229,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 24px 0 16px;
+    margin: 16px 0 12px;
 
     &::before,
     &::after {
@@ -192,22 +254,22 @@
 @media (max-width: 576px) {
   .links-page {
     &__hero {
-      padding: 24px 16px 24px;
+      padding: 16px 12px 10px;
     }
 
     &__title {
-      font-size: 1.6rem;
+      font-size: 1.3rem;
     }
 
     &__link {
-      padding: 14px 16px;
-      gap: 12px;
+      padding: 12px 14px;
+      gap: 10px;
     }
 
     &__link-icon {
-      width: 40px;
-      height: 40px;
-      font-size: 1rem;
+      width: 36px;
+      height: 36px;
+      font-size: 0.9rem;
     }
   }
 }

@@ -1,5 +1,5 @@
 const socialLinks = [
-  // Verified platforms (have working URLs)
+  // ── Follow Us (social profiles) ──
   {
     platform: 'Instagram',
     url: 'https://www.instagram.com/360ghar/',
@@ -7,6 +7,7 @@ const socialLinks = [
     username: '@360ghar',
     verified: true,
     color: '#E4405F',
+    category: 'follow',
   },
   {
     platform: 'Facebook',
@@ -15,14 +16,7 @@ const socialLinks = [
     username: '360 Ghar',
     verified: true,
     color: '#1877F2',
-  },
-  {
-    platform: 'Google Business',
-    url: 'https://share.google/uJiR1EYNDB8yfEZFE',
-    icon: 'fab fa-google',
-    username: '360Ghar',
-    verified: true,
-    color: '#4285F4',
+    category: 'follow',
   },
   {
     platform: 'YouTube',
@@ -31,6 +25,7 @@ const socialLinks = [
     username: '@360Ghar',
     verified: true,
     color: '#FF0000',
+    category: 'follow',
   },
   {
     platform: 'X (Twitter)',
@@ -39,6 +34,7 @@ const socialLinks = [
     username: '@360Ghar',
     verified: true,
     color: '#000000',
+    category: 'follow',
   },
   {
     platform: 'LinkedIn',
@@ -47,6 +43,7 @@ const socialLinks = [
     username: '360ghar',
     verified: true,
     color: '#0A66C2',
+    category: 'follow',
   },
   {
     platform: 'Reddit',
@@ -55,6 +52,7 @@ const socialLinks = [
     username: 'u/360ghar',
     verified: true,
     color: '#FF4500',
+    category: 'follow',
   },
   {
     platform: 'Pinterest',
@@ -63,7 +61,41 @@ const socialLinks = [
     username: '@360ghar',
     verified: true,
     color: '#E60023',
+    category: 'follow',
   },
+
+  // ── Review Us ──
+  {
+    platform: 'Google Business Profile',
+    url: 'https://www.google.com/search?q=360Ghar+Reviews#lrd=0x390d172407f3e11f:0x1c1fef0917d13d5e,3,,,,',
+    icon: 'fab fa-google',
+    username: 'Write a Review',
+    verified: true,
+    color: '#4285F4',
+    category: 'review',
+  },
+  {
+    platform: 'Google Play Store',
+    url: 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360',
+    icon: 'fab fa-google-play',
+    username: 'Write a Review',
+    verified: true,
+    color: '#34A853',
+    category: 'review',
+  },
+
+  // ── Our App ──
+  {
+    platform: 'Download Android App',
+    url: 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360',
+    icon: 'fab fa-google-play',
+    username: '360Ghar on Google Play',
+    verified: true,
+    color: '#34A853',
+    category: 'app',
+  },
+
+  // ── Coming Soon (follow) ──
   {
     platform: 'Quora',
     url: 'https://www.quora.com/profile/360ghar',
@@ -71,9 +103,9 @@ const socialLinks = [
     username: '360ghar',
     verified: false,
     color: '#B92B27',
+    category: 'follow',
   },
 
-  // Coming Soon — platforms without verified URLs
   {
     platform: 'Threads',
     url: 'https://www.threads.net/@360ghar',
@@ -82,6 +114,7 @@ const socialLinks = [
     username: '@360ghar',
     verified: false,
     color: '#000000',
+    category: 'follow',
   },
   {
     platform: 'TikTok',
@@ -90,6 +123,7 @@ const socialLinks = [
     username: '@360ghar',
     verified: false,
     color: '#000000',
+    category: 'follow',
   },
   {
     platform: 'WhatsApp Channel',
@@ -98,6 +132,7 @@ const socialLinks = [
     username: '360Ghar',
     verified: false,
     color: '#25D366',
+    category: 'follow',
   },
   {
     platform: 'WhatsApp Business',
@@ -106,6 +141,7 @@ const socialLinks = [
     username: '360Ghar',
     verified: false,
     color: '#25D366',
+    category: 'follow',
   },
   {
     platform: 'Snapchat',
@@ -114,6 +150,7 @@ const socialLinks = [
     username: '360ghar.com',
     verified: false,
     color: '#FFFC00',
+    category: 'follow',
   },
   {
     platform: 'ShareChat',
@@ -123,6 +160,7 @@ const socialLinks = [
     username: '@360ghar',
     verified: false,
     color: '#FF8C00',
+    category: 'follow',
   },
   {
     platform: 'Moj',
@@ -132,6 +170,7 @@ const socialLinks = [
     username: '@360ghar',
     verified: false,
     color: '#FF2D55',
+    category: 'follow',
   },
   {
     platform: 'Josh',
@@ -141,6 +180,7 @@ const socialLinks = [
     username: '@360ghar',
     verified: false,
     color: '#FF6B35',
+    category: 'follow',
   },
   {
     platform: 'Koo',
@@ -150,6 +190,7 @@ const socialLinks = [
     username: '@360ghar',
     verified: false,
     color: '#5E5AED',
+    category: 'follow',
   },
 ];
 
