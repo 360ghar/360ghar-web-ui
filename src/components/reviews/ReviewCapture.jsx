@@ -80,7 +80,7 @@ const ReviewCapture = ({ role = 'buyer', propertyId, className = '', onSubmitted
                 key={star}
                 type="button"
                 className="btn btn-link p-0 border-0"
-                style={{ fontSize: '1.5rem', color: star <= (hoverRating || rating) ? '#ff6b00' : '#ccc', textDecoration: 'none' }}
+                style={{ fontSize: '1.5rem', color: star <= (hoverRating || rating) ? 'var(--main-color)' : 'var(--gray-400)', textDecoration: 'none' }}
                 onClick={() => setRating(star)}
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}

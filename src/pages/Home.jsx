@@ -20,15 +20,13 @@ const MessageThree = lazy(() => import('../components/layout/MessageThree'));
 const PropertyManagementShowcase = lazy(() => import('../components/ui/PropertyManagementShowcase'));
 const Newsletter = lazy(() => import('../components/ui/Newsletter'));
 const AppDownload = lazy(() => import('../components/ui/AppDownload'));
-const TestimonialThree = lazy(() => import('../components/ui/TestimonialThree'));
+const CustomerReviews = lazy(() => import('../components/reviews/CustomerReviews'));
 const CounterThree = lazy(() => import('../components/ui/CounterThree'));
 const AIAgentShowcase = lazy(() => import('../components/ui/AIAgentShowcase'));
 const ToolShowcase = lazy(() => import('../components/ui/ToolShowcase'));
 const Faq = lazy(() => import('../components/layout/Faq'));
 const BlogFeed = lazy(() => import('../components/blog/BlogFeed'));
 const AiFactSheet = lazy(() => import('../components/seo/AiFactSheet'));
-const ReviewDisplay = lazy(() => import('../components/reviews/ReviewDisplay'));
-const ReviewCapture = lazy(() => import('../components/reviews/ReviewCapture'));
 const Footer = lazy(() => import('../common/layout/Footer'));
 
 const FAQ_DATA = {
@@ -191,9 +189,9 @@ const Home = () => {
                     </Suspense>
                 </LazySection>
 
-                <LazySection minHeight="300px">
-                    <Suspense fallback={<SectionLoader height="300px" type="card" />}>
-                        <TestimonialThree />
+                <LazySection minHeight="400px">
+                    <Suspense fallback={<SectionLoader height="400px" type="card" />}>
+                        <CustomerReviews />
                     </Suspense>
                 </LazySection>
 
@@ -269,34 +267,6 @@ const Home = () => {
                 <LazySection minHeight="200px">
                     <Suspense fallback={<SectionLoader height="200px" />}>
                         <AiFactSheet context="homepage" />
-                    </Suspense>
-                </LazySection>
-
-                <LazySection minHeight="300px">
-                    <Suspense fallback={<SectionLoader height="300px" />}>
-                        <ReviewDisplay
-                            reviews={[
-                                { rating: 5, text: 'Excellent VR tours helped me shortlist without visiting 10 properties. RM handled everything from visits to registration.', name: 'Rahul S.', role: 'Buyer' },
-                                { rating: 5, text: 'Listed my flat for free. The team came, verified, and created the VR tour same day. Got genuine buyers within a week.', name: 'Priya M.', role: 'Seller' },
-                                { rating: 4, text: 'Found a great 2 BHK near Sector 56 metro. The virtual tour matched the actual property exactly. Very transparent process.', name: 'Amit K.', role: 'Tenant' },
-                            ]}
-                            averageRating={4.7}
-                            totalCount={128}
-                        />
-                    </Suspense>
-                </LazySection>
-
-                <LazySection minHeight="200px">
-                    <Suspense fallback={<SectionLoader height="200px" />}>
-                        <section className="padding-y-60">
-                            <div className="container container-two">
-                                <div className="row justify-content-center">
-                                    <div className="col-lg-8">
-                                        <ReviewCapture role="buyer" />
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
                     </Suspense>
                 </LazySection>
 

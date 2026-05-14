@@ -229,10 +229,6 @@
     "waitForSelector": "main"
   },
   {
-    "route": "/careers/software-developer",
-    "waitForSelector": "main"
-  },
-  {
     "route": "/careers/software-developer-intern",
     "waitForSelector": "main"
   },
@@ -250,6 +246,10 @@
   },
   {
     "route": "/glossary",
+    "waitForSelector": "main"
+  },
+  {
+    "route": "/links",
     "waitForSelector": "main"
   },
   {
@@ -731,10 +731,6 @@
     "waitForSelector": "html[lang=\"hi\"] main"
   },
   {
-    "route": "/hi/careers/software-developer",
-    "waitForSelector": "html[lang=\"hi\"] main"
-  },
-  {
     "route": "/hi/careers/software-developer-intern",
     "waitForSelector": "html[lang=\"hi\"] main"
   },
@@ -752,6 +748,10 @@
   },
   {
     "route": "/hi/glossary",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/links",
     "waitForSelector": "html[lang=\"hi\"] main"
   },
   {
