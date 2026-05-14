@@ -89,20 +89,19 @@ const buildReimaginePrompt = ({ style, customPrompt }) => {
   const styleDesc = stylePreset?.promptText || '';
 
   const parts = [
-    // Critical: Tell Gemini to use the uploaded image as reference
-    'Using the uploaded image as the exact reference',
-    'Keep the identical room layout, architecture, walls, windows, doors, and furniture positions',
-    styleDesc ? `Redesign in ${styleDesc} style` : null,
-    'Only change: colors, materials, textures, decor items, and styling',
-    'Do NOT change: room shape, furniture arrangement, camera angle, or perspective',
-    'Maintain the exact same spatial composition as the original image',
-    customPrompt,
-    'Professional interior design visualization',
-    'photorealistic rendering',
-    'same lighting direction as original',
+    'STRICT RULES — You MUST follow every rule below:',
+    '1. The uploaded image is the REFERENCE. Reproduce its exact room layout, architecture, walls, windows, doors, ceiling, floor plan, and furniture positions pixel-for-pixel.',
+    '2. Do NOT add, remove, or relocate any furniture, walls, doors, or windows.',
+    '3. Do NOT change the camera angle, perspective, lens distortion, or viewpoint.',
+    '4. ONLY change: surface colors, materials, textures, fabrics, finishes, decor accessories, wall art, plants, and styling.',
+    '5. Maintain the exact same lighting direction, shadow angles, and natural light sources.',
+    styleDesc ? `6. Apply a ${styleDesc} interior design style to all surfaces and decor.` : null,
+    '7. Output a photorealistic, professional interior design rendering.',
+    '8. The result must look like the SAME room photographed from the SAME angle, just restyled.',
+    customPrompt ? `Additional user instructions: ${customPrompt}` : null,
   ].filter(Boolean);
 
-  return parts.join('. ');
+  return parts.join('\n');
 };
 
 const AIDesignStudio = () => {

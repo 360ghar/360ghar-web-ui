@@ -10,6 +10,7 @@ import { siteMetadata } from '../../seo/siteMetadata';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 import { ToolFaq, ToolRelatedLinks } from '../../components/tools/ToolContentSections';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import './DesignBlueprint.css';
 
@@ -64,7 +65,7 @@ const DesignBlueprint = () => {
           generateToolSchema(toolSchemas.designBlueprint),
           generateBreadcrumbStructuredData([
             { name: 'Home', url: 'https://360ghar.com/' },
-            { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+            { name: 'Tools', url: 'https://360ghar.com/tools' },
             { name: toolSchemas.designBlueprint.name, url: 'https://360ghar.com/design-blueprint' }
           ]),
           generateHowToStructuredData({
@@ -132,6 +133,7 @@ const DesignBlueprint = () => {
                 <ToolRelatedLinks
                   heading="Related Calculators & Tools"
                   links={[
+                    { to: '/ai-design-studio', label: 'AI Design Studio', icon: 'fas fa-wand-magic-sparkles' },
                     { to: '/vastu-checker', label: 'AI Vastu Checker', icon: 'fas fa-compass' },
                     { to: '/area-calculator', label: 'Carpet Area Calculator', icon: 'fas fa-ruler-combined' },
                     { to: '/area-converter', label: 'Area Unit Converter', icon: 'fas fa-exchange-alt' },

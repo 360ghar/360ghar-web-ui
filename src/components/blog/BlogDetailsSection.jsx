@@ -215,12 +215,14 @@ const BlogDetailsSection = () => {
     const seoMeta = useMemo(() => {
         const rawTitle = post?.title || tSeo('blog.fallbackTitle');
         const year = new Date().getFullYear();
-        // Enhance title: add year and brand suffix if not already present
-        const titleText = rawTitle.includes('360Ghar')
-            ? rawTitle
-            : `${rawTitle} (${year}) | 360Ghar`;
-        // Enhance description: add freshness signal, trust prefix for legal topics, and CTA
-        const rawDesc = post?.excerpt || post?.summary || '';
+        // Use backend meta_title if available, otherwise enhance title with year and brand suffix
+        const titleText = post?.meta_title || (
+            rawTitle.includes('360Ghar')
+                ? rawTitle
+                : `${rawTitle} (${year}) | 360Ghar`
+        );
+        // Use backend meta_description if available, otherwise derive from excerpt
+        const rawDesc = post?.meta_description || post?.excerpt || post?.summary || '';
         const isLegalTopic = ['document', 'checklist', 'legal', 'loan against property', 'registration', 'mutation', 'rera', 'stamp duty'].some(
             kw => (rawTitle + ' ' + rawDesc).toLowerCase().includes(kw)
         );
@@ -228,7 +230,8 @@ const BlogDetailsSection = () => {
         const descText = rawDesc
             ? `${trustPrefix}${rawDesc.length > 150 ? `${rawDesc.slice(0, 147)}...` : rawDesc}`
             : tSeo('blog.fallbackDescription');
-        const image = post?.thumbnail_url || post?.cover_image_url
+        // Use backend og_image_url if available, otherwise fall back through image sources
+        const image = post?.og_image_url || post?.thumbnail_url || post?.cover_image_url
             || post?.featured_image || post?.image_url || post?.image
             || extractFirstMarkdownImage(post?.content || '')
             || siteMetadata.defaultOgImage;
@@ -236,6 +239,8 @@ const BlogDetailsSection = () => {
         const url = postSlug ? `/blog/${postSlug}` : undefined;
         const authorSlug = post?.author_slug || '360ghar-team';
         const authorSchema = getAuthorSchema(authorSlug);
+        // Merge backend schema_markup with auto-generated structured data
+        const backendSchemaMarkup = post?.seo_metadata?.schema_markup || null;
         const ld = generateBlogStructuredData({
             title: titleText,
             description: descText,
@@ -245,6 +250,7 @@ const BlogDetailsSection = () => {
             publishedAt: post?.published_at,
             updatedAt: post?.updated_at,
             authorSchema,
+            schemaMarkup: backendSchemaMarkup,
         });
         const breadcrumb = generateBreadcrumbStructuredData([
             { name: 'Home', url: 'https://360ghar.com/' },
@@ -252,6 +258,7 @@ const BlogDetailsSection = () => {
             { name: rawTitle, url: url ? `${siteMetadata.siteUrl}${url}` : 'https://360ghar.com/blog' }
         ]);
         const keywords = [
+            post?.focus_keyword,
             post?.title,
             post?.categories?.[0]?.name,
             'real estate blog',
@@ -273,7 +280,7 @@ const BlogDetailsSection = () => {
             publishedAt: post?.published_at,
             updatedAt: post?.updated_at || post?.published_at,
         };
-    }, [post]);
+    }, [post, tSeo]);
 
     // Detect content type and prepare for rendering
     // Returns { type: 'html'|'markdown'|'empty', html?, markdown? }
@@ -375,6 +382,10 @@ const BlogDetailsSection = () => {
                                                 <span className="icon"><i className="fas fa-calendar"></i></span>
                                                 {formattedDate}
                                             </li>
+                                            <li className="blog-infos__item">
+                                                <span className="icon"><i className="fas fa-clock"></i></span>
+                                                {post.reading_time_minutes || Math.max(1, Math.ceil((post.word_count || 200) / 200))} min read
+                                            </li>
                                         </ul>
 
                                         {/* Categories */}
@@ -439,6 +450,34 @@ const BlogDetailsSection = () => {
                                                         </I18nLink>
                                                     ))}
                                                 </div>
+                                            </div>
+                                        )}
+
+                                        {/* Sources & References */}
+                                        {post?.sources?.length > 0 && (
+                                            <div className="blog-details__sources mt-4 pt-3 border-top">
+                                                <h4 className="mb-3">Sources &amp; References</h4>
+                                                <ol className="blog-sources-list">
+                                                    {post.sources.map((source, idx) => (
+                                                        <li key={idx} className="blog-source-item">
+                                                            <a
+                                                                href={source.url && source.url.startsWith('http') ? source.url : '#'}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                {source.name || (() => { try { return new URL(source.url).hostname; } catch { return source.url; } })()}
+                                                            </a>
+                                                            {source.type === 'primary' && (
+                                                                <span className="badge bg-main ms-2">Primary</span>
+                                                            )}
+                                                            {source.retrieved_at && (
+                                                                <span className="text-muted ms-2" style={{ fontSize: '0.8rem' }}>
+                                                                    (accessed {new Date(source.retrieved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })})
+                                                                </span>
+                                                            )}
+                                                        </li>
+                                                    ))}
+                                                </ol>
                                             </div>
                                         )}
 

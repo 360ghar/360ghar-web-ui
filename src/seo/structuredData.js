@@ -677,11 +677,12 @@ export const generatePropertyStructuredData = (property) => ({
 });
 
 // Blog post structured data generator
-export const generateBlogStructuredData = ({ authorSchema, inLanguage, ...blog }) => ({
+export const generateBlogStructuredData = ({ authorSchema, schemaMarkup, inLanguage, ...blog }) => ({
+  ...(schemaMarkup || {}),
   '@type': 'BlogPosting',
-  headline: blog.title || 'Real Estate Blog',
-  description: blog.description || 'Latest real estate insights and tips',
-  image: blog.image || siteMetadata.defaultOgImage,
+  headline: blog.title || schemaMarkup?.headline || 'Real Estate Blog',
+  description: blog.description || schemaMarkup?.description || 'Latest real estate insights and tips',
+  image: blog.image || schemaMarkup?.image || siteMetadata.defaultOgImage,
   author: authorSchema || {
     '@type': 'Organization',
     name: siteMetadata.siteName,
@@ -694,8 +695,8 @@ export const generateBlogStructuredData = ({ authorSchema, inLanguage, ...blog }
       url: siteMetadata.defaultOgImage
     }
   },
-  datePublished: blog.publishedAt || new Date().toISOString(),
-  dateModified: blog.updatedAt || new Date().toISOString(),
+  datePublished: blog.publishedAt || schemaMarkup?.datePublished || new Date().toISOString(),
+  dateModified: blog.updatedAt || schemaMarkup?.dateModified || new Date().toISOString(),
   inLanguage: inLanguage || ['en-IN', 'hi-IN'],
   mainEntityOfPage: {
     '@type': 'WebPage',

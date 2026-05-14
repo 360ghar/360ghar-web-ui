@@ -339,6 +339,45 @@
             }
         }
     }
+
+    // Sources & References section
+    &__sources {
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .blog-sources-list {
+            padding-left: 1.25rem;
+            margin-bottom: 0;
+
+            .blog-source-item {
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+                line-height: 1.6;
+
+                a {
+                    color: #f97316;
+                    text-decoration: none;
+                    transition: color 0.2s ease;
+                    overflow-wrap: break-word;
+                    word-break: break-word;
+
+                    &:hover {
+                        color: #ea580c;
+                        text-decoration: underline;
+                    }
+                }
+
+                .badge {
+                    font-size: 0.7rem;
+                    padding: 2px 8px;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
 }
 
 // Blog infos styling

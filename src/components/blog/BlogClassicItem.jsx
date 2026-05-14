@@ -10,12 +10,13 @@ const BlogClassicItem = ({ post }) => {
     const { setBlogData, currentMonthName } = useBlogStore();
 
     // Extract post data
-    const thumb = post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.png';
+    const thumb = post.og_image_url || post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.png';
     const title = post.title || 'Untitled';
     const slug = post.slug; // Use backend slug directly
     const excerpt = post.excerpt || post.summary || '';
     const authorName = post.author_name || 'Admin';
     const publishedAt = post.published_at || post.created_at;
+    const readingTime = post.reading_time_minutes || Math.max(1, Math.ceil((post.word_count || 200) / 200));
 
     // Format date
     const formattedDate = publishedAt
@@ -43,6 +44,7 @@ const BlogClassicItem = ({ post }) => {
     const meta = [
         { icon: <i className="fas fa-user"></i>, text: `By ${authorName}` },
         publishedAt && { icon: <i className="fas fa-calendar"></i>, text: formattedDate },
+        { icon: <i className="fas fa-clock"></i>, text: `${readingTime} min read` },
     ].filter(Boolean);
 
     return (

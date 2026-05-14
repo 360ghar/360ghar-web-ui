@@ -61,7 +61,7 @@ const FakeListingChecker = () => {
           generateToolSchema(toolSchemas.fakeListingChecker),
           generateBreadcrumbStructuredData([
             { name: 'Home', url: 'https://360ghar.com/' },
-            { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+            { name: 'Tools', url: 'https://360ghar.com/tools' },
             { name: 'Fake Listing Checker', url: 'https://360ghar.com/check-fake-listing' },
           ]),
           generateFaqStructuredData(FAKE_LISTING_FAQS),

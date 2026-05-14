@@ -240,6 +240,7 @@ const Home = () => {
                                     { to: '/localities', label: t('explore.link1'), icon: 'fa-map-marker-alt' },
                                     { to: '/circle-rates', label: t('explore.link2'), icon: 'fa-indian-rupee-sign' },
                                     { to: '/bank-auctions', label: t('explore.link3'), icon: 'fa-gavel' },
+                                    { to: '/ai-design-studio', label: t('explore.link12'), icon: 'fa-wand-magic-sparkles' },
                                     { to: '/emi-calculator', label: t('explore.link4'), icon: 'fa-calculator' },
                                     { to: '/area-converter', label: t('explore.link5'), icon: 'fa-ruler-combined' },
                                     { to: '/about-us', label: t('explore.link6'), icon: 'fa-building' },

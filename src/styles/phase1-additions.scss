@@ -1851,3 +1851,116 @@
     border-radius: 16px;
   }
 }
+
+// =============================================================================
+// Tools Index Page
+// =============================================================================
+
+.tools-index-hero {
+  background: linear-gradient(180deg, #ffffff 0%, var(--main-color-lighter) 100%);
+}
+
+.tools-category-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-color-light);
+}
+
+.tools-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.tools-card {
+  background: #fff;
+  border: 1px solid var(--border-color-light);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 12px 24px rgba(16, 24, 40, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(255, 107, 0, 0.1);
+  }
+
+  &__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--main-color-lighter);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    i {
+      font-size: 1.35rem;
+      color: var(--main-color);
+    }
+  }
+
+  &__title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  &__desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex: 1;
+  }
+
+  &__cta {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--main-color);
+    display: inline-flex;
+    align-items: center;
+
+    i {
+      transition: transform 0.2s ease;
+    }
+
+    .tools-card-link:hover & i {
+      transform: translateX(4px);
+    }
+  }
+}
+
+.tools-why-section {
+  background: #fff;
+}
+
+.tools-why-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px 20px;
+  background: var(--bg-light);
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+
+  i {
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+}

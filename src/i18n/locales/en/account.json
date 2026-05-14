@@ -213,5 +213,29 @@
   },
   "common": {
     "postProperty": "Post Property"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password | 360Ghar",
+    "description": "Reset your 360Ghar account password.",
+    "heading": "Forgot Password",
+    "sendBtn": "Send Reset Link",
+    "sending": "Sending...",
+    "emailSentTitle": "Check Your Email",
+    "emailSentDesc": "We've sent a password reset link to your email address. Please check your inbox and follow the instructions.",
+    "backToLogin": "Back to Login",
+    "successMessage": "Password reset link sent to your email!",
+    "errorMessage": "Failed to send reset email. Please try again."
+  },
+  "resetPassword": {
+    "title": "Reset Password | 360Ghar",
+    "description": "Set a new password for your 360Ghar account.",
+    "heading": "Reset Password",
+    "resetBtn": "Reset Password",
+    "resetting": "Resetting...",
+    "invalidTitle": "Invalid or Expired Link",
+    "invalidDesc": "This password reset link is invalid or has expired. Please request a new one.",
+    "requestNewLink": "Request New Link",
+    "successMessage": "Password reset successfully! Please login with your new password.",
+    "errorMessage": "Failed to reset password. Please try again."
   }
 }

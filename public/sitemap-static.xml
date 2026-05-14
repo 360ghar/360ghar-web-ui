@@ -882,22 +882,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/real-estate-agent" />
   </url>
   <url>
-    <loc>https://360ghar.com/careers/software-developer</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/software-developer" />
-    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/software-developer" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/software-developer" />
-  </url>
-  <url>
-    <loc>https://360ghar.com/hi/careers/software-developer</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/careers/software-developer" />
-    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/careers/software-developer" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/careers/software-developer" />
-  </url>
-  <url>
     <loc>https://360ghar.com/careers/software-developer-intern</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -976,6 +960,22 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/glossary" />
     <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/glossary" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/glossary" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/links</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/links" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/links" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/links" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/links</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/links" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/links" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/links" />
   </url>
   <url>
     <loc>https://360ghar.com/check-fake-listing</loc>

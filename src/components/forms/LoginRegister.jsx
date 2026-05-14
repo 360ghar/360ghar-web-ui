@@ -448,7 +448,7 @@ const LoginRegister = ({titleText, firstNameCol, showFirstName, lastNameCol, sho
                                                                     <input className="form-check-input" type="checkbox" value="" id="remember-login"/>
                                                                     <label className="form-check-label" htmlFor="remember-login">{t('forms:generic.rememberMe')}</label>
                                                                 </div>
-                                                                <I18nLink to="/contact" className="forgot-password text-decoration-underline text-main text-poppins font-14">{t('forms:generic.forgotPassword')}</I18nLink>
+                                                                <I18nLink to="/forgot-password" className="forgot-password text-decoration-underline text-main text-poppins font-14">{t('forms:generic.forgotPassword')}</I18nLink>
                                                             </div>
                                                         </div>
                                                     )

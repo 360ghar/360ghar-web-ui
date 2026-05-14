@@ -84,7 +84,7 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                      generateToolSchema(toolSchemas.propertyChecklist),
                      generateBreadcrumbStructuredData([
                          { name: 'Home', url: 'https://360ghar.com/' },
-                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: 'Tools', url: 'https://360ghar.com/tools' },
                          { name: toolSchemas.propertyChecklist.name, url: 'https://360ghar.com/property-document-checklist' }
                      ]),
                      generateFaqStructuredData(PROPERTY_CHECKLIST_FAQS),

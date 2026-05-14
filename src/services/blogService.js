@@ -1,4 +1,4 @@
-import { publicApi } from './api';
+import { api, publicApi } from './api';
 
 // Blog and Content Service
 export const blogService = {
@@ -35,6 +35,24 @@ export const blogService = {
   // Get specific tag by ID or slug
   getTagByIdentifier: async (identifier) => {
     const response = await publicApi.get(`/blog/tags/${identifier}`);
+    return response.data;
+  },
+
+  // Admin: create a new blog post (requires auth)
+  createPost: async (data) => {
+    const response = await api.post('/blog/posts', data);
+    return response.data;
+  },
+
+  // Admin: update a blog post by ID or slug (requires auth)
+  updatePost: async (identifier, data) => {
+    const response = await api.put(`/blog/posts/${identifier}`, data);
+    return response.data;
+  },
+
+  // Admin: delete a blog post by ID or slug (requires auth)
+  deletePost: async (identifier) => {
+    const response = await api.delete(`/blog/posts/${identifier}`);
     return response.data;
   },
 };

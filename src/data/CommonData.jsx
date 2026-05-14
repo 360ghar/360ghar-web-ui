@@ -193,6 +193,10 @@ export const navMenus = [
                 path: "/blog",
             },
             {
+                textKey: "common:nav.aiDesignStudio",
+                path: "/ai-design-studio",
+            },
+            {
                 textKey: "common:nav.aboutUs",
                 path: "/about-us",
             },
@@ -315,6 +319,10 @@ export const footerUsefulLinks = [
     {
         textKey: 'common:nav.vastuChecker',
         link: '/vastu-checker'
+    },
+    {
+        textKey: 'common:nav.aiDesignStudio',
+        link: '/ai-design-studio'
     },
     {
         textKey: 'common:nav.auctionSources',

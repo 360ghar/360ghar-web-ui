@@ -93,6 +93,27 @@ export const authService = {
     localStorage.removeItem('user');
   },
 
+  sendPasswordResetEmail: async (email) => {
+    const client = await ensureSupabaseClient();
+    const redirectTo = `${window.location.origin}/reset-password`;
+    const { error } = await client.auth.resetPasswordForEmail(email, {
+      redirectTo,
+    });
+    if (error) {
+      throw new Error(error.message || 'Failed to send reset email');
+    }
+    return { success: true };
+  },
+
+  resetPassword: async (newPassword) => {
+    const client = await ensureSupabaseClient();
+    const { error } = await client.auth.updateUser({ password: newPassword });
+    if (error) {
+      throw new Error(error.message || 'Failed to reset password');
+    }
+    return { success: true };
+  },
+
   // Change password - requires current password verification
   changePassword: async (currentPassword, newPassword) => {
     const client = await ensureSupabaseClient();

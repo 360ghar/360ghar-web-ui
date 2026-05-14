@@ -31,6 +31,8 @@ const Contact = lazy(() => import('./pages/core/Contact'));
 const PostProperty = lazy(() => import('./pages/properties/PostProperty'));
 const Register = lazy(() => import('./pages/account/Register'));
 const AccountDeletionRequest = lazy(() => import('./pages/account/AccountDeletionRequest'));
+const ForgotPassword = lazy(() => import('./pages/account/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/account/ResetPassword'));
 const NotFound = lazy(() => import('./pages/core/NotFound'));
 const Policies = lazy(() => import('./pages/core/Policies'));
 const PolicyDetails = lazy(() => import('./pages/core/PolicyDetails'));
@@ -61,6 +63,7 @@ const NriPropertyGuide = lazy(() => import('./pages/core/NriPropertyGuide'));
 const ListPropertyFree = lazy(() => import('./pages/core/ListPropertyFree'));
 const Glossary = lazy(() => import('./pages/core/Glossary'));
 const FakeListingChecker = lazy(() => import('./pages/tools/FakeListingChecker'));
+const ToolsIndex = lazy(() => import('./pages/tools/ToolsIndex'));
 const Links = lazy(() => import('./pages/core/Links'));
 const ChatBot = lazy(() => import('./components/chatbot/ChatBot'));
 
@@ -116,6 +119,8 @@ const accountRoutes = [
   { path: '/register', element: <Register /> },
   { path: '/account', element: <Account /> },
   { path: '/delete-account', element: <AccountDeletionRequest /> },
+  { path: '/forgot-password', element: <ForgotPassword /> },
+  { path: '/reset-password', element: <ResetPassword /> },
 ];
 
 const contentRoutes = [
@@ -145,6 +150,7 @@ const contentRoutes = [
 ];
 
 const toolRoutes = [
+  { path: '/tools', element: <ToolsIndex /> },
   { path: '/emi-calculator', element: <EmiCalculator /> },
   { path: '/area-converter', element: <AreaConverter /> },
   { path: '/loan-eligibility-calculator', element: <LoanEligibilityCalculator /> },

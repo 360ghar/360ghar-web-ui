@@ -167,7 +167,7 @@ const VastuChecker = () => {
                      generateToolSchema(toolSchemas.vastuChecker),
                      generateBreadcrumbStructuredData([
                          { name: 'Home', url: 'https://360ghar.com/' },
-                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: 'Tools', url: 'https://360ghar.com/tools' },
                          { name: toolSchemas.vastuChecker.name, url: 'https://360ghar.com/vastu-checker' }
                      ]),
                      generateFaqStructuredData(VASTU_CHECKER_FAQS),
@@ -439,7 +439,11 @@ const VastuChecker = () => {
                                     {t('vastu.ctaDesc')}
                                 </p>
                                 <div className="cta-buttons d-flex justify-content-center gap-3 flex-wrap">
-                                    <I18nLink to="/properties" className="btn btn-white btn-main">
+                                    <I18nLink to="/ai-design-studio" className="btn btn-white btn-main">
+                                        <i className="fas fa-wand-magic-sparkles me-2"></i>
+                                        AI Design Studio
+                                    </I18nLink>
+                                    <I18nLink to="/properties" className="btn btn-outline-white">
                                         <i className="fas fa-home me-2"></i>
                                         {t('vastu.browseProperties')}
                                     </I18nLink>

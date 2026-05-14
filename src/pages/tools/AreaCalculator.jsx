@@ -53,7 +53,7 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                      generateToolSchema(toolSchemas.areaCalculator),
                      generateBreadcrumbStructuredData([
                          { name: 'Home', url: 'https://360ghar.com/' },
-                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: 'Tools', url: 'https://360ghar.com/tools' },
                          { name: toolSchemas.areaCalculator.name, url: 'https://360ghar.com/area-calculator' }
                      ]),
                      generateFaqStructuredData(AREA_CALCULATOR_FAQS),

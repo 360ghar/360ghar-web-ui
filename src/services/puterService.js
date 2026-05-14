@@ -105,8 +105,7 @@ export const puterService = {
 
   /**
    * Text-to-Image generation
-   * Creates a new image from a text prompt
-   * Uses GPT Image 1.5 for high-quality results
+   * Uses GPT Image 2 (openai-image-generation) for high-quality results
    *
    * @param {string} prompt - Text description of the image
    * @param {Object} options - Generation options
@@ -119,16 +118,15 @@ export const puterService = {
       throw new Error('Please sign in with Puter to generate images');
     }
 
-    // Use GPT Image 1.5 for high quality results
     const generationOptions = {
       provider: 'openai-image-generation',
-      model: 'gpt-image-1.5',
-      quality: options.quality || 'medium',
-      ratio: { w: 1024, h: 1024 },
+      model: 'gpt-image-2',
+      quality: options.quality || 'high',
+      ratio: options.ratio || { w: 1024, h: 1024 },
     };
 
     const image = await window.puter.ai.txt2img(prompt, generationOptions);
-    return image.src; // Returns data URL
+    return image.src;
   },
 
   /**
@@ -148,10 +146,10 @@ export const puterService = {
       throw new Error('Please sign in with Puter to generate images');
     }
 
-    // Gemini provider supports image-to-image
+    // Gemini 3.1 Flash Image supports image-to-image via input_image
     const image = await window.puter.ai.txt2img(prompt, {
       provider: 'gemini',
-      model: options.model || 'gemini-2.5-flash-image-preview',
+      model: options.model || 'gemini-3.1-flash-image-preview',
       input_image: imageBase64,
       input_image_mime_type: mimeType,
     });

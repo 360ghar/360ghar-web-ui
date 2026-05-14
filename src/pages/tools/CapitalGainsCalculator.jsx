@@ -145,7 +145,7 @@ const CapitalGainsCalculator = () => {
                     generateToolSchema(toolSchemas.capitalGains),
                     generateBreadcrumbStructuredData([
                         { name: 'Home', url: 'https://360ghar.com/' },
-                        { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                        { name: 'Tools', url: 'https://360ghar.com/tools' },
                         { name: toolSchemas.capitalGains.name, url: 'https://360ghar.com/capital-gains-tax-calculator' }
                     ]),
                     faqStructuredData,

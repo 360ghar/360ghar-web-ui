@@ -10,6 +10,7 @@ import ReraVerifiedBadge from '../../components/data-hub/ReraVerifiedBadge';
 import NeighbourhoodScorePanel from '../../components/data-hub/NeighbourhoodScorePanel';
 import ZoneInfoCard from '../../components/data-hub/ZoneInfoCard';
 import CircleRateBanner from '../../components/data-hub/CircleRateBanner';
+import { I18nLink } from '../../i18n/I18nLink';
 
 import SEO from '../../common/SEO';
 import { useTranslation } from 'react-i18next';
@@ -286,6 +287,29 @@ const PropertyDetails = () => {
 
                 {/* Cta */}
                 <Cta ctaClass="" />
+
+                {/* AI Design Studio Cross-link */}
+                <section className="padding-y-60" style={{ background: 'var(--main-color-lighter)' }}>
+                    <div className="container">
+                        <div className="row align-items-center">
+                            <div className="col-lg-8">
+                                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+                                    <i className="fas fa-wand-magic-sparkles me-2" style={{ color: 'var(--main-color)' }}></i>
+                                    Visualize This Property with AI
+                                </h3>
+                                <p className="mb-lg-0 mb-3 text-muted">
+                                    Curious how this home could look with a fresh design? Use AI Design Studio to generate photorealistic interior and exterior renders — free.
+                                </p>
+                            </div>
+                            <div className="col-lg-4 text-lg-end">
+                                <I18nLink to="/ai-design-studio" className="btn btn-main">
+                                    <i className="fas fa-palette me-2"></i>
+                                    Try AI Design Studio
+                                </I18nLink>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 {/* Footer */}
                 <Footer />

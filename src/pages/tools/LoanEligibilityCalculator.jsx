@@ -98,7 +98,7 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                      generateToolSchema(toolSchemas.loanEligibility),
                      generateBreadcrumbStructuredData([
                          { name: 'Home', url: 'https://360ghar.com/' },
-                         { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+                         { name: 'Tools', url: 'https://360ghar.com/tools' },
                          { name: toolSchemas.loanEligibility.name, url: 'https://360ghar.com/loan-eligibility-calculator' }
                      ]),
                      generateFaqStructuredData(LOAN_ELIGIBILITY_FAQS),
