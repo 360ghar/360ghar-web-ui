@@ -57,15 +57,15 @@ export const toolSchemas = {
     },
     areaConverter: {
         name: 'Area Unit Converter',
-        description: 'Convert area units instantly between Square Feet, Square Yard, Square Meter, Acres, Bigha, and other units commonly used in Indian real estate.',
-        keywords: 'area converter, sq ft to sq yard, square feet converter, land area calculator, unit conversion, sq yard to sq ft, acre to bigha, hectare to acre, area unit converter India, gaj to sq ft converter, zameen converter, sq ft to sq yard India, area unit converter Hindi, gaj to sq ft, bigha converter India',
+        description: 'Free land area converter for Indian real estate. Convert Gaj to Acre, Sq Ft to Gaj, Bigha to Acre, Ground to Acre, and more. Instant and accurate area unit conversion for property buyers in India.',
+        keywords: 'area converter india, sq ft to gaj, gaj to acre, bigha to acre, 4840 gaj in acre, 360 sq ft in gaj, 2400 gaj in acre, 2400 sq ft in gaj, bigha to acre calculator, bigha to acre conversion, gaj to bigha, 43560 sq ft to ground, ground to acre, land calculator india, bigha in acre, sq ft to gaj converter, gaj to sq ft, bigha converter, 1 acre to bigha in haryana, jamin calculator, 360 sq yard to gaj, land area converter India, acre to bigha, square feet to gaj, 1 gaj in bigha, 360ghar',
         category: 'UtilitiesApplication',
         route: '/area-converter'
     },
     areaCalculator: {
         name: 'Carpet Area Calculator',
-        description: 'Calculate carpet area, built-up area, and super built-up area for your property. Understand actual usable area vs total area.',
-        keywords: 'carpet area calculator, built-up area, super built-up area, property area calculation, usable area, RERA carpet area, area calculation formula, plinth area, super built up area calculation, carpet area to built up area, carpet area kya hota hai, built-up area calculator Hindi, super built up area meaning, RERA carpet area Hindi, area calculation India',
+        description: 'Free carpet area calculator to convert between carpet area, built-up area, and super built-up area. Calculate RERA carpet area, convert MOFA to RERA, and understand loading factor for properties in India. Accurate area conversion in square feet.',
+        keywords: 'carpet area calculator, carpet area to built up area calculator, mofa to rera carpet conversion calculator, rera carpet area calculator, super built up area to carpet area calculator, carpet area to built-up area calculator India, built up area to carpet area calculator, carpet area in square feet calculator, how to calculate carpet area from super built up area, carpet area calculation formula, carpet area for flat calculator, loading factor calculator, RERA carpet area, carpet area converter, area calculation formula India, flat carpet area calculator, built up area vs carpet area, carpet area kya hota hai, 360ghar',
         category: 'UtilitiesApplication',
         route: '/area-calculator'
     },
@@ -92,8 +92,8 @@ export const toolSchemas = {
     },
     vastuChecker: {
         name: 'Vastu Compliance Checker',
-        description: 'AI-powered Vastu Shastra analysis for floor plans. Upload your floor plan and get instant Vastu compliance score and recommendations.',
-        keywords: 'Vastu checker, Vastu analysis, floor plan Vastu, Vastu compliance, vastu shastra checker, Vastu evaluation online, Vastu score calculator, Vastu for home, Vastu for flat, online Vastu consultation, vastu check Hindi, ghar ka vastu, flat vastu checker online, vastu for home India, vastu shastra consultation online',
+        description: 'Check Vastu of your house or flat online for free. Upload your floor plan and get an instant AI-powered Vastu score, room-by-room analysis, and practical remedies for kitchen, bedroom, and entrance. Free online Vastu checker and calculator.',
+        keywords: 'Vastu checker, Vastu analysis, floor plan Vastu, Vastu compliance, vastu shastra checker, Vastu evaluation online, Vastu score calculator, Vastu for home, Vastu for flat, online Vastu consultation, vastu check Hindi, ghar ka vastu, flat vastu checker online, vastu for home India, vastu shastra consultation online, online vastu check free, vastu calculator, how to check vastu of house, AI vastu checker, vastu for apartment, vastu dosh remedies, vastu for kitchen, vastu for bedroom, vastu for entrance direction, vastu compliance score',
         category: 'LifestyleApplication',
         route: '/vastu-checker'
     },

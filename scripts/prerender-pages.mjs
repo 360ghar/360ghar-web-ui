@@ -66,7 +66,7 @@ function outputPathForRoute(route) {
     return path.join(DIST_DIR, 'index.html');
   }
 
-  return path.join(DIST_DIR, route.replace(/^\/+/, ''), 'index.html');
+  return path.join(DIST_DIR, route.replace(/^\/+/, '') + '.html');
 }
 
 function ensurePrerenderAnnotations(html) {

@@ -11,6 +11,8 @@
  import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 
+import './AreaConverter.scss';
+
  const AreaConverter = () => {
      const { t } = useTranslation('tools');
 
@@ -19,6 +21,11 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
          { question: t('areaConverter.faqs.q2.question'), answer: t('areaConverter.faqs.q2.answer') },
          { question: t('areaConverter.faqs.q3.question'), answer: t('areaConverter.faqs.q3.answer') },
          { question: t('areaConverter.faqs.q4.question'), answer: t('areaConverter.faqs.q4.answer') },
+         { question: t('areaConverter.faqs.q5.question'), answer: t('areaConverter.faqs.q5.answer') },
+         { question: t('areaConverter.faqs.q6.question'), answer: t('areaConverter.faqs.q6.answer') },
+         { question: t('areaConverter.faqs.q7.question'), answer: t('areaConverter.faqs.q7.answer') },
+         { question: t('areaConverter.faqs.q8.question'), answer: t('areaConverter.faqs.q8.answer') },
+         { question: t('areaConverter.faqs.q9.question'), answer: t('areaConverter.faqs.q9.answer') },
      ];
 
      const AREA_CONVERTER_HOW_TO_STEPS = [
@@ -32,7 +39,8 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
      const [fromUnit, setFromUnit] = useState('sq_ft');
      const [toUnit, setToUnit] = useState('sq_yard');
      const [result, setResult] = useState(0);
- 
+     const [faqOpenIndex, setFaqOpenIndex] = useState(0);
+
      // Conversion rates to Square Feet (Base Unit)
      const conversionRates = useMemo(() => ({
          sq_ft: 1,
@@ -48,7 +56,7 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
          kanal: 5445,
          marla: 272.25
      }), []);
- 
+
      const unitLabels = {
          sq_ft: t('areaConverter.sqFt'),
          sq_mt: t('areaConverter.sqMt'),
@@ -63,7 +71,7 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
          kanal: t('areaConverter.kanal'),
          marla: t('areaConverter.marla')
      };
- 
+
      useEffect(() => {
          const convert = () => {
              const inSqFt = amount * conversionRates[fromUnit];
@@ -72,12 +80,12 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
          };
          convert();
      }, [amount, fromUnit, toUnit, conversionRates]);
- 
+
      const handleSwap = () => {
          setFromUnit(toUnit);
          setToUnit(fromUnit);
      };
- 
+
      return (
          <>
              <SEO
@@ -105,21 +113,19 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
 
              <OffCanvas />
              <MobileMenu />
- 
+
              <main className="body-bg">
                  <Header />
- 
+
                  <section className="padding-y-50">
                      <div className="container">
                          <div className="row justify-content-center">
                              <div className="col-lg-8">
-                                 <div className="section-heading text-center mb-5">
-                                     <h2 className="section-title">{t('areaConverter.headingTitle')}</h2>
-                                     <p className="section-desc">
-                                         {t('areaConverter.headingDesc')}
-                                     </p>
+                                 <div className="area-conv-hero">
+                                     <h1>{t('areaConverter.heroTitle')}</h1>
+                                     <p>{t('areaConverter.heroDesc')}</p>
                                  </div>
- 
+
                                  <div className="calculator-form bg-white p-4 rounded-3 shadow-sm">
                                      <div className="row g-4 align-items-center">
                                          <div className="col-md-5">
@@ -141,9 +147,9 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                                  ))}
                                              </select>
                                          </div>
- 
+
                                          <div className="col-md-2 text-center pt-md-4">
-                                             <button 
+                                             <button
                                                  className="btn btn-outline-main rounded-circle p-2"
                                                  onClick={handleSwap}
                                                  title={t('areaConverter.swapUnits')}
@@ -151,7 +157,7 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                                  <i className="fas fa-exchange-alt"></i>
                                              </button>
                                          </div>
- 
+
                                          <div className="col-md-5">
                                              <label className="form-label">{t('areaConverter.to')}</label>
                                              <div className="form-control mb-2 bg-light fw-bold text-main fs-5">
@@ -169,10 +175,10 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                          </div>
                                      </div>
                                  </div>
- 
+
                                  {/* Common Conversions Table */}
                                  <div className="mt-5">
-                                     <h4 className="mb-4">{t('areaConverter.commonConversions')}</h4>
+                                     <h2 className="h4 mb-4">{t('areaConverter.commonConversions')}</h2>
                                      <div className="table-responsive">
                                          <table className="table table-bordered table-striped bg-white">
                                              <thead>
@@ -195,7 +201,7 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                                  </tr>
                                                  <tr>
                                                      <td>1 Ground</td>
-                                                     <td>2400 Sq. Ft.</td>
+                                                     <td>2,400 Sq. Ft.</td>
                                                      <td>266.67 Sq. Yd.</td>
                                                  </tr>
                                                  <tr>
@@ -217,11 +223,50 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                          </table>
                                      </div>
                                  </div>
+
+                                 <div className="area-conv-content-section">
+                                     <h2>{t('areaConverter.gajToAcreTitle')}</h2>
+                                     <p>{t('areaConverter.gajToAcreDesc')}</p>
+                                 </div>
+
+                                 <div className="area-conv-content-section">
+                                     <h2>{t('areaConverter.sqFtToGajTitle')}</h2>
+                                     <p>{t('areaConverter.sqFtToGajDesc')}</p>
+                                 </div>
+
+                                 <div className="area-conv-faq-section">
+                                     <h2 className="mb-4">{t('areaConverter.faqTitle')}</h2>
+                                     <div className="area-conv-faq-list">
+                                         {AREA_CONVERTER_FAQS.map((faq, index) => (
+                                             <div className="area-conv-faq-item" key={index}>
+                                                 <button
+                                                     className="area-conv-faq-item__question"
+                                                     aria-expanded={faqOpenIndex === index}
+                                                     aria-controls={`area-conv-faq-answer-${index}`}
+                                                     onClick={() => setFaqOpenIndex(faqOpenIndex === index ? -1 : index)}
+                                                 >
+                                                     <span>{faq.question}</span>
+                                                     <span className="area-conv-faq-item__icon">
+                                                         <i className={`fas ${faqOpenIndex === index ? 'fa-minus' : 'fa-plus'}`} />
+                                                     </span>
+                                                 </button>
+                                                 <div
+                                                     id={`area-conv-faq-answer-${index}`}
+                                                     className={`area-conv-faq-item__answer ${faqOpenIndex === index ? 'open' : ''}`}
+                                                     role="region"
+                                                     aria-label={faq.question}
+                                                 >
+                                                     <p>{faq.answer}</p>
+                                                 </div>
+                                             </div>
+                                         ))}
+                                     </div>
+                                 </div>
                              </div>
                          </div>
                      </div>
                  </section>
- 
+
                  <Cta ctaClass="" />
 
                  <Footer />
@@ -229,5 +274,5 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
          </>
      );
  };
- 
+
  export default AreaConverter;

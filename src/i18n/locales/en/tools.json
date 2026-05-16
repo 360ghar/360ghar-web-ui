@@ -34,9 +34,9 @@
     "contactUs": "Contact Us"
   },
   "areaConverter": {
-    "title": "Land Area Converter India | Sq Ft, Gaj, Bigha, Acre Converter | 360Ghar",
-    "description": "Convert land area units instantly. Support for Sq Ft, Sq Yard (Gaj), Bigha, Acre, Hectare, Guntha, and more. Essential tool for buying land or plots in India.",
-    "keywords": "land area converter India, sq ft to gaj converter, bigha to sq ft, acre to hectare converter, plot size converter, real estate unit converter, 360ghar tools, land measurement India",
+    "title": "Land Area Converter - Gaj to Acre, Sq Ft to Gaj, Bigha to Acre | 360Ghar",
+    "description": "Free land area converter for Indian real estate. Convert Gaj to Acre, Sq Ft to Gaj, Bigha to Acre, Ground to Acre, and more. Instant and accurate area unit conversion for property buyers in India.",
+    "keywords": "area converter india, sq ft to gaj, gaj to acre, bigha to acre, 4840 gaj in acre, 360 sq ft in gaj, 2400 gaj in acre, 2400 sq ft in gaj, bigha to acre calculator, bigha to acre conversion, gaj to bigha, 43560 sq ft to ground, ground to acre, land calculator india, bigha in acre, sq ft to gaj converter, gaj to sq ft, bigha converter, 1 acre to bigha in haryana, jamin calculator, 360 sq yard to gaj, land area converter India, acre to bigha, square feet to gaj, 1 gaj in bigha, 360ghar",
     "faqs": {
       "q1": {
         "question": "How do I convert square feet to square meters?",
@@ -53,6 +53,26 @@
       "q4": {
         "question": "What is the difference between carpet area and built-up area?",
         "answer": "Carpet area is the net usable floor area inside walls. Built-up area includes carpet area plus walls and balconies. Super built-up area adds common areas like corridors and lobbies."
+      },
+      "q5": {
+        "question": "How do I convert Gaj to Acre?",
+        "answer": "1 Gaj equals 9 sq ft, and 1 Acre equals 43,560 sq ft. So to convert Gaj to Acre, divide the number of Gaj by 4,840. For example, 4,840 Gaj = 1 Acre, and 2,400 Gaj = 0.496 Acre. Use the converter above for instant results."
+      },
+      "q6": {
+        "question": "How do I convert Bigha to Acre?",
+        "answer": "1 Bigha in Haryana equals approximately 27,000 sq ft, which is about 0.6198 Acre (27,000 ÷ 43,560). In Uttar Pradesh, 1 Bigha ≈ 0.625 Acre. Since Bigha varies by state, use our converter to get accurate results for your region."
+      },
+      "q7": {
+        "question": "How do I convert Square Feet to Gaj?",
+        "answer": "1 Gaj = 9 sq ft. To convert sq ft to Gaj, divide the square feet value by 9. For example, 360 sq ft = 40 Gaj, and 2,400 sq ft = 266.67 Gaj. The converter above calculates this instantly."
+      },
+      "q8": {
+        "question": "How many Gaj are in 1 Acre?",
+        "answer": "1 Acre = 43,560 sq ft = 4,840 Gaj (since 1 Gaj = 9 sq ft). So if you see a plot listed as 4,840 Gaj, it equals exactly 1 Acre."
+      },
+      "q9": {
+        "question": "How do I convert Ground to Acre?",
+        "answer": "1 Ground = 2,400 sq ft. Since 1 Acre = 43,560 sq ft, 1 Ground equals approximately 0.0551 Acre (2,400 ÷ 43,560). Ground is commonly used in South India, especially Tamil Nadu."
       }
     },
     "howToSteps": {
@@ -61,6 +81,13 @@
       "step3": { "name": "Select output unit", "text": "Choose the unit you want to convert to. The result updates instantly." },
       "step4": { "name": "Copy or note the result", "text": "The converted value is displayed immediately. You can copy it for use in property documents or calculations." }
     },
+    "heroTitle": "Land Area Converter",
+    "heroDesc": "Convert between Indian land measurement units instantly — Gaj to Acre, Sq Ft to Gaj, Bigha to Acre, Ground to Acre, and more. Free and accurate area conversion for property buyers and sellers.",
+    "faqTitle": "Frequently Asked Questions",
+    "gajToAcreTitle": "Gaj to Acre Conversion",
+    "gajToAcreDesc": "Gaj (also called Square Yard) is one of the most commonly used land measurement units in North India, especially in Haryana, Punjab, and Delhi NCR. 1 Gaj equals 9 square feet, and 1 Acre equals 4,840 Gaj (43,560 sq ft). To convert Gaj to Acre, divide the Gaj value by 4,840. For example, 4,840 Gaj equals 1 Acre, and 2,400 Gaj equals approximately 0.496 Acre. This conversion is essential when comparing plot sizes listed in Gaj with agricultural land measured in Acres. Use the converter above for instant, accurate results.",
+    "sqFtToGajTitle": "Square Feet to Gaj Conversion",
+    "sqFtToGajDesc": "Converting square feet to Gaj is one of the most frequent calculations in Indian real estate, especially in Haryana and Uttar Pradesh. Since 1 Gaj equals 9 square feet, you simply divide the square feet value by 9. For example, 360 sq ft equals 40 Gaj, 2,400 sq ft equals 266.67 Gaj, and 43,560 sq ft (1 Acre) equals 4,840 Gaj. Property listings in Gurugram, Faridabad, and other NCR cities often use Gaj, making this conversion crucial for buyers comparing plot sizes across different listings and portals.",
     "headingTitle": "Land Area Converter",
     "headingDesc": "Compare properties easily by converting between local and standard measurement units.",
     "from": "From",
@@ -84,9 +111,9 @@
     "marla": "Marla"
   },
   "areaCalculator": {
-    "title": "Carpet Area Calculator India | RERA Super Built-up vs Carpet Area | 360Ghar",
-    "description": "Calculate actual Carpet Area from Super Built-up Area using our RERA-compliant calculator. Understand loading factor and usable space for properties in Gurugram and Delhi NCR.",
-    "keywords": "carpet area calculator India, super built up area vs carpet area, RERA area calculator, loading factor calculator, apartment area calculator, flat size calculator, 360ghar tools",
+    "title": "Carpet Area Calculator - Carpet to Built-up & RERA Area Conversion | 360Ghar",
+    "description": "Free carpet area calculator to convert between carpet area, built-up area, and super built-up area. Calculate RERA carpet area, convert MOFA to RERA, and understand loading factor for properties in India. Accurate area conversion in square feet.",
+    "keywords": "carpet area calculator, carpet area to built up area calculator, mofa to rera carpet conversion calculator, rera carpet area calculator, super built up area to carpet area calculator, carpet area to built-up area calculator India, built up area to carpet area calculator, carpet area in square feet calculator, how to calculate carpet area from super built up area, carpet area calculation formula, carpet area for flat calculator, loading factor calculator, carpet area vs built up area, RERA carpet area, carpet area converter, area calculation formula India, flat carpet area calculator, built up area vs carpet area, carpet area to super built up area calculator, carpet area kya hota hai, 360ghar",
     "faqs": {
       "q1": {
         "question": "How do I calculate the area of a room?",
@@ -103,6 +130,26 @@
       "q4": {
         "question": "What is the difference between RERA carpet area and usable area?",
         "answer": "RERA carpet area includes the area enclosed by walls (up to the inner face). Usable area may exclude some wall portions. RERA definition is more generous than the older 'carpet area' standard."
+      },
+      "q5": {
+        "question": "How do I convert carpet area to built-up area?",
+        "answer": "To convert carpet area to built-up area, add 10-15% to the carpet area. The formula is: Built-up Area = Carpet Area × 1.10 to 1.15. This accounts for walls, balconies, and exclusive terraces. For example, if carpet area is 1000 sq ft, built-up area is approximately 1100-1150 sq ft."
+      },
+      "q6": {
+        "question": "What is MOFA to RERA carpet area conversion?",
+        "answer": "Under MOFA (Maharashtra Ownership Flats Act), carpet area excluded internal partition walls. RERA carpet area includes the area within internal walls, making it about 5-8% larger than MOFA carpet area. For example, a flat with MOFA carpet area of 1000 sq ft would have approximately 1050-1080 sq ft RERA carpet area. Use our calculator to convert accurately."
+      },
+      "q7": {
+        "question": "How to calculate RERA carpet area?",
+        "answer": "RERA carpet area is the net usable floor area of an apartment, measured from the inner face of walls. It includes internal partition walls but excludes external walls, common areas, balconies, and open terraces. Formula: RERA Carpet Area = Total Floor Area − External Walls − Balconies − Open Terraces − Common Areas."
+      },
+      "q8": {
+        "question": "How to convert carpet area to square feet?",
+        "answer": "If carpet area is given in square meters, multiply by 10.764 to get square feet. If in square yards (gaj), multiply by 9. For example, 100 sq m carpet area = 1076.4 sq ft. Use our free area converter tool for other unit conversions like bigha, kanal, or marla to square feet."
+      },
+      "q9": {
+        "question": "How to calculate carpet area for a flat?",
+        "answer": "To calculate carpet area for a flat, measure each room's length × width from the inner face of walls, then sum all rooms. Exclude balconies, external walls, service shafts, and open terraces. Alternatively, if you know the super built-up area and loading factor, use: Carpet Area = Super Built-up Area × (1 − Loading Factor/100)."
       }
     },
     "howToSteps": {
@@ -130,7 +177,14 @@
     "builtUpAreaTitle": "Built-up Area",
     "builtUpAreaDesc": "Carpet Area + Area of walls + Area of balconies. This is typically 10-15% more than the carpet area.",
     "superBuiltUpAreaTitle": "Super Built-up Area",
-    "superBuiltUpAreaDesc": "Built-up Area + Proportionate share of common areas (lobby, lifts, stairs, amenities). This is what you usually pay for."
+    "superBuiltUpAreaDesc": "Built-up Area + Proportionate share of common areas (lobby, lifts, stairs, amenities). This is what you usually pay for.",
+    "heroTitle": "Carpet Area Calculator",
+    "heroDesc": "Convert between Carpet Area, Built-up Area, and Super Built-up Area instantly. RERA-compliant calculations with loading factor for properties in India.",
+    "faqTitle": "Frequently Asked Questions",
+    "carpetToBuiltUpTitle": "Carpet Area to Built-up Area Conversion",
+    "carpetToBuiltUpDesc": "Converting carpet area to built-up area is essential when comparing property sizes. Built-up area includes the carpet area plus the area covered by walls and balconies. Typically, built-up area is 10-15% more than carpet area. For example, a flat with 1000 sq ft carpet area will have approximately 1100-1150 sq ft built-up area. When a builder quotes a super built-up area, the carpet area (your actual usable space) is calculated by subtracting the loading factor — usually 25-35% — from the super built-up area.",
+    "reraVsMofaTitle": "RERA Carpet Area vs MOFA Carpet Area",
+    "reraVsMofaDesc": "Before RERA, Maharashtra followed MOFA (Maharashtra Ownership Flats Act), which defined carpet area as the area excluding internal partition walls. RERA expanded the definition to include the area within internal walls, making RERA carpet area approximately 5-8% larger than MOFA carpet area. This difference matters because homebuyers paying per square foot get more usable space under the RERA definition. If a builder quotes MOFA carpet area of 1000 sq ft, the RERA equivalent would be roughly 1050-1080 sq ft. Always verify which standard is being used when comparing property prices."
   },
   "loanEligibility": {
     "title": "Home Loan Eligibility Calculator India | Check Max Loan Amount | 360Ghar",
@@ -270,9 +324,9 @@
     "iframeTitle": "360Ghar Blueprint Designer"
   },
   "vastu": {
-    "title": "Free Vastu Checker - AI Floor Plan Analysis | 360Ghar",
-    "description": "Get instant AI-powered Vastu Shastra analysis for your floor plan. Upload your floor plan and receive a comprehensive Vastu score, room-by-room analysis, and practical remedies. Free online Vastu checker.",
-    "keywords": "vastu checker, vastu analysis, floor plan vastu, vastu shastra, vastu score, vastu remedies, 360ghar, free vastu analysis, vastu consultant, vastu for home, vastu tips, vastu dosh, vastu shastra in hindi",
+    "title": "Free Online Vastu Checker - Check Vastu for House & Flat | 360Ghar",
+    "description": "Check Vastu of your house or flat online for free. Upload your floor plan and get an instant AI-powered Vastu score, room-by-room analysis, and practical remedies for kitchen, bedroom, and entrance. Free online Vastu checker and calculator.",
+    "keywords": "vastu checker, vastu analysis, floor plan vastu, vastu shastra, vastu score, vastu remedies, 360ghar, free vastu analysis, vastu consultant, vastu for home, vastu tips, vastu dosh, vastu shastra in hindi, online vastu check, vastu check online free, vastu calculator, vastu for flat, how to check vastu of house, AI vastu checker, vastu dosh remedies, vastu for kitchen, vastu for bedroom, vastu for entrance, vastu compliance checker, check vastu online, vastu report online, automated vastu analysis, vastu ai app, ghar ka vastu, flat ka vastu",
     "heroTitle": "AI-Powered Vastu Checker",
     "heroDesc": "Upload your floor plan and receive a comprehensive Vastu Shastra analysis with personalized recommendations and practical remedies.",
     "additionalNotes": "Additional Notes",
@@ -431,6 +485,22 @@
       "q5": {
         "question": "Is Vastu Shastra scientifically proven?",
         "answer": "While Vastu Shastra is rooted in traditional Indian knowledge, many of its principles align with environmental science — natural light, ventilation, and spatial planning. It is widely followed in India as a cultural and architectural practice rather than a strict science."
+      },
+      "q6": {
+        "question": "How to check Vastu of house online?",
+        "answer": "You can check Vastu of your house online for free using 360Ghar's AI Vastu checker. Simply upload a photo or screenshot of your floor plan, mark the north direction, and the AI will analyze room placements, entrance direction, kitchen position, and other Vastu factors. You receive a compliance score out of 10 along with room-by-room analysis and practical remedies — all in under a minute, without any on-site visit."
+      },
+      "q7": {
+        "question": "How to check Vastu for flat or apartment?",
+        "answer": "For flats and apartments, Vastu analysis focuses on the unit's entrance direction, kitchen placement (ideally southeast), master bedroom (southwest), and toilet positions. Upload your apartment's floor plan to 360Ghar's Vastu checker, mark the north direction, and get an instant AI-powered analysis. Since structural changes are limited in flats, the tool emphasizes non-structural remedies like color adjustments, mirror placements, and elemental corrections."
+      },
+      "q8": {
+        "question": "Is there a free online Vastu calculator?",
+        "answer": "Yes, 360Ghar offers a free online Vastu calculator that analyzes your floor plan using AI. Unlike simple direction-based calculators, it evaluates the complete layout — room positions, entrance orientation, kitchen and toilet placements — and generates a Vastu compliance score with specific recommendations. There is no charge and no sign-up required."
+      },
+      "q9": {
+        "question": "What are common Vastu dosh and their remedies?",
+        "answer": "Common Vastu dosh include south-facing entrance, kitchen in the northeast, toilet in the northeast or center, and master bedroom in the northeast. Remedies vary by dosh: a south entrance can be corrected with a copper swastik or pyramid; a northeast kitchen may need color corrections and Vastu salt; toilet dosh can be balanced with metal strips and specific colors. 360Ghar's Vastu checker identifies these dosh automatically and suggests tailored remedies for each."
       }
     },
     "howToSteps": {
@@ -438,7 +508,15 @@
       "step2": { "name": "Mark the compass directions", "text": "Ensure the floor plan shows north direction correctly. The analysis depends on accurate orientation." },
       "step3": { "name": "Review Vastu analysis", "text": "The AI checker identifies Vastu-compliant and non-compliant zones in your floor plan." },
       "step4": { "name": "Apply Vastu remedies", "text": "For non-compliant areas, the tool suggests remedies like color changes, mirror placement, or room reassignment." }
-    }
+    },
+    "faqTitle": "Frequently Asked Questions About Vastu",
+    "howToCheckOnlineTitle": "How to Check Vastu of Your House Online",
+    "howToCheckOnlineDesc": "Checking Vastu online is now simple and free. With 360Ghar's AI-powered Vastu checker, you can upload any floor plan — whether it's an independent house, builder floor, or apartment layout — and get a detailed Vastu compliance report in under a minute. Unlike traditional Vastu consultations that require an on-site visit, our online Vastu checker analyzes room directions, entrance placement, kitchen position, and toilet locations using AI vision technology. You receive a Vastu score out of 10, room-by-room compliance breakdown, identified Vastu dosh, and practical remedies — all without leaving your home.",
+    "howToCheckOnlineStep1": "Take a photo or screenshot of your floor plan",
+    "howToCheckOnlineStep2": "Upload the image and mark the north direction",
+    "howToCheckOnlineStep3": "Get your AI-generated Vastu report with score and remedies",
+    "vastuFlatVsHouseTitle": "Vastu for Flats vs Independent Houses",
+    "vastuFlatVsHouseDesc": "Vastu Shastra applies to both flats and independent houses, but the evaluation priorities differ. For independent houses, you have full control over plot orientation, entrance placement, and room positioning. For apartments and flats, you share the building's orientation and must work within the builder's layout. Key Vastu factors for flats include the apartment's entrance direction, kitchen position relative to the unit's center, master bedroom location, and toilet placements. While you cannot change the structural layout of a flat, our Vastu checker identifies non-compliant areas and suggests practical remedies like color adjustments, mirror placements, and elemental corrections that do not require demolition."
   },
   "aiDesignStudio": {
     "title": "AI Design Studio - Interior & Exterior Design Generator | 360Ghar",

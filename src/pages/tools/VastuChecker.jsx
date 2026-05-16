@@ -26,6 +26,10 @@ const VastuChecker = () => {
         { question: t('vastu.faqs.q3.question'), answer: t('vastu.faqs.q3.answer') },
         { question: t('vastu.faqs.q4.question'), answer: t('vastu.faqs.q4.answer') },
         { question: t('vastu.faqs.q5.question'), answer: t('vastu.faqs.q5.answer') },
+        { question: t('vastu.faqs.q6.question'), answer: t('vastu.faqs.q6.answer') },
+        { question: t('vastu.faqs.q7.question'), answer: t('vastu.faqs.q7.answer') },
+        { question: t('vastu.faqs.q8.question'), answer: t('vastu.faqs.q8.answer') },
+        { question: t('vastu.faqs.q9.question'), answer: t('vastu.faqs.q9.answer') },
     ];
 
     const VASTU_CHECKER_HOW_TO_STEPS = [
@@ -43,6 +47,7 @@ const VastuChecker = () => {
 
     // UI state
     const [appState, setAppState] = useState('input'); // input, loading, result, error
+    const [faqOpenIndex, setFaqOpenIndex] = useState(0);
     const [loadingStep, setLoadingStep] = useState('analyzing');
     const [errorMessage, setErrorMessage] = useState('');
     const [errorType, setErrorType] = useState('general'); // general, timeout, network, validation
@@ -392,7 +397,7 @@ const VastuChecker = () => {
                             <div className="row">
                                 <div className="col-lg-8 mx-auto">
                                     <div className="about-content text-center">
-                                        <h3 className="mb-4">{t('vastu.whatIsVastu')}</h3>
+                                        <h2 className="mb-4">{t('vastu.whatIsVastu')}</h2>
                                         <p className="mb-4">
                                             {t('vastu.whatIsVastuDesc')}
                                         </p>
@@ -422,6 +427,95 @@ const VastuChecker = () => {
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* How to Check Vastu Online - only show on input state */}
+                {appState === 'input' && (
+                    <section className="vastu-howto-section bg-light">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-lg-8 mx-auto">
+                                    <h2 className="text-center mb-4">{t('vastu.howToCheckOnlineTitle')}</h2>
+                                    <p className="text-center mb-5">{t('vastu.howToCheckOnlineDesc')}</p>
+                                </div>
+                            </div>
+                            <div className="row g-4">
+                                <div className="col-md-4">
+                                    <div className="info-card bg-white h-100 text-center">
+                                        <i className="fas fa-camera fa-3x text-main mb-3"></i>
+                                        <h4>1</h4>
+                                        <p className="text-muted mb-0">{t('vastu.howToCheckOnlineStep1')}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="info-card bg-white h-100 text-center">
+                                        <i className="fas fa-compass fa-3x text-main mb-3"></i>
+                                        <h4>2</h4>
+                                        <p className="text-muted mb-0">{t('vastu.howToCheckOnlineStep2')}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="info-card bg-white h-100 text-center">
+                                        <i className="fas fa-chart-line fa-3x text-main mb-3"></i>
+                                        <h4>3</h4>
+                                        <p className="text-muted mb-0">{t('vastu.howToCheckOnlineStep3')}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* Vastu for Flats vs Houses - only show on input state */}
+                {appState === 'input' && (
+                    <section className="vastu-flat-vs-house-section">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-lg-8 mx-auto text-center">
+                                    <h2 className="mb-4">{t('vastu.vastuFlatVsHouseTitle')}</h2>
+                                    <p>{t('vastu.vastuFlatVsHouseDesc')}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* FAQ Accordion - only show on input state */}
+                {appState === 'input' && (
+                    <section className="vastu-faq-section bg-light">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-lg-8 mx-auto">
+                                    <h2 className="text-center mb-5">{t('vastu.faqTitle')}</h2>
+                                    <div className="vastu-faq-list">
+                                        {VASTU_CHECKER_FAQS.map((faq, index) => (
+                                            <div
+                                                key={index}
+                                                className="vastu-faq-item"
+                                            >
+                                                <button
+                                                    className="vastu-faq-item__question"
+                                                    aria-expanded={faqOpenIndex === index}
+                                                    aria-controls={`vastu-faq-answer-${index}`}
+                                                    onClick={() => setFaqOpenIndex(faqOpenIndex === index ? -1 : index)}
+                                                >
+                                                    <span>{faq.question}</span>
+                                                    <i className={`vastu-faq-item__icon fas ${faqOpenIndex === index ? 'fa-minus' : 'fa-plus'}`}></i>
+                                                </button>
+                                                <div
+                                                    id={`vastu-faq-answer-${index}`}
+                                                    role="region"
+                                                    className={`vastu-faq-item__answer ${faqOpenIndex === index ? 'open' : ''}`}
+                                                >
+                                                    <p>{faq.answer}</p>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
