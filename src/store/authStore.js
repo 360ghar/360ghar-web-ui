@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { authService } from '../services/authService';
 import { getSupabaseAccessToken, onSupabaseAuthStateChange } from '../services/supabaseClient';
+import * as posthogService from '../services/posthogService';
 
 function readStoredUser() {
   try {
@@ -58,6 +59,14 @@ async function syncUserProfile(token, set) {
         isAuthenticated: true,
         isInitializing: false,
       });
+      // Identify user in PostHog for session replay and event attribution
+      if (userProfile?.id) {
+        posthogService.identifyUser(userProfile.id, {
+          email: userProfile.email,
+          name: userProfile.name || userProfile.full_name,
+          phone: userProfile.phone,
+        });
+      }
       return userProfile;
     } catch {
       await authService.logout();
@@ -75,6 +84,7 @@ async function syncUserProfile(token, set) {
 
 async function handleAuthStateChange(event, session, set, get) {
   if (event === 'SIGNED_OUT' || !session) {
+    posthogService.resetUser();
     clearAuthState(set);
     return;
   }
@@ -161,6 +171,14 @@ const useAuthStore = create((set, get) => ({
         const userProfile = data.user || (await authService.getCurrentUser());
         if (userProfile) {
           writeStoredUser(userProfile);
+          // Identify user in PostHog
+          if (userProfile.id) {
+            posthogService.identifyUser(userProfile.id, {
+              email: userProfile.email,
+              name: userProfile.name || userProfile.full_name,
+              phone: userProfile.phone,
+            });
+          }
         }
 
         set({
@@ -195,6 +213,14 @@ const useAuthStore = create((set, get) => ({
         const userProfile = result.user || (await authService.getCurrentUser());
         if (userProfile) {
           writeStoredUser(userProfile);
+          // Identify user in PostHog
+          if (userProfile.id) {
+            posthogService.identifyUser(userProfile.id, {
+              email: userProfile.email,
+              name: userProfile.name || userProfile.full_name,
+              phone: userProfile.phone,
+            });
+          }
         }
 
         set({
@@ -222,6 +248,7 @@ const useAuthStore = create((set, get) => ({
   },
 
   logout: async () => {
+    posthogService.resetUser();
     await authService.logout();
     clearAuthState(set);
   },

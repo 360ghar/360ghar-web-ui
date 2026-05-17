@@ -1,6 +1,7 @@
 // Lightweight RUM for Core Web Vitals
 // If Google Analytics (gtag) is present, send metrics; otherwise log.
 import { onCLS, onINP, onLCP, onFCP, onTTFB } from 'web-vitals';
+import * as posthogService from '../services/posthogService';
 
 function sendToAnalytics(metric) {
   try {
@@ -16,6 +17,14 @@ function sendToAnalytics(metric) {
       // Fallback to console for visibility during development only
       console.log('[web-vitals]', metric.name, metric.value, metric);
     }
+
+    // Send Web Vitals to PostHog for dashboard correlation
+    posthogService.captureEvent('web_vitals', {
+      metric_name: metric.name,
+      value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+      metric_id: metric.id,
+      rating: metric.rating,
+    });
   } catch (e) {
      
     console.warn('web-vitals report error', e);

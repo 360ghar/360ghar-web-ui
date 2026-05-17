@@ -5,8 +5,9 @@ import './i18n'
 import { HelmetProvider } from 'react-helmet-async'
 import { reportWebVitals } from './seo/reportWebVitals'
 import LazyToastProvider from './common/LazyToast.jsx'
+import * as posthogService from './services/posthogService'
 
-// Lazy load PostHog analytics after initial render
+// Lazy load analytics after initial render
 const loadAnalytics = () => {
   if (window.__PRERENDER_INJECTED?.isPrerendering) {
     return
@@ -23,24 +24,8 @@ const loadAnalytics = () => {
     document.head.appendChild(script)
   }
 
-  // Load PostHog
-  // Only load in production
-  if (import.meta.env.PROD && import.meta.env.VITE_PUBLIC_POSTHOG_KEY) {
-    import('posthog-js').then(({ default: posthog }) => {
-      posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
-        api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-        // Reduce initial network impact
-        autocapture: false,
-        capture_pageview: false,
-        loaded: (posthog) => {
-          // Manually capture page view after load
-          posthog.capture('$pageview')
-        },
-      })
-    }).catch(() => {
-      // Silently fail if PostHog fails to load
-    })
-  }
+  // Load PostHog (includes session replay)
+  posthogService.init()
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

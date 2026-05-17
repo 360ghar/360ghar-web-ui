@@ -12,6 +12,7 @@ import ScrollToTop from './common/layout/ScrollToTop';
 import SEO from './common/SEO';
 import UIScrollLockEffect from './common/UIScrollLockEffect';
 import { realEstateStructuredData, generateSpeakableStructuredData } from './seo/structuredData';
+import * as posthogService from './services/posthogService';
 
 const Home = lazy(() => import('./pages/Home'));
 const PropertySidebar = lazy(() => import('./pages/properties/PropertySidebar'));
@@ -234,6 +235,8 @@ function RouteScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Track SPA pageview in PostHog
+    posthogService.capturePageView();
   }, [pathname]);
   return null;
 }
