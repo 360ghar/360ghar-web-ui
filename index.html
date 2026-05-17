@@ -48,14 +48,19 @@
 
     #root {
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      width: 100%;
     }
 
-    /* Loading state styles */
     .page-loader {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      position: fixed;
+      inset: 0;
     }
   </style>
 
@@ -69,10 +74,15 @@
 
   <!-- Self-hosted brand fonts (inlined to eliminate render-blocking request) -->
   <link rel="preload" href="%BASE_URL%assets/fonts/josefin-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="%BASE_URL%assets/fonts/josefin-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="%BASE_URL%assets/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="%BASE_URL%assets/fonts/cinzel-latin-700.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     @font-face { font-family: 'Cinzel'; font-style: normal; font-weight: 400; font-display: swap; src: url('%BASE_URL%assets/fonts/cinzel-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Cinzel'; font-style: normal; font-weight: 700; font-display: swap; src: url('%BASE_URL%assets/fonts/cinzel-latin-700.woff2') format('woff2'); }
     @font-face { font-family: 'Josefin Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url('%BASE_URL%assets/fonts/josefin-sans-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Josefin Sans'; font-style: normal; font-weight: 600; font-display: swap; src: url('%BASE_URL%assets/fonts/josefin-sans-latin-variable.woff2') format('woff2'); }
+    @font-face { font-family: 'Josefin Sans'; font-style: normal; font-weight: 700; font-display: swap; src: url('%BASE_URL%assets/fonts/josefin-sans-latin-variable.woff2') format('woff2'); }
   </style>
 
   <!-- Preload LCP hero image (responsive) -->
