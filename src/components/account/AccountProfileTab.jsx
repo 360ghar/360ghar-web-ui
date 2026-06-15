@@ -70,7 +70,7 @@ const AccountProfileTab = () => {
                     <div className="profile-info d-flex gap-4 align-items-center">
                         <div className="profile-info__thumb">
                             <LazyImage
-                                src={profile?.profile_image_url || '/assets/images/thumbs/team1.png'}
+                                src={profile?.profile_image_url || '/assets/images/thumbs/team1.webp'}
                                 alt="Profile"
                                 className="rounded-circle"
                                 style={{ width: '80px', height: '80px', objectFit: 'cover' }}

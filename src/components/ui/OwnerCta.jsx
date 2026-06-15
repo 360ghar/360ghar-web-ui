@@ -15,7 +15,7 @@ const OwnerCta = ({ className = '' }) => {
             </div>
           </div>
           <div className="cta-content__thumb d-xl-block d-none">
-            <LazyImage src="/assets/images/thumbs/cta-img.png" alt="Owner CTA" />
+            <LazyImage src="/assets/images/thumbs/cta-img.webp" alt="Owner CTA" />
           </div>
         </div>
       </div>

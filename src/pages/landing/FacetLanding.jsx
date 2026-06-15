@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocalitiesIndex } from '../../hooks/useLocalitiesIndex';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -87,6 +88,7 @@ const VALID_BUDGETS = [
 const FacetLanding = () => {
   const { t } = useTranslation('landing');
   const { citySlug, intent, type, bhk, budget, amenity } = useParams();
+  const { data: localitiesIndex } = useLocalitiesIndex();
   const canonicalCitySlug = normalizeCitySlug(citySlug);
 
   const validCity = pretty(canonicalCitySlug);
@@ -216,8 +218,8 @@ const FacetLanding = () => {
 
   // Popular localities
   const popularLocalities = useMemo(
-    () => getCityLocalities(canonicalCitySlug, { limit: 4, preferTypes: [canonicalType] }),
-    [canonicalCitySlug, canonicalType]
+    () => getCityLocalities(canonicalCitySlug, { limit: 4, preferTypes: [canonicalType], index: localitiesIndex }),
+    [canonicalCitySlug, canonicalType, localitiesIndex]
   );
 
   const faqItems = buildFacetFaqs(t, validCity, facetText, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity);

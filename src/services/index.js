@@ -21,6 +21,12 @@ import {
   refreshSupabaseSession,
   onSupabaseAuthStateChange,
 } from './supabaseClient';
+import {
+  AUTH_METHODS,
+  getLastAuthMethod,
+  setLastAuthMethod,
+  maskIdentifier,
+} from './lastAuthMethod';
 
 export {
   api,
@@ -45,4 +51,8 @@ export {
   getSupabaseAccessToken,
   refreshSupabaseSession,
   onSupabaseAuthStateChange,
+  AUTH_METHODS,
+  getLastAuthMethod,
+  setLastAuthMethod,
+  maskIdentifier,
 };

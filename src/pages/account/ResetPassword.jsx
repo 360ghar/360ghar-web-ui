@@ -43,6 +43,8 @@ const ResetPassword = () => {
         password: yup
             .string()
             .min(8, t('forms:password.minLength'))
+            .matches(/[A-Z]/, t('forms:password.uppercase'))
+            .matches(/[0-9]/, t('forms:password.number'))
             .required(t('forms:password.required')),
         confirmPassword: yup
             .string()

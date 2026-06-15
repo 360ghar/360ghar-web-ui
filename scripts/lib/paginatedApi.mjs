@@ -1,5 +1,58 @@
+import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
+import nodePath from 'node:path';
+import crypto from 'node:crypto';
+
 export const API_PAGE_LIMIT = 100;
 export const DEFAULT_FETCH_TIMEOUT_MS = 120000;
+
+// --- Build-time on-disk cache (best-effort, opt-out via BUILD_CACHE_DISABLED) ---
+// NOTE: Netlify build containers are ephemeral, so this only persists for
+// local/persistent-CI builds. The real build-egress fix is the backend Redis
+// cache (P0-1/P0-2) + a CDN in front of the API (P1-2), which absorb the live
+// fetches regardless. This cache just avoids re-crawling the API on repeated
+// local builds.
+const BUILD_CACHE_DIR = nodePath.resolve(process.cwd(), '.build-cache');
+const BUILD_CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12h — matches backend search cache TTL
+
+function buildCacheKey(baseUrl, requestPath) {
+  const raw = `${normalizeBaseUrl(baseUrl)}::${requestPath}`;
+  return crypto.createHash('sha1').update(raw).digest('hex').slice(0, 24);
+}
+
+export function buildCachePath(baseUrl, requestPath) {
+  return nodePath.join(BUILD_CACHE_DIR, `${buildCacheKey(baseUrl, requestPath)}.json`);
+}
+
+async function readBuildCache(cachePath, ttlMs = BUILD_CACHE_TTL_MS) {
+  if (process.env.BUILD_CACHE_DISABLED === '1') return null;
+  try {
+    const st = await stat(cachePath);
+    if (Date.now() - st.mtimeMs > ttlMs) return null;
+    return JSON.parse(await readFile(cachePath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+async function writeBuildCache(cachePath, data) {
+  try {
+    await mkdir(nodePath.dirname(cachePath), { recursive: true });
+    await writeFile(cachePath, JSON.stringify(data), 'utf8');
+  } catch {
+    // Best-effort — a cache write failure must never break the build.
+  }
+}
+
+export async function fetchPaginatedCollectionCached(options) {
+  const cachePath = buildCachePath(options.baseUrl, options.path);
+  const cached = await readBuildCache(cachePath);
+  if (cached) {
+    return cached;
+  }
+  const items = await fetchPaginatedCollectionParallel(options);
+  await writeBuildCache(cachePath, items);
+  return items;
+}
 
 function normalizeBaseUrl(baseUrl) {
   return baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;

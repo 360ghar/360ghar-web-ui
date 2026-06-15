@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import CtaThumb from '/assets/images/thumbs/cta-img.png';
+import CtaThumb from '/assets/images/thumbs/cta-img.webp';
 import NewsletterForm from '../../common/forms/NewsletterForm';
 
 import LazyImage from '../../common/ui/LazyImage';

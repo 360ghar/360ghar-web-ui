@@ -19,7 +19,7 @@ const resolveProjectFromSlug = (slug) => {
         return {
             title: match.title,
             desc: match.desc || '',
-            thumb: match.thumb || '/assets/images/thumbs/project-img1.png',
+            thumb: match.thumb || '/assets/images/thumbs/project-img1.webp',
             city: 'Gurugram',
         };
     }

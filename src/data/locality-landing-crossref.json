@@ -36192,6 +36192,30 @@
     ]
   },
   {
+    "slug": "mvn-aero-one",
+    "name": "mvn aero one",
+    "citySlug": "gurgaon",
+    "landingPaths": [
+      "/gurgaon/buy/flats",
+      "/gurgaon/buy/independent-house",
+      "/gurgaon/buy/builder-floor",
+      "/gurgaon/buy/villa",
+      "/gurgaon/buy/plots",
+      "/gurgaon/rent/flats",
+      "/gurgaon/rent/independent-house",
+      "/gurgaon/rent/builder-floor",
+      "/gurgaon/rent/villa",
+      "/gurgaon/rent/plots",
+      "/gurgaon/pg/flats",
+      "/gurgaon/buy/flats/1-bhk",
+      "/gurgaon/buy/flats/2-bhk",
+      "/gurgaon/buy/flats/3-bhk",
+      "/gurgaon/rent/flats/1-bhk",
+      "/gurgaon/rent/flats/2-bhk",
+      "/gurgaon/rent/flats/3-bhk"
+    ]
+  },
+  {
     "slug": "mvn-athens",
     "name": "mvn athens",
     "citySlug": "gurgaon",
@@ -43202,6 +43226,30 @@
   {
     "slug": "projects-in-kadipur-gurgaon",
     "name": "projects in kadipur gurgaon",
+    "citySlug": "gurgaon",
+    "landingPaths": [
+      "/gurgaon/buy/flats",
+      "/gurgaon/buy/independent-house",
+      "/gurgaon/buy/builder-floor",
+      "/gurgaon/buy/villa",
+      "/gurgaon/buy/plots",
+      "/gurgaon/rent/flats",
+      "/gurgaon/rent/independent-house",
+      "/gurgaon/rent/builder-floor",
+      "/gurgaon/rent/villa",
+      "/gurgaon/rent/plots",
+      "/gurgaon/pg/flats",
+      "/gurgaon/buy/flats/1-bhk",
+      "/gurgaon/buy/flats/2-bhk",
+      "/gurgaon/buy/flats/3-bhk",
+      "/gurgaon/rent/flats/1-bhk",
+      "/gurgaon/rent/flats/2-bhk",
+      "/gurgaon/rent/flats/3-bhk"
+    ]
+  },
+  {
+    "slug": "projects-in-khatrika",
+    "name": "projects in khatrika",
     "citySlug": "gurgaon",
     "landingPaths": [
       "/gurgaon/buy/flats",

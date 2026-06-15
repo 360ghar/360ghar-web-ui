@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useI18nNavigate } from '../../i18n/I18nLink';
 import { I18nLink } from '../../i18n/I18nLink';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { authService } from '../../services/authService';
+import { useResendTimer } from '../../hooks/useResendTimer';
+import useWebOtp from '../../hooks/useWebOtp';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -12,34 +13,136 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
 
+// Reuse the same helper from LoginRegister.
+const looksLikeEmail = (value) => (value || '').includes('@');
+const normalizePhone = (value) => {
+  const digits = (value || '').replace(/\D/g, '');
+  return digits.startsWith('91') && digits.length === 12 ? digits.slice(2) : digits;
+};
+
 const ForgotPassword = () => {
     const { t } = useTranslation(['account', 'forms']);
+    const navigate = useI18nNavigate();
+
+    // State machine: 'input' | 'otp'
+    const [step, setStep] = useState('input');
+    const [identifier, setIdentifier] = useState('');
+    const [identifierError, setIdentifierError] = useState('');
+    const [channel, setChannel] = useState(null); // 'phone' | 'email'
+    const [otp, setOtp] = useState('');
+    const [otpError, setOtpError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [emailSent, setEmailSent] = useState(false);
 
-    const validationSchema = yup.object().shape({
-        email: yup
-            .string()
-            .email(t('forms:email.invalidShort'))
-            .required(t('forms:email.required')),
-    });
+    // Standard 30s resend cooldown for the OTP step.
+    const resend = useResendTimer();
 
-    const formik = useFormik({
-        initialValues: { email: '' },
-        validationSchema,
-        onSubmit: async (values) => {
+    // WebOTP autofill on the OTP step (SMS only — email OTP is not delivered via SMS).
+    useWebOtp((code) => setOtp((code || '').replace(/\D/g, '').slice(0, 6)), step === 'otp' && channel === 'phone');
+
+    // ---- Step: input (email or phone) ----
+    const handleInputSubmit = async (event) => {
+        event.preventDefault();
+        setIdentifierError('');
+
+        const value = identifier.trim();
+        if (!value) {
+            setIdentifierError(t('forms:identifier.required'));
+            return;
+        }
+
+        const isEmail = looksLikeEmail(value);
+
+        if (isEmail) {
+            // Email path: validate → send 6-digit email OTP → show OTP input.
+            // OTP for both channels (decision 1); never create an account on reset.
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                setIdentifierError(t('forms:email.invalidShort'));
+                return;
+            }
+            setChannel('email');
             setIsLoading(true);
             try {
-                await authService.sendPasswordResetEmail(values.email);
-                setEmailSent(true);
-                toast.success(t('forgotPassword.successMessage'));
+                await authService.sendEmailOtp(value, { shouldCreateUser: false });
+                resend.start();
+                setStep('otp');
             } catch (error) {
                 toast.error(error.message || t('forgotPassword.errorMessage'));
             } finally {
                 setIsLoading(false);
             }
-        },
-    });
+        } else {
+            // Phone path: validate → send OTP → show OTP input.
+            const phone = normalizePhone(value);
+            if (!/^[6-9]\d{9}$/.test(phone)) {
+                setIdentifierError(t('forms:phone.invalid'));
+                return;
+            }
+            setChannel('phone');
+            setIsLoading(true);
+            try {
+                await authService.sendPhoneOtp(`+91${phone}`, { shouldCreateUser: false });
+                resend.start();
+                setStep('otp');
+            } catch (error) {
+                toast.error(error.message || t('forgotPassword.errorMessage'));
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    };
+
+    // ---- Step: OTP (email or phone) ----
+    const handleResend = async () => {
+        if (!resend.canResend) return;
+        setIsLoading(true);
+        try {
+            if (channel === 'email') {
+                await authService.sendEmailOtp(identifier.trim(), { shouldCreateUser: false });
+            } else {
+                await authService.sendPhoneOtp(`+91${normalizePhone(identifier.trim())}`, { shouldCreateUser: false });
+            }
+            resend.start();
+        } catch (error) {
+            toast.error(error.message || t('forgotPassword.errorMessage'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleOtpSubmit = async (event) => {
+        event.preventDefault();
+        setOtpError('');
+        const code = otp.replace(/\D/g, '');
+        if (code.length !== 6) {
+            setOtpError(t('forms:otp.invalidLength'));
+            return;
+        }
+        setIsLoading(true);
+        try {
+            if (channel === 'email') {
+                await authService.verifyEmailOtp(identifier.trim(), code);
+            } else {
+                await authService.verifyPhoneOtp(`+91${normalizePhone(identifier.trim())}`, code);
+            }
+            // OTP verified — redirect to the reset-password page where the
+            // user can set a new password via the live Supabase session.
+            toast.success(t('forgotPassword.otpVerified') || 'Verified! Set your new password.');
+            navigate('/reset-password');
+        } catch (error) {
+            setOtpError(error.message || t('forms:otp.verifyFailed'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const resetToInput = () => {
+        setStep('input');
+        setOtp('');
+        setOtpError('');
+        setChannel(null);
+        setIdentifierError('');
+        resend.reset();
+    };
 
     return (
         <>
@@ -79,34 +182,25 @@ const ForgotPassword = () => {
                                         <p className="text-muted">{t('forgotPassword.description')}</p>
                                     </div>
 
-                                    {emailSent ? (
-                                        <div className="text-center py-4">
-                                            <div className="mb-3">
-                                                <i className="fas fa-envelope-open-text" style={{ fontSize: '3rem', color: 'var(--main-color)' }}></i>
-                                            </div>
-                                            <h5 className="mb-2">{t('forgotPassword.emailSentTitle')}</h5>
-                                            <p className="text-muted mb-4">{t('forgotPassword.emailSentDesc')}</p>
-                                            <I18nLink to="/login" className="btn btn-main">
-                                                {t('forgotPassword.backToLogin')}
-                                            </I18nLink>
-                                        </div>
-                                    ) : (
-                                        <form onSubmit={formik.handleSubmit}>
+                                    {/* ----- Step: input (email or phone) ----- */}
+                                    {step === 'input' && (
+                                        <form onSubmit={handleInputSubmit}>
                                             <div className="col-12">
                                                 <div className="form-group">
-                                                    <label className="form-label">{t('forms:email.label')}</label>
+                                                    <label className="form-label">{t('forgotPassword.identifierLabel') || t('forms:identifier.label')}</label>
                                                     <input
-                                                        type="email"
-                                                        name="email"
-                                                        className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
-                                                        placeholder={t('forms:email.placeholder')}
-                                                        value={formik.values.email}
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}
+                                                        type="text"
+                                                        inputMode="email"
+                                                        autoComplete="username"
+                                                        name="identifier"
+                                                        className={`form-control ${identifierError ? 'is-invalid' : ''}`}
+                                                        placeholder={t('forgotPassword.identifierPlaceholder') || t('forms:identifier.placeholder')}
+                                                        value={identifier}
+                                                        onChange={(e) => setIdentifier(e.target.value)}
                                                         disabled={isLoading}
                                                     />
-                                                    {formik.touched.email && formik.errors.email && (
-                                                        <div className="invalid-feedback d-block">{formik.errors.email}</div>
+                                                    {identifierError && (
+                                                        <div className="invalid-feedback d-block">{identifierError}</div>
                                                     )}
                                                 </div>
                                             </div>
@@ -126,6 +220,71 @@ const ForgotPassword = () => {
                                             </div>
 
                                             <div className="col-12 mt-3 text-center">
+                                                <I18nLink to="/login" className="text-decoration-underline text-main font-14">
+                                                    {t('forgotPassword.backToLogin')}
+                                                </I18nLink>
+                                            </div>
+                                        </form>
+                                    )}
+
+                                    {/* ----- Step: OTP (email or phone) ----- */}
+                                    {step === 'otp' && (
+                                        <form onSubmit={handleOtpSubmit}>
+                                            <div className="col-12">
+                                                <p className="text-muted mb-0 small">
+                                                    {channel === 'email' ? t('forms:otp.sentToEmail') : t('forms:otp.sentToPhone')}{' '}
+                                                    <button type="button" className="btn btn-link p-0 align-baseline text-main" onClick={resetToInput}>
+                                                        {t('forms:identifier.useDifferent')}
+                                                    </button>
+                                                </p>
+                                            </div>
+                                            <div className="col-12 mt-3">
+                                                <div className="form-group">
+                                                    <label className="form-label">{t('forms:otp.label')}</label>
+                                                    <input
+                                                        type="text"
+                                                        inputMode="numeric"
+                                                        autoComplete="one-time-code"
+                                                        maxLength={6}
+                                                        className={`form-control ${otpError ? 'is-invalid' : ''}`}
+                                                        placeholder={t('forms:otp.placeholder')}
+                                                        value={otp}
+                                                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                                        disabled={isLoading}
+                                                        autoFocus
+                                                    />
+                                                    {otpError && (
+                                                        <div className="invalid-feedback d-block">{otpError}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12 mt-3">
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-main w-100"
+                                                    disabled={isLoading}
+                                                >
+                                                    {isLoading ? (
+                                                        <><i className="fas fa-spinner fa-spin me-2"></i>{t('forms:otp.verifying')}</>
+                                                    ) : (
+                                                        t('forms:otp.verify')
+                                                    )}
+                                                </button>
+                                            </div>
+
+                                            <div className="col-12 mt-3 text-center">
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-link text-main"
+                                                    onClick={handleResend}
+                                                    disabled={isLoading || !resend.canResend}
+                                                >
+                                                    {resend.canResend ? t('forms:otp.resend') : t('forms:otp.resendIn', { seconds: resend.secondsLeft })}
+                                                </button>
+                                            </div>
+
+                                            <div className="col-12 mt-2 text-center">
                                                 <I18nLink to="/login" className="text-decoration-underline text-main font-14">
                                                     {t('forgotPassword.backToLogin')}
                                                 </I18nLink>

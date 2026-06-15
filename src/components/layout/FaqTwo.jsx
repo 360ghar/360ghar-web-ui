@@ -1,5 +1,5 @@
 import FaqAccordion from '../../common/FaqAccordion';
-import FaqTwoThumb from '/assets/images/thumbs/faq-two-img.png';
+import FaqTwoThumb from '/assets/images/thumbs/faq-two-img.webp';
 import SectionHeading from '../../common/ui/SectionHeading';
 
 import LazyImage from '../../common/ui/LazyImage';

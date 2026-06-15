@@ -98,10 +98,10 @@ export const bedBaths = [
 
 
 // ============================== Property Details Page Data Start ==============================
-import propertyDetailsThumb1 from '/assets/images/thumbs/property-details-1.png';
-import propertyDetailsThumb2 from '/assets/images/thumbs/property-details-2.png';
-import propertyDetailsThumb3 from '/assets/images/thumbs/property-details-3.png';
-import propertyDetailsThumb4 from '/assets/images/thumbs/property-details-4.png';
+import propertyDetailsThumb1 from '/assets/images/thumbs/property-details-1.webp';
+import propertyDetailsThumb2 from '/assets/images/thumbs/property-details-2.webp';
+import propertyDetailsThumb3 from '/assets/images/thumbs/property-details-3.webp';
+import propertyDetailsThumb4 from '/assets/images/thumbs/property-details-4.webp';
 export const propertyDetailsThumbs = [
     {
         thumb: propertyDetailsThumb1
@@ -662,9 +662,9 @@ export const mapLocations = [
 
 
 // ============================== Team Section Data Start ==============================
-import teamImg1 from '/assets/images/thumbs/team1.png';
-import teamImg2 from '/assets/images/thumbs/team2.png';
-import teamImg3 from '/assets/images/thumbs/team3.png';
+import teamImg1 from '/assets/images/thumbs/team1.webp';
+import teamImg2 from '/assets/images/thumbs/team2.webp';
+import teamImg3 from '/assets/images/thumbs/team3.webp';
 
 export const teams = [
     {
@@ -723,8 +723,8 @@ export const counterFourContents = [
 
 
 // ========================= Checkout Page Data Start =========================
-import paymentMethodImg1 from '/assets/images/thumbs/paypal.png';
-import paymentMethodImg2 from '/assets/images/thumbs/visa.png';
+import paymentMethodImg1 from '/assets/images/thumbs/paypal.webp';
+import paymentMethodImg2 from '/assets/images/thumbs/visa.webp';
 
 export const paymentMethods = [
     {
@@ -764,10 +764,10 @@ export const billingLists = [
 
 
 // ========================= Cart Page Data Start =========================
-import cartThumb1 from '/assets/images/thumbs/property-1.png';
-import cartThumb2 from '/assets/images/thumbs/property-2.png';
-import cartThumb3 from '/assets/images/thumbs/property-3.png';
-import cartThumb4 from '/assets/images/thumbs/property-4.png';
+import cartThumb1 from '/assets/images/thumbs/property-1.webp';
+import cartThumb2 from '/assets/images/thumbs/property-2.webp';
+import cartThumb3 from '/assets/images/thumbs/property-3.webp';
+import cartThumb4 from '/assets/images/thumbs/property-4.webp';
 
 export const cartItems = [
     {       
@@ -887,10 +887,10 @@ export const accountAddress = [
 
 
 // ========================= Project Page Data End =========================
-import projectItemThumb1 from '/assets/images/thumbs/project-img1.png';
-import projectItemThumb2 from '/assets/images/thumbs/project-img2.png';
-import projectItemThumb3 from '/assets/images/thumbs/project-img3.png';
-import projectItemThumb4 from '/assets/images/thumbs/project-img4.png';
+import projectItemThumb1 from '/assets/images/thumbs/project-img1.webp';
+import projectItemThumb2 from '/assets/images/thumbs/project-img2.webp';
+import projectItemThumb3 from '/assets/images/thumbs/project-img3.webp';
+import projectItemThumb4 from '/assets/images/thumbs/project-img4.webp';
 export const projectItems = [
     {
         id: 1,

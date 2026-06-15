@@ -10,7 +10,7 @@ import {
   getListingLabel,
   getPropertyTypeLabel,
 } from '../../utils/propertyTaxonomy';
-const PROPERTY_IMAGE_FALLBACK = '/assets/images/thumbs/property-1.png';
+const PROPERTY_IMAGE_FALLBACK = '/assets/images/thumbs/property-1.webp';
 
 const isUsableImageUrl = (value) =>
   typeof value === 'string' && value.trim() !== '' && !/kuula\.co/i.test(value);

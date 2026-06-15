@@ -3,7 +3,7 @@
   "homepage": "https://360ghar.com/",
   "description": "Real estate platform for Buy, Rent and PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.",
   "metadata": {
-    "last_updated": "2026-05-17",
+    "last_updated": "2026-06-15",
     "coverage": [
       "Gurugram",
       "Delhi",
@@ -20,7 +20,7 @@
       "penthouse",
       "studio"
     ],
-    "total_localities": 3213,
+    "total_localities": 3215,
     "total_societies": 179
   },
   "inLanguage": [

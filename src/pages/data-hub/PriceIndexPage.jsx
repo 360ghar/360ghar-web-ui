@@ -8,7 +8,7 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import priceContext from '../../data/priceContext.json' with { type: 'json' };
-import localitiesIndex from '../../data/localities-index.json';
+import { useLocalitiesIndex } from '../../hooks/useLocalitiesIndex';
 
 const pretty = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
 
@@ -41,6 +41,7 @@ const FAQS = (city) => [
 const PriceIndexPage = () => {
   const { citySlug } = useParams();
   const [tSeo] = useTranslation('seo');
+  const { data: localitiesIndex, loading: _localitiesLoading } = useLocalitiesIndex();
   const city = priceContext[citySlug];
 
   if (!city) {

@@ -1,4 +1,4 @@
-import BlogTestiThumb from '/assets/images/thumbs/blog-testi.png';
+import BlogTestiThumb from '/assets/images/thumbs/blog-testi.webp';
 
 import LazyImage from '../ui/LazyImage';
 const BlogTesti = () => {

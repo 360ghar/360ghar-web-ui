@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
@@ -9,7 +9,11 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
-import localitiesIndex from '../../data/localities-index.json';
+import { useLocalitiesIndex } from '../../hooks/useLocalitiesIndex';
+
+// Render locality groups in progressive batches to avoid mounting hundreds of
+// DOM nodes at once when the directory first loads.
+const GROUPS_PER_BATCH = 6;
 
 const LocalitiesDirectory = () => {
     const { t } = useTranslation();
@@ -17,7 +21,9 @@ const LocalitiesDirectory = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedType, setSelectedType] = useState('all');
 
-    const localities = useMemo(() => localitiesIndex.slice(), []);
+    // Lazily load the (464 KB) localities index chunk — keeps it out of the
+    // initial bundle and off the first-paint critical path.
+    const { data: localities, loading } = useLocalitiesIndex();
 
     const entityTypes = useMemo(() => {
         const types = new Set(localities.map((item) => item.entityType || item.type || 'Locality'));
@@ -48,6 +54,37 @@ const LocalitiesDirectory = () => {
     }, [filteredLocalities]);
 
     const letters = useMemo(() => Object.keys(groupedLocalities).sort((a, b) => a.localeCompare(b)), [groupedLocalities]);
+
+    // Progressive rendering: mount a few letter groups at a time, appending more
+    // when the sentinel nears the viewport. Resets whenever the filter changes.
+    const [visibleCount, setVisibleCount] = useState(GROUPS_PER_BATCH);
+    const sentinelRef = useRef(null);
+
+    // Reset visible count when filters change — derived during render instead of
+    // useEffect to satisfy the react-hooks/set-state-in-effect lint rule.
+    // React supports conditional setState during render as long as it's guarded.
+    const [prevSearch, setPrevSearch] = useState(searchQuery);
+    const [prevType, setPrevType] = useState(selectedType);
+    if (prevSearch !== searchQuery || prevType !== selectedType) {
+        setPrevSearch(searchQuery);
+        setPrevType(selectedType);
+        setVisibleCount(GROUPS_PER_BATCH);
+    }
+
+    useEffect(() => {
+        const node = sentinelRef.current;
+        if (!node || visibleCount >= letters.length) return;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    setVisibleCount((prev) => prev + GROUPS_PER_BATCH);
+                }
+            },
+            { rootMargin: '400px' }
+        );
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, [visibleCount, letters.length]);
 
     const latestVerification = useMemo(() => {
         const values = localities
@@ -238,7 +275,12 @@ const LocalitiesDirectory = () => {
 
                 <section className="locality-directory-v2__content padding-b-80">
                     <div className="container container-two">
-                        {filteredLocalities.length === 0 ? (
+                        {loading ? (
+                            <div className="locality-empty-state">
+                                <h2 className="h3 mb-2">Loading localities…</h2>
+                                <p className="text-muted mb-0">Indexing verified Gurugram neighborhoods.</p>
+                            </div>
+                        ) : filteredLocalities.length === 0 ? (
                             <div className="locality-empty-state">
                                 <h2 className="h3 mb-2">No localities found</h2>
                                 <p className="text-muted mb-4">Try a different search term or reset filters to browse the full directory.</p>
@@ -255,7 +297,7 @@ const LocalitiesDirectory = () => {
                             </div>
                         ) : (
                             <div className="locality-directory-v2__group-list">
-                                {letters.map((letter) => (
+                                {letters.slice(0, visibleCount).map((letter) => (
                                     <section id={`locality-letter-${letter}`} className="locality-directory-group" key={letter}>
                                         <div className="locality-directory-group__header">
                                             <span>{letter}</span>
@@ -275,6 +317,11 @@ const LocalitiesDirectory = () => {
                                         </div>
                                     </section>
                                 ))}
+                                {visibleCount < letters.length && (
+                                    <div ref={sentinelRef} className="text-center py-4 text-muted" aria-hidden="true">
+                                        <span>Loading more localities…</span>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

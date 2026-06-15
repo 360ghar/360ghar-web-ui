@@ -1,6 +1,6 @@
 
-import CommentThumb1 from '/assets/images/thumbs/comment1.png';
-import CommentThumb2 from '/assets/images/thumbs/comment2.png';
+import CommentThumb1 from '/assets/images/thumbs/comment1.webp';
+import CommentThumb2 from '/assets/images/thumbs/comment2.webp';
 import { I18nLink } from '../../i18n/I18nLink';
 
 import LazyImage from '../ui/LazyImage';

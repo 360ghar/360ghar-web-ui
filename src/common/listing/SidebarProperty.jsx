@@ -3,7 +3,7 @@ import { I18nLink } from '../../i18n/I18nLink';
 import { propertyAPIService } from '../../services/propertyAPIService';
 
 import LazyImage from '../ui/LazyImage';
-const PROPERTY_IMAGE_FALLBACK = '/assets/images/thumbs/property-1.png';
+const PROPERTY_IMAGE_FALLBACK = '/assets/images/thumbs/property-1.webp';
 
 const isUsableImageUrl = (value) =>
     typeof value === 'string' && value.trim() !== '' && !/kuula\.co/i.test(value);

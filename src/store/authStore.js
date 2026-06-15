@@ -1,6 +1,8 @@
 import { create } from 'zustand';
+import api from '../services/api';
 import { authService } from '../services/authService';
 import { getSupabaseAccessToken, onSupabaseAuthStateChange } from '../services/supabaseClient';
+import { fetchAuthStage } from '../utils/authStage';
 import * as posthogService from '../services/posthogService';
 
 function readStoredUser() {
@@ -40,6 +42,7 @@ function clearAuthState(set) {
     token: null,
     isAuthenticated: false,
     isInitializing: false,
+    authStage: null,
   });
 }
 
@@ -53,11 +56,16 @@ async function syncUserProfile(token, set) {
     try {
       const userProfile = await authService.getCurrentUser();
       writeStoredUser(userProfile);
+
+      // Fetch auth gate state from the backend (single source of truth).
+      const authStage = await fetchAuthStage(api);
+
       set({
         user: userProfile,
         token,
         isAuthenticated: true,
         isInitializing: false,
+        authStage,
       });
       // Identify user in PostHog for session replay and event attribution
       if (userProfile?.id) {
@@ -127,6 +135,7 @@ const useAuthStore = create((set, get) => ({
   isLoading: false,
   isInitializing: true,
   error: null,
+  authStage: null, // 'identifier_verification' | 'password_setup' | 'profile_completion' | 'app_onboarding' | 'active'
 
   initializeAuth: async () => {
     // During prerender, skip all Supabase network calls — no session exists
@@ -181,12 +190,16 @@ const useAuthStore = create((set, get) => ({
           }
         }
 
+        // Fetch auth gate state from the backend (single source of truth).
+        const authStage = await fetchAuthStage(api);
+
         set({
           token: data.access_token,
           user: userProfile,
           isAuthenticated: true,
           isLoading: false,
           isInitializing: false,
+          authStage,
         });
 
         return true;
@@ -204,44 +217,27 @@ const useAuthStore = create((set, get) => ({
     }
   },
 
-  register: async (userData) => {
+  // Sync the auth store from the current Supabase session after an external
+  // auth event (e.g. the Google OAuth callback exchanged a code for a session).
+  // Ensures the auth subscription is wired, then fetches the profile.
+  syncAfterExternalAuth: async () => {
     try {
-      set({ isLoading: true, error: null });
-      const result = await authService.register(userData);
+      set({ isInitializing: true, error: null });
+      await ensureAuthSubscription(set, get);
 
-      if (result.access_token) {
-        const userProfile = result.user || (await authService.getCurrentUser());
-        if (userProfile) {
-          writeStoredUser(userProfile);
-          // Identify user in PostHog
-          if (userProfile.id) {
-            posthogService.identifyUser(userProfile.id, {
-              email: userProfile.email,
-              name: userProfile.name || userProfile.full_name,
-              phone: userProfile.phone,
-            });
-          }
-        }
-
-        set({
-          token: result.access_token,
-          user: userProfile,
-          isAuthenticated: true,
-          isLoading: false,
-          isInitializing: false,
-        });
-        return true;
+      const token = await getSupabaseAccessToken();
+      if (!token) {
+        clearAuthState(set);
+        return false;
       }
 
-      set({ isLoading: false, isInitializing: false });
-      const identifier = userData.phone || userData.email;
-      if (!identifier) return false;
-      return get().login(identifier, userData.password);
+      set({ token, isAuthenticated: true });
+      const profile = await syncUserProfile(token, set);
+      return Boolean(profile);
     } catch (error) {
       set({
-        isLoading: false,
         isInitializing: false,
-        error: error.response?.data?.detail?.message || error.response?.data?.detail || error.message || 'Registration failed'
+        error: error.message || 'Failed to complete sign-in',
       });
       return false;
     }

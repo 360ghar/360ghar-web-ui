@@ -28,7 +28,7 @@ const Faq = () => {
                         </div>
                         <div className="col-lg-6  d-lg-block d-none">
                             <div className="faq-thumb">
-                                <LazyImage src="assets/images/thumbs/faq-img.png" alt="Image"/>
+                                <LazyImage src="assets/images/thumbs/faq-img.webp" alt="Image"/>
                             </div>
                         </div>
                     </div>

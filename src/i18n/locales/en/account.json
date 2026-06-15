@@ -220,11 +220,10 @@
     "heading": "Forgot Password",
     "sendBtn": "Send Reset Link",
     "sending": "Sending...",
-    "emailSentTitle": "Check Your Email",
-    "emailSentDesc": "We've sent a password reset link to your email address. Please check your inbox and follow the instructions.",
     "backToLogin": "Back to Login",
     "successMessage": "Password reset link sent to your email!",
-    "errorMessage": "Failed to send reset email. Please try again."
+    "errorMessage": "Failed to send reset email. Please try again.",
+    "otpVerified": "Verified! Set your new password."
   },
   "resetPassword": {
     "title": "Reset Password | 360Ghar",
@@ -237,5 +236,29 @@
     "requestNewLink": "Request New Link",
     "successMessage": "Password reset successfully! Please login with your new password.",
     "errorMessage": "Failed to reset password. Please try again."
+  },
+  "profileCompletion": {
+    "title": "Complete Your Profile | 360Ghar",
+    "description": "Please complete your profile to continue.",
+    "heading": "Complete Your Profile",
+    "submitBtn": "Complete Profile",
+    "successMessage": "Profile updated successfully!",
+    "errorMessage": "Failed to update profile. Please try again."
+  },
+  "addPhone": {
+    "title": "Add Phone | 360Ghar",
+    "description": "Add and verify a phone number to your account.",
+    "heading": "Add your phone number",
+    "subheading": "Verify a phone number to secure your account and get visit updates. You can skip this for now.",
+    "sendCode": "Send code",
+    "sending": "Sending...",
+    "verify": "Verify & continue",
+    "verifying": "Verifying...",
+    "skip": "Skip for now",
+    "codeSent": "We sent a 6-digit code to your phone.",
+    "successMessage": "Phone verified successfully!",
+    "sendFailed": "Failed to send code. Please try again.",
+    "verifyFailed": "Invalid or expired code. Please try again.",
+    "changeNumber": "Change number"
   }
 }

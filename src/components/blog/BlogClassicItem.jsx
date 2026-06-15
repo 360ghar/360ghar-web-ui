@@ -10,7 +10,7 @@ const BlogClassicItem = ({ post }) => {
     const { setBlogData, currentMonthName } = useBlogStore();
 
     // Extract post data
-    const thumb = post.og_image_url || post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.png';
+    const thumb = post.og_image_url || post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.webp';
     const title = post.title || 'Untitled';
     const slug = post.slug; // Use backend slug directly
     const excerpt = post.excerpt || post.summary || '';

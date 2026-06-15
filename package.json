@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:entities && npm run build:ai-discovery && npm run build:sitemaps && npm run build:rss && node scripts/generate-og-image.mjs && vite build && node scripts/purge-main-css.mjs && npm run build:prerender && node scripts/purge-bootstrap.mjs",
+    "build": "npm run build:entities && npm run build:ai-discovery && npm run build:sitemaps && npm run build:rss && npm run build:images && node scripts/generate-og-image.mjs && vite build && node scripts/purge-main-css.mjs && npm run build:prerender && node scripts/purge-bootstrap.mjs",
     "build:entities": "node scripts/ingest-gurgaon-entities.mjs && node scripts/merge-entities.mjs && node scripts/build-localities-json.mjs && node scripts/build-localities-index.mjs && node scripts/generate-locality-sitemap.mjs",
+    "build:images": "node scripts/optimize-images.mjs --quiet",
     "build:ai-discovery": "node scripts/write-ai-discovery.mjs",
     "build:sitemaps": "node scripts/generate-sitemaps.mjs && node scripts/generate-locality-sitemap.mjs && node scripts/generate-datahub-sitemap.mjs && node scripts/generate-dynamic-sitemaps.mjs",
     "build:prerender": "npm run build:prerender-routes && node scripts/prerender-pages.mjs",

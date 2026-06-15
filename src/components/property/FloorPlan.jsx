@@ -1,7 +1,7 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import SectionHeading from '../../common/ui/SectionHeading';
-import FloorImage from '/assets/images/thumbs/floor-plan.png';
+import FloorImage from '/assets/images/thumbs/floor-plan.webp';
 import { floorTabLists, floorTabPanels } from '../../data/HomeTwoData';
 
 import LazyImage from '../../common/ui/LazyImage';

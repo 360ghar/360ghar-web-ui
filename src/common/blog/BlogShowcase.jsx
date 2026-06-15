@@ -8,7 +8,7 @@ const BlogShowcase = () => {
                 <p className="blog-showcase__desc">Aliquam eros justo, posuere loborti viverra laoreet matti ullamcorper posuere viverra .Aliquam eros justo, posuere lobortis, viverra laoreet augue mattis fermentum ullamcorper viverra laoreet Aliquam eros </p>
                 <div className="blog-showcase__content flx-align gap-4">
                     <div className="blog-showcase__thumb">
-                        <LazyImage src="assets/images/thumbs/blog-showcase.png" alt="360Ghar real estate services showcase" width={120} height={120}/>
+                        <LazyImage src="assets/images/thumbs/blog-showcase.webp" alt="360Ghar real estate services showcase" width={120} height={120}/>
                     </div>
                     <ul className="check-list">
                         <li className="check-list__item d-flex align-items-center">

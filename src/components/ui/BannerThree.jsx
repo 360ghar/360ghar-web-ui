@@ -15,8 +15,8 @@ const BannerThree = () => {
         <>
             {/* ============================ Banner Three Start =============================    */}
             <section className="banner-three">
-                <LazyImage src="assets/images/thumbs/dotted-bg.png" alt="Decorative dotted background pattern" className="banner-three__dotted"/>
-                <LazyImage src="assets/images/shapes/banner-shape.png" alt="Decorative banner shape element" className="banner-three__shape"/>
+                <LazyImage src="assets/images/thumbs/dotted-bg.webp" alt="Decorative dotted background pattern" className="banner-three__dotted"/>
+                <LazyImage src="assets/images/shapes/banner-shape.webp" alt="Decorative banner shape element" className="banner-three__shape"/>
                 <div className="container container-two">
                     <div className="banner-three__inner position-relative padding-y-120">
                         <div className="row">
@@ -27,7 +27,7 @@ const BannerThree = () => {
                                         <h1 className="banner-content__title">{bannerThreeContent.title}
                                             <span className="position-relative d-inline">
                                             {bannerThreeContent.shapedTitle}
-                                                <LazyImage src="assets/images/shapes/curve-shape.png" alt="Decorative curve shape" className="curve-shape"/>
+                                                <LazyImage src="assets/images/shapes/curve-shape.webp" alt="Decorative curve shape" className="curve-shape"/>
                                             </span>
                                         </h1>
                                         <p className="banner-content__desc font-18 mb-4 mb-lg-3">{bannerThreeContent.desc}</p>
