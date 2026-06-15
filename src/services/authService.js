@@ -1,12 +1,16 @@
-import api from './api';
+import api, { publicApi } from './api';
 import { ensureSupabaseClient } from './supabaseClient';
+import { setLastAuthMethod, AUTH_METHODS } from './lastAuthMethod';
+
+// Normalize an identifier and detect whether it is an email or a phone number.
+const isEmailIdentifier = (identifier) => (identifier || '').includes('@');
 
 export const authService = {
-  // Login user directly with Supabase Auth (phone-first, email optional)
+  // Login user directly with Supabase Auth (email-or-phone + password)
   login: async (phoneOrEmail, password) => {
     const client = await ensureSupabaseClient();
     const identifier = (phoneOrEmail || '').trim();
-    const credentials = identifier.includes('@')
+    const credentials = isEmailIdentifier(identifier)
       ? { email: identifier, password }
       : { phone: identifier, password };
 
@@ -14,6 +18,12 @@ export const authService = {
     if (error || !data.session) {
       throw new Error(error?.message || 'Login failed');
     }
+
+    // Record the last-used method (best-effort, never blocks login).
+    const method = isEmailIdentifier(identifier)
+      ? AUTH_METHODS.EMAIL_PASSWORD
+      : AUTH_METHODS.PHONE_PASSWORD;
+    authService.afterAuthSuccess(method, identifier);
 
     const response = await api.get('/users/profile/');
     return {
@@ -25,53 +35,155 @@ export const authService = {
     };
   },
 
-  // Register new user directly with Supabase Auth
-  register: async (userData) => {
+  // ---- Google OAuth (redirect flow) --------------------------------------
+  // Kicks off the Supabase Google OAuth redirect. Supabase redirects to Google,
+  // then back to `${origin}/auth/callback?code=...` which AuthCallbackPage
+  // exchanges for a session. No client-side Google client id needed here.
+  // Override the callback origin via VITE_AUTH_REDIRECT_URL for Docker /
+  // reverse-proxy setups that need a specific callback URL.
+  signInWithGoogle: async (next) => {
     const client = await ensureSupabaseClient();
-    const phone = (userData.phone || '').trim();
-    const email = (userData.email || '').trim();
-
-    const payload = {
-      password: userData.password,
+    const base = import.meta.env.VITE_AUTH_REDIRECT_URL ?? window.location.origin;
+    const callbackUrl = new URL('/auth/callback', base);
+    if (next && typeof next === 'string' && next.startsWith('/') && !next.startsWith('//')) {
+      callbackUrl.searchParams.set('next', next);
+    }
+    const { data, error } = await client.auth.signInWithOAuth({
+      provider: 'google',
       options: {
-        data: {
-          full_name: userData.full_name || '',
-          email: email || null,
-        },
+        redirectTo: callbackUrl.toString(),
       },
-    };
-
-    if (phone) {
-      payload.phone = phone;
-    } else if (email) {
-      payload.email = email;
-    } else {
-      throw new Error('Phone or email is required');
-    }
-
-    const { data, error } = await client.auth.signUp(payload);
+    });
     if (error) {
-      throw new Error(error.message);
+      throw new Error(error.message || 'Google sign-in failed');
     }
+    return data;
+  },
 
-    if (!data.session) {
-      return {
-        access_token: null,
-        refresh_token: null,
-        expires_in: null,
-        token_type: null,
-        user: null,
-      };
+  // Exchange the OAuth `code` (returned to /auth/callback) for a session.
+  exchangeCodeForSession: async (code) => {
+    const client = await ensureSupabaseClient();
+    const { data, error } = await client.auth.exchangeCodeForSession(code);
+    if (error) {
+      throw new Error(error.message || 'Failed to complete sign-in');
     }
+    return data;
+  },
 
-    const response = await api.get('/users/profile/');
-    return {
-      access_token: data.session.access_token,
-      refresh_token: data.session.refresh_token,
-      expires_in: data.session.expires_in,
-      token_type: data.session.token_type,
-      user: response.data,
-    };
+  // ---- Login state-machine -----------------------------------------------
+  // PUBLIC. Given an email or phone, asks the backend whether the account
+  // exists/verified/has a password and what the next step should be.
+  // Returns { exists, verified, has_password, channel, next_step }.
+  checkIdentifierStatus: async (identifier) => {
+    const value = (identifier || '').trim();
+    const { data } = await publicApi.post('/auth/identifier-status', {
+      identifier: value,
+    });
+    return data;
+  },
+
+  // AUTH. Records the last-used auth method on the backend. Best-effort: never
+  // throws into the auth flow (a failed mirror should not break login).
+  recordLastMethod: async (method) => {
+    try {
+      await api.post('/auth/last-method', { method });
+    } catch {
+      // Non-fatal — local last-method storage is the source of truth for UI.
+    }
+  },
+
+  // ---- Phone OTP ----------------------------------------------------------
+  // `shouldCreateUser` defaults to FALSE so login & reset sends never silently
+  // create an account for an unknown/mistyped number. Pass true ONLY for signup.
+  sendPhoneOtp: async (phone, { shouldCreateUser = false } = {}) => {
+    const client = await ensureSupabaseClient();
+    const { error } = await client.auth.signInWithOtp({
+      phone: (phone || '').trim(),
+      options: { shouldCreateUser },
+    });
+    if (error) {
+      throw new Error(error.message || 'Failed to send OTP');
+    }
+    return { success: true };
+  },
+
+  verifyPhoneOtp: async (phone, token) => {
+    const client = await ensureSupabaseClient();
+    const { data, error } = await client.auth.verifyOtp({
+      phone: (phone || '').trim(),
+      token: (token || '').trim(),
+      type: 'sms',
+    });
+    if (error || !data.session) {
+      throw new Error(error?.message || 'Invalid or expired code');
+    }
+    return data;
+  },
+
+  // ---- Email OTP (6-digit code, not magic link) ---------------------------
+  // `shouldCreateUser` defaults to FALSE so login & reset sends never silently
+  // create an account for an unknown/mistyped email. Pass true ONLY for signup.
+  sendEmailOtp: async (email, { shouldCreateUser = false } = {}) => {
+    const client = await ensureSupabaseClient();
+    const { error } = await client.auth.signInWithOtp({
+      email: (email || '').trim(),
+      options: {
+        shouldCreateUser,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) {
+      throw new Error(error.message || 'Failed to send OTP');
+    }
+    return { success: true };
+  },
+
+  verifyEmailOtp: async (email, token) => {
+    const client = await ensureSupabaseClient();
+    const { data, error } = await client.auth.verifyOtp({
+      email: (email || '').trim(),
+      token: (token || '').trim(),
+      type: 'email',
+    });
+    if (error || !data.session) {
+      throw new Error(error?.message || 'Invalid or expired code');
+    }
+    return data;
+  },
+
+  // Set a password after a passwordless (OTP) signup, while the session is live.
+  setPasswordAfterSignup: async (password) => {
+    const client = await ensureSupabaseClient();
+    const { error } = await client.auth.updateUser({ password });
+    if (error) {
+      throw new Error(error.message || 'Failed to set password');
+    }
+    return { success: true };
+  },
+
+  // ---- Add + verify a phone to an existing (e.g. Google) account ----------
+  // Step 1: request an OTP for the new phone via updateUser({ phone }).
+  startAddPhone: async (phone) => {
+    const client = await ensureSupabaseClient();
+    const { error } = await client.auth.updateUser({ phone: (phone || '').trim() });
+    if (error) {
+      throw new Error(error.message || 'Failed to send verification code');
+    }
+    return { success: true };
+  },
+
+  // Step 2: verify the code (type 'phone_change') to attach the phone.
+  verifyAddPhone: async (phone, token) => {
+    const client = await ensureSupabaseClient();
+    const { data, error } = await client.auth.verifyOtp({
+      phone: (phone || '').trim(),
+      token: (token || '').trim(),
+      type: 'phone_change',
+    });
+    if (error) {
+      throw new Error(error?.message || 'Invalid or expired code');
+    }
+    return data;
   },
 
   // Get current user profile
@@ -93,18 +205,10 @@ export const authService = {
     localStorage.removeItem('user');
   },
 
-  sendPasswordResetEmail: async (email) => {
-    const client = await ensureSupabaseClient();
-    const redirectTo = `${window.location.origin}/reset-password`;
-    const { error } = await client.auth.resetPasswordForEmail(email, {
-      redirectTo,
-    });
-    if (error) {
-      throw new Error(error.message || 'Failed to send reset email');
-    }
-    return { success: true };
-  },
-
+  // NOTE: Password reset now uses a 6-digit OTP for BOTH email and phone
+  // (decision 1) — see ForgotPassword.jsx which calls sendEmailOtp/sendPhoneOtp
+  // ({ shouldCreateUser: false }) then verifyEmailOtp/verifyPhoneOtp, and
+  // finally resetPassword() below to set the new password on the live session.
   resetPassword: async (newPassword) => {
     const client = await ensureSupabaseClient();
     const { error } = await client.auth.updateUser({ password: newPassword });
@@ -132,7 +236,7 @@ export const authService = {
       throw new Error('User has no email or phone associated');
     }
 
-    const credentials = identifier.includes('@')
+    const credentials = isEmailIdentifier(identifier)
       ? { email: identifier, password: currentPassword }
       : { phone: identifier, password: currentPassword };
 
@@ -152,5 +256,14 @@ export const authService = {
     }
 
     return { success: true };
+  },
+
+  // ---- Shared success hook ------------------------------------------------
+  // Persist the last-used method locally + mirror it to the backend.
+  // Always safe to call after any successful authentication.
+  afterAuthSuccess: (method, identifier) => {
+    setLastAuthMethod(method, identifier);
+    // Fire-and-forget the backend mirror.
+    authService.recordLastMethod(method);
   },
 };

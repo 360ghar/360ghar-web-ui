@@ -85,7 +85,7 @@ const GurugramGuide = () => {
                 <article className="blog-details">
                   <div className="blog-details__thumb mb-4">
                     <LazyImage
-                      src="/assets/images/blog/gurugram-guide.jpg"
+                      src="/assets/images/blog/gurugram-guide.webp"
                       alt="Gurugram Real Estate Market Overview"
                       className="img-fluid rounded"
                       priority

@@ -27,7 +27,7 @@ const PropertyInfoWindow = ({ property, onClose }) => {
   }, t);
   const propertyTypeLabel = getPropertyTypeLabel(property.property_type, t);
 
-  const mainImage = property.main_image_url || property.image_url || '/assets/images/thumbs/property-1.png';
+  const mainImage = property.main_image_url || property.image_url || '/assets/images/thumbs/property-1.webp';
 
   return (
     <div className="property-info-window">

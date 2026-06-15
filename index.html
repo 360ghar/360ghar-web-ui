@@ -23,17 +23,35 @@
   <link rel="alternate" hreflang="hi" href="https://360ghar.com/hi" />
   <link rel="alternate" hreflang="x-default" href="https://360ghar.com/" />
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0S1Q7466MM"></script>
+  <!-- Google tag (gtag.js) — deferred to idle so it never competes with first paint -->
   <script>
+    // Minimal gtag stub: buffers calls until the real gtag.js loads.
+    // Placed inline at <script> weight (~100 bytes) so gtag() is always safe to call.
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-0S1Q7466MM');
+    // Defer the actual gtag.js network request until the browser is idle
+    // (or after 2s on browsers without requestIdleCallback, like Safari).
+    // This prevents gtag from competing with the hero image / first paint.
+    function loadGtag() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-0S1Q7466MM';
+      document.head.appendChild(s);
+      gtag('config', 'G-0S1Q7466MM');
+    }
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadGtag);
+    } else {
+      setTimeout(loadGtag, 2000);
+    }
   </script>
 
-  <link rel="shortcut icon" href="%BASE_URL%assets/images/logo/favicon.png">
+  <!-- WebP favicon (115 KB) — much smaller than the 489 KB PNG. All modern browsers support this. -->
+  <link rel="icon" type="image/webp" href="%BASE_URL%assets/images/logo/favicon.webp">
+  <!-- PNG fallback for Safari, social crawlers, and bookmarks that don't support WebP favicons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="%BASE_URL%assets/images/logo/favicon.png">
   <link rel="alternate" type="application/rss+xml" title="360Ghar All Feeds" href="/rss.xml">
   <link rel="alternate" type="application/rss+xml" title="360Ghar Blog" href="/rss/blog.xml">
   <link rel="alternate" type="application/rss+xml" title="360Ghar Properties" href="/rss/properties.xml">
@@ -97,9 +115,9 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="%BASE_URL%assets/css/fontawesome-all.min.css" media="print" onload="this.media='all'">
 
-  <!-- Fallback for no-JS browsers -->
+  <!-- Fallback for no-JS browsers. fonts.css removed: @font-face declarations are
+       already inlined in <head> above, so the separate CSS file is redundant. -->
   <noscript>
-    <link rel="stylesheet" href="%BASE_URL%assets/css/fonts.css">
     <link rel="stylesheet" href="%BASE_URL%assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="%BASE_URL%assets/css/fontawesome-all.min.css">
   </noscript>

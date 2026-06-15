@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { I18nLink } from '../../i18n/I18nLink';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocalitiesIndex } from '../../hooks/useLocalitiesIndex';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -94,7 +95,8 @@ const CityHub = () => {
   const city = meta.fullName;
 
   const landingLinks = getCityLandingLinks(canonical);
-  const topLocalities = getCityLocalities(canonical, { limit: 8 });
+  const { data: localitiesIndex } = useLocalitiesIndex();
+  const topLocalities = getCityLocalities(canonical, { limit: 8, index: localitiesIndex });
   const comparisonLinks = getComparisonLinks();
   const toolLinks = getToolLinks();
   const faqItems = buildCityHubFaqs(city, meta);

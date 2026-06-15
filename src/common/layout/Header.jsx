@@ -63,11 +63,23 @@ const Header = ({
     };
     
     useEffect(() => {
+        let rafId = 0;
+        let prevSticky = false;
         const handleScroll = () => {
-            setStickyHeader(window.scrollY > 100);
+            cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                const next = window.scrollY > 100;
+                if (next !== prevSticky) {
+                    prevSticky = next;
+                    setStickyHeader(next);
+                }
+            });
         };
         window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
+        return () => {
+            cancelAnimationFrame(rafId);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     return (

@@ -63,6 +63,15 @@ const socialLinks = [
     color: '#E60023',
     category: 'follow',
   },
+  {
+    platform: 'Instagram (360 Flatmates)',
+    url: 'https://www.instagram.com/360flatmates/',
+    icon: 'fab fa-instagram',
+    username: '@360flatmates',
+    verified: true,
+    color: '#E4405F',
+    category: 'follow',
+  },
 
   // ── Review Us ──
   {
@@ -83,6 +92,15 @@ const socialLinks = [
     color: '#34A853',
     category: 'review',
   },
+  {
+    platform: 'Google Play Store (360 Flatmates)',
+    url: 'https://play.google.com/store/apps/details?id=com.the360ghar.flatmates360',
+    icon: 'fab fa-google-play',
+    username: 'Write a Review',
+    verified: true,
+    color: '#34A853',
+    category: 'review',
+  },
 
   // ── Our App ──
   {
@@ -90,6 +108,15 @@ const socialLinks = [
     url: 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360',
     icon: 'fab fa-google-play',
     username: '360Ghar on Google Play',
+    verified: true,
+    color: '#34A853',
+    category: 'app',
+  },
+  {
+    platform: 'Download Android App (360 Flatmates)',
+    url: 'https://play.google.com/store/apps/details?id=com.the360ghar.flatmates360',
+    icon: 'fab fa-google-play',
+    username: '360 Flatmates on Google Play',
     verified: true,
     color: '#34A853',
     category: 'app',

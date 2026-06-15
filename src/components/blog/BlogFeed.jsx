@@ -42,7 +42,7 @@ const BlogFeed = () => {
 
     const mapPost = (post) => ({
         id: post.id,
-        thumb: post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.png',
+        thumb: post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.webp',
         title: post.title || 'Untitled',
         excerpt: post.excerpt || post.summary || '',
         date: post.published_at,

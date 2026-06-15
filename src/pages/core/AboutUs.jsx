@@ -38,7 +38,7 @@ const AboutUs = () => {
         generatePersonStructuredData({
             name: 'Saksham Mittal',
             jobTitle: 'Founder & CEO',
-            image: 'https://360ghar.com/assets/images/thumbs/team1.png',
+            image: 'https://360ghar.com/assets/images/thumbs/team1.webp',
             bio: 'Saksham Mittal is the founder of 360Ghar, India\'s first AI + VR-first real estate platform. With deep expertise in PropTech and the Gurugram real estate market, he leads product strategy and technology innovation.',
             linkedin: 'https://www.linkedin.com/in/saksham360/',
             twitter: 'https://twitter.com/360ghar',
@@ -47,7 +47,7 @@ const AboutUs = () => {
         generatePersonStructuredData({
             name: 'Priya Singh',
             jobTitle: 'Manager of Sales',
-            image: 'https://360ghar.com/assets/images/thumbs/team2.png',
+            image: 'https://360ghar.com/assets/images/thumbs/team2.webp',
             bio: 'Real estate sales leader at 360Ghar with expertise in verified property transactions across Gurugram.',
             linkedin: 'https://www.linkedin.com/company/360ghar',
             expertise: ['Property Sales', 'Client Relations', 'Gurugram Properties'],
@@ -55,7 +55,7 @@ const AboutUs = () => {
         generatePersonStructuredData({
             name: 'Vikram Malhotra',
             jobTitle: 'Director of Sales',
-            image: 'https://360ghar.com/assets/images/thumbs/team3.png',
+            image: 'https://360ghar.com/assets/images/thumbs/team3.webp',
             bio: 'Sales director at 360Ghar leading the relationship manager team for seamless property buying and renting experiences in Delhi NCR.',
             linkedin: 'https://www.linkedin.com/company/360ghar',
             expertise: ['Sales Strategy', 'Real Estate Operations', 'Team Leadership'],

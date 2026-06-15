@@ -1,20 +1,26 @@
 User-agent: OAI-SearchBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: GPTBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: ChatGPT-User
 Allow: /
+Crawl-delay: 10
 
 User-agent: ClaudeBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: Claude-SearchBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: Claude-User
 Allow: /
+Crawl-delay: 10
 
 User-agent: Googlebot
 Allow: /
@@ -27,39 +33,51 @@ Allow: /
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 10
 
 User-agent: Applebot
 Allow: /
+Crawl-delay: 10
 
 User-agent: PerplexityBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: Perplexity-User
 Allow: /
+Crawl-delay: 10
 
 User-agent: CCBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: Bytespider
 Allow: /
+Crawl-delay: 10
 
 User-agent: PetalBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: Applebot-Extended
 Allow: /
+Crawl-delay: 10
 
 User-agent: Meta-ExternalAgent
 Allow: /
+Crawl-delay: 10
 
 User-agent: Amazonbot
 Allow: /
+Crawl-delay: 10
 
 User-agent: CohereBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: YouBot
 Allow: /
+Crawl-delay: 10
 
 User-agent: KagiBot
 Allow: /
@@ -80,6 +98,11 @@ Allow: /openapi.json
 Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /data/llm-feed.json
+
+# Default for any other crawler not listed above
+User-agent: *
+Allow: /
+Crawl-delay: 10
 
 # Explicitly disallow private or system paths
 Disallow: /admin/

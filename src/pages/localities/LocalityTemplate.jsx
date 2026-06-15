@@ -24,7 +24,7 @@ let localitiesDataPromise = null;
 let cachedLocalitiesData = null;
 
 const HERO_IMAGES = [
-    '/assets/images/thumbs/property-details-1.png',
+    '/assets/images/thumbs/property-details-1.webp',
     '/assets/images/thumbs/property-details-2.webp',
     '/assets/images/thumbs/property-details-3.webp',
     '/assets/images/thumbs/property-details-4.webp',

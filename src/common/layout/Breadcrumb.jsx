@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
-import BreadcrumbImage from '/assets/images/thumbs/breadcrumb-img.png';
+import BreadcrumbImage from '/assets/images/thumbs/breadcrumb-img.webp';
 
 import LazyImage from '../ui/LazyImage';
 const Breadcrumb = (props) => {

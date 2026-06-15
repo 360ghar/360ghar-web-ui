@@ -1,5 +1,5 @@
 
-import BannerTwoThumb from '/assets/images/thumbs/banner-two-filter-bg.png';
+import BannerTwoThumb from '/assets/images/thumbs/banner-two-filter-bg.webp';
 import TabFilter from '../../common/forms/TabFilter';
 import { bannerTwoContent } from '../../data/HomeTwoData';
 import { I18nLink } from '../../i18n/I18nLink';

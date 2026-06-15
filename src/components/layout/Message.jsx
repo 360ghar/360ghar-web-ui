@@ -1,4 +1,4 @@
-import messageThumb from '/assets/images/thumbs/message-img.png';
+import messageThumb from '/assets/images/thumbs/message-img.webp';
 import ValidationForm from './ValidationForm';
 
 import LazyImage from '../../common/ui/LazyImage';

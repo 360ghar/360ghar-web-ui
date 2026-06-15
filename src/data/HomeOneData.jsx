@@ -1,6 +1,6 @@
 
 // Banner One
-import BannerImg from '/assets/images/thumbs/banner-img.png'; 
+import BannerImg from '/assets/images/thumbs/banner-img.webp';
 export const bannerContent = {
     subtitle: 'AI + VR REAL ESTATE',
     title: 'India\'s VR-First Way to',
@@ -32,7 +32,7 @@ export const aboutStatistics = {
     number: '4000+',
     text: 'Satisfied Clients'
 }
-import aboutContentThumb from '/assets/images/thumbs/about-img.png';
+import aboutContentThumb from '/assets/images/thumbs/about-img.webp';
 import aboutContentIcon from '/assets/images/icons/about-icon.svg'; 
 export const aboutContent = {
     thumb: aboutContentThumb,
@@ -90,10 +90,10 @@ export const counts = [
 
 
 // portfolio  Data
-import portfolioThumb1 from '/assets/images/thumbs/portfolio1.png';
-import portfolioThumb2 from '/assets/images/thumbs/portfolio2.png';
-import portfolioThumb3 from '/assets/images/thumbs/portfolio3.png';
-import portfolioThumb4 from '/assets/images/thumbs/portfolio4.png'; 
+import portfolioThumb1 from '/assets/images/thumbs/portfolio1.webp';
+import portfolioThumb2 from '/assets/images/thumbs/portfolio2.webp';
+import portfolioThumb3 from '/assets/images/thumbs/portfolio3.webp';
+import portfolioThumb4 from '/assets/images/thumbs/portfolio4.webp';
 export const portfolios = [
     {
         thumb: portfolioThumb1,

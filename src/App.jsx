@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Outlet } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useMemo, Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 // Toast CSS is now lazy-loaded via LazyToast.jsx
 import { useLocationStore } from './store/locationStore';
@@ -7,6 +7,7 @@ import { useAuthStore } from './store';
 import useLocaleStore from './store/localeStore';
 import i18n from './i18n';
 import PageLoader from './common/PageLoader';
+import ProfileCompletionRouteGuard from './common/ProfileCompletionRouteGuard';
 import ErrorBoundary from './common/ErrorBoundary';
 import ScrollToTop from './common/layout/ScrollToTop';
 import SEO from './common/SEO';
@@ -34,6 +35,9 @@ const Register = lazy(() => import('./pages/account/Register'));
 const AccountDeletionRequest = lazy(() => import('./pages/account/AccountDeletionRequest'));
 const ForgotPassword = lazy(() => import('./pages/account/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/account/ResetPassword'));
+const ProfileCompletion = lazy(() => import('./pages/account/ProfileCompletion'));
+const AuthCallbackPage = lazy(() => import('./pages/account/AuthCallbackPage'));
+const AddPhonePage = lazy(() => import('./pages/account/AddPhonePage'));
 const NotFound = lazy(() => import('./pages/core/NotFound'));
 const Policies = lazy(() => import('./pages/core/Policies'));
 const PolicyDetails = lazy(() => import('./pages/core/PolicyDetails'));
@@ -123,6 +127,9 @@ const accountRoutes = [
   { path: '/delete-account', element: <AccountDeletionRequest /> },
   { path: '/forgot-password', element: <ForgotPassword /> },
   { path: '/reset-password', element: <ResetPassword /> },
+  { path: '/auth/callback', element: <AuthCallbackPage /> },
+  { path: '/add-phone', element: <AddPhonePage /> },
+  { path: '/profile-completion', element: <ProfileCompletion /> },
 ];
 
 const contentRoutes = [
@@ -253,7 +260,7 @@ function LocaleGate({ locale }) {
     document.documentElement.lang = locale;
   }, [locale, setLocale]);
 
-  return <Outlet />;
+  return <ProfileCompletionRouteGuard />;
 }
 
 function App() {
@@ -265,8 +272,10 @@ function App() {
     initializeAuth();
   }, [initializeLocation, initializeAuth]);
 
-  // Global schemas applied to every page for maximum AI discoverability
-  const globalSchemas = [
+  // Global schemas applied to every page for maximum AI discoverability.
+  // Memoized: these are static module-level constants, so re-creating the array
+  // and re-stringifying on every App render (every route / auth change) is waste.
+  const globalSchemas = useMemo(() => [
     realEstateStructuredData.organization,
     realEstateStructuredData.website,
     realEstateStructuredData.localBusiness,
@@ -276,7 +285,7 @@ function App() {
     generateSpeakableStructuredData({
       cssSelectors: ['.speakable-summary', '.speakable-highlights', 'h1', 'h2'],
     }),
-  ];
+  ], []);
 
   return (
     <>

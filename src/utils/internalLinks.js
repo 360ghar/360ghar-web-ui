@@ -2,8 +2,13 @@
  * Centralized internal link generation for pSEO pages.
  * Produces contextually relevant links between Landing, FacetLanding,
  * LocalityTemplate, and CityHub pages.
+ *
+ * NOTE: `localities-index.json` is intentionally NOT statically imported here.
+ * It is a ~464 KB chunk; pulling it in eagerly forces every page that uses any
+ * helper below to download it on the critical path. Instead, `getCityLocalities`
+ * accepts the index as an argument (loaded lazily via `useLocalitiesIndex`),
+ * keeping the chunk out of the initial bundle.
  */
-import localitiesIndex from '../data/localities-index.json';
 import priceContextData from '../data/priceContext.json' with { type: 'json' };
 
 const CITY_SLUG_MAP = {
@@ -101,8 +106,14 @@ export const getBudgetFacetLinks = (citySlug, intent, typeSlug, excludeBudget) =
 
 /**
  * Get top localities for a city, optionally filtered by property type relevance.
+ *
+ * @param {string} citySlug
+ * @param {{ limit?: number, preferTypes?: string[], index?: Array }} opts
+ *   `index` is the localities index array, loaded lazily via `useLocalitiesIndex()`.
+ *   If omitted, returns an empty array (the caller should render a fallback until
+ *   the index has loaded).
  */
-export const getCityLocalities = (citySlug, { limit = 5, preferTypes = [] } = {}) => {
+export const getCityLocalities = (citySlug, { limit = 5, preferTypes = [], index = null } = {}) => {
   const cityName = {
     gurgaon: 'Gurgaon',
     gurugram: 'Gurgaon',
@@ -112,14 +123,14 @@ export const getCityLocalities = (citySlug, { limit = 5, preferTypes = [] } = {}
     ghaziabad: 'Ghaziabad',
   }[normalizeCitySlug(citySlug)];
 
-  if (!cityName) return [];
+  if (!cityName || !index || !index.length) return [];
 
   const typePriority = {
     sector: 0, society: 1, locality: 2, phase: 3,
     project: 4, road: 5, township: 6, village: 7,
   };
 
-  let filtered = localitiesIndex.filter((l) => l.city === cityName);
+  let filtered = index.filter((l) => l.city === cityName);
 
   // If preferTypes given (e.g., 'villa' → prefer sectors/societies over projects),
   // boost entities more likely to have that type

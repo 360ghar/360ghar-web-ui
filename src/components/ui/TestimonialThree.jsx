@@ -23,12 +23,16 @@ const NextArrow = ({ currentSlide: _currentSlide, slideCount: _slideCount, ...pr
     );
 };
 
+// Respect prefers-reduced-motion: disable autoplay for users who opted out.
+const REDUCED_MOTION = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const settings = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    speed: 1500,
+    autoplay: !REDUCED_MOTION,
+    autoplaySpeed: 5000,
+    speed: 500,
     dots: false,
     pauseOnHover: true,
     arrows: true,

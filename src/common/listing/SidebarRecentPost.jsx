@@ -36,7 +36,7 @@ const SidebarRecentPost = () => {
             {error && !loading && <div className="text-danger">{error}</div>}
             {!loading && !error && posts.map((post, idx) => {
                 const title = post.title || 'Untitled';
-                const thumb = post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.png';
+                const thumb = post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.webp';
                 const slug = post.slug || encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'));
                 const blogURL = `/blog/${slug}`;
                 const handleBlogClick = () => {

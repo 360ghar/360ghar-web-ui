@@ -28,7 +28,7 @@ const BlogThree = () => {
     }, []);
 
     const mapPost = (post) => ({
-        thumb: post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.png',
+        thumb: post.thumbnail_url || post.cover_image_url || '/assets/images/thumbs/blog1.webp',
         meta: [
             { icon: <i className="fas fa-user"></i>, text: `By ${post.author_name || 'Admin'}` },
             post.published_at ? { icon: <i className="fas fa-calendar"></i>, text: new Date(post.published_at).toLocaleDateString() } : null,

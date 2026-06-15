@@ -22,7 +22,7 @@ import { propertyAPIService } from '../../services/propertyAPIService';
 import { hapticLight, hapticSuccess } from '../../utils/hapticFeedback';
 import { localInputToServerTimestamp } from '../../utils/dateUtils';
 import { getListingLabel, getPropertyTypeLabel } from '../../utils/propertyTaxonomy';
-const PROPERTY_IMAGE_FALLBACK = '/assets/images/thumbs/property-1.png';
+const PROPERTY_IMAGE_FALLBACK = '/assets/images/thumbs/property-1.webp';
 function formatCurrency(value) {
   if (value === null || value === undefined) return 'Price on request';
   try {

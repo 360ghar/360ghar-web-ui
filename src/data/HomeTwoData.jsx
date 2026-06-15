@@ -57,7 +57,7 @@ export const checkLists = [
     },
 ]
 
-import AboutTwoImg from '/assets/images/thumbs/about-two-img.png'
+import AboutTwoImg from '/assets/images/thumbs/about-two-img.webp'
 export const aboutTwoRight = {
     thumb: AboutTwoImg,
     title: 'Property Management',
@@ -243,10 +243,10 @@ export const floorTabPanels= [
 
 
 // Gallery Data
-import galleryImage1 from '/assets/images/thumbs/gallery-img1.png'
-import galleryImage2 from '/assets/images/thumbs/gallery-img2.png'
-import galleryImage3 from '/assets/images/thumbs/gallery-img3.png'
-import galleryImage4 from '/assets/images/thumbs/gallery-img4.png'
+import galleryImage1 from '/assets/images/thumbs/gallery-img1.webp'
+import galleryImage2 from '/assets/images/thumbs/gallery-img2.webp'
+import galleryImage3 from '/assets/images/thumbs/gallery-img3.webp'
+import galleryImage4 from '/assets/images/thumbs/gallery-img4.webp'
 export const galleries= [
     {
         image: galleryImage1,

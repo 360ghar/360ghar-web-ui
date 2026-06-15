@@ -2,7 +2,7 @@ import Slider from "react-slick";
 
 import { testimonials } from '../../data/HomeOneData';
 import TestimonialItem from './TestimonialItem';
-import TestimonialThumb from '/assets/images/thumbs/testimonial-img.png';
+import TestimonialThumb from '/assets/images/thumbs/testimonial-img.webp';
 import SectionHeading from '../../common/ui/SectionHeading';
 
 import LazyImage from '../../common/ui/LazyImage';

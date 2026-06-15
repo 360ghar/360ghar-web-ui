@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
+import { useLocalitiesIndex } from '../../hooks/useLocalitiesIndex';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -86,6 +87,7 @@ const buildLandingFaqs = (t, city, facet, validIntent) => {
 const Landing = () => {
   const { t } = useTranslation('landing');
   const { citySlug, intent, type } = useParams();
+  const { data: localitiesIndex } = useLocalitiesIndex();
   const canonicalCitySlug = normalizeCitySlug(citySlug);
   const shouldIndex = isIndexableCitySlug(canonicalCitySlug);
   const city = pretty(canonicalCitySlug);
@@ -138,7 +140,7 @@ const Landing = () => {
 
   // --- Enrichment data ---
 
-  const popularLocalities = getCityLocalities(canonicalCitySlug, { limit: 5, preferTypes: [canonicalType] });
+  const popularLocalities = getCityLocalities(canonicalCitySlug, { limit: 5, preferTypes: [canonicalType], index: localitiesIndex });
 
   const priceRange = getPriceRange(canonicalCitySlug, validIntent, canonicalType);
 

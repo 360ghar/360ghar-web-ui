@@ -115,8 +115,8 @@ export const messageThreeContents = {
 
 
 // Testimonial Three Data
-import userThumb1 from '/assets/images/thumbs/user-img1.png';
-import userThumb2 from '/assets/images/thumbs/user-img2.png'; 
+import userThumb1 from '/assets/images/thumbs/user-img1.webp';
+import userThumb2 from '/assets/images/thumbs/user-img2.webp';
 export const testimonialThreeContents = [
     {
         image: userThumb1,

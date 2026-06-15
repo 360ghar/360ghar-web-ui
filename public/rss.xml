@@ -5,48 +5,48 @@
     <link>https://360ghar.com</link>
     <description>Index of all 360Ghar RSS feeds: blog, properties, and localities</description>
     <language>en-in</language>
-    <lastBuildDate>Sun, 17 May 2026 09:31:36 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 17:36:53 GMT</lastBuildDate>
     <atom:link href="https://360ghar.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>360Ghar Blog</title>
       <link>https://360ghar.com/rss/blog.xml</link>
       <description>Real estate guides, buying tips, locality deep-dives, and market updates</description>
-      <pubDate>Thu, 14 May 2026 14:39:11 GMT</pubDate>
+      <pubDate>Mon, 15 Jun 2026 17:36:53 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/blog.xml</guid>
     </item>
     <item>
       <title>360Ghar Properties</title>
       <link>https://360ghar.com/rss/properties.xml</link>
       <description>Latest verified property listings in Gurugram and Delhi NCR</description>
-      <pubDate>Thu, 14 May 2026 16:07:01 GMT</pubDate>
+      <pubDate>Mon, 15 Jun 2026 17:36:53 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/properties.xml</guid>
     </item>
     <item>
       <title>360Ghar Localities</title>
       <link>https://360ghar.com/rss/localities.xml</link>
       <description>Locality guides and neighbourhood intelligence for Gurugram and Delhi NCR</description>
-      <pubDate>Sun, 17 May 2026 00:00:00 GMT</pubDate>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/localities.xml</guid>
     </item>
     <item>
       <title>360Ghar ब्लॉग (Hindi)</title>
       <link>https://360ghar.com/rss/hi-blog.xml</link>
       <description>रियल एस्टेट गाइड, खरीद टिप्स, लोकैलिटी गाइड और बाज़ार अपडेट</description>
-      <pubDate>Thu, 14 May 2026 14:39:11 GMT</pubDate>
+      <pubDate>Mon, 15 Jun 2026 17:36:53 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/hi-blog.xml</guid>
     </item>
     <item>
       <title>360Ghar प्रॉपर्टी (Hindi)</title>
       <link>https://360ghar.com/rss/hi-properties.xml</link>
       <description>गुरुग्राम और दिल्ली NCR में नवीनतम वेरिफाइड प्रॉपर्टी लिस्टिंग</description>
-      <pubDate>Thu, 14 May 2026 16:07:01 GMT</pubDate>
+      <pubDate>Mon, 15 Jun 2026 17:36:53 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/hi-properties.xml</guid>
     </item>
     <item>
       <title>360Ghar लोकैलिटी (Hindi)</title>
       <link>https://360ghar.com/rss/hi-localities.xml</link>
       <description>लोकैलिटी गाइड और पड़ोस इंटेलिजेंस</description>
-      <pubDate>Sun, 17 May 2026 00:00:00 GMT</pubDate>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://360ghar.com/rss/hi-localities.xml</guid>
     </item>
   </channel>

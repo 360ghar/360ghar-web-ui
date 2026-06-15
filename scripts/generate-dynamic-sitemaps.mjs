@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { fetchPaginatedCollection } from './lib/paginatedApi.mjs';
+import { fetchPaginatedCollection, fetchPaginatedCollectionCached } from './lib/paginatedApi.mjs';
 import { getProjectEntries } from './lib/projectEntries.mjs';
 
 const SITE_URL = process.env.SITE_URL || 'https://360ghar.com';
@@ -47,11 +47,11 @@ const formatDate = (dateString) => {
   }
 };
 
-// Fetch properties from API
+// Fetch properties from API (build-cached to avoid re-crawling on every build)
 async function fetchProperties() {
   try {
     return {
-      items: await fetchPaginatedCollection({
+      items: await fetchPaginatedCollectionCached({
         baseUrl: API_BASE,
         path: '/properties/',
       }),

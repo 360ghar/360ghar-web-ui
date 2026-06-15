@@ -3,7 +3,7 @@ import Button from '../../common/ui/Button';
 import { aboutCheckLists } from '../../data/HomeThreeData';
 import CountUp from 'react-countup';
 
-import AboutThreeThumb from '/assets/images/thumbs/about-three-img.png';
+import AboutThreeThumb from '/assets/images/thumbs/about-three-img.webp';
 
 import LazyImage from '../../common/ui/LazyImage';
 const AboutThree = () => {

@@ -1,9 +1,27 @@
 import { forwardRef, useMemo, useState } from 'react';
 
 /**
- * Centralized <img> wrapper that defaults to native lazy loading while
- * letting critical assets opt into eager loading via the `priority` flag.
- * Supports responsive images via srcSet and sizes props.
+ * Centralized image component with progressive enhancement:
+ *
+ *  1. Format negotiation via <picture> (when avifSrc / webpSrc are supplied):
+ *       <source type="image/avif"> → <source type="image/webp"> → <img> (.png/.jpg)
+ *     Browsers pick the first type they understand, so AVIF-capable clients get
+ *     ~30-50% smaller payloads than WebP, and old clients still get the PNG.
+ *
+ *  2. Responsive `srcset` per format (pass avifSrcSet / webpSrcSet / srcSet).
+ *
+ *  3. Optional blur-up placeholder (LQIP). Supply a tiny `lqip` (e.g. a 20px
+ *     blurred WebP data-URL or a low-res path) and it is shown as a CSS
+ *     background until the real image's `onLoad` fires, then cross-faded.
+ *
+ *  4. CLS prevention via aspect-ratio when width/height are given.
+ *
+ *  5. Native lazy-loading by default; `priority` opts into eager + high fetch
+ *     priority for above-the-fold / LCP images.
+ *
+ * Backward compatible: when no avif/webp sources are passed it renders exactly
+ * as a plain <img> (the historical behaviour), so existing call sites keep
+ * working while they are migrated.
  */
 const LOCAL_HOSTNAMES = new Set(['localhost', '127.0.0.1', '::1']);
 
@@ -42,13 +60,21 @@ const LazyImageBase = forwardRef(
       fallbackSrc,
       referrerPolicy,
       onError,
-      // Responsive image props
+      // Next-gen format sources (optional). When omitted, renders a plain <img>.
+      avifSrc,
+      avifSrcSet,
+      webpSrc,
+      webpSrcSet,
+      // Responsive image props (applied to the fallback <img> srcset)
       srcSet,
       sizes,
+      // LQIP blur-up placeholder (data URL or path). Optional.
+      lqip,
       // CLS prevention props
       width,
       height,
       style,
+      className,
       alt = '360Ghar property image',
       ...rest
     },
@@ -60,9 +86,20 @@ const LazyImageBase = forwardRef(
 
     const normalizedSrc = useMemo(() => normalizeSrc(rest.src), [rest.src]);
     const normalizedFallbackSrc = useMemo(() => normalizeSrc(fallbackSrc), [fallbackSrc]);
+    const normalizedAvif = useMemo(() => normalizeSrc(avifSrc), [avifSrc]);
+    const normalizedWebp = useMemo(() => normalizeSrc(webpSrc), [webpSrc]);
 
     const [currentSrc, setCurrentSrc] = useState(normalizedSrc || normalizedFallbackSrc || '');
     const [didFallback, setDidFallback] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+
+    // Reset the loaded flag when the source changes (e.g. fallback swap).
+    // Derived during render rather than useEffect to satisfy react-hooks/set-state-in-effect.
+    const [prevSrc, setPrevSrc] = useState(currentSrc);
+    if (prevSrc !== currentSrc) {
+      setPrevSrc(currentSrc);
+      setLoaded(false);
+    }
 
     const resolvedReferrerPolicy = useMemo(() => {
       if (referrerPolicy) return referrerPolicy;
@@ -70,16 +107,28 @@ const LazyImageBase = forwardRef(
       return currentSrc.startsWith('http') ? 'no-referrer' : undefined;
     }, [referrerPolicy, currentSrc]);
 
-    // Compute aspect ratio style for CLS prevention
     const computedStyle = useMemo(() => {
-      if (width && height) {
+      // Blur-up: until the real image loads, show the LQIP as a blurred
+      // background filling the box. Once loaded, cross-fade by dropping the
+      // background and revealing the <img>.
+      const base = {
+        aspectRatio: width && height ? `${width} / ${height}` : undefined,
+        ...style,
+      };
+      if (lqip && !loaded) {
         return {
-          aspectRatio: `${width} / ${height}`,
-          ...style,
+          backgroundImage: `url(${lqip})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          // Slight blur hides the placeholder's low resolution.
+          filter: 'blur(8px)',
+          transform: 'scale(1.04)', // hide blur edge bleed
+          transition: 'opacity 0.3s ease',
+          ...base,
         };
       }
-      return style;
-    }, [width, height, style]);
+      return base;
+    }, [width, height, style, lqip, loaded]);
 
     const handleError = (event) => {
       if (!didFallback && normalizedFallbackSrc && currentSrc !== normalizedFallbackSrc) {
@@ -89,27 +138,65 @@ const LazyImageBase = forwardRef(
       if (typeof onError === 'function') onError(event);
     };
 
+    const handleLoad = (event) => {
+      setLoaded(true);
+      if (typeof rest.onLoad === 'function') rest.onLoad(event);
+    };
+
     const fetchPriorityProps = resolvedFetchPriority
       ? { fetchpriority: resolvedFetchPriority }
       : {};
 
-    return (
+    // Wrapper class for blur-up + picture support
+    const wrapperClass = useMemo(() => {
+      const base = className || '';
+      return lqip ? `${base} lazy-image--lqip`.trim() : base;
+    }, [className, lqip]);
+
+    const hasPicture = Boolean(normalizedAvif || normalizedWebp || avifSrcSet || webpSrcSet);
+    const imgEl = (
       <img
         ref={ref}
         loading={resolvedLoading}
         decoding={resolvedDecoding}
         referrerPolicy={resolvedReferrerPolicy}
         onError={handleError}
+        onLoad={handleLoad}
         srcSet={srcSet}
         sizes={sizes}
         width={width}
         height={height}
         style={computedStyle}
+        className={wrapperClass}
         alt={alt}
         {...fetchPriorityProps}
         {...rest}
         src={currentSrc}
       />
+    );
+
+    if (!hasPicture) return imgEl;
+
+    return (
+      <picture>
+        {normalizedAvif && (
+          <source
+            type="image/avif"
+            srcSet={avifSrcSet || undefined}
+            sizes={sizes}
+            src={normalizedAvif}
+          />
+        )}
+        {normalizedWebp && (
+          <source
+            type="image/webp"
+            srcSet={webpSrcSet || undefined}
+            sizes={sizes}
+            src={normalizedWebp}
+          />
+        )}
+        {imgEl}
+      </picture>
     );
   }
 );

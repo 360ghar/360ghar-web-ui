@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import NewsletterThumb from '/assets/images/thumbs/newsletter-bg.png';
+import NewsletterThumb from '/assets/images/thumbs/newsletter-bg.webp';
 import NewsletterForm from '../../common/forms/NewsletterForm';
 
 const Newsletter = () => {

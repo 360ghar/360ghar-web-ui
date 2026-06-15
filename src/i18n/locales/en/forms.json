@@ -13,6 +13,15 @@
     "labelShort": "Phone",
     "labelPhoneNumber": "Phone Number"
   },
+  "fullName": {
+    "label": "Full Name",
+    "placeholder": "Enter your full name",
+    "required": "Full name is required"
+  },
+  "dateOfBirth": {
+    "label": "Date of Birth",
+    "required": "Date of birth is required"
+  },
   "name": {
     "label": "Full Name",
     "labelFirstName": "First Name",
@@ -101,7 +110,8 @@
     "loginSuccess": "Login successful!",
     "registerSuccess": "Registration successful!",
     "loginFailed": "Login failed. Please try again.",
-    "registerFailed": "Registration failed. Please try again."
+    "registerFailed": "Registration failed. Please try again.",
+    "saving": "Saving..."
   },
   "validation": {
     "displayName": "Display Name",
@@ -118,6 +128,51 @@
     "trustedAgents": "Trusted agents",
     "loggingIn": "Logging in...",
     "registering": "Registering..."
+  },
+  "google": {
+    "continueWith": "Continue with Google",
+    "connecting": "Connecting...",
+    "failed": "Google sign-in could not be started. Please try again."
+  },
+  "or": "or",
+  "identifier": {
+    "label": "Email or mobile number",
+    "placeholder": "Enter email or 10-digit mobile number",
+    "required": "Enter your email or mobile number",
+    "invalid": "Enter a valid email or 10-digit mobile number",
+    "continue": "Continue",
+    "checking": "Checking...",
+    "useDifferent": "Use a different email or phone"
+  },
+  "otp": {
+    "label": "Verification code",
+    "placeholder": "Enter 6-digit code",
+    "sentToPhone": "We sent a 6-digit code to your phone.",
+    "sentToEmail": "We sent a 6-digit code to your email.",
+    "required": "Enter the 6-digit code",
+    "invalidLength": "The code must be 6 digits",
+    "verify": "Verify",
+    "verifying": "Verifying...",
+    "resend": "Resend code",
+    "resendIn": "Resend code in {{seconds}}s",
+    "verifyFailed": "Invalid or expired code. Please try again.",
+    "sendFailed": "Failed to send code. Please try again."
+  },
+  "lastUsed": {
+    "badge": "Last used",
+    "label": "You last signed in with {{method}}",
+    "google": "Google",
+    "email_password": "email & password",
+    "phone_password": "phone & password",
+    "phone_otp": "phone OTP",
+    "email_otp": "email OTP"
+  },
+  "setPassword": {
+    "heading": "Set a password",
+    "subheading": "Create a password so you can sign in faster next time.",
+    "required": "To finish signing in, set a password for your account. This step is required.",
+    "forAccount": "for {{identifier}}",
+    "label": "Create password"
   },
   "loginBtn": "Login",
   "registerBtn": "Register",
