@@ -7,7 +7,7 @@ const SocialList = () => {
                 socialLists.map((socialList, index) => {
                     return (
                         <li className="social-list__item" key={index}>
-                            <a href={socialList.link} className="social-list__link flx-center" target="_blank" rel="noopener noreferrer">{socialList.icon}</a>
+                            <a href={socialList.link} className="social-list__link flx-center" target="_blank" rel="noopener noreferrer" aria-label={socialList.label}>{socialList.icon}</a>
                         </li>
                     )
                 })

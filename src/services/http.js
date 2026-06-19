@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { getSupabaseAccessToken, refreshSupabaseSession } from './supabaseClient';
-import { shouldShortCircuitDataFetch } from '../utils/prerender';
+import {
+  getPrerenderDataSource,
+  isPrerendering,
+} from '../utils/prerender';
+import { buildRequestKey } from '../utils/prerenderDataKey';
 
 const LOCAL_HOSTNAMES = ['localhost', '127.0.0.1', '::1'];
 
@@ -46,12 +50,19 @@ export const getApiBaseUrl = () => {
 // Retry helper function
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// ── Prerender short-circuit ──────────────────────────────────────────────────
-// During prerender (local build / Netlify preview build), every axios call is
-// resolved locally with an empty payload so neither the backend API nor
-// Supabase receives traffic. Live users never see this because the
-// short-circuit is AND-gated with the runtime `isPrerendering()` window flag
-// (set only by the Puppeteer capture script).
+// ── Prerender data-source adapter ────────────────────────────────────────────
+// During prerender, axios calls are resolved based on the build-time data-source
+// mode (see src/utils/prerender.js `getPrerenderDataSource`):
+//
+//   'empty' (non-production default) — resolve with an empty payload envelope
+//   'bulk'  (Netlify production)     — resolve from a prebuilt /prerender-data.json
+//                                       bundle. Unknown keys fall through to the
+//                                       live adapter so endpoints not in the bundle
+//                                       still get real data during production capture.
+//   'live'                           — forward to the real network adapter
+//
+// Real users NEVER enter this path: `isPrerendering()` is only true while
+// Puppeteer is capturing the page.
 const SHORT_CIRCUIT_LOGGED = new Set();
 const logShortCircuitOnce = (config) => {
   const key = `${(config.method || 'get').toUpperCase()} ${config.url || ''}`;
@@ -70,19 +81,88 @@ const buildEmptyPrerenderBody = (config) => {
   return {};
 };
 
+const buildPrerenderResponse = (config, data) => ({
+  data,
+  status: 200,
+  statusText: 'OK (prerender short-circuit)',
+  headers: {},
+  config,
+  request: {},
+});
+
+// Bulk-bundle fetch is memoized per page load: the promise is created once and
+// reused for every subsequent request during the capture. A failed/missing
+// bundle resolves to an empty object so callers uniformly fall back to live.
+let bulkBundlePromise = null;
+const loadBulkBundle = () => {
+  if (bulkBundlePromise) return bulkBundlePromise;
+  if (typeof fetch !== 'function') {
+    bulkBundlePromise = Promise.resolve(null);
+    return bulkBundlePromise;
+  }
+  bulkBundlePromise = fetch('/prerender-data.json', { credentials: 'omit' })
+    .then((response) => (response && response.ok ? response.json() : null))
+    .then((json) => {
+      const bundle = json && typeof json === 'object' && json.entries
+        ? json.entries
+        : (json && typeof json === 'object' ? json : null);
+      if (typeof window !== 'undefined') {
+        window.__PRERENDER_BULK_DATA__ = bundle || {};
+      }
+      return bundle;
+    })
+    .catch(() => {
+      if (typeof window !== 'undefined') {
+        window.__PRERENDER_BULK_DATA__ = {};
+      }
+      return null;
+    });
+  return bulkBundlePromise;
+};
+
+const resetPrerenderBulkCache = () => {
+  // Exposed for tests; not used in production code paths.
+  bulkBundlePromise = null;
+};
+
 const prerenderShortCircuitAdapter = (fallbackAdapter) => (config) => {
-  if (!shouldShortCircuitDataFetch()) {
+  // Only intercept during Puppeteer prerender. Real users always use the real adapter.
+  if (!isPrerendering()) {
     return fallbackAdapter(config);
   }
+
+  const source = getPrerenderDataSource();
+
+  if (source === 'live') {
+    // Explicit live mode: forward to the real network during prerender capture.
+    return fallbackAdapter(config);
+  }
+
+  if (source === 'bulk') {
+    return loadBulkBundle().then((bundle) => {
+      if (!bundle) {
+        // Bundle missing/failed -> fall through to live so production prerender
+        // still gets real data (same as pre-optimization behavior).
+        return fallbackAdapter(config);
+      }
+      const requestKey = buildRequestKey({
+        method: config.method,
+        url: config.url,
+        baseURL: config.baseURL,
+      });
+      if (Object.prototype.hasOwnProperty.call(bundle, requestKey)) {
+        return buildPrerenderResponse(config, bundle[requestKey]);
+      }
+      // Unknown key -> fall through to live. This preserves correct data for
+      // endpoints not pre-fetched (e.g. blog posts with varying params) while
+      // still eliminating the bulk of API calls (property searches).
+      return fallbackAdapter(config);
+    });
+  }
+
+  // 'empty' (non-production default): resolve with an empty payload.
   logShortCircuitOnce(config);
-  return Promise.resolve({
-    data: buildEmptyPrerenderBody(config),
-    status: 200,
-    statusText: 'OK (prerender short-circuit)',
-    headers: {},
-    config,
-    request: {},
-  });
+  return Promise.resolve(buildPrerenderResponse(config, buildEmptyPrerenderBody(config)));
 };
 
 const resolveFallbackAdapter = () => {
@@ -192,5 +272,9 @@ export const createAxiosInstance = ({ withAuth = false, enableRetry = true } = {
 
   return instance;
 };
+
+// Test-only export: resets the memoized bulk-bundle fetch promise so unit
+// tests can exercise the bulk adapter deterministically across cases.
+export const __test__resetPrerenderBulkCache = () => resetPrerenderBulkCache();
 
 export default createAxiosInstance;

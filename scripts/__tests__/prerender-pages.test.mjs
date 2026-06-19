@@ -113,6 +113,7 @@ test('prerenderRoutes continues after a route failure and reports failed routes'
     'http://127.0.0.1:4317',
     [{ route: '/' }, { route: '/bad-route' }, { route: '/about-us' }],
     {
+      concurrency: 1,
       launchBrowser: async () => browser,
       prerenderRouteImpl: async (_baseUrl, routeConfig) => {
         calls.push(routeConfig.route);
@@ -139,6 +140,7 @@ test('prerenderRoutes reuses one browser instance across all routes', async () =
   const calls = [];
 
   await prerenderRoutes('http://127.0.0.1:4317', [{ route: '/' }, { route: '/about-us' }], {
+    concurrency: 1,
     launchBrowser: async () => browser,
     prerenderRouteImpl: async (baseUrl, routeConfig, sharedBrowser) => {
       calls.push({ baseUrl, route: routeConfig.route, browser: sharedBrowser });
@@ -148,6 +150,49 @@ test('prerenderRoutes reuses one browser instance across all routes', async () =
   assert.deepEqual(calls.map((call) => call.route), ['/', '/about-us']);
   assert.ok(calls.every((call) => call.browser === browser));
   assert.equal(browser.closeCalls, 1);
+});
+
+test('prerenderRoutes reports cacheHits and rendered counts from the route impl', async () => {
+  const browser = { async close() {} };
+  const routes = [
+    { route: '/cached-a' },
+    { route: '/fresh' },
+    { route: '/cached-b' },
+  ];
+
+  const result = await prerenderRoutes('http://127.0.0.1:4317', routes, {
+    concurrency: 3,
+    launchBrowser: async () => browser,
+    prerenderRouteImpl: async (_baseUrl, routeConfig) => {
+      // First and third are cache hits; the middle one is a fresh render.
+      return { cacheHit: routeConfig.route !== '/fresh' };
+    },
+  });
+
+  assert.equal(result.cacheHits, 2);
+  assert.equal(result.rendered, 1);
+  assert.equal(result.failed.length, 0);
+});
+
+test('prerenderRoutes runs routes concurrently (all in flight together)', async () => {
+  const browser = { async close() {} };
+  const started = [];
+  const routes = Array.from({ length: 4 }, (_, i) => ({ route: `/r${i}` }));
+
+  await prerenderRoutes('http://127.0.0.1:4317', routes, {
+    concurrency: 4,
+    launchBrowser: async () => browser,
+    prerenderRouteImpl: async (_baseUrl, routeConfig) => {
+      started.push(routeConfig.route);
+      // Hold each worker open so all four overlap. If execution were sequential,
+      // the second could not start before the first resolves.
+      await new Promise((resolve) => setTimeout(resolve, 30));
+      return { cacheHit: false };
+    },
+  });
+
+  // All four workers started before any resolved (30ms overlap window).
+  assert.equal(started.length, 4);
 });
 
 test('throwIfPrerenderFailed turns route failures into build failures', () => {

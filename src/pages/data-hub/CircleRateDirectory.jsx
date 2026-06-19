@@ -78,7 +78,7 @@ const CircleRateDirectory = () => {
   // Fetch sectors for dropdown
   useEffect(() => {
     dataHubService.getCircleRateSectors()
-      .then(setSectors)
+      .then((data) => setSectors(Array.isArray(data) ? data : (data?.items || [])))
       .catch(() => {});
   }, []);
 

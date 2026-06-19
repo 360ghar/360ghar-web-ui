@@ -6,7 +6,8 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { VitePWA } from "vite-plugin-pwa";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { readFileSync, writeFileSync } from "node:fs";
+import crypto from "node:crypto";
+import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,6 +24,45 @@ const deferEntryCssPlugin = () => ({
         return `<link rel="preload" as="style"${before}href="${href}"${after} onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet"${before}href="${href}"${after}></noscript>`;
       }
     );
+  },
+});
+
+// Write dist/.vite-build-hash after the build so the prerender cache can bust
+// when the compiled bundle changes. The hash is computed over the built
+// index.html plus the names+sizes of every hashed asset under /assets/. It is
+// a content proxy (filename+size, not file bytes) which is sufficient to
+// detect any deploy that changed the bundle, and cheap to compute.
+const writeViteBuildHash = () => ({
+  name: "write-vite-build-hash",
+  apply: "build",
+  closeBundle() {
+    const distDir = path.join(__dirname, "dist");
+    const assetsDir = path.join(distDir, "assets");
+    const hash = crypto.createHash("sha256");
+    try {
+      hash.update(readFileSync(path.join(distDir, "index.html"), "utf-8"));
+    } catch {
+      // dist/index.html missing — nothing meaningful to hash; bail.
+      return;
+    }
+    try {
+      for (const name of readdirSync(assetsDir).sort()) {
+        const full = path.join(assetsDir, name);
+        try {
+          const st = statSync(full);
+          if (st.isFile()) hash.update(`${name}:${st.size};`);
+        } catch {
+          // skip unreadable entries
+        }
+      }
+    } catch {
+      // assets dir missing — proceed with index.html-only hash
+    }
+    try {
+      writeFileSync(path.join(distDir, ".vite-build-hash"), hash.digest("hex"));
+    } catch {
+      // best-effort; never fail the build over the hash file
+    }
   },
 });
 
@@ -73,9 +113,18 @@ export default defineConfig(({ mode }) => {
     process.env.NETLIFY === 'true' && process.env.CONTEXT === 'production';
   const prerenderNoFetch = !isNetlifyProduction;
 
+  // Bulk-data mode: production builds pre-fetch a /prerender-data.json bundle
+  // and serve it from the local preview server during Puppeteer capture, so
+  // the 244 prerendered pages do NOT each fire live API calls. Non-production
+  // builds keep the cheaper 'empty' short-circuit. Overridable via env.
+  const prerenderDataSource =
+    process.env.VITE_PRERENDER_DATA_SOURCE ||
+    (isNetlifyProduction ? 'bulk' : 'empty');
+
   return {
   define: {
     __PRERENDER_NO_FETCH__: JSON.stringify(prerenderNoFetch),
+    __PRERENDER_DATA_SOURCE__: JSON.stringify(prerenderDataSource),
   },
   plugins: [
     react(),
@@ -86,6 +135,9 @@ export default defineConfig(({ mode }) => {
 
     // Make PWA SW registration non-blocking
     asyncRegisterSW(),
+
+    // Write dist/.vite-build-hash for prerender cache busting
+    writeViteBuildHash(),
 
     // Image optimization
     ViteImageOptimizer({

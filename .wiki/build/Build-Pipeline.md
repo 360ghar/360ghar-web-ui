@@ -23,7 +23,9 @@
 | `vite.config.js` | Stage 7: Vite production build |
 | `scripts/purge-main-css.mjs` | Stage 8: PurgeCSS on main entry |
 | `scripts/generate-prerender-routes.mjs` | Stage 9a: prerender route manifest |
-| `scripts/prerender-pages.mjs` | Stage 9b: Puppeteer prerendering |
+| `scripts/fetch-prerender-data.mjs` | Stage 9b: bulk API data bundle |
+| `scripts/prerender-pages.mjs` | Stage 9c: Puppeteer prerendering (concurrent + cached) |
+| `scripts/lib/prerenderCache.mjs` | Stage 9 cache: content-hash HTML cache |
 | `scripts/purge-bootstrap.mjs` | Stage 10: PurgeCSS on Bootstrap |
 
 ## The `build` Script
@@ -40,8 +42,9 @@ Sub-scripts:
 "build:sitemaps": "node scripts/generate-sitemaps.mjs && node scripts/generate-locality-sitemap.mjs && node scripts/generate-datahub-sitemap.mjs && node scripts/generate-dynamic-sitemaps.mjs",
 "build:rss": "node scripts/generate-rss.mjs",
 "build:images": "node scripts/optimize-images.mjs --quiet",
-"build:prerender": "npm run build:prerender-routes && node scripts/prerender-pages.mjs",
-"build:prerender-routes": "node scripts/generate-prerender-routes.mjs"
+"build:prerender": "npm run build:prerender-routes && node scripts/fetch-prerender-data.mjs && node scripts/prerender-pages.mjs",
+"build:prerender-routes": "node scripts/generate-prerender-routes.mjs",
+"build:prerender-data": "node scripts/fetch-prerender-data.mjs"
 ```
 
 ## Stages in Order
@@ -107,14 +110,16 @@ Idempotent: outputs are skipped if newer than the source. Flags: `--force` (rege
 ### 9. Prerendering (`build:prerender`)
 
 1. **generate-prerender-routes.mjs** - builds `scripts/prerender-routes.json` from `indexableStaticRoutes`, `seedLandingPrerenderRoutes`, `seedLocalityPrerenderRoutes`, and locality data. Each route has `waitForSelector` / `waitForText` / `waitForTitle`.
-2. **prerender-pages.mjs** - spawns `vite preview` on `127.0.0.1:4317`, launches headless Puppeteer (`--no-sandbox` on Linux), and for each route:
-   - Navigates with a 60s timeout.
-   - Waits for the configured signal.
-   - Sets `window.__PRERENDER_INJECTED = { isPrerendering: true }`.
-   - Serializes `page.content()` to `dist/<route>.html`.
-   - Rewrites stylesheets to be non-blocking (strips duplicate `<noscript>` copies, converts `media="print"` preloads).
+2. **fetch-prerender-data.mjs** - pre-fetches a single bulk bundle of the high-value API payloads (recommendations, default + per-route property searches, blog posts) keyed by the same `buildRequestKey` the SPA adapter uses. Writes `dist/prerender-data.json` = `{ meta, entries: { [requestKey]: payload } }`. During capture the SPA reads from this bundle instead of firing live calls per route, so production prerender no longer hammers the backend with 244 × live requests. Any endpoint not in the bundle degrades gracefully to an empty payload. Never fails the build on a network error.
+3. **prerender-pages.mjs** - spawns `vite preview` on `127.0.0.1:4317`, launches headless Puppeteer (`--no-sandbox` on Linux), and renders each route. Optimizations:
+   - **Concurrency** (`PRERENDER_CONCURRENCY`, default 5, clamped 1-8): a bounded worker pool renders multiple routes in parallel against one shared browser (one page per route).
+   - **Content-hash cache** (`PRERENDER_CACHE_DIR`, default `node_modules/.cache/prerender-html`): Netlify persists this across builds. Each route's cache key is sha256 over the vite build hash (`dist/.vite-build-hash`), the bulk-data bundle hash, the route config, and the algorithm source hash. Unchanged routes skip the Puppeteer render and copy cached HTML to `dist/`. Disable with `PRERENDER_CACHE_DISABLED=1`.
+   - **Request interception**: aborts maps/analytics/fonts/service-worker during capture (defense-in-depth alongside the in-app `isPrerendering()` short-circuits).
+   - **Lower timeouts**: per-route wait lowered from 60s to 20s (`waitForText` 10s) so flaky routes fail fast.
 
-The `isPrerendering` flag is checked by `authStore.initializeAuth`, `locationStore.initializeLocation`, `posthogService.init`, and `main.jsx` to skip network calls.
+   Per route: sets `window.__PRERENDER_INJECTED = { isPrerendering: true }`, navigates, waits for the configured signal, serializes `page.content()` to `dist/<route>.html`, and rewrites stylesheets to be non-blocking.
+
+The `isPrerendering` flag is checked by `authStore.initializeAuth`, `locationStore.initializeLocation`, `posthogService.init`, and `main.jsx` to skip network calls. The bulk-data adapter in `src/services/http.js` (`__PRERENDER_DATA_SOURCE__` define) serves from `dist/prerender-data.json` during production capture; non-production builds use the `'empty'` short-circuit.
 
 ### 10. Bootstrap Purge
 
@@ -150,9 +155,21 @@ flowchart TD
   NODE_VERSION = "20"
   VITE_API_SERVER = "https://api.360ghar.com"
   VITE_API_BASE_URL = "https://api.360ghar.com/api/v1"
+  PRERENDER_CONCURRENCY = "5"
+  PRERENDER_CACHE_DIR = "node_modules/.cache/prerender-html"
 ```
 
-Puppeteer's Chrome is installed explicitly before the build so prerendering works in Netlify's CI. Key redirects:
+Puppeteer's Chrome is installed explicitly before the build so prerendering works in Netlify's CI. Netlify persists `node_modules/.cache` across builds, so the content-hash prerender cache survives deploys and skips unchanged renders. Prerender tuning env vars:
+
+| Var | Default | Effect |
+|-----|---------|--------|
+| `PRERENDER_CONCURRENCY` | `5` | Parallel Puppeteer pages (clamped 1-8) |
+| `PRERENDER_CACHE_DIR` | `node_modules/.cache/prerender-html` | Where cached HTML + manifest live |
+| `PRERENDER_CACHE_DISABLED` | unset | `1` forces every route to render |
+| `PRERENDER_DATA_DISABLED` | unset | `1` writes an empty bulk bundle |
+| `VITE_PRERENDER_DATA_SOURCE` | `bulk` (prod) / `empty` (other) | Overrides the SPA adapter data source |
+
+Key redirects:
 
 - `www.360ghar.com` -> `360ghar.com` (301)
 - trailing-slash normalization (301)

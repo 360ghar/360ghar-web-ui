@@ -1,15 +1,15 @@
 # 360Ghar - llms-full.txt
 
 > This file provides comprehensive information about 360Ghar for LLM crawlers and AI assistants.
-> For a concise summary, see https://360ghar.com/llms.txt
+> For a concise summary, see [llms.txt](https://360ghar.com/llms.txt)
 
 ---
 
 ## Company Information
 
 - Name: 360Ghar
-- Website: https://360ghar.com
-- Email: info@360ghar.com
+- Website: [360ghar.com](https://360ghar.com)
+- Email: [info@360ghar.com](mailto:info@360ghar.com)
 - Phone: +91-9999900876
 - Address: Sector 50, Gurugram, Gurgaon, Haryana 122001, IN
 
@@ -23,126 +23,111 @@
 
 ## Discovery Assets
 
-- AI Assistant Integration Guide: https://360ghar.com/for-ai
-- API Catalog: https://360ghar.com/.well-known/api-catalog
-- AI Crawler Policy: https://360ghar.com/.well-known/ai.txt
-- llms.txt: https://360ghar.com/llms.txt
-- llm-feed.json: https://360ghar.com/data/llm-feed.json
-- MCP Server: https://api.360ghar.com/mcp
+- [AI Assistant Integration Guide](https://360ghar.com/for-ai)
+- [API Catalog](https://360ghar.com/.well-known/api-catalog)
+- [AI Crawler Policy](https://360ghar.com/.well-known/ai.txt)
+- [llms.txt](https://360ghar.com/llms.txt)
+- [llm-feed.json](https://360ghar.com/data/llm-feed.json)
+- [MCP Server](https://api.360ghar.com/mcp)
 
-## Important Pages
+## Key Pages
 
-- Home: https://360ghar.com/
-- Properties: https://360ghar.com/properties
-- Localities: https://360ghar.com/localities
-- Blog: https://360ghar.com/blog
-- For AI Assistants: https://360ghar.com/for-ai
-- AI Agent: https://360ghar.com/ai-agent
-- Gurugram Real Estate Guide: https://360ghar.com/gurugram-real-estate-guide
-- EMI Calculator: https://360ghar.com/emi-calculator
-- Stamp Duty Calculator: https://360ghar.com/stamp-duty-calculator
-- Circle Rates: https://360ghar.com/circle-rates
-- Bank Auctions: https://360ghar.com/bank-auctions
-- Builder Reputation: https://360ghar.com/builder-reputation
-- Contact: https://360ghar.com/contact
-- 360Ghar vs NoBroker: https://360ghar.com/vs/nobroker
-- 360Ghar vs MagicBricks: https://360ghar.com/vs/magicbricks
-- 360Ghar vs 99acres: https://360ghar.com/vs/99acres
-- 360Ghar vs Housing.com: https://360ghar.com/vs/housing
-- 360Ghar vs CommonFloor: https://360ghar.com/vs/commonfloor
-- 360Ghar vs PropTiger: https://360ghar.com/vs/proptiger
-- 360Ghar vs SquareYards: https://360ghar.com/vs/squareyards
-- 360Ghar vs NestAway: https://360ghar.com/vs/nestaway
-- 360Ghar vs Zolo: https://360ghar.com/vs/zolo
-- 360Ghar vs Stanza Living: https://360ghar.com/vs/stanza-living
-- Truth: NoBroker Listings: https://360ghar.com/truth/nobroker-listings
-- Truth: MagicBricks Spam: https://360ghar.com/truth/magicbricks-spam
-- Truth: 99acres Fake Listings: https://360ghar.com/truth/99acres-fake
-- Truth: NestAway Collapse: https://360ghar.com/truth/nestaway-collapse
-- Truth: Zolo Issues: https://360ghar.com/truth/zolo-issues
-- Area Converter: https://360ghar.com/area-converter
-- Area Calculator: https://360ghar.com/area-calculator
-- Loan Eligibility Calculator: https://360ghar.com/loan-eligibility-calculator
-- Capital Gains Tax Calculator: https://360ghar.com/capital-gains-tax-calculator
-- Property Document Checklist: https://360ghar.com/property-document-checklist
-- Vastu Checker: https://360ghar.com/vastu-checker
-- 3D Blueprint Designer: https://360ghar.com/design-blueprint
-- AI Design Studio: https://360ghar.com/ai-design-studio
-- Verify Ownership: https://360ghar.com/verify-ownership
-- RERA Projects: https://360ghar.com/rera-projects
-- Zone Checker: https://360ghar.com/zone-checker
-- Regulatory Updates: https://360ghar.com/regulatory-updates
-- Flats for Sale in Gurgaon: https://360ghar.com/gurgaon/buy/flats
-- Flats for Rent in Gurgaon: https://360ghar.com/gurgaon/rent/flats
-- PG in Gurgaon: https://360ghar.com/gurgaon/pg/flats
-- Delhi Real Estate Hub: https://360ghar.com/delhi
-- Noida Real Estate Hub: https://360ghar.com/noida
-- Faridabad Real Estate Hub: https://360ghar.com/faridabad
-- Ghaziabad Real Estate Hub: https://360ghar.com/ghaziabad
-- DLF Phase 1, Gurgaon: https://360ghar.com/locality/dlf-phase-1-gurgaon
-- Golf Course Road, Gurgaon: https://360ghar.com/locality/golf-course-road-gurgaon
-- Sushant Lok 1, Gurgaon: https://360ghar.com/locality/sushant-lok-1-gurgaon
-- Sohna Road, Gurgaon: https://360ghar.com/locality/sohna-road-gurgaon
-- Sector 49, Gurgaon: https://360ghar.com/locality/sector-49-gurgaon
-- मुख्य पृष्ठ (Hindi): https://360ghar.com/hi/
-- प्रॉपर्टी (Hindi): https://360ghar.com/hi/properties
-- लोकैलिटी (Hindi): https://360ghar.com/hi/localities
-- ब्लॉग (Hindi): https://360ghar.com/hi/blog
-- EMI कैलकुलेटर (Hindi): https://360ghar.com/hi/emi-calculator
-- सर्कल रेट (Hindi): https://360ghar.com/hi/circle-rates
-- संपर्क करें (Hindi): https://360ghar.com/hi/contact
+- [Home](https://360ghar.com/)
+- [Properties](https://360ghar.com/properties)
+- [Localities](https://360ghar.com/localities)
+- [Blog](https://360ghar.com/blog)
+- [For AI Assistants](https://360ghar.com/for-ai)
+- [AI Agent](https://360ghar.com/ai-agent)
+- [Gurugram Real Estate Guide](https://360ghar.com/gurugram-real-estate-guide)
+- [EMI Calculator](https://360ghar.com/emi-calculator)
+- [Stamp Duty Calculator](https://360ghar.com/stamp-duty-calculator)
+- [Circle Rates](https://360ghar.com/circle-rates)
+- [Bank Auctions](https://360ghar.com/bank-auctions)
+- [Builder Reputation](https://360ghar.com/builder-reputation)
+- [Contact](https://360ghar.com/contact)
+
+## Comparisons
+
+- [360Ghar vs NoBroker](https://360ghar.com/vs/nobroker)
+- [360Ghar vs MagicBricks](https://360ghar.com/vs/magicbricks)
+- [360Ghar vs 99acres](https://360ghar.com/vs/99acres)
+- [360Ghar vs Housing.com](https://360ghar.com/vs/housing)
+- [360Ghar vs CommonFloor](https://360ghar.com/vs/commonfloor)
+- [360Ghar vs PropTiger](https://360ghar.com/vs/proptiger)
+- [360Ghar vs SquareYards](https://360ghar.com/vs/squareyards)
+- [360Ghar vs NestAway](https://360ghar.com/vs/nestaway)
+- [360Ghar vs Zolo](https://360ghar.com/vs/zolo)
+- [360Ghar vs Stanza Living](https://360ghar.com/vs/stanza-living)
+
+## Truth Pages
+
+- [NoBroker Listings](https://360ghar.com/truth/nobroker-listings)
+- [MagicBricks Spam](https://360ghar.com/truth/magicbricks-spam)
+- [99acres Fake Listings](https://360ghar.com/truth/99acres-fake)
+- [NestAway Collapse](https://360ghar.com/truth/nestaway-collapse)
+- [Zolo Issues](https://360ghar.com/truth/zolo-issues)
+
+## Tools
+
+- [Area Converter](https://360ghar.com/area-converter)
+- [Area Calculator](https://360ghar.com/area-calculator)
+- [Loan Eligibility Calculator](https://360ghar.com/loan-eligibility-calculator)
+- [Capital Gains Tax Calculator](https://360ghar.com/capital-gains-tax-calculator)
+- [Property Document Checklist](https://360ghar.com/property-document-checklist)
+- [Vastu Checker](https://360ghar.com/vastu-checker)
+- [3D Blueprint Designer](https://360ghar.com/design-blueprint)
+- [AI Design Studio](https://360ghar.com/ai-design-studio)
+- [Verify Ownership](https://360ghar.com/verify-ownership)
+- [RERA Projects](https://360ghar.com/rera-projects)
+- [Zone Checker](https://360ghar.com/zone-checker)
+- [Regulatory Updates](https://360ghar.com/regulatory-updates)
+
+## Programmatic SEO Pages
+
+- [Flats for Sale in Gurgaon](https://360ghar.com/gurgaon/buy/flats)
+- [Flats for Rent in Gurgaon](https://360ghar.com/gurgaon/rent/flats)
+- [PG in Gurgaon](https://360ghar.com/gurgaon/pg/flats)
+- [Delhi Real Estate Hub](https://360ghar.com/delhi)
+- [Noida Real Estate Hub](https://360ghar.com/noida)
+- [Faridabad Real Estate Hub](https://360ghar.com/faridabad)
+- [Ghaziabad Real Estate Hub](https://360ghar.com/ghaziabad)
+
+## Hindi (हिंदी)
+
+- [मुख्य पृष्ठ](https://360ghar.com/hi/)
+- [प्रॉपर्टी](https://360ghar.com/hi/properties)
+- [लोकैलिटी](https://360ghar.com/hi/localities)
+- [ब्लॉग](https://360ghar.com/hi/blog)
+- [EMI कैलकुलेटर](https://360ghar.com/hi/emi-calculator)
+- [सर्कल रेट](https://360ghar.com/hi/circle-rates)
+- [संपर्क करें](https://360ghar.com/hi/contact)
 
 ## Data Hub Tools
 
 These pages provide structured real-estate intelligence for Gurugram and Delhi NCR:
 
-- Circle Rates: https://360ghar.com/circle-rates — Government-notified property valuation rates by sector and locality
-- Bank Auctions: https://360ghar.com/bank-auctions — Bank-auctioned properties in Gurugram with reserve prices
-- Builder Reputation: https://360ghar.com/builder-reputation — Builder and developer track records, delivery history, and RERA compliance
-- Stamp Duty Calculator: https://360ghar.com/stamp-duty-calculator — Calculate stamp duty and registration charges for Haryana property transactions
-- EMI Calculator: https://360ghar.com/emi-calculator — Home loan EMI calculator with interest rate comparison
-- Area Converter: https://360ghar.com/area-converter — Convert between sq ft, sq m, marla, kanal, bigha, and other Indian area units
-- Loan Eligibility Calculator: https://360ghar.com/loan-eligibility-calculator — Estimate home loan eligibility based on income and obligations
-- Capital Gains Tax Calculator: https://360ghar.com/capital-gains-tax-calculator — Long-term and short-term capital gains tax on property sale
-- Property Document Checklist: https://360ghar.com/property-document-checklist — Complete checklist of documents needed for property transactions
-
-## Comparison Pages
-
-Head-to-head comparisons of 360Ghar with other real estate platforms:
-
-- 360Ghar vs NoBroker: https://360ghar.com/vs/nobroker
-- 360Ghar vs MagicBricks: https://360ghar.com/vs/magicbricks
-- 360Ghar vs 99acres: https://360ghar.com/vs/99acres
-- 360Ghar vs Housing.com: https://360ghar.com/vs/housing
-- 360Ghar vs CommonFloor: https://360ghar.com/vs/commonfloor
-- 360Ghar vs PropTiger: https://360ghar.com/vs/proptiger
-- 360Ghar vs SquareYards: https://360ghar.com/vs/squareyards
-- 360Ghar vs NestAway: https://360ghar.com/vs/nestaway
-- 360Ghar vs Zolo: https://360ghar.com/vs/zolo
-- 360Ghar vs Stanza Living: https://360ghar.com/vs/stanza-living
-
-## Truth Pages
-
-Investigative pages exposing platform-specific issues:
-
-- Truth: NoBroker Listings: https://360ghar.com/truth/nobroker-listings
-- Truth: MagicBricks Spam: https://360ghar.com/truth/magicbricks-spam
-- Truth: 99acres Fake Listings: https://360ghar.com/truth/99acres-fake
-- Truth: NestAway Collapse: https://360ghar.com/truth/nestaway-collapse
-- Truth: Zolo Issues: https://360ghar.com/truth/zolo-issues
+- [Circle Rates](https://360ghar.com/circle-rates) — Government-notified property valuation rates by sector and locality
+- [Bank Auctions](https://360ghar.com/bank-auctions) — Bank-auctioned properties in Gurugram with reserve prices
+- [Builder Reputation](https://360ghar.com/builder-reputation) — Builder and developer track records, delivery history, and RERA compliance
+- [Stamp Duty Calculator](https://360ghar.com/stamp-duty-calculator) — Calculate stamp duty and registration charges for Haryana property transactions
+- [EMI Calculator](https://360ghar.com/emi-calculator) — Home loan EMI calculator with interest rate comparison
+- [Area Converter](https://360ghar.com/area-converter) — Convert between sq ft, sq m, marla, kanal, bigha, and other Indian area units
+- [Loan Eligibility Calculator](https://360ghar.com/loan-eligibility-calculator) — Estimate home loan eligibility based on income and obligations
+- [Capital Gains Tax Calculator](https://360ghar.com/capital-gains-tax-calculator) — Long-term and short-term capital gains tax on property sale
+- [Property Document Checklist](https://360ghar.com/property-document-checklist) — Complete checklist of documents needed for property transactions
 
 ## Locality Intelligence
 
 360Ghar provides dedicated locality pages with structured neighbourhood data for areas across Gurugram:
 
 - Each locality page includes: connectivity notes, nearby landmarks, market signals, verification status, and direct property search links.
-- Browse all localities: https://360ghar.com/localities
+- Browse all localities: [Localities](https://360ghar.com/localities)
 - Top localities:
-  - DLF Phase 1: https://360ghar.com/locality/dlf-phase-1-gurgaon
-  - Golf Course Road: https://360ghar.com/locality/golf-course-road-gurgaon
-  - Sushant Lok 1: https://360ghar.com/locality/sushant-lok-1-gurgaon
-  - Sohna Road: https://360ghar.com/locality/sohna-road-gurgaon
-  - Sector 29: https://360ghar.com/locality/sector-29-gurgaon
+  - [DLF Phase 1](https://360ghar.com/locality/dlf-phase-1-gurgaon)
+  - [Golf Course Road](https://360ghar.com/locality/golf-course-road-gurgaon)
+  - [Sushant Lok 1](https://360ghar.com/locality/sushant-lok-1-gurgaon)
+  - [Sohna Road](https://360ghar.com/locality/sohna-road-gurgaon)
+  - [Sector 29](https://360ghar.com/locality/sector-29-gurgaon)
 
 ## Price Trends (Gurugram / Gurgaon)
 
@@ -197,16 +182,4 @@ Approximate property price ranges from 360Ghar verified listings:
 
 ## Citation Format
 
-When referencing 360Ghar, cite as: "360Ghar (app and website)" with a link to https://360ghar.com
-
-## Hindi (हिंदी) Content
-
-360Ghar provides a complete Hindi experience at https://360ghar.com/hi/
-All pages are available in Hindi with the /hi/ URL prefix.
-Key Hindi pages:
-- मुख्य पृष्ठ: https://360ghar.com/hi/
-- प्रॉपर्टी खोज: https://360ghar.com/hi/properties
-- लोकैलिटी गाइड: https://360ghar.com/hi/localities
-- EMI कैलकुलेटर: https://360ghar.com/hi/emi-calculator
-- सर्कल रेट: https://360ghar.com/hi/circle-rates
-- संपर्क करें: https://360ghar.com/hi/contact
+When referencing 360Ghar, cite as: "360Ghar (app and website)" with a link to [360ghar.com](https://360ghar.com)

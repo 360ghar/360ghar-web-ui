@@ -1,4 +1,4 @@
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, mkdir, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
@@ -7,6 +7,12 @@ import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 import routeManifest from './prerender-routes.json' with { type: 'json' };
 import { siteMetadata } from '../src/seo/siteMetadata.js';
+import {
+  computeScriptVersionHash,
+  createPrerenderCache,
+  DEFAULT_CACHE_DIR,
+  readViteBuildHash,
+} from './lib/prerenderCache.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -19,7 +25,33 @@ try {
   console.warn('⚠ puppeteer not installed — skipping prerender step');
   process.exit(0);
 }
-const ROUTE_WAIT_TIMEOUT = 60000;
+
+// Lowered from 60s: genuine renders complete well under 20s, and faster
+// failure surfaces flaky routes quickly without stalling the whole build.
+const ROUTE_WAIT_TIMEOUT = 20000;
+const TEXT_WAIT_TIMEOUT = 10000;
+// Default worker count. Override via PRERENDER_CONCURRENCY (clamped 1-8).
+const DEFAULT_CONCURRENCY = Math.min(
+  8,
+  Math.max(1, Number(process.env.PRERENDER_CONCURRENCY) || 5)
+);
+
+// Domains aborted during prerender capture: maps, analytics, fonts, and the
+// service worker (not needed in the captured snapshot). The local preview
+// server, /prerender-data.json, our own /assets/*, and (for non-bulk mode)
+// the API are always allowed.
+const BLOCKED_HOST_PATTERNS = [
+  /^maps\.googleapis\.com$/i,
+  /^maps\.gstatic\.com$/i,
+  /^fonts\.googleapis\.com$/i,
+  /^fonts\.gstatic\.com$/i,
+  /^([a-z0-9-]+\.)?posthog\.com$/i,
+  /^www\.google-analytics\.com$/i,
+  /^([a-z0-9-]+\.)?doubleclick\.net$/i,
+  /^([a-z0-9-]+\.)?googletagmanager\.com$/i,
+];
+const BLOCKED_PATH_PATTERNS = [/^\/sw\.js(\?|$)/, /^\/registerSW\.js(\?|$)/];
+
 const BROWSER_OPTIONS = {
   headless: true,
   args: process.platform === 'linux' ? ['--no-sandbox', '--disable-setuid-sandbox'] : [],
@@ -165,7 +197,6 @@ async function waitForRoute(page, routeConfig) {
   }
 
   if (routeConfig.waitForText) {
-    const TEXT_WAIT_TIMEOUT = 15_000;
     await page.waitForFunction(
       (text) => Boolean(document.body && document.body.innerText.indexOf(text) !== -1),
       { timeout: TEXT_WAIT_TIMEOUT },
@@ -197,7 +228,47 @@ async function waitForRoute(page, routeConfig) {
   });
 }
 
-async function prerenderRoute(baseUrl, routeConfig, browser) {
+// Configure request interception on a page so junk (maps, analytics, fonts,
+// service worker) never loads during capture. The local preview server, the
+// bulk-data bundle, our own assets, and (in live mode) the real API are always
+// allowed. Defense-in-depth alongside the in-app isPrerendering() short-circuits.
+async function configureRequestInterception(page) {
+  await page.setRequestInterception(true);
+  page.on('request', (request) => {
+    const url = request.url();
+    let parsed;
+    try {
+      parsed = new URL(url);
+    } catch {
+      request.continue();
+      return;
+    }
+    const host = parsed.hostname;
+    const pathname = parsed.pathname;
+
+    if (BLOCKED_HOST_PATTERNS.some((re) => re.test(host)) ||
+        BLOCKED_PATH_PATTERNS.some((re) => re.test(pathname))) {
+      request.abort();
+      return;
+    }
+    request.continue();
+  });
+}
+
+async function prerenderRoute(baseUrl, routeConfig, browser, { cache = null, routeData = null } = {}) {
+  // Cache fast-path: if inputs are unchanged, copy the cached HTML to dist and
+  // skip the Puppeteer render entirely.
+  if (cache) {
+    const cachedHtml = await cache.lookup(routeConfig, routeData).catch(() => null);
+    if (cachedHtml) {
+      const outputPath = outputPathForRoute(routeConfig.route);
+      await mkdir(path.dirname(outputPath), { recursive: true });
+      await writeFile(outputPath, cachedHtml, 'utf8');
+      console.log(`Prerendered (cache hit) ${routeConfig.route} -> ${path.relative(ROOT, outputPath)}`);
+      return { cacheHit: true };
+    }
+  }
+
   console.log(`Starting prerender for ${routeConfig.route}`);
   const page = await browser.newPage();
 
@@ -207,6 +278,8 @@ async function prerenderRoute(baseUrl, routeConfig, browser) {
         console.warn(`[prerender:${routeConfig.route}] ${message.text()}`);
       }
     });
+
+    await configureRequestInterception(page);
 
     await page.evaluateOnNewDocument(() => {
       window.__PRERENDER_INJECTED = { isPrerendering: true };
@@ -222,32 +295,77 @@ async function prerenderRoute(baseUrl, routeConfig, browser) {
     await mkdir(path.dirname(outputPath), { recursive: true });
     await writeFile(outputPath, html, 'utf8');
 
+    if (cache) {
+      await cache.store(routeConfig, routeData, html).catch(() => {});
+    }
+
     await page.close();
     console.log(`Prerendered ${routeConfig.route} -> ${path.relative(ROOT, outputPath)}`);
+    return { cacheHit: false };
   } finally {
     await page.close().catch(() => {});
   }
+}
+
+// Bounded worker pool: process routeConfigs with up to `concurrency` in-flight
+// renders against a single shared browser (each render opens its own page).
+async function runConcurrent(routeConfigs, worker, concurrency) {
+  if (concurrency <= 1) {
+    const results = [];
+    for (const routeConfig of routeConfigs) {
+      // eslint-disable-next-line no-await-in-loop
+      results.push(await worker(routeConfig));
+    }
+    return results;
+  }
+
+  const results = new Array(routeConfigs.length);
+  let nextIndex = 0;
+  const workers = Array.from({ length: concurrency }, async () => {
+    while (true) {
+      const index = nextIndex++;
+      if (index >= routeConfigs.length) return;
+      results[index] = await worker(routeConfigs[index]); // eslint-disable-line no-await-in-loop
+    }
+  });
+  await Promise.all(workers);
+  return results;
 }
 
 export async function prerenderRoutes(baseUrl, routeConfigs, options = {}) {
   const {
     launchBrowser = () => puppeteer.launch(BROWSER_OPTIONS),
     prerenderRouteImpl = prerenderRoute,
+    concurrency = DEFAULT_CONCURRENCY,
+    cache = null,
+    routeData = null,
   } = options;
   const browser = await launchBrowser();
   const failed = [];
+  let cacheHits = 0;
+  let rendered = 0;
 
   try {
-    for (const routeConfig of routeConfigs) {
+    const worker = async (routeConfig) => {
       try {
-        await prerenderRouteImpl(baseUrl, routeConfig, browser);
+        const result = await prerenderRouteImpl(baseUrl, routeConfig, browser, { cache, routeData });
+        if (result?.cacheHit) cacheHits += 1;
+        else rendered += 1;
       } catch (error) {
+        rendered += 1;
         failed.push({ route: routeConfig.route, error });
         console.error(`[prerender] FAILED ${routeConfig.route}: ${error.message}`);
       }
-    }
+    };
+
+    await runConcurrent(routeConfigs, worker, concurrency);
   } finally {
     await browser.close().catch(() => {});
+  }
+
+  if (cache) {
+    console.log(`[prerender] cache: ${cacheHits} hit(s), ${rendered} rendered`);
+    await cache.flush().catch(() => {});
   }
 
   if (failed.length > 0) {
@@ -258,7 +376,7 @@ export async function prerenderRoutes(baseUrl, routeConfigs, options = {}) {
     console.warn('');
   }
 
-  return { failed };
+  return { failed, cacheHits, rendered };
 }
 
 export function throwIfPrerenderFailed(failed) {
@@ -360,6 +478,45 @@ async function stopPreviewServer(previewProcess) {
   });
 }
 
+// Hash the bulk-data bundle so any data change busts every route's cache entry.
+// Returns null when the bundle is absent (cache key falls back to 'no-data').
+async function readBulkDataHash() {
+  try {
+    const raw = await readFile(path.join(DIST_DIR, 'prerender-data.json'), 'utf-8');
+    const { createHash } = await import('node:crypto');
+    return createHash('sha256').update(raw).digest('hex');
+  } catch {
+    return null;
+  }
+}
+
+// Source files whose change should bust the entire cache (algorithm drift).
+const SCRIPT_VERSION_FILES = [
+  path.join(__dirname, 'prerender-pages.mjs'),
+  path.join(__dirname, 'lib', 'prerenderCache.mjs'),
+  path.join(ROOT, 'src', 'utils', 'prerender.js'),
+  path.join(ROOT, 'src', 'services', 'http.js'),
+  path.join(ROOT, 'src', 'utils', 'prerenderDataKey.js'),
+];
+
+async function buildPrerenderCacheForRun() {
+  if (process.env.PRERENDER_CACHE_DISABLED === '1') {
+    console.log('[prerender] cache disabled (PRERENDER_CACHE_DISABLED=1)');
+    return { cache: null, routeData: null };
+  }
+  const viteHash = await readViteBuildHash(DIST_DIR);
+  const scriptVersionHash = await computeScriptVersionHash(SCRIPT_VERSION_FILES);
+  const cacheDir = process.env.PRERENDER_CACHE_DIR
+    ? path.resolve(process.env.PRERENDER_CACHE_DIR)
+    : DEFAULT_CACHE_DIR;
+  const routeData = await readBulkDataHash();
+  const cache = createPrerenderCache({ cacheDir, viteHash, scriptVersionHash });
+  console.log(
+    `[prerender] cache: dir=${path.relative(ROOT, cacheDir)} viteHash=${viteHash ? viteHash.slice(0, 8) : 'none'} dataHash=${routeData ? routeData.slice(0, 8) : 'none'}`
+  );
+  return { cache, routeData };
+}
+
 async function main() {
   if (!existsSync(DIST_DIR)) {
     throw new Error('dist directory not found. Run vite build before prerendering.');
@@ -371,7 +528,12 @@ async function main() {
   await waitForPreviewServer(baseUrl, previewProcess);
 
   try {
-    const { failed } = await prerenderRoutes(baseUrl, ROUTE_MANIFEST);
+    const { cache, routeData } = await buildPrerenderCacheForRun();
+    const { failed } = await prerenderRoutes(baseUrl, ROUTE_MANIFEST, {
+      concurrency: DEFAULT_CONCURRENCY,
+      cache,
+      routeData,
+    });
     throwIfPrerenderFailed(failed);
   } finally {
     await stopPreviewServer(previewProcess);

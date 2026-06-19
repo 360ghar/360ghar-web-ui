@@ -20,15 +20,15 @@ const Comment = () => {
                                 <span className="comment-list__date">December 16, 2023</span>
                                 <ul className="social-list mt-0 p-0 border-0 gap-3">
                                     <li className="social-list__item">
-                                        <I18nLink to="https://www.facebook.com/people/360Ghar" className="social-list__link text-gradient font-12 flx-center"><i className="fab fa-facebook-f"></i>
+                                        <I18nLink to="https://www.facebook.com/people/360Ghar" className="social-list__link text-gradient font-12 flx-center" aria-label="Facebook"><i className="fab fa-facebook-f"></i>
                                         </I18nLink>
                                     </li>
                                     <li className="social-list__item">
-                                        <I18nLink to="https://x.com/360Ghar" className="social-list__link text-gradient font-12 flx-center"> <i className="fab fa-twitter"></i>
+                                        <I18nLink to="https://x.com/360Ghar" className="social-list__link text-gradient font-12 flx-center" aria-label="X (Twitter)"> <i className="fab fa-twitter"></i>
                                         </I18nLink>
                                     </li>
                                     <li className="social-list__item">
-                                        <I18nLink to="https://www.instagram.com/360ghar/" className="social-list__link text-gradient font-12 flx-center"> <i className="fab fa-instagram"></i>
+                                        <I18nLink to="https://www.instagram.com/360ghar/" className="social-list__link text-gradient font-12 flx-center" aria-label="Instagram"> <i className="fab fa-instagram"></i>
                                         </I18nLink>
                                     </li>
                                 </ul>
@@ -47,15 +47,15 @@ const Comment = () => {
                                 <span className="comment-list__date">December 16, 2023</span>
                                 <ul className="social-list mt-0 p-0 border-0 gap-3">
                                     <li className="social-list__item">
-                                        <I18nLink to="https://www.facebook.com/people/360Ghar" className="social-list__link text-gradient font-12 flx-center"><i className="fab fa-facebook-f"></i>
+                                        <I18nLink to="https://www.facebook.com/people/360Ghar" className="social-list__link text-gradient font-12 flx-center" aria-label="Facebook"><i className="fab fa-facebook-f"></i>
                                         </I18nLink>
                                     </li>
                                     <li className="social-list__item">
-                                        <I18nLink to="https://x.com/360Ghar" className="social-list__link text-gradient font-12 flx-center"> <i className="fab fa-twitter"></i>
+                                        <I18nLink to="https://x.com/360Ghar" className="social-list__link text-gradient font-12 flx-center" aria-label="X (Twitter)"> <i className="fab fa-twitter"></i>
                                         </I18nLink>
                                     </li>
                                     <li className="social-list__item">
-                                        <I18nLink to="https://www.instagram.com/360ghar/" className="social-list__link text-gradient font-12 flx-center"> <i className="fab fa-instagram"></i>
+                                        <I18nLink to="https://www.instagram.com/360ghar/" className="social-list__link text-gradient font-12 flx-center" aria-label="Instagram"> <i className="fab fa-instagram"></i>
                                         </I18nLink>
                                     </li>
                                 </ul>

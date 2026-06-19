@@ -7,6 +7,10 @@
   NODE_VERSION = "20"
   VITE_API_SERVER = "https://api.360ghar.com"
   VITE_API_BASE_URL = "https://api.360ghar.com/api/v1"
+  # Prerender tuning. Netlify persists node_modules/.cache across builds, so
+  # the content-hash cache there survives deploys and skips unchanged renders.
+  PRERENDER_CONCURRENCY = "5"
+  PRERENDER_CACHE_DIR = "node_modules/.cache/prerender-html"
 
 # ── Server-side redirects (processed top-to-bottom, BEFORE the SPA catch-all) ──
 

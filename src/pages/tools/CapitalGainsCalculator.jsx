@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -93,6 +94,26 @@ const CapitalGainsCalculator = () => {
     const [reinvest54EC, setReinvest54EC] = useState(0);
     const [reinvest54F, setReinvest54F] = useState(0);
 
+    // AUDIT FIX (shareable-link): read query params produced by
+    // handleShareResults so a shared link restores the shared inputs instead
+    // of showing defaults.
+    const [searchParams] = useSearchParams();
+    useEffect(() => {
+        const sale = searchParams.get('sale');
+        const purchase = searchParams.get('purchase');
+        const py = searchParams.get('py');
+        const sy = searchParams.get('sy');
+        const expenses = searchParams.get('expenses');
+        const slab = searchParams.get('slab');
+        if (sale !== null) setSalePrice(Number(sale) || 0);
+        if (purchase !== null) setPurchasePrice(Number(purchase) || 0);
+        if (py !== null) setPurchaseYear(py);
+        if (sy !== null) setSaleYear(sy);
+        if (expenses !== null) setTransferExpenses(Number(expenses) || 0);
+        if (slab !== null) setSlabRate(Number(slab) || 0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const taxSummary = useMemo(() => {
         const pYearParts = purchaseYear.split('-');
         const sYearParts = saleYear.split('-');
@@ -126,7 +147,7 @@ const CapitalGainsCalculator = () => {
         // (only available if the sold asset is NOT a residential house).
         const gainForExemption = Math.max(gain, 0);
         const exempt54 = Math.min(reinvest54, gainForExemption);
-        const exempt54EC = Math.min(reinvest54EC, gainForExemption, 500000);
+        const exempt54EC = Math.min(reinvest54EC, gainForExemption, 5000000);
         // 54F: exemption = gain * (reinvested / netConsideration), full exempt if full proceeds reinvested.
         const exempt54F = netSaleConsideration > 0
             ? Math.min(gainForExemption * (reinvest54F / netSaleConsideration), gainForExemption)

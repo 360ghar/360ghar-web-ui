@@ -1,7 +1,11 @@
 // Unit test for the prerender short-circuit gating logic.
 // Usage: node scripts/test-prerender-short-circuit.mjs
 import assert from 'node:assert/strict';
-import { isPrerendering, shouldShortCircuitDataFetch } from '../src/utils/prerender.js';
+import {
+  getPrerenderDataSource,
+  isPrerendering,
+  shouldShortCircuitDataFetch,
+} from '../src/utils/prerender.js';
 
 const setPrerender = (flag) => {
   if (flag) {
@@ -15,6 +19,10 @@ const setPrerender = (flag) => {
 setPrerender(false);
 assert.equal(isPrerendering(), false, 'isPrerendering should be false without flag');
 assert.equal(shouldShortCircuitDataFetch(), false, 'shouldShortCircuitDataFetch should be false without flag');
+
+// getPrerenderDataSource defaults to 'empty' when the build-time define is
+// absent (this script runs in plain Node, not Vite).
+assert.equal(getPrerenderDataSource(), 'empty', 'getPrerenderDataSource defaults to empty');
 
 // Scenario 2: prerender flag on (simulates Puppeteer capture of a local build)
 setPrerender(true);

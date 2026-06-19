@@ -17,19 +17,23 @@ export const offCanvasInfos = [
 export const socialLists = [
     {
         link: 'https://www.facebook.com/people/360Ghar',
-        icon: <i className="fab fa-facebook-f"></i>
+        icon: <i className="fab fa-facebook-f"></i>,
+        label: 'Facebook'
     },
     {
         link: 'https://x.com/360Ghar',
-        icon: <i className="fab fa-twitter"></i>
+        icon: <i className="fab fa-twitter"></i>,
+        label: 'X (Twitter)'
     },
     {
         link: 'https://in.linkedin.com/company/360ghar',
-        icon: <i className="fab fa-linkedin-in"></i>
+        icon: <i className="fab fa-linkedin-in"></i>,
+        label: 'LinkedIn'
     },
     {
         link: 'https://www.instagram.com/360ghar/',
-        icon: <i className="fab fa-instagram"></i>
+        icon: <i className="fab fa-instagram"></i>,
+        label: 'Instagram'
     },
 ]
 

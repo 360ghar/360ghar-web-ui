@@ -64,6 +64,7 @@ const FooterLogoDesc = () => {
                             type="submit"
                             className="btn btn-main rounded-end-pill px-3"
                             disabled={!email}
+                            aria-label="Subscribe"
                         >
                             <i className="fas fa-paper-plane"></i>
                         </button>

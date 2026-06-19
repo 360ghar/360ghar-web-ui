@@ -1,5 +1,6 @@
  import React, { useState, useEffect, useMemo } from 'react'; // eslint-disable-line no-unused-vars
  import { useTranslation } from 'react-i18next';
+ import { useSearchParams } from 'react-router-dom';
  import { toast } from 'react-toastify';
  import Header from '../../common/layout/Header';
  import Footer from '../../common/layout/Footer';
@@ -55,7 +56,24 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
      const [interestRate, setInterestRate] = useState(8.5);
      const [tenure, setTenure] = useState(20);
      const [otherExpenses, setOtherExpenses] = useState(10000);
-     
+
+     // AUDIT FIX (shareable-link): restore inputs from a shared URL
+     // (produced by handleShareResults) so the recipient sees the same numbers.
+     const [searchParams] = useSearchParams();
+     useEffect(() => {
+         const inc = searchParams.get('income');
+         const emi = searchParams.get('emi');
+         const rate = searchParams.get('rate');
+         const ten = searchParams.get('tenure');
+         const exp = searchParams.get('expenses');
+         if (inc !== null) setIncome(Number(inc) || 0);
+         if (emi !== null) setExistingEmi(Number(emi) || 0);
+         if (rate !== null) setInterestRate(Number(rate) || 0);
+         if (ten !== null) setTenure(Number(ten) || 0);
+         if (exp !== null) setOtherExpenses(Number(exp) || 0);
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+     }, []);
+
      const [maxLoan, setMaxLoan] = useState(0);
      const [eligibleEmi, setEligibleEmi] = useState(0);
 

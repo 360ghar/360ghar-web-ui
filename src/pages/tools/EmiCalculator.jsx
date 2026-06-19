@@ -1,5 +1,6 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -66,6 +67,20 @@ const EmiCalculator = () => {
     const [loanAmount, setLoanAmount] = useState(1000000);
     const [interestRate, setInterestRate] = useState(8.5);
     const [loanTenure, setLoanTenure] = useState(20);
+
+    // AUDIT FIX (shareable-link): restore inputs from a shared URL produced by
+    // handleShareResults so a recipient sees the shared calculation, not defaults.
+    const [searchParams] = useSearchParams();
+    useEffect(() => {
+        const amount = searchParams.get('amount');
+        const rate = searchParams.get('rate');
+        const tenure = searchParams.get('tenure');
+        if (amount !== null) setLoanAmount(Number(amount) || 0);
+        if (rate !== null) setInterestRate(Number(rate) || 0);
+        if (tenure !== null) setLoanTenure(Number(tenure) || 0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     // AUDIT FIX (imp 3.1): prepayment simulator inputs.
     const [prepaymentAmount, setPrepaymentAmount] = useState(0);
     const [prepaymentMonth, setPrepaymentMonth] = useState(12);

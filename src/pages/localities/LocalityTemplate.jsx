@@ -605,18 +605,21 @@ const LocalityTemplate = () => {
         return <Navigate to={localizePath('/properties', locale)} replace />;
     }
 
-    const breadcrumbs = [
-        { name: 'Home', url: 'https://360ghar.com/' },
-        { name: `Properties in ${computed.city}`, url: 'https://360ghar.com/properties' },
-        { name: `${computed.localityName}, ${computed.city}`, url: `https://360ghar.com/locality/${localityFullSlug}` }
-    ];
-
     // Derive URL-safe city slug for cross-linking (e.g. "Gurugram" -> "gurgaon")
     const canonicalCitySlug = (computed.city || 'gurgaon').toLowerCase().replace(/\s+/g, '-').replace('gurugram', 'gurgaon');
     // CRITICAL FIX (audit 4.1): previously canonical/structured-data URLs
     // hardcoded a "-gurgaon" suffix, breaking SEO for non-Gurgaon localities.
     // Derive the suffix from the actual city slug instead.
     const localityFullSlug = `${computed.localitySlug}-${canonicalCitySlug}`;
+
+    // FIX: breadcrumbs references localityFullSlug, so it must be declared
+    // AFTER localityFullSlug to avoid a Temporal Dead Zone (TDZ) violation
+    // that surfaced in the minified build as "Cannot access 'Z' before initialization".
+    const breadcrumbs = [
+        { name: 'Home', url: 'https://360ghar.com/' },
+        { name: `Properties in ${computed.city}`, url: 'https://360ghar.com/properties' },
+        { name: `${computed.localityName}, ${computed.city}`, url: `https://360ghar.com/locality/${localityFullSlug}` }
+    ];
 
     const faqItems = defaultFaqBuilder(computed.localityName, computed.entityType);
 

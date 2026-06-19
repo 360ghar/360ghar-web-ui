@@ -89,6 +89,7 @@ const MobileMenu = () => {
                 ref={menuRef}
                 className={`mobile-menu d-lg-none d-block ${toggleMobileMenu ? 'active' : ''}`}
                 aria-hidden={!toggleMobileMenu}
+                inert={!toggleMobileMenu ? '' : undefined}
             >
                 <button
                     type="button"
