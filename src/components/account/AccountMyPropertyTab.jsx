@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import Pagination from '../../common/ui/Pagination';
 import { I18nLink } from '../../i18n/I18nLink';
 import { usePropertyStore } from '../../store';
 
@@ -125,7 +124,6 @@ const AccountMyPropertyTab = () => {
                     </div>
                 </div>
             </div>
-            <Pagination/>
         </>
     );
 };

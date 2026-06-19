@@ -1,0 +1,550 @@
+// =============================================================================
+// Audit Fixes — Missing styles for new UI elements (June 2026)
+// =============================================================================
+// Covers: compare tray, carousel dots, compare button, tour badge,
+// search suggestions, saved searches, mobile menu search, pagination jump,
+// top bar suggestions, style preset icons, offline indicator, and more.
+
+// =============================================================================
+// 1. Property Card — Carousel Dots
+// =============================================================================
+.property-item__carousel-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &--active {
+    background: #fff;
+    transform: scale(1.3);
+  }
+}
+
+// =============================================================================
+// 2. Property Card — Compare Quick-Action Button
+// =============================================================================
+.quick-action-btn--compare {
+  &:hover,
+  &.quick-action-btn--active {
+    background: #dbeafe;
+
+    i {
+      color: #3b82f6;
+    }
+  }
+}
+
+// =============================================================================
+// 3. Property Card — 360° Tour Badge
+// =============================================================================
+.property-item__tour-badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+// =============================================================================
+// 4. Compare Tray (floating bottom bar)
+// =============================================================================
+.compare-tray {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1040;
+  background: #fff;
+  border-top: 2px solid var(--main-color, #ff6b00);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+  padding: 14px 20px;
+  animation: slideUpTray 0.25s ease-out;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-primary, #181616);
+  }
+
+  &__items {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-light, #f8f8f8);
+    border: 1px solid var(--border-color-light, #e0e6ed);
+    border-radius: 10px;
+    min-width: 160px;
+    max-width: 220px;
+    flex-shrink: 0;
+  }
+
+  &__remove {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    background: var(--danger-color-light, #f8d7da);
+    color: var(--danger-color, #dc3545);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: var(--danger-color, #dc3545);
+      color: #fff;
+    }
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary, #181616);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@keyframes slideUpTray {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// =============================================================================
+// 5. Search Suggestions Dropdown (SearchBox on homepage)
+// =============================================================================
+.search-box__suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 6px 0;
+  background: var(--bg-white, #fff);
+  border: 1px solid var(--border-color-light, #e0e6ed);
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgba(16, 24, 40, 0.08);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.search-box__suggestion {
+  padding: 8px 14px;
+  font-size: 14px;
+  color: var(--text-secondary, #777);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &--active,
+  &:hover {
+    background: var(--main-color-lighter, #fff5eb);
+    color: var(--text-primary, #181616);
+  }
+
+  &--empty {
+    cursor: default;
+    color: var(--text-muted, #6b7385);
+    font-style: italic;
+
+    &:hover {
+      background: transparent;
+      color: var(--text-muted, #6b7385);
+    }
+  }
+}
+
+// =============================================================================
+// 6. Property Top Bar — Recent Searches Dropdown
+// =============================================================================
+.search-suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background: var(--bg-white, #fff);
+  border: 1px solid var(--border-color-light, #e0e6ed);
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgba(16, 24, 40, 0.08);
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.search-suggestions-header {
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted, #6b7385);
+  background: var(--bg-light, #f8f8f8);
+  border-bottom: 1px solid var(--border-color-light, #e0e6ed);
+}
+
+.search-suggestion-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--text-secondary, #777);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: var(--main-color-lighter, #fff5eb);
+    color: var(--text-primary, #181616);
+  }
+}
+
+// =============================================================================
+// 7. Saved Searches (in PropertyFilters sidebar)
+// =============================================================================
+.saved-searches-list {
+  border: 1px solid var(--border-color-light, #e0e6ed);
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.saved-search-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color-light, #e0e6ed);
+  background: var(--bg-white, #fff);
+  transition: background 0.15s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: var(--bg-light, #f8f8f8);
+  }
+
+  &__name {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    color: var(--text-primary, #181616);
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--main-color, #ff6b00);
+    }
+  }
+
+  &__remove {
+    flex-shrink: 0;
+  }
+}
+
+// =============================================================================
+// 8. Mobile Menu — Quick Search
+// =============================================================================
+.mobile-menu__search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  .common-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 14px 10px 40px;
+    font-size: 14px;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:focus {
+      border-color: var(--main-color, #ff6b00);
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+    }
+  }
+
+  .input-icon--left {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
+
+// =============================================================================
+// 9. Pagination Jump-to-Page
+// =============================================================================
+.pagination-jump {
+  .form-control {
+    width: 80px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .btn {
+    font-size: 13px;
+    padding: 4px 12px;
+  }
+}
+
+// =============================================================================
+// 10. Style Preset Selector — Icon & Example
+// =============================================================================
+.style-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--main-color-lighter, #fff5eb);
+  color: var(--main-color, #ff6b00);
+  font-size: 16px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.style-example {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted, #6b7385);
+  line-height: 1.4;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+// =============================================================================
+// 11. Offline Indicator
+// =============================================================================
+.offline-indicator {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10001;
+  background: var(--danger-color, #dc3545);
+  color: #fff;
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  animation: slideUpTray 0.3s ease-out;
+
+  i {
+    margin-right: 8px;
+  }
+}
+
+// =============================================================================
+// 12. Property Filter Bottom — Adjusted for cursor pagination
+// =============================================================================
+.property-filter__bottom {
+  .property-results-info {
+    .property-filter__text {
+      font-size: 15px;
+      color: var(--text-secondary, #777);
+    }
+  }
+}
+
+// =============================================================================
+// 13. Load More Button
+// =============================================================================
+.property-page,
+.property,
+.blog-classic {
+  .btn-outline-main {
+    border-color: var(--main-color, #ff6b00);
+    color: var(--main-color, #ff6b00);
+    font-weight: 600;
+    padding: 10px 28px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--main-color, #ff6b00);
+      color: #fff;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// =============================================================================
+// 14. Inline Breadcrumb (Zone Checker, data-hub pages)
+// =============================================================================
+// Scoped to nav[aria-label="breadcrumb"] to avoid overriding the hero-style
+// .breadcrumb section used on other pages.
+nav[aria-label="breadcrumb"] .breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+
+  .breadcrumb-item {
+    color: var(--text-muted, #6b7385);
+
+    a {
+      color: var(--main-color, #ff6b00);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &.active {
+      color: var(--text-primary, #181616);
+      font-weight: 500;
+    }
+  }
+}
+
+// =============================================================================
+// 15. Property Item — Ensure quick-actions container fits new buttons
+// =============================================================================
+.property-item__quick-actions {
+  // On touch devices, show a horizontal row at the bottom of the thumb
+  @media (hover: none), (pointer: coarse), (max-width: 991px) {
+    display: flex !important;
+    flex-direction: row;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+    padding: 8px 12px;
+    justify-content: flex-end;
+    gap: 8px;
+    border-radius: 0 0 10px 10px;
+
+    .quick-action-btn {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+  }
+}
+
+// =============================================================================
+// 16. EMI Calculator — Prepayment & Amortization
+// =============================================================================
+.emi-calculator-wrapper {
+  .table-sm {
+    font-size: 13px;
+
+    th {
+      font-weight: 600;
+      color: var(--text-primary, #181616);
+    }
+
+    td {
+      color: var(--text-secondary, #777);
+    }
+  }
+}
+
+// =============================================================================
+// 17. Blog — Popular Posts & Search
+// =============================================================================
+.blog-classic {
+  .locality-stat-card {
+    background: #fff;
+    border: 1px solid var(--border-color-light, #e0e6ed);
+    border-radius: 14px;
+    padding: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 0, 0.06);
+    }
+
+    img {
+      border-radius: 10px;
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+  }
+}
+
+// =============================================================================
+// 18. Zone Checker — Search group nowrap fix
+// =============================================================================
+.zone-checker-search-group {
+  flex-wrap: nowrap !important;
+
+  .form-control {
+    min-width: 0;
+  }
+}
+
+.zone-checker-clear-btn {
+  flex-shrink: 0;
+}

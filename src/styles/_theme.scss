@@ -144,14 +144,11 @@
   --main-color-lighter: #2a1a0a;
 }
 
+// Dark mode is opt-in only via `data-theme="dark"` on <html>.
+// The `prefers-color-scheme` auto-apply was removed because it broke the UI
+// for all dark-mode OS users without proper component-level dark styling.
 :root[data-theme="dark"] {
   @include dark-mode-overrides;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    @include dark-mode-overrides;
-  }
 }
 
 // =============================================================================
