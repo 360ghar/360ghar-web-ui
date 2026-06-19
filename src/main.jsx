@@ -6,10 +6,11 @@ import { HelmetProvider } from 'react-helmet-async'
 import { reportWebVitals } from './seo/reportWebVitals'
 import LazyToastProvider from './common/LazyToast.jsx'
 import * as posthogService from './services/posthogService'
+import { isPrerendering } from './utils/prerender'
 
 // Lazy load analytics after initial render
 const loadAnalytics = () => {
-  if (window.__PRERENDER_INJECTED?.isPrerendering) {
+  if (isPrerendering()) {
     return
   }
 

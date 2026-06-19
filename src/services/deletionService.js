@@ -1,28 +1,43 @@
 import { api, publicApi } from './api';
 
 /**
- * Account deletion / data-erasure request service.
+ * Account deletion / data-erasure service.
  *
- * CRITICAL FIX (audit 1.3): previously the AccountDeletionRequest page posted
- * to Formspree (a third-party form backend), bypassing our own backend and
- * authentication. This service centralises the deletion-request contract.
+ * Two flows are exposed:
  *
- * Contract (expected backend):
- *   POST   /account/delete-request/                 -> create request
+ *   1. Logged-in user clicks "Delete my account" — we POST `/auth/delete-account`
+ *      (authenticated, returns 204) and let the auth store tear down the local
+ *      session. Replaces the older `/account/delete-request/` flow for users
+ *      who can prove their identity via the Supabase session.
+ *
+ *   2. Anonymous / unverified user submits the GDPR request form — kept on
+ *      `/account/delete-request/` so we still collect a contact email and
+ *      reason for the data-protection team to action.
+ *
+ * Contract:
+ *   POST   /auth/delete-account              -> 204 No Content (auth)
+ *   POST   /account/delete-request/          -> create request (auth, best-effort)
  *          body: { email, deletion_type, reason, message }
  *          resp: { id, status, created_at }
- *   GET    /account/delete-request/{id}/status/      -> poll status
- *   POST   /account/delete-request/{id}/cancel/      -> cancel pending request
+ *   GET    /account/delete-request/{id}/status/      -> poll status (public)
+ *   POST   /account/delete-request/{id}/cancel/      -> cancel pending request (auth)
  *
  * TODO(BACKEND): confirm the exact FastAPI route names and response shapes with
- * the backend team. If the route does not yet exist, the calls below will 404
+ * the backend team. If a route does not yet exist, the calls below will 404
  * and the calling UI will surface a clear error to the user instead of silently
  * succeeding via a third party.
  */
 
-const BASE = '/account/delete-request';
-
 export const deletionService = {
+  /**
+   * Immediate account deletion for an authenticated user.
+   * Backend returns 204 No Content on success.
+   * @returns {Promise<void>}
+   */
+  deleteAccountImmediate: async () => {
+    await api.post('/auth/delete-account');
+  },
+
   /**
    * Submit a new account-deletion / data-erasure request.
    * Uses the authenticated `api` instance so the backend can associate the
@@ -32,7 +47,7 @@ export const deletionService = {
    * @returns {Promise<{ id: string, status: string, created_at: string }>}
    */
   submitDeletionRequest: async (data) => {
-    const response = await api.post(`${BASE}/`, data);
+    const response = await api.post('/account/delete-request/', data);
     return response.data;
   },
 
@@ -41,7 +56,7 @@ export const deletionService = {
    * @param {string} requestId
    */
   getDeletionRequestStatus: async (requestId) => {
-    const response = await publicApi.get(`${BASE}/${requestId}/status/`);
+    const response = await publicApi.get(`/account/delete-request/${requestId}/status/`);
     return response.data;
   },
 
@@ -50,7 +65,7 @@ export const deletionService = {
    * @param {string} requestId
    */
   cancelDeletionRequest: async (requestId) => {
-    const response = await api.post(`${BASE}/${requestId}/cancel/`);
+    const response = await api.post(`/account/delete-request/${requestId}/cancel/`);
     return response.data;
   },
 };

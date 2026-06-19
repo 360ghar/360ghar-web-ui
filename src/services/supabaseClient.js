@@ -1,3 +1,5 @@
+import { shouldShortCircuitDataFetch } from '../utils/prerender';
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_PUBLISHABLE_KEY =
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || '';
@@ -20,9 +22,35 @@ if (!IS_TEST_MODE && (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY)) {
 let _supabase = null;
 let _initPromise = null;
 
+// Prerender stub — see src/utils/prerender.js for the gating logic. Returning
+// a no-op client during prerender keeps the @supabase/supabase-js chunk out of
+// the network path entirely; `authStore.initializeAuth` already short-circuits,
+// but this is the belt-and-suspenders for any future caller.
+const createPrerenderStubClient = () => {
+  const noopUnsubscribe = { unsubscribe: () => undefined };
+  const stub = {
+    auth: {
+      getSession: async () => ({ data: { session: null }, error: null }),
+      refreshSession: async () => ({ data: { session: null }, error: null }),
+      onAuthStateChange: () => noopUnsubscribe,
+      signInWithPassword: async () => ({ data: { session: null, user: null }, error: new Error('Supabase disabled during prerender') }),
+      signUp: async () => ({ data: { session: null, user: null }, error: new Error('Supabase disabled during prerender') }),
+      signOut: async () => ({ error: null }),
+      exchangeCodeForSession: async () => ({ data: { session: null }, error: new Error('Supabase disabled during prerender') }),
+    },
+  };
+  return stub;
+};
+
 async function getClientLazy() {
   if (_supabase) return _supabase;
   if (_initPromise) return _initPromise;
+
+  if (shouldShortCircuitDataFetch()) {
+    _supabase = createPrerenderStubClient();
+    return _supabase;
+  }
+
   _initPromise = import('@supabase/supabase-js').then(({ createClient }) => {
     if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) return null;
     _supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

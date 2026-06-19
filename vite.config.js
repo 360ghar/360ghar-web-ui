@@ -56,7 +56,27 @@ const asyncRegisterSW = () => ({
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const apiServer = env.VITE_API_SERVER || 'https://api.360ghar.com';
+
+  // Build-time gate for the prerender data-fetch short-circuit
+  // (see src/utils/prerender.js and src/services/http.js).
+  //
+  //   Local build             ->  __PRERENDER_NO_FETCH__ = true   (skip fetches)
+  //   Netlify production      ->  __PRERENDER_NO_FETCH__ = false  (full fetches)
+  //   Netlify deploy-preview  ->  __PRERENDER_NO_FETCH__ = true   (skip fetches)
+  //   Netlify branch-deploy   ->  __PRERENDER_NO_FETCH__ = true   (skip fetches)
+  //   Netlify dev             ->  __PRERENDER_NO_FETCH__ = true   (skip fetches)
+  //
+  // The short-circuit is AND-gated with the runtime `isPrerendering()` flag,
+  // so real users on the deployed site always get live data regardless of
+  // the value baked in here.
+  const isNetlifyProduction =
+    process.env.NETLIFY === 'true' && process.env.CONTEXT === 'production';
+  const prerenderNoFetch = !isNetlifyProduction;
+
   return {
+  define: {
+    __PRERENDER_NO_FETCH__: JSON.stringify(prerenderNoFetch),
+  },
   plugins: [
     react(),
 

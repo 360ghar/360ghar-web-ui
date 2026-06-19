@@ -1,5 +1,7 @@
 import { create } from 'zustand';
+import { useShallow } from 'zustand/shallow';
 import { persist } from 'zustand/middleware';
+import { isPrerendering } from '../utils/prerender';
 
 const LOCATION_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours
 const GURGAON_FALLBACK = { lat: 28.4595, lng: 77.0266, name: 'Gurgaon, India' };
@@ -15,7 +17,7 @@ export const useLocationStore = create(
       // Initialize location on first load
       initializeLocation: () => {
         // During prerender, use Gurgaon fallback immediately — no geolocation API call
-        if (typeof window !== 'undefined' && window.__PRERENDER_INJECTED?.isPrerendering) {
+        if (isPrerendering()) {
           set({ location: GURGAON_FALLBACK, locationTimestamp: Date.now(), isLocating: false });
           return;
         }
@@ -88,12 +90,20 @@ export const useLocationStore = create(
  * Gurgaon default (permission denied, timeout, unsupported, etc.) in `error`,
  * but consumers had no ergonomic way to surface it. This hook returns a tuple
  * `[isFallback, reason]` so any component can show a non-blocking banner.
+ *
+ * CRITICAL FIX (loop bug): wrapping the selector in `useShallow` makes Zustand
+ * compare the returned array element-wise instead of by reference. Without
+ * this, every render produces a new `[...]` instance, which React 18's
+ * `useSyncExternalStore` (used by Zustand 5) treats as a state change and
+ * re-renders forever — see error #185 "Maximum update depth exceeded".
  */
 export function useLocationFallback() {
-  return useLocationStore((s) => {
-    const isFallback =
-      Boolean(s.error) ||
-      (s.location?.lat === GURGAON_FALLBACK.lat && s.location?.lng === GURGAON_FALLBACK.lng);
-    return [isFallback, s.error];
-  });
+  return useLocationStore(
+    useShallow((s) => {
+      const isFallback =
+        Boolean(s.error) ||
+        (s.location?.lat === GURGAON_FALLBACK.lat && s.location?.lng === GURGAON_FALLBACK.lng);
+      return [isFallback, s.error];
+    })
+  );
 }

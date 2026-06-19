@@ -280,9 +280,16 @@ const useChatStore = create(
       onRehydrateStorage: () => (state) => {
         if (!state) return;
         if (Array.isArray(state.messages) && state.messages.length > 0) {
-          state.messages = state.messages.map((msg) =>
-            msg.isStreaming ? { ...msg, isStreaming: false } : msg
-          );
+          state.messages = state.messages.map((msg) => {
+            if (typeof msg.timestamp === 'string' || msg.isStreaming) {
+              return {
+                ...msg,
+                timestamp: typeof msg.timestamp === 'string' ? new Date(msg.timestamp) : msg.timestamp,
+                isStreaming: false,
+              };
+            }
+            return msg;
+          });
         }
         state.isStreaming = false;
         state.streamingMessageId = null;

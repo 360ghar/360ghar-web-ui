@@ -1,9 +1,11 @@
 import { create } from 'zustand';
 import api from '../services/api';
 import { authService } from '../services/authService';
+import { deletionService } from '../services/deletionService';
 import { getSupabaseAccessToken, onSupabaseAuthStateChange } from '../services/supabaseClient';
 import { fetchAuthStage } from '../utils/authStage';
 import * as posthogService from '../services/posthogService';
+import { isPrerendering } from '../utils/prerender';
 
 // AUDIT FIX (1.imp6): Cache TTL for the locally-cached user profile. The cache
 // is only used to render the UI instantly on init; a fresh profile is always
@@ -167,7 +169,7 @@ const useAuthStore = create((set, get) => ({
 
   initializeAuth: async () => {
     // During prerender, skip all Supabase network calls — no session exists
-    if (typeof window !== 'undefined' && window.__PRERENDER_INJECTED?.isPrerendering) {
+    if (isPrerendering()) {
       set({ isInitializing: false });
       return;
     }
@@ -283,10 +285,33 @@ const useAuthStore = create((set, get) => ({
     }
   },
 
-  logout: async () => {
+  logout: async (options = {}) => {
+    // Backward-compatible signature: `logout()` (or `logout(undefined)`) only
+    // tears down the local session. Pass `{ deleteAccount: true }` to also
+    // ask the backend to permanently delete the account BEFORE clearing the
+    // Supabase session — this matches the new /auth/delete-account flow.
     posthogService.resetUser();
+    if (options && options.deleteAccount === true) {
+      try {
+        await deletionService.deleteAccountImmediate();
+      } catch (err) {
+        // Best-effort: still proceed with local logout so the user is not
+        // stranded on a page that requires authentication.
+        console.error('[authStore] deleteAccountImmediate failed:', err);
+      }
+    }
     await authService.logout();
     clearAuthState(set);
+  },
+
+  /**
+   * Mirror the last-used auth method on the backend (fire-and-forget).
+   * Wraps `authService.recordLastMethod` so stores/components can call it
+   * without importing the service directly.
+   * @param {string} method
+   */
+  recordLastMethod: async (method) => {
+    await authService.recordLastMethod(method);
   },
 
   updateProfile: async (userData) => {
@@ -309,6 +334,17 @@ const useAuthStore = create((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
+
+  retryProfileFetch: async () => {
+    const { token } = get();
+    if (!token) return;
+    set({ error: null, isLoading: true });
+    try {
+      await syncUserProfile(token, set);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 }));
 
 export { useAuthStore };

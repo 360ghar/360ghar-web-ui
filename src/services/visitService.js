@@ -1,20 +1,28 @@
 import api from './api';
 
+/**
+ * Property-visit service. All endpoints require auth (Supabase bearer token).
+ *
+ * The list endpoints (`getAll`, `getUpcoming`, `getPast`) accept an optional
+ * `params` object that is forwarded to axios as the query string — the
+ * backend uses cursor pagination (`?cursor=...&limit=...`) and returns an
+ * envelope `{ items, next_cursor, has_more, ... }`.
+ */
 export const visitService = {
   schedule: async ({ property_id, scheduled_date, special_requirements }) => {
     const response = await api.post('/visits/', { property_id, scheduled_date, special_requirements });
     return response.data;
   },
-  getAll: async () => {
-    const response = await api.get('/visits/');
+  getAll: async (params = {}) => {
+    const response = await api.get('/visits/', { params });
     return response.data;
   },
-  getUpcoming: async () => {
-    const response = await api.get('/visits/upcoming');
+  getUpcoming: async (params = {}) => {
+    const response = await api.get('/visits/upcoming', { params });
     return response.data;
   },
-  getPast: async () => {
-    const response = await api.get('/visits/past');
+  getPast: async (params = {}) => {
+    const response = await api.get('/visits/past', { params });
     return response.data;
   },
   getById: async (visitId) => {

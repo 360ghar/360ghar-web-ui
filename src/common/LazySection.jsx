@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { isPrerendering } from '../utils/prerender';
 import './LazySection.css';
 
 const shouldRenderImmediately = () => {
   if (typeof window === 'undefined') return true;
 
-  const prerenderSnapshot = Boolean(window.__PRERENDER_INJECTED?.isPrerendering);
+  const prerenderSnapshot = isPrerendering();
   const prerenderedDocument =
     typeof document !== 'undefined' &&
     document.documentElement?.dataset?.prerendered === 'true';

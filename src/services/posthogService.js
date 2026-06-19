@@ -2,6 +2,8 @@
 // Handles dynamic import, initialization, session replay, and provides
 // safe wrappers so callers never need to worry about PostHog availability.
 
+import { isPrerendering } from '../utils/prerender';
+
 let posthogInstance = null;
 let initPromise = null;
 let initialPageviewCaptured = false;
@@ -10,7 +12,7 @@ export async function init() {
   if (initPromise) return initPromise;
 
   initPromise = (async () => {
-    if (window.__PRERENDER_INJECTED?.isPrerendering) return;
+    if (isPrerendering()) return;
     if (!import.meta.env.PROD || !import.meta.env.VITE_PUBLIC_POSTHOG_KEY) return;
 
     try {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { I18nLink } from '../../i18n/I18nLink';
+import { I18nLink, useI18nNavigate } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -17,7 +17,9 @@ const AccountDeletionRequest = () => {
     // CRITICAL FIX (audit 1.3 / 1.12): replace Formspree with our own backend
     // service. Pre-fill the email from the auth store when the user is logged
     // in, but keep the form accessible to anonymous users (GDPR right).
+    const navigate = useI18nNavigate();
     const authUser = useAuthStore((s) => s.user);
+    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const [submitting, setSubmitting] = useState(false);
     const [succeeded, setSucceeded] = useState(false);
     const [submitError, setSubmitError] = useState('');
@@ -73,6 +75,32 @@ const AccountDeletionRequest = () => {
         }
     };
 
+    // Logged-in users go through the new /auth/delete-account flow: a single
+    // confirmation that posts immediately, then signs the user out and
+    // redirects to home. Anonymous users keep the legacy GDPR request form
+    // so they can still submit a contact email + reason.
+    const handleImmediateDelete = async () => {
+        if (submitting) return;
+        setSubmitting(true);
+        setSubmitError('');
+        try {
+            await deletionService.deleteAccountImmediate();
+            await useAuthStore.getState().logout({ deleteAccount: true });
+            toast.success(t('deletion.successTitle'), { theme: 'colored' });
+            navigate('/');
+        } catch (err) {
+            const msg =
+                err?.response?.data?.detail?.message ||
+                err?.response?.data?.detail ||
+                err?.message ||
+                t('deletion.submitError');
+            setSubmitError(typeof msg === 'string' ? msg : t('deletion.submitError'));
+            toast.error(t('deletion.submitError'), { theme: 'colored' });
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     if (succeeded) {
         return (
             <>
@@ -115,6 +143,112 @@ const AccountDeletionRequest = () => {
                                         <i className="fas fa-home me-2"></i>
                                         {t('deletion.returnHome')}
                                     </I18nLink>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <Cta ctaClass=""/>
+                <Footer/>
+            </main>
+            </>
+        );
+    }
+
+    // ---- Logged-in branch: simple confirmation screen ----------------------
+    // Identified users bypass the multi-step request form and use the
+    // /auth/delete-account endpoint (returns 204). After the call we sign
+    // them out via `logout({ deleteAccount: true })` and redirect home.
+    if (isAuthenticated) {
+        return (
+            <>
+            <SEO title={t('deletion.title')} description={t('deletion.description')} canonical="/delete-account" noindex />
+            <OffCanvas />
+            <MobileMenu />
+
+            <main className="body-bg">
+                <Header
+                    headerClass="dark-header has-border"
+                    headerMenusClass="mx-auto"
+                    btnClass="btn btn-outline-main btn-outline-main-dark d-lg-block d-none"
+                    btnLink="/post-property"
+                    btnText={t('common.postProperty')}
+                    spanClass="icon-right text-gradient"
+                    showContactNumber={false}
+                />
+
+                {/* Authenticated Account Deletion Confirmation */}
+                <section className="contact-us-section padding-b-120">
+                    <div className="container container-two">
+                        <div className="contact-form bg-white">
+                            <div className="section-heading text-center">
+                                <span className="section-heading__subtitle bg-gray-100">
+                                    <span className="text-gradient fw-semibold">{t('deletion.privacyRequest')}</span>
+                                </span>
+                                <h2 className="section-heading__title">{t('deletion.heading')}</h2>
+                                <p className="section-heading__desc">
+                                    {t('deletion.description2')}
+                                </p>
+                            </div>
+
+                            <div className="contact-form__form">
+                                {submitError && (
+                                    <div className="alert alert-danger" role="alert">
+                                        {submitError}
+                                    </div>
+                                )}
+
+                                {/* Important Notice */}
+                                <div className="deletion-notice">
+                                    <div className="notice-header">
+                                        <div className="notice-icon">
+                                            <i className="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <h4 className="notice-title">{t('deletion.importantNotice')}</h4>
+                                    </div>
+                                    <div className="notice-content">
+                                        <ul>
+                                            <li>
+                                                <i className="fas fa-check-circle me-2"></i>
+                                                <Trans i18nKey="deletion.noticeIrreversible" components={{ 0: <strong /> }} />
+                                            </li>
+                                            <li>
+                                                <i className="fas fa-check-circle me-2"></i>
+                                                <Trans i18nKey="deletion.noticePermanentlyRemoved" components={{ 0: <strong /> }} />
+                                            </li>
+                                            <li>
+                                                <i className="fas fa-check-circle me-2"></i>
+                                                {t('deletion.noticeLoseAccess')}
+                                            </li>
+                                            <li>
+                                                <i className="fas fa-check-circle me-2"></i>
+                                                {t('deletion.noticeVerifyIdentity')}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                {/* Confirm Button */}
+                                <div className="text-center mt-4">
+                                    <button
+                                        type="button"
+                                        className="btn btn-main btn-deletion"
+                                        onClick={handleImmediateDelete}
+                                        disabled={submitting}
+                                    >
+                                        {submitting ? (
+                                            <>
+                                                <i className="fas fa-spinner fa-spin me-2"></i>
+                                                {t('deletion.submitting')}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="fas fa-user-times me-2"></i>
+                                                {t('deletion.submitBtn')}
+                                            </>
+                                        )}
+                                    </button>
                                 </div>
                             </div>
                         </div>
