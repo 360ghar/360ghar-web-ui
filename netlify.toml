@@ -125,11 +125,13 @@
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
 
-# HTML pages — always revalidate
+# HTML pages — short fresh cache + stale-while-revalidate for instant edge TTFB.
+# Prerendered HTML is static; a fresh deploy propagates within 60s (max-age) at
+# the browser and immediately at the edge (SWR fetches fresh in background).
 [[headers]]
   for = "/*.html"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "public, max-age=60, stale-while-revalidate=604800"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "0"
@@ -138,7 +140,7 @@
 [[headers]]
   for = "/"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "public, max-age=60, stale-while-revalidate=604800"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Link = '''</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </for-ai>; rel="service-doc"; type="text/html", </data/llm-feed.json>; rel="service-meta"; type="application/json", </.well-known/mcp/server-card.json>; rel="mcp-server", </.well-known/agent-skills/index.json>; rel="agent-skills", </llms.txt>; rel="llms-txt", </.well-known/openid-configuration>; rel="openid-configuration"'''

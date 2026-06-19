@@ -168,8 +168,18 @@ function stripBakedMaps(html) {
     .replace(/<script[^>]*src="https:\/\/maps\.googleapis\.com[^"]*"><\/script>/g, '');
 }
 
+// Restore fetchpriority="high" on the LCP hero image preload.
+// Puppeteer's page.content() may drop this newer attribute during serialization,
+// causing the hero image to lose bandwidth priority to competing preloads.
+function restoreHeroFetchPriority(html) {
+  return html.replace(
+    /<link\s+rel="preload"\s+as="image"(?![^>]*fetchpriority)/gi,
+    '<link rel="preload" as="image" fetchpriority="high"',
+  );
+}
+
 function ensurePrerenderAnnotations(html) {
-  let nextHtml = stripBakedMaps(reDeferCss(html));
+  let nextHtml = stripBakedMaps(reDeferCss(restoreHeroFetchPriority(html)));
 
   if (!nextHtml.includes('data-prerendered="true"')) {
     nextHtml = nextHtml.replace('<html', '<html data-prerendered="true"');

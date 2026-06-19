@@ -94,11 +94,10 @@
   <link rel="preconnect" href="https://www.google-analytics.com">
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
 
-  <!-- Self-hosted brand fonts (inlined to eliminate render-blocking request) -->
+  <!-- Self-hosted brand fonts — preload only LCP-critical fonts (body + H1 heading).
+       Other weights (600/700) load lazily via @font-face below, not on the critical path. -->
   <link rel="preload" href="%BASE_URL%assets/fonts/josefin-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="%BASE_URL%assets/fonts/josefin-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="%BASE_URL%assets/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="%BASE_URL%assets/fonts/cinzel-latin-700.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     @font-face { font-family: 'Cinzel'; font-style: normal; font-weight: 400; font-display: swap; src: url('%BASE_URL%assets/fonts/cinzel-latin.woff2') format('woff2'); }
     @font-face { font-family: 'Cinzel'; font-style: normal; font-weight: 700; font-display: swap; src: url('%BASE_URL%assets/fonts/cinzel-latin-700.woff2') format('woff2'); }
@@ -110,8 +109,8 @@
   <!-- Preload LCP hero image (responsive) -->
   <link rel="preload" as="image" fetchpriority="high" href="%BASE_URL%assets/images/thumbs/banner-three.webp" imagesrcset="%BASE_URL%assets/images/thumbs/banner-three-320w.webp 320w, %BASE_URL%assets/images/thumbs/banner-three-640w.webp 640w, %BASE_URL%assets/images/thumbs/banner-three-768w.webp 768w, %BASE_URL%assets/images/thumbs/banner-three-1024w.webp 1024w" imagesizes="(max-width: 768px) 100vw, 50vw">
 
-  <!-- Preload critical assets -->
-  <link rel="preload" href="%BASE_URL%assets/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Font Awesome woff2 (126 KB) NOT preloaded — it competes with the LCP hero image
+       for bandwidth. Icons render via CSS after first paint; the font loads lazily. -->
 
   <!-- Deferred CSS loading using media="print" pattern -->
   <!-- Bootstrap -->
