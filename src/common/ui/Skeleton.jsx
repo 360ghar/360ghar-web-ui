@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 /**
  * AUDIT FIX (imp 5.3): reusable skeleton-screen primitive so callers can
  * replace generic spinners with skeleton blocks that match the content
@@ -20,10 +22,16 @@ const baseStyle = {
 
 const keyframes = `@keyframes skeleton-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }`;
 
+let keyframesInjected = false;
+
 export function Skeleton({ width = '100%', height = 16, radius, style, className = '' }) {
+  useEffect(() => {
+    keyframesInjected = true;
+  }, []);
+
   return (
     <>
-      <style>{keyframes}</style>
+      {!keyframesInjected && <style>{keyframes}</style>}
       <span
         className={`skeleton ${className}`}
         style={{ ...baseStyle, width, height, borderRadius: radius, ...style }}
@@ -48,7 +56,6 @@ export function SkeletonCircle({ size = 48, style, className = '' }) {
 export function SkeletonLines({ lines = 3, lineHeight = 16, gap = 8, className = '' }) {
   return (
     <div className={className} style={{ display: 'flex', flexDirection: 'column', gap }} aria-hidden="true">
-      <style>{keyframes}</style>
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton
           key={i}
@@ -73,7 +80,6 @@ export function SkeletonCard({ className = '' }) {
       }}
       aria-hidden="true"
     >
-      <style>{keyframes}</style>
       <Skeleton height={160} radius="12px" />
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 14 }}>
         <Skeleton height={18} width="70%" />

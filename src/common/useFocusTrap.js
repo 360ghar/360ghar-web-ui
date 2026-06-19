@@ -60,8 +60,12 @@ export function useFocusTrap(containerRef, active) {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       // Restore focus to the trigger element when the trap deactivates.
-      if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
-        previouslyFocused.focus();
+      try {
+        if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+          previouslyFocused.focus();
+        }
+      } catch {
+        // element may have been unmounted during SPA navigation
       }
     };
   }, [active, containerRef]);

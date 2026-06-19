@@ -71,7 +71,7 @@ const SearchBox = () => {
     initialValues: {
       keyword: '',
       type: 'All',
-      purpose: 'all',
+      purpose: '',
       minPrice: '',
       maxPrice: '',
       bedrooms: '',
@@ -250,7 +250,7 @@ const SearchBox = () => {
                     onChange={formik.handleChange}
                   >
                     {PURPOSE_OPTIONS.map((option) => (
-                      <option key={option.value || 'all'} value={option.value || 'all'}>
+                      <option key={option.value || 'all'} value={option.value}>
                         {t(option.labelKey)}
                       </option>
                     ))}
@@ -360,7 +360,7 @@ const SearchBox = () => {
                   onChange={formik.handleChange}
                 >
                   {PURPOSE_OPTIONS.map((option) => (
-                    <option key={option.value || 'all'} value={option.value || 'all'}>
+                    <option key={option.value || 'all'} value={option.value}>
                       {t(option.labelKey)}
                     </option>
                   ))}

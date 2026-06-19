@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { visitService } from '../services/visitService';
 import { extractError } from '../utils/apiError';
 
-const useVisitStore = create((set) => ({
+const useVisitStore = create((set, get) => ({
   visits: [],
   upcomingVisits: [],
   pastVisits: [],
@@ -87,11 +87,11 @@ const useVisitStore = create((set) => ({
    * Append the next page of all visits to `visits` using the backend cursor.
    * @param {{ cursor?: string|null, limit?: number }} [opts]
    */
-  loadMoreVisits: async ({ cursor = null, limit } = {}) => {
+  loadMoreVisits: async ({ cursor, limit } = {}) => {
     try {
       set({ isLoading: true, error: null });
       const data = await visitService.getAll({
-        cursor: cursor ?? undefined,
+        cursor: cursor !== undefined ? cursor : get().visitsNextCursor ?? undefined,
         limit,
       });
       const items = Array.isArray(data?.items) ? data.items : [];
@@ -112,11 +112,11 @@ const useVisitStore = create((set) => ({
    * Append the next page of upcoming visits to `upcomingVisits`.
    * @param {{ cursor?: string|null, limit?: number }} [opts]
    */
-  loadMoreUpcoming: async ({ cursor = null, limit } = {}) => {
+  loadMoreUpcoming: async ({ cursor, limit } = {}) => {
     try {
       set({ isLoading: true, error: null });
       const data = await visitService.getUpcoming({
-        cursor: cursor ?? undefined,
+        cursor: cursor !== undefined ? cursor : get().upcomingNextCursor ?? undefined,
         limit,
       });
       const items = Array.isArray(data?.items) ? data.items : [];
@@ -137,11 +137,11 @@ const useVisitStore = create((set) => ({
    * Append the next page of past visits to `pastVisits`.
    * @param {{ cursor?: string|null, limit?: number }} [opts]
    */
-  loadMorePast: async ({ cursor = null, limit } = {}) => {
+  loadMorePast: async ({ cursor, limit } = {}) => {
     try {
       set({ isLoading: true, error: null });
       const data = await visitService.getPast({
-        cursor: cursor ?? undefined,
+        cursor: cursor !== undefined ? cursor : get().pastNextCursor ?? undefined,
         limit,
       });
       const items = Array.isArray(data?.items) ? data.items : [];

@@ -35,9 +35,7 @@ const AccountDeletionRequest = () => {
         setSelectedReason(e.target.value);
     };
 
-    const handleOptionClick = (value) => {
-        handleTypeChange(value);
-    };
+    const handleOptionClick = handleTypeChange;
 
     const handleKeyPress = (e, value) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -84,7 +82,6 @@ const AccountDeletionRequest = () => {
         setSubmitting(true);
         setSubmitError('');
         try {
-            await deletionService.deleteAccountImmediate();
             await useAuthStore.getState().logout({ deleteAccount: true });
             toast.success(t('deletion.successTitle'), { theme: 'colored' });
             navigate('/');
