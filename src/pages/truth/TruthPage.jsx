@@ -256,8 +256,9 @@ const TruthPage = ({
         {/* CTA Section */}
         <section className="compare-cta-section">
           <div className="container container-two">
-            <h3 className="cta-title">Don&apos;t Settle for Less. Choose Transparency.</h3>
-            <p className="cta-subtitle">Join thousands of happy property seekers who chose 360 Ghar</p>
+            {/* AUDIT FIX (4.7): softened language to reduce legal liability */}
+            <h3 className="cta-title">Prefer a Verified, Transparent Alternative?</h3>
+            <p className="cta-subtitle">Explore physically verified properties with 360° virtual tours on 360 Ghar</p>
             <div className="mt-4">
               <I18nLink to="/properties?city=Gurgaon&intent=buy" className="btn btn-main">
                 Start Your Property Search

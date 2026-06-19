@@ -1,5 +1,6 @@
- import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+ import React, { useState, useEffect, useMemo } from 'react'; // eslint-disable-line no-unused-vars
  import { useTranslation } from 'react-i18next';
+ import { toast } from 'react-toastify';
  import Header from '../../common/layout/Header';
  import Footer from '../../common/layout/Footer';
  import MobileMenu from '../../common/layout/MobileMenu';
@@ -57,19 +58,51 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
      
      const [maxLoan, setMaxLoan] = useState(0);
      const [eligibleEmi, setEligibleEmi] = useState(0);
- 
+
+     // AUDIT FIX (imp 3.4): bank-specific eligibility with different FOIR.
+     const BANKS = [
+       { name: 'SBI', foir: 0.50 },
+       { name: 'HDFC', foir: 0.55 },
+       { name: 'ICICI', foir: 0.55 },
+       { name: 'Axis', foir: 0.50 },
+       { name: 'Bank of Baroda', foir: 0.60 },
+     ];
+
+     // Pure helper so we can reuse it for the bank-specific comparison.
+     const computeEligibility = (inc, exp, emi, rate, ten, foir) => {
+       const disposableIncome = Math.max(inc - exp, 0);
+       const maxMonthlyPayment = disposableIncome * foir - emi;
+       if (maxMonthlyPayment <= 0) return 0;
+       const r = rate / 12 / 100;
+       const n = ten * 12;
+       if (r === 0) return maxMonthlyPayment * n;
+       return Math.round(maxMonthlyPayment * (Math.pow(1 + r, n) - 1) / (r * Math.pow(1 + r, n)));
+     };
+
+     const bankEligibility = useMemo(
+       () => BANKS.map((b) => ({ name: b.name, foir: b.foir, maxLoan: computeEligibility(income, otherExpenses, existingEmi, interestRate, tenure, b.foir) })),
+       // eslint-disable-next-line react-hooks/exhaustive-deps
+       [income, otherExpenses, existingEmi, interestRate, tenure]
+     );
+
      useEffect(() => {
          const calculateEligibility = () => {
-             // Assumptions:
-             // FOIR (Fixed Obligation to Income Ratio) is typically 50% for lower incomes, up to 65% for higher.
-             // We'll use a sliding scale or fixed conservative 50-60%.
-             
+             // CRITICAL FIX (audit 3.2): FOIR (Fixed Obligation to Income
+             // Ratio) is the maximum % of income allowed for ALL obligations.
+             // Previously the code subtracted BOTH existingEmi AND
+             // otherExpenses from (income * FOIR), double-counting.
+             // Correct logic: capacity = (income * FOIR) - existingEmi.
+             // otherExpenses should reduce the income BASE before the FOIR
+             // check (they are living expenses, not financial obligations),
+             // so disposable income = income - otherExpenses, and the bank
+             // then allows FOIR of THAT for EMIs.
              let foir = 0.50; // Default 50%
              if (income > 50000) foir = 0.55;
              if (income > 100000) foir = 0.60;
              if (income > 200000) foir = 0.65;
- 
-             const maxMonthlyPayment = (income * foir) - existingEmi - otherExpenses;
+
+             const disposableIncome = Math.max(income - otherExpenses, 0);
+             const maxMonthlyPayment = (disposableIncome * foir) - existingEmi;
              
              if (maxMonthlyPayment <= 0) {
                  setMaxLoan(0);
@@ -104,6 +137,20 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
               currency: 'INR',
               maximumFractionDigits: 0
           }).format(val);
+     };
+
+     // AUDIT FIX (imp 3.2): share results via URL query params.
+     const handleShareResults = async () => {
+         const params = new URLSearchParams({
+             income, emi: existingEmi, rate: interestRate, tenure, expenses: otherExpenses,
+         });
+         const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+         try {
+             await navigator.clipboard.writeText(url);
+             toast.success(t('loanEligibility.shareCopied', 'Shareable link copied to clipboard!'));
+         } catch {
+             toast.error(t('loanEligibility.shareError', 'Could not copy link.'));
+         }
      };
  
      return (
@@ -145,59 +192,55 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                      <div className="col-lg-6">
                                          <div className="calculator-form bg-white p-4 rounded-3 shadow-sm h-100">
                                              <h4 className="mb-4">{t('loanEligibility.financialDetails')}</h4>
-                                             
-                                             <div className="mb-3">
-                                                 <label className="form-label">{t('loanEligibility.netMonthlyIncome')}</label>
-                                                 <input 
-                                                     type="number" 
-                                                     className="form-control" 
-                                                     value={income}
-                                                     onChange={(e) => setIncome(Number(e.target.value))}
-                                                 />
-                                             </div>
- 
-                                             <div className="mb-3">
-                                                 <label className="form-label">{t('loanEligibility.existingEmis')}</label>
-                                                 <input 
-                                                     type="number" 
-                                                     className="form-control" 
-                                                     value={existingEmi}
-                                                     onChange={(e) => setExistingEmi(Number(e.target.value))}
-                                                 />
-                                             </div>
- 
-                                             <div className="mb-3">
-                                                 <label className="form-label">{t('loanEligibility.otherExpenses')}</label>
-                                                 <input 
-                                                     type="number" 
-                                                     className="form-control" 
-                                                     value={otherExpenses}
-                                                     onChange={(e) => setOtherExpenses(Number(e.target.value))}
-                                                 />
-                                             </div>
- 
-                                             <div className="mb-3">
-                                                 <label className="form-label">{t('loanEligibility.interestRate')}</label>
-                                                 <input 
-                                                     type="number" 
-                                                     className="form-control" 
-                                                     value={interestRate}
-                                                     step="0.1"
-                                                     onChange={(e) => setInterestRate(Number(e.target.value))}
-                                                 />
-                                             </div>
- 
-                                             <div className="mb-3">
-                                                 <label className="form-label">{t('loanEligibility.loanTenure')}</label>
-                                                 <input 
-                                                     type="number" 
-                                                     className="form-control" 
-                                                     value={tenure}
-                                                     onChange={(e) => setTenure(Number(e.target.value))}
-                                                 />
-                                             </div>
-                                         </div>
-                                     </div>
+
+                                            {/* AUDIT FIX (3.3): range sliders alongside number inputs */}
+                                            <div className="mb-3">
+                                                <label className="form-label">{t('loanEligibility.netMonthlyIncome')}</label>
+                                                <div className="input-group">
+                                                    <input type="range" className="form-range" min="10000" max="500000" step="5000" value={income} onChange={(e) => setIncome(Number(e.target.value))} />
+                                                    <input type="number" className="form-control" min="10000" max="500000" value={income} onChange={(e) => setIncome(Math.min(Math.max(Number(e.target.value), 0), 500000))} />
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <label className="form-label">{t('loanEligibility.existingEmis')}</label>
+                                                <div className="input-group">
+                                                    <input type="range" className="form-range" min="0" max="100000" step="1000" value={existingEmi} onChange={(e) => setExistingEmi(Number(e.target.value))} />
+                                                    <input type="number" className="form-control" min="0" max="100000" value={existingEmi} onChange={(e) => setExistingEmi(Math.max(Number(e.target.value), 0))} />
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <label className="form-label">{t('loanEligibility.otherExpenses')}</label>
+                                                <div className="input-group">
+                                                    <input type="range" className="form-range" min="0" max="100000" step="1000" value={otherExpenses} onChange={(e) => setOtherExpenses(Number(e.target.value))} />
+                                                    <input type="number" className="form-control" min="0" max="100000" value={otherExpenses} onChange={(e) => setOtherExpenses(Math.max(Number(e.target.value), 0))} />
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <label className="form-label">{t('loanEligibility.interestRate')}</label>
+                                                <div className="input-group">
+                                                    <input type="range" className="form-range" min="1" max="20" step="0.1" value={interestRate} onChange={(e) => setInterestRate(Number(e.target.value))} />
+                                                    <input type="number" className="form-control" min="1" max="20" step="0.1" value={interestRate} onChange={(e) => setInterestRate(Number(e.target.value))} />
+                                                    <span className="input-group-text">%</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <label className="form-label">{t('loanEligibility.loanTenure')}</label>
+                                                <div className="input-group">
+                                                    <input type="range" className="form-range" min="1" max="30" value={tenure} onChange={(e) => setTenure(Number(e.target.value))} />
+                                                    <input type="number" className="form-control" min="1" max="30" value={tenure} onChange={(e) => setTenure(Math.min(Math.max(Number(e.target.value), 1), 30))} />
+                                                    <span className="input-group-text">{t('loanEligibility.tenureYears', { years: '' }).trim() || 'Yrs'}</span>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" className="btn btn-sm btn-outline-main w-100" onClick={handleShareResults}>
+                                                <i className="fas fa-share-alt me-2"></i>{t('loanEligibility.shareResults', 'Share Results')}
+                                            </button>
+                                        </div>
+                                    </div>
  
                                      <div className="col-lg-6">
                                          <div className="bg-main text-white p-4 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center text-center">
@@ -227,6 +270,31 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                          </div>
                                      </div>
                                  </div>
+
+                                {/* AUDIT FIX (imp 3.4): bank-specific eligibility comparison */}
+                                <ToolInfoCard title={t('loanEligibility.bankComparisonTitle', 'Bank-wise Eligibility Estimate')}>
+                                    <p className="text-muted small mb-3">{t('loanEligibility.bankComparisonDesc', 'Each bank applies a different FOIR (Fixed Obligation to Income Ratio). Estimated eligible loan amounts based on your inputs:')}</p>
+                                    <div className="table-responsive">
+                                        <table className="table table-bordered table-sm">
+                                            <thead className="table-light">
+                                                <tr>
+                                                    <th>{t('loanEligibility.bankCol', 'Bank')}</th>
+                                                    <th>FOIR</th>
+                                                    <th>{t('loanEligibility.estLoanCol', 'Estimated Loan')}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {bankEligibility.map((b) => (
+                                                    <tr key={b.name}>
+                                                        <td className="fw-600">{b.name}</td>
+                                                        <td>{Math.round(b.foir * 100)}%</td>
+                                                        <td className="fw-bold text-main">{formatCurrency(b.maxLoan)}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </ToolInfoCard>
 
                                 <ToolInfoCard title="How Home Loan Eligibility is Calculated">
                                     <p className="mb-2">Banks consider several factors when determining your home loan eligibility:</p>

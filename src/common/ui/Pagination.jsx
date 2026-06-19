@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import { absoluteUrl } from '../../seo/siteMetadata';
 import { I18nLink } from '../../i18n/I18nLink';
 
@@ -13,6 +13,8 @@ import { I18nLink } from '../../i18n/I18nLink';
  */
 const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisiblePages = 5 }) => {
     const location = useLocation();
+    const { t } = useTranslation('common');
+    const [jumpValue, setJumpValue] = useState('');
 
     // Generate page URL with ?page=N query param
     const getPageUrl = (page) => {
@@ -88,12 +90,28 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisibleP
         }
     };
 
+    // UX FIX (audit 5.6): "jump to page" input for large result sets.
+    const handleJumpToPage = (e) => {
+        e.preventDefault();
+        const page = parseInt(jumpValue, 10);
+        if (
+            Number.isInteger(page) &&
+            page >= 1 &&
+            page <= totalPages &&
+            page !== currentPage &&
+            onPageChange
+        ) {
+            onPageChange(page);
+        }
+        setJumpValue('');
+    };
+
     return (
         <>
             {/* SEO: rel prev/next for pagination */}
             {prevLink && <link rel="prev" href={prevLink} />}
             {nextLink && <link rel="next" href={nextLink} />}
-            <nav aria-label="Page navigation" className="mt-4">
+            <nav aria-label={t('pagination.navAriaLabel')} className="mt-4">
             <ul className="pagination common-pagination justify-content-center">
                 {/* Previous Button */}
                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
@@ -102,12 +120,12 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisibleP
                             className="page-link"
                             to={getPageUrl(currentPage - 1)}
                             onClick={(e) => handlePageClick(e, currentPage - 1)}
-                            aria-label="Previous page"
+                            aria-label={t('pagination.previousPage')}
                         >
                             <i className="fas fa-chevron-left"></i>
                         </I18nLink>
                     ) : (
-                        <span className="page-link" aria-label="Previous page" aria-disabled="true">
+                        <span className="page-link" aria-label={t('pagination.previousPage')} aria-disabled="true">
                             <i className="fas fa-chevron-left"></i>
                         </span>
                     )}
@@ -133,7 +151,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisibleP
                                 className="page-link"
                                 to={getPageUrl(page)}
                                 onClick={(e) => handlePageClick(e, page)}
-                                aria-label={`Page ${page}`}
+                                aria-label={t('pagination.pageAriaLabel', { page })}
                                 aria-current={isActive ? 'page' : undefined}
                             >
                                 {page}
@@ -149,17 +167,41 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange, maxVisibleP
                             className="page-link"
                             to={getPageUrl(currentPage + 1)}
                             onClick={(e) => handlePageClick(e, currentPage + 1)}
-                            aria-label="Next page"
+                            aria-label={t('pagination.nextPage')}
                         >
                             <i className="fas fa-chevron-right"></i>
                         </I18nLink>
                     ) : (
-                        <span className="page-link" aria-label="Next page" aria-disabled="true">
+                        <span className="page-link" aria-label={t('pagination.nextPage')} aria-disabled="true">
                             <i className="fas fa-chevron-right"></i>
                         </span>
                     )}
                 </li>
             </ul>
+
+            {/* UX FIX (audit 5.6): jump-to-page input for large result sets */}
+            {totalPages > maxVisiblePages && (
+                <form className="pagination-jump mt-3 d-flex align-items-center justify-content-center gap-2" onSubmit={handleJumpToPage}>
+                    <label className="text-muted small mb-0" htmlFor="pagination-jump-input">
+                        {t('pagination.jumpToLabel')}
+                    </label>
+                    <input
+                        id="pagination-jump-input"
+                        type="number"
+                        className="form-control form-control-sm"
+                        style={{ width: '80px' }}
+                        min="1"
+                        max={totalPages}
+                        value={jumpValue}
+                        onChange={(e) => setJumpValue(e.target.value)}
+                        aria-label={t('pagination.jumpToAriaLabel')}
+                        placeholder={String(currentPage)}
+                    />
+                    <button type="submit" className="btn btn-outline-main btn-sm">
+                        {t('pagination.jumpToBtn')}
+                    </button>
+                </form>
+            )}
         </nav>
         </>
     );

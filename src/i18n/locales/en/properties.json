@@ -51,6 +51,8 @@
     "openVirtualTourFullScreen": "Open virtual tour in full screen",
     "propertyLocation": "Property Location",
     "virtualTour": "360° Virtual Tour",
+    "photos": "Photos",
+    "video": "Video",
     "propertyVideo": "Property Video",
     "browserNoVideo": "Your browser does not support video playback.",
     "showPhoneNumber": "Show Phone Number",
@@ -184,7 +186,14 @@
     "sqftUnit": "sqft",
     "filterDrawerTitle": "Filters",
     "searchFiltersApplied": "Search filters applied successfully!",
-    "errorApplyingFilters": "Error applying filters. Please try again."
+    "errorApplyingFilters": "Error applying filters. Please try again.",
+    "saveSearch": "Save Search",
+    "mySearches": "My Searches",
+    "savedSearchDefault": "Search",
+    "saveSearchSuccess": "Search saved!",
+    "saveSearchLoaded": "Saved search loaded!",
+    "saveSearchEmpty": "Add at least one filter before saving.",
+    "removeSavedSearch": "Remove saved search"
   },
   "sort": {
     "newest": "Newest First",
@@ -254,7 +263,9 @@
     "copyLink": "Copy Link",
     "share": "Share",
     "linkCopied": "Link copied to clipboard!",
-    "failedToCopy": "Failed to copy link"
+    "failedToCopy": "Failed to copy link",
+    "tourAvailable": "360° virtual tour available",
+    "compare": "Add to comparison"
   },
   "actions": {
     "save": "Save",
@@ -348,6 +359,33 @@
   "addListing": {
     "addListing": "Add Listing"
   },
+  "virtualTourPage": {
+    "loadingTour": "Loading virtual tour...",
+    "propertyNotFound": "Property not found",
+    "notFoundDescription": "The property you are looking for does not exist or has been removed.",
+    "browseProperties": "Browse Properties",
+    "home": "Home",
+    "properties": "Properties",
+    "virtualTour": "Virtual Tour",
+    "tourNotAvailable": "Virtual Tour Not Available",
+    "tourNotAvailableDescription": "This property does not yet have a 360° virtual tour.",
+    "viewPropertyDetails": "View Property Details",
+    "backToProperty": "Back to Property",
+    "whatThisTourCovers": "What This Tour Covers",
+    "backToPropertyDetails": "Back to Property Details",
+    "highlights": {
+      "livingRoom": "Living Room",
+      "livingRoomDesc": "Spacious living area with natural lighting",
+      "kitchen": "Kitchen",
+      "kitchenDesc": "Modular kitchen with modern fittings",
+      "bedrooms": "Bedrooms",
+      "bedroomsDesc": "All bedrooms with attached bathrooms",
+      "balcony": "Balcony",
+      "balconyDesc": "Balcony with panoramic views",
+      "societyAmenities": "Society Amenities",
+      "societyAmenitiesDesc": "Clubhouse, pool, gym, and parks"
+    }
+  },
   "sidebar": {
     "gettingLocation": "Getting your location...",
     "showingNear": "Showing properties near {{location}}",
@@ -357,7 +395,12 @@
     "search": "Search",
     "location": "Location",
     "searching": "Searching",
-    "searchBtn": "Search"
+    "searchBtn": "Search",
+    "recentSearches": "Recent searches",
+    "share": "Share",
+    "shareFilteredView": "Share this filtered view",
+    "shareLinkCopied": "Filtered view link copied to clipboard!",
+    "shareLinkFailed": "Failed to copy link"
   },
   "advancedFilter": {
     "searchProperties": "Search Properties",
@@ -410,7 +453,10 @@
     "bedroom3": "3+ Bedrooms",
     "bedroom4": "4+ Bedrooms",
     "applyFilters": "Apply Filters",
-    "kmRadius": "{{km}} km"
+    "kmRadius": "{{km}} km",
+    "recentSearches": "Recent searches",
+    "suggestionsAriaLabel": "Search suggestions",
+    "noSuggestions": "No matching recent searches"
   },
   "popularSearches": {
     "flatsRentGurugram": "Flats for rent in Gurugram",

@@ -1,7 +1,7 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
-import { I18nLink } from '../../i18n/I18nLink';
+import PageLoader from '../../common/PageLoader';
 
 const ComparePage = lazy(() => import('./ComparePage'));
 
@@ -10,12 +10,14 @@ const SquareYardsCompare = () => {
   const competitor = competitors.squareyards;
 
   return (
-    <ComparePage
+    <Suspense fallback={<PageLoader />}>
+      <ComparePage
       competitor={competitor}
       pageTitle={t('squareyards.pageTitle')}
       pageDescription={t('squareyards.pageDescription')}
       canonicalPath="/vs/squareyards"
-    />
+      />
+    </Suspense>
   );
 };
 

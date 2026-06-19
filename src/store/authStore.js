@@ -5,10 +5,26 @@ import { getSupabaseAccessToken, onSupabaseAuthStateChange } from '../services/s
 import { fetchAuthStage } from '../utils/authStage';
 import * as posthogService from '../services/posthogService';
 
+// AUDIT FIX (1.imp6): Cache TTL for the locally-cached user profile. The cache
+// is only used to render the UI instantly on init; a fresh profile is always
+// fetched via syncUserProfile. To avoid showing very stale data (e.g. a user
+// who just registered on another device), entries older than this TTL are
+// ignored and the store waits for the fresh fetch instead.
+const USER_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+const USER_CACHE_KEY = 'user';
+
 function readStoredUser() {
   try {
-    const raw = localStorage.getItem('user');
-    return raw ? JSON.parse(raw) : null;
+    const raw = localStorage.getItem(USER_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    // Support both legacy (bare user object) and timestamped ({ user, ts })
+    // cache entries. Expired entries are treated as a miss.
+    if (parsed && typeof parsed === 'object' && 'user' in parsed && 'ts' in parsed) {
+      if (Date.now() - parsed.ts > USER_CACHE_TTL_MS) return null;
+      return parsed.user || null;
+    }
+    return parsed || null;
   } catch {
     return null;
   }
@@ -21,7 +37,9 @@ let profileSyncToken = null;
 
 function writeStoredUser(user) {
   try {
-    localStorage.setItem('user', JSON.stringify(user));
+    // AUDIT FIX (1.imp6): store the user alongside a timestamp so the cache
+    // can expire (see readStoredUser / USER_CACHE_TTL_MS).
+    localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ user, ts: Date.now() }));
   } catch {
     // Ignore storage quota/private mode failures.
   }
@@ -29,7 +47,7 @@ function writeStoredUser(user) {
 
 function clearStoredUser() {
   try {
-    localStorage.removeItem('user');
+    localStorage.removeItem(USER_CACHE_KEY);
   } catch {
     // Ignore storage failures during cleanup.
   }
@@ -76,9 +94,19 @@ async function syncUserProfile(token, set) {
         });
       }
       return userProfile;
-    } catch {
-      await authService.logout();
-      clearAuthState(set);
+    } catch (err) {
+      // CRITICAL FIX (audit 1.1): Do NOT call logout()/clearAuthState() on a
+      // transient profile-fetch failure. A TOKEN_REFRESHED event racing with
+      // sync, or a temporary backend hiccup, would otherwise log the user out
+      // mid-session. Only clear auth state on an explicit SIGNED_OUT event
+      // (handled in handleAuthStateChange). Keep the Supabase session intact;
+      // surface the error and let the user retry.
+      set({
+        isInitializing: false,
+        error:
+          (err && (err.response?.data?.detail || err.message)) ||
+          'Failed to load profile. Please retry.',
+      });
       return null;
     } finally {
       if (profileSyncToken === token) {
@@ -208,6 +236,18 @@ const useAuthStore = create((set, get) => ({
       set({ isLoading: false, isInitializing: false, error: 'Failed to login' });
       return false;
     } catch (error) {
+      // AUDIT FIX (1.4): ensure consistent auth state on login failure.
+      // authService.login() may have already established a Supabase session
+      // (signInWithPassword succeeded) before getCurrentUser/profile fetch
+      // threw. That leaves a valid Supabase session while the app considers
+      // the user unauthenticated (token set in Supabase, no profile here) —
+      // a partial state. Sign out the dangling session so state is consistent.
+      try {
+        await authService.logout();
+      } catch {
+        // Best-effort cleanup; the Supabase session may not exist.
+      }
+      clearAuthState(set);
       set({
         isLoading: false,
         isInitializing: false,

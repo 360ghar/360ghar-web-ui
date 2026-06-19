@@ -5,6 +5,11 @@ import crypto from 'node:crypto';
 export const API_PAGE_LIMIT = 100;
 export const DEFAULT_FETCH_TIMEOUT_MS = 120000;
 
+// Hard safety cap on the number of cursor pages we'll walk per collection.
+// Prevents an unbounded loop if the backend ever returns a non-null
+// next_cursor while also reporting has_more=true indefinitely.
+const MAX_CURSOR_PAGES = 10000;
+
 // --- Build-time on-disk cache (best-effort, opt-out via BUILD_CACHE_DISABLED) ---
 // NOTE: Netlify build containers are ephemeral, so this only persists for
 // local/persistent-CI builds. The real build-egress fix is the backend Redis
@@ -58,94 +63,48 @@ function normalizeBaseUrl(baseUrl) {
   return baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
 }
 
-export function buildApiPageUrl(baseUrl, path, page = 1, pageSize = API_PAGE_LIMIT) {
+/**
+ * Build a cursor-paginated API URL.
+ *
+ * `cursor` is an opaque base64 token returned by a prior `next_cursor`. Pass
+ * null/undefined/empty on the first page (the `cursor` param is omitted so
+ * the backend serves the first page).
+ */
+export function buildApiCursorUrl(baseUrl, path, cursor = null, pageSize = API_PAGE_LIMIT) {
   const url = new URL(String(path || '').replace(/^\/+/, ''), normalizeBaseUrl(baseUrl));
-  url.searchParams.set('page', String(page));
   url.searchParams.set('limit', String(Math.min(pageSize, API_PAGE_LIMIT)));
+  if (cursor) {
+    url.searchParams.set('cursor', String(cursor));
+  }
   return url.toString();
 }
 
-export function extractTotalPages(data, pageSize = API_PAGE_LIMIT) {
-  if (Number.isInteger(data?.total_pages) && data.total_pages > 0) {
-    return data.total_pages;
-  }
-
-  if (Number.isInteger(data?.totalPages) && data.totalPages > 0) {
-    return data.totalPages;
-  }
-
-  if (Number.isInteger(data?.count) && data.count >= 0) {
-    return Math.max(1, Math.ceil(data.count / Math.min(pageSize, API_PAGE_LIMIT)));
-  }
-
-  return null;
-}
-
 export function defaultExtractItems(data) {
-  if (Array.isArray(data?.results)) return data.results;
   if (Array.isArray(data?.items)) return data.items;
+  if (Array.isArray(data?.results)) return data.results;
   if (Array.isArray(data?.properties)) return data.properties;
   if (Array.isArray(data)) return data;
   return [];
 }
 
-export async function fetchPaginatedCollection({
-  baseUrl,
-  path,
-  fetchImpl = fetch,
-  pageSize = API_PAGE_LIMIT,
-  timeoutMs = DEFAULT_FETCH_TIMEOUT_MS,
-  extractItems = defaultExtractItems,
-}) {
-  const allItems = [];
-  const cappedPageSize = Math.min(pageSize, API_PAGE_LIMIT);
-  let page = 1;
-
-  while (true) {
-    const url = buildApiPageUrl(baseUrl, path, page, cappedPageSize);
-    let response;
-    let lastFetchErr;
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        response = await fetchImpl(url, {
-          signal: AbortSignal.timeout(timeoutMs),
-        });
-        lastFetchErr = null;
-        break;
-      } catch (err) {
-        lastFetchErr = err;
-        if (attempt < 3) {
-          await new Promise((r) => setTimeout(r, 1000 * 2 ** (attempt - 1)));
-        }
-      }
-    }
-    if (lastFetchErr) throw lastFetchErr;
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status} from ${url}`);
-    }
-
-    const data = await response.json();
-    const items = extractItems(data);
-    allItems.push(...items);
-
-    const totalPages = extractTotalPages(data, cappedPageSize);
-    const reachedLastPage = totalPages
-      ? page >= totalPages
-      : items.length < cappedPageSize;
-
-    if (reachedLastPage || items.length === 0) {
-      break;
-    }
-
-    page += 1;
-  }
-
-  return allItems;
+export function defaultExtractNextCursor(data) {
+  return data?.next_cursor ?? data?.nextCursor ?? null;
 }
 
-async function fetchSinglePage({ baseUrl, path, page, pageSize, timeoutMs, fetchImpl }) {
-  const url = buildApiPageUrl(baseUrl, path, page, pageSize);
+export function defaultExtractHasMore(data) {
+  if (typeof data?.has_more === 'boolean') return data.has_more;
+  if (typeof data?.hasMore === 'boolean') return data.hasMore;
+  // Legacy fallback: if the API reports total_pages/page, treat has_more as
+  // "not on the last page". This keeps the crawler terminating for backends
+  // that haven't fully migrated yet.
+  if (Number.isInteger(data?.total_pages) && Number.isInteger(data?.page)) {
+    return data.page < data.total_pages;
+  }
+  return false;
+}
+
+async function fetchSinglePage({ baseUrl, path, cursor, pageSize, timeoutMs, fetchImpl }) {
+  const url = buildApiCursorUrl(baseUrl, path, cursor, pageSize);
   let response;
   let lastFetchErr;
   for (let attempt = 1; attempt <= 3; attempt++) {
@@ -171,55 +130,55 @@ async function fetchSinglePage({ baseUrl, path, page, pageSize, timeoutMs, fetch
   return response.json();
 }
 
-async function runInBatches(tasks, concurrency) {
-  const results = [];
-  for (let i = 0; i < tasks.length; i += concurrency) {
-    const batch = tasks.slice(i, i + concurrency);
-    results.push(...await Promise.all(batch.map(fn => fn())));
-  }
-  return results;
-}
-
-export async function fetchPaginatedCollectionParallel({
+/**
+ * Walk a cursor-paginated collection to exhaustion.
+ *
+ * Termination: the loop stops when the backend reports `has_more === false`,
+ * when `next_cursor` is null/empty, when a page returns no items, or when the
+ * MAX_CURSOR_PAGES safety cap is reached. Cursor tokens are treated as opaque
+ * — they are never decoded or arithmetic'd on.
+ */
+export async function fetchPaginatedCollection({
   baseUrl,
   path,
   fetchImpl = fetch,
   pageSize = API_PAGE_LIMIT,
   timeoutMs = DEFAULT_FETCH_TIMEOUT_MS,
   extractItems = defaultExtractItems,
-  concurrency = 5,
+  extractNextCursor = defaultExtractNextCursor,
+  extractHasMore = defaultExtractHasMore,
 }) {
+  const allItems = [];
   const cappedPageSize = Math.min(pageSize, API_PAGE_LIMIT);
+  let cursor = null;
 
-  // Step 1: Fetch page 1 to discover total pages
-  const firstData = await fetchSinglePage({ baseUrl, path, page: 1, pageSize: cappedPageSize, timeoutMs, fetchImpl });
-  const firstItems = extractItems(firstData);
-  const totalPages = extractTotalPages(firstData, cappedPageSize);
+  for (let pageNum = 0; pageNum < MAX_CURSOR_PAGES; pageNum++) {
+    const data = await fetchSinglePage({ baseUrl, path, cursor, pageSize: cappedPageSize, timeoutMs, fetchImpl });
+    const items = extractItems(data);
+    allItems.push(...items);
 
-  // No more pages if first page is partial, or only 1 page reported
-  if (firstItems.length < cappedPageSize) return firstItems;
-  if (totalPages !== null && totalPages <= 1) return firstItems;
+    const nextCursor = extractNextCursor(data);
+    const hasMore = extractHasMore(data);
 
-  // If API doesn't report total pages, fall back to sequential fetching
-  if (totalPages === null) {
-    return fetchPaginatedCollection({
-      baseUrl, path, fetchImpl, pageSize, timeoutMs, extractItems,
-    });
+    // Terminal page: no cursor, backend says no more, or empty page.
+    if (!hasMore || !nextCursor || items.length === 0) {
+      break;
+    }
+
+    cursor = nextCursor;
   }
 
-  // Step 2: Fetch remaining pages in parallel batches
-  const pageTasks = [];
-  for (let page = 2; page <= totalPages; page++) {
-    pageTasks.push(async () => {
-      const data = await fetchSinglePage({ baseUrl, path, page, pageSize: cappedPageSize, timeoutMs, fetchImpl });
-      return extractItems(data);
-    });
-  }
+  return allItems;
+}
 
-  const remainingItems = await runInBatches(pageTasks, concurrency);
-
-  // Step 3: Merge in page order
-  return [...firstItems, ...remainingItems.flat()];
+/**
+ * Cursor pagination is inherently sequential (each page's cursor depends on
+ * the previous response), so the "parallel" variant simply delegates to the
+ * sequential cursor walk. The name is preserved for backwards compatibility
+ * with existing call sites (generate-rss.mjs, etc.).
+ */
+export async function fetchPaginatedCollectionParallel(options) {
+  return fetchPaginatedCollection(options);
 }
 
 export async function fetchPaginatedCollectionWithFallbacksParallel({

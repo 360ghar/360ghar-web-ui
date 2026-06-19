@@ -20,7 +20,7 @@ const STATUS_LABELS = {
 export default function VisitListWidget({ data }) {
   if (!data) return null;
 
-  const visits = data.visits || data.bookings || data.items || [];
+  const visits = Array.isArray(data?.items) ? data.items : [];
 
   if (visits.length === 0) {
     return (

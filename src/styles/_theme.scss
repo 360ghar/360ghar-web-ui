@@ -110,6 +110,51 @@
   }
 
 // =============================================================================
+// Dark Mode Scaffolding (audit imp 5.10)
+// =============================================================================
+// This is a SCAFFOLD ONLY: it overrides the CSS custom properties above when
+// the user has requested a dark color scheme via OS preference or an explicit
+// `data-theme="dark"` attribute on <html>. Brand/semantic hues are preserved;
+// only surface, text, and border tokens are inverted so existing components
+// that consume var(--xxx) pick up dark values automatically. A full dark theme
+// (component-level tuning, images, shadows) is intentionally out of scope here.
+@mixin dark-mode-overrides {
+  --gray-100: #1a1c1f;
+  --gray-200: #2a2d31;
+  --gray-300: #3a3e43;
+  --gray-400: #4a4f55;
+  --gray-500: #6b7280;
+  --gray-600: #9aa0aa;
+  --gray-700: #c2c7d0;
+  --gray-800: #e0e3e8;
+  --gray-900: #f5f6f7;
+
+  --text-primary: #f5f6f7;
+  --text-secondary: #e0e3e8;
+  --text-muted: #9aa0aa;
+  --text-light: #181616;
+
+  --border-color-light: #2a2d31;
+  --border-color-dark: #3a3e43;
+
+  --bg-light: #121316;
+  --bg-white: #1a1c1f;
+  --bg-dark: #f5f6f7;
+
+  --main-color-lighter: #2a1a0a;
+}
+
+:root[data-theme="dark"] {
+  @include dark-mode-overrides;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include dark-mode-overrides;
+  }
+}
+
+// =============================================================================
 // Utility Classes
 // =============================================================================
 .bg-main {

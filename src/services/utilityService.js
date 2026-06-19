@@ -1,4 +1,4 @@
-import api from './api';
+import { api, publicApi } from './api';
 
 // Utility Services (Amenities, Upload, Support, etc.)
 export const utilityService = {
@@ -20,15 +20,19 @@ export const utilityService = {
     return response.data;
   },
 
+  // CRITICAL FIX (audit 5.3): public FAQs and public pages must use the
+  // unauthenticated `publicApi` instance, otherwise unauthenticated users
+  // get 401s (the authenticated `api` instance attaches a Bearer token that
+  // may be absent or expired).
   // Get public FAQs
   getPublicFAQs: async (params = {}) => {
-    const response = await api.get('/faqs/public', { params });
+    const response = await publicApi.get('/faqs/public', { params });
     return response.data;
   },
 
   // Get static pages (terms, privacy, etc.)
   getPageByUniqueName: async (uniqueName) => {
-    const response = await api.get(`/pages/${uniqueName}/public`);
+    const response = await publicApi.get(`/pages/${uniqueName}/public`);
     return response.data;
   },
 

@@ -7,14 +7,23 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
-import { useForm, ValidationError } from '@formspree/react';
+import { toast } from 'react-toastify';
+import { useAuthStore } from '../../store/authStore';
+import { deletionService } from '../../services/deletionService';
 import '../../styles/account-deletion.scss';
 
 const AccountDeletionRequest = () => {
     const { t } = useTranslation('account');
-    const [state, handleSubmit] = useForm("mwpqglyb");
+    // CRITICAL FIX (audit 1.3 / 1.12): replace Formspree with our own backend
+    // service. Pre-fill the email from the auth store when the user is logged
+    // in, but keep the form accessible to anonymous users (GDPR right).
+    const authUser = useAuthStore((s) => s.user);
+    const [submitting, setSubmitting] = useState(false);
+    const [succeeded, setSucceeded] = useState(false);
+    const [submitError, setSubmitError] = useState('');
     const [selectedType, setSelectedType] = useState('account');
     const [selectedReason, setSelectedReason] = useState('');
+    const [email, setEmail] = useState(authUser?.email || '');
 
     const handleTypeChange = (value) => {
         setSelectedType(value);
@@ -35,19 +44,36 @@ const AccountDeletionRequest = () => {
         }
     };
 
-    const onFormSubmit = (e) => {
-        // Ensure the selected values are included in the form data
-        const form = e.target;
-
-        // Update the hidden field with current selection
-        if (form.elements.deletion_type) {
-            form.elements.deletion_type.value = selectedType;
+    const onFormSubmit = async (e) => {
+        e.preventDefault();
+        if (submitting) return;
+        setSubmitting(true);
+        setSubmitError('');
+        try {
+            const form = e.target;
+            const payload = {
+                email: (form.elements.user_email?.value || email || '').trim(),
+                deletion_type: selectedType,
+                reason: selectedReason,
+                message: form.elements.message?.value || '',
+            };
+            await deletionService.submitDeletionRequest(payload);
+            setSucceeded(true);
+            toast.success(t('deletion.successTitle'), { theme: 'colored' });
+        } catch (err) {
+            const msg =
+                err?.response?.data?.detail?.message ||
+                err?.response?.data?.detail ||
+                err?.message ||
+                t('deletion.submitError');
+            setSubmitError(typeof msg === 'string' ? msg : t('deletion.submitError'));
+            toast.error(t('deletion.submitError'), { theme: 'colored' });
+        } finally {
+            setSubmitting(false);
         }
-
-        handleSubmit(e);
     };
 
-    if (state.succeeded) {
+    if (succeeded) {
         return (
             <>
             <SEO title={t('deletion.title')} description={t('deletion.description')} canonical="/delete-account" noindex />
@@ -135,6 +161,11 @@ const AccountDeletionRequest = () => {
 
                         <form onSubmit={onFormSubmit} className="contact-form__form">
                             <input type="hidden" name="form_type" value="account_deletion" />
+                            {submitError && (
+                                <div className="alert alert-danger" role="alert">
+                                    {submitError}
+                                </div>
+                            )}
                             <div className="row gy-4">
                                 {/* Email */}
                                 <div className="col-lg-12">
@@ -149,13 +180,9 @@ const AccountDeletionRequest = () => {
                                             name="user_email"
                                             className="common-input"
                                             placeholder={t('deletion.emailPlaceholder')}
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             required
-                                        />
-                                        <ValidationError
-                                            prefix="Email"
-                                            field="user_email"
-                                            errors={state.errors}
-                                            className="text-danger mt-2"
                                         />
                                         {/* Hidden field to identify this as a deletion request */}
                                         <input
@@ -336,12 +363,6 @@ const AccountDeletionRequest = () => {
                                             rows="5"
                                             placeholder={t('deletion.detailsPlaceholder')}
                                         ></textarea>
-                                        <ValidationError
-                                            prefix="Message"
-                                            field="message"
-                                            errors={state.errors}
-                                            className="text-danger mt-2"
-                                        />
                                     </div>
                                 </div>
 
@@ -382,9 +403,9 @@ const AccountDeletionRequest = () => {
                                     <button
                                         type="submit"
                                         className="btn btn-main btn-deletion"
-                                        disabled={state.submitting}
+                                        disabled={submitting}
                                     >
-                                        {state.submitting ? (
+                                        {submitting ? (
                                             <>
                                                 <i className="fas fa-spinner fa-spin me-2"></i>
                                                 {t('deletion.submitting')}

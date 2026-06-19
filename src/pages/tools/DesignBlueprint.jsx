@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -52,7 +53,43 @@ const DESIGN_BLUEPRINT_FAQS = [
 
 const DesignBlueprint = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  // AUDIT FIX (3.6): error state with retry when the iframe fails to load.
+  const [hasError, setHasError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
+  const loadTimeoutRef = useRef(null);
+  const isLoadedRef = useRef(false);
   const { t } = useTranslation('tools');
+
+  // Keep a ref of isLoaded so the timeout callback can read the latest value
+  // without re-subscribing the effect (avoids setState-in-effect).
+  useEffect(() => {
+    isLoadedRef.current = isLoaded;
+  }, [isLoaded]);
+
+  // AUDIT FIX (3.6): if the iframe doesn't fire onLoad within 15s, show a
+  // fallback error state with a retry button instead of an infinite spinner.
+  useEffect(() => {
+    loadTimeoutRef.current = setTimeout(() => {
+      if (!isLoadedRef.current) setHasError(true);
+    }, 15000);
+    return () => {
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+    };
+  }, [retryKey]);
+
+  const handleRetry = () => {
+    if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+    isLoadedRef.current = false;
+    setIsLoaded(false);
+    setHasError(false);
+    setRetryKey((k) => k + 1);
+  };
+
+  const handleIframeLoad = () => {
+    isLoadedRef.current = true;
+    if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+    setIsLoaded(true);
+  };
 
   const faqStructuredData = generateFaqStructuredData(DESIGN_BLUEPRINT_FAQS);
 
@@ -112,20 +149,43 @@ const DesignBlueprint = () => {
 
         <section className="design-blueprint-content">
           <div className="design-blueprint-frame">
-            {!isLoaded && (
-              <div className="design-blueprint-loading" role="status" aria-live="polite">
-                {t('designBlueprint.loading')}
+            {/* AUDIT FIX (3.6): fallback UI when the iframe fails to load */}
+            {hasError ? (
+              <div className="design-blueprint-loading" role="alert" style={{ flexDirection: 'column', gap: 16 }}>
+                <i className="fas fa-exclamation-triangle" style={{ fontSize: 40, color: 'var(--warning-color)' }}></i>
+                <p style={{ margin: 0 }}>{t('designBlueprint.loadError', 'The 3D designer could not be loaded. Please check your connection and try again.')}</p>
+                <button type="button" className="btn btn-main" onClick={handleRetry}>
+                  <i className="fas fa-redo me-2"></i>{t('designBlueprint.retry', 'Retry')}
+                </button>
               </div>
-            )}
+            ) : (
+              <>
+                {!isLoaded && (
+                  <div className="design-blueprint-loading" role="status" aria-live="polite">
+                    {t('designBlueprint.loading')}
+                  </div>
+                )}
 
-            <iframe
-              className="design-blueprint-iframe"
-              src={DESIGNER_SRC}
-              title={t('designBlueprint.iframeTitle')}
-              onLoad={() => setIsLoaded(true)}
-              loading="lazy"
-              allow="fullscreen; clipboard-read; clipboard-write"
-            />
+                <iframe
+                  key={retryKey}
+                  className="design-blueprint-iframe"
+                  src={DESIGNER_SRC}
+                  title={t('designBlueprint.iframeTitle')}
+                  onLoad={handleIframeLoad}
+                  onError={() => setHasError(true)}
+                  loading="lazy"
+                  allow="fullscreen; clipboard-read; clipboard-write"
+                />
+              </>
+            )}
+          </div>
+
+          {/* AUDIT FIX (imp 3.7): one-click Vastu check after designing */}
+          <div className="container mt-4 text-center">
+            <I18nLink to="/vastu-checker" className="btn btn-outline-main">
+              <i className="fas fa-compass me-2"></i>
+              {t('designBlueprint.checkVastu', 'Check Vastu for Your Design')}
+            </I18nLink>
           </div>
         </section>
 

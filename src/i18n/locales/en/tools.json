@@ -31,7 +31,22 @@
     "ctaTitle": "Ready to Find Your Dream Home?",
     "ctaDesc": "Explore our wide range of properties and use our EMI calculator to plan your finances better.",
     "browseProperties": "Browse Properties",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "shareResults": "Share Results",
+    "shareCopied": "Shareable link copied to clipboard!",
+    "shareError": "Could not copy link.",
+    "prepaymentTitle": "Prepayment Simulator",
+    "prepaymentAmount": "Prepayment Amount",
+    "prepaymentMonth": "After Month #",
+    "monthsSaved": "Months Saved",
+    "interestSaved": "Interest Saved",
+    "newTenure": "New Tenure",
+    "months": "months",
+    "amortizationSchedule": "Amortization Schedule (Yearly)",
+    "year": "Year",
+    "principal": "Principal",
+    "interest": "Interest",
+    "balance": "Balance"
   },
   "areaConverter": {
     "title": "Land Area Converter - Gaj to Acre, Sq Ft to Gaj, Bigha to Acre | 360Ghar",
@@ -163,6 +178,8 @@
     "superBuiltupHint": "Total area advertised by builder",
     "loadingFactor": "Loading Factor (%)",
     "loadingHint": "Standard loading is 25-35%",
+    "builtUpLoadingFactor": "Built-up Loading Factor (%)",
+    "builtUpLoadingHint": "Extra over carpet for walls & balconies (default 15%)",
     "areaBreakdown": "Area Breakdown",
     "estimatedCarpetArea": "ESTIMATED CARPET AREA (Usable Space)",
     "sqFt": "Sq. Ft.",
@@ -171,6 +188,8 @@
     "builtUpHint": "Includes walls & balconies",
     "commonArea": "COMMON AREA (Loading)",
     "commonAreaHint": "Lobby, stairs, lift, etc.",
+    "loadingArea": "LOADING AREA (Super − Carpet)",
+    "loadingAreaHint": "The portion of super area that is not usable carpet space.",
     "understandingTerms": "Understanding the Terms",
     "carpetAreaTitle": "Carpet Area",
     "carpetAreaDesc": "The area enclosed within the walls, actual usable floor area. According to RERA, it excludes external walls, service shafts, balconies, and open terraces.",
@@ -224,7 +243,14 @@
     "maxMonthlyEmi": "Max Monthly EMI",
     "tenure": "Tenure",
     "tenureYears": "{{years}} Years",
-    "estimateNote": "* This is an estimate based on standard bank norms (FOIR). Actual eligibility may vary based on credit score, age, and bank policies."
+    "estimateNote": "* This is an estimate based on standard bank norms (FOIR). Actual eligibility may vary based on credit score, age, and bank policies.",
+    "shareResults": "Share Results",
+    "shareCopied": "Shareable link copied to clipboard!",
+    "shareError": "Could not copy link.",
+    "bankComparisonTitle": "Bank-wise Eligibility Estimate",
+    "bankComparisonDesc": "Each bank applies a different FOIR (Fixed Obligation to Income Ratio). Estimated eligible loan amounts based on your inputs:",
+    "bankCol": "Bank",
+    "estLoanCol": "Estimated Loan"
   },
   "capitalGains": {
     "title": "Capital Gains Tax Calculator India | Property LTCG & STCG Calculator | 360Ghar",
@@ -244,6 +270,9 @@
     "indexedCostNote": "(Purchase Price adjusted for inflation using CII)",
     "capitalGains": "Capital Gains",
     "estimatedTaxLiability": "ESTIMATED TAX LIABILITY",
+    "atRate": "@ {{rate}}% on gains",
+    "slabRate": "Income Tax Slab Rate",
+    "slabRateHelp": "Short-term capital gains on property are taxed at your slab rate. Select the slab that applies to your total income.",
     "asPerTaxSlab": "As per Tax Slab",
     "longTermTaxNote": "@ 20% on gains with indexation benefit",
     "shortTermTaxNote": "Short term gains are added to your total income and taxed as per your slab.",
@@ -252,7 +281,16 @@
     "exemption1": "1 year before the sale",
     "exemption2": "2 years after the sale (for purchase)",
     "exemption3": "3 years after the sale (for construction)",
-    "exemptionBonds": "Or by investing in 54EC Capital Gain Bonds (max ₹50 Lakhs) within 6 months."
+    "exemptionBonds": "Or by investing in 54EC Capital Gain Bonds (max ₹50 Lakhs) within 6 months.",
+    "capitalLossWarning": "You have a capital loss. No tax is payable; the loss can be set off against other capital gains or carried forward for 8 years.",
+    "shareResults": "Share Results",
+    "shareCopied": "Shareable link copied to clipboard!",
+    "shareError": "Could not copy link.",
+    "savingsCalcTitle": "Tax Savings Calculator (Section 54 / 54EC / 54F)",
+    "savingsCalcDesc": "Enter reinvestment amounts to see how much tax you can save. These exemptions apply only to long-term capital gains.",
+    "totalExemption": "Total Exemption",
+    "taxAfterExemption": "Tax After Exemption",
+    "taxSaved": "Tax Saved"
   },
   "propertyChecklist": {
     "title": "Property Documents Checklist India | Home Buying Legal Checklist | 360Ghar",
@@ -314,7 +352,15 @@
     "docPossession": "Possession Letter",
     "docPossessionDesc": "Issued by the builder/seller when handing over keys.",
     "noteTitle": "Note",
-    "noteDesc": "This checklist is for general guidance only. Property laws vary by state in India. It is highly recommended to consult a property lawyer for legal verification of documents before making a purchase."
+    "noteDesc": "This checklist is for general guidance only. Property laws vary by state in India. It is highly recommended to consult a property lawyer for legal verification of documents before making a purchase.",
+    "downloadPdf": "Download PDF",
+    "copySummary": "Copy Summary",
+    "copySuccess": "Checklist summary copied to clipboard!",
+    "copyError": "Could not copy. Try the Print option instead.",
+    "uploadDoc": "Upload Document",
+    "uploadSuccess": "Uploaded {{name}}",
+    "verified": "Verified",
+    "remove": "Remove"
   },
   "designBlueprint": {
     "title": "Online Floor Planner & 3D Blueprint Designer India | 360Ghar",
@@ -339,6 +385,7 @@
     "errorValidation": "Invalid Input",
     "errorGeneral": "Analysis Failed",
     "errorNoFile": "Please upload a floor plan image",
+    "errorFileTooLarge": "Image is too large. Maximum allowed size is {{mb}} MB.",
     "errorDefault": "Analysis failed. Please try again.",
     "errorTimeoutMsg": "The analysis is taking longer than expected. This may be due to high demand or a complex floor plan.",
     "errorNetworkMsg": "Unable to connect to the server. Please check your internet connection and try again.",
@@ -657,6 +704,10 @@
     "badgePrivate": "Data stays on your device",
     "badgePANRequired": "Landlord PAN required (annual rent > ₹1 lakh)",
     "badgeRevenueStamp": "Revenue stamp required (cash > ₹5,000)",
+    "stampStateNote": "The ₹5,000 revenue stamp threshold varies by state under the Indian Stamp Act. Some states (e.g., Maharashtra, Karnataka) have different limits or surcharges. Confirm the applicable stamp duty rule for your state before submitting receipts for HRA claims.",
+    "landlordSignature": "Landlord Signature (optional)",
+    "signatureTooLarge": "Signature image must be under 2MB.",
+    "removeSignature": "Remove",
     "fillSample": "Fill Sample Data",
     "clearAll": "Clear All",
     "landlordDetails": "Landlord Details",
@@ -710,6 +761,8 @@
   },
   "toolsIndex": {
     "toolrentReceipt": "Rent Receipt Generator",
-    "toolrentReceiptDesc": "Generate rent receipts for HRA tax exemption. Download PDF, print, or batch-generate full year receipts."
+    "toolrentReceiptDesc": "Generate rent receipts for HRA tax exemption. Download PDF, print, or batch-generate full year receipts.",
+    "searchPlaceholder": "Search tools by name or description...",
+    "noResults": "No tools match your search. Try a different keyword."
   }
 }

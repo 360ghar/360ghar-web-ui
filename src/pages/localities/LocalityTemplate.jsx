@@ -470,6 +470,11 @@ const LocalityTemplate = () => {
     const { t } = useTranslation();
     const [tSeo] = useTranslation('seo');
     const params = useParams();
+    // CRITICAL FIX (audit 4.5): subscribe to the locale store via the hook at
+    // the top of the component (rules-of-hooks safe) instead of calling
+    // getState() inside the conditional early return below, which bypassed
+    // React's subscription model and could render a stale locale.
+    const locale = useLocaleStore((s) => s.locale);
     // URL param is the full slug (may include -gurgaon suffix for SEO)
     const slug = (params.slug || '').replace(/-gurgaon$/i, '');
 
@@ -597,18 +602,21 @@ const LocalityTemplate = () => {
     }
 
     if (!computed) {
-        const locale = useLocaleStore.getState().locale;
         return <Navigate to={localizePath('/properties', locale)} replace />;
     }
 
     const breadcrumbs = [
         { name: 'Home', url: 'https://360ghar.com/' },
         { name: `Properties in ${computed.city}`, url: 'https://360ghar.com/properties' },
-        { name: `${computed.localityName}, ${computed.city}`, url: `https://360ghar.com/locality/${computed.localitySlug}-gurgaon` }
+        { name: `${computed.localityName}, ${computed.city}`, url: `https://360ghar.com/locality/${localityFullSlug}` }
     ];
 
     // Derive URL-safe city slug for cross-linking (e.g. "Gurugram" -> "gurgaon")
     const canonicalCitySlug = (computed.city || 'gurgaon').toLowerCase().replace(/\s+/g, '-').replace('gurugram', 'gurgaon');
+    // CRITICAL FIX (audit 4.1): previously canonical/structured-data URLs
+    // hardcoded a "-gurgaon" suffix, breaking SEO for non-Gurgaon localities.
+    // Derive the suffix from the actual city slug instead.
+    const localityFullSlug = `${computed.localitySlug}-${canonicalCitySlug}`;
 
     const faqItems = defaultFaqBuilder(computed.localityName, computed.entityType);
 
@@ -617,7 +625,7 @@ const LocalityTemplate = () => {
         generateLocalityStructuredData({
             name: computed.localityName,
             city: computed.city,
-            slug: `${computed.localitySlug}-gurgaon`,
+            slug: localityFullSlug,
             lat: localityInfo?.geo?.lat,
             lng: localityInfo?.geo?.lng,
             entityType: computed.entityType,
@@ -625,7 +633,7 @@ const LocalityTemplate = () => {
         {
             '@type': 'WebPage',
             name: `${computed.localityName}, ${computed.city}`,
-            url: `https://360ghar.com/locality/${computed.localitySlug}-gurgaon`,
+            url: `https://360ghar.com/locality/${localityFullSlug}`,
             dateModified: localityInfo.lastVerifiedAt || new Date().toISOString().split('T')[0]
         },
         {
@@ -648,7 +656,7 @@ const LocalityTemplate = () => {
                 title={localityInfo?.seo?.title || tSeo('localityTemplate.title', { localityName: computed.localityName, city: computed.city })}
                 description={localityInfo?.seo?.description || tSeo('localityTemplate.description', { localityName: computed.localityName, city: computed.city })}
                 keywords={localityInfo?.seo?.keywords || `${computed.localityName} ${computed.city} real estate, properties in ${computed.localityName}, ${computed.localityName} prices, ${computed.localityName} reviews, flats in ${computed.localityName}`}
-                canonical={`/locality/${computed.localitySlug}-gurgaon`}
+                canonical={`/locality/${localityFullSlug}`}
                 image={siteMetadata.defaultOgImage}
                 type="website"
                 structuredData={localityStructuredData}
@@ -667,6 +675,25 @@ const LocalityTemplate = () => {
                     showContactNumber={false}
                 />
 
+                {/* AUDIT FIX (4.4): visible breadcrumbs. Previously breadcrumbs
+                    existed only in structured data; render a lightweight UI
+                    breadcrumb strip for users and crawlers. */}
+                <nav aria-label="Breadcrumb" className="locality-breadcrumb-strip">
+                    <div className="container container-two">
+                        <ol className="locality-breadcrumb-list">
+                            <li className="locality-breadcrumb-item">
+                                <I18nLink to="/">{t('common:breadcrumb.home')}</I18nLink>
+                            </li>
+                            <li className="locality-breadcrumb-item">
+                                <I18nLink to="/properties">{computed.city}</I18nLink>
+                            </li>
+                            <li className="locality-breadcrumb-item locality-breadcrumb-item--active" aria-current="page">
+                                {computed.localityName}, {computed.city}
+                            </li>
+                        </ol>
+                    </div>
+                </nav>
+
                 <LocalityHero
                     localityName={computed.localityName}
                     city={computed.city}
@@ -677,16 +704,38 @@ const LocalityTemplate = () => {
                     marketStatus={computed.marketStatus.label}
                 />
 
-                {/* WhatsApp Share */}
+                {/* AUDIT FIX (4.5): expanded social sharing (Facebook, X,
+                    LinkedIn, WhatsApp, copy link) for locality pages. */}
                 <section className="pt-20 pb-0">
                     <div className="container container-two text-end">
                         {(() => {
                             const shareText = `Check out ${computed.localityName} on 360Ghar - verified properties with 360° virtual tours`;
-                            const shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + window.location.origin + window.location.pathname + '?utm_source=whatsapp&utm_medium=share&utm_campaign=locality_share')}`;
+                            const shareUrl = `${window.location.origin}${window.location.pathname}?utm_source=share&utm_medium=social&utm_campaign=locality_share`;
+                            const encUrl = encodeURIComponent(shareUrl);
+                            const encText = encodeURIComponent(shareText);
+                            const links = [
+                                { href: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`, icon: 'fab fa-whatsapp', label: 'WhatsApp', cls: 'btn-outline-success' },
+                                { href: `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`, icon: 'fab fa-facebook', label: 'Facebook', cls: 'btn-outline-primary' },
+                                { href: `https://twitter.com/intent/tweet?text=${encText}&url=${encUrl}`, icon: 'fab fa-x-twitter', label: 'X', cls: 'btn-outline-dark' },
+                                { href: `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`, icon: 'fab fa-linkedin', label: 'LinkedIn', cls: 'btn-outline-primary' },
+                            ];
                             return (
-                                <a href={shareUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-success">
-                                    <i className="fab fa-whatsapp me-1" />Share
-                                </a>
+                                <div className="d-inline-flex flex-wrap gap-2 justify-content-end">
+                                    {links.map((l) => (
+                                        <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className={`btn btn-sm ${l.cls}`}>
+                                            <i className={`${l.icon} me-1`} />{l.label}
+                                        </a>
+                                    ))}
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-outline-main"
+                                        onClick={() => {
+                                            navigator.clipboard?.writeText(shareUrl);
+                                        }}
+                                    >
+                                        <i className="fas fa-link me-1" />{t('common:contentSeo.copyLink')}
+                                    </button>
+                                </div>
                             );
                         })()}
                     </div>

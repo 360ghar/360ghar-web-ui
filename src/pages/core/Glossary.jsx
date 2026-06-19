@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { I18nLink } from '../../i18n/I18nLink';
 import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
+import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
 
@@ -39,13 +40,26 @@ const GLOSSARY_FAQS = GLOSSARY_ENTRIES.map(e => ({
 const Glossary = () => {
   const { t } = useTranslation();
   const [tSeo] = useTranslation('seo');
+  const [tC] = useTranslation('common');
   const [search, setSearch] = useState('');
   const [openIndex, setOpenIndex] = useState(-1);
+  // AUDIT FIX (4.10): active letter filter for A-Z quick jump navigation.
+  // "ALL" shows every entry; a single letter shows only entries whose term
+  // starts with that letter (case-insensitive).
+  const [activeLetter, setActiveLetter] = useState('ALL');
 
-  const filtered = GLOSSARY_ENTRIES.filter((entry) =>
-    entry.term.toLowerCase().includes(search.toLowerCase()) ||
-    entry.question.toLowerCase().includes(search.toLowerCase())
-  );
+  // AUDIT FIX (4.10): build the A-Z navigation from the available first letters.
+  const availableLetters = useMemo(() => {
+    const letters = new Set(GLOSSARY_ENTRIES.map((entry) => entry.term.charAt(0).toUpperCase()));
+    return ['ALL', ...Array.from(letters).sort()];
+  }, []);
+
+  const filtered = useMemo(() => GLOSSARY_ENTRIES.filter((entry) => {
+    const matchesSearch = entry.term.toLowerCase().includes(search.toLowerCase())
+      || entry.question.toLowerCase().includes(search.toLowerCase());
+    const matchesLetter = activeLetter === 'ALL' || entry.term.charAt(0).toUpperCase() === activeLetter;
+    return matchesSearch && matchesLetter;
+  }), [search, activeLetter]);
 
   return (
     <>
@@ -86,7 +100,7 @@ const Glossary = () => {
             </div>
 
             {/* Search */}
-            <div className="row justify-content-center mb-5">
+            <div className="row justify-content-center mb-4">
               <div className="col-lg-8">
                 <input
                   type="text"
@@ -95,6 +109,25 @@ const Glossary = () => {
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setOpenIndex(-1); }}
                 />
+              </div>
+            </div>
+
+            {/* AUDIT FIX (4.10): A-Z quick jump navigation */}
+            <div className="row justify-content-center mb-5">
+              <div className="col-lg-8">
+                <nav aria-label={tC('contentSeo.glossaryAzNav')} className="d-flex flex-wrap gap-1 justify-content-center">
+                  {availableLetters.map((letter) => (
+                    <button
+                      key={letter}
+                      type="button"
+                      onClick={() => { setActiveLetter(letter); setOpenIndex(-1); }}
+                      className={`btn btn-sm ${activeLetter === letter ? 'btn-main' : 'btn-outline-main'}`}
+                      aria-pressed={activeLetter === letter}
+                    >
+                      {letter === 'ALL' ? tC('contentSeo.glossaryAll') : letter}
+                    </button>
+                  ))}
+                </nav>
               </div>
             </div>
 
@@ -125,7 +158,7 @@ const Glossary = () => {
                   })}
                 </div>
                 {filtered.length === 0 && (
-                  <p className="text-center text-muted py-4">No matching terms found. Try a different search.</p>
+                  <p className="text-center text-muted py-4">{tC('contentSeo.noResults')}</p>
                 )}
               </div>
             </div>
@@ -140,6 +173,9 @@ const Glossary = () => {
             </div>
           </div>
         </section>
+
+        {/* AUDIT FIX (4.3): add CTA section to glossary page */}
+        <Cta ctaClass="" />
 
         <Footer />
       </main>

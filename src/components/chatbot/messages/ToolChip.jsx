@@ -1,39 +1,43 @@
-// Map backend snake_case tool names to human-readable labels
-const TOOL_LABELS = {
-  owner_properties_list: 'Checking properties',
-  owner_properties_create: 'Creating property',
-  owner_properties_get: 'Getting property details',
-  owner_properties_update: 'Updating property',
-  owner_properties_toggle_availability: 'Updating availability',
-  tenant_lease_current: 'Checking lease',
-  tenant_rent_history: 'Checking rent history',
-  tenant_maintenance_create: 'Creating request',
-  tenant_maintenance_list: 'Checking maintenance',
-  bookings_check_availability: 'Checking availability',
-  bookings_get_pricing: 'Getting pricing',
-  bookings_create: 'Creating booking',
-  bookings_list: 'Checking bookings',
-  bookings_get: 'Getting booking details',
-  bookings_cancel: 'Cancelling booking',
-  user_system_status: 'Checking status',
-  agent_properties_list: 'Listing properties',
-  agent_properties_get: 'Getting property',
-  agent_properties_create_for_owner: 'Creating property',
-  agent_properties_verify: 'Verifying property',
-  agent_leases_list: 'Checking leases',
-  agent_leases_create: 'Creating lease',
-  agent_leases_terminate: 'Terminating lease',
-  agent_rent_list_due: 'Checking overdue rent',
-  agent_rent_record_payment: 'Recording payment',
-  agent_maintenance_list: 'Checking maintenance',
-  agent_maintenance_update_status: 'Updating maintenance',
-  agent_bookings_list_all: 'Checking all bookings',
-  agent_bookings_update_status: 'Updating booking',
-  agent_dashboard_overview: 'Loading dashboard',
-  admin_system_status: 'Checking system',
-  discovery_search: 'Searching properties',
-  discovery_property_get: 'Getting property',
-  discovery_feed: 'Loading feed',
+import { useTranslation } from 'react-i18next';
+
+// AUDIT FIX (5.5): map backend snake_case tool names to i18n keys so the
+// chip labels are translated. Unknown tools fall back to a humanized version
+// of the raw tool name.
+const TOOL_LABEL_KEYS = {
+  owner_properties_list: 'chatbot.tools.checkingProperties',
+  owner_properties_create: 'chatbot.tools.creatingProperty',
+  owner_properties_get: 'chatbot.tools.gettingPropertyDetails',
+  owner_properties_update: 'chatbot.tools.updatingProperty',
+  owner_properties_toggle_availability: 'chatbot.tools.updatingAvailability',
+  tenant_lease_current: 'chatbot.tools.checkingLease',
+  tenant_rent_history: 'chatbot.tools.checkingRentHistory',
+  tenant_maintenance_create: 'chatbot.tools.creatingRequest',
+  tenant_maintenance_list: 'chatbot.tools.checkingMaintenance',
+  bookings_check_availability: 'chatbot.tools.checkingAvailability',
+  bookings_get_pricing: 'chatbot.tools.gettingPricing',
+  bookings_create: 'chatbot.tools.creatingBooking',
+  bookings_list: 'chatbot.tools.checkingBookings',
+  bookings_get: 'chatbot.tools.gettingBookingDetails',
+  bookings_cancel: 'chatbot.tools.cancellingBooking',
+  user_system_status: 'chatbot.tools.checkingStatus',
+  agent_properties_list: 'chatbot.tools.listingProperties',
+  agent_properties_get: 'chatbot.tools.gettingProperty',
+  agent_properties_create_for_owner: 'chatbot.tools.creatingPropertyForOwner',
+  agent_properties_verify: 'chatbot.tools.verifyingProperty',
+  agent_leases_list: 'chatbot.tools.checkingLeases',
+  agent_leases_create: 'chatbot.tools.creatingLease',
+  agent_leases_terminate: 'chatbot.tools.terminatingLease',
+  agent_rent_list_due: 'chatbot.tools.checkingOverdueRent',
+  agent_rent_record_payment: 'chatbot.tools.recordingPayment',
+  agent_maintenance_list: 'chatbot.tools.checkingMaintenance',
+  agent_maintenance_update_status: 'chatbot.tools.updatingMaintenance',
+  agent_bookings_list_all: 'chatbot.tools.checkingAllBookings',
+  agent_bookings_update_status: 'chatbot.tools.updatingBooking',
+  agent_dashboard_overview: 'chatbot.tools.loadingDashboard',
+  admin_system_status: 'chatbot.tools.checkingSystem',
+  discovery_search: 'chatbot.tools.searchingProperties',
+  discovery_property_get: 'chatbot.tools.gettingProperty',
+  discovery_feed: 'chatbot.tools.loadingFeed',
 };
 
 function humanize(snakeName) {
@@ -72,8 +76,10 @@ function ErrorIcon() {
 }
 
 export default function ToolChip({ toolCall }) {
+  const { t } = useTranslation('common');
   const { tool, status, summary } = toolCall;
-  const label = TOOL_LABELS[tool] || humanize(tool);
+  const labelKey = TOOL_LABEL_KEYS[tool];
+  const label = labelKey ? t(labelKey) : humanize(tool);
 
   return (
     <span

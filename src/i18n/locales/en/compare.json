@@ -4,6 +4,12 @@
     "browseProperties": "Browse Properties",
     "listYourProperty": "List Your Property"
   },
+  "atAGlance": {
+    "founded": "Founded",
+    "valuation": "Valuation",
+    "users": "Users",
+    "cities": "Cities"
+  },
   "quickComparison": {
     "subtitle": "Quick Comparison",
     "titlePrefix": "Why 360 Ghar Beats",

@@ -18,12 +18,36 @@ const VERIFY_OWNERSHIP_HOW_TO_STEPS = [
   { name: 'View property ownership records', text: 'Review ownership details, mutation status, encumbrance, and area from official Haryana land records.' },
 ];
 
+// AUDIT FIX (3.14): expanded the hardcoded tehsil list to cover more of
+// Haryana's districts so the tool is useful beyond a small Gurugram subset.
 const TEHSIL_OPTIONS = [
-  'Gurgaon',
-  'Faridabad',
-  'Sohna',
-  'Pataudi',
-  'Badshahpur',
+  // Gurugram district
+  'Gurgaon', 'Sohna', 'Pataudi', 'Farukhnagar', 'Manesar',
+  // Faridabad district
+  'Faridabad', 'Ballabgarh', 'Palwal',
+  // Sonipat district
+  'Sonipat', 'Ganaur', 'Gohana',
+  // Rohtak district
+  'Rohtak', 'Maham',
+  // Panipat district
+  'Panipat', 'Samalkha',
+  // Karnal district
+  'Karnal', 'Gharaunda', 'Assandh',
+  // Rewari district
+  'Rewari', 'Bawal', 'Kosli',
+  // Hisar district
+  'Hisar', 'Hansi', 'Narnaund',
+  // Ambala district
+  'Ambala', 'Ambala Cantt', 'Naraingarh',
+  // Kurukshetra district
+  'Kurukshetra', 'Pehowa', 'Shahbad',
+  // Jhajjar district
+  'Jhajjar', 'Bahadurgarh',
+  // Mewat district
+  'Nuh', 'Ferozepur Jhirka', 'Punahana',
+  // Yamunanagar district
+  'Yamunanagar', 'Jagadhri', 'Chhachhrauli',
+  // Other
   'Wazirabad',
 ];
 
@@ -141,6 +165,14 @@ const VerifyOwnership = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
+                {/* AUDIT FIX (imp 3.19): consistent breadcrumb */}
+                <nav aria-label="breadcrumb" className="mb-20">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
+                    <li className="breadcrumb-item"><I18nLink to="/verify-ownership">Data Hub</I18nLink></li>
+                    <li className="breadcrumb-item active">Verify Ownership</li>
+                  </ol>
+                </nav>
                 <h1 className="fs-28 fw-600 mb-10">{t('verifyOwnership.title')}</h1>
                 <p className="mb-10 color-text-3">
                   {t('verifyOwnership.description')}

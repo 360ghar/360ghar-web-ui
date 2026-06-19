@@ -125,12 +125,16 @@ async function streamChatPublic(message, onEvent, signal) {
  * Get list of conversations for the current user.
  *
  * @param {number} limit
- * @param {number} offset
+ * @param {string|null} cursor - opaque base64 cursor from a prior response's next_cursor (null for first page)
  */
-async function getConversations(limit = 50, offset = 0) {
+async function getConversations(limit = 50, cursor = null) {
+  const params = new URLSearchParams();
+  params.set('limit', String(limit));
+  if (cursor) params.set('cursor', cursor);
   const response = await api.get(
-    `${getApiBaseUrl()}/agent/conversations?limit=${limit}&offset=${offset}`
+    `${getApiBaseUrl()}/agent/conversations?${params.toString()}`
   );
+  // Backend now returns {items, next_cursor, has_more, limit}
   return response.data;
 }
 

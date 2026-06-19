@@ -1,5 +1,70 @@
 
 
+/* UX FIX (audit 5.1): skip-to-content link for keyboard / screen-reader users. */
+.skip-link {
+	position: absolute;
+	top: -100px;
+	left: 0;
+	padding: 12px 20px;
+	background: var(--main-color, #ff6b00);
+	color: #fff;
+	font-weight: 600;
+	z-index: 10000;
+	text-decoration: none;
+	transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+	top: 0;
+	color: #fff;
+	outline: 2px solid #fff;
+	outline-offset: -2px;
+}
+
+/* UX FIX (audit 5.5): autocomplete suggestions dropdown for SearchBox */
+.search-box__suggestions {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 1050;
+	list-style: none;
+	margin: 4px 0 0;
+	padding: 6px 0;
+	background: var(--bg-white, #fff);
+	border: 1px solid var(--border-color-light, #e0e6ed);
+	border-radius: 10px;
+	box-shadow: 0 12px 24px rgba(16, 24, 40, 0.08);
+	max-height: 280px;
+	overflow-y: auto;
+}
+
+.search-box__suggestion {
+	padding: 8px 14px;
+	font-size: 14px;
+	color: var(--text-secondary, #777);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+}
+
+.search-box__suggestion--active,
+.search-box__suggestion:hover {
+	background: var(--main-color-lighter, #fff5eb);
+	color: var(--text-primary, #181616);
+}
+
+.search-box__suggestion--empty {
+	cursor: default;
+	color: var(--text-muted, #6b7385);
+	font-style: italic;
+}
+
+.search-box__suggestion--empty:hover {
+	background: transparent;
+	color: var(--text-muted, #6b7385);
+}
+
 .Toastify__toast-container--top-right {
 	top: 120px;
 }

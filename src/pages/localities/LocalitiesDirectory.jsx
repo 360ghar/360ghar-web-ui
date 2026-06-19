@@ -5,6 +5,7 @@ import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
+import Cta from '../../components/ui/Cta';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
@@ -347,6 +348,9 @@ const LocalitiesDirectory = () => {
                         </div>
                     </div>
                 </section>
+
+                {/* AUDIT FIX (4.3): add CTA section to localities directory */}
+                <Cta ctaClass="" />
 
                 <Footer />
             </main>

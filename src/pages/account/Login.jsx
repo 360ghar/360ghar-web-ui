@@ -31,13 +31,10 @@ const Login = () => {
 
 
             {/* Login Section */}
+            {/* AUDIT FIX (1.2): LoginFlow ignores the legacy layout props
+                (firstNameCol, showFirstName, etc.). Stop passing them. */}
             <LoginRegister
                 titleText={t('login.heading')}
-                firstNameCol="col-sm-6 col-xs-6"
-                showFirstName={false}
-                lastNameCol="col-sm-6 col-xs-6"
-                showLastName={false}
-                passwordCol="col-lg-12"
                 showConfirm={false}
                 btnText={t('login.btnText')}
                 showForgotRemember={true}

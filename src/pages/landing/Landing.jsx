@@ -226,6 +226,24 @@ const Landing = () => {
           showContactNumber={false}
         />
 
+        {/* AUDIT FIX (4.4): visible breadcrumbs. Previously only in structured
+            data; render a lightweight UI breadcrumb for users and crawlers. */}
+        <nav aria-label="Breadcrumb" className="landing-breadcrumb-strip">
+          <div className="container container-two">
+            <ol className="landing-breadcrumb-list">
+              <li className="landing-breadcrumb-item">
+                <I18nLink to="/">{t('common:breadcrumb.home')}</I18nLink>
+              </li>
+              <li className="landing-breadcrumb-item">
+                <I18nLink to={`/${canonicalCitySlug}`}>{city}</I18nLink>
+              </li>
+              <li className="landing-breadcrumb-item landing-breadcrumb-item--active" aria-current="page">
+                {facet} - {intentLabel}
+              </li>
+            </ol>
+          </div>
+        </nav>
+
         <section className="padding-y-60">
           <div className="container container-two">
             {/* Hero */}

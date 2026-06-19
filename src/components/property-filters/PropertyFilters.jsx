@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { usePropertyStore } from '../../store/propertyStore';
 import { useLocationStore } from '../../store/locationStore';
 import {
@@ -20,6 +21,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
     updateFilter,
     clearFilters,
     applyFilters,
+    setFilters,
     isLoading,
     filtersChanged,
     getActiveFiltersCount
@@ -30,6 +32,52 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
   const [removingChip, setRemovingChip] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+
+  // AUDIT FIX (improvement 2.2): saved searches (localStorage, no auth needed
+  // for the minimal version). Users can save the current filter set and
+  // re-apply it later.
+  const SAVED_SEARCHES_KEY = 'property_saved_searches';
+  const [savedSearches, setSavedSearches] = useState(() => {
+    try {
+      const raw = localStorage.getItem(SAVED_SEARCHES_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [showSavedSearches, setShowSavedSearches] = useState(false);
+
+  const persistSavedSearches = (list) => {
+    setSavedSearches(list);
+    try {
+      localStorage.setItem(SAVED_SEARCHES_KEY, JSON.stringify(list));
+    } catch {
+      // ignore storage errors
+    }
+  };
+
+  const handleSaveSearch = () => {
+    const count = getActiveFiltersCount();
+    if (count === 0) {
+      toast.info(t('filters.saveSearchEmpty'), { theme: 'colored' });
+      return;
+    }
+    const name = `${t('filters.savedSearchDefault')} ${savedSearches.length + 1}`;
+    const entry = { id: Date.now(), name, filters: { ...filters } };
+    persistSavedSearches([entry, ...savedSearches].slice(0, 10));
+    toast.success(t('filters.saveSearchSuccess'), { theme: 'colored' });
+    setShowSavedSearches(false);
+  };
+
+  const handleLoadSavedSearch = (entry) => {
+    setFilters(entry.filters);
+    setShowSavedSearches(false);
+    toast.success(t('filters.saveSearchLoaded'), { theme: 'colored' });
+  };
+
+  const handleDeleteSavedSearch = (id) => {
+    persistSavedSearches(savedSearches.filter((s) => s.id !== id));
+  };
 
   const activeFiltersCount = getActiveFiltersCount();
   const advancedFiltersId = 'property-advanced-filters';
@@ -765,6 +813,50 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
       {/* Action Buttons */}
       <div className="filter-group filter-group--actions">
+        {/* AUDIT FIX (improvement 2.2): saved searches */}
+        <div className="d-flex gap-2 mb-2">
+          <button
+            type="button"
+            className="btn btn-outline-secondary btn-sm flex-fill"
+            onClick={handleSaveSearch}
+            disabled={isLoading}
+            title={t('filters.saveSearch')}
+          >
+            <i className="fas fa-bookmark me-1"></i> {t('filters.saveSearch')}
+          </button>
+          {savedSearches.length > 0 && (
+            <button
+              type="button"
+              className="btn btn-outline-secondary btn-sm flex-fill"
+              onClick={() => setShowSavedSearches(!showSavedSearches)}
+            >
+              <i className="fas fa-list me-1"></i> {t('filters.mySearches')}
+            </button>
+          )}
+        </div>
+        {showSavedSearches && savedSearches.length > 0 && (
+          <div className="saved-searches-list mb-2">
+            {savedSearches.map((entry) => (
+              <div key={entry.id} className="saved-search-item d-flex align-items-center justify-content-between">
+                <button
+                  type="button"
+                  className="saved-search-item__name flex-fill text-start"
+                  onClick={() => handleLoadSavedSearch(entry)}
+                >
+                  <i className="fas fa-bookmark me-1 text-muted"></i> {entry.name}
+                </button>
+                <button
+                  type="button"
+                  className="saved-search-item__remove btn btn-link btn-sm text-danger p-0"
+                  onClick={() => handleDeleteSavedSearch(entry.id)}
+                  aria-label={t('filters.removeSavedSearch')}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
         <button
           type="button"
           className={`btn btn-main w-100 ${filtersChanged ? 'btn-main-active' : ''}`}

@@ -8,7 +8,6 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
-import Pagination from '../../common/ui/Pagination';
 import BuilderScoreChart from '../../components/data-hub/BuilderScoreChart';
 import { dataHubService } from '../../services/dataHubService';
 
@@ -52,12 +51,12 @@ const BuilderReputationDetail = () => {
   // Tab state
   const [activeTab, setActiveTab] = useState('projects');
 
-  // Projects tab state
+  // Projects tab state — cursor-paginated
   const [projects, setProjects] = useState([]);
-  const [projectsTotal, setProjectsTotal] = useState(0);
-  const [projectsPage, setProjectsPage] = useState(1);
+  const [projectsNextCursor, setProjectsNextCursor] = useState(null);
+  const [projectsHasMore, setProjectsHasMore] = useState(false);
   const [projectsLoading, setProjectsLoading] = useState(false);
-  const projectsTotalPages = Math.ceil(projectsTotal / PAGE_LIMIT);
+  const [projectsLoadingMore, setProjectsLoadingMore] = useState(false);
 
   // Complaints tab state — sourced from builder.complaints array
   const [complaints, setComplaints] = useState([]);
@@ -80,23 +79,45 @@ const BuilderReputationDetail = () => {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  // Fetch RERA projects for this builder when on projects tab
+  // Fetch RERA projects for this builder when on projects tab (first page)
   useEffect(() => {
     if (!builder || activeTab !== 'projects') return;
-    const params = { page: projectsPage, limit: PAGE_LIMIT };
+    const params = { limit: PAGE_LIMIT };
     if (builder.builder_name) params.developer = builder.builder_name;
 
+    setProjectsLoading(true);
     dataHubService.getReraProjects(params)
       .then((data) => {
-        setProjects(data?.items || []);
-        setProjectsTotal(data?.total || 0);
+        setProjects(Array.isArray(data?.items) ? data.items : []);
+        setProjectsNextCursor(data?.next_cursor ?? null);
+        setProjectsHasMore(Boolean(data?.has_more));
       })
       .catch(() => {
         setProjects([]);
-        setProjectsTotal(0);
+        setProjectsNextCursor(null);
+        setProjectsHasMore(false);
       })
       .finally(() => setProjectsLoading(false));
-  }, [builder, activeTab, projectsPage]);
+  }, [builder, activeTab]);
+
+  // Cursor "Load more" for the projects tab.
+  const handleLoadMoreProjects = async () => {
+    if (!builder || !projectsHasMore || !projectsNextCursor || projectsLoadingMore) return;
+    setProjectsLoadingMore(true);
+    try {
+      const params = { limit: PAGE_LIMIT, cursor: projectsNextCursor };
+      if (builder.builder_name) params.developer = builder.builder_name;
+      const data = await dataHubService.getReraProjects(params);
+      const items = Array.isArray(data?.items) ? data.items : [];
+      setProjects(prev => [...prev, ...items]);
+      setProjectsNextCursor(data?.next_cursor ?? null);
+      setProjectsHasMore(Boolean(data?.has_more));
+    } catch {
+      // Silently ignore; user can retry via Load More.
+    } finally {
+      setProjectsLoadingMore(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -334,7 +355,7 @@ const BuilderReputationDetail = () => {
                     </div>
                   ) : (
                     <>
-                      <p className="mb-20 fs-14 color-text-3">{t('builderReputation.detail.projectsFound', { count: projectsTotal, suffix: projectsTotal !== 1 ? 's' : '' })}</p>
+                      <p className="mb-20 fs-14 color-text-3">{t('builderReputation.detail.projectsFound', { count: projects.length, suffix: projects.length !== 1 ? 's' : '' })}</p>
                       <div className="row g-3 mb-30">
                         {projects.map((project) => (
                           <div key={project.id || project.rera_number} className="col-lg-4 col-md-6 col-12">
@@ -375,11 +396,28 @@ const BuilderReputationDetail = () => {
                           </div>
                         ))}
                       </div>
-                      <Pagination
-                        currentPage={projectsPage}
-                        totalPages={projectsTotalPages}
-                        onPageChange={setProjectsPage}
-                      />
+                      {/* Cursor-based Load more */}
+                      {projectsHasMore && (
+                        <div className="text-center mt-3">
+                          <button
+                            type="button"
+                            className="btn btn-outline-main"
+                            onClick={handleLoadMoreProjects}
+                            disabled={projectsLoadingMore}
+                          >
+                            {projectsLoadingMore ? (
+                              <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                Loading...
+                              </>
+                            ) : (
+                              <>
+                                <i className="fas fa-plus me-1"></i> Load More
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      )}
                     </>
                   )}
                 </div>

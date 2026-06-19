@@ -31,13 +31,12 @@ const Register = () => {
 
 
             {/* Register Section */}
+            {/* AUDIT FIX (1.2): RegisterFlow ignores the legacy layout props
+                (showFirstName, showLastName, firstNameCol, lastNameCol,
+                passwordCol). Stop passing them so the migration is complete
+                and the API surface matches the implementation. */}
             <LoginRegister
                 titleText={t('register.heading')}
-                firstNameCol="col-sm-6 col-xs-6"
-                showFirstName={true}
-                lastNameCol="col-sm-6 col-xs-6"
-                showLastName={true}
-                passwordCol="col-sm-6 col-xs-6"
                 showConfirm={true}
                 btnText={t('register.btnText')}
                 showForgotRemember={false}

@@ -40,12 +40,35 @@ const FakeListingChecker = () => {
   const [url, setUrl] = useState('');
   const [checked, setChecked] = useState(false);
   const [portalInfo, setPortalInfo] = useState(null);
+  // UX FIX (audit 3.9): add a brief loading state so users get feedback that
+  // an analysis is running, even though the check is fast client-side work.
+  const [checking, setChecking] = useState(false);
 
   const handleCheck = () => {
-    if (!url.trim()) return;
-    const domain = Object.keys(KNOWN_PORTALS).find((p) => url.includes(p));
+    if (!url.trim() || checking) return;
+    setChecking(true);
+    // Small delay for UX feedback; the actual hostname check is instant.
+    setTimeout(() => {
+    // CRITICAL FIX (audit 3.7): `url.includes(p)` matched partial strings,
+    // so a query param containing "nobroker.in" on another site would
+    // falsely match. Extract the hostname and compare against the curated
+    // list of trusted portal domains.
+    let hostname = '';
+    try {
+      hostname = new URL(url).hostname.toLowerCase();
+    } catch {
+      // Not a valid absolute URL; fall back to the raw string so the user
+      // still gets a useful "unknown portal" result instead of a crash.
+      hostname = url.toLowerCase();
+    }
+    const domain = Object.keys(KNOWN_PORTALS).find((p) => {
+      const candidate = p.toLowerCase();
+      return hostname === candidate || hostname.endsWith(`.${candidate}`);
+    });
     setPortalInfo(domain ? KNOWN_PORTALS[domain] : null);
     setChecked(true);
+    setChecking(false);
+    }, 400);
   };
 
   const riskColor = portalInfo?.risk === 'high' ? '#dc2626' : portalInfo?.risk === 'medium' ? '#d97706' : '#16a34a';
@@ -108,7 +131,14 @@ const FakeListingChecker = () => {
                     onChange={(e) => { setUrl(e.target.value); setChecked(false); }}
                     onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
                   />
-                  <button className="btn btn-main px-4" onClick={handleCheck}>Check Listing</button>
+                  <button className="btn btn-main px-4" onClick={handleCheck} disabled={checking}>
+                    {checking ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Analyzing...
+                      </>
+                    ) : 'Check Listing'}
+                  </button>
                 </div>
               </div>
             </div>

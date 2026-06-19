@@ -12,6 +12,8 @@ import { toast } from 'react-toastify';
 import { useTranslation, Trans } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import { PROPERTY_TYPE_OPTIONS } from '../../utils/propertyTaxonomy';
+import { propertyService } from '../../services/propertyService';
+import GooglePlacesInput from '../../common/search/GooglePlacesInput';
 
 const PostPropertyForm = () => {
     const { t } = useTranslation('properties');
@@ -72,30 +74,40 @@ const PostPropertyForm = () => {
             setGlobalError(null);
 
             try {
-                const response = await fetch('https://formspree.io/f/mwpqglyb', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ...values,
-                        phone: `+91${values.phone}`,
-                        form_type: 'property_posting',
-                    })
+                // CRITICAL FIX (audit 2.5): previously posted to Formspree,
+                // bypassing the property management system. Wire to the app's
+                // own propertyService so listings land in the real pipeline.
+                // TODO(BACKEND): confirm whether a dedicated "lead" or
+                // "owner-inquiry" endpoint is more appropriate than
+                // POST /properties/ for this partial data shape. The current
+                // form captures lead info (name/phone/location/budget) rather
+                // than a full property record.
+                await propertyService.createProperty({
+                    title: `${values.property_type} - ${values.property_location}`,
+                    description: values.property_description || '',
+                    property_type: values.property_type,
+                    listing_type: values.listing_type || 'rent',
+                    location: values.property_location,
+                    // Lead contact info (the backend may move these to a
+                    // separate owner/lead table).
+                    contact_name: values.full_name,
+                    contact_email: values.email,
+                    contact_phone: `+91${values.phone}`,
+                    budget_range: values.budget_range || undefined,
+                    property_size: values.property_size || undefined,
+                    form_type: 'property_posting',
                 });
-
-                if (response.ok) {
-                    setIsSuccess(true);
-                    resetForm();
-                    toast.success(t('postProperty.submitSuccess'), {
-                        theme: 'colored'
-                    });
-                } else {
-                    throw new Error('Failed to submit form');
-                }
-            } catch {
-                setGlobalError(t('postProperty.submitError'));
+                setIsSuccess(true);
+                resetForm();
+                toast.success(t('postProperty.submitSuccess'), {
+                    theme: 'colored'
+                });
+            } catch (err) {
+                const msg =
+                    err?.response?.data?.detail?.message ||
+                    err?.response?.data?.detail ||
+                    t('postProperty.submitError');
+                setGlobalError(typeof msg === 'string' ? msg : t('postProperty.submitError'));
                 toast.error(t('postProperty.submitError'), {
                     theme: 'colored'
                 });
@@ -225,15 +237,17 @@ const PostPropertyForm = () => {
                                 </div>
                                 <div className="col-sm-6 col-xs-6">
                                     <label htmlFor="property_location" className="form-label">{t('postProperty.propertyLocation')} <span className="text-danger">*</span></label>
-                                    <input
-                                        type="text"
-                                        id="property_location"
-                                        name="property_location"
-                                        className={`common-input ${formik.touched.property_location && formik.errors.property_location ? 'is-invalid' : ''}`}
+                                    {/* UX FIX (audit 2.6): use GooglePlacesInput for location autocomplete
+                                        instead of a plain text input, so location data is consistent
+                                        with the rest of the app. The selected formatted address is
+                                        mirrored into the Formik field via onSelect. */}
+                                    <GooglePlacesInput
                                         placeholder={t('postProperty.locationPlaceholder')}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.property_location}
+                                        className={`common-input ${formik.touched.property_location && formik.errors.property_location ? 'is-invalid' : ''}`}
+                                        onSelect={({ name }) => {
+                                            formik.setFieldValue('property_location', name);
+                                            formik.setFieldTouched('property_location', true, false);
+                                        }}
                                     />
                                     {formik.touched.property_location && formik.errors.property_location && (
                                         <span className="text-danger">{formik.errors.property_location}</span>

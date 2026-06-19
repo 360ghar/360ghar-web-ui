@@ -1,5 +1,6 @@
  import { useState } from 'react';
  import { useTranslation } from 'react-i18next';
+ import { toast } from 'react-toastify';
  import Header from '../../common/layout/Header';
  import Footer from '../../common/layout/Footer';
  import MobileMenu from '../../common/layout/MobileMenu';
@@ -58,17 +59,68 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
              return {};
          }
      });
+     // AUDIT FIX (imp 3.6): per-item document upload + verified status,
+     // persisted to localStorage so progress survives browser data clears.
+     const [uploadedDocs, setUploadedDocs] = useState(() => {
+         try {
+             const saved = localStorage.getItem('propertyChecklistDocs');
+             return saved ? JSON.parse(saved) : {};
+         } catch {
+             return {};
+         }
+     });
  
      const handleCheck = (id) => {
          const updated = { ...checkedItems, [id]: !checkedItems[id] };
          setCheckedItems(updated);
          localStorage.setItem('propertyChecklist', JSON.stringify(updated));
      };
+
+     const handleUpload = (id, file) => {
+         if (!file) return;
+         // Store only metadata (name + size) — we don't persist the file blob.
+         const updated = { ...uploadedDocs, [id]: { name: file.name, size: file.size, uploadedAt: new Date().toISOString() } };
+         setUploadedDocs(updated);
+         localStorage.setItem('propertyChecklistDocs', JSON.stringify(updated));
+         toast.success(t('propertyChecklist.uploadSuccess', { name: file.name }));
+     };
+
+     const handleRemoveUpload = (id) => {
+         const updated = { ...uploadedDocs };
+         delete updated[id];
+         setUploadedDocs(updated);
+         localStorage.setItem('propertyChecklistDocs', JSON.stringify(updated));
+     };
  
      const calculateProgress = () => {
          const totalItems = Object.values(checklistData).flat().length;
          const checkedCount = Object.values(checkedItems).filter(Boolean).length;
          return Math.round((checkedCount / totalItems) * 100);
+     };
+
+     // AUDIT FIX (3.5): export/share the checklist.
+     const handlePrintPdf = () => {
+         window.print();
+     };
+
+     const handleCopySummary = async () => {
+         const lines = [t('propertyChecklist.title'), ''];
+         Object.entries(checklistData).forEach(([category, items]) => {
+             lines.push(category);
+             items.forEach((item) => {
+                 const status = checkedItems[item.id] ? '[x]' : '[ ]';
+                 const doc = uploadedDocs[item.id] ? ` (doc: ${uploadedDocs[item.id].name})` : '';
+                 lines.push(`  ${status} ${item.text}${doc}`);
+             });
+             lines.push('');
+         });
+         lines.push(`${t('propertyChecklist.yourProgress')}: ${calculateProgress()}%`);
+         try {
+             await navigator.clipboard.writeText(lines.join('\n'));
+             toast.success(t('propertyChecklist.copySuccess', 'Checklist summary copied to clipboard!'));
+         } catch {
+             toast.error(t('propertyChecklist.copyError', 'Could not copy. Try the Print option instead.'));
+         }
      };
  
      return (
@@ -120,6 +172,15 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                              style={{width: `${calculateProgress()}%`}}
                                          ></div>
                                      </div>
+                                     {/* AUDIT FIX (3.5): export / share buttons */}
+                                     <div className="d-flex gap-2 mt-3 flex-wrap">
+                                         <button type="button" className="btn btn-sm btn-main" onClick={handlePrintPdf}>
+                                             <i className="fas fa-file-pdf me-1"></i>{t('propertyChecklist.downloadPdf', 'Download PDF')}
+                                         </button>
+                                         <button type="button" className="btn btn-sm btn-outline-main" onClick={handleCopySummary}>
+                                             <i className="fas fa-copy me-1"></i>{t('propertyChecklist.copySummary', 'Copy Summary')}
+                                         </button>
+                                     </div>
                                  </div>
  
                                  {Object.entries(checklistData).map(([category, items]) => (
@@ -142,11 +203,38 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                                              onChange={() => handleCheck(item.id)}
                                                          />
                                                      </div>
-                                                     <div>
+                                                     <div className="flex-grow-1">
                                                          <h5 className={`mb-1 fs-6 ${checkedItems[item.id] ? 'text-decoration-line-through text-muted' : ''}`}>
                                                              {item.text}
+                                                             {/* AUDIT FIX (imp 3.6): show verified/pending badge */}
+                                                             {uploadedDocs[item.id] && (
+                                                                 <span className="badge bg-success ms-2" style={{fontSize: '0.7em'}}>
+                                                                     <i className="fas fa-check me-1"></i>{t('propertyChecklist.verified', 'Verified')}
+                                                                 </span>
+                                                             )}
                                                          </h5>
-                                                         <p className="small text-muted mb-0">{item.desc}</p>
+                                                         <p className="small text-muted mb-2">{item.desc}</p>
+                                                         {/* AUDIT FIX (imp 3.6): document upload per item */}
+                                                         {uploadedDocs[item.id] ? (
+                                                             <div className="d-flex align-items-center gap-2 flex-wrap">
+                                                                 <span className="badge bg-light text-dark border">
+                                                                     <i className="fas fa-paperclip me-1"></i>{uploadedDocs[item.id].name}
+                                                                 </span>
+                                                                 <button type="button" className="btn btn-sm btn-link text-danger p-0" onClick={() => handleRemoveUpload(item.id)}>
+                                                                     <i className="fas fa-times me-1"></i>{t('propertyChecklist.remove', 'Remove')}
+                                                                 </button>
+                                                             </div>
+                                                         ) : (
+                                                             <label className="btn btn-sm btn-outline-secondary" style={{cursor: 'pointer'}}>
+                                                                 <i className="fas fa-upload me-1"></i>{t('propertyChecklist.uploadDoc', 'Upload Document')}
+                                                                 <input
+                                                                     type="file"
+                                                                     className="d-none"
+                                                                     accept="image/*,.pdf"
+                                                                     onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
+                                                                 />
+                                                             </label>
+                                                         )}
                                                      </div>
                                                  </div>
                                              ))}

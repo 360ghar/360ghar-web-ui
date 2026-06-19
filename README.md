@@ -2,6 +2,19 @@
 
 A modern real estate platform built with React 18 and Vite, featuring property listings, 360-degree virtual tours, AI-powered tools, and programmatic SEO landing pages.
 
+## Documentation
+
+Comprehensive documentation lives in the [`.wiki/`](.wiki/) directory and is auto-published to the [GitHub Wiki](https://github.com/360ghar/frontend/wiki) tab on every push to `main`.
+
+### Video Overview
+
+<video controls width="800" preload="metadata">
+  <source src=".wiki/video/overview.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+For details on the video's contents and how to re-render it, see the [Video Overview](.wiki/Video-Overview.md) wiki page.
+
 ## Features
 
 - **Property Listings** - Browse, search, and filter properties with advanced filters
@@ -226,6 +239,26 @@ For production, ensure:
 ## License
 
 Proprietary - All rights reserved.
+
+## Documentation Maintenance
+
+The `.wiki/` directory contains comprehensive codebase documentation that is published to the GitHub Wiki tab automatically. Keep it up to date after every change.
+
+| Change type | Wiki page to update |
+|-------------|-------------------|
+| New/removed page, component, service, or store | Relevant `.wiki/pages/`, `.wiki/components/`, `.wiki/services/`, or `.wiki/state/` page |
+| Feature or architecture change | `.wiki/Architecture.md` + relevant `.wiki/features/` page |
+| Dependency added/removed/updated | `.wiki/reference/Reference.md` |
+| Build process change | `.wiki/build/Build-Pipeline.md` |
+| Branding or UI pattern change | `.wiki/how-to-contribute/Patterns-Conventions.md` |
+| Video content change (features, architecture, branding) | Re-render `.wiki/video/overview.mp4` |
+
+```bash
+# Re-render the wiki overview video (after editing .wiki/video/src/)
+cd .wiki/video && npm install && npx remotion render src/Root.tsx OverviewVideo overview.mp4
+```
+
+The wiki auto-publishes to the GitHub Wiki tab on push to `main` (via `.github/workflows/publish-wiki.yml`), and the video auto-renders when `.wiki/video/src/` changes (via `.github/workflows/render-wiki-video.yml`).
 
 ## Contact
 

@@ -1,9 +1,11 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useTranslation } from 'react-i18next';
 import ToolChip from './ToolChip';
 import TypingIndicator from './TypingIndicator';
 
 export default function BotMessage({ message }) {
+  const { t } = useTranslation('common');
   const hasContent = message.content && message.content.length > 0;
   const hasToolCalls = message.toolCalls && message.toolCalls.length > 0;
 
@@ -45,7 +47,7 @@ export default function BotMessage({ message }) {
         {/* Error state */}
         {message.isError && !hasContent && (
           <p className="chatbot-msg__error-text">
-            Sorry, something went wrong. Please try again.
+            {t('chatbot.errorMessage')}
           </p>
         )}
       </div>

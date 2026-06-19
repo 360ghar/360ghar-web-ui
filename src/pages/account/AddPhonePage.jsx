@@ -32,6 +32,11 @@ const AddPhonePage = () => {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // AUDIT FIX (1.8): dedicated syncing state so the user sees a clear message
+  // while syncAfterExternalAuth() runs (it flips isInitializing on the auth
+  // store). Showing our own spinner prevents a confusing flash where route
+  // guards or init-driven loaders might briefly redirect or render blank.
+  const [syncing, setSyncing] = useState(false);
   const [phoneError, setPhoneError] = useState('');
 
   // Standard 30s resend cooldown for the OTP step.
@@ -90,6 +95,7 @@ const AddPhonePage = () => {
       await authService.verifyAddPhone(`+91${phone.replace(/\D/g, '')}`, code);
       // Keep last-used method as Google; just re-sync the profile.
       authService.afterAuthSuccess(AUTH_METHODS.GOOGLE);
+      setSyncing(true);
       await syncAfterExternalAuth();
       toast.success(t('account:addPhone.successMessage'), { theme: 'colored' });
       goNext();
@@ -97,6 +103,7 @@ const AddPhonePage = () => {
       toast.error(error.message || t('account:addPhone.verifyFailed'));
     } finally {
       setSubmitting(false);
+      setSyncing(false);
     }
   };
 
@@ -215,16 +222,40 @@ const AddPhonePage = () => {
                       type="button"
                       className="btn btn-outline-secondary w-100"
                       onClick={goNext}
-                      disabled={submitting}
+                      disabled={submitting || syncing}
                     >
                       {t('account:addPhone.skip')}
                     </button>
+                    {/* AUDIT FIX (1.imp4): explain the consequences of skipping
+                        the phone so the user can make an informed choice. */}
+                    <small className="text-muted d-block mt-2">
+                      {t('account:addPhone.skipConsequence')}
+                    </small>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* AUDIT FIX (1.8): full-screen syncing overlay while the auth store
+            re-syncs the profile after phone verification. Prevents interaction
+            and shows a clear status instead of a silent redirect/spinner. */}
+        {syncing && (
+          <div
+            className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+            style={{ background: 'rgba(255,255,255,0.85)', zIndex: 1050 }}
+            role="status"
+            aria-live="polite"
+          >
+            <div className="text-center">
+              <div className="spinner-border text-main mb-3" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="text-muted mb-0">{t('account:addPhone.syncing')}</p>
+            </div>
+          </div>
+        )}
 
         <Cta ctaClass="" />
         <Footer />

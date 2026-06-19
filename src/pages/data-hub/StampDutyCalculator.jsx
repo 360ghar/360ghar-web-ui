@@ -268,6 +268,44 @@ const StampDutyCalculator = () => {
               </p>
             </div>
 
+            {/* AUDIT FIX (imp 3.13): stamp duty comparison across states */}
+            {form.property_value && Number(form.property_value) > 0 && (() => {
+              const value = Number(form.property_value);
+              const STATE_RATES = [
+                { state: 'Haryana (Male)', rate: 0.07 },
+                { state: 'Haryana (Female)', rate: 0.05 },
+                { state: 'Delhi (Male)', rate: 0.04 },
+                { state: 'Delhi (Female)', rate: 0.06 },
+                { state: 'UP (Male)', rate: 0.07 },
+                { state: 'Rajasthan (Male)', rate: 0.05 },
+              ];
+              return (
+                <div className="mt-5">
+                  <h2 className="h4 mb-3">{t('stampDuty.stateComparisonTitle', 'Stamp Duty Comparison Across States')}</h2>
+                  <p className="text-muted">{t('stampDuty.stateComparisonDesc', 'Indicative stamp duty for your property value across NCR states. Registration charges (1%) extra.')}</p>
+                  <div className="table-responsive">
+                    <table className="table table-bordered table-sm">
+                      <thead className="table-light">
+                        <tr>
+                          <th>{t('stampDuty.stateCol', 'State / Buyer')}</th>
+                          <th>{t('stampDuty.rateCol', 'Rate')}</th>
+                          <th>{t('stampDuty.stampDutyCol', 'Stamp Duty')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {STATE_RATES.map((s) => (
+                          <tr key={s.state}>
+                            <td className="fw-600">{s.state}</td>
+                            <td>{(s.rate * 100).toFixed(0)}%</td>
+                            <td className="fw-bold">₹{Math.round(value * s.rate).toLocaleString('en-IN')}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              );
+            })()}
             {/* FAQ Section */}
             <ToolFaq faqs={FAQS} heading="Stamp Duty & Registration FAQs" />
 

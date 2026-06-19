@@ -1,0 +1,60 @@
+name: Render Wiki Video
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.wiki/video/src/**'
+      - '.wiki/video/package.json'
+      - '.wiki/video/package-lock.json'
+      - '.wiki/video/remotion.config.ts'
+      - '.wiki/video/tsconfig.json'
+      - '.github/workflows/render-wiki-video.yml'
+
+concurrency:
+  group: render-wiki-video
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  render-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Remotion dependencies
+        working-directory: .wiki/video
+        run: npm install
+
+      - name: Install Chromium for Remotion
+        working-directory: .wiki/video
+        run: npx --yes playwright install --with-deps chromium
+
+      - name: Render overview video
+        working-directory: .wiki/video
+        run: |
+          CHROME_PATH=$(find ~/.cache/ms-playwright -type f -name "chrome" -o -name "headless_shell" 2>/dev/null | head -1)
+          npx remotion render src/Root.tsx OverviewVideo overview.mp4 \
+            --codec=h264 --crf=18 --pixel-format=yuv420p \
+            ${CHROME_PATH:+--browser-executable="$CHROME_PATH"}
+
+      - name: Commit rendered video
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .wiki/video/overview.mp4
+          if git diff --cached --quiet; then
+            echo "No video changes to commit"
+          else
+            git commit -m "chore(wiki-video): re-render overview.mp4 @ ${GITHUB_SHA::7}"
+            git push
+          fi

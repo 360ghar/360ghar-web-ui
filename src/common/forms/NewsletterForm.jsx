@@ -1,10 +1,13 @@
 import { useForm, ValidationError } from '@formspree/react';
+import { useTranslation } from 'react-i18next';
 
 const NewsletterForm = (props) => {
+    const { t } = useTranslation('common');
     const [state, handleSubmit] = useForm("mkgzdjyj");
 
+    // UX FIX (audit 5.9): explicit success confirmation message.
     if (state.succeeded) {
-        return <p className="text-success">Thanks for joining!</p>;
+        return <p className="text-success">{t('newsletter.subscribeSuccess')}</p>;
     }
 
     return (
@@ -15,7 +18,7 @@ const NewsletterForm = (props) => {
                         id="email"
                         type="email"
                         name="email"
-                        placeholder="Your Email"
+                        placeholder={t('newsletter.emailPlaceholder')}
                         className={`common-input common-input--withLeftIcon w-100 ${props.inputClass}`}
                     />
                     <span className={`input-icon input-icon--left text-white font-20 line-height-1 ${props.iconClass}`}>
@@ -30,7 +33,7 @@ const NewsletterForm = (props) => {
                 />
             </div>
             <button type="submit" disabled={state.submitting} className="btn btn-main text-uppercase flex-shrink-0">
-                Subscribe <span className="text">Now</span>
+                {t('newsletter.subscribeBtn')}
             </button>
         </form>
     );

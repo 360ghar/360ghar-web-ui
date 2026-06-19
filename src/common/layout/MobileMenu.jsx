@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nLink, useI18nNavigate } from '../../i18n/I18nLink';
 import Logo from '../Logo';
@@ -15,6 +15,7 @@ const MobileMenu = () => {
     const { toggleMobileMenu, handleMobileMenuClose } = useUIStore();
     const menuRef = useRef(null);
     const overlayRef = useRef(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Authentication state
     const { user, isAuthenticated, logout } = useAuthStore();
@@ -45,10 +46,13 @@ const MobileMenu = () => {
     }, [toggleMobileMenu]);
 
     const handleLogout = async () => {
+        // UX FIX (audit 1.7): await logout() so the auth store clears
+        // isAuthenticated BEFORE we navigate, preventing a race with
+        // PrivateRoute guards redirecting to /login.
         await logout();
         toastSuccess(t('header.loggedOutSuccess'));
-        navigate('/');
         handleMobileMenuClose();
+        navigate('/');
     };
 
     const handleNavigation = (path) => {
@@ -57,6 +61,18 @@ const MobileMenu = () => {
     };
 
     const handleMenuNavigation = () => {
+        handleMobileMenuClose();
+    };
+
+    // UX FIX (audit 5.3): quick search input inside the mobile menu so users
+    // can jump straight to filtered property results without opening the full
+    // search box.
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        const q = searchQuery.trim();
+        if (!q) return;
+        navigate(`/properties?q=${encodeURIComponent(q)}`);
+        setSearchQuery('');
         handleMobileMenuClose();
     };
 
@@ -86,6 +102,26 @@ const MobileMenu = () => {
 
                     {/* Logo */}
                     <Logo/>
+
+                    {/* Quick search */}
+                    <form className="mobile-menu__search mt-4" onSubmit={handleSearchSubmit} role="search">
+                        <div className="position-relative">
+                            <input
+                                type="search"
+                                className="common-input common-input--light w-100"
+                                placeholder={t('mobileMenu.searchPlaceholder')}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                aria-label={t('mobileMenu.searchAriaLabel')}
+                            />
+                            <span className="input-icon input-icon--left text-white font-20 line-height-1">
+                                <i className="fas fa-search"></i>
+                            </span>
+                        </div>
+                        <button type="submit" className="btn btn-main btn-sm flex-shrink-0 visually-hidden">
+                            {t('mobileMenu.searchBtn')}
+                        </button>
+                    </form>
 
                     <div className="mobile-menu__menu">
 

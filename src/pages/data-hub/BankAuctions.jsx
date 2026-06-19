@@ -9,7 +9,6 @@ import SEO from '../../common/SEO';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 import { ToolFaq, ToolRelatedLinks } from '../../components/tools/ToolContentSections';
-import Pagination from '../../common/ui/Pagination';
 import AuctionCard from '../../components/data-hub/AuctionCard';
 import AuctionAlertModal from '../../components/data-hub/AuctionAlertModal';
 import { dataHubService } from '../../services/dataHubService';
@@ -88,8 +87,9 @@ const BankAuctions = () => {
   const { t } = useTranslation('data-hub');
   const [tSeo] = useTranslation('seo');
   const [auctions, setAuctions] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [banks, setBanks] = useState([]);
   const [cities, setCities] = useState([]);
   const [filters, setFilters] = useState({
@@ -108,8 +108,29 @@ const BankAuctions = () => {
 
   const [alertModal, setAlertModal] = useState({ isOpen: false, initialData: {} });
 
-  const totalPages = Math.ceil(total / PAGE_LIMIT);
   const selectedCityLabel = CITY_LABELS[filters.city] || filters.city || 'Delhi NCR';
+
+  // Sort auction items by auction_date ascending (nulls last). Applied to the
+  // full accumulated list so ordering stays consistent across appended pages.
+  const sortAuctions = (items) => [...items].sort((a, b) => {
+    if (!a.auction_date) return 1;
+    if (!b.auction_date) return -1;
+    return new Date(a.auction_date) - new Date(b.auction_date);
+  });
+
+  // Build the request params (excluding cursor) for the current filter set.
+  const buildFilterParams = () => {
+    const params = {};
+    if (filters.bank_name) params.bank = filters.bank_name;
+    if (filters.property_type) params.property_type = filters.property_type;
+    if (filters.price_min) params.min_price = Number(filters.price_min);
+    if (filters.price_max) params.max_price = Number(filters.price_max);
+    if (filters.date_from) params.date_from = filters.date_from;
+    if (filters.date_to) params.date_to = filters.date_to;
+    if (filters.auction_type) params.type = filters.auction_type;
+    if (filters.city) params.city = filters.city;
+    return params;
+  };
 
   useEffect(() => {
     dataHubService.getAuctionBanks()
@@ -120,40 +141,50 @@ const BankAuctions = () => {
       .catch(() => {});
   }, []);
 
+  // Fetch the first page (cursor=null) whenever filters change.
   useEffect(() => {
-    const params = { page, limit: PAGE_LIMIT };
-    if (filters.bank_name) params.bank = filters.bank_name;
-    if (filters.property_type) params.property_type = filters.property_type;
-    if (filters.price_min) params.min_price = Number(filters.price_min);
-    if (filters.price_max) params.max_price = Number(filters.price_max);
-    if (filters.date_from) params.date_from = filters.date_from;
-    if (filters.date_to) params.date_to = filters.date_to;
-    if (filters.auction_type) params.type = filters.auction_type;
-    if (filters.city) params.city = filters.city;
+    const params = { limit: PAGE_LIMIT, ...buildFilterParams() };
 
+    // CRITICAL FIX (audit 3.8): reset error/loading at the start of every
+    // fetch so a previous failure doesn't persist after a successful retry.
+    setLoading(true);
+    setError(null);
     dataHubService.getAuctions(params)
       .then((data) => {
-        const items = data?.items || [];
-        items.sort((a, b) => {
-          if (!a.auction_date) return 1;
-          if (!b.auction_date) return -1;
-          return new Date(a.auction_date) - new Date(b.auction_date);
-        });
-        setAuctions(items);
-        setTotal(data?.total || 0);
+        const items = Array.isArray(data?.items) ? data.items : [];
+        setAuctions(sortAuctions(items));
+        setNextCursor(data?.next_cursor ?? null);
+        setHasMore(Boolean(data?.has_more));
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [filters, page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- buildFilterParams depends only on filters
+  }, [filters]);
+
+  // Cursor "Load more": fetch the next page using the opaque cursor token.
+  const handleLoadMore = async () => {
+    if (!hasMore || !nextCursor || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      const params = { limit: PAGE_LIMIT, cursor: nextCursor, ...buildFilterParams() };
+      const data = await dataHubService.getAuctions(params);
+      const items = Array.isArray(data?.items) ? data.items : [];
+      setAuctions(prev => sortAuctions([...prev, ...items]));
+      setNextCursor(data?.next_cursor ?? null);
+      setHasMore(Boolean(data?.has_more));
+    } catch {
+      // Silently ignore; user can retry via Load More.
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleFilterChange = (key, value) => {
     setFilters(f => ({ ...f, [key]: value }));
-    setPage(1);
   };
 
   const clearFilters = () => {
     setFilters({ bank_name: '', property_type: '', price_min: '', price_max: '', date_from: '', date_to: '', auction_type: '', city: '' });
-    setPage(1);
   };
 
   const openAlert = (auction) => {
@@ -190,7 +221,7 @@ const BankAuctions = () => {
             name: `Bank & Govt Property Auctions — ${selectedCityLabel}`,
             description: `SARFAESI auctions, court-ordered sales, and government authority property auctions in ${selectedCityLabel}.`,
             url: 'https://360ghar.com/bank-auctions',
-            numberOfItems: total,
+            numberOfItems: auctions.length,
           },
           generateFaqStructuredData(FAQS),
           generateHowToStructuredData({
@@ -209,6 +240,14 @@ const BankAuctions = () => {
           <div className="container">
             <div className="row mb-20">
               <div className="col-12">
+                {/* AUDIT FIX (imp 3.19): consistent breadcrumb */}
+                <nav aria-label="breadcrumb" className="mb-20">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
+                    <li className="breadcrumb-item"><I18nLink to="/bank-auctions">Data Hub</I18nLink></li>
+                    <li className="breadcrumb-item active">Bank Auctions</li>
+                  </ol>
+                </nav>
                 <h1 className="fs-28 fw-600 mb-10">{t('bankAuctions.title')}</h1>
                 <p className="mb-0 color-text-3">
                   {t('bankAuctions.description')}{' '}
@@ -372,7 +411,7 @@ const BankAuctions = () => {
                   </div>
                 ) : (
                   <>
-                    <p className="mb-20 fs-14 color-text-3">{t('bankAuctions.auctionsFound', { count: total, suffix: total !== 1 ? 's' : '' })}</p>
+                    <p className="mb-20 fs-14 color-text-3">{t('bankAuctions.auctionsFound', { count: auctions.length, suffix: auctions.length !== 1 ? 's' : '' })}</p>
                     <div className="row g-3 mb-30">
                       {auctions.map((auction) => (
                         <div key={auction.id} className="col-md-6 col-12">
@@ -380,11 +419,28 @@ const BankAuctions = () => {
                         </div>
                       ))}
                     </div>
-                    <Pagination
-                      currentPage={page}
-                      totalPages={totalPages}
-                      onPageChange={setPage}
-                    />
+                    {/* Cursor-based Load more */}
+                    {hasMore && (
+                      <div className="text-center mt-3">
+                        <button
+                          type="button"
+                          className="btn btn-outline-main"
+                          onClick={handleLoadMore}
+                          disabled={loadingMore}
+                        >
+                          {loadingMore ? (
+                            <>
+                              <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                              Loading...
+                            </>
+                          ) : (
+                            <>
+                              <i className="fas fa-plus me-1"></i> Load More
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -441,7 +497,7 @@ const BankAuctions = () => {
                         <ul className="mb-0" style={{ paddingLeft: '1.2em' }}>
                           <li className="mb-2">Existing occupants may refuse to vacate, requiring lengthy legal proceedings</li>
                           <li className="mb-2">Hidden encumbrances, pending litigations, or legal disputes from previous owners</li>
-                          <li className="mb-2">Limited or no inspection time — property sold on "as is where is" basis</li>
+                          <li className="mb-2">Limited or no inspection time — property sold on &quot;as is where is&quot; basis</li>
                           <li className="mb-2">Outstanding dues like property tax, maintenance, or utility bills may transfer to buyer</li>
                           <li>Strict payment timelines (usually 15-90 days) with forfeiture of EMD on default</li>
                         </ul>
@@ -466,7 +522,7 @@ const BankAuctions = () => {
                         <ul className="mb-0" style={{ paddingLeft: '1.2em', fontSize: 14 }}>
                           <li>Verify outstanding property tax and utility bills</li>
                           <li>Check society NOC and maintenance dues</li>
-                          <li>Confirm the bank's reserve price vs market rate</li>
+                          <li>Confirm the bank&apos;s reserve price vs market rate</li>
                           <li>Understand the EMD forfeiture and refund terms</li>
                         </ul>
                       </div>
@@ -532,12 +588,12 @@ const BankAuctions = () => {
 
                   <h3 className="fs-18 fw-600 mb-2">EMD Payment Process</h3>
                   <p className="mb-3">
-                    The Earnest Money Deposit (EMD) is typically 5-10% of the reserve price and must be deposited via demand draft, pay order, or online transfer to the bank's designated account before the auction deadline. The EMD is refundable if you do not win the auction, but is forfeited if you win and fail to complete the payment within the stipulated timeline.
+                    The Earnest Money Deposit (EMD) is typically 5-10% of the reserve price and must be deposited via demand draft, pay order, or online transfer to the bank&apos;s designated account before the auction deadline. The EMD is refundable if you do not win the auction, but is forfeited if you win and fail to complete the payment within the stipulated timeline.
                   </p>
 
                   <h3 className="fs-18 fw-600 mb-2">Post-Auction Payment Timeline</h3>
                   <p className="mb-0">
-                    After winning a bank auction, you are typically required to pay 25% of the bid amount immediately (including the EMD already paid). The remaining 75% must be paid within 15-90 days depending on the bank's terms. Failure to pay within the deadline results in EMD forfeiture and cancellation of the allotment. Some banks allow loan financing for the balance amount — check with the auctioning bank for specific terms.
+                    After winning a bank auction, you are typically required to pay 25% of the bid amount immediately (including the EMD already paid). The remaining 75% must be paid within 15-90 days depending on the bank&apos;s terms. Failure to pay within the deadline results in EMD forfeiture and cancellation of the allotment. Some banks allow loan financing for the balance amount — check with the auctioning bank for specific terms.
                   </p>
                 </div>
 

@@ -5,6 +5,16 @@ import { setLastAuthMethod, AUTH_METHODS } from './lastAuthMethod';
 // Normalize an identifier and detect whether it is an email or a phone number.
 const isEmailIdentifier = (identifier) => (identifier || '').includes('@');
 
+// Ensure a phone number is in E.164 format (default country: India +91).
+const normalizePhoneForAuth = (phone) => {
+  const trimmed = (phone || '').trim().replace(/\s+/g, '');
+  if (!trimmed) return '';
+  if (trimmed.startsWith('+')) return trimmed;
+  const digits = trimmed.replace(/\D/g, '');
+  if (digits.length === 10) return `+91${digits}`;
+  return `+${digits}`;
+};
+
 export const authService = {
   // Login user directly with Supabase Auth (email-or-phone + password)
   login: async (phoneOrEmail, password) => {
@@ -12,7 +22,7 @@ export const authService = {
     const identifier = (phoneOrEmail || '').trim();
     const credentials = isEmailIdentifier(identifier)
       ? { email: identifier, password }
-      : { phone: identifier, password };
+      : { phone: normalizePhoneForAuth(identifier), password };
 
     const { data, error } = await client.auth.signInWithPassword(credentials);
     if (error || !data.session) {
@@ -98,7 +108,7 @@ export const authService = {
   sendPhoneOtp: async (phone, { shouldCreateUser = false } = {}) => {
     const client = await ensureSupabaseClient();
     const { error } = await client.auth.signInWithOtp({
-      phone: (phone || '').trim(),
+      phone: normalizePhoneForAuth(phone),
       options: { shouldCreateUser },
     });
     if (error) {
@@ -110,7 +120,7 @@ export const authService = {
   verifyPhoneOtp: async (phone, token) => {
     const client = await ensureSupabaseClient();
     const { data, error } = await client.auth.verifyOtp({
-      phone: (phone || '').trim(),
+      phone: normalizePhoneForAuth(phone),
       token: (token || '').trim(),
       type: 'sms',
     });
@@ -165,7 +175,7 @@ export const authService = {
   // Step 1: request an OTP for the new phone via updateUser({ phone }).
   startAddPhone: async (phone) => {
     const client = await ensureSupabaseClient();
-    const { error } = await client.auth.updateUser({ phone: (phone || '').trim() });
+    const { error } = await client.auth.updateUser({ phone: normalizePhoneForAuth(phone) });
     if (error) {
       throw new Error(error.message || 'Failed to send verification code');
     }
@@ -176,7 +186,7 @@ export const authService = {
   verifyAddPhone: async (phone, token) => {
     const client = await ensureSupabaseClient();
     const { data, error } = await client.auth.verifyOtp({
-      phone: (phone || '').trim(),
+      phone: normalizePhoneForAuth(phone),
       token: (token || '').trim(),
       type: 'phone_change',
     });

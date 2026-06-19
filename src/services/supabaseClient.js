@@ -3,9 +3,15 @@ const SUPABASE_PUBLISHABLE_KEY =
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 const IS_TEST_MODE = import.meta.env.MODE === 'test' || import.meta.env.VITEST === 'true';
 
+// CRITICAL FIX (audit 5.1): previously this module threw at import time when
+// env vars were missing, crashing the entire app before any error boundary
+// could catch it. Now we only warn at import and defer the throw to the first
+// actual use (inside getClientLazy), which runs within the React tree where
+// error boundaries can recover gracefully.
 if (!IS_TEST_MODE && (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY)) {
-  throw new Error(
-    'Missing Supabase configuration. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY.'
+  console.warn(
+    '[supabaseClient] Missing VITE_SUPABASE_URL and/or VITE_SUPABASE_PUBLISHABLE_KEY. ' +
+      'Auth and authenticated API calls will fail until these are set.'
   );
 }
 
@@ -23,7 +29,12 @@ async function getClientLazy() {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: true,
+        // Google OAuth redirects to /auth/callback?code=... and AuthCallbackPage
+        // calls exchangeCodeForSession() explicitly. Keeping this true caused a
+        // double-exchange race (SDK auto-exchange + manual exchange competing for
+        // the single-use PKCE code). All other auth flows use typed OTP codes,
+        // not redirects, so disabling auto-detection is safe and deterministic.
+        detectSessionInUrl: false,
       },
     });
     return _supabase;

@@ -57,24 +57,33 @@ const AccountChangePasswordTab = () => {
     },
   });
 
+  // AUDIT FIX (1.imp5): align the password-strength indicator with the
+  // registration flow's 5-level system (0–5). Previously this tab used a
+  // different 4-level system (0–4) with different colors and labels, which was
+  // inconsistent with LoginRegister's RegisterFlow.
   const getPasswordStrength = (password) => {
-    let strength = 0;
-    if (password.length >= 8) strength += 1;
-    if (/[A-Z]/.test(password)) strength += 1;
-    if (/[0-9]/.test(password)) strength += 1;
-    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-    return strength;
+    if (!password) return 0;
+    let s = 0;
+    if (password.length >= 8) s += 1;
+    if (/[A-Z]/.test(password)) s += 1;
+    if (/[0-9]/.test(password)) s += 1;
+    if (/[^A-Za-z0-9]/.test(password)) s += 1;
+    if (password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) s += 1;
+    return s;
   };
 
   const passwordStrength = getPasswordStrength(formik.values.newPassword);
+  // Mirrors the registration flow: index 0 is the empty/none label, 1–5 map to
+  // weak → veryStrong.
   const strengthLabels = [
-    t('forms:password.strength.veryWeak'),
+    '',
     t('forms:password.strength.weak'),
     t('forms:password.strength.fair'),
     t('forms:password.strength.good'),
     t('forms:password.strength.strong'),
+    t('forms:password.strength.veryStrong'),
   ];
-  const strengthColors = ['#dc3545', '#fd7e14', '#ffc107', '#20c997', '#198754'];
+  const strengthColors = ['#e9ecef', '#dc3545', '#fd7e14', '#ffc107', '#20c997', '#198754'];
 
   return (
     <>
@@ -156,7 +165,7 @@ const AccountChangePasswordTab = () => {
                         className="progress-bar"
                         role="progressbar"
                         style={{
-                          width: `${(passwordStrength + 1) * 20}%`,
+                          width: `${Math.min((passwordStrength + 1) * 20, 100)}%`,
                           backgroundColor: strengthColors[passwordStrength],
                         }}
                       ></div>

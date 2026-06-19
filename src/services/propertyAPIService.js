@@ -2,12 +2,22 @@ import { publicApi } from './api';
 import { buildPropertySearchParams } from '../utils/propertyFilters';
 
 /**
- * Searches for properties based on filters, location, and pagination.
+ * Searches for properties based on filters, location, and cursor pagination.
  * Corresponds to: GET /properties/
  * NO AUTHENTICATION REQUIRED
+ *
+ * The backend now returns a uniform cursor-paginated payload:
+ *   { items: [...], next_cursor: "<base64>"|null, has_more: bool, limit: int }
+ * `cursor` is an opaque base64 token returned by a prior `next_cursor`. Pass
+ * null/undefined on the first page. Detect end-of-list via `has_more === false`
+ * or `next_cursor === null`.
+ *
+ * @param {object} filters - Property filter params.
+ * @param {string|null} cursor - Opaque cursor token from a prior next_cursor.
+ * @param {number} limit - Page size (1-100, default 20).
  */
-const searchProperties = (filters = {}, page = 1, limit = 12) => {
-  const params = buildPropertySearchParams(filters, page, limit);
+const searchProperties = (filters = {}, cursor = null, limit = 12) => {
+  const params = buildPropertySearchParams(filters, cursor, limit);
   return publicApi.get(`/properties/?${params.toString()}`);
 };
 

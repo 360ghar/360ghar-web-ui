@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
@@ -8,14 +8,27 @@ import i18n from '../../i18n';
 
 import LazyImage from '../../common/ui/LazyImage';
 
+// AUDIT FIX (1.9): stale-while-revalidate window. If the profile was fetched
+// within this window, skip the redundant refetch on remount (e.g. when
+// switching tabs rapidly) and serve the cached data immediately. A background
+// refresh is NOT triggered to keep the SWR behaviour simple and predictable.
+const PROFILE_FRESH_MS = 30 * 1000; // 30s
+
 const AccountProfileTab = () => {
     const { t } = useTranslation(['account', 'forms']);
     const { profile, getProfile, updateProfile, isLoading, error, clearError } = useUserStore();
     const [isEditing, setIsEditing] = useState(false);
+    const lastFetchAt = useRef(0);
 
     useEffect(() => {
-        getProfile();
-    }, [getProfile]);
+        // Stale-while-revalidate: only call getProfile() when there is no
+        // cached profile OR the cached profile is older than the fresh window.
+        const now = Date.now();
+        if (!profile || now - lastFetchAt.current > PROFILE_FRESH_MS) {
+            lastFetchAt.current = now;
+            getProfile();
+        }
+    }, [getProfile, profile]);
 
     const validationSchema = yup.object({
         full_name: yup.string().min(3, () => i18n.t('forms:name.minLength')).required(() => i18n.t('forms:name.required')),

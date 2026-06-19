@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -56,8 +56,28 @@ const VastuChecker = () => {
     const [analysisResult, setAnalysisResult] = useState(null);
 
     const handleImageSelect = useCallback((file, preview) => {
+        // CRITICAL FIX (audit 3.6): revoke the previous blob URL before
+        // replacing it so we don't leak object URLs on every reselect or
+        // after an error+retry cycle.
+        setPreviewUrl((prev) => {
+            if (prev && prev.startsWith('blob:')) {
+                try { URL.revokeObjectURL(prev); } catch { /* noop */ }
+            }
+            return preview;
+        });
         setSelectedFile(file);
-        setPreviewUrl(preview);
+    }, []);
+
+    // CRITICAL FIX (audit 3.6): revoke any lingering blob URL on unmount.
+    useEffect(() => {
+        return () => {
+            setPreviewUrl((prev) => {
+                if (prev && prev.startsWith('blob:')) {
+                    try { URL.revokeObjectURL(prev); } catch { /* noop */ }
+                }
+                return prev;
+            });
+        };
     }, []);
 
     const handleSubmit = useCallback(async (e) => {
@@ -65,6 +85,16 @@ const VastuChecker = () => {
 
         if (!selectedFile) {
             setErrorMessage(t('vastu.errorNoFile'));
+            setErrorType('validation');
+            setAppState('error');
+            return;
+        }
+
+        // UX FIX (audit 3.7): client-side file-size validation so users get
+        // immediate feedback instead of a 413 from the server.
+        const MAX_FILE_SIZE_MB = 5;
+        if (selectedFile.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+            setErrorMessage(t('vastu.errorFileTooLarge', { mb: MAX_FILE_SIZE_MB }));
             setErrorType('validation');
             setAppState('error');
             return;

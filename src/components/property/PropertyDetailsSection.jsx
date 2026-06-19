@@ -104,7 +104,7 @@ const PropertyDetailsSection = ({ property }) => {
     property?.main_image_url ||
     images.find((i) => i.is_main_image)?.image_url ||
     images[0]?.image_url;
-  const title = property?.title || 'Property Details';
+  const title = property?.title || t('details.title');
   const description = property?.description || '';
   const purpose = property?.purpose || property?.price_type;
   const priceValue = purpose === 'rent' ? (property?.monthly_rent || property?.daily_rate || property?.base_price) : property?.base_price;
@@ -161,11 +161,11 @@ const PropertyDetailsSection = ({ property }) => {
   }, [lightboxOpen, lightboxIndex, preloadAdjacentImages]);
 
   const previewStats = [
-    { icon: <i className="fas fa-bed"></i>, label: 'Bedrooms', value: property?.bedrooms },
-    { icon: <i className="fas fa-bath"></i>, label: 'Bathrooms', value: property?.bathrooms },
-    { icon: <i className="fas fa-ruler-combined"></i>, label: 'Area', value: property?.area_sqft ? `${property.area_sqft} sqft` : null },
-    { icon: <i className="fas fa-building"></i>, label: 'Floor', value: property?.floor_number },
-    { icon: <i className="fas fa-parking"></i>, label: 'Parking', value: property?.parking_spaces },
+    { icon: <i className="fas fa-bed"></i>, label: t('details.bedrooms'), value: property?.bedrooms },
+    { icon: <i className="fas fa-bath"></i>, label: t('details.bathrooms'), value: property?.bathrooms },
+    { icon: <i className="fas fa-ruler-combined"></i>, label: t('details.area'), value: property?.area_sqft ? `${property.area_sqft} sqft` : null },
+    { icon: <i className="fas fa-building"></i>, label: t('details.floor'), value: property?.floor_number },
+    { icon: <i className="fas fa-parking"></i>, label: t('details.parking'), value: property?.parking_spaces },
   ].filter((x) => x.value !== null && x.value !== undefined && x.value !== '');
 
   const features = Array.isArray(property?.features) ? property.features : [];
@@ -177,65 +177,65 @@ const PropertyDetailsSection = ({ property }) => {
   }, t);
 
   const keyDetails = useMemo(() => ([
-    { label: 'Property Type', value: propertyTypeLabel },
-    { label: 'Listing', value: listingLabel },
-    { label: 'Status', value: property?.status },
-    { label: 'Available', value: property?.is_available === true ? 'Yes' : (property?.is_available === false ? 'No' : null) },
-    { label: 'Available From', value: formatDate(property?.available_from) },
-    { label: 'Builder', value: property?.builder_name },
-    { label: 'Owner', value: property?.owner_name },
-    { label: 'Owner Contact', value: property?.owner_contact },
+    { label: t('details.propertyType'), value: propertyTypeLabel },
+    { label: t('details.listing'), value: listingLabel },
+    { label: t('details.status'), value: property?.status },
+    { label: t('details.available'), value: property?.is_available === true ? t('details.yes') : (property?.is_available === false ? t('details.no') : null) },
+    { label: t('details.availableFrom'), value: formatDate(property?.available_from) },
+    { label: t('details.builder'), value: property?.builder_name },
+    { label: t('details.owner'), value: property?.owner_name },
+    { label: t('details.ownerContact'), value: property?.owner_contact },
     listingPreferences?.gender_preference
       ? {
-          label: 'Gender Preference',
+          label: t('details.genderPreference'),
           value: listingPreferences.gender_preference.replace(/_/g, ' '),
         }
       : null,
     listingPreferences?.sharing_type
       ? {
-          label: 'Room Type',
+          label: t('details.roomType'),
           value: listingPreferences.sharing_type.replace(/_/g, ' '),
         }
       : null,
-    { label: 'Listing ID', value: property?.id },
-  ].filter(i => i && i.value !== null && i.value !== undefined && i.value !== '')), [listingLabel, listingPreferences, property, propertyTypeLabel]);
+    { label: t('details.listingId'), value: property?.id },
+  ].filter(i => i && i.value !== null && i.value !== undefined && i.value !== '')), [listingLabel, listingPreferences, property, propertyTypeLabel, t]);
 
   const pricingDetails = useMemo(() => ([
-    { label: purpose === 'rent' ? 'Monthly Rent' : 'Base Price', value: formatCurrency(priceValue) },
-    property?.daily_rate ? { label: 'Daily Rate', value: formatCurrency(property.daily_rate) } : null,
-    property?.security_deposit ? { label: 'Security Deposit', value: formatCurrency(property.security_deposit) } : null,
-    property?.maintenance_charges ? { label: 'Maintenance', value: formatCurrency(property.maintenance_charges) } : null,
-    property?.price_per_sqft ? { label: 'Price / Sqft', value: `₹${formatNumber(property.price_per_sqft)}` } : null,
-    property?.minimum_stay_days ? { label: 'Minimum Stay (days)', value: property.minimum_stay_days } : null,
-    property?.max_occupancy ? { label: 'Max Occupancy', value: property.max_occupancy } : null,
-  ].filter(Boolean)), [property, priceValue, purpose]);
+    { label: purpose === 'rent' ? t('details.monthlyRent') : t('details.basePrice'), value: formatCurrency(priceValue) },
+    property?.daily_rate ? { label: t('details.dailyRate'), value: formatCurrency(property.daily_rate) } : null,
+    property?.security_deposit ? { label: t('details.securityDeposit'), value: formatCurrency(property.security_deposit) } : null,
+    property?.maintenance_charges ? { label: t('details.maintenance'), value: formatCurrency(property.maintenance_charges) } : null,
+    property?.price_per_sqft ? { label: t('details.pricePerSqft'), value: `₹${formatNumber(property.price_per_sqft)}` } : null,
+    property?.minimum_stay_days ? { label: t('details.minimumStayDays'), value: property.minimum_stay_days } : null,
+    property?.max_occupancy ? { label: t('details.maxOccupancy'), value: property.max_occupancy } : null,
+  ].filter(Boolean)), [property, priceValue, purpose, t]);
 
   const buildingDetails = useMemo(() => ([
-    property?.area_type ? { label: 'Area Type', value: property.area_type } : null,
-    property?.area_sqft ? { label: 'Area (sqft)', value: formatNumber(property.area_sqft) } : null,
-    property?.balconies ? { label: 'Balconies', value: property.balconies } : null,
-    property?.total_floors ? { label: 'Total Floors', value: property.total_floors } : null,
-    property?.age_of_property ? { label: 'Age of Property (yrs)', value: property.age_of_property } : null,
-  ].filter(Boolean)), [property]);
+    property?.area_type ? { label: t('details.areaType'), value: property.area_type } : null,
+    property?.area_sqft ? { label: t('details.areaSqft'), value: formatNumber(property.area_sqft) } : null,
+    property?.balconies ? { label: t('details.balconies'), value: property.balconies } : null,
+    property?.total_floors ? { label: t('details.totalFloors'), value: property.total_floors } : null,
+    property?.age_of_property ? { label: t('details.ageOfProperty'), value: property.age_of_property } : null,
+  ].filter(Boolean)), [property, t]);
 
   const addressDetails = useMemo(() => ([
-    { label: 'Full Address', value: address },
-    property?.landmark ? { label: 'Landmark', value: property.landmark } : null,
-    property?.sub_locality ? { label: 'Sub Locality', value: property.sub_locality } : null,
-    property?.locality ? { label: 'Locality', value: property.locality } : null,
-    property?.city ? { label: 'City', value: property.city } : null,
-    property?.state ? { label: 'State', value: property.state } : null,
-    property?.pincode ? { label: 'Pincode', value: property.pincode } : null,
-    property?.country ? { label: 'Country', value: property.country } : null,
-  ].filter(Boolean)), [address, property]);
+    { label: t('details.fullAddress'), value: address },
+    property?.landmark ? { label: t('details.landmark'), value: property.landmark } : null,
+    property?.sub_locality ? { label: t('details.subLocality'), value: property.sub_locality } : null,
+    property?.locality ? { label: t('details.locality'), value: property.locality } : null,
+    property?.city ? { label: t('details.city'), value: property.city } : null,
+    property?.state ? { label: t('details.state'), value: property.state } : null,
+    property?.pincode ? { label: t('details.pincode'), value: property.pincode } : null,
+    property?.country ? { label: t('details.country'), value: property.country } : null,
+  ].filter(Boolean)), [address, property, t]);
 
   const engagementDetails = useMemo(() => ([
-    property?.view_count != null ? { label: 'Views', value: formatNumber(property.view_count) } : null,
-    property?.like_count != null ? { label: 'Likes', value: formatNumber(property.like_count) } : null,
-    property?.interest_count != null ? { label: 'Interests', value: formatNumber(property.interest_count) } : null,
-    property?.created_at ? { label: 'Created', value: formatDate(property.created_at) } : null,
-    property?.updated_at ? { label: 'Updated', value: formatDate(property.updated_at) } : null,
-  ].filter(Boolean)), [property]);
+    property?.view_count != null ? { label: t('details.views'), value: formatNumber(property.view_count) } : null,
+    property?.like_count != null ? { label: t('details.likes'), value: formatNumber(property.like_count) } : null,
+    property?.interest_count != null ? { label: t('details.interests'), value: formatNumber(property.interest_count) } : null,
+    property?.created_at ? { label: t('details.created'), value: formatDate(property.created_at) } : null,
+    property?.updated_at ? { label: t('details.updated'), value: formatDate(property.updated_at) } : null,
+  ].filter(Boolean)), [property, t]);
 
   const { recordSwipe } = usePropertyStore();
   const { scheduleVisit, isLoading: visitLoading } = useVisitStore();
@@ -289,8 +289,8 @@ const PropertyDetailsSection = ({ property }) => {
           filters.price_max = property.base_price + priceBuffer;
         }
         
-        const response = await propertyAPIService.searchProperties(filters, 1, 4);
-        const properties = response.data?.properties || response.data?.items || [];
+        const response = await propertyAPIService.searchProperties(filters, null, 4);
+        const properties = Array.isArray(response.data?.items) ? response.data.items : [];
         
         // Filter out the current property
         const filtered = properties.filter(p => p.id !== property.id).slice(0, 4);
@@ -381,8 +381,11 @@ const PropertyDetailsSection = ({ property }) => {
       return;
     }
     setLikeLoading(true);
+    // AUDIT FIX (2.3): use is_liked (the canonical store/API field) with a
+    // legacy `liked` fallback, so the toggle persists visually after re-fetch.
+    const currentLiked = property?.is_liked ?? property?.liked ?? false;
     try {
-      await recordSwipe(property?.id, !property?.liked);
+      await recordSwipe(property?.id, !currentLiked);
       hapticSuccess();
     } finally {
       setLikeLoading(false);
@@ -457,14 +460,42 @@ const PropertyDetailsSection = ({ property }) => {
     }
     setCallbackErrors({});
     setCallbackLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setCallbackLoading(false);
-    setCallbackSuccess(true);
-    setTimeout(() => {
+    // CRITICAL FIX (audit 2.4): the callback form was a non-functional mock
+    // (`setTimeout` + fake success). Wire it to the existing visit endpoint
+    // so an agent actually receives the request. The visit contract requires
+    // a scheduled_date; for a callback we schedule a generic follow-up window
+    // (next day) and flag it via special_requirements so agents can filter.
+    try {
+      const { visitService } = await import('../../services/visitService');
+      const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000)
+        .toISOString()
+        .slice(0, 16);
+      await visitService.schedule({
+        property_id: property?.id,
+        scheduled_date: tomorrow,
+        special_requirements: `Callback requested. Phone: ${
+          callbackForm.phone || 'not provided'
+        }. Preferred time: ${callbackForm.preferredTime || 'anytime'}. Notes: ${
+          callbackForm.notes || 'none'
+        }`,
+      });
+      setCallbackSuccess(true);
+      setTimeout(() => {
       setShowCallbackModal(false);
       setCallbackSuccess(false);
       setCallbackForm({ phone: user?.phone || '', preferredTime: '', notes: '' });
     }, 3000);
+    } catch (err) {
+      setCallbackErrors({
+        form:
+          err?.response?.data?.detail?.message ||
+          err?.response?.data?.detail ||
+          err?.message ||
+          'Could not submit callback request. Please try again or call us directly.',
+      });
+    } finally {
+      setCallbackLoading(false);
+    }
   };
 
   const enterFullscreenTour = () => {
@@ -495,14 +526,14 @@ const PropertyDetailsSection = ({ property }) => {
                     disabled={!virtualTourUrl}
                     onClick={() => setMediaTab('tour')}
                     icon="fas fa-vr-cardboard"
-                    label="360° Tour"
+                    label={t('details.virtualTour')}
                   />
                   <MediaTabButton
                     active={mediaTab === 'photos'}
                     disabled={!hasPhotos}
                     onClick={() => setMediaTab('photos')}
                     icon="fas fa-images"
-                    label="Photos"
+                    label={t('details.photos')}
                     count={galleryImages.length}
                   />
                   <MediaTabButton
@@ -510,7 +541,7 @@ const PropertyDetailsSection = ({ property }) => {
                     disabled={!parsedVideo}
                     onClick={() => setMediaTab('video')}
                     icon="fas fa-video"
-                    label="Video"
+                    label={t('details.video')}
                   />
                 </div>
                 {mediaTab === 'tour' && virtualTourUrl ? (
@@ -519,19 +550,19 @@ const PropertyDetailsSection = ({ property }) => {
                       type="button"
                       className="btn btn-outline-dark btn-sm"
                       onClick={enterFullscreenTour}
-                      title="Full Screen"
-                      aria-label="Open virtual tour in full screen"
+                      title={t('details.fullScreen')}
+                      aria-label={t('details.openVirtualTourFullScreen')}
                     >
                       <i className="fas fa-expand" aria-hidden="true"></i>
                     </button>
-                    <a href={virtualTourUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark btn-sm" title="Open in new tab">
+                    <a href={virtualTourUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark btn-sm" title={t('details.openInNewTab')}>
                       <i className="fas fa-external-link-alt" aria-hidden="true"></i>
                     </a>
                   </div>
                 ) : mediaTab === 'photos' && galleryImages.length > 0 ? (
                   <div className="media-actions d-flex gap-2 mt-2 mt-sm-0">
-                    <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => openLightbox(0)} title="View all photos">
-                      <i className="fas fa-expand"></i> View All
+                    <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => openLightbox(0)} title={t('details.viewAllPhotos')}>
+                      <i className="fas fa-expand"></i> {t('details.viewAll')}
                     </button>
                   </div>
                 ) : null}
@@ -615,7 +646,7 @@ const PropertyDetailsSection = ({ property }) => {
                   ) : (
                     <div className="property-details__thumb media-hero no-image-placeholder">
                       <i className="fas fa-image fa-3x text-muted"></i>
-                      <p className="text-muted mt-2">No photos available</p>
+                      <p className="text-muted mt-2">{t('details.noPhotosAvailable')}</p>
                     </div>
                   )}
                   {galleryImages.length > 1 && (
@@ -659,7 +690,7 @@ const PropertyDetailsSection = ({ property }) => {
                   {parsedVideo.type === 'native' ? (
                     <video controls className="video-player" preload="metadata">
                       <source src={parsedVideo.src} type="video/mp4" />
-                      Your browser does not support video playback.
+                      {t('details.browserNoVideo')}
                     </video>
                   ) : (
                     <iframe
@@ -667,7 +698,7 @@ const PropertyDetailsSection = ({ property }) => {
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                       allowFullScreen
                       loading="lazy"
-                      title="Property Video"
+                      title={t('details.propertyVideo')}
                       className="video-iframe"
                     />
                   )}
@@ -679,7 +710,7 @@ const PropertyDetailsSection = ({ property }) => {
                 <PropertyActions
                   property={property}
                   onLikeToggle={toggleLike}
-                  isLiked={property.liked}
+                  isLiked={property.is_liked ?? property.liked}
                   likeLoading={likeLoading}
                 />
               </div>
@@ -689,29 +720,20 @@ const PropertyDetailsSection = ({ property }) => {
                 {price} <span className="day">{day}</span>
               </h5>
               <div className="property-trust-strip d-flex flex-wrap gap-2 mb-3">
-                {property?.is_verified && <span className="badge bg-success">Verified Listing</span>}
+                {property?.is_verified && <span className="badge bg-success">{t('details.verifiedListing')}</span>}
                 {property?.id && <span className="badge bg-light text-dark border">ID: {property.id}</span>}
-                {property?.updated_at && <span className="badge bg-light text-dark border">Updated: {formatDate(property.updated_at)}</span>}
+                {property?.updated_at && <span className="badge bg-light text-dark border">{t('details.updated')}: {formatDate(property.updated_at)}</span>}
               </div>
-              {(property.owner_name || property.owner_contact) && (
-                <div className="property-mobile-owner d-lg-none mb-3">
-                  <div className="owner-box small">
-                    <div className="owner-label">Listed By</div>
-                    <div className="owner-name">{property.owner_name || property.builder_name}</div>
-                    {property.owner_contact && (
-                      <a href={`tel:${property.owner_contact}`} className="btn btn-sm btn-outline-main mt-2">
-                        <i className="fas fa-phone" aria-hidden="true"></i> {property.owner_contact}
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
+              {/* AUDIT FIX (UX 2.11): removed the duplicate mobile-only owner
+                  box. The sidebar owner card (visible on all breakpoints) and
+                  the mobile sticky bar already expose owner name, Call,
+                  WhatsApp and Callback, so the extra mobile box was redundant. */}
               {/* Description */}
               {description && <p className="property-details__desc mb-3">{description}</p>}
 
               <div className="property-details-wrapper">
                 <div className="property-details-item">
-                  <h6 className="property-details-item__title">Overview</h6>
+                  <h6 className="property-details-item__title">{t('details.overview')}</h6>
                   <div className="property-details-item__content">
                     <div className="row gy-4 gy-lg-5">
                       {previewStats.map((stat, index) => (
@@ -731,7 +753,7 @@ const PropertyDetailsSection = ({ property }) => {
 
                 {keyDetails.length > 0 && (
                   <div className="property-details-item">
-                    <h6 className="property-details-item__title">Key Details</h6>
+                    <h6 className="property-details-item__title">{t('details.keyDetails')}</h6>
                     <div className="property-details-item__content">
                       <div className="row gy-3">
                         {keyDetails.map((d, i) => (
@@ -756,7 +778,7 @@ const PropertyDetailsSection = ({ property }) => {
 
                 {pricingDetails.length > 0 && (
                   <div className="property-details-item">
-                    <h6 className="property-details-item__title">Pricing & Costs</h6>
+                    <h6 className="property-details-item__title">{t('details.pricingCosts')}</h6>
                     <div className="property-details-item__content">
                       <div className="row gy-3">
                         {pricingDetails.map((d, i) => (
@@ -774,7 +796,7 @@ const PropertyDetailsSection = ({ property }) => {
 
                 {buildingDetails.length > 0 && (
                   <div className="property-details-item">
-                    <h6 className="property-details-item__title">Building & Area</h6>
+                    <h6 className="property-details-item__title">{t('details.buildingArea')}</h6>
                     <div className="property-details-item__content">
                       <div className="row gy-3">
                         {buildingDetails.map((d, i) => (
@@ -792,7 +814,7 @@ const PropertyDetailsSection = ({ property }) => {
 
                 {features.length > 0 && (
                   <div className="property-details-item">
-                    <h6 className="property-details-item__title">Features</h6>
+                    <h6 className="property-details-item__title">{t('details.features')}</h6>
                     <div className="property-details-item__content">
                       <div className="row gy-2">
                         <div className="col-12">
@@ -813,7 +835,7 @@ const PropertyDetailsSection = ({ property }) => {
                 )}
 
                 <div className="property-details-item">
-                  <h6 className="property-details-item__title">Address</h6>
+                  <h6 className="property-details-item__title">{t('details.address')}</h6>
                   <div className="property-details-item__content">
                     <div className="row gy-3">
                       {addressDetails.map((d, i) => (
@@ -825,18 +847,26 @@ const PropertyDetailsSection = ({ property }) => {
                         </div>
                       ))}
                     </div>
-                    {property.latitude && property.longitude && (
-                      <div className="address-map mt-3">
-                        <iframe
-                          src={`https://www.google.com/maps?q=${property.latitude},${property.longitude}&z=15&output=embed`}
-                          allowFullScreen
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                          title="Property Location"
-                          style={{ width: '100%', minHeight: 320, border: 0 }}
-                        />
-                      </div>
-                    )}
+                    {(() => {
+                      // CRITICAL FIX (audit 2.2): API returns lat/lng, but some
+                      // legacy/seed records expose latitude/longitude. Accept
+                      // both with lat/lng taking precedence.
+                      const lat = property.lat ?? property.latitude;
+                      const lng = property.lng ?? property.longitude;
+                      if (!lat || !lng) return null;
+                      return (
+                        <div className="address-map mt-3">
+                          <iframe
+                            src={`https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="Property Location"
+                            style={{ width: '100%', minHeight: 320, border: 0 }}
+                          />
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 
@@ -844,7 +874,7 @@ const PropertyDetailsSection = ({ property }) => {
 
                 {engagementDetails.length > 0 && (
                   <div className="property-details-item">
-                    <h6 className="property-details-item__title">Engagement</h6>
+                    <h6 className="property-details-item__title">{t('details.engagement')}</h6>
                     <div className="property-details-item__content">
                       <div className="row gy-3">
                         {engagementDetails.map((d, i) => (
@@ -865,7 +895,7 @@ const PropertyDetailsSection = ({ property }) => {
                   <div className="similar-properties-section">
                     <h6 className="similar-properties-section__title">
                       <i className="fas fa-home me-2"></i>
-                      Similar Properties
+                      {t('details.similarProperties')}
                     </h6>
                     <div className="similar-properties-scroll">
                       {loadingSimilar ? (
@@ -913,12 +943,12 @@ const PropertyDetailsSection = ({ property }) => {
                       </div>
                       <button
                         type="button"
-                        className={`btn btn-sm ${property.liked ? 'btn-danger' : 'btn-outline-secondary'}`}
+                        className={`btn btn-sm ${(property.is_liked ?? property.liked) ? 'btn-danger' : 'btn-outline-secondary'}`}
                         onClick={toggleLike}
                         disabled={likeLoading}
-                        title={property.liked ? 'Unlike' : 'Like'}
-                        aria-label={property.liked ? 'Remove property from favorites' : 'Save property to favorites'}
-                        aria-pressed={Boolean(property.liked)}
+                        title={(property.is_liked ?? property.liked) ? 'Unlike' : 'Like'}
+                        aria-label={(property.is_liked ?? property.liked) ? 'Remove property from favorites' : 'Save property to favorites'}
+                        aria-pressed={Boolean(property.is_liked ?? property.liked)}
                       >
                         <i className="fas fa-heart" aria-hidden="true"></i>
                       </button>
@@ -955,7 +985,7 @@ const PropertyDetailsSection = ({ property }) => {
 
                     {(property.owner_name || property.owner_contact) && (
                       <div className="owner-box small mb-3">
-                        <div className="owner-label">Listed By</div>
+                        <div className="owner-label">{t('details.listedBy')}</div>
                         <div className="owner-name">{property.owner_name || property.builder_name}</div>
                         
                         {/* WhatsApp Button */}
@@ -980,7 +1010,7 @@ const PropertyDetailsSection = ({ property }) => {
                                 onClick={handlePhoneReveal}
                               >
                                 <i className="fas fa-eye"></i>
-                                <span>Show Phone Number</span>
+                                <span>{t('details.showPhoneNumber')}</span>
                               </button>
                             ) : (
                               <a
@@ -1002,7 +1032,7 @@ const PropertyDetailsSection = ({ property }) => {
                             onClick={() => setShowCallbackModal(true)}
                           >
                             <i className="fas fa-phone-volume"></i>
-                            <span>Request Callback</span>
+                            <span>{t('details.requestCallback')}</span>
                           </button>
                         </div>
                       </div>
@@ -1010,13 +1040,13 @@ const PropertyDetailsSection = ({ property }) => {
 
                     <form className={`visit-form ${shakeForm ? 'shake' : ''}`} onSubmit={onSchedule} id="schedule-visit-form">
                       <label htmlFor="visit-date-time" className="form-label small mb-1 fw-semibold">
-                        <i className="far fa-calendar-alt me-1"></i> Schedule a Visit
+                        <i className="far fa-calendar-alt me-1"></i> {t('details.scheduleVisit')}
                       </label>
                       
                       {visitSuccess && (
                         <div className="alert alert-success alert-dismissible fade show py-2 px-3 mb-2" role="alert">
                           <i className="fas fa-check-circle me-1"></i>
-                          Visit scheduled successfully!
+                          {t('details.visitScheduled')}
                         </div>
                       )}
                       
@@ -1028,6 +1058,8 @@ const PropertyDetailsSection = ({ property }) => {
                               id="visit-date"
                               name="visitDate"
                               type="date"
+                              // UX FIX (audit 2.7): prevent past dates; IST implied.
+                              min={new Date().toISOString().split('T')[0]}
                               className={`form-control ${visitErrors.visitDate ? 'is-invalid' : ''}`}
                               value={visitDatePart}
                               onChange={(e) => {
@@ -1069,7 +1101,7 @@ const PropertyDetailsSection = ({ property }) => {
                           id="visit-notes"
                           name="visitNotes"
                           className="form-control"
-                          placeholder="Special requirements or notes (optional)"
+                          placeholder={t('details.specialRequirements')}
                           value={visitNotes}
                           onChange={(e) => setVisitNotes(e.target.value)}
                           autoComplete="off"
@@ -1084,12 +1116,12 @@ const PropertyDetailsSection = ({ property }) => {
                           {visitLoading ? (
                             <>
                               <i className="fas fa-spinner fa-spin me-2"></i>
-                              Scheduling...
+                              {t('details.scheduling')}
                             </>
                           ) : (
                             <>
                               <i className="far fa-calendar-check me-2"></i>
-                              Schedule Visit
+                              {t('details.scheduleVisit')}
                             </>
                           )}
                         </button>
@@ -1109,23 +1141,30 @@ const PropertyDetailsSection = ({ property }) => {
 
       {/* Callback Request Modal */}
       {showCallbackModal && (
-        <div 
-          className="modal show d-block callback-modal" 
-          tabIndex="-1" 
+        <div
+          className="modal show d-block callback-modal"
+          tabIndex="-1"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="callback-modal-title"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setShowCallbackModal(false);
             }
           }}
+          onKeyDown={(e) => {
+            // UX FIX (audit 2.8): close on Escape for keyboard accessibility.
+            if (e.key === 'Escape') setShowCallbackModal(false);
+          }}
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">
+                <h5 className="modal-title" id="callback-modal-title">
                   <i className="fas fa-phone-volume me-2"></i>
-                  Request a Callback
+                  {t('details.requestCallbackTitle')}
                 </h5>
-                <button 
+                <button
                   type="button" 
                   className="btn-close" 
                   onClick={() => setShowCallbackModal(false)}
@@ -1138,20 +1177,20 @@ const PropertyDetailsSection = ({ property }) => {
                     <div className="mb-3">
                       <i className="fas fa-check-circle text-success fa-3x"></i>
                     </div>
-                    <h5 className="text-success">Callback Requested!</h5>
-                    <p className="text-muted mb-0">We&apos;ll call you soon.</p>
+                    <h5 className="text-success">{t('details.callbackRequested')}</h5>
+                    <p className="text-muted mb-0">{t('details.callbackMessage')}</p>
                   </div>
                 ) : (
                   <form onSubmit={handleCallbackSubmit}>
                     <div className="mb-3">
                       <label htmlFor="callback-phone" className="form-label">
-                        Your Phone Number <span className="text-danger">*</span>
+                        {t('details.yourPhoneNumber')} <span className="text-danger">*</span>
                       </label>
                       <input
                         type="tel"
                         className={`form-control ${callbackErrors.phone ? 'is-invalid' : ''}`}
                         id="callback-phone"
-                        placeholder="e.g., +91 98765 43210"
+                        placeholder={t('details.phoneNumberPlaceholder')}
                         value={callbackForm.phone}
                         onChange={(e) => {
                           setCallbackForm(prev => ({ ...prev, phone: e.target.value }));
@@ -1169,7 +1208,7 @@ const PropertyDetailsSection = ({ property }) => {
                     
                     <div className="mb-3">
                       <label htmlFor="callback-time" className="form-label">
-                        Preferred Time <span className="text-danger">*</span>
+                        {t('details.preferredTime')} <span className="text-danger">*</span>
                       </label>
                       <select
                         className={`form-select ${callbackErrors.preferredTime ? 'is-invalid' : ''}`}
@@ -1182,10 +1221,10 @@ const PropertyDetailsSection = ({ property }) => {
                           }
                         }}
                       >
-                        <option value="">Select a time slot...</option>
-                        <option value="morning">Morning (9 AM - 12 PM)</option>
-                        <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
-                        <option value="evening">Evening (4 PM - 8 PM)</option>
+                        <option value="">{t('details.selectTimeSlot')}</option>
+                        <option value="morning">{t('details.morning')}</option>
+                        <option value="afternoon">{t('details.afternoon')}</option>
+                        <option value="evening">{t('details.evening')}</option>
                       </select>
                       {callbackErrors.preferredTime && (
                         <div className="invalid-feedback">
@@ -1196,13 +1235,13 @@ const PropertyDetailsSection = ({ property }) => {
                     
                     <div className="mb-3">
                       <label htmlFor="callback-notes" className="form-label">
-                        Additional Notes
+                        {t('details.additionalNotes')}
                       </label>
                       <textarea
                         className="form-control"
                         id="callback-notes"
                         rows="3"
-                        placeholder="Any specific questions or requirements..."
+                        placeholder={t('details.notesPlaceholder')}
                         value={callbackForm.notes}
                         onChange={(e) => setCallbackForm(prev => ({ ...prev, notes: e.target.value }))}
                       />
@@ -1216,12 +1255,12 @@ const PropertyDetailsSection = ({ property }) => {
                       {callbackLoading ? (
                         <>
                           <i className="fas fa-spinner fa-spin me-2"></i>
-                          Sending Request...
+                          {t('details.sendingRequest')}
                         </>
                       ) : (
                         <>
                           <i className="fas fa-paper-plane me-2"></i>
-                          Request Callback
+                          {t('details.requestCallback')}
                         </>
                       )}
                     </button>
@@ -1233,13 +1272,27 @@ const PropertyDetailsSection = ({ property }) => {
         </div>
       )}
 
+      {/* AUDIT FIX (UX 2.11): removed the duplicate mobile owner box above
+          (owner name/phone + Call) since the sticky bottom bar already
+          exposes Call/Callback/WhatsApp actions. Keeping both caused visual
+          redundancy on mobile. */}
       {property?.owner_contact && (
         <div className="mobile-sticky-actions d-lg-none">
           <a href={`tel:${property.owner_contact}`} className="btn btn-outline-main btn-sm flex-fill">
-            <i className="fas fa-phone me-1" aria-hidden="true"></i> Call
+            <i className="fas fa-phone me-1" aria-hidden="true"></i> {t('details.call')}
           </a>
+          {/* AUDIT FIX (improvement 2.8): add WhatsApp to the mobile sticky bar
+              so mobile users can reach the owner via WhatsApp just like desktop. */}
+          <WhatsAppButton
+            phone={property.owner_contact}
+            property={property}
+            variant="small"
+            className="btn-sm flex-fill"
+          >
+            <i className="fab fa-whatsapp me-1" aria-hidden="true"></i> WhatsApp
+          </WhatsAppButton>
           <button type="button" className="btn btn-main btn-sm flex-fill" onClick={() => setShowCallbackModal(true)}>
-            <i className="fas fa-phone-volume me-1" aria-hidden="true"></i> Callback
+            <i className="fas fa-phone-volume me-1" aria-hidden="true"></i> {t('details.callback')}
           </button>
         </div>
       )}

@@ -44,6 +44,6 @@ export default [
     },
   },
   {
-    ignores: ['dist', 'build', 'node_modules', 'public', '*.config.js'],
+    ignores: ['dist', 'build', 'node_modules', 'public', '*.config.js', '.agents/**', '.claude/**', '.kiro/**', '.kilo/**', '.opencode/**', '.wiki/**', 'scripts/**'],
   },
 ];

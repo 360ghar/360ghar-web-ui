@@ -1,0 +1,32 @@
+name: Publish Wiki
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.wiki/**'
+      - '.github/workflows/publish-wiki.yml'
+
+concurrency:
+  group: publish-wiki
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  publish-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sync .wiki/ to GitHub Wiki tab
+        uses: Andrew-Chen-Wang/github-wiki-action@v4
+        with:
+          path: '.wiki'
+          token: ${{ github.token }}
+          strategy: 'clone'
+          preprocess: true
+          disable-empty-commits: true
+          commit-message: 'chore(wiki): sync from .wiki @ ${{ github.sha }}'

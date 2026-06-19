@@ -1,6 +1,6 @@
 import { I18nLink } from '../../i18n/I18nLink';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -20,9 +20,46 @@ const CAREER_VALUES = [
 const TODAY = new Date().toISOString().split('T')[0];
 const VALID_THROUGH = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
+/**
+ * AUDIT FIX (4.8): derive a human-readable category from each opening so the
+ * careers page can offer a search + category filter. Categories are derived
+ * from the role title to avoid a separate data migration.
+ */
+const deriveCategory = (opening) => {
+  const title = (opening.title || '').toLowerCase();
+  if (title.includes('content') || title.includes('writer') || title.includes('marketing')) return 'content';
+  if (title.includes('software') || title.includes('developer') || title.includes('engineer')) return 'engineering';
+  if (title.includes('agent') || title.includes('sales') || title.includes('real estate')) return 'sales';
+  return 'other';
+};
+
+const CATEGORY_LABELS = {
+  content: 'Content & Marketing',
+  engineering: 'Engineering',
+  sales: 'Sales & Field',
+  other: 'Other',
+};
+
 const Careers = () => {
   const { t } = useTranslation();
   const [tSeo] = useTranslation('seo');
+  const [tC] = useTranslation('common');
+  // AUDIT FIX (4.8): search + category filter state
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('all');
+
+  const categories = useMemo(() => {
+    const set = new Set(careerOpenings.map(deriveCategory));
+    return ['all', ...Array.from(set)];
+  }, []);
+
+  const filteredOpenings = useMemo(() => careerOpenings.filter((opening) => {
+    const matchesQuery = !query
+      || opening.title.toLowerCase().includes(query.toLowerCase())
+      || opening.description.toLowerCase().includes(query.toLowerCase());
+    const matchesCategory = category === 'all' || deriveCategory(opening) === category;
+    return matchesQuery && matchesCategory;
+  }), [query, category]);
 
   const structuredData = useMemo(() => [
     {
@@ -131,8 +168,41 @@ const Careers = () => {
               </div>
             </div>
 
+            {/* AUDIT FIX (4.8): search + category filter */}
+            <div className="row g-3 justify-content-center mb-5">
+              <div className="col-lg-6">
+                <div className="input-group">
+                  <span className="input-group-text bg-white border-end-0">
+                    <i className="fas fa-search text-muted"></i>
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control border-start-0"
+                    placeholder={tC('contentSeo.searchJobs')}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    aria-label={tC('contentSeo.searchJobs')}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-4">
+                <select
+                  className="form-select"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  aria-label={tC('contentSeo.filterByCategory')}
+                >
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat === 'all' ? tC('contentSeo.allCategories') : CATEGORY_LABELS[cat] || cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             <div className="row g-4 g-lg-5">
-              {careerOpenings.map((opening) => (
+              {filteredOpenings.map((opening) => (
                 <div className="col-lg-6 col-xl-4" key={opening.slug}>
                   <article className="careers-card h-100 shadow-sm border-0 rounded-4 overflow-hidden transition-all">
                     <div className="careers-card__header bg-gradient"></div>
@@ -170,6 +240,9 @@ const Careers = () => {
                 </div>
               ))}
             </div>
+            {filteredOpenings.length === 0 && (
+              <p className="text-center text-muted py-5">{tC('contentSeo.noResults')}</p>
+            )}
           </div>
         </section>
 

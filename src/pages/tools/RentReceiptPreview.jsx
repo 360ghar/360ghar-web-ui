@@ -11,6 +11,7 @@ const RentReceiptPreview = ({ data }) => {
     paymentMode,
     receiptDate,
     landlordPAN,
+    landlordSignature,
     transactionRef,
     receiptNumber,
     isRevenueStampRequired,
@@ -110,6 +111,15 @@ const RentReceiptPreview = ({ data }) => {
 
           {/* Signature */}
           <div className="rent-receipt-paper__signature">
+            {/* AUDIT FIX (imp 3.10): render uploaded landlord signature */}
+            {landlordSignature && (
+              <img
+                src={landlordSignature}
+                alt="Landlord signature"
+                className="rent-receipt-paper__signature-image"
+                style={{ maxHeight: 60, marginBottom: 4, objectFit: 'contain' }}
+              />
+            )}
             <div className="rent-receipt-paper__signature-line" />
             <span className="rent-receipt-paper__signature-label">
               Landlord Signature

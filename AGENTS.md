@@ -154,3 +154,38 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 - ✅ Use `var(--danger-color)` for negative indicators
 - ✅ Use semantic classes like `text-success`, `text-muted`
 - ✅ Follow existing card patterns in `phase1-additions.scss`
+
+## Documentation Maintenance
+
+The `.wiki/` directory contains comprehensive codebase documentation that is published to the GitHub Wiki tab automatically. Keep it up to date after every change.
+
+### When to update
+
+| Change type | Wiki page to update |
+|-------------|-------------------|
+| New/removed page, component, service, or store | Relevant `.wiki/pages/`, `.wiki/components/`, `.wiki/services/`, or `.wiki/state/` page |
+| Feature or architecture change | `.wiki/Architecture.md` + relevant `.wiki/features/` page |
+| Dependency added/removed/updated | `.wiki/reference/Reference.md` |
+| Build process change | `.wiki/build/Build-Pipeline.md` |
+| Branding or UI pattern change | `.wiki/how-to-contribute/Patterns-Conventions.md` |
+| Video content change (features, architecture, branding) | Re-render `.wiki/video/overview.mp4` |
+
+### Commands
+
+```bash
+# Re-render the wiki overview video (after editing .wiki/video/src/)
+cd .wiki/video && npm install && npx remotion render src/Root.tsx OverviewVideo overview.mp4
+
+# Preview the video in Remotion Studio (interactive editing)
+cd .wiki/video && npm run dev
+
+# Wiki auto-publishes to GitHub Wiki tab on push to main (via .github/workflows/publish-wiki.yml)
+# Video auto-renders on push to main when .wiki/video/src/ changes (via .github/workflows/render-wiki-video.yml)
+```
+
+### Wiki structure
+
+- Wiki source lives in `.wiki/` (markdown files, versioned with code, browsable on GitHub)
+- `_Sidebar.md` and `_Footer.md` provide navigation on the GitHub Wiki tab
+- The Remotion video project lives in `.wiki/video/` (editable, re-renderable)
+- One-time prerequisite: create the first wiki page via GitHub UI to initialize the `.wiki.git` backend

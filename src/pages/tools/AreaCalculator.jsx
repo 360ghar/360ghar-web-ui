@@ -37,17 +37,24 @@ const AreaCalculator = () => {
 
     const [superArea, setSuperArea] = useState(1000);
     const [loading, setLoading] = useState(30);
+    // CRITICAL FIX (audit 3.3): the built-up area multiplier was hardcoded
+    // to 1.15 with no explanation. Make it a user-editable input with a
+    // sensible default and a tooltip, and compute it as
+    // carpet * (1 + builtUpLoading/100) so the relationship is explicit.
+    const [builtUpLoading, setBuiltUpLoading] = useState(15);
     const [faqOpenIndex, setFaqOpenIndex] = useState(0);
 
-    const { carpetArea, builtUpArea } = useMemo(() => {
+    const { carpetArea, builtUpArea, loadingArea } = useMemo(() => {
         const calculatedCarpet = superArea * ((100 - loading) / 100);
-        const calculatedBuiltUp = calculatedCarpet * 1.15;
+        const calculatedBuiltUp = calculatedCarpet * (1 + builtUpLoading / 100);
 
         return {
             carpetArea: Math.round(calculatedCarpet),
             builtUpArea: Math.min(Math.round(calculatedBuiltUp), superArea),
+            // Loading area = super area minus carpet area (the "common" portion).
+            loadingArea: Math.max(Math.round(superArea - calculatedCarpet), 0),
         };
-    }, [superArea, loading]);
+    }, [superArea, loading, builtUpLoading]);
 
     return (
         <>
@@ -120,6 +127,21 @@ const AreaCalculator = () => {
                                                 </div>
                                                 <small className="text-muted">{t('areaCalculator.loadingHint')}</small>
                                             </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">{t('areaCalculator.builtUpLoadingFactor')}</label>
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <input
+                                                        type="range"
+                                                        className="form-range flex-grow-1"
+                                                        min="0"
+                                                        max="40"
+                                                        value={builtUpLoading}
+                                                        onChange={(e) => setBuiltUpLoading(Number(e.target.value))}
+                                                    />
+                                                    <span className="fw-bold" style={{width: '50px'}}>{builtUpLoading}%</span>
+                                                </div>
+                                                <small className="text-muted">{t('areaCalculator.builtUpLoadingHint')}</small>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -145,9 +167,9 @@ const AreaCalculator = () => {
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="p-3 bg-light rounded-3">
-                                                        <label className="text-muted small fw-bold">{t('areaCalculator.commonArea')}</label>
-                                                        <div className="fs-4 fw-bold">{superArea - carpetArea} <span className="fs-6">{t('areaCalculator.sqFt')}</span></div>
-                                                        <small className="text-muted">{t('areaCalculator.commonAreaHint')}</small>
+                                                        <label className="text-muted small fw-bold">{t('areaCalculator.loadingArea')}</label>
+                                                        <div className="fs-4 fw-bold">{loadingArea} <span className="fs-6">{t('areaCalculator.sqFt')}</span></div>
+                                                        <small className="text-muted">{t('areaCalculator.loadingAreaHint')}</small>
                                                     </div>
                                                 </div>
                                             </div>

@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Pagination from '../../common/ui/Pagination';
 import CommonSidebar from '../../common/listing/CommonSidebar';
 import BlogClassicItem from './BlogClassicItem';
 import { blogService } from '../../services/blogService';
@@ -10,93 +9,83 @@ const POSTS_PER_PAGE = 10;
 const BlogClassicSection = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // State
+    // State — cursor-paginated: we accumulate posts across pages and fetch the
+    // next page using the opaque `next_cursor` returned by the backend.
     const [posts, setPosts] = useState([]);
+    const [nextCursor, setNextCursor] = useState(null);
+    const [hasMore, setHasMore] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(null);
-    const [pagination, setPagination] = useState({
-        page: 1,
-        totalPages: 1,
-        total: 0
-    });
 
-    // Get filters from URL
-    const page = parseInt(searchParams.get('page')) || 1;
+    // Get filters from URL (cursor is held in component state, not the URL)
     const category = searchParams.get('category') || '';
     const tag = searchParams.get('tag') || '';
     const searchQuery = searchParams.get('q') || '';
 
-    // Fetch posts
-    const fetchPosts = useCallback(async () => {
+    // Fetch the first page (cursor=null) — replaces the list. Triggered when
+    // any filter changes.
+    const fetchFirstPage = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
 
-            const params = {
-                page,
-                limit: POSTS_PER_PAGE,
-            };
-
-            // Add filters if present
+            const params = { limit: POSTS_PER_PAGE };
             if (category) params.category = category;
             if (tag) params.tag = tag;
             if (searchQuery) params.q = searchQuery;
 
             const data = await blogService.getPosts(params);
-
-            // Handle response structure
-            if (data?.items && Array.isArray(data.items)) {
-                setPosts(data.items);
-                setPagination({
-                    page: data.page || 1,
-                    totalPages: data.total_pages || 1,
-                    total: data.total || 0
-                });
-            } else if (Array.isArray(data)) {
-                setPosts(data);
-                setPagination({
-                    page: 1,
-                    totalPages: 1,
-                    total: data.length
-                });
-            } else {
-                setPosts([]);
-                setPagination({ page: 1, totalPages: 1, total: 0 });
-            }
+            const items = Array.isArray(data?.items) ? data.items : (Array.isArray(data) ? data : []);
+            setPosts(items);
+            setNextCursor(data?.next_cursor ?? null);
+            setHasMore(Boolean(data?.has_more));
         } catch (err) {
             setError(err?.response?.data?.detail || err?.message || 'Failed to load posts');
             setPosts([]);
+            setNextCursor(null);
+            setHasMore(false);
         } finally {
             setLoading(false);
         }
-    }, [page, category, tag, searchQuery]);
+    }, [category, tag, searchQuery]);
 
     useEffect(() => {
-        fetchPosts();
-    }, [fetchPosts]);
+        fetchFirstPage();
+    }, [fetchFirstPage]);
 
-    // Handle page change
-    const handlePageChange = (newPage) => {
-        const params = new URLSearchParams();
-        if (newPage > 1) params.set('page', newPage.toString());
-        if (category) params.set('category', category);
-        if (tag) params.set('tag', tag);
-        if (searchQuery) params.set('q', searchQuery);
-        setSearchParams(params);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Fetch the next page using the opaque cursor token and append.
+    const handleLoadMore = async () => {
+        if (!hasMore || !nextCursor || loadingMore) return;
+        setLoadingMore(true);
+        try {
+            const params = { limit: POSTS_PER_PAGE, cursor: nextCursor };
+            if (category) params.category = category;
+            if (tag) params.tag = tag;
+            if (searchQuery) params.q = searchQuery;
+
+            const data = await blogService.getPosts(params);
+            const items = Array.isArray(data?.items) ? data.items : [];
+            setPosts(prev => [...prev, ...items]);
+            setNextCursor(data?.next_cursor ?? null);
+            setHasMore(Boolean(data?.has_more));
+        } catch {
+            // Silently ignore; user can retry via the Load More button.
+        } finally {
+            setLoadingMore(false);
+        }
     };
 
     // Handle search from sidebar
     const handleSearch = (query) => {
         const params = new URLSearchParams();
         if (query) params.set('q', query);
-        // Reset page when searching
         setSearchParams(params);
     };
 
     // Handle retry
     const handleRetry = () => {
-        fetchPosts();
+        fetchFirstPage();
     };
 
     // Clear all filters
@@ -160,9 +149,6 @@ const BlogClassicSection = () => {
                                             Tag: {tag}
                                         </span>
                                     )}
-                                    <span className="text-muted ms-2">
-                                        {pagination.total} {pagination.total === 1 ? 'result' : 'results'} found
-                                    </span>
                                 </div>
                                 <button
                                     className="btn btn-sm btn-outline-secondary"
@@ -219,18 +205,27 @@ const BlogClassicSection = () => {
                                     />
                                 ))}
 
-                                {/* Pagination */}
-                                <Pagination
-                                    currentPage={pagination.page}
-                                    totalPages={pagination.totalPages}
-                                    onPageChange={handlePageChange}
-                                />
-
-                                {/* Results info */}
-                                {pagination.total > 0 && (
-                                    <p className="text-center text-muted mt-3">
-                                        Showing {((pagination.page - 1) * POSTS_PER_PAGE) + 1} - {Math.min(pagination.page * POSTS_PER_PAGE, pagination.total)} of {pagination.total} posts
-                                    </p>
+                                {/* Cursor-based Load more */}
+                                {hasMore && (
+                                    <div className="text-center mt-4">
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-main"
+                                            onClick={handleLoadMore}
+                                            disabled={loadingMore}
+                                        >
+                                            {loadingMore ? (
+                                                <>
+                                                    <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                                    Loading...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <i className="fas fa-plus me-1"></i> Load More
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
                                 )}
                             </>
                         )}

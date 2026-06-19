@@ -1,5 +1,6 @@
 import { useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { useReactToPrint } from 'react-to-print';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -120,6 +121,8 @@ const RentReceipt = () => {
   const [receiptDate, setReceiptDate] = useState(today);
   const [landlordPAN, setLandlordPAN] = useState('');
   const [transactionRef, setTransactionRef] = useState('');
+  // AUDIT FIX (imp 3.10): optional landlord signature image (data URL).
+  const [landlordSignature, setLandlordSignature] = useState('');
   const [receiptNumber] = useState(generateReceiptNumber());
   const [batchMode, setBatchMode] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
@@ -258,6 +261,7 @@ const RentReceipt = () => {
         paymentMode,
         receiptDate: end.toISOString().split('T')[0],
         landlordPAN,
+        landlordSignature,
         transactionRef,
         receiptNumber: `${receiptNumber}-${(i + 1).toString().padStart(2, '0')}`,
         isRevenueStampRequired,
@@ -266,7 +270,7 @@ const RentReceipt = () => {
     return receipts;
   }, [
     batchMode, tenantName, landlordName, propertyAddress, rentAmount,
-    paymentMode, landlordPAN, transactionRef, receiptNumber, isRevenueStampRequired,
+    paymentMode, landlordPAN, landlordSignature, transactionRef, receiptNumber, isRevenueStampRequired,
   ]);
 
   const previewData = {
@@ -279,6 +283,7 @@ const RentReceipt = () => {
     paymentMode,
     receiptDate,
     landlordPAN,
+    landlordSignature,
     transactionRef,
     receiptNumber,
     isRevenueStampRequired,
@@ -345,6 +350,12 @@ const RentReceipt = () => {
                   )}
                 </div>
 
+                {/* AUDIT FIX (3.10): state-specific revenue stamp disclaimer */}
+                <div className="alert alert-info py-2 px-3 small mb-3">
+                  <i className="fas fa-info-circle me-1"></i>
+                  {t('rentReceipt.stampStateNote', 'The ₹5,000 revenue stamp threshold varies by state under the Indian Stamp Act. Some states (e.g., Maharashtra, Karnataka) have different limits or surcharges. Confirm the applicable stamp duty rule for your state before submitting receipts for HRA claims.')}
+                </div>
+
                 {/* Quick actions */}
                 <div className="rent-receipt-quick-actions">
                   <button className="btn-quick" onClick={handleFillSample}>
@@ -395,6 +406,34 @@ const RentReceipt = () => {
                           <div className="rent-receipt-warning">
                             <i className="fas fa-exclamation-triangle" />
                             {t('rentReceipt.panWarning')}
+                          </div>
+                        )}
+                      </div>
+                      {/* AUDIT FIX (imp 3.10): landlord signature upload */}
+                      <div className="mb-3">
+                        <label className="form-label">{t('rentReceipt.landlordSignature', 'Landlord Signature (optional)')}</label>
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            if (file.size > 2 * 1024 * 1024) {
+                              toast.error(t('rentReceipt.signatureTooLarge', 'Signature image must be under 2MB.'));
+                              return;
+                            }
+                            const reader = new FileReader();
+                            reader.onload = () => setLandlordSignature(reader.result);
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                        {landlordSignature && (
+                          <div className="d-flex align-items-center gap-2 mt-2">
+                            <img src={landlordSignature} alt="signature" style={{ maxHeight: 48 }} />
+                            <button type="button" className="btn btn-sm btn-link text-danger p-0" onClick={() => setLandlordSignature('')}>
+                              <i className="fas fa-times me-1" />{t('rentReceipt.removeSignature', 'Remove')}
+                            </button>
                           </div>
                         )}
                       </div>

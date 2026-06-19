@@ -44,6 +44,7 @@
     "more": "और"
   },
   "header": {
+    "skipToContent": "मुख्य सामग्री पर जाएं",
     "signIn": "साइन इन",
     "myAccount": "मेरा अकाउंट",
     "favorites": "पसंदीदा",
@@ -57,7 +58,9 @@
   },
   "offCanvas": {
     "location": "गुरुग्राम, हरियाणा भारत, 122001",
-    "email": "info@360ghar.com"
+    "email": "info@360ghar.com",
+    "mapTitle": "360Ghar सेवा क्षेत्र मानचित्र",
+    "panelAriaLabel": "360Ghar मेन्यू पैनल"
   },
   "footer": {
     "connectWithUs": "हमसे जुड़ें",
@@ -108,7 +111,10 @@
   "mobileMenu": {
     "welcomeBack": "वापस स्वागत है!",
     "signIn": "लॉग इन",
-    "signUp": "साइन अप"
+    "signUp": "साइन अप",
+    "searchPlaceholder": "प्रॉपर्टी, लोकैलिटी खोजें...",
+    "searchAriaLabel": "खोज",
+    "searchBtn": "खोजें"
   },
   "commonData": {
     "addressLabel": "पता",
@@ -139,7 +145,57 @@
     "tryNow": "अभी आज़माएं",
     "signInToUnlock": "अनलॉक करने के लिए साइन इन करें",
     "lockedManageProperties": "प्रॉपर्टी प्रबंधित करें",
-    "lockedCheckRent": "किराया चेक करें"
+    "lockedCheckRent": "किराया चेक करें",
+    "guestBannerText": "विजिट, किराया ट्रैकिंग और अधिक के लिए साइन इन करें",
+    "guestBannerCta": "साइन इन करें",
+    "errorMessage": "क्षमा करें, कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
+    "widgetError": "यह परिणाम प्रदर्शित नहीं किया जा सका।",
+    "typingAriaLabel": "AI सोच रहा है",
+    "tools": {
+      "checkingProperties": "प्रॉपर्टी जांची जा रही है",
+      "creatingProperty": "प्रॉपर्टी बनाई जा रही है",
+      "gettingPropertyDetails": "प्रॉपर्टी विवरण लाया जा रहा है",
+      "updatingProperty": "प्रॉपर्टी अपडेट की जा रही है",
+      "updatingAvailability": "उपलब्धता अपडेट की जा रही है",
+      "checkingLease": "लीज जांची जा रही है",
+      "checkingRentHistory": "किराया इतिहास जांचा जा रहा है",
+      "creatingRequest": "अनुरोध बनाया जा रहा है",
+      "checkingMaintenance": "मेंटेनेंस जांची जा रही है",
+      "checkingAvailability": "उपलब्धता जांची जा रही है",
+      "gettingPricing": "मूल्य लाया जा रहा है",
+      "creatingBooking": "बुकिंग बनाई जा रही है",
+      "checkingBookings": "बुकिंग जांची जा रही है",
+      "gettingBookingDetails": "बुकिंग विवरण लाया जा रहा है",
+      "cancellingBooking": "बुकिंग रद्द की जा रही है",
+      "checkingStatus": "स्टेटस जांचा जा रहा है",
+      "listingProperties": "प्रॉपर्टी सूचीबद्ध की जा रही है",
+      "gettingProperty": "प्रॉपर्टी लाई जा रही है",
+      "creatingPropertyForOwner": "प्रॉपर्टी बनाई जा रही है",
+      "verifyingProperty": "प्रॉपर्टी सत्यापित की जा रही है",
+      "checkingLeases": "लीज जांची जा रही है",
+      "creatingLease": "लीज बनाई जा रही है",
+      "terminatingLease": "लीज समाप्त की जा रही है",
+      "checkingOverdueRent": "बकाया किराया जांचा जा रहा है",
+      "recordingPayment": "भुगतान दर्ज किया जा रहा है",
+      "updatingMaintenance": "मेंटेनेंस अपडेट की जा रही है",
+      "checkingAllBookings": "सभी बुकिंग जांची जा रही है",
+      "updatingBooking": "बुकिंग अपडेट की जा रही है",
+      "loadingDashboard": "डैशबोर्ड लोड हो रहा है",
+      "checkingSystem": "सिस्टम जांचा जा रहा है",
+      "searchingProperties": "प्रॉपर्टी खोजी जा रही है",
+      "loadingFeed": "फ़ीड लोड हो रहा है"
+    },
+    "widgets": {
+      "resultTitle": "परिणाम",
+      "resultReceived": "परिणाम प्राप्त हुआ।",
+      "priceOnRequest": "मूल्य अनुरोध पर",
+      "propertiesFound": "प्रॉपर्टी मिलीं",
+      "resultCount": "{{count}} परिणाम",
+      "resultCount_other": "{{count}} परिणाम",
+      "noProperties": "आपके मानदंड से मेल खाती कोई प्रॉपर्टी नहीं मिली।",
+      "resultsNotAvailable": "परिणाम उपलब्ध नहीं हैं।",
+      "viewAll": "सभी {{count}} प्रॉपर्टी देखें →"
+    }
   },
   "scrollToTop": "ऊपर स्क्रॉल करें",
   "cta": {
@@ -150,6 +206,52 @@
   },
   "newsletter": {
     "title": "हमारे न्यूज़लेटर की सदस्यता लें",
-    "description": "नवीनतम प्रॉपर्टी लिस्टिंग, विशेष ऑफर और रियल एस्टेट इनसाइट्स सीधे अपने इनबॉक्स में प्राप्त करें। गुरुग्राम के सर्वोत्तम स्थानों पर अपना सपनों का घर खोजने में हम आपकी मदद करें।"
+    "description": "नवीनतम प्रॉपर्टी लिस्टिंग, विशेष ऑफर और रियल एस्टेट इनसाइट्स सीधे अपने इनबॉक्स में प्राप्त करें। गुरुग्राम के सर्वोत्तम स्थानों पर अपना सपनों का घर खोजने में हम आपकी मदद करें।",
+    "emailPlaceholder": "आपका ईमेल",
+    "subscribeBtn": "अभी सदस्यता लें",
+    "subscribeSuccess": "जुड़ने के लिए धन्यवाद!"
+  },
+  "contentSeo": {
+    "breadcrumbHome": "होम",
+    "share": "शेयर करें",
+    "shareOn": "पर शेयर करें",
+    "copyLink": "लिंक कॉपी करें",
+    "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी हो गया!",
+    "searchPlaceholder": "खोजें...",
+    "searchJobs": "भूमिकाएं खोजें...",
+    "allCategories": "सभी श्रेणियां",
+    "filterByCategory": "श्रेणी से फ़िल्टर करें",
+    "noResults": "कोई मिलान परिणाम नहीं मिला।",
+    "relatedPosts": "संबंधित लेख",
+    "relatedPostsDesc": "इन लोकप्रिय लेखों के साथ पढ़ना जारी रखें।",
+    "loadingPosts": "लेख लोड हो रहे हैं...",
+    "glossaryAzNav": "अक्षर पर जाएं",
+    "glossaryAll": "सभी",
+    "referralHowItWorks": "आपका रेफरल कैसे ट्रैक होता है",
+    "referralTrackingDesc": "एक बार जब आप रेफरल सबमिट करते हैं, तब यह होता है:",
+    "referralStep1": "आप नीचे दिए गए फॉर्म से प्रॉपर्टी ओनर की जानकारी सबमिट करते हैं।",
+    "referralStep2": "हमारी टीम प्रॉपर्टी वेरिफाई करती है और 48 घंटे के भीतर ओनर से संपर्क करती है।",
+    "referralStep3": "जब प्रॉपर्टी 360Ghar पर लिस्ट हो जाती है, तो आप ₹100 कमाते हैं।",
+    "referralStep4": "जब डील क्लोज होती है (किराया या बिक्री), तो आप ₹10,000 तक कमाते हैं।",
+    "referralStatusTitle": "अपने रेफरल ट्रैक करें",
+    "referralStatusDesc": "सबमिशन के बाद, आपको ईमेल और SMS द्वारा एक रेफरेंस आईडी प्राप्त होगा। अपने रेफरल और रिवॉर्ड की स्थिति जानने के लिए info@360ghar.com पर हमारी टीम से संपर्क करें।",
+    "referralDashboardNote": "सेल्फ-सर्विस रेफरल डैशबोर्ड जल्द आ रहा है। तब तक, रियल-टाइम अपडेट के लिए अपने रेफरेंस आईडी के साथ हमसे संपर्क करें।",
+    "popularPages": "लोकप्रिय पेज",
+    "notFoundSearchPlaceholder": "प्रॉपर्टी, लोकैलिटी, टूल खोजें...",
+    "notFoundSearchBtn": "खोजें",
+    "notFoundSearchHint": "या अपनी ज़रूरत की चीज़ खोजें:",
+    "notFoundLocalities": "लोकैलिटी"
+  },
+  "pagination": {
+    "navAriaLabel": "पेज नेविगेशन",
+    "previousPage": "पिछला पेज",
+    "nextPage": "अगला पेज",
+    "pageAriaLabel": "पेज {{page}}",
+    "jumpToLabel": "पेज पर जाएं",
+    "jumpToAriaLabel": "पेज नंबर पर जाएं",
+    "jumpToBtn": "जाएं"
+  },
+  "offlineIndicator": {
+    "message": "आप ऑफ़लाइन हैं। कुछ सुविधाएँ अनुपलब्ध हो सकती हैं।"
   }
 }

@@ -2,6 +2,8 @@
   "circleRates": {
     "title": "Gurugram Circle Rates (DLC Rates)",
     "description": "Official rates published by IGRS Haryana. Used to calculate stamp duty on property registrations.",
+    "historicalTitle": "Circle Rate Trend (Illustrative)",
+    "historicalDesc": "Indicative year-on-year movement of circle rates in prime Gurugram sectors. Actual rates vary by sector and property type; refer to the table above for current values.",
     "allSectors": "All Sectors",
     "allPropertyTypes": "All Property Types",
     "loading": "Loading circle rates...",
@@ -69,7 +71,12 @@
       "male": "Male",
       "female": "Female",
       "joint": "Joint"
-    }
+    },
+    "stateComparisonTitle": "Stamp Duty Comparison Across States",
+    "stateComparisonDesc": "Indicative stamp duty for your property value across NCR states. Registration charges (1%) extra.",
+    "stateCol": "State / Buyer",
+    "rateCol": "Rate",
+    "stampDutyCol": "Stamp Duty"
   },
   "rera": {
     "title": "RERA Projects Directory \u2014 Gurugram",
@@ -220,6 +227,10 @@
     "zonesFound": "{{count}} zone{{suffix}} found",
     "far": "FAR",
     "maxHeight": "Max Height",
+    "farCalcTitle": "FAR Calculator",
+    "farCalcDesc": "Estimate the maximum buildable area from your plot size and the applicable Floor Area Ratio (FAR).",
+    "plotSize": "Plot Size (sq ft)",
+    "maxBuildable": "Max Buildable Area",
     "viewDetails": "View Details",
     "pagination": {
       "prev": "\u2190 Prev",

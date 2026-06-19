@@ -5,18 +5,17 @@ import OffCanvas from '../../common/layout/OffCanvas';
 import PropertyPageSection from '../../components/property/PropertyPageSection';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { I18nLink, localizePath, stripLocalePrefix } from '../../i18n/I18nLink';
+import { useLocation } from 'react-router-dom';
+import { I18nLink, stripLocalePrefix } from '../../i18n/I18nLink';
 import { useTranslation } from 'react-i18next';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { realEstateStructuredData, generateBreadcrumbStructuredData } from '../../seo/structuredData';
-import { usePropertyStore } from '../../store/propertyStore';
 
 const popularSearchesConfig = [
     { labelKey: 'popularSearches.flatsRentGurugram', to: '/gurgaon/rent/flats' },
     { labelKey: 'popularSearches.apartmentsSaleGurugram', to: '/gurgaon/buy/flats' },
     { labelKey: 'popularSearches.twoBhkFlatsSaleGurgaon', to: '/gurgaon/buy/flats/2-bhk' },
-    { labelKey: 'popularSearches.under20kRentGurugram', to: '/gurgaon/rent/flats/budget/under-20k' },
+    { labelKey: 'popularSearches.flatsRentUnder20k', to: '/gurgaon/rent/flats/budget/under-20k' },
     { labelKey: 'popularSearches.pgGurugram', to: '/gurgaon/pg/flats' },
     { labelKey: 'popularSearches.exploreLocalities', to: '/localities' },
 ];
@@ -25,23 +24,13 @@ const Property = () => {
     const { t } = useTranslation('properties');
     const [tSeo] = useTranslation('seo');
     const location = useLocation();
-    const [searchParams] = useSearchParams();
-    const page = parseInt(searchParams.get('page'), 10) || 1;
 
-    const rawLocale = location.pathname.startsWith('/hi') ? 'hi' : 'en';
     const barePath = stripLocalePrefix(location.pathname);
 
-    // Canonical: /properties for page 1, /properties?page=N for page > 1
-    const canonical = page > 1 ? `${barePath}?page=${page}` : barePath;
-
-    const pagination = usePropertyStore((s) => s.pagination);
-
-    const prevUrl = page > 1
-        ? (page === 2 ? localizePath(barePath, rawLocale) : `${localizePath(barePath, rawLocale)}?page=${page - 1}`)
-        : undefined;
-    const nextUrl = page < pagination.totalPages
-        ? `${localizePath(barePath, rawLocale)}?page=${page + 1}`
-        : undefined;
+    // Cursor pagination: the property list is an infinite "Load more" stream
+    // keyed off the active filters, so there is no canonical page N to link to.
+    // We use the bare path as the canonical URL (no ?page= param).
+    const canonical = barePath;
 
     // Enhanced structured data for property listings
     const propertyStructuredData = [
@@ -62,8 +51,6 @@ const Property = () => {
           image={siteMetadata.defaultOgImage}
           type="website"
           structuredData={propertyStructuredData}
-          prevUrl={prevUrl}
-          nextUrl={nextUrl}
         />
         <OffCanvas />
         <MobileMenu />

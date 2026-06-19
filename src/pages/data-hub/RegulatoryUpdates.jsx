@@ -7,8 +7,8 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
-import Pagination from '../../common/ui/Pagination';
 import GazetteItem from '../../components/data-hub/GazetteItem';
+import Cta from '../../components/ui/Cta';
 import { dataHubService } from '../../services/dataHubService';
 
 const PAGE_LIMIT = 20;
@@ -41,13 +41,12 @@ const RegulatoryUpdates = () => {
   const [tSeo] = useTranslation('seo');
   const [activeTab, setActiveTab] = useState('');
   const [notifications, setNotifications] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
-
-  const totalPages = Math.ceil(total / PAGE_LIMIT);
 
   const TABS = [
     { key: '', label: t('regulatoryUpdates.tabs.all') },
@@ -57,22 +56,42 @@ const RegulatoryUpdates = () => {
     { key: 'clu_change', label: t('regulatoryUpdates.tabs.cluChange') },
   ];
 
+  // Fetch the first page (cursor=null) whenever the active tab changes.
   useEffect(() => {
-    const params = { page, limit: PAGE_LIMIT };
+    const params = { limit: PAGE_LIMIT };
     if (activeTab) params.type = activeTab;
 
     dataHubService.getGazetteNotifications(params)
       .then((data) => {
-        setNotifications(data?.items || []);
-        setTotal(data?.total || 0);
+        setNotifications(Array.isArray(data?.items) ? data.items : []);
+        setNextCursor(data?.next_cursor ?? null);
+        setHasMore(Boolean(data?.has_more));
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [activeTab, page]);
+  }, [activeTab]);
+
+  // Cursor "Load more": fetch the next page using the opaque cursor token.
+  const handleLoadMore = async () => {
+    if (!hasMore || !nextCursor || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      const params = { limit: PAGE_LIMIT, cursor: nextCursor };
+      if (activeTab) params.type = activeTab;
+      const data = await dataHubService.getGazetteNotifications(params);
+      const items = Array.isArray(data?.items) ? data.items : [];
+      setNotifications(prev => [...prev, ...items]);
+      setNextCursor(data?.next_cursor ?? null);
+      setHasMore(Boolean(data?.has_more));
+    } catch {
+      // Silently ignore; user can retry via Load More.
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleTabChange = (tabKey) => {
     setActiveTab(tabKey);
-    setPage(1);
   };
 
   const activeTabLabel = TABS.find(tab => tab.key === activeTab)?.label || t('regulatoryUpdates.tabs.all');
@@ -107,6 +126,14 @@ const RegulatoryUpdates = () => {
           <div className="container">
             <div className="row mb-20">
               <div className="col-12">
+                {/* AUDIT FIX (imp 3.19): consistent breadcrumb */}
+                <nav aria-label="breadcrumb" className="mb-20">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
+                    <li className="breadcrumb-item"><I18nLink to="/regulatory-updates">Data Hub</I18nLink></li>
+                    <li className="breadcrumb-item active">Regulatory Updates</li>
+                  </ol>
+                </nav>
                 <h1 className="fs-28 fw-600 mb-10">{t('regulatoryUpdates.title')}</h1>
                 <p className="mb-0 color-text-3">
                   {t('regulatoryUpdates.description')}
@@ -162,7 +189,7 @@ const RegulatoryUpdates = () => {
             ) : (
               <>
                 <p className="mb-20 fs-14 color-text-3">
-                  {t('regulatoryUpdates.notificationsFound', { count: total, suffix: total !== 1 ? 's' : '' })}
+                  {t('regulatoryUpdates.notificationsFound', { count: notifications.length, suffix: notifications.length !== 1 ? 's' : '' })}
                 </p>
 
                 {notifications.length === 0 ? (
@@ -177,11 +204,28 @@ const RegulatoryUpdates = () => {
                   </div>
                 )}
 
-                <Pagination
-                  currentPage={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                />
+                {/* Cursor-based Load more */}
+                {hasMore && (
+                  <div className="text-center mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-outline-main"
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                    >
+                      {loadingMore ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                          Loading...
+                        </>
+                      ) : (
+                        <>
+                          <i className="fas fa-plus me-1"></i> Load More
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -207,21 +251,8 @@ const RegulatoryUpdates = () => {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="cta-section bg-main text-white padding-y-60">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-lg-8 text-center">
-                <h2 className="cta-title mb-3">{t('regulatoryUpdates.cta.title')}</h2>
-                <p className="mb-4">{t('regulatoryUpdates.cta.description')}</p>
-                <div className="d-flex justify-content-center gap-3 flex-wrap">
-                  <I18nLink to="/contact" className="btn btn-white btn-main">{t('regulatoryUpdates.cta.talkToExpert')}</I18nLink>
-                  <I18nLink to="/properties" className="btn btn-outline-white">{t('regulatoryUpdates.cta.browseProperties')}</I18nLink>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* AUDIT FIX (3.17): use the shared Cta component for consistency */}
+        <Cta ctaClass="" />
 
         <Footer />
       </main>

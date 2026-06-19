@@ -4,6 +4,12 @@
     "browseProperties": "प्रॉपर्टी ब्राउज़ करें",
     "listYourProperty": "अपनी प्रॉपर्टी लिस्ट करें"
   },
+  "atAGlance": {
+    "founded": "स्थापित",
+    "valuation": "वैल्यूएशन",
+    "users": "यूज़र्स",
+    "cities": "शहर"
+  },
   "quickComparison": {
     "subtitle": "त्वरित तुलना",
     "titlePrefix": "360 Ghar क्यों बेहतर है",

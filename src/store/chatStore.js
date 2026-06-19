@@ -1,9 +1,18 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { chatService } from '../services/chatService';
 import { useAuthStore } from './authStore';
 import { extractError } from '../utils/apiError';
 
-const useChatStore = create((set, get) => ({
+// AUDIT FIX (5.12): persist chat history to localStorage so users can resume
+// a previous conversation after a page refresh. Only `messages` and
+// `conversationId` are persisted; streaming/transient flags are dropped and
+// any in-flight bot message is marked as no-longer-streaming on rehydrate.
+const CHAT_STORAGE_KEY = '360ghar:chatStore';
+
+const useChatStore = create(
+  persist(
+    (set, get) => ({
   isOpen: false,
   conversationId: null,
   messages: [],
@@ -258,7 +267,31 @@ const useChatStore = create((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
-}));
+    }),
+    {
+      name: CHAT_STORAGE_KEY,
+      // Only persist the conversation history, not transient/streaming state.
+      partialize: (state) => ({
+        messages: state.messages,
+        conversationId: state.conversationId,
+      }),
+      // Drop any in-flight streaming flags when rehydrating from storage so a
+      // mid-stream refresh doesn't leave a "typing" message stuck forever.
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        if (Array.isArray(state.messages) && state.messages.length > 0) {
+          state.messages = state.messages.map((msg) =>
+            msg.isStreaming ? { ...msg, isStreaming: false } : msg
+          );
+        }
+        state.isStreaming = false;
+        state.streamingMessageId = null;
+        state._abortController = null;
+        state.error = null;
+      },
+    }
+  )
+);
 
 // When the user logs in, keep messages visible but reset conversationId so the next
 // message creates a new authenticated conversation.

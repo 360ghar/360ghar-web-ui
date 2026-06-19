@@ -82,3 +82,18 @@ export const useLocationStore = create(
     }
   )
 );
+
+/**
+ * CRITICAL FIX (audit 5.7): the store already records WHY it fell back to the
+ * Gurgaon default (permission denied, timeout, unsupported, etc.) in `error`,
+ * but consumers had no ergonomic way to surface it. This hook returns a tuple
+ * `[isFallback, reason]` so any component can show a non-blocking banner.
+ */
+export function useLocationFallback() {
+  return useLocationStore((s) => {
+    const isFallback =
+      Boolean(s.error) ||
+      (s.location?.lat === GURGAON_FALLBACK.lat && s.location?.lng === GURGAON_FALLBACK.lng);
+    return [isFallback, s.error];
+  });
+}

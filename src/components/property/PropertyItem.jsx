@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
+import { toast } from 'react-toastify';
 
 import LazyImage from '../../common/ui/LazyImage';
 import TrustBadge from '../ui/TrustBadge';
 import { usePropertyStore } from '../../store';
 import { useAuthStore } from '../../store';
+import { useCompareStore } from '../../store/compareStore';
 import {
   getListingLabel,
   getPropertyTypeLabel,
@@ -23,7 +25,9 @@ const ShareModal = ({ isOpen, onClose, propertyTitle, propertyURL }) => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(fullURL);
-    alert(t('propertyItem.linkCopied'));
+    // UX FIX (audit 2.4): use toast instead of alert() to avoid blocking the
+    // UI thread and to match the rest of the app's notification pattern.
+    toast.success(t('propertyItem.linkCopied'), { theme: 'colored' });
     onClose();
   };
 
@@ -124,9 +128,37 @@ const PropertyItem = ({
   const { t } = useTranslation('properties');
   const [isHovered, setIsHovered] = useState(false);
   const [isFavorite, setIsFavorite] = useState(property.is_liked ?? false);
+  // AUDIT FIX (improvement 2.10): minimal image carousel - cycle through
+  // available images while hovering the card.
+  const propertyImages = Array.isArray(property.images)
+    ? property.images
+        .map((img) => img?.image_url)
+        .filter((url) => isUsableImageUrl(url))
+    : [];
+  const [activeImageIdx, setActiveImageIdx] = useState(0);
+  useEffect(() => {
+    if (!isHovered || propertyImages.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveImageIdx((prev) => (prev + 1) % propertyImages.length);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, [isHovered, propertyImages.length]);
+  useEffect(() => {
+    if (!isHovered) setActiveImageIdx(0);
+  }, [isHovered]);
+  const carouselThumb = propertyImages.length > 0 ? propertyImages[activeImageIdx] : thumb;
+  // UX FIX (audit 2.10): keep favorite state in sync with the property data
+  // (which the store updates optimistically after a swipe) so navigating back
+  // to the listing reflects the latest like state.
+  useEffect(() => {
+    setIsFavorite(property.is_liked ?? false);
+  }, [property.is_liked]);
   const [showShareModal, setShowShareModal] = useState(false);
   const recordSwipe = usePropertyStore((state) => state.recordSwipe);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  // AUDIT FIX (improvement 2.3): comparison selection
+  const { compareList, toggleCompare, openCompare } = useCompareStore();
+  const isInCompare = compareList.some((p) => p.id === id);
   const isCompactCard = typeof itemClass === 'string' && itemClass.includes('compact-card');
   const visibleAmenitiesCount = isCompactCard ? 3 : 4;
   // Handle API-first data structure with fallbacks
@@ -224,8 +256,19 @@ const PropertyItem = ({
       >
         <div className="property-item__thumb">
           <I18nLink to={propertyURL} className="link">
-            <LazyImage src={thumb} fallbackSrc={PROPERTY_IMAGE_FALLBACK} alt={generatePropertyAltText(property, t)} className="cover-img" />
+            <LazyImage src={carouselThumb} fallbackSrc={PROPERTY_IMAGE_FALLBACK} alt={generatePropertyAltText(property, t)} className="cover-img" />
           </I18nLink>
+          {/* AUDIT FIX (improvement 2.10): carousel dots when multiple images */}
+          {propertyImages.length > 1 && (
+            <div className="property-item__carousel-dots">
+              {propertyImages.slice(0, 5).map((_, dotIdx) => (
+                <span
+                  key={dotIdx}
+                  className={`carousel-dot ${dotIdx === activeImageIdx ? 'carousel-dot--active' : ''}`}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Verified Badge with TrustBadge Component */}
           {property.is_verified && (
@@ -254,6 +297,25 @@ const PropertyItem = ({
             >
               <i className="fas fa-share-alt"></i>
             </button>
+            {/* AUDIT FIX (improvement 2.3): compare toggle */}
+            <button
+              className={`quick-action-btn quick-action-btn--compare ${isInCompare ? 'quick-action-btn--active' : ''}`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const added = toggleCompare(property);
+                if (added === false && !isInCompare) {
+                  // reached the 4-property cap
+                }
+                if (compareList.length + (isInCompare ? 0 : 1) >= 2 && !isInCompare) {
+                  openCompare();
+                }
+              }}
+              title={t('propertyItem.compare')}
+              aria-label={t('propertyItem.compare')}
+            >
+              <i className="fas fa-balance-scale"></i>
+            </button>
           </div>
           
           {/* Property Type Badge */}
@@ -265,6 +327,13 @@ const PropertyItem = ({
           
           {shouldRenderBadge && !property.is_verified && <span className={badgeClass}>{resolvedBadgeText}</span>}
           {showDistance}
+          {/* AUDIT FIX (improvement 2.7): badge indicating the listing has a
+              360° virtual tour, so users can spot tour-enabled cards. */}
+          {property.virtual_tour_url && (
+            <span className="badge bg-dark text-white property-item__tour-badge" title={t('propertyItem.tourAvailable')}>
+              <i className="fas fa-vr-cardboard me-1" aria-hidden="true"></i>360°
+            </span>
+          )}
         </div>
         <div className="property-item__content">
           <div className="property-item__header">

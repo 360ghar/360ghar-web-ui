@@ -69,17 +69,9 @@ const ComparePage = ({
         }
       }))
     },
-    {
-      '@type': 'AggregateRating',
-      itemReviewed: {
-        '@type': 'Product',
-        name: `360Ghar vs ${competitorData.name} Comparison`,
-      },
-      ratingValue: '4.8',
-      reviewCount: '128',
-      bestRating: '5',
-      worstRating: '1',
-    }
+    // CRITICAL FIX (audit 4.2): removed fabricated AggregateRating block.
+    // Fake review counts/ratings risk a Google manual penalty. Restore only
+    // when backed by a real, verified review source.
   ];
 
   return (
@@ -131,6 +123,28 @@ const ComparePage = ({
 
         {/* Breadcrumb */}
         <CompareBreadcrumb items={breadcrumbItems} />
+
+        {/* AUDIT FIX (4.6): competitor "At a Glance" snapshot adds minimal
+            per-competitor differentiation to an otherwise uniform template. */}
+        <section className="padding-y-60 bg-white">
+          <div className="container container-two">
+            <div className="row g-3 text-center">
+              {[
+                { label: t('compare:atAGlance.founded'), value: competitorData.founded },
+                { label: t('compare:atAGlance.valuation'), value: competitorData.valuation },
+                { label: t('compare:atAGlance.users'), value: competitorData.users },
+                { label: t('compare:atAGlance.cities'), value: competitorData.cities },
+              ].map((stat) => (
+                <div className="col-md-3 col-6" key={stat.label}>
+                  <div className="p-3 rounded-3 border h-100">
+                    <small className="text-muted d-block text-uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.05em' }}>{stat.label}</small>
+                    <strong className="d-block mt-1" style={{ fontSize: '0.95rem' }}>{stat.value || '—'}</strong>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Quick Comparison Summary */}
         <section className="padding-y-120 bg-white">

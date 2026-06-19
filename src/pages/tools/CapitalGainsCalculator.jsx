@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -83,6 +84,14 @@ const CapitalGainsCalculator = () => {
     const [saleYear, setSaleYear] = useState('2024-2025');
     const [transferExpenses, setTransferExpenses] = useState(50000);
     const [improvementCost] = useState(0);
+    // CRITICAL FIX (audit 3.1): STCG on property is taxed at the applicable
+    // income-tax slab rate (not 0, and not the 20% LTCG rate). We need the
+    // user's slab rate to compute it correctly. Default 30% (highest slab).
+    const [slabRate, setSlabRate] = useState(30);
+    // AUDIT FIX (imp 3.5): reinvestment amounts for Section 54/54EC/54F.
+    const [reinvest54, setReinvest54] = useState(0);
+    const [reinvest54EC, setReinvest54EC] = useState(0);
+    const [reinvest54F, setReinvest54F] = useState(0);
 
     const taxSummary = useMemo(() => {
         const pYearParts = purchaseYear.split('-');
@@ -106,7 +115,31 @@ const CapitalGainsCalculator = () => {
 
         const netSaleConsideration = salePrice - transferExpenses;
         const gain = netSaleConsideration - finalCost;
-        const taxLiability = isLongTerm && gain > 0 ? Math.round(gain * 0.20) : 0;
+        // CRITICAL FIX (audit 3.1): STCG is taxed at the slab rate, not 0.
+        // LTCG on real estate is taxed at 20% with indexation.
+        const applicableRate = isLongTerm ? 0.20 : slabRate / 100;
+        const taxLiability = gain > 0 ? Math.round(gain * applicableRate) : 0;
+
+        // AUDIT FIX (imp 3.5): compute tax savings under Section 54/54EC/54F.
+        // 54 & 54EC exempt based on capital gains reinvested (capped at 50L for 54EC).
+        // 54F exempts proportionally based on net sale proceeds reinvested in a house
+        // (only available if the sold asset is NOT a residential house).
+        const gainForExemption = Math.max(gain, 0);
+        const exempt54 = Math.min(reinvest54, gainForExemption);
+        const exempt54EC = Math.min(reinvest54EC, gainForExemption, 500000);
+        // 54F: exemption = gain * (reinvested / netConsideration), full exempt if full proceeds reinvested.
+        const exempt54F = netSaleConsideration > 0
+            ? Math.min(gainForExemption * (reinvest54F / netSaleConsideration), gainForExemption)
+            : 0;
+        // Total exemption cannot exceed the gain; only LTCG qualifies for these sections.
+        const totalExemption = isLongTerm
+            ? Math.min(exempt54 + exempt54EC + exempt54F, gainForExemption)
+            : 0;
+        const taxableGainAfterExemption = Math.max(gainForExemption - totalExemption, 0);
+        const taxAfterExemption = isLongTerm
+            ? Math.round(taxableGainAfterExemption * applicableRate)
+            : taxLiability;
+        const taxSaved = Math.max(taxLiability - taxAfterExemption, 0);
 
         return {
             gainType,
@@ -114,8 +147,15 @@ const CapitalGainsCalculator = () => {
             indexedCost: Math.round(finalCost),
             capitalGain: Math.round(gain),
             taxLiability,
+            applicableRatePercent: isLongTerm ? 20 : slabRate,
+            // AUDIT FIX (3.4): flag a capital loss so the UI can warn the user.
+            isCapitalLoss: gain < 0,
+            netSaleConsideration: Math.round(netSaleConsideration),
+            totalExemption: Math.round(totalExemption),
+            taxAfterExemption: taxAfterExemption,
+            taxSaved: taxSaved,
         };
-    }, [improvementCost, purchasePrice, purchaseYear, salePrice, saleYear, transferExpenses]);
+    }, [improvementCost, purchasePrice, purchaseYear, salePrice, saleYear, transferExpenses, slabRate, reinvest54, reinvest54EC, reinvest54F]);
 
     const formatCurrency = (val) => {
         return new Intl.NumberFormat(i18n.language === 'hi' ? 'hi-IN' : 'en-IN', {
@@ -123,6 +163,25 @@ const CapitalGainsCalculator = () => {
             currency: 'INR',
             maximumFractionDigits: 0
         }).format(val);
+    };
+
+    // AUDIT FIX (imp 3.2): share results via URL query params encoding inputs.
+    const handleShareResults = async () => {
+        const params = new URLSearchParams({
+            sale: salePrice,
+            purchase: purchasePrice,
+            py: purchaseYear,
+            sy: saleYear,
+            expenses: transferExpenses,
+            slab: slabRate,
+        });
+        const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+        try {
+            await navigator.clipboard.writeText(url);
+            toast.success(t('capitalGains.shareCopied', 'Shareable link copied to clipboard!'));
+        } catch {
+            toast.error(t('capitalGains.shareError', 'Could not copy link.'));
+        }
     };
 
     const faqStructuredData = generateFaqStructuredData(CG_FAQS);
@@ -224,6 +283,25 @@ const CapitalGainsCalculator = () => {
                                                     onChange={(e) => setTransferExpenses(Number(e.target.value))}
                                                 />
                                             </div>
+
+                                            <div className="mb-3">
+                                                <label className="form-label">
+                                                    {t('capitalGains.slabRate')} (%)
+                                                    <small className="d-block text-muted">
+                                                        {t('capitalGains.slabRateHelp')}
+                                                    </small>
+                                                </label>
+                                                <select
+                                                    className="form-select"
+                                                    value={slabRate}
+                                                    onChange={(e) => setSlabRate(Number(e.target.value))}
+                                                >
+                                                    <option value={0}>0% (up to 2.5L)</option>
+                                                    <option value={5}>5% (2.5L to 5L)</option>
+                                                    <option value={20}>20% (5L to 10L)</option>
+                                                    <option value={30}>30% (above 10L)</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -255,10 +333,22 @@ const CapitalGainsCalculator = () => {
                                                         {formatCurrency(taxSummary.capitalGain)}
                                                     </span>
                                                 </div>
+                                                {/* AUDIT FIX (3.4): warn on capital loss */}
+                                                {taxSummary.isCapitalLoss && (
+                                                    <div className="alert alert-warning py-2 px-3 mt-2 mb-0 small">
+                                                        <i className="fas fa-exclamation-triangle me-1"></i>
+                                                        {t('capitalGains.capitalLossWarning', 'You have a capital loss. No tax is payable; the loss can be set off against other capital gains or carried forward for 8 years.')}
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <div className="p-3 bg-main bg-opacity-10 rounded-2 border border-main">
-                                                <label className="text-main small fw-bold">{t('capitalGains.estimatedTaxLiability')}</label>
+                                                <label className="text-main small fw-bold">
+                                                    {t('capitalGains.estimatedTaxLiability')}
+                                                    <span className="ms-2 text-muted">
+                                                        ({t('capitalGains.atRate', { rate: taxSummary.applicableRatePercent })})
+                                                    </span>
+                                                </label>
                                                 <div className="display-6 fw-bold text-main">
                                                     {taxSummary.isLongTerm ? formatCurrency(taxSummary.taxLiability) : t('capitalGains.asPerTaxSlab')}
                                                 </div>
@@ -268,9 +358,63 @@ const CapitalGainsCalculator = () => {
                                                         : t('capitalGains.shortTermTaxNote')}
                                                 </div>
                                             </div>
+
+                                            {/* AUDIT FIX (imp 3.2): share results button */}
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-outline-main w-100 mt-3"
+                                                onClick={handleShareResults}
+                                            >
+                                                <i className="fas fa-share-alt me-2"></i>{t('capitalGains.shareResults', 'Share Results')}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* AUDIT FIX (imp 3.5): Section 54/54EC/54F tax savings calculator */}
+                                {taxSummary.isLongTerm && taxSummary.capitalGain > 0 && (
+                                    <div className="mt-4 p-4 bg-white rounded-3 shadow-sm border">
+                                        <h2 className="h5 mb-3">{t('capitalGains.savingsCalcTitle', 'Tax Savings Calculator (Section 54 / 54EC / 54F)')}</h2>
+                                        <p className="text-muted small mb-3">{t('capitalGains.savingsCalcDesc', 'Enter reinvestment amounts to see how much tax you can save. These exemptions apply only to long-term capital gains.')}</p>
+                                        <div className="row g-3 mb-3">
+                                            <div className="col-md-4">
+                                                <label className="form-label small">Section 54 (new house)</label>
+                                                <input type="number" className="form-control" value={reinvest54} min="0" onChange={(e) => setReinvest54(Math.max(0, Number(e.target.value)))} />
+                                                <small className="text-muted">Reinvest gains in residential property</small>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label className="form-label small">Section 54EC (bonds, max ₹50L)</label>
+                                                <input type="number" className="form-control" value={reinvest54EC} min="0" onChange={(e) => setReinvest54EC(Math.max(0, Number(e.target.value)))} />
+                                                <small className="text-muted">NHAI/REC/PFC/IRFC bonds within 6 months</small>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label className="form-label small">Section 54F (full proceeds)</label>
+                                                <input type="number" className="form-control" value={reinvest54F} min="0" onChange={(e) => setReinvest54F(Math.max(0, Number(e.target.value)))} />
+                                                <small className="text-muted">Reinvest net sale proceeds in a house</small>
+                                            </div>
+                                        </div>
+                                        <div className="row g-3">
+                                            <div className="col-md-4">
+                                                <div className="p-3 bg-light rounded-2 text-center h-100">
+                                                    <small className="text-muted d-block">{t('capitalGains.totalExemption', 'Total Exemption')}</small>
+                                                    <span className="fw-bold text-success fs-5">{formatCurrency(taxSummary.totalExemption)}</span>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <div className="p-3 bg-light rounded-2 text-center h-100">
+                                                    <small className="text-muted d-block">{t('capitalGains.taxAfterExemption', 'Tax After Exemption')}</small>
+                                                    <span className="fw-bold text-main fs-5">{formatCurrency(taxSummary.taxAfterExemption)}</span>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <div className="p-3 bg-main bg-opacity-10 rounded-2 text-center h-100 border border-main">
+                                                    <small className="text-main d-block">{t('capitalGains.taxSaved', 'Tax Saved')}</small>
+                                                    <span className="fw-bold text-main fs-5">{formatCurrency(taxSummary.taxSaved)}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="mt-5">
                                     <h2 className="h5">{t('capitalGains.exemptionsTitle')}</h2>

@@ -62,6 +62,8 @@ const AccountSection = () => {
   };
 
   const handleLogout = async () => {
+    // Await logout so isAuthenticated is cleared before navigating, avoiding
+    // a race with PrivateRoute guards.
     await logout();
     toast.success(t('account.loggedOut'), { theme: 'colored' });
     navigate('/login');

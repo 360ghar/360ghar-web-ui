@@ -8,38 +8,50 @@ import BlogClassicSection from '../../components/blog/BlogClassicSection';
 import SEO from '../../common/SEO';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { I18nLink, localizePath, stripLocalePrefix } from '../../i18n/I18nLink';
+import { I18nLink, stripLocalePrefix } from '../../i18n/I18nLink';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { blogService } from '../../services/blogService';
 
 const BlogClassic = () => {
     const { t } = useTranslation('blog');
+    const [tC] = useTranslation('common');
     const location = useLocation();
     const [searchParams] = useSearchParams();
 
-    // Category / tag / page awareness
+    // Category / tag awareness (cursor pagination — no page count)
     const category = searchParams.get('category') || '';
     const tag = searchParams.get('tag') || '';
-    const page = parseInt(searchParams.get('page'), 10) || 1;
     const isFiltered = Boolean(category || tag);
 
     const POSTS_PER_PAGE = 10;
-    const [totalPages, setTotalPages] = useState(1);
+    // AUDIT FIX (4.5 / 4.4): popular posts for the blog listing + keyword
+    // search box that redirects to the property search when no blog match.
+    const [popularPosts, setPopularPosts] = useState([]);
+    const [blogSearch, setBlogSearch] = useState('');
 
     useEffect(() => {
-        const params = { page: 1, limit: POSTS_PER_PAGE };
+        const params = { limit: POSTS_PER_PAGE };
         if (category) params.category = category;
         if (tag) params.tag = tag;
         blogService.getPosts(params)
             .then(data => {
-                const tp = data.total_pages || Math.ceil((data.total || 0) / POSTS_PER_PAGE) || 1;
-                setTotalPages(tp);
+                const posts = Array.isArray(data?.items) ? data.items : [];
+                setPopularPosts(Array.isArray(posts) ? posts.slice(0, 4) : []);
             })
-            .catch(() => {});
+            .catch(() => setPopularPosts([]));
     }, [category, tag]);
 
-    const rawLocale = location.pathname.startsWith('/hi') ? 'hi' : 'en';
+    // AUDIT FIX (4.5): fetch a few popular/recent posts for cross-linking.
+    useEffect(() => {
+        blogService.getPosts({ limit: 4 })
+            .then(data => {
+                const posts = Array.isArray(data?.items) ? data.items : [];
+                setPopularPosts(Array.isArray(posts) ? posts.slice(0, 4) : []);
+            })
+            .catch(() => setPopularPosts([]));
+    }, []);
+
     const barePath = stripLocalePrefix(location.pathname);
 
     // Featured guides derived from translation keys
@@ -85,16 +97,11 @@ const BlogClassic = () => {
             ? t('blogClassicPage.taggedPosts', { tag, baseDescription })
             : baseDescription;
 
-    // Canonical: /blog for page 1, /blog?page=N for page > 1
-    const canonical = page > 1 ? `${barePath}?page=${page}` : barePath;
+    // Canonical: the blog listing is a cursor-paginated "Load more" stream,
+    // so there is no page N to canonicalize — use the bare path.
+    const canonical = barePath;
 
-    // Prev/next for pagination — prefix with /hi/ when on Hindi route
-    const prevUrl = page > 1
-        ? (page === 2 ? localizePath(barePath, rawLocale) : `${localizePath(barePath, rawLocale)}?page=${page - 1}`)
-        : undefined;
-    const nextUrl = page < totalPages
-        ? `${localizePath(barePath, rawLocale)}?page=${page + 1}`
-        : undefined;
+    // Prev/next pagination links don't apply to an opaque-cursor stream.
 
     // Generate CollectionPage schema for blog listings
     const blogCollectionSchema = {
@@ -123,8 +130,6 @@ const BlogClassic = () => {
           image={siteMetadata.defaultOgImage}
           type="website"
           noindex={isFiltered}
-          prevUrl={prevUrl}
-          nextUrl={nextUrl}
           structuredData={[
             blogCollectionSchema,
             generateBreadcrumbStructuredData([
@@ -160,6 +165,30 @@ const BlogClassic = () => {
                                 <a href="#latest-posts" className="btn btn-main">{t('blogClassic.browseLatest')}</a>
                                 <I18nLink to="/localities" className="btn btn-outline-main">{t('blogClassic.exploreLocalities')}</I18nLink>
                             </div>
+                            {/* AUDIT FIX (4.4): blog keyword search box */}
+                            <form
+                                className="mt-4 d-flex gap-2"
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    if (blogSearch.trim()) {
+                                        // Redirect to the property search as the app-wide
+                                        // search experience when looking up a keyword.
+                                        window.location.href = `/properties?q=${encodeURIComponent(blogSearch.trim())}&city=Gurgaon`;
+                                    }
+                                }}
+                            >
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder={tC('contentSeo.searchPlaceholder')}
+                                    value={blogSearch}
+                                    onChange={(e) => setBlogSearch(e.target.value)}
+                                    aria-label={tC('contentSeo.searchPlaceholder')}
+                                />
+                                <button type="submit" className="btn btn-outline-main">
+                                    <i className="fas fa-search" />
+                                </button>
+                            </form>
                         </div>
                         <div className="col-lg-5">
                             <div className="row g-3">
@@ -187,6 +216,45 @@ const BlogClassic = () => {
             <section id="latest-posts">
                 <BlogClassicSection/>
             </section>
+
+            {/* AUDIT FIX (4.5): popular / recent posts cross-linking section */}
+            {popularPosts.length > 0 && (
+                <section className="padding-y-60 bg-light">
+                    <div className="container container-two">
+                        <div className="section-heading mb-4">
+                            <h2 className="section-heading__title">{tC('contentSeo.relatedPosts')}</h2>
+                            <p className="section-heading__desc">{tC('contentSeo.relatedPostsDesc')}</p>
+                        </div>
+                        <div className="row g-4">
+                            {popularPosts.map((post) => {
+                                const postTitle = post.title || 'Untitled';
+                                const postSlug = post.slug;
+                                const postThumb = post.thumbnail_url || post.cover_image_url || post.featured_image || post.image_url;
+                                const postExcerpt = post.excerpt || post.summary || '';
+                                return (
+                                    <div className="col-lg-3 col-md-6" key={postSlug || postTitle}>
+                                        <div className="locality-stat-card h-100">
+                                            {postThumb && (
+                                                <I18nLink to={`/blog/${postSlug}`} className="d-block mb-3">
+                                                    <img src={postThumb} alt={postTitle} className="img-fluid rounded-3" loading="lazy" />
+                                                </I18nLink>
+                                            )}
+                                            <h3 className="h6 mb-2">
+                                                <I18nLink to={`/blog/${postSlug}`} className="text-decoration-none text-dark">
+                                                    {postTitle}
+                                                </I18nLink>
+                                            </h3>
+                                            {postExcerpt && (
+                                                <p className="text-muted small mb-0">{postExcerpt.length > 100 ? `${postExcerpt.slice(0, 97)}...` : postExcerpt}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </section>
+            )}
 
             <Cta ctaClass=""/>
             <Footer/>

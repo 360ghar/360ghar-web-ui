@@ -1,22 +1,24 @@
  import { useEffect, useRef, useState } from 'react';
  import { toast } from 'react-toastify';
+ import { useTranslation } from 'react-i18next';
  
  const PropertyActions = ({ property, onLikeToggle, isLiked, likeLoading }) => {
+   const { t } = useTranslation('properties');
    const [shareOpen, setShareOpen] = useState(false);
    const shareRef = useRef(null);
  
    const propertyUrl = typeof window !== 'undefined' 
      ? `${window.location.origin}/property/${property?.id}` 
      : '';
-   const shareText = `Check out this property: ${property?.title || 'Property'} on 360Ghar`;
+   const shareText = t('actions.checkOutProperty', { title: property?.title || 'Property' });
  
    const copyLink = async () => {
      try {
        await navigator.clipboard.writeText(propertyUrl);
-       toast.success('Link copied to clipboard!');
+       toast.success(t('actions.linkCopied'));
        setShareOpen(false);
      } catch {
-       toast.error('Failed to copy link');
+       toast.error(t('actions.failedToCopy'));
      }
    };
  
@@ -72,10 +74,10 @@
          className={`btn btn-sm ${isLiked ? 'btn-danger' : 'btn-outline-danger'}`}
          onClick={onLikeToggle}
          disabled={likeLoading}
-         title={isLiked ? 'Remove from saved' : 'Save property'}
+         title={isLiked ? t('actions.removeFromSaved') : t('actions.saveProperty')}
        >
          <i className={`fas fa-heart ${likeLoading ? 'fa-pulse' : ''}`}></i>
-         <span className="ms-1 d-none d-sm-inline">{isLiked ? 'Saved' : 'Save'}</span>
+         <span className="ms-1 d-none d-sm-inline">{isLiked ? t('actions.saved') : t('actions.save')}</span>
        </button>
  
        <div className="dropdown" ref={shareRef}>
@@ -83,12 +85,12 @@
            type="button"
            className="btn btn-sm btn-outline-primary"
            onClick={() => setShareOpen(!shareOpen)}
-           title="Share property"
+           title={t('actions.shareProperty')}
            aria-expanded={shareOpen}
            aria-controls="property-share-menu"
          >
            <i className="fas fa-share-alt"></i>
-           <span className="ms-1 d-none d-sm-inline">Share</span>
+           <span className="ms-1 d-none d-sm-inline">{t('actions.share')}</span>
          </button>
          {shareOpen && (
            <div className="dropdown-menu show share-dropdown" id="property-share-menu" role="menu">
@@ -103,7 +105,7 @@
              </button>
              <hr className="dropdown-divider" />
              <button className="dropdown-item" onClick={copyLink} role="menuitem">
-               <i className="fas fa-link me-2"></i> Copy Link
+               <i className="fas fa-link me-2"></i> {t('propertyItem.copyLink')}
              </button>
            </div>
          )}
@@ -113,10 +115,10 @@
          type="button"
          className="btn btn-sm btn-outline-secondary d-none d-md-inline-flex"
          onClick={printPage}
-         title="Print property details"
+         title={t('actions.printPropertyDetails')}
        >
          <i className="fas fa-print"></i>
-         <span className="ms-1 d-none d-md-inline">Print</span>
+         <span className="ms-1 d-none d-md-inline">{t('actions.print')}</span>
        </button>
      </div>
    );

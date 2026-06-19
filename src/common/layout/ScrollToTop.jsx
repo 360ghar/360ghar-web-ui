@@ -7,7 +7,9 @@ const ScrollToTop = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            setVisible(window.scrollY > 200);
+            // UX FIX (audit 5.10): only appear after meaningful scroll so it
+            // isn't distracting on short pages.
+            setVisible(window.scrollY > 400);
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });

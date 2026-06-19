@@ -10,6 +10,8 @@ import PageLoader from './common/PageLoader';
 import ProfileCompletionRouteGuard from './common/ProfileCompletionRouteGuard';
 import ErrorBoundary from './common/ErrorBoundary';
 import ScrollToTop from './common/layout/ScrollToTop';
+import LocationFallbackNotifier from './common/layout/LocationFallbackNotifier';
+import OfflineIndicator from './common/layout/OfflineIndicator';
 import SEO from './common/SEO';
 import UIScrollLockEffect from './common/UIScrollLockEffect';
 import { realEstateStructuredData, generateSpeakableStructuredData } from './seo/structuredData';
@@ -295,6 +297,8 @@ function App() {
         <SEO structuredData={globalSchemas} />
         <ErrorBoundary>
           <Suspense fallback={<PageLoader />}>
+            {/* id used by the Header's skip-to-content link (audit 5.1). */}
+            <div id="main-content">
             <Routes>
             {/* Hindi routes — /hi/* prefix */}
             <Route path="/hi" element={<LocaleGate locale="hi" />}>
@@ -316,6 +320,7 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
+            </div>
           </Suspense>
         </ErrorBoundary>
         <Suspense fallback={null}>
@@ -324,6 +329,10 @@ function App() {
       </BrowserRouter>
 
       <ScrollToTop />
+      {/* AUDIT FIX (5.7): notify the user when geolocation falls back. */}
+      <LocationFallbackNotifier />
+      {/* IMP FIX (audit 5.9): offline connectivity banner. */}
+      <OfflineIndicator />
     </>
   );
 }

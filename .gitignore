@@ -55,3 +55,7 @@ gsc_report/
 
 # Build-time API fetch cache (local/persistent-CI only; ephemeral on Netlify)
 .build-cache/
+
+# Remotion video project dependencies (source is tracked, deps are not)
+.wiki/video/node_modules/
+.wiki/video/out/

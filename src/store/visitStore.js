@@ -25,11 +25,11 @@ const useVisitStore = create((set) => ({
     try {
       set({ isLoading: true, error: null });
       const data = await visitService.getAll();
-      set({ visits: data?.visits || [], isLoading: false });
+      set({ visits: Array.isArray(data?.items) ? data.items : [], isLoading: false });
       return data;
     } catch (err) {
       set({ isLoading: false, error: extractError(err, 'Failed to fetch visits') });
-      return { visits: [] };
+      return { items: [] };
     }
   },
 
@@ -37,11 +37,11 @@ const useVisitStore = create((set) => ({
     try {
       set({ isLoading: true, error: null });
       const data = await visitService.getUpcoming();
-      set({ upcomingVisits: data?.visits || [], isLoading: false });
+      set({ upcomingVisits: Array.isArray(data?.items) ? data.items : [], isLoading: false });
       return data;
     } catch (err) {
       set({ isLoading: false, error: extractError(err, 'Failed to fetch upcoming visits') });
-      return { visits: [] };
+      return { items: [] };
     }
   },
 
@@ -49,11 +49,11 @@ const useVisitStore = create((set) => ({
     try {
       set({ isLoading: true, error: null });
       const data = await visitService.getPast();
-      set({ pastVisits: data?.visits || [], isLoading: false });
+      set({ pastVisits: Array.isArray(data?.items) ? data.items : [], isLoading: false });
       return data;
     } catch (err) {
       set({ isLoading: false, error: extractError(err, 'Failed to fetch past visits') });
-      return { visits: [] };
+      return { items: [] };
     }
   },
 

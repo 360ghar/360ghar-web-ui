@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import DOMPurify from 'dompurify';
 import { useLocalitiesIndex } from '../../hooks/useLocalitiesIndex';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -225,6 +226,13 @@ const FacetLanding = () => {
   const faqItems = buildFacetFaqs(t, validCity, facetText, validIntent, isBhk, bhkText, isBudget, budgetText, isAmenity, amenity);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
+  // CRITICAL FIX (audit 4.8): guard against malformed/missing route params.
+  // Placed AFTER all hooks so rules-of-hooks is satisfied. If the required
+  // path segments are absent, redirect to a safe default instead of crashing.
+  if (!citySlug || !intent || !type) {
+    return <Navigate to="/properties" replace />;
+  }
+
   // Preposition helpers for popular searches
   const intentDisplay = validIntent === 'pg' ? '' : validIntent;
   const readyPreposition = validIntent === 'pg' ? 'in' : `for ${validIntent} in`;
@@ -276,6 +284,30 @@ const FacetLanding = () => {
           spanClass="icon-right text-gradient"
           showContactNumber={false}
         />
+
+        {/* AUDIT FIX (4.4): visible breadcrumbs. Previously only in structured
+            data; render a lightweight UI breadcrumb for users and crawlers. */}
+        <nav aria-label="Breadcrumb" className="facet-breadcrumb-strip">
+          <div className="container container-two">
+            <ol className="facet-breadcrumb-list">
+              <li className="facet-breadcrumb-item">
+                <I18nLink to="/">{t('common:breadcrumb.home')}</I18nLink>
+              </li>
+              <li className="facet-breadcrumb-item">
+                <I18nLink to={`/${canonicalCitySlug}`}>{validCity}</I18nLink>
+              </li>
+              <li className="facet-breadcrumb-item">
+                <I18nLink to={baseCanonicalPath}>{facetText} - {intentLabel}</I18nLink>
+              </li>
+              {isBhk && <li className="facet-breadcrumb-item facet-breadcrumb-item--active" aria-current="page">{bhkText}</li>}
+              {isBudget && <li className="facet-breadcrumb-item facet-breadcrumb-item--active" aria-current="page">{budgetText}</li>}
+              {isAmenity && <li className="facet-breadcrumb-item facet-breadcrumb-item--active" aria-current="page">{pretty(amenity)}</li>}
+              {!isBhk && !isBudget && !isAmenity && (
+                <li className="facet-breadcrumb-item facet-breadcrumb-item--active" aria-current="page">{facetText} - {intentLabel}</li>
+              )}
+            </ol>
+          </div>
+        </nav>
 
         <section className="padding-y-60">
           <div className="container container-two">
@@ -330,7 +362,10 @@ const FacetLanding = () => {
                   <h2 className="h6 mb-2">{t('landing:budgetEnrichment.aboutAmenity', { amenityPretty: pretty(amenity), city: validCity })}</h2>
                   <p className="mb-2"
                     dangerouslySetInnerHTML={{
-                      __html: t('landing:budgetEnrichment.amenityHighDemand', { amenityPretty: pretty(amenity), city: validCity }),
+                      // CRITICAL FIX (audit 4.4): sanitize interpolated HTML
+                      // with DOMPurify to prevent XSS via the amenity/city
+                      // values that are injected into the translation string.
+                      __html: DOMPurify.sanitize(t('landing:budgetEnrichment.amenityHighDemand', { amenityPretty: pretty(amenity), city: validCity })),
                     }}
                   />
                   <p className="mb-0 text-muted" style={{ fontSize: '0.875rem' }}>

@@ -64,7 +64,12 @@ const McpLogin = () => {
       e.preventDefault();
       if (!redirectUri || submitting) return;
 
-      if (!isAllowedRedirect(redirectUri)) {
+      // CRITICAL FIX (audit 1.2 / 1.11): Use the memoized allowlist check and
+      // never leak the access token in a URL query parameter. Query params are
+      // captured by server logs, browser history, Referer headers, and
+      // analytics. Use the URL fragment (#) instead, which is never sent to
+      // the server.
+      if (!isRedirectAllowed) {
         setRedirectError(true);
         setSubmitting(false);
         return;
@@ -87,16 +92,16 @@ const McpLogin = () => {
       }
 
       // Build final redirect URL for the MCP client, preserving its `state`.
+      // Token goes in the fragment so it never reaches a server log or Referer.
       const url = new URL(redirectUri);
       if (stateParam) {
         url.searchParams.set('state', stateParam);
       }
-      url.searchParams.set('access_token', token);
-      url.searchParams.set('token_type', 'bearer');
+      url.hash = `access_token=${encodeURIComponent(token)}&token_type=bearer`;
 
       window.location.href = url.toString();
     },
-    [redirectUri, stateParam, submitting, login, phone, password, clearError]
+    [redirectUri, stateParam, submitting, login, phone, password, clearError, isRedirectAllowed]
   );
 
   if (!redirectUri) {

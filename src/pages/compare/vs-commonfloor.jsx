@@ -1,6 +1,7 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
+import PageLoader from '../../common/PageLoader';
 
 const ComparePage = lazy(() => import('./ComparePage'));
 
@@ -9,12 +10,14 @@ const CommonFloorCompare = () => {
   const competitor = competitors.commonfloor;
 
   return (
-    <ComparePage
+    <Suspense fallback={<PageLoader />}>
+      <ComparePage
       competitor={competitor}
       pageTitle={t('commonfloor.pageTitle')}
       pageDescription={t('commonfloor.pageDescription')}
       canonicalPath="/vs/commonfloor"
-    />
+      />
+    </Suspense>
   );
 };
 

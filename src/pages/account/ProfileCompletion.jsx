@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useI18nNavigate } from '../../i18n/I18nLink';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '../../store';
 import api from '../../services/api';
+import { authService } from '../../services/authService';
 import { getRedirectPathForStage, fetchAuthStage } from '../../utils/authStage';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -14,12 +15,38 @@ import SEO from '../../common/SEO';
 const ProfileCompletion = () => {
     const { t } = useTranslation(['account', 'forms']);
     const navigate = useI18nNavigate();
-    const { user, updateProfile } = useAuthStore();
+    const { updateProfile } = useAuthStore();
 
-    const [fullName, setFullName] = useState(user?.full_name || user?.name || '');
-    const [dateOfBirth, setDateOfBirth] = useState(user?.date_of_birth || '');
+    // AUDIT FIX (1.6): Do NOT pre-fill the form from the potentially-stale
+    // cached user object in the auth store (e.g. right after registration the
+    // backend may not have propagated the profile yet, leaving cached fields
+    // empty and forcing the user to re-enter data). Instead, fetch a fresh
+    // profile on mount and seed the fields from that. While loading, the
+    // fields stay blank with clear guidance so the user is never shown stale
+    // or empty-but-presented-as-current values.
+    const [fullName, setFullName] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isPrefilling, setIsPrefilling] = useState(true);
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            try {
+                const fresh = await authService.getCurrentUser();
+                if (cancelled) return;
+                setFullName(fresh?.full_name || fresh?.name || '');
+                setDateOfBirth(fresh?.date_of_birth || '');
+            } catch {
+                // Fresh fetch failed — leave fields blank so the user can
+                // enter values explicitly rather than seeing stale cache data.
+            } finally {
+                if (!cancelled) setIsPrefilling(false);
+            }
+        })();
+        return () => { cancelled = true; };
+    }, []);
 
     const validate = () => {
         const newErrors = {};
@@ -115,7 +142,7 @@ const ProfileCompletion = () => {
                                                     placeholder={t('forms:fullName.placeholder') || 'Enter your full name'}
                                                     value={fullName}
                                                     onChange={(e) => setFullName(e.target.value)}
-                                                    disabled={isLoading}
+                                                    disabled={isLoading || isPrefilling}
                                                     autoFocus
                                                 />
                                                 {errors.fullName && (
@@ -133,7 +160,7 @@ const ProfileCompletion = () => {
                                                     className={`form-control ${errors.dateOfBirth ? 'is-invalid' : ''}`}
                                                     value={dateOfBirth}
                                                     onChange={(e) => setDateOfBirth(e.target.value)}
-                                                    disabled={isLoading}
+                                                    disabled={isLoading || isPrefilling}
                                                     max={new Date().toISOString().split('T')[0]}
                                                 />
                                                 {errors.dateOfBirth && (
@@ -146,9 +173,11 @@ const ProfileCompletion = () => {
                                             <button
                                                 type="submit"
                                                 className="btn btn-main w-100"
-                                                disabled={isLoading}
+                                                disabled={isLoading || isPrefilling}
                                             >
-                                                {isLoading ? (
+                                                {isPrefilling ? (
+                                                    <><i className="fas fa-spinner fa-spin me-2"></i>{t('forms:generic.saving') || 'Loading...'}</>
+                                                ) : isLoading ? (
                                                     <><i className="fas fa-spinner fa-spin me-2"></i>{t('forms:generic.saving') || 'Saving...'}</>
                                                 ) : (
                                                     t('profileCompletion.submitBtn') || 'Complete Profile'

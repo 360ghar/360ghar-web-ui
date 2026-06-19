@@ -12,7 +12,7 @@ import { propertyAPIService } from '../../services/propertyAPIService';
 import { siteMetadata } from '../../seo/siteMetadata';
 
 const VirtualTourPage = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('properties');
     const [tSeo] = useTranslation('seo');
     const { id } = useParams();
     const [propertyData, setPropertyData] = useState(null);
@@ -136,11 +136,11 @@ const VirtualTourPage = () => {
 
     // Tour highlights
     const tourHighlights = [
-        { icon: 'fas fa-couch', label: 'Living Room', description: 'Spacious living area with natural lighting' },
-        { icon: 'fas fa-utensils', label: 'Kitchen', description: 'Modular kitchen with modern fittings' },
-        { icon: 'fas fa-bed', label: 'Bedrooms', description: 'All bedrooms with attached bathrooms' },
-        { icon: 'fas fa-wind', label: 'Balcony', description: 'Balcony with panoramic views' },
-        { icon: 'fas fa-swimming-pool', label: 'Society Amenities', description: 'Clubhouse, pool, gym, and parks' },
+        { icon: 'fas fa-couch', label: t('virtualTourPage.highlights.livingRoom'), description: t('virtualTourPage.highlights.livingRoomDesc') },
+        { icon: 'fas fa-utensils', label: t('virtualTourPage.highlights.kitchen'), description: t('virtualTourPage.highlights.kitchenDesc') },
+        { icon: 'fas fa-bed', label: t('virtualTourPage.highlights.bedrooms'), description: t('virtualTourPage.highlights.bedroomsDesc') },
+        { icon: 'fas fa-wind', label: t('virtualTourPage.highlights.balcony'), description: t('virtualTourPage.highlights.balconyDesc') },
+        { icon: 'fas fa-swimming-pool', label: t('virtualTourPage.highlights.societyAmenities'), description: t('virtualTourPage.highlights.societyAmenitiesDesc') },
     ];
 
     return (
@@ -174,7 +174,7 @@ const VirtualTourPage = () => {
                         <div className="container container-two">
                             <div className="text-center py-5">
                                 <i className="fas fa-spinner fa-spin fa-2x text-primary"></i>
-                                <p className="mt-3">Loading virtual tour...</p>
+                                <p className="mt-3">{t('virtualTourPage.loadingTour')}</p>
                             </div>
                         </div>
                     </section>
@@ -186,11 +186,11 @@ const VirtualTourPage = () => {
                         <div className="container container-two">
                             <div className="text-center py-5">
                                 <i className="fas fa-exclamation-triangle fa-2x text-danger"></i>
-                                <h4 className="mt-3 text-danger">Property not found</h4>
-                                <p>The property you are looking for does not exist or has been removed.</p>
+                                <h4 className="mt-3 text-danger">{t('virtualTourPage.propertyNotFound')}</h4>
+                                <p>{t('virtualTourPage.notFoundDescription')}</p>
                                 <I18nLink to="/properties" className="btn btn-main mt-3">
                                     <span className="icon-left"><i className="fas fa-arrow-left"></i></span>
-                                    Browse Properties
+                                    {t('virtualTourPage.browseProperties')}
                                 </I18nLink>
                             </div>
                         </div>
@@ -202,11 +202,11 @@ const VirtualTourPage = () => {
                         <div className="container container-two">
                             <div className="text-center py-5">
                                 <i className="fas fa-home fa-2x text-muted"></i>
-                                <h4 className="mt-3">Property not found</h4>
-                                <p>The property you are looking for does not exist or has been removed.</p>
+                                <h4 className="mt-3">{t('virtualTourPage.propertyNotFound')}</h4>
+                                <p>{t('virtualTourPage.notFoundDescription')}</p>
                                 <I18nLink to="/properties" className="btn btn-main mt-3">
                                     <span className="icon-left"><i className="fas fa-arrow-left"></i></span>
-                                    Browse Properties
+                                    {t('virtualTourPage.browseProperties')}
                                 </I18nLink>
                             </div>
                         </div>
@@ -221,10 +221,10 @@ const VirtualTourPage = () => {
                             <div className="container container-two">
                                 <nav aria-label="breadcrumb">
                                     <ol className="breadcrumb mb-0" style={{ background: 'transparent', padding: 0 }}>
-                                        <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
-                                        <li className="breadcrumb-item"><I18nLink to="/properties">Properties</I18nLink></li>
+                                        <li className="breadcrumb-item"><I18nLink to="/">{t('virtualTourPage.home')}</I18nLink></li>
+                                        <li className="breadcrumb-item"><I18nLink to="/properties">{t('virtualTourPage.properties')}</I18nLink></li>
                                         <li className="breadcrumb-item"><I18nLink to={`/property/${propertyData.id}`}>{propertyTitle}</I18nLink></li>
-                                        <li className="breadcrumb-item active" aria-current="page">Virtual Tour</li>
+                                        <li className="breadcrumb-item active" aria-current="page">{t('virtualTourPage.virtualTour')}</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -246,10 +246,10 @@ const VirtualTourPage = () => {
                                 ) : (
                                     <div className="text-center py-5" style={{ background: '#f8f9fa', borderRadius: '12px', minHeight: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                         <i className="fas fa-vr-cardboard fa-3x text-muted mb-3"></i>
-                                        <h4>Virtual Tour Not Available</h4>
-                                        <p className="text-muted">This property does not yet have a 360° virtual tour.</p>
+                                        <h4>{t('virtualTourPage.tourNotAvailable')}</h4>
+                                        <p className="text-muted">{t('virtualTourPage.tourNotAvailableDescription')}</p>
                                         <I18nLink to={`/property/${propertyData.id}`} className="btn btn-main mt-2">
-                                            View Property Details
+                                            {t('virtualTourPage.viewPropertyDetails')}
                                         </I18nLink>
                                     </div>
                                 )}
@@ -285,7 +285,7 @@ const VirtualTourPage = () => {
                                             </div>
                                             <I18nLink to={`/property/${propertyData.id}`} className="btn btn-outline-main">
                                                 <span className="icon-left"><i className="fas fa-arrow-left"></i></span>
-                                                Back to Property
+                                                {t('virtualTourPage.backToProperty')}
                                             </I18nLink>
                                         </div>
                                     </div>
@@ -299,7 +299,7 @@ const VirtualTourPage = () => {
                                 <div className="container container-two">
                                     <h4 className="mb-4" style={{ fontWeight: 600 }}>
                                         <i className="fas fa-eye me-2 text-primary"></i>
-                                        What This Tour Covers
+                                        {t('virtualTourPage.whatThisTourCovers')}
                                     </h4>
                                     <div className="row g-3">
                                         {tourHighlights.map((highlight) => (
@@ -330,7 +330,7 @@ const VirtualTourPage = () => {
                                 <div className="container container-two text-center">
                                     <I18nLink to={`/property/${propertyData.id}`} className="btn btn-main btn-lg">
                                         <span className="icon-left"><i className="fas fa-arrow-left"></i></span>
-                                        Back to Property Details
+                                        {t('virtualTourPage.backToPropertyDetails')}
                                     </I18nLink>
                                 </div>
                             </section>

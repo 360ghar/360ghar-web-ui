@@ -7,7 +7,6 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData } from '../../seo/structuredData';
-import Pagination from '../../common/ui/Pagination';
 import ScoreWheel from '../../components/data-hub/ScoreWheel';
 import { dataHubService } from '../../services/dataHubService';
 
@@ -36,12 +35,9 @@ const FAQS = [
   },
 ];
 
-const SORT_OPTIONS = [
-  { value: 'score_desc', label: 'Score (High to Low)' },
-  { value: 'name_asc', label: 'Name (A-Z)' },
-  { value: 'projects_desc', label: 'Projects (Most First)' },
-  { value: 'complaints_desc', label: 'Complaints (Most First)' },
-];
+// UX FIX (audit 3.15): removed the duplicate module-level SORT_OPTIONS; the
+// component-level declaration below (inside BuilderReputation) is the one
+// actually used and is i18n-aware.
 
 const scoreColor = (score) => {
   if (score >= 70) return '#22c55e';
@@ -65,16 +61,15 @@ const BuilderReputation = () => {
   const { t } = useTranslation('data-hub');
   const [tSeo] = useTranslation('seo');
   const [builders, setBuilders] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [sortBy, setSortBy] = useState('score_desc');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
-
-  const totalPages = Math.ceil(total / PAGE_LIMIT);
 
   const SORT_OPTIONS = [
     { value: 'score_desc', label: t('builderReputation.sortOptions.scoreDesc') },
@@ -83,25 +78,46 @@ const BuilderReputation = () => {
     { value: 'complaints_desc', label: t('builderReputation.sortOptions.complaintsDesc') },
   ];
 
+  // Fetch the first page (cursor=null) whenever search/sort changes.
   useEffect(() => {
-    dataHubService.getBuilders({ search, sort_by: sortBy, page, limit: PAGE_LIMIT })
+    // CRITICAL FIX (audit 3.10): reset error/loading at the start of every
+    // fetch so a previous failure doesn't persist after a successful retry.
+    setLoading(true);
+    setError(null);
+    dataHubService.getBuilders({ search, sort_by: sortBy, limit: PAGE_LIMIT })
       .then((data) => {
-        setBuilders(data?.items || []);
-        setTotal(data?.total || 0);
+        setBuilders(Array.isArray(data?.items) ? data.items : []);
+        setNextCursor(data?.next_cursor ?? null);
+        setHasMore(Boolean(data?.has_more));
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [search, sortBy, page]);
+  }, [search, sortBy]);
+
+  // Cursor "Load more": fetch the next page using the opaque cursor token.
+  const handleLoadMore = async () => {
+    if (!hasMore || !nextCursor || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      const data = await dataHubService.getBuilders({ search, sort_by: sortBy, limit: PAGE_LIMIT, cursor: nextCursor });
+      const items = Array.isArray(data?.items) ? data.items : [];
+      setBuilders(prev => [...prev, ...items]);
+      setNextCursor(data?.next_cursor ?? null);
+      setHasMore(Boolean(data?.has_more));
+    } catch {
+      // Silently ignore; user can retry via Load More.
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setSearch(searchInput);
-    setPage(1);
   };
 
   const handleSortChange = (value) => {
     setSortBy(value);
-    setPage(1);
   };
 
   return (
@@ -121,7 +137,7 @@ const BuilderReputation = () => {
             name: 'Builder Reputation Directory — Gurugram',
             description: 'Builder reputation scores based on HRERA registered projects and complaints.',
             url: 'https://360ghar.com/builder-reputation',
-            numberOfItems: total,
+            numberOfItems: builders.length,
           },
           generateFaqStructuredData(FAQS),
         ]}
@@ -135,6 +151,14 @@ const BuilderReputation = () => {
           <div className="container">
             <div className="row mb-20">
               <div className="col-12">
+                {/* AUDIT FIX (imp 3.19): consistent breadcrumb */}
+                <nav aria-label="breadcrumb" className="mb-20">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
+                    <li className="breadcrumb-item"><I18nLink to="/builder-reputation">Data Hub</I18nLink></li>
+                    <li className="breadcrumb-item active">Builder Reputation</li>
+                  </ol>
+                </nav>
                 <h1 className="fs-28 fw-600 mb-10">{t('builderReputation.title')}</h1>
                 <p className="mb-0 color-text-3">
                   {t('builderReputation.description')}
@@ -202,7 +226,7 @@ const BuilderReputation = () => {
             ) : (
               <>
                 <p className="mb-20 fs-14 color-text-3">
-                  {t('builderReputation.buildersFound', { count: total, suffix: total !== 1 ? 's' : '' })}
+                  {t('builderReputation.buildersFound', { count: builders.length, suffix: builders.length !== 1 ? 's' : '' })}
                 </p>
 
                 {builders.length === 0 ? (
@@ -292,11 +316,28 @@ const BuilderReputation = () => {
                   </>
                 )}
 
-                <Pagination
-                  currentPage={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                />
+                {/* Cursor-based Load more */}
+                {hasMore && (
+                  <div className="text-center mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-outline-main"
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                    >
+                      {loadingMore ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                          Loading...
+                        </>
+                      ) : (
+                        <>
+                          <i className="fas fa-plus me-1"></i> Load More
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
               </>
             )}
 

@@ -30,7 +30,6 @@ export const DEFAULT_PROPERTY_FILTERS = {
   gender_preference: '',
   sharing_type: '',
   sort_by: 'newest',
-  page: 1,
   limit: 12,
 };
 
@@ -52,7 +51,6 @@ export const PROPERTY_FILTER_NUMBER_KEYS = new Set([
   'age_max',
   'guests',
   'bhk',
-  'page',
   'limit',
 ]);
 
@@ -79,10 +77,15 @@ export const cleanPropertyFilters = (filters = {}) => {
   return cleaned;
 };
 
-export const buildPropertySearchParams = (filters = {}, page = 1, limit = 12) => {
+export const buildPropertySearchParams = (filters = {}, cursor = null, limit = 12) => {
   const params = new URLSearchParams();
-  params.set('page', String(page));
   params.set('limit', String(limit));
+
+  // Cursor tokens are opaque base64 strings returned by a prior `next_cursor`.
+  // Omit on the first page (cursor is null/undefined/empty).
+  if (cursor) {
+    params.set('cursor', String(cursor));
+  }
 
   const cleaned = cleanPropertyFilters(filters);
   const appendArray = (key, values) => values.forEach((value) => params.append(key, String(value)));
@@ -139,6 +142,14 @@ export const parsePropertySearchParams = (searchParams) => {
   const arrayKeys = new Set(['property_type', 'amenities', 'features']);
 
   for (const [key, value] of searchParams.entries()) {
+    // Cursor pagination: `page`/`offset` are legacy params from the old
+    // page-based contract and are intentionally ignored. The new contract
+    // uses an opaque `cursor` token that is not a filter and is managed in
+    // component state, so we never parse it into the filter object.
+    if (key === 'page' || key === 'offset' || key === 'cursor') {
+      continue;
+    }
+
     if (arrayKeys.has(key)) {
       parsed[key] = searchParams.getAll(key);
       continue;
@@ -159,6 +170,6 @@ export const parsePropertySearchParams = (searchParams) => {
 export const buildPropertySearchQuery = (filters = {}) =>
   buildPropertySearchParams(
     filters,
-    filters.page ?? DEFAULT_PROPERTY_FILTERS.page,
+    null,
     filters.limit ?? DEFAULT_PROPERTY_FILTERS.limit
   ).toString();

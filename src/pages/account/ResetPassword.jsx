@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { authService } from '../../services/authService';
 import { ensureSupabaseClient } from '../../services/supabaseClient';
+import { maskIdentifier } from '../../services/lastAuthMethod';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -22,14 +23,34 @@ const ResetPassword = () => {
     const [isValidSession, setIsValidSession] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [maskedAccount, setMaskedAccount] = useState('');
 
     useEffect(() => {
         (async () => {
             try {
                 const client = await ensureSupabaseClient();
                 const { data: { session } } = await client.auth.getSession();
-                if (session) {
+                // AUDIT FIX (1.4): getSession() may return a session object
+                // that has actually expired (the JWT in localStorage is stale
+                // until the next refresh). Validate the expiry timestamp before
+                // trusting it; an expired session is treated as invalid so
+                // updateUser won't fail silently with a confusing error later.
+                const expiresAt = session?.expires_at;
+                const isExpired = expiresAt ? expiresAt * 1000 <= Date.now() : false;
+                if (session && !isExpired) {
                     setIsValidSession(true);
+                    setMaskedAccount(maskIdentifier(session.user?.email || session.user?.phone || ''));
+                } else if (session && isExpired) {
+                    // Try to refresh; if that fails the session is unusable.
+                    try {
+                        const { data: { session: refreshed } } = await client.auth.refreshSession();
+                        if (refreshed) {
+                            setIsValidSession(true);
+                            setMaskedAccount(maskIdentifier(refreshed.user?.email || refreshed.user?.phone || ''));
+                        }
+                    } catch {
+                        setIsValidSession(false);
+                    }
                 }
             } catch {
                 setIsValidSession(false);
@@ -59,6 +80,22 @@ const ResetPassword = () => {
             setIsLoading(true);
             try {
                 await authService.resetPassword(values.password);
+                // AUDIT FIX (1.7): The session used to authorize this reset was
+                // a transient recovery session created by the OTP verification
+                // (see ForgotPassword.jsx). It is not a real login. Sign it out
+                // so the user is returned to a clean, unauthenticated state and
+                // must sign in with the new password — keeping session state
+                // unambiguous.
+                try {
+                    sessionStorage.removeItem('passwordResetFlow');
+                } catch {
+                    // Non-fatal.
+                }
+                try {
+                    await authService.logout();
+                } catch {
+                    // Best-effort cleanup.
+                }
                 toast.success(t('resetPassword.successMessage'));
                 navigate('/login');
             } catch (error) {
@@ -159,6 +196,21 @@ const ResetPassword = () => {
                                     <div className="text-center mb-4">
                                         <h3 className="mb-2">{t('resetPassword.heading')}</h3>
                                         <p className="text-muted">{t('resetPassword.description')}</p>
+                                        {maskedAccount && (
+                                            <p className="mt-2 mb-0" style={{
+                                                fontFamily: 'var(--font-body)',
+                                                color: 'var(--text-secondary)',
+                                                background: 'var(--bg-light)',
+                                                border: '1px solid var(--border-color-light)',
+                                                borderRadius: '8px',
+                                                display: 'inline-block',
+                                                padding: '6px 14px',
+                                                fontSize: '0.9rem',
+                                            }}>
+                                                <i className="fas fa-user-shield me-2" style={{ color: 'var(--main-color)' }}></i>
+                                                {maskedAccount}
+                                            </p>
+                                        )}
                                     </div>
 
                                     <form onSubmit={formik.handleSubmit}>

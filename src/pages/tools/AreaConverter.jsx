@@ -135,7 +135,7 @@ import './AreaConverter.scss';
                                                  type="number"
                                                  className="form-control mb-2"
                                                  value={amount}
-                                                 onChange={(e) => setAmount(e.target.value)}
+                                                 onChange={(e) => setAmount(Math.max(0, Number(e.target.value)))}
                                                  min="0"
                                              />
                                              <select
@@ -175,6 +175,40 @@ import './AreaConverter.scss';
                                              </select>
                                          </div>
                                      </div>
+
+                                     {/* AUDIT FIX (imp 3.3): visual comparison of the two area units */}
+                                     {amount > 0 && (
+                                         <div className="mt-4 p-3 bg-light rounded-3">
+                                             <h6 className="mb-3">{t('areaConverter.visualComparison', 'Visual Comparison')}</h6>
+                                             {(() => {
+                                                 const fromVal = amount;
+                                                 const toVal = parseFloat(result.toFixed(4));
+                                                 const max = Math.max(fromVal, toVal, 0.0001);
+                                                 const fromPct = Math.max((fromVal / max) * 100, 2);
+                                                 const toPct = Math.max((toVal / max) * 100, 2);
+                                                 return (
+                                                     <>
+                                                         <div className="mb-2">
+                                                             <div className="d-flex justify-content-between small text-muted mb-1">
+                                                                 <span>{fromVal} {unitLabels[fromUnit]}</span>
+                                                             </div>
+                                                             <div style={{ height: 18, background: '#fff', borderRadius: 9, overflow: 'hidden', border: '1px solid var(--border-color-light)' }}>
+                                                                 <div style={{ width: `${fromPct}%`, height: '100%', background: 'var(--main-color)' }}></div>
+                                                             </div>
+                                                         </div>
+                                                         <div>
+                                                             <div className="d-flex justify-content-between small text-muted mb-1">
+                                                                 <span>{toVal} {unitLabels[toUnit]}</span>
+                                                             </div>
+                                                             <div style={{ height: 18, background: '#fff', borderRadius: 9, overflow: 'hidden', border: '1px solid var(--border-color-light)' }}>
+                                                                 <div style={{ width: `${toPct}%`, height: '100%', background: 'var(--cta-color)' }}></div>
+                                                             </div>
+                                                         </div>
+                                                     </>
+                                                 );
+                                             })()}
+                                         </div>
+                                     )}
                                  </div>
 
                                  {/* Common Conversions Table */}

@@ -17,6 +17,12 @@ import LazyImage from '../../common/ui/LazyImage';
 
 // Detect whether a raw identifier is an email or an Indian phone number.
 const looksLikeEmail = (value) => (value || '').includes('@');
+// CRITICAL FIX (audit 1.5): normalizePhone previously silently left a
+// wrong-digit-count input unchanged, then the `^[6-9]\d{9}$` check produced a
+// generic "invalid phone" error. Now we only strip the country code when the
+// length is exactly 12 and the number starts with 91; everything else is
+// passed through unchanged and validated explicitly by validateIdentifier
+// below, which surfaces a precise "wrong length" error.
 const normalizePhone = (value) => {
   const digits = (value || '').replace(/\D/g, '');
   return digits.startsWith('91') && digits.length === 12 ? digits.slice(2) : digits;
@@ -364,6 +370,13 @@ const RegisterFlow = ({titleText, btnText, showTermCondition, haveAccountText, h
                                                     />
                                                 </div>
 
+                                                {/* UX FIX (audit 1.3): clarify that EITHER phone OR email works. */}
+                                                <div className="col-12">
+                                                    <small className="text-muted">
+                                                        {t('forms:identifier.eitherHint')}
+                                                    </small>
+                                                </div>
+
                                                 {identifierError && (
                                                     <div className="col-12">
                                                         <span className="text-danger">{identifierError}</span>
@@ -698,8 +711,18 @@ const LoginFlow = ({
             return { value, channel: 'email' };
         }
         const phone = normalizePhone(value);
+        // CRITICAL FIX (audit 1.5): give a precise error for wrong digit
+        // counts instead of a generic "invalid phone".
+        if (!/^\d+$/.test(phone)) {
+            setIdentifierError(t('forms:identifier.phoneDigitsOnly'));
+            return null;
+        }
+        if (phone.length !== 10) {
+            setIdentifierError(t('forms:identifier.phoneWrongLength', { count: phone.length }));
+            return null;
+        }
         if (!/^[6-9]\d{9}$/.test(phone)) {
-            setIdentifierError(t('forms:identifier.invalid'));
+            setIdentifierError(t('forms:identifier.phoneInvalidStart'));
             return null;
         }
         return { value: phone, channel: 'phone' };

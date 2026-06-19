@@ -51,6 +51,8 @@
     "openVirtualTourFullScreen": "वर्चुअल टूर पूर्ण स्क्रीन में खोलें",
     "propertyLocation": "प्रॉपर्टी स्थान",
     "virtualTour": "360° वर्चुअल टूर",
+    "photos": "फ़ोटो",
+    "video": "वीडियो",
     "propertyVideo": "प्रॉपर्टी वीडियो",
     "browserNoVideo": "आपका ब्राउज़र वीडियो प्लेबैक का समर्थन नहीं करता है।",
     "showPhoneNumber": "फ़ोन नंबर देखें",
@@ -184,7 +186,14 @@
     "sqftUnit": "वर्ग फ़ुट",
     "filterDrawerTitle": "फ़िल्टर",
     "searchFiltersApplied": "सर्च फ़िल्टर सफलतापूर्वक लागू किए गए!",
-    "errorApplyingFilters": "फ़िल्टर लागू करने में त्रुटि। कृपया पुनः प्रयास करें।"
+    "errorApplyingFilters": "फ़िल्टर लागू करने में त्रुटि। कृपया पुनः प्रयास करें।",
+    "saveSearch": "खोज सहेजें",
+    "mySearches": "मेरी खोजें",
+    "savedSearchDefault": "खोज",
+    "saveSearchSuccess": "खोज सहेजी गई!",
+    "saveSearchLoaded": "सहेजी गई खोज लोड हो गई!",
+    "saveSearchEmpty": "सहेजने से पहले कम से कम एक फ़िल्टर जोड़ें।",
+    "removeSavedSearch": "सहेजी गई खोज हटाएँ"
   },
   "sort": {
     "newest": "नवीनतम पहले",
@@ -254,7 +263,9 @@
     "copyLink": "लिंक कॉपी करें",
     "share": "शेयर",
     "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी हो गया!",
-    "failedToCopy": "लिंक कॉपी करने में विफल"
+    "failedToCopy": "लिंक कॉपी करने में विफल",
+    "tourAvailable": "360° वर्चुअल टूर उपलब्ध",
+    "compare": "तुलना में जोड़ें"
   },
   "actions": {
     "save": "सहेजें",
@@ -348,6 +359,33 @@
   "addListing": {
     "addListing": "लिस्टिंग जोड़ें"
   },
+  "virtualTourPage": {
+    "loadingTour": "वर्चुअल टूर लोड हो रहा है...",
+    "propertyNotFound": "प्रॉपर्टी नहीं मिली",
+    "notFoundDescription": "आप जो प्रॉपर्टी खोज रहे हैं वह मौजूद नहीं है या हटा दी गई है।",
+    "browseProperties": "प्रॉपर्टी ब्राउज़ करें",
+    "home": "होम",
+    "properties": "प्रॉपर्टी",
+    "virtualTour": "वर्चुअल टूर",
+    "tourNotAvailable": "वर्चुअल टूर उपलब्ध नहीं",
+    "tourNotAvailableDescription": "इस प्रॉपर्टी का अभी 360° वर्चुअल टूर नहीं है।",
+    "viewPropertyDetails": "प्रॉपर्टी विवरण देखें",
+    "backToProperty": "प्रॉपर्टी पर वापस",
+    "whatThisTourCovers": "इस टूर में क्या शामिल है",
+    "backToPropertyDetails": "प्रॉपर्टी विवरण पर वापस",
+    "highlights": {
+      "livingRoom": "लिविंग रूम",
+      "livingRoomDesc": "प्राकृतिक रोशनी के साथ विशाल लिविंग क्षेत्र",
+      "kitchen": "रसोई",
+      "kitchenDesc": "आधुनिक फिटिंग के साथ मॉड्यूलर किचन",
+      "bedrooms": "बेडरूम",
+      "bedroomsDesc": "अटैच्ड बाथरूम के साथ सभी बेडरूम",
+      "balcony": "बालकनी",
+      "balconyDesc": "विहंगम दृश्य के साथ बालकनी",
+      "societyAmenities": "सोसायटी सुविधाएँ",
+      "societyAmenitiesDesc": "क्लबहाउस, पूल, जिम और पार्क"
+    }
+  },
   "sidebar": {
     "gettingLocation": "आपका स्थान प्राप्त हो रहा है...",
     "showingNear": "{{location}} के पास की प्रॉपर्टी दिखा रहे हैं",
@@ -357,7 +395,12 @@
     "search": "खोजें",
     "location": "स्थान",
     "searching": "खोज रहे हैं",
-    "searchBtn": "खोजें"
+    "searchBtn": "खोजें",
+    "recentSearches": "हाल की खोजें",
+    "share": "शेयर",
+    "shareFilteredView": "यह फ़िल्टर किया गया दृश्य शेयर करें",
+    "shareLinkCopied": "फ़िल्टर किया गया दृश्य लिंक क्लिपबोर्ड पर कॉपी हो गया!",
+    "shareLinkFailed": "लिंक कॉपी करने में विफल"
   },
   "advancedFilter": {
     "searchProperties": "प्रॉपर्टी खोजें",
@@ -410,7 +453,10 @@
     "bedroom3": "3+ बेडरूम",
     "bedroom4": "4+ बेडरूम",
     "applyFilters": "फ़िल्टर लागू करें",
-    "kmRadius": "{{km}} किमी"
+    "kmRadius": "{{km}} किमी",
+    "recentSearches": "हाल की खोजें",
+    "suggestionsAriaLabel": "खोज सुझाव",
+    "noSuggestions": "कोई मेल खाती हाल की खोज नहीं"
   },
   "popularSearches": {
     "flatsRentGurugram": "गुरुग्राम में किराये पर फ्लैट",

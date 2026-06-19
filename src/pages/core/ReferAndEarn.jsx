@@ -3,6 +3,7 @@ import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
+import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
@@ -14,6 +15,7 @@ import ReferralTerms from '../../components/referral/ReferralTerms';
 const ReferAndEarn = () => {
   const { t } = useTranslation('policies');
   const [tSeo] = useTranslation('seo');
+  const [tC] = useTranslation('common');
   const pageStructuredData = [
     {
       '@type': 'WebPage',
@@ -119,6 +121,35 @@ const ReferAndEarn = () => {
           </div>
         </section>
 
+        {/* AUDIT FIX (4.9): clarify the referral link generation & tracking
+            mechanism so users understand how their referral is identified,
+            tracked, and rewarded. */}
+        <section className="referral-tracking padding-y-60 bg-light">
+          <div className="container container-two">
+            <div className="row justify-content-center">
+              <div className="col-lg-8">
+                <h2 className="section-heading text-center mb-3">{tC('contentSeo.referralHowItWorks')}</h2>
+                <p className="text-center text-muted mb-4">{tC('contentSeo.referralTrackingDesc')}</p>
+                <ol className="referral-tracking-list">
+                  <li className="mb-2">{tC('contentSeo.referralStep1')}</li>
+                  <li className="mb-2">{tC('contentSeo.referralStep2')}</li>
+                  <li className="mb-2">{tC('contentSeo.referralStep3')}</li>
+                  <li className="mb-2">{tC('contentSeo.referralStep4')}</li>
+                </ol>
+
+                <div className="referral-status-card mt-4 p-4 bg-white rounded-3 border">
+                  <h3 className="h6 mb-2">{tC('contentSeo.referralStatusTitle')}</h3>
+                  <p className="text-muted small mb-2">{tC('contentSeo.referralStatusDesc')}</p>
+                  <p className="text-muted small mb-0">
+                    <i className="fas fa-info-circle me-1 text-main"></i>
+                    {tC('contentSeo.referralDashboardNote')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <ReferralTerms />
 
         <section className="referral-faq padding-y-60 bg-light">
@@ -156,6 +187,9 @@ const ReferAndEarn = () => {
             </div>
           </div>
         </section>
+
+        {/* AUDIT FIX (4.3): add CTA section to referral page */}
+        <Cta ctaClass="" />
 
         <Footer />
       </main>

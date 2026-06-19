@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 function formatValue(value) {
   if (value === null || value === undefined) return '—';
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
@@ -11,7 +13,10 @@ function formatKey(key) {
 }
 
 export default function GenericWidget({ data, widgetName }) {
+  const { t } = useTranslation('common');
   if (!data) return null;
+
+  const title = widgetName?.replace(/Widget$/, '') || t('chatbot.widgets.resultTitle');
 
   // Get only primitive/simple values from the top level to avoid nested mess
   const entries = Object.entries(data).filter(([, v]) =>
@@ -22,9 +27,9 @@ export default function GenericWidget({ data, widgetName }) {
     return (
       <div className="chatbot-widget chatbot-widget--generic">
         <div className="chatbot-widget__header">
-          <span className="chatbot-widget__title">{widgetName?.replace(/Widget$/, '') || 'Result'}</span>
+          <span className="chatbot-widget__title">{title}</span>
         </div>
-        <p className="chatbot-widget__empty">Result received.</p>
+        <p className="chatbot-widget__empty">{t('chatbot.widgets.resultReceived')}</p>
       </div>
     );
   }
@@ -32,7 +37,7 @@ export default function GenericWidget({ data, widgetName }) {
   return (
     <div className="chatbot-widget chatbot-widget--generic">
       <div className="chatbot-widget__header">
-        <span className="chatbot-widget__title">{widgetName?.replace(/Widget$/, '') || 'Result'}</span>
+        <span className="chatbot-widget__title">{title}</span>
       </div>
       <dl className="chatbot-widget__kv">
         {entries.slice(0, 8).map(([key, value]) => (

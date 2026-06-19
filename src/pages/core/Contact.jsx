@@ -90,13 +90,9 @@ const Contact = () => {
                 closes: '20:00'
               }
             ],
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: '4.9',
-              reviewCount: '500',
-              bestRating: '5',
-              worstRating: '1'
-            },
+            // CRITICAL FIX (audit 4.3): removed fabricated aggregateRating.
+            // Restore only with a real, verified review source to avoid a
+            // Google manual penalty.
             hasMap: 'https://maps.google.com/?q=360Ghar+Gurgaon',
             areaServed: 'Gurgaon, Haryana, India'
           }

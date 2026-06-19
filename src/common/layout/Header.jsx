@@ -48,10 +48,13 @@ const Header = ({
     }, []);
 
     const handleLogout = async () => {
+        // UX FIX (audit 1.6): await logout() so the auth store clears
+        // isAuthenticated BEFORE we navigate. This prevents a race with
+        // PrivateRoute guards that might briefly redirect to /login.
         await logout();
         toastSuccess(t('header.loggedOutSuccess'));
-        navigate('/');
         setShowUserDropdown(false);
+        navigate('/');
     };
 
     const handleMobileMenuToggle = () => {
@@ -84,6 +87,10 @@ const Header = ({
 
     return (
         <>
+            {/* UX FIX (audit 5.1): skip-to-content link for keyboard / screen-reader users. */}
+            <a href="#main-content" className="skip-link visually-hidden-focusable">
+                {t('header.skipToContent')}
+            </a>
             {/* ==================== Header Start Here ==================== */}
             <header className={`header ${headerClass} ${stickyHeader ? 'fixed-header' : ''}`}>
                 <div className="container container-two">

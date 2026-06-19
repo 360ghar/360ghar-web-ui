@@ -9,7 +9,6 @@ import SEO from '../../common/SEO';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { ToolFaq, ToolRelatedLinks } from '../../components/tools/ToolContentSections';
-import Pagination from '../../common/ui/Pagination';
 import { dataHubService } from '../../services/dataHubService';
 
 const PROPERTY_TYPES = ['residential', 'commercial', 'mixed', 'plotted'];
@@ -77,8 +76,9 @@ const ReraProjectDirectory = () => {
   const { t } = useTranslation('data-hub');
   const [tSeo] = useTranslation('seo');
   const [projects, setProjects] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [filters, setFilters] = useState({ search: '', status: '', property_type: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -88,26 +88,49 @@ const ReraProjectDirectory = () => {
   const [verifyResult, setVerifyResult] = useState(null); // null | { found: bool, project: object }
   const [verifying, setVerifying] = useState(false);
 
-  const totalPages = Math.ceil(total / PAGE_LIMIT);
-
+  // Fetch the first page (cursor=null) whenever filters change. Replaces the
+  // list and resets cursor state.
   useEffect(() => {
-    const params = { page, limit: PAGE_LIMIT };
+    const params = { limit: PAGE_LIMIT };
     if (filters.search) params.q = filters.search;
     if (filters.status) params.status = filters.status;
     if (filters.property_type) params.property_type = filters.property_type;
 
+    setLoading(true);
+    setError(null);
     dataHubService.getReraProjects(params)
       .then((data) => {
-        setProjects(data?.items || []);
-        setTotal(data?.total || 0);
+        setProjects(Array.isArray(data?.items) ? data.items : []);
+        setNextCursor(data?.next_cursor ?? null);
+        setHasMore(Boolean(data?.has_more));
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [filters, page]);
+  }, [filters]);
+
+  // Cursor "Load more": fetch the next page using the opaque cursor token.
+  const handleLoadMore = async () => {
+    if (!hasMore || !nextCursor || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      const params = { limit: PAGE_LIMIT, cursor: nextCursor };
+      if (filters.search) params.q = filters.search;
+      if (filters.status) params.status = filters.status;
+      if (filters.property_type) params.property_type = filters.property_type;
+      const data = await dataHubService.getReraProjects(params);
+      const items = Array.isArray(data?.items) ? data.items : [];
+      setProjects(prev => [...prev, ...items]);
+      setNextCursor(data?.next_cursor ?? null);
+      setHasMore(Boolean(data?.has_more));
+    } catch {
+      // Silently ignore; user can retry via Load More.
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleFilterChange = (key, value) => {
     setFilters(f => ({ ...f, [key]: value }));
-    setPage(1);
   };
 
   const handleVerify = async () => {
@@ -143,7 +166,7 @@ const ReraProjectDirectory = () => {
             name: 'RERA Projects Gurugram',
             description: 'RERA-registered real estate projects in Gurugram.',
             url: 'https://360ghar.com/rera-projects',
-            numberOfItems: total,
+            numberOfItems: projects.length,
           },
           generateFaqStructuredData(FAQS),
           generateHowToStructuredData({
@@ -275,7 +298,7 @@ const ReraProjectDirectory = () => {
               </div>
             ) : (
               <>
-                <p className="mb-20 fs-14 color-text-3">{t('rera.projectsFound', { count: total, suffix: total !== 1 ? 's' : '' })}</p>
+                <p className="mb-20 fs-14 color-text-3">{t('rera.projectsFound', { count: projects.length, suffix: projects.length !== 1 ? 's' : '' })}</p>
                 {projects.length === 0 ? (
                   <div className="text-center py-40">
                     <p className="fs-16 color-text-3">{t('rera.noResults')}</p>
@@ -326,11 +349,28 @@ const ReraProjectDirectory = () => {
                   </div>
                 )}
 
-                <Pagination
-                  currentPage={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                />
+                {/* Cursor-based Load more */}
+                {hasMore && (
+                  <div className="text-center mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-outline-main"
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                    >
+                      {loadingMore ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                          Loading...
+                        </>
+                      ) : (
+                        <>
+                          <i className="fas fa-plus me-1"></i> Load More
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>

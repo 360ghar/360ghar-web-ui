@@ -88,6 +88,7 @@
     "noticeVerifyIdentity": "We will verify your identity before processing the request",
     "submitting": "Submitting...",
     "submitBtn": "Submit Deletion Request",
+    "submitError": "We could not submit your request. Please try again or contact support.",
     "requestReceived": "Request Received",
     "successTitle": "Deletion Request Submitted Successfully!",
     "successDesc": "Thank you for contacting us! We have received your account deletion request and will get back to you within 24 hours.",
@@ -259,6 +260,8 @@
     "successMessage": "Phone verified successfully!",
     "sendFailed": "Failed to send code. Please try again.",
     "verifyFailed": "Invalid or expired code. Please try again.",
-    "changeNumber": "Change number"
+    "changeNumber": "Change number",
+    "syncing": "Finishing sign-in...",
+    "skipConsequence": "If you skip, you won't receive SMS notifications about visits, property updates, or account alerts."
   }
 }

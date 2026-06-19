@@ -124,6 +124,18 @@ const ForgotPassword = () => {
             } else {
                 await authService.verifyPhoneOtp(`+91${normalizePhone(identifier.trim())}`, code);
             }
+            // AUDIT FIX (1.7): verifyEmailOtp/verifyPhoneOtp establish a full
+            // Supabase sign-in session. For a password-reset flow this session
+            // is only meant to authorize `authService.resetPassword()` (which
+            // calls updateUser) — it is NOT a real login. Flag the session as
+            // transient so ResetPassword.jsx clears it after the new password
+            // is set, keeping session state unambiguous (no lingering "logged
+            // in as recovery" state).
+            try {
+                sessionStorage.setItem('passwordResetFlow', '1');
+            } catch {
+                // sessionStorage may be unavailable (private mode); non-fatal.
+            }
             // OTP verified — redirect to the reset-password page where the
             // user can set a new password via the live Supabase session.
             toast.success(t('forgotPassword.otpVerified') || 'Verified! Set your new password.');

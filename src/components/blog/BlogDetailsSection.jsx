@@ -406,14 +406,36 @@ const BlogDetailsSection = () => {
                                         {/* Title */}
                                         <div className="d-flex align-items-start flex-wrap gap-2">
                                           <h2 className="blog-details__title">{title}</h2>
-                                          <a
-                                            href={`https://wa.me/?text=${encodeURIComponent(title + ' — ' + window.location.origin + window.location.pathname + '?utm_source=whatsapp&utm_medium=share&utm_campaign=blog_share')}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn btn-sm btn-outline-success ms-2"
-                                          >
-                                            <i className="fab fa-whatsapp me-1" />Share
-                                          </a>
+                                          {/* AUDIT FIX (4.5): expanded social sharing
+                                              (WhatsApp, Facebook, X, LinkedIn, copy link). */}
+                                          {(() => {
+                                            const shareUrl = `${window.location.origin}${window.location.pathname}?utm_source=share&utm_medium=social&utm_campaign=blog_share`;
+                                            const encUrl = encodeURIComponent(shareUrl);
+                                            const encText = encodeURIComponent(title);
+                                            const shareLinks = [
+                                              { href: `https://wa.me/?text=${encodeURIComponent(`${title} — ${shareUrl}`)}`, icon: 'fab fa-whatsapp', cls: 'btn-outline-success', label: 'WhatsApp' },
+                                              { href: `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`, icon: 'fab fa-facebook', cls: 'btn-outline-primary', label: 'Facebook' },
+                                              { href: `https://twitter.com/intent/tweet?text=${encText}&url=${encUrl}`, icon: 'fab fa-x-twitter', cls: 'btn-outline-dark', label: 'X' },
+                                              { href: `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`, icon: 'fab fa-linkedin', cls: 'btn-outline-primary', label: 'LinkedIn' },
+                                            ];
+                                            return (
+                                              <div className="d-inline-flex flex-wrap gap-1 ms-auto align-items-center">
+                                                {shareLinks.map((l) => (
+                                                  <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className={`btn btn-sm ${l.cls}`} aria-label={l.label}>
+                                                    <i className={l.icon} />
+                                                  </a>
+                                                ))}
+                                                <button
+                                                  type="button"
+                                                  className="btn btn-sm btn-outline-main"
+                                                  aria-label="Copy link"
+                                                  onClick={() => navigator.clipboard?.writeText(shareUrl)}
+                                                >
+                                                  <i className="fas fa-link" />
+                                                </button>
+                                              </div>
+                                            );
+                                          })()}
                                         </div>
 
                                         {/* Excerpt / Lead paragraph */}

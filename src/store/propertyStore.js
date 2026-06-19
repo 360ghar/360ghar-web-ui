@@ -13,7 +13,7 @@ const usePropertyStore = create((set, get) => ({
   userProperties: [],
   currentProperty: null,
   propertyMedia: [],
-  pagination: { page: 1, totalPages: 1, total: 0, limit: 12 },
+  pagination: { nextCursor: null, hasMore: false, limit: 12 },
   // Comprehensive filters matching API documentation
   filters: cloneDefaultPropertyFilters(),
   
@@ -26,47 +26,47 @@ const usePropertyStore = create((set, get) => ({
   
   // Actions
   // Public search using propertyAPIService (no auth)
-  fetchProperties: async (overrideFilters = {}, page = null, limit = null) => {
+  // `overrideFilters` are merged with the store's current filters.
+  // `cursor` is an opaque base64 token (null/undefined for the first page).
+  // When `append` is true, fetched items are appended to the existing list
+  // (used by "Load more"); otherwise the list is replaced (new search / filter
+  // change).
+  fetchProperties: async (overrideFilters = {}, cursor = null, limit = null, append = false) => {
     try {
       set({ isLoading: true, error: null });
       const state = get();
-      
+
       // Merge current filters with any overrides
       const searchFilters = { ...state.filters, ...overrideFilters };
-      
-      // Use provided page/limit or defaults from filters
-      const searchPage = page || searchFilters.page || 1;
       const searchLimit = limit || searchFilters.limit || 12;
-      
+
       // Clean up null/undefined/empty values for API call
       const cleanFilters = cleanPropertyFilters(searchFilters);
 
-      const response = await propertyAPIService.searchProperties(cleanFilters, searchPage, searchLimit);
+      const response = await propertyAPIService.searchProperties(cleanFilters, cursor, searchLimit);
       const payload = response.data || {};
-      
-      set({
-        properties: payload.properties || payload.items || [],
+      const items = Array.isArray(payload.items) ? payload.items : [];
+      const nextCursor = payload.next_cursor ?? null;
+      const hasMore = Boolean(payload.has_more);
+
+      set((prevState) => ({
+        properties: append ? [...prevState.properties, ...items] : items,
         pagination: {
-          page: payload.page || searchPage,
-          totalPages: payload.total_pages || payload.totalPages || 1,
-          total: payload.total || 0,
+          nextCursor,
+          hasMore,
           limit: payload.limit || searchLimit,
-        },
-        filters: {
-          ...state.filters,
-          page: payload.page || searchPage,
         },
         filtersChanged: false, // Mark as applied
         isLoading: false,
-      });
-      
+      }));
+
       return payload;
     } catch (error) {
       set({
         isLoading: false,
         error: extractError(error, 'Failed to fetch properties')
       });
-      return { items: [], properties: [] };
+      return { items: [], next_cursor: null, has_more: false };
     }
   },
 
@@ -93,7 +93,7 @@ const usePropertyStore = create((set, get) => ({
       set({ isSwipeLoading: true });
       const params = { ...filters, is_liked: true };
       const data = await swipeService.getSwipes(params);
-      const items = data?.properties || [];
+      const items = Array.isArray(data?.items) ? data.items : [];
       set({ likedProperties: items, isSwipeLoading: false });
       return items;
     } catch (error) {
@@ -150,11 +150,15 @@ const usePropertyStore = create((set, get) => ({
     try {
       set({ isLoading: true, error: null });
       const data = await propertyService.getUserProperties();
+      // Cursor-paginated endpoint now returns { items, next_cursor, has_more }.
+      // Fall back to the raw payload for non-list responses (e.g. plain arrays
+      // from older flows) so we stay robust.
+      const items = Array.isArray(data?.items) ? data.items : (Array.isArray(data) ? data : []);
       set({
-        userProperties: data,
+        userProperties: items,
         isLoading: false,
       });
-      return data;
+      return items;
     } catch (error) {
       set({
         isLoading: false,
@@ -288,6 +292,12 @@ const usePropertyStore = create((set, get) => ({
   // Mark filters as applied (called after successful fetch)
   markFiltersApplied: () => {
     set({ filtersChanged: false });
+  },
+
+  // AUDIT FIX (2.5): allow SWR-driven components to sync pagination into the
+  // store so sibling components (e.g. SEO prev/next links) stay up to date.
+  setPagination: (pagination) => {
+    set({ pagination: { ...get().pagination, ...pagination } });
   },
   
   // Get active filters count for UI badge

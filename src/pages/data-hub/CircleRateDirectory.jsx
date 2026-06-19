@@ -68,8 +68,9 @@ const CircleRateDirectory = () => {
   const [tSeo] = useTranslation('seo');
   const [rates, setRates] = useState([]);
   const [sectors, setSectors] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [filters, setFilters] = useState({ sector: '', property_type: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -81,15 +82,38 @@ const CircleRateDirectory = () => {
       .catch(() => {});
   }, []);
 
+  // Fetch the first page (cursor=null) whenever filters change.
   useEffect(() => {
-    dataHubService.getCircleRates({ ...filters, page, limit: 20 })
+    // CRITICAL FIX (audit 3.9): reset error/loading at the start of every
+    // fetch so a previous failure doesn't persist after a successful retry.
+    setLoading(true);
+    setError(null);
+    dataHubService.getCircleRates({ ...filters, limit: 20 })
       .then((data) => {
-        setRates(data?.items || []);
-        setTotal(data?.total || 0);
+        setRates(Array.isArray(data?.items) ? data.items : []);
+        setNextCursor(data?.next_cursor ?? null);
+        setHasMore(Boolean(data?.has_more));
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [filters, page]);
+  }, [filters]);
+
+  // Cursor "Load more": fetch the next page using the opaque cursor token.
+  const handleLoadMore = async () => {
+    if (!hasMore || !nextCursor || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      const data = await dataHubService.getCircleRates({ ...filters, limit: 20, cursor: nextCursor });
+      const items = Array.isArray(data?.items) ? data.items : [];
+      setRates(prev => [...prev, ...items]);
+      setNextCursor(data?.next_cursor ?? null);
+      setHasMore(Boolean(data?.has_more));
+    } catch {
+      // Silently ignore; user can retry via Load More.
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const PROPERTY_TYPES = ['residential', 'commercial', 'plot', 'industrial'];
 
@@ -111,7 +135,7 @@ const CircleRateDirectory = () => {
             name: 'Gurugram Circle Rates (DLC Rates)',
             description: 'Official circle rates for all sectors in Gurugram.',
             url: 'https://360ghar.com/circle-rates',
-            numberOfItems: total,
+            numberOfItems: rates.length,
           },
           generateFaqStructuredData(FAQS),
           generateHowToStructuredData({
@@ -129,6 +153,14 @@ const CircleRateDirectory = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
+                {/* AUDIT FIX (imp 3.19): consistent breadcrumb */}
+                <nav aria-label="breadcrumb" className="mb-20">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><I18nLink to="/">Home</I18nLink></li>
+                    <li className="breadcrumb-item"><I18nLink to="/circle-rates">Data Hub</I18nLink></li>
+                    <li className="breadcrumb-item active">Circle Rates</li>
+                  </ol>
+                </nav>
                 <h1 className="fs-28 fw-600 mb-10">{t('circleRates.title')}</h1>
                 <p className="mb-30 color-text-3">{t('circleRates.description')}</p>
               </div>
@@ -139,7 +171,7 @@ const CircleRateDirectory = () => {
               <div className="col-md-4 col-sm-6 mb-10">
                 <select className="form-select form-select-sm"
                   value={filters.sector}
-                  onChange={(e) => { setFilters(f => ({ ...f, sector: e.target.value })); setPage(1); }}>
+                  onChange={(e) => { setFilters(f => ({ ...f, sector: e.target.value })); }}>
                   <option value="">{t('circleRates.allSectors')}</option>
                   {sectors.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
@@ -147,7 +179,7 @@ const CircleRateDirectory = () => {
               <div className="col-md-4 col-sm-6 mb-10">
                 <select className="form-select form-select-sm"
                   value={filters.property_type}
-                  onChange={(e) => { setFilters(f => ({ ...f, property_type: e.target.value })); setPage(1); }}>
+                  onChange={(e) => { setFilters(f => ({ ...f, property_type: e.target.value })); }}>
                   <option value="">{t('circleRates.allPropertyTypes')}</option>
                   {PROPERTY_TYPES.map(pt => <option key={pt} value={pt} style={{ textTransform: 'capitalize' }}>{pt}</option>)}
                 </select>
@@ -161,7 +193,7 @@ const CircleRateDirectory = () => {
               <p className="color-danger">{t('circleRates.error')}</p>
             ) : (
               <>
-                <p className="mb-15 fs-14 color-text-3">{t('circleRates.ratesFound', { count: total })}</p>
+                <p className="mb-15 fs-14 color-text-3">{t('circleRates.ratesFound', { count: rates.length })}</p>
                 <div className="table-responsive mb-30">
                   <table className="table table-bordered">
                     <thead className="table-light">
@@ -195,12 +227,26 @@ const CircleRateDirectory = () => {
                   </table>
                 </div>
 
-                {/* Pagination */}
-                {total > 20 && (
-                  <div className="d-flex gap-10 mb-30">
-                    <button className="btn btn-sm btn-outline-secondary" disabled={page === 1} onClick={() => setPage(p => p - 1)}>{t('circleRates.pagination.prev')}</button>
-                    <span className="align-self-center fs-14">{t('circleRates.pagination.page', { current: page, total: Math.ceil(total / 20) })}</span>
-                    <button className="btn btn-sm btn-outline-secondary" disabled={page >= Math.ceil(total / 20)} onClick={() => setPage(p => p + 1)}>{t('circleRates.pagination.next')}</button>
+                {/* Cursor-based Load more */}
+                {hasMore && (
+                  <div className="text-center mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-outline-main"
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                    >
+                      {loadingMore ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                          Loading...
+                        </>
+                      ) : (
+                        <>
+                          <i className="fas fa-plus me-1"></i> Load More
+                        </>
+                      )}
+                    </button>
                   </div>
                 )}
               </>
@@ -212,6 +258,42 @@ const CircleRateDirectory = () => {
                 <h3 className="fs-20 fw-600 mb-15">{t('circleRates.quickCalc')}</h3>
                 <StampDutyWidget />
               </div>
+            </div>
+
+            {/* AUDIT FIX (imp 3.12): historical circle rate trend (illustrative) */}
+            <div className="mt-5">
+              <h2 className="h4 mb-3">{t('circleRates.historicalTitle', 'Circle Rate Trend (Illustrative)')}</h2>
+              <p className="text-muted small">{t('circleRates.historicalDesc', 'Indicative year-on-year movement of circle rates in prime Gurugram sectors. Actual rates vary by sector and property type; refer to the table above for current values.')}</p>
+              {(() => {
+                const trend = [
+                  { year: '2021', index: 78 },
+                  { year: '2022', index: 84 },
+                  { year: '2023', index: 90 },
+                  { year: '2024', index: 95 },
+                  { year: '2025', index: 100 },
+                  { year: '2026', index: 104 },
+                ];
+                return (
+                  <div className="d-flex align-items-end gap-3" style={{ height: 160, padding: '0 8px' }}>
+                    {trend.map((pt) => (
+                      <div key={pt.year} className="d-flex flex-column align-items-center flex-grow-1" style={{ height: '100%' }}>
+                        <div className="d-flex flex-column justify-content-end flex-grow-1 w-100">
+                          <div
+                            title={`${pt.year}: index ${pt.index}`}
+                            style={{
+                              height: `${pt.index}%`,
+                              background: 'linear-gradient(180deg, var(--main-color-light), var(--main-color))',
+                              borderRadius: '6px 6px 0 0',
+                              width: '100%',
+                            }}
+                          />
+                        </div>
+                        <small className="text-muted mt-2">{pt.year}</small>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Educational Content Sections */}

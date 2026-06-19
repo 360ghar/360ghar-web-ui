@@ -1,5 +1,4 @@
-import { useState, useEffect }  from 'react';
-import Pagination from '../../common/ui/Pagination';
+import { useEffect }  from 'react';
 import PropertyFilterBottom from '../property-filters/PropertyFilterBottom';
 import PropertyItem from './PropertyItem';
 import SearchSidebar from '../../common/search/SearchSidebar';
@@ -9,57 +8,73 @@ import { usePropertyStore } from '../../store/propertyStore';
 
 const PropertySidebarSection = () => {
     const { location, isLocating, error: locationError } = useLocationStore();
-    const { 
-        properties, 
-        pagination, 
-        isLoading, 
-        error: propertyError, 
-        fetchProperties 
+    const {
+        properties,
+        pagination,
+        isLoading,
+        error: propertyError,
+        fetchProperties,
+        setFilters,
+        filters: storeFilters,
+        clearFilters,
+        getActiveFiltersCount
     } = usePropertyStore();
-    
-    const [filters, setFilters] = useState({});
 
-    // Fetch properties whenever location or filters change
+    // UX FIX (audit 2.12): use the global store's filter state directly so
+    // filters persist across the main listing page and the sidebar page.
+    const filters = storeFilters;
+    const activeFilterCount = getActiveFiltersCount();
+
+    // Fetch properties whenever location or filters change (first page only;
+    // cursor=null resets the list for the new filter set).
     useEffect(() => {
         if (location.lat && location.lng) {
+            // CRITICAL FIX (audit 2.6): use the canonical API param names
+            // (lat, lng, radius) used everywhere else in the codebase, not
+            // (latitude, longitude, radius_km). See propertyAPIService.js.
             const searchPayload = {
-                latitude: location.lat,
-                longitude: location.lng,
-                radius_km: 10,
+                lat: location.lat,
+                lng: location.lng,
+                radius: 10,
                 sort_by: 'distance',
                 ...filters,
             };
-            fetchProperties(searchPayload, 1); // Fetch page 1
+            fetchProperties(searchPayload); // First page (cursor=null)
         }
     }, [location, filters, fetchProperties]);
 
     const handleFiltersChange = (newFilters) => {
+        // Push changes into the global store so they persist across pages.
         setFilters(newFilters);
     };
 
-    const handlePageChange = (newPage) => {
-        if (location.lat && location.lng) {
-            const searchPayload = { 
-                latitude: location.lat, 
-                longitude: location.lng,
-                radius_km: 10,
-                ...filters 
-            };
-            fetchProperties(searchPayload, newPage);
-        }
+    const handleClearFilters = () => {
+        clearFilters();
+    };
+
+    // Cursor-based "Load more": fetch the next page using the opaque
+    // next_cursor token and append to the existing list.
+    const handleLoadMore = () => {
+        if (!pagination.hasMore || !pagination.nextCursor) return;
+        const searchPayload = {
+            lat: location.lat,
+            lng: location.lng,
+            radius: 10,
+            ...filters,
+        };
+        fetchProperties(searchPayload, pagination.nextCursor, null, true);
     };
     return (
         <>
             {/* =========================== Property Sidebar Section Start ====================== */}
             <section className="property bg-gray-100 padding-y-120">
                 <div className="container container-two">
-                    <div className="property-filter">   
+                    <div className="property-filter">
                         <PropertyFilterBottom
-                            total={pagination.total}
-                            currentPage={pagination.page}
+                            loadedCount={properties.length}
                         />
                     </div>
-                    
+
                     <div className="row gy-4">
                         <div className="col-lg-8">
                             {/* Location Status */}
@@ -73,10 +88,21 @@ const PropertySidebarSection = () => {
                                         <i className="fas fa-exclamation-triangle"></i> {locationError}
                                     </div>
                                 ) : (
-                                    <div className="text-success small">
-                                        <i className="fas fa-map-marker-alt"></i> Showing properties near {location.name}
-                                        {properties.length > 0 && (
-                                            <span className="ms-2">({properties.length} found)</span>
+                                    <div className="text-success small d-flex align-items-center justify-content-between">
+                                        <span>
+                                            <i className="fas fa-map-marker-alt"></i> Showing properties near {location.name}
+                                            {properties.length > 0 && (
+                                                <span className="ms-2">({properties.length} found)</span>
+                                            )}
+                                        </span>
+                                        {activeFilterCount > 0 && (
+                                            <button
+                                                type="button"
+                                                className="btn btn-link btn-sm text-danger p-0"
+                                                onClick={handleClearFilters}
+                                            >
+                                                <i className="fas fa-times me-1"></i>Clear Filters
+                                            </button>
                                         )}
                                     </div>
                                 )}
@@ -111,7 +137,7 @@ const PropertySidebarSection = () => {
                                 ) : (
                                     properties.map((property, index) => (
                                         <div className="col-sm-6" key={property.id || index}>
-                                            <PropertyItem 
+                                            <PropertyItem
                                                 itemClass="style-two style-shaped compact-card"
                                                 btnClass="text-gradient fw-semibold"
                                                 property={property}
@@ -121,7 +147,7 @@ const PropertySidebarSection = () => {
                                                 btnRenderBottom={true}
                                                 btnRenderRight={false}
                                             />
-                                        </div> 
+                                        </div>
                                     ))
                                 )}
                             </div>
@@ -131,18 +157,32 @@ const PropertySidebarSection = () => {
                             <div className="mb-4">
                                 <LocationSearchInput />
                             </div>
-                            
+
                             {/* Search Sidebar */}
                             <SearchSidebar onFiltersChange={handleFiltersChange} />
                         </div>
                     </div>
-                    {/* Pagination */}
-                    {properties.length > 0 && pagination.totalPages > 1 && (
-                        <Pagination
-                            currentPage={pagination.page}
-                            totalPages={pagination.totalPages}
-                            onPageChange={handlePageChange}
-                        />
+                    {/* Cursor-based Load more */}
+                    {properties.length > 0 && pagination.hasMore && (
+                        <div className="text-center mt-4">
+                            <button
+                                type="button"
+                                className="btn btn-outline-main"
+                                onClick={handleLoadMore}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? (
+                                    <>
+                                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                        Loading...
+                                    </>
+                                ) : (
+                                    <>
+                                        <i className="fas fa-plus me-1"></i> Load More
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     )}
                 </div>
             </section>

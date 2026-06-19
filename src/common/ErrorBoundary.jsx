@@ -1,6 +1,7 @@
 import { Component } from 'react';
+import { useLocation } from 'react-router-dom';
 
-export default class ErrorBoundary extends Component {
+class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -12,6 +13,16 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('[ErrorBoundary]', error, errorInfo);
+  }
+
+  // CRITICAL FIX (audit 5.6): reset the error state when the route changes
+  // (via the `resetKey` prop wired by the wrapper below) so navigating away
+  // from a crashed page recovers automatically instead of staying stuck on
+  // the error screen.
+  componentDidUpdate(prevProps) {
+    if (this.state.hasError && prevProps.resetKey !== this.props.resetKey) {
+      this.setState({ hasError: false, error: null });
+    }
   }
 
   handleReset = () => {
@@ -92,3 +103,15 @@ export default class ErrorBoundary extends Component {
     return this.props.children;
   }
 }
+
+/**
+ * Wrapper that binds the ErrorBoundary to the current route so it auto-resets
+ * on navigation. Use this as the default export in the app tree.
+ */
+function ErrorBoundaryWithRoute(props) {
+  const location = useLocation();
+  return <ErrorBoundary resetKey={location.pathname} {...props} />;
+}
+
+export default ErrorBoundaryWithRoute;
+export { ErrorBoundary };

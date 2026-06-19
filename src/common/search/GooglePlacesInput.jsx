@@ -1,5 +1,5 @@
 /* global google */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
 // Singleton loader for Google Maps - preloads on first import for faster autocomplete
@@ -55,6 +55,9 @@ const GooglePlacesInput = ({
   const initHandleRef = useRef(null);
   const initPromiseRef = useRef(null);
   const onSelectRef = useRef(onSelect);
+  // UX FIX (audit 5.8): loading indicator shown while the Places library is
+  // still being fetched, so the dropdown isn't silently blank.
+  const [isPlacesLoading, setIsPlacesLoading] = useState(false);
 
   // Stable serialized keys for effect dependencies
   const typesKey = Array.isArray(types) ? types.join('|') : '';
@@ -104,6 +107,7 @@ const GooglePlacesInput = ({
             return;
           }
 
+          setIsPlacesLoading(true);
           await loaderSingleton.preload();
 
           if (!isMounted || !input) return;
@@ -149,6 +153,7 @@ const GooglePlacesInput = ({
         }
       })().finally(() => {
         initPromiseRef.current = null;
+        setIsPlacesLoading(false);
       });
 
       return initPromiseRef.current;
@@ -193,6 +198,26 @@ const GooglePlacesInput = ({
         placeholder={placeholder}
         autoComplete="off"
       />
+      {isPlacesLoading && (
+        <span
+          className="google-places-input__spinner"
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            right: '10px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: '16px',
+            height: '16px',
+            border: '2px solid var(--border-color-light, #e0e6ed)',
+            borderTopColor: 'var(--main-color, #ff6b00)',
+            borderRadius: '50%',
+            display: 'inline-block',
+            animation: 'google-places-spin 0.8s linear infinite',
+          }}
+        />
+      )}
+      <style>{`@keyframes google-places-spin { to { transform: translateY(-50%) rotate(360deg); } }`}</style>
     </div>
   );
 };

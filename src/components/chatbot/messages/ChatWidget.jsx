@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PropertyResultsWidget from '../widgets/PropertyResultsWidget';
 import PropertyDetailWidget from '../widgets/PropertyDetailWidget';
 import VisitListWidget from '../widgets/VisitListWidget';
@@ -37,7 +38,7 @@ class WidgetErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div className="chatbot-widget chatbot-widget--error">
-          <p>Could not display this result.</p>
+          <p>{this.props.errorText}</p>
         </div>
       );
     }
@@ -46,6 +47,7 @@ class WidgetErrorBoundary extends React.Component {
 }
 
 export default function ChatWidget({ message }) {
+  const { t } = useTranslation('common');
   const { widgetName, structuredContent } = message.widget || {};
 
   if (!widgetName) return null;
@@ -54,7 +56,7 @@ export default function ChatWidget({ message }) {
 
   return (
     <div className="chatbot-widget-wrapper">
-      <WidgetErrorBoundary>
+      <WidgetErrorBoundary errorText={t('chatbot.widgetError')}>
         <WidgetComponent
           data={structuredContent}
           widgetName={widgetName}

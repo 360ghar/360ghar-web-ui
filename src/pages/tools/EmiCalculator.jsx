@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -65,6 +66,17 @@ const EmiCalculator = () => {
     const [loanAmount, setLoanAmount] = useState(1000000);
     const [interestRate, setInterestRate] = useState(8.5);
     const [loanTenure, setLoanTenure] = useState(20);
+    // AUDIT FIX (imp 3.1): prepayment simulator inputs.
+    const [prepaymentAmount, setPrepaymentAmount] = useState(0);
+    const [prepaymentMonth, setPrepaymentMonth] = useState(12);
+    const [showAmortization, setShowAmortization] = useState(false);
+    // CRITICAL FIX (audit 3.4): clamp number inputs to the slider's min/max
+    // so the slider and number box never desync.
+    const clamp = (value, min, max) => {
+        const n = Number(value);
+        if (Number.isNaN(n)) return min;
+        return Math.min(Math.max(n, min), max);
+    };
     const emiBreakdown = useMemo(() => {
         const principal = parseFloat(loanAmount);
         const rate = parseFloat(interestRate) / 12 / 100; // Monthly interest rate
@@ -84,6 +96,77 @@ const EmiCalculator = () => {
         return { emi: 0, totalPayment: 0, totalInterest: 0 };
     }, [loanAmount, interestRate, loanTenure]);
 
+    // AUDIT FIX (3.1): year-by-year amortization schedule (principal, interest, balance).
+    const amortizationSchedule = useMemo(() => {
+        const principal = parseFloat(loanAmount);
+        const rate = parseFloat(interestRate) / 12 / 100;
+        const months = parseFloat(loanTenure) * 12;
+        if (!(principal > 0 && rate > 0 && months > 0)) return [];
+        const emi = emiBreakdown.emi;
+        let balance = principal;
+        const years = [];
+        for (let y = 1; y <= loanTenure; y++) {
+            let yearPrincipal = 0;
+            let yearInterest = 0;
+            for (let m = 0; m < 12; m++) {
+                if (balance <= 0) break;
+                const interest = balance * rate;
+                const principalPart = Math.min(emi - interest, balance);
+                yearInterest += interest;
+                yearPrincipal += principalPart;
+                balance -= principalPart;
+            }
+            years.push({
+                year: y,
+                principal: Math.round(yearPrincipal),
+                interest: Math.round(yearInterest),
+                balance: Math.max(Math.round(balance), 0),
+            });
+        }
+        return years;
+    }, [loanAmount, interestRate, loanTenure, emiBreakdown.emi]);
+
+    // AUDIT FIX (imp 3.1): effect of a one-time prepayment on tenure & interest.
+    const prepaymentImpact = useMemo(() => {
+        const principal = parseFloat(loanAmount);
+        const rate = parseFloat(interestRate) / 12 / 100;
+        const months = parseFloat(loanTenure) * 12;
+        const prep = parseFloat(prepaymentAmount);
+        const prepMonth = parseInt(prepaymentMonth, 10);
+        if (!(principal > 0 && rate > 0 && months > 0) || !(prep > 0) || prepMonth < 1) return null;
+        const emi = emiBreakdown.emi;
+        let balance = principal;
+        let totalInterest = 0;
+        let month = 0;
+        // Simulate up to prepayment month.
+        while (month < prepMonth && balance > 0) {
+            const interest = balance * rate;
+            const principalPart = Math.min(emi - interest, balance);
+            totalInterest += interest;
+            balance -= principalPart;
+            month++;
+        }
+        // Apply prepayment.
+        balance = Math.max(balance - prep, 0);
+        // Continue until balance is cleared.
+        while (balance > 0 && month < months * 2) {
+            const interest = balance * rate;
+            const principalPart = Math.min(emi - interest, balance);
+            totalInterest += interest;
+            balance -= principalPart;
+            month++;
+        }
+        const originalInterest = emiBreakdown.totalInterest;
+        const monthsSaved = Math.max(months - month, 0);
+        const interestSaved = Math.max(originalInterest - totalInterest, 0);
+        return {
+            newTenureMonths: month,
+            monthsSaved,
+            interestSaved: Math.round(interestSaved),
+            newTotalInterest: Math.round(totalInterest),
+        };
+    }, [loanAmount, interestRate, loanTenure, prepaymentAmount, prepaymentMonth, emiBreakdown.emi, emiBreakdown.totalInterest]);
+
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat(i18n.language === 'hi' ? 'hi-IN' : 'en-IN', {
             style: 'currency',
@@ -100,6 +183,24 @@ const EmiCalculator = () => {
         setLoanAmount(1000000);
         setInterestRate(8.5);
         setLoanTenure(20);
+        setPrepaymentAmount(0);
+        setPrepaymentMonth(12);
+    };
+
+    // AUDIT FIX (imp 3.2): share results via URL query params.
+    const handleShareResults = async () => {
+        const params = new URLSearchParams({
+            amount: loanAmount,
+            rate: interestRate,
+            tenure: loanTenure,
+        });
+        const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+        try {
+            await navigator.clipboard.writeText(url);
+            toast.success(t('emi.shareCopied', 'Shareable link copied to clipboard!'));
+        } catch {
+            toast.error(t('emi.shareError', 'Could not copy link.'));
+        }
     };
 
     return (
@@ -176,7 +277,7 @@ const EmiCalculator = () => {
                                                             min="100000"
                                                             max="10000000"
                                                             value={loanAmount}
-                                                            onChange={(e) => setLoanAmount(e.target.value)}
+                                                            onChange={(e) => setLoanAmount(clamp(e.target.value, 100000, 10000000))}
                                                         />
                                                     </div>
                                                     <small className="text-muted">
@@ -208,7 +309,7 @@ const EmiCalculator = () => {
                                                             max="20"
                                                             step="0.1"
                                                             value={interestRate}
-                                                            onChange={(e) => setInterestRate(e.target.value)}
+                                                            onChange={(e) => setInterestRate(clamp(e.target.value, 1, 20))}
                                                         />
                                                         <span className="input-group-text">%</span>
                                                     </div>
@@ -239,7 +340,7 @@ const EmiCalculator = () => {
                                                             min="1"
                                                             max="30"
                                                             value={loanTenure}
-                                                            onChange={(e) => setLoanTenure(e.target.value)}
+                                                            onChange={(e) => setLoanTenure(clamp(e.target.value, 1, 30))}
                                                         />
                                                         <span className="input-group-text">{t('emi.years')}</span>
                                                     </div>
@@ -344,6 +445,95 @@ const EmiCalculator = () => {
                                                     </div>
                                                 </div>
                                                 )}
+
+                                                {/* AUDIT FIX (imp 3.2): share results button */}
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-sm btn-outline-main w-100 mt-3"
+                                                    onClick={handleShareResults}
+                                                >
+                                                    <i className="fas fa-share-alt me-2"></i>{t('emi.shareResults', 'Share Results')}
+                                                </button>
+
+                                                {/* AUDIT FIX (imp 3.1): prepayment simulator */}
+                                                <div className="mt-4 p-3 border rounded-2">
+                                                    <h6 className="mb-3">{t('emi.prepaymentTitle', 'Prepayment Simulator')}</h6>
+                                                    <div className="row g-2 mb-3">
+                                                        <div className="col-6">
+                                                            <label className="form-label small text-muted">{t('emi.prepaymentAmount', 'Prepayment Amount')}</label>
+                                                            <input
+                                                                type="number"
+                                                                className="form-control form-control-sm"
+                                                                min="0"
+                                                                value={prepaymentAmount}
+                                                                onChange={(e) => setPrepaymentAmount(Math.max(0, Number(e.target.value)))}
+                                                            />
+                                                        </div>
+                                                        <div className="col-6">
+                                                            <label className="form-label small text-muted">{t('emi.prepaymentMonth', 'After Month #')}</label>
+                                                            <input
+                                                                type="number"
+                                                                className="form-control form-control-sm"
+                                                                min="1"
+                                                                value={prepaymentMonth}
+                                                                onChange={(e) => setPrepaymentMonth(Math.max(1, Number(e.target.value)))}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    {prepaymentImpact && prepaymentAmount > 0 && (
+                                                        <div className="small">
+                                                            <div className="d-flex justify-content-between">
+                                                                <span className="text-muted">{t('emi.monthsSaved', 'Months Saved')}:</span>
+                                                                <span className="fw-bold text-success">{prepaymentImpact.monthsSaved}</span>
+                                                            </div>
+                                                            <div className="d-flex justify-content-between">
+                                                                <span className="text-muted">{t('emi.interestSaved', 'Interest Saved')}:</span>
+                                                                <span className="fw-bold text-success">{formatCurrency(prepaymentImpact.interestSaved)}</span>
+                                                            </div>
+                                                            <div className="d-flex justify-content-between">
+                                                                <span className="text-muted">{t('emi.newTenure', 'New Tenure')}:</span>
+                                                                <span className="fw-bold">{prepaymentImpact.newTenureMonths} {t('emi.months', 'months')}</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* AUDIT FIX (3.1): collapsible amortization schedule */}
+                                                <div className="mt-4">
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-sm btn-link p-0 text-main"
+                                                        onClick={() => setShowAmortization((v) => !v)}
+                                                        aria-expanded={showAmortization}
+                                                    >
+                                                        <i className={`fas ${showAmortization ? 'fa-chevron-down' : 'fa-chevron-right'} me-1`}></i>
+                                                        {t('emi.amortizationSchedule', 'Amortization Schedule (Yearly)')}
+                                                    </button>
+                                                    {showAmortization && amortizationSchedule.length > 0 && (
+                                                        <div className="table-responsive mt-2" style={{ maxHeight: 320 }}>
+                                                            <table className="table table-sm table-bordered">
+                                                                <thead className="table-light">
+                                                                    <tr>
+                                                                        <th>{t('emi.year', 'Year')}</th>
+                                                                        <th>{t('emi.principal', 'Principal')}</th>
+                                                                        <th>{t('emi.interest', 'Interest')}</th>
+                                                                        <th>{t('emi.balance', 'Balance')}</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {amortizationSchedule.map((row) => (
+                                                                        <tr key={row.year}>
+                                                                            <td>{row.year}</td>
+                                                                            <td>{formatCurrency(row.principal)}</td>
+                                                                            <td>{formatCurrency(row.interest)}</td>
+                                                                            <td>{formatCurrency(row.balance)}</td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -4,8 +4,7 @@ import ListGridButtons from '../../common/listing/ListGridButtons';
 import { usePropertyStore } from '../../store/propertyStore';
 
 const PropertyFilterBottom = ({
-    total = 0,
-    currentPage = 1,
+    loadedCount = 0,
     viewMode = 'grid',
     onViewModeChange
 }) => {
@@ -25,28 +24,23 @@ const PropertyFilterBottom = ({
 
     const handleSortChangeEnhanced = async (newSortValue) => {
         updateFilter('sort_by', newSortValue);
-        updateFilter('page', 1);
         await applyFilters();
 
         const params = new URLSearchParams(searchParams);
         params.set('sort_by', newSortValue);
-        params.set('page', '1');
         navigate(`?${params.toString()}`, { replace: true });
     };
-
-    const showingStart = total > 0 ? ((currentPage - 1) * 12) + 1 : 0;
-    const showingEnd = Math.min(currentPage * 12, total);
 
     return (
         <div className="property-filter__bottom flx-between gap-2">
             <div className="property-results-info d-flex align-items-center gap-3 flex-wrap">
                 <span className="property-filter__text font-16 text-gray-800">
-                    {total > 0 ?
-                        `Showing ${showingStart}-${showingEnd} of ${total.toLocaleString()} properties` :
-                        'No properties found'
+                    {loadedCount > 0
+                        ? `${loadedCount.toLocaleString()} properties`
+                        : 'No properties found'
                     }
                 </span>
-                {total > 0 && (
+                {loadedCount > 0 && (
                     <div className="sort-options">
                         <label htmlFor="property-sort-select" className="visually-hidden">Sort properties</label>
                         <select

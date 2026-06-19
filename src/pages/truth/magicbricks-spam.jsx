@@ -1,6 +1,7 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { competitors } from '../../data/competitors';
+import PageLoader from '../../common/PageLoader';
 
 const TruthPage = lazy(() => import('./TruthPage'));
 
@@ -10,37 +11,41 @@ const MagicBricksTruth = () => {
   
   const keyIssues = [
     {
-      title: 'Massive Spam Call Problem',
-      description: 'Within 24 hours of posting an inquiry on MagicBricks, users report receiving 50+ calls from brokers. Their business model relies on selling user data to agents.',
+      title: 'Frequent Broker Calls After Inquiries',
+      description: 'Users report receiving a high volume of calls from brokers within 24 hours of posting an inquiry on MagicBricks. The platform shares contact details with agents as part of its lead-generation model.',
       source: 'User reviews, Google Play Store'
     },
     {
-      title: 'Data Sold to Broker Networks',
-      description: 'MagicBricks monetizes user contact information by selling it to broker databases. Your phone number becomes available to every agent in the city.',
+      title: 'Contact Details Shared With Broker Networks',
+      description: 'MagicBricks monetizes by providing user contact information to broker databases. Your phone number may become available to multiple agents in the city.',
       source: 'User testimonials'
     },
     {
-      title: 'Fake "Verified" Listings',
-      description: 'The "verified" badge on MagicBricks listings is largely symbolic. Users report that half the properties they viewed were already rented or never existed.',
+      title: 'Verification Inconsistencies',
+      description: 'The "verified" badge on MagicBricks listings does not always reflect on-ground status. Users report that some properties they viewed were already rented or no longer available.',
       source: 'User reviews on Trustpilot'
     },
     {
-      title: 'Heavy Broker Reliance',
-      description: 'Despite positioning as a direct owner-tenant platform, MagicBricks is dominated by broker listings. Direct owner listings are rare and hard to find.',
+      title: 'Predominantly Broker Listings',
+      description: 'While positioned as a direct owner-tenant platform, MagicBricks is largely populated by broker listings. Direct owner listings are comparatively limited.',
       source: 'Platform analysis'
     }
   ];
   
   return (
-    <TruthPage
-      competitor={competitor}
-      pageTitle={tSeo('truth.magicbricks.title')}
-      pageDescription={tSeo('truth.magicbricks.description')}
-      canonicalPath="/truth/magicbricks-spam"
-      truthTitle="The Truth About MagicBricks Spam Calls"
-      introText="MagicBricks has perfected the art of selling your data to brokers. What starts as a simple property search becomes a nightmare of spam calls."
-      keyIssues={keyIssues}
-    />
+    // CRITICAL FIX (audit 4.6): wrap lazy-loaded component in Suspense so a
+    // slow/failed chunk shows a loader instead of crashing the route.
+    <Suspense fallback={<PageLoader />}>
+      <TruthPage
+        competitor={competitor}
+        pageTitle={tSeo('truth.magicbricks.title')}
+        pageDescription={tSeo('truth.magicbricks.description')}
+        canonicalPath="/truth/magicbricks-spam"
+        truthTitle="What to Know About MagicBricks Spam Calls"
+        introText="MagicBricks shares contact details with brokers as part of its lead-generation model. A simple property search can lead to a high volume of broker calls. Here is what users report and how to navigate it."
+        keyIssues={keyIssues}
+      />
+    </Suspense>
   );
 };
 

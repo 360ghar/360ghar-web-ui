@@ -44,6 +44,7 @@
     "more": "More"
   },
   "header": {
+    "skipToContent": "Skip to main content",
     "signIn": "Sign In",
     "myAccount": "My Account",
     "favorites": "Favorites",
@@ -57,7 +58,9 @@
   },
   "offCanvas": {
     "location": "Gurugram, Haryana India, 122001",
-    "email": "info@360ghar.com"
+    "email": "info@360ghar.com",
+    "mapTitle": "360Ghar service area map",
+    "panelAriaLabel": "360Ghar menu panel"
   },
   "footer": {
     "connectWithUs": "Connect With Us",
@@ -108,7 +111,10 @@
   "mobileMenu": {
     "welcomeBack": "Welcome back!",
     "signIn": "Login",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "searchPlaceholder": "Search properties, localities...",
+    "searchAriaLabel": "Search",
+    "searchBtn": "Search"
   },
   "commonData": {
     "addressLabel": "Address",
@@ -139,7 +145,57 @@
     "tryNow": "Try now",
     "signInToUnlock": "Sign in to unlock",
     "lockedManageProperties": "Manage Properties",
-    "lockedCheckRent": "Check Rent"
+    "lockedCheckRent": "Check Rent",
+    "guestBannerText": "Sign in for visits, rent tracking & more",
+    "guestBannerCta": "Sign In",
+    "errorMessage": "Sorry, something went wrong. Please try again.",
+    "widgetError": "Could not display this result.",
+    "typingAriaLabel": "AI is thinking",
+    "tools": {
+      "checkingProperties": "Checking properties",
+      "creatingProperty": "Creating property",
+      "gettingPropertyDetails": "Getting property details",
+      "updatingProperty": "Updating property",
+      "updatingAvailability": "Updating availability",
+      "checkingLease": "Checking lease",
+      "checkingRentHistory": "Checking rent history",
+      "creatingRequest": "Creating request",
+      "checkingMaintenance": "Checking maintenance",
+      "checkingAvailability": "Checking availability",
+      "gettingPricing": "Getting pricing",
+      "creatingBooking": "Creating booking",
+      "checkingBookings": "Checking bookings",
+      "gettingBookingDetails": "Getting booking details",
+      "cancellingBooking": "Cancelling booking",
+      "checkingStatus": "Checking status",
+      "listingProperties": "Listing properties",
+      "gettingProperty": "Getting property",
+      "creatingPropertyForOwner": "Creating property",
+      "verifyingProperty": "Verifying property",
+      "checkingLeases": "Checking leases",
+      "creatingLease": "Creating lease",
+      "terminatingLease": "Terminating lease",
+      "checkingOverdueRent": "Checking overdue rent",
+      "recordingPayment": "Recording payment",
+      "updatingMaintenance": "Updating maintenance",
+      "checkingAllBookings": "Checking all bookings",
+      "updatingBooking": "Updating booking",
+      "loadingDashboard": "Loading dashboard",
+      "checkingSystem": "Checking system",
+      "searchingProperties": "Searching properties",
+      "loadingFeed": "Loading feed"
+    },
+    "widgets": {
+      "resultTitle": "Result",
+      "resultReceived": "Result received.",
+      "priceOnRequest": "Price on request",
+      "propertiesFound": "Properties Found",
+      "resultCount": "{{count}} result",
+      "resultCount_other": "{{count}} results",
+      "noProperties": "No properties found matching your criteria.",
+      "resultsNotAvailable": "Results not available.",
+      "viewAll": "View all {{count}} properties →"
+    }
   },
   "scrollToTop": "Scroll to top",
   "cta": {
@@ -150,6 +206,52 @@
   },
   "newsletter": {
     "title": "Subscribe To Our Newsletter",
-    "description": "Get the latest property listings, exclusive offers, and real estate insights delivered straight to your inbox. Let us help you find your dream home in Gurugram's finest locations."
+    "description": "Get the latest property listings, exclusive offers, and real estate insights delivered straight to your inbox. Let us help you find your dream home in Gurugram's finest locations.",
+    "emailPlaceholder": "Your Email",
+    "subscribeBtn": "Subscribe Now",
+    "subscribeSuccess": "Thanks for joining!"
+  },
+  "contentSeo": {
+    "breadcrumbHome": "Home",
+    "share": "Share",
+    "shareOn": "Share on",
+    "copyLink": "Copy Link",
+    "linkCopied": "Link copied to clipboard!",
+    "searchPlaceholder": "Search...",
+    "searchJobs": "Search roles...",
+    "allCategories": "All Categories",
+    "filterByCategory": "Filter by category",
+    "noResults": "No matching results found.",
+    "relatedPosts": "Related Posts",
+    "relatedPostsDesc": "Keep reading with these popular articles.",
+    "loadingPosts": "Loading posts...",
+    "glossaryAzNav": "Jump to letter",
+    "glossaryAll": "All",
+    "referralHowItWorks": "How Your Referral Is Tracked",
+    "referralTrackingDesc": "Once you submit a referral, here is what happens next:",
+    "referralStep1": "You submit the property owner's details via the form below.",
+    "referralStep2": "Our team verifies the property and contacts the owner within 48 hours.",
+    "referralStep3": "When the property is listed on 360Ghar, you earn ₹100.",
+    "referralStep4": "When a deal closes (rent or sale), you earn up to ₹10,000.",
+    "referralStatusTitle": "Track Your Referrals",
+    "referralStatusDesc": "After submission, you will receive a Reference ID by email and SMS. Use it to check the status of your referral and rewards with our team at info@360ghar.com.",
+    "referralDashboardNote": "A self-service referral dashboard is coming soon. Until then, contact us with your Reference ID for real-time updates.",
+    "popularPages": "Popular pages",
+    "notFoundSearchPlaceholder": "Search properties, localities, tools...",
+    "notFoundSearchBtn": "Search",
+    "notFoundSearchHint": "Or try searching for what you need:",
+    "notFoundLocalities": "Localities"
+  },
+  "pagination": {
+    "navAriaLabel": "Page navigation",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "pageAriaLabel": "Page {{page}}",
+    "jumpToLabel": "Jump to page",
+    "jumpToAriaLabel": "Jump to page number",
+    "jumpToBtn": "Go"
+  },
+  "offlineIndicator": {
+    "message": "You are offline. Some features may be unavailable."
   }
 }

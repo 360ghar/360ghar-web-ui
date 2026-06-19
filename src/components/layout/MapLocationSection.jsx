@@ -262,6 +262,22 @@ const MapLocationSection = () => {
         resetToCurrentLocation();
     };
 
+    // Cursor-based "Load more": re-issue the same location/sort search using
+    // the opaque next_cursor token and append the next page of results.
+    const handleLoadMoreProperties = () => {
+        if (!pagination.hasMore || !pagination.nextCursor) return;
+        if (location.lat && location.lng) {
+            fetchProperties(
+                { lat: location.lat, lng: location.lng, radius, sort_by: sortBy },
+                pagination.nextCursor,
+                null,
+                true
+            );
+        } else {
+            fetchProperties({ sort_by: sortBy }, pagination.nextCursor, null, true);
+        }
+    };
+
     // Group properties by location
     const groupPropertiesByLocation = useMemo(() => {
         const grouped = {};
@@ -592,12 +608,12 @@ const MapLocationSection = () => {
                             </div>
                         )}
 
-                        {/* Load More Button */}
-                        {pagination.page < pagination.totalPages && (
+                        {/* Cursor-based Load More Button */}
+                        {pagination.hasMore && (
                             <div className="text-center mt-5">
                                 <button
                                     className="btn btn-main"
-                                    onClick={() => fetchProperties({ page: pagination.page + 1 })}
+                                    onClick={handleLoadMoreProperties}
                                     disabled={isLoading}
                                 >
                                     {isLoading ? (
