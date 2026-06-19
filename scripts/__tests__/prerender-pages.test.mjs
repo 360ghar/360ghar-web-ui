@@ -177,6 +177,8 @@ test('prerenderRoutes reports cacheHits and rendered counts from the route impl'
 test('prerenderRoutes runs routes concurrently (all in flight together)', async () => {
   const browser = { async close() {} };
   const started = [];
+  let inFlight = 0;
+  let maxInFlight = 0;
   const routes = Array.from({ length: 4 }, (_, i) => ({ route: `/r${i}` }));
 
   await prerenderRoutes('http://127.0.0.1:4317', routes, {
@@ -184,15 +186,19 @@ test('prerenderRoutes runs routes concurrently (all in flight together)', async 
     launchBrowser: async () => browser,
     prerenderRouteImpl: async (_baseUrl, routeConfig) => {
       started.push(routeConfig.route);
+      inFlight += 1;
+      maxInFlight = Math.max(maxInFlight, inFlight);
       // Hold each worker open so all four overlap. If execution were sequential,
       // the second could not start before the first resolves.
       await new Promise((resolve) => setTimeout(resolve, 30));
+      inFlight -= 1;
       return { cacheHit: false };
     },
   });
 
   // All four workers started before any resolved (30ms overlap window).
   assert.equal(started.length, 4);
+  assert.ok(maxInFlight > 1, 'expected overlapping route execution');
 });
 
 test('throwIfPrerenderFailed turns route failures into build failures', () => {

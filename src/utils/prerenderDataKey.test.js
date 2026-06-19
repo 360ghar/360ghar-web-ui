@@ -47,4 +47,10 @@ describe('buildRequestKey', () => {
   it('defaults method to get and empty url to root', () => {
     expect(buildRequestKey({})).toBe('get /');
   });
+
+  it('does not strip near-prefix baseURL matches', () => {
+    expect(buildRequestKey({ url: '/apiary/properties?limit=6', baseURL: '/api' })).toBe(
+      'get /apiary/properties?limit=6'
+    );
+  });
 });

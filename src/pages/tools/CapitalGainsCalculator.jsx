@@ -105,12 +105,16 @@ const CapitalGainsCalculator = () => {
         const sy = searchParams.get('sy');
         const expenses = searchParams.get('expenses');
         const slab = searchParams.get('slab');
+        const allowedSlabs = new Set([0, 5, 20, 30]);
         if (sale !== null) setSalePrice(Number(sale) || 0);
         if (purchase !== null) setPurchasePrice(Number(purchase) || 0);
-        if (py !== null) setPurchaseYear(py);
-        if (sy !== null) setSaleYear(sy);
+        if (py !== null && ciiData[py]) setPurchaseYear(py);
+        if (sy !== null && ciiData[sy]) setSaleYear(sy);
         if (expenses !== null) setTransferExpenses(Number(expenses) || 0);
-        if (slab !== null) setSlabRate(Number(slab) || 0);
+        if (slab !== null) {
+            const parsedSlab = Number(slab);
+            if (allowedSlabs.has(parsedSlab)) setSlabRate(parsedSlab);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

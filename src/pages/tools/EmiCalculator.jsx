@@ -68,23 +68,6 @@ const EmiCalculator = () => {
     const [interestRate, setInterestRate] = useState(8.5);
     const [loanTenure, setLoanTenure] = useState(20);
 
-    // AUDIT FIX (shareable-link): restore inputs from a shared URL produced by
-    // handleShareResults so a recipient sees the shared calculation, not defaults.
-    const [searchParams] = useSearchParams();
-    useEffect(() => {
-        const amount = searchParams.get('amount');
-        const rate = searchParams.get('rate');
-        const tenure = searchParams.get('tenure');
-        if (amount !== null) setLoanAmount(Number(amount) || 0);
-        if (rate !== null) setInterestRate(Number(rate) || 0);
-        if (tenure !== null) setLoanTenure(Number(tenure) || 0);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // AUDIT FIX (imp 3.1): prepayment simulator inputs.
-    const [prepaymentAmount, setPrepaymentAmount] = useState(0);
-    const [prepaymentMonth, setPrepaymentMonth] = useState(12);
-    const [showAmortization, setShowAmortization] = useState(false);
     // CRITICAL FIX (audit 3.4): clamp number inputs to the slider's min/max
     // so the slider and number box never desync.
     const clamp = (value, min, max) => {
@@ -92,6 +75,24 @@ const EmiCalculator = () => {
         if (Number.isNaN(n)) return min;
         return Math.min(Math.max(n, min), max);
     };
+
+    // AUDIT FIX (shareable-link): restore inputs from a shared URL produced by
+    // handleShareResults so a recipient sees the shared calculation, not defaults.
+    const [searchParams, setSearchParams] = useSearchParams();
+    useEffect(() => {
+        const amount = searchParams.get('amount');
+        const rate = searchParams.get('rate');
+        const tenure = searchParams.get('tenure');
+        if (amount !== null) setLoanAmount(clamp(Number(amount), 100000, 10000000));
+        if (rate !== null) setInterestRate(clamp(Number(rate), 1, 20));
+        if (tenure !== null) setLoanTenure(clamp(Number(tenure), 1, 30));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // AUDIT FIX (imp 3.1): prepayment simulator inputs.
+    const [prepaymentAmount, setPrepaymentAmount] = useState(0);
+    const [prepaymentMonth, setPrepaymentMonth] = useState(12);
+    const [showAmortization, setShowAmortization] = useState(false);
     const emiBreakdown = useMemo(() => {
         const principal = parseFloat(loanAmount);
         const rate = parseFloat(interestRate) / 12 / 100; // Monthly interest rate
@@ -200,6 +201,7 @@ const EmiCalculator = () => {
         setLoanTenure(20);
         setPrepaymentAmount(0);
         setPrepaymentMonth(12);
+        setSearchParams({});
     };
 
     // AUDIT FIX (imp 3.2): share results via URL query params.

@@ -110,7 +110,7 @@ async function readManifest(cacheDir) {
   try {
     const raw = await readFile(nodePath.join(cacheDir, 'manifest.json'), 'utf-8');
     const parsed = JSON.parse(raw);
-    if (parsed && typeof parsed === 'object' && parsed.routes) return parsed;
+    if (parsed && typeof parsed === 'object' && parsed.routes && typeof parsed.routes === 'object' && !Array.isArray(parsed.routes)) return parsed;
   } catch {
     // missing or corrupt -> treat as empty
   }
@@ -222,6 +222,8 @@ export function createPrerenderCache({
       await rm(cacheDir, { recursive: true, force: true });
     } catch {
       // best-effort
+    } finally {
+      manifestPromise = null;
     }
   }
 

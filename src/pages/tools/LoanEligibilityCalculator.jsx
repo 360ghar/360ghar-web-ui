@@ -59,6 +59,12 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
 
      // AUDIT FIX (shareable-link): restore inputs from a shared URL
      // (produced by handleShareResults) so the recipient sees the same numbers.
+     const parseBoundedNumber = (raw, fallback, min, max) => {
+         const n = Number(raw);
+         if (!Number.isFinite(n)) return fallback;
+         return Math.min(Math.max(n, min), max);
+     };
+
      const [searchParams] = useSearchParams();
      useEffect(() => {
          const inc = searchParams.get('income');
@@ -66,11 +72,11 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
          const rate = searchParams.get('rate');
          const ten = searchParams.get('tenure');
          const exp = searchParams.get('expenses');
-         if (inc !== null) setIncome(Number(inc) || 0);
-         if (emi !== null) setExistingEmi(Number(emi) || 0);
-         if (rate !== null) setInterestRate(Number(rate) || 0);
-         if (ten !== null) setTenure(Number(ten) || 0);
-         if (exp !== null) setOtherExpenses(Number(exp) || 0);
+         if (inc !== null) setIncome(parseBoundedNumber(inc, 50000, 10000, 500000));
+         if (emi !== null) setExistingEmi(parseBoundedNumber(emi, 0, 0, 100000));
+         if (rate !== null) setInterestRate(parseBoundedNumber(rate, 8.5, 1, 20));
+         if (ten !== null) setTenure(parseBoundedNumber(ten, 20, 1, 30));
+         if (exp !== null) setOtherExpenses(parseBoundedNumber(exp, 10000, 0, 100000));
          // eslint-disable-next-line react-hooks/exhaustive-deps
      }, []);
 

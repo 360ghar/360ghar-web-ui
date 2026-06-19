@@ -20,6 +20,8 @@ const normalizePath = (rawPath) => {
   p = p.replace(/\/{2,}/g, '/');
   // Normalize trailing slash (except root)
   if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
+  // Ensure leading slash for canonical form
+  if (!p.startsWith('/')) p = '/' + p;
   return p || '/';
 };
 
@@ -61,8 +63,9 @@ export function buildRequestKey({ method = 'get', url = '', baseURL = '' } = {})
   const normalizedMethod = String(method || 'get').toLowerCase();
   let rawUrl = String(url || '');
   const base = String(baseURL || '');
-  if (base && rawUrl.startsWith(base)) {
-    rawUrl = rawUrl.slice(base.length);
+  const normalizedBase = base.endsWith('/') ? base.slice(0, -1) : base;
+  if (normalizedBase && (rawUrl === normalizedBase || rawUrl.startsWith(normalizedBase + '/'))) {
+    rawUrl = rawUrl.slice(normalizedBase.length);
   }
   // If the url is absolute, keep only the path+search (origin-agnostic).
   if (/^https?:\/\//i.test(rawUrl)) {

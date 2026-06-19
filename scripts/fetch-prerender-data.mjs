@@ -17,12 +17,12 @@
  * fails the build on a network error — it just writes what it could gather.
  */
 import { writeFile, mkdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizePropertySearchFilters } from '../src/utils/propertyTaxonomy.js';
 import { buildRequestKey } from '../src/utils/prerenderDataKey.js';
-import routeManifest from './prerender-routes.json' with { type: 'json' };
+const routeManifest = JSON.parse(readFileSync(new URL('./prerender-routes.json', import.meta.url), 'utf-8'));
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');

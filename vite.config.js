@@ -118,7 +118,7 @@ export default defineConfig(({ mode }) => {
   // the 244 prerendered pages do NOT each fire live API calls. Non-production
   // builds keep the cheaper 'empty' short-circuit. Overridable via env.
   const prerenderDataSource =
-    process.env.VITE_PRERENDER_DATA_SOURCE ||
+    env.VITE_PRERENDER_DATA_SOURCE ||
     (isNetlifyProduction ? 'bulk' : 'empty');
 
   return {
