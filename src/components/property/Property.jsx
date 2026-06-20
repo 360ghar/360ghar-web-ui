@@ -89,7 +89,7 @@ const Property = ({ properties: propsProperties, loading: propsLoading }) => {
                         <Button 
                             btnLink="/properties" 
                             btnClass="btn-main" 
-                            btnText="Sell All Listing " 
+                            btnText="See All Listings" 
                             spanClass="icon-right" 
                             iconClass="fas fa-arrow-right" 
                         />
