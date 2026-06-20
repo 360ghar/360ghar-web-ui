@@ -69,7 +69,7 @@ const BannerThree = () => {
                             </div>
 
                             <div className="col-12">
-                                <TabFilter colClass="col-lg-3 col-sm-6 col-6"/>
+                                <TabFilter />
                             </div>
 
                         </div>

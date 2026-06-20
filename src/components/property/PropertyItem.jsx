@@ -246,7 +246,9 @@ const PropertyItem = ({
   return (
     <>
       <div
-        className={`property-item ${itemClass} card-name`}
+        className={`property-item ${itemClass || ''}`.trim()}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         data-status={property.status}
         data-type={property.property_type}
         data-location={property.city}

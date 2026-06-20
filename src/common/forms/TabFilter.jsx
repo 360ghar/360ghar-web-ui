@@ -3,7 +3,7 @@ import { filterTabs } from '../../data/HomeOneData';
 import SimplifiedFilter from './SimplifiedFilter';
 import { usePropertyStore } from '../../store/propertyStore';
 
-const TabFilter = (props) => {
+const TabFilter = () => {
     const { updateFilter } = usePropertyStore();
 
     const handleTabSelect = (index) => {
@@ -36,7 +36,6 @@ const TabFilter = (props) => {
                     filterTabs.map((filterTab, index) => (
                         <TabPanel key={index}>
                             <SimplifiedFilter 
-                                colClass={props.colClass} 
                                 buttonText={`Search ${filterTab.text === 'Rent' ? 'Rentals' : filterTab.text === 'Buy' ? 'Properties' : 'Properties'}`}
                             />
                         </TabPanel>

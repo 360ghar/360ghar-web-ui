@@ -101,7 +101,8 @@
       "guest": "Guest",
       "manageDesc": "Manage your profile, saved listings, and visits from one place.",
       "upcomingVisits": "Upcoming visits",
-      "profileCompletion": "Profile completion"
+      "profileCompletion": "Profile completion",
+      "quickActions": "Quick Actions"
     },
     "profile": {
       "propertySeeker": "Property Seeker",
@@ -149,6 +150,7 @@
       "phone": "Phone:"
     },
     "myProperties": {
+      "title": "Manage Listings",
       "caption": "Properties you listed on 360Ghar",
       "colProperty": "My Properties",
       "colDate": "Date Added",
