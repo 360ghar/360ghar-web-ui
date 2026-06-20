@@ -26,7 +26,7 @@ const PropertyType = () => {
                         {
                             propertyTypes.map((propertyType, propertyTypeIndex) => {
                                 return (
-                                    <div className="col-lg-4 col-sm-6 col-xs-6" key={propertyTypeIndex}>
+                                    <div className="col-lg-4 col-sm-6 col-6" key={propertyTypeIndex}>
                                         <PropertyTypeItem propertyType={propertyType}/>
                                     </div>
                                 )

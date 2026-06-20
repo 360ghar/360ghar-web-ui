@@ -44,14 +44,14 @@ const MessageThree = () => {
                             <div className="form-box max-w-unset">
                                 <form action="https://formspree.io/f/mwpqglyb" method="POST" className="contact-form__form">
                                     <div className="row gy-4">
-                                        <div className="col-sm-6 col-xs-6">
+                                        <div className="col-sm-6 col-6">
                                             <label htmlFor="full_name" className="form-label text-black fw-normal font-14">Full Name</label>
                                             <div className="position-relative">
                                                 <input id="full_name" name="full_name" type="text" className="common-input common-input--withIcon" placeholder="Full Name" required />
                                                 <span className="input-icon"><i className="fas fa-user"></i></span>
                                             </div>
                                         </div>
-                                        <div className="col-sm-6 col-xs-6">
+                                        <div className="col-sm-6 col-6">
                                             <label htmlFor="email" className="form-label text-black fw-normal font-14">Email</label>
                                             <div className="position-relative">
                                                 <input id="email" name="email" type="email" className="common-input common-input--withIcon" placeholder="Email Address" required />
@@ -59,7 +59,7 @@ const MessageThree = () => {
                                             </div>
                                         </div>
                                         
-                                        <div className="col-sm-6 col-xs-6">
+                                        <div className="col-sm-6 col-6">
                                             <label htmlFor="address" className="form-label text-black fw-normal font-14">Property Address / Area</label>
                                             <div className="position-relative">
                                                 <input id="address" name="address" type="text" className="common-input common-input--withIcon" placeholder="e.g., DLF Phase 3, Gurugram" required />

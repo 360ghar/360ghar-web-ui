@@ -9,11 +9,11 @@ const ListingContactDetails = () => {
                     </div>
                     <div className="card-body">
                         <div className="row gy-4">
-                            <div className="col-md-4 col-sm-6 col-xs-6">
+                            <div className="col-md-4 col-sm-6 col-6">
                                 <label htmlFor="Name" className="form-label">Your Name</label>
                                 <input type="text" id="Name" className="common-input" placeholder="Your Name"/>
                             </div>
-                            <div className="col-md-4 col-sm-6 col-xs-6">
+                            <div className="col-md-4 col-sm-6 col-6">
                                 <label htmlFor="Email" className="form-label">Your E-mail</label>
                                 <input type="email" id="Email" className="common-input" placeholder="Your E-Mail"/>
                             </div>

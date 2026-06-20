@@ -12,7 +12,7 @@ const PropertyTypeThree = () => {
                         headingClass="style-left"  
                         subtitle="Property Type"
                         subtitleClass="bg-white" 
-                        title="Investing in real estate made it lot easy" 
+                        title="Investing in real estate made easy" 
                         renderDesc={false}
                         desc="Real estate is a lucrative industry that involves the buying selling and renting of properties. It encompasses residential commercial and industrial properties Real estate agents play a crucial role in facilitating real estate"
                         renderButton={false}
@@ -24,7 +24,7 @@ const PropertyTypeThree = () => {
                         {
                             propertyThreeTypes.map((propertyTypeItem, index) => {
                                 return (
-                                    <div className="col-xl-4 col-sm-6 col-xs-6" key={index}>
+                                    <div className="col-xl-4 col-sm-6 col-6" key={index}>
                                         <PropertyTypeThreeItem propertyTypeItem={propertyTypeItem} />
                                     </div>
                                 )

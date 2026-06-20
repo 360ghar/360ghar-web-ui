@@ -22,7 +22,7 @@ const ProjectSection = () => {
                                 const projectURL = `/project/${encodeURIComponent(slug || convertToSlug(title))}`;
                                 
                                 return (
-                                    <div className={`col-md-4 col-sm-6 col-xs-6`} key={projectItemIndex}>
+                                    <div className={`col-md-4 col-sm-6 col-6`} key={projectItemIndex}>
                                         <div className="project-page-thumb">
                                             <LazyImage src={thumb} alt={title || 'Project'} className="cover-img" width={400} height={300}/>
                                             <div className="project-page-content">

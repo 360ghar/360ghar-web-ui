@@ -40,7 +40,7 @@ const MessageTwo = () => {
                         <div className="col-lg-8">
                             <div className="form-box style-dark">
                                 <ValidationForm 
-                                    colClass="col-sm-6 col-xs-6" 
+                                    colClass="col-sm-6 col-6" 
                                     inputClass="common-input common-input--withIcon common-input--light"
                                     iconSpanClass="text-gradient"
                                     renderLabel={true}

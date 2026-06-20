@@ -19,7 +19,7 @@ const Message = () => {
                                 <h2 className="form-box__title">Get A Quote </h2>
                                 
                                 <ValidationForm 
-                                    colClass="col-sm-6 col-xs-6" 
+                                    colClass="col-sm-6 col-6" 
                                     inputClass="common-input common-input--withIcon"
                                     iconSpanClass=""
                                     renderLabel={false}

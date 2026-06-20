@@ -153,7 +153,7 @@ const AccountProfileTab = () => {
 
                     <form onSubmit={formik.handleSubmit}>
                         <div className="row gy-lg-4 gy-3">
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="profile-full-name" className="form-label">{t('account:tabs.profile.fullName')}</label>
                                 <input
                                     id="profile-full-name"
@@ -172,7 +172,7 @@ const AccountProfileTab = () => {
                                 )}
                             </div>
 
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="profile-email" className="form-label">{t('account:tabs.profile.email')}</label>
                                 <input
                                     id="profile-email"
@@ -191,7 +191,7 @@ const AccountProfileTab = () => {
                                 )}
                             </div>
 
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="profile-phone" className="form-label">{t('account:tabs.profile.phone')}</label>
                                 <input
                                     id="profile-phone"
@@ -210,7 +210,7 @@ const AccountProfileTab = () => {
                                 )}
                             </div>
 
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="profile-dob" className="form-label">{t('account:tabs.profile.dob')}</label>
                                 <input
                                     id="profile-dob"

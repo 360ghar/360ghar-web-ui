@@ -17,7 +17,7 @@ const ListingBasicInformation = () => {
                                 <label htmlFor="Description" className="form-label">Description</label>
                                 <textarea className="common-input" id="Description" placeholder="Your Message"></textarea>
                             </div>
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="Status" className="form-label">Status</label>
                                 <div className="select-has-icon icon-black">
                                     <select className="select common-input" id="Status">
@@ -27,7 +27,7 @@ const ListingBasicInformation = () => {
                                     </select>
                                 </div>
                             </div>
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="Type" className="form-label">Status</label>
                                 <div className="select-has-icon icon-black">
                                     <select className="select common-input" id="Type">
@@ -39,11 +39,11 @@ const ListingBasicInformation = () => {
                                     </select>
                                 </div>
                             </div>
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="Price" className="form-label">Price</label>
                                 <input type="number" className="common-input" id="Price" placeholder="USD"/>
                             </div>
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="Area" className="form-label">Area</label>
                                 <input type="number" className="common-input" id="Area" placeholder="Sq Ft"/>
                             </div>

@@ -39,7 +39,7 @@ const ContactUsSection = () => {
                     <div className="contact-form__form">
                         <form onSubmit={handleSubmit} className="contact-form__form">
                             <div className="row gy-4">
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <input
                                         id="user_name"
                                         type="text"
@@ -48,7 +48,7 @@ const ContactUsSection = () => {
                                         placeholder={t('contact.namePlaceholder')}
                                     />
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <input
                                         id="user_email"
                                         type="email"
@@ -64,7 +64,7 @@ const ContactUsSection = () => {
                                     />
                                 </div>
 
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <input
                                         id="user_subject"
                                         type="text"

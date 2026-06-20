@@ -21,7 +21,7 @@ const FaqContactUs = () => {
                         />
                         <div className="contact-form__form">
                             <ValidationForm
-                                colClass="col-sm-6 col-xs-6" 
+                                colClass="col-sm-6 col-6" 
                                 inputClass="common-input"
                                 iconSpanClass="d-none text-gradient"
                                 renderLabel={false}

@@ -24,7 +24,7 @@ const Team = () => {
                         {
                             teams.map((team, teamIndex) => {
                                 return (
-                                    <div className="col-lg-4 col-sm-6 col-xs-6" key={teamIndex}>
+                                    <div className="col-lg-4 col-sm-6 col-6" key={teamIndex}>
                                         <TeamItem team={team}/>
                                     </div>
                                 )
