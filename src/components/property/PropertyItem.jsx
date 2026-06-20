@@ -246,13 +246,11 @@ const PropertyItem = ({
   return (
     <>
       <div
-        className={`property-item ${itemClass} ${isHovered ? 'property-item--hovered' : ''}`}
+        className={`property-item ${itemClass} card-name`}
         data-status={property.status}
         data-type={property.property_type}
         data-location={property.city}
         data-sort={property.sort_by || 'newest'}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
       >
         <div className="property-item__thumb">
           <I18nLink to={propertyURL} className="link">
@@ -386,7 +384,7 @@ const PropertyItem = ({
               ))}
             </ul>
             {btnRenderRight && (
-              <I18nLink to={propertyURL} className={`simple-btn ${btnClass}`}>
+              <I18nLink to={propertyURL} className={`btn btn-outline-main ${btnClass || ''}`.trim()}>
                 {btnText}
                 <span className="icon-right">
                   {' '}
@@ -437,7 +435,7 @@ const PropertyItem = ({
           )}
 
           {btnRenderBottom && (
-            <I18nLink to={propertyURL} className={`simple-btn ${btnClass}`}>
+            <I18nLink to={propertyURL} className={`btn btn-outline-main w-100 mt-3 ${btnClass || ''}`.trim()}>
               {btnText}
               <span className="icon-right">
                 {' '}
