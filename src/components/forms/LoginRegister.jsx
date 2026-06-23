@@ -789,7 +789,17 @@ const LoginFlow = ({
             ]);
 
             if (result === '__timeout__') {
-                toast.error(t('forms:generic.loginTimeout'), { theme: 'colored' });
+                // The login() call is still running in the background. If
+                // Supabase signInWithPassword already succeeded, the user is
+                // authenticated but stuck on /login. Check the store and
+                // navigate anyway so they aren't stranded.
+                const { isAuthenticated, authStage } = useAuthStore.getState();
+                if (isAuthenticated) {
+                    toast.success(t('forms:generic.loginSuccess'), { theme: 'colored' });
+                    navigate(getRedirectPathForStage(authStage));
+                } else {
+                    toast.error(t('forms:generic.loginTimeout'), { theme: 'colored' });
+                }
                 return;
             }
 

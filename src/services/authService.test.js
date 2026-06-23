@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const ensureSupabaseClient = vi.fn();
 const apiGet = vi.fn();
 
-vi.mock('./supabaseClient', () => ({ ensureSupabaseClient }));
+vi.mock('./supabaseClient', () => ({ ensureSupabaseClient, setCachedAccessToken: vi.fn() }));
 vi.mock('./api', () => ({
   default: { get: apiGet },
   publicApi: {},

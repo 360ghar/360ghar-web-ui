@@ -6,7 +6,7 @@ import Footer from '../../common/layout/Footer';
 import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
 import { useAuthStore } from '../../store/authStore';
-import { getSupabaseAccessToken } from '../../services/supabaseClient';
+import { getCachedAccessToken, getSupabaseAccessToken } from '../../services/supabaseClient';
 
 const ALLOWED_MCP_ORIGINS = [
   'http://localhost:3000',
@@ -85,7 +85,10 @@ const McpLogin = () => {
         return;
       }
 
-      const token = await getSupabaseAccessToken();
+      // login() already populated the token cache via syncUserProfile. Read
+      // the cache first to avoid a redundant getSession() lock acquisition.
+      // Fall back to getSupabaseAccessToken() only on cold start.
+      const token = getCachedAccessToken() || await getSupabaseAccessToken();
       if (!token) {
         setSubmitting(false);
         return;

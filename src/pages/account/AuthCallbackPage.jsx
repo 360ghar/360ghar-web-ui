@@ -31,8 +31,10 @@ const AuthCallbackPage = () => {
         return;
       }
 
+      let sessionEstablished = false;
       try {
         await authService.exchangeCodeForSession(code);
+        sessionEstablished = true;
 
         // Persist + mirror the last-used method (Google).
         authService.afterAuthSuccess(AUTH_METHODS.GOOGLE);
@@ -61,7 +63,16 @@ const AuthCallbackPage = () => {
 
         navigate(next, { replace: true });
       } catch {
-        navigate('/login?error=auth', { replace: true });
+        if (sessionEstablished) {
+          // The Supabase session was established but the sync/profile step
+          // failed. The user is authenticated — navigate to the intended
+          // destination. The SIGNED_IN event will fire in the background and
+          // the route guard will handle profile-completion routing if needed.
+          navigate(next, { replace: true });
+        } else {
+          // The code exchange itself failed — the user is not authenticated.
+          navigate('/login?error=auth', { replace: true });
+        }
       }
     }
 

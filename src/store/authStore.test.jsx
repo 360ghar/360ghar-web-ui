@@ -19,6 +19,7 @@ vi.mock('../services/authService', () => ({
 vi.mock('../services/supabaseClient', () => ({
   getSupabaseAccessToken,
   onSupabaseAuthStateChange,
+  setCachedAccessToken: vi.fn(),
 }));
 
 vi.mock('../services/http', () => ({

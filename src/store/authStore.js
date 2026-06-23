@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import api from '../services/api';
 import { authService } from '../services/authService';
 import { deletionService } from '../services/deletionService';
-import { getSupabaseAccessToken, onSupabaseAuthStateChange } from '../services/supabaseClient';
+import { getSupabaseAccessToken, onSupabaseAuthStateChange, setCachedAccessToken } from '../services/supabaseClient';
 import { fetchAuthStage } from '../utils/authStage';
 import * as posthogService from '../services/posthogService';
 import { isPrerendering } from '../utils/prerender';
@@ -69,6 +69,7 @@ function clearStoredUser() {
 
 function clearAuthState(set) {
   clearStoredUser();
+  setCachedAccessToken(null);
   set({
     user: null,
     token: null,
@@ -157,6 +158,13 @@ async function handleAuthStateChange(event, session, set, _get) {
     return;
   }
 
+  // Populate the in-memory token cache from the session the SDK just handed us
+  // (covers INITIAL_SESSION, SIGNED_IN, TOKEN_REFRESHED). Authenticated axios
+  // requests then read the token synchronously instead of each calling
+  // client.auth.getSession(), which acquires the auth lock and — under the
+  // post-login request burst — trips "AbortError: signal is aborted without reason".
+  setCachedAccessToken(session.access_token);
+
   if (event === 'INITIAL_SESSION' && initializationInProgress) {
     return;
   }
@@ -193,6 +201,10 @@ async function ensureAuthSubscription(set, get) {
     handleAuthStateChange(event, session, set, get)
   ).catch((error) => {
     authSubscriptionPromise = null;
+    // A lock-contention abort from supabase-js (see lock: processLock note in
+    // supabaseClient.js) is benign noise here — it must not become an unhandled
+    // rejection. Re-throw anything else so real subscription failures surface.
+    if (error?.name === 'AbortError') return undefined;
     throw error;
   });
 
@@ -237,6 +249,11 @@ const useAuthStore = create((set, get) => ({
       }
 
       await syncUserProfile(token, set);
+    } catch (error) {
+      // Defensive: a reason-less AbortError from supabase-js lock contention
+      // must not bubble as an unhandled rejection during init (mirrors the
+      // hot-path mitigation in http.js). Anything else is a real init failure.
+      if (error?.name !== 'AbortError') throw error;
     } finally {
       initializationInProgress = false;
     }

@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { getSupabaseAccessToken, refreshSupabaseSession } from './supabaseClient';
+import {
+  getSupabaseAccessToken,
+  getCachedAccessToken,
+  setCachedAccessToken,
+  refreshSupabaseSession,
+} from './supabaseClient';
 import {
   getPrerenderDataSource,
   isPrerendering,
@@ -214,7 +219,26 @@ export const createAxiosInstance = ({ withAuth = false, enableRetry = true } = {
       }
 
       if (withAuth) {
-        const token = await getSupabaseAccessToken();
+        // Read the cached token synchronously. This is the fix for the login
+        // "AbortError: signal is aborted without reason": calling getSession() on
+        // every request acquires supabase-js's navigator.locks mutex, and a burst
+        // of them right after signInWithPassword races the SDK's own lock work.
+        // The cache is populated by auth events (onAuthStateChange) and by the
+        // cold-start fallback below, so the hot path never touches the lock.
+        let token = getCachedAccessToken();
+        if (!token) {
+          try {
+            // Cold start only (first authenticated request before any auth event
+            // has populated the cache). getSupabaseAccessToken stashes its result
+            // back into the cache.
+            token = await getSupabaseAccessToken();
+          } catch (err) {
+            // A lock-contention abort here must not reject the whole request.
+            // Let it go out unauthenticated; route guards / 401 handling will
+            // deal with it if the token really is missing.
+            if (err?.name !== 'AbortError') throw err;
+          }
+        }
         if (token) {
           config.headers = config.headers || {};
           config.headers.Authorization = `Bearer ${token}`;
@@ -271,6 +295,11 @@ export const createAxiosInstance = ({ withAuth = false, enableRetry = true } = {
           };
           const refreshedSession = await refreshSessionOnce();
           if (refreshedSession?.access_token) {
+            // The cache is now the source of truth for the auth header (see the
+            // request interceptor). Update it here directly so any concurrent or
+            // subsequent request picks up the rotated token immediately — don't
+            // wait for the TOKEN_REFRESHED event, which may run after this resolves.
+            setCachedAccessToken(refreshedSession.access_token);
             retryConfig.headers = retryConfig.headers || {};
             retryConfig.headers.Authorization = `Bearer ${refreshedSession.access_token}`;
             return instance(retryConfig);

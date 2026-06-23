@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@googlemaps/js-api-loader', () => ({
@@ -11,29 +11,37 @@ import GooglePlacesInput from './GooglePlacesInput';
 
 describe('GooglePlacesInput', () => {
   const originalApiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
-  let autocompleteInstance;
-  let autocompleteConstructor;
-  let placeChangedHandler;
+  let fetchAutocompleteSuggestions;
+  let fetchFields;
+  let toPlace;
 
   beforeEach(() => {
-    autocompleteInstance = {
-      addListener: vi.fn((eventName, callback) => {
-        if (eventName === 'place_changed') {
-          placeChangedHandler = callback;
-        }
-      }),
-      getPlace: vi.fn(() => ({
-        formatted_address: 'Gurgaon, Haryana, India',
-        geometry: {
-          location: {
-            lat: () => 28.4595,
-            lng: () => 77.0266,
-          },
-        },
-      })),
+    // Place returned after a suggestion is picked + fetchFields() resolves.
+    fetchFields = vi.fn().mockResolvedValue(undefined);
+    const place = {
+      fetchFields,
+      location: { lat: () => 28.4595, lng: () => 77.0266 },
+      formattedAddress: 'Gurgaon, Haryana, India',
+      displayName: 'Gurgaon',
+    };
+    toPlace = vi.fn(() => place);
+
+    const prediction = {
+      placeId: 'place-1',
+      text: { toString: () => 'Gurgaon, Haryana, India' },
+      mainText: { toString: () => 'Gurgaon' },
+      secondaryText: { toString: () => 'Haryana, India' },
+      toPlace,
     };
 
-    autocompleteConstructor = vi.fn(() => autocompleteInstance);
+    fetchAutocompleteSuggestions = vi.fn().mockResolvedValue({
+      suggestions: [{ placePrediction: prediction }],
+    });
+
+    const placesLibrary = {
+      AutocompleteSuggestion: { fetchAutocompleteSuggestions },
+      AutocompleteSessionToken: vi.fn(function AutocompleteSessionToken() {}),
+    };
 
     import.meta.env.VITE_GOOGLE_PLACES_API_KEY = 'test-api-key';
     window.requestIdleCallback = vi.fn((callback) => {
@@ -43,9 +51,7 @@ describe('GooglePlacesInput', () => {
     window.cancelIdleCallback = vi.fn();
     globalThis.google = {
       maps: {
-        places: {
-          Autocomplete: autocompleteConstructor,
-        },
+        importLibrary: vi.fn(async (name) => (name === 'places' ? placesLibrary : {})),
       },
     };
   });
@@ -55,7 +61,6 @@ describe('GooglePlacesInput', () => {
     delete window.requestIdleCallback;
     delete window.cancelIdleCallback;
     delete globalThis.google;
-    placeChangedHandler = undefined;
     vi.clearAllMocks();
   });
 
@@ -67,7 +72,7 @@ describe('GooglePlacesInput', () => {
     ).toBeInTheDocument();
   });
 
-  it('initializes legacy Google Maps autocomplete with mapped options', async () => {
+  it('requests autocomplete suggestions with mapped New-API options', async () => {
     render(
       <GooglePlacesInput
         placeholder="Enter location, city, or area..."
@@ -77,31 +82,44 @@ describe('GooglePlacesInput', () => {
     );
 
     const input = screen.getByPlaceholderText('Enter location, city, or area...');
+    fireEvent.change(input, { target: { value: 'gurgaon' } });
 
     await waitFor(() => {
-      expect(autocompleteConstructor).toHaveBeenCalledWith(input, {
-        componentRestrictions: { country: 'in' },
-        fields: ['formatted_address', 'geometry', 'name'],
-        types: ['(cities)'],
-      });
+      expect(fetchAutocompleteSuggestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          input: 'gurgaon',
+          includedRegionCodes: ['in'],
+          includedPrimaryTypes: ['(cities)'],
+        })
+      );
     });
   });
 
   it('calls onSelect with place details when a prediction is chosen', async () => {
     const onSelect = vi.fn();
 
-    render(<GooglePlacesInput placeholder="Enter location, city, or area..." onSelect={onSelect} />);
+    render(
+      <GooglePlacesInput placeholder="Enter location, city, or area..." onSelect={onSelect} />
+    );
+
+    const input = screen.getByPlaceholderText('Enter location, city, or area...');
+    fireEvent.change(input, { target: { value: 'gurgaon' } });
+
+    // Wait for the suggestion dropdown to render.
+    const option = await screen.findByRole('option');
+    fireEvent.mouseDown(option);
 
     await waitFor(() => {
-      expect(autocompleteInstance.addListener).toHaveBeenCalledWith('place_changed', expect.any(Function));
+      expect(onSelect).toHaveBeenCalledWith({
+        lat: 28.4595,
+        lng: 77.0266,
+        name: 'Gurgaon, Haryana, India',
+      });
     });
 
-    placeChangedHandler();
-
-    expect(onSelect).toHaveBeenCalledWith({
-      lat: 28.4595,
-      lng: 77.0266,
-      name: 'Gurgaon, Haryana, India',
+    expect(toPlace).toHaveBeenCalled();
+    expect(fetchFields).toHaveBeenCalledWith({
+      fields: ['location', 'formattedAddress', 'displayName'],
     });
   });
 });

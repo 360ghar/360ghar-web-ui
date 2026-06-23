@@ -1,5 +1,5 @@
 import api, { publicApi } from './api';
-import { ensureSupabaseClient } from './supabaseClient';
+import { ensureSupabaseClient, setCachedAccessToken } from './supabaseClient';
 import { setLastAuthMethod, AUTH_METHODS } from './lastAuthMethod';
 import { SKIP_AUTH_RETRY } from './http';
 
@@ -29,6 +29,13 @@ export const authService = {
     if (error || !data.session) {
       throw new Error(error?.message || 'Login failed');
     }
+
+    // Populate the token cache immediately so the profile fetch below (and the
+    // fire-and-forget recordLastMethod, and the SIGNED_IN-triggered sync) all
+    // read the token synchronously instead of each acquiring the supabase auth
+    // lock via getSession() — the root cause of the login AbortError. The
+    // onAuthStateChange listener also sets this, but the fetch below can race it.
+    setCachedAccessToken(data.session.access_token);
 
     // Record the last-used method (best-effort, never blocks login).
     const method = isEmailIdentifier(identifier)
@@ -256,6 +263,7 @@ export const authService = {
   logout: async () => {
     const client = await ensureSupabaseClient();
     await client.auth.signOut();
+    setCachedAccessToken(null);
     localStorage.removeItem('user');
   },
 
