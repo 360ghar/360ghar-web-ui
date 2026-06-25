@@ -17,6 +17,9 @@
 | `/vastu-checker` | `src/pages/tools/VastuChecker.jsx` | AI-powered Vastu compliance checker |
 | `/check-fake-listing` | `src/pages/tools/FakeListingChecker.jsx` | Fake listing risk checker for portals |
 | `/rent-receipt` | `src/pages/tools/RentReceipt.jsx` | Rent receipt generator (PDF) |
+| `/mofa-to-rera-converter` | `src/pages/tools/MofaToReraConverter.jsx` | MOFA ↔ RERA carpet area converter |
+| `/sq-ft-calculator` | `src/pages/tools/SqFtCalculator.jsx` | Carpet area ↔ square feet converter |
+| `/acre-in-gaj` | `src/pages/tools/AcreInGaj.jsx` | Acre ↔ gaj unit converter (1 acre = 4840 gaj) |
 
 Shared helpers: `src/seo/toolSchemas.js` (`generateToolSchema`, `toolSchemas`), `src/components/tools/ToolContentSections.jsx` (`ToolFaq`, `ToolRelatedLinks`, `ToolInfoCard`, `ToolComparisonTable`), and `src/seo/structuredData.js` (`generateFaqStructuredData`, `generateHowToStructuredData`).
 
@@ -61,6 +64,18 @@ Helps users assess the risk that a listing on a portal (99acres, MagicBricks, Ho
 ### RentReceipt (`/rent-receipt`)
 
 Generates printable rent receipts for HRA tax exemption claims. Uses `react-to-print` and `jsdpf` for PDF export, `html2canvas` for preview, and a `RentReceiptPreview` companion component. Has its own `RentReceipt.scss`. Emits tool + FAQ + HowTo schema.
+
+### MofaToReraConverter (`/mofa-to-rera-converter`)
+
+Converts between MOFA and RERA carpet area (RERA carpet ≈ MOFA carpet + balcony/terrace, ~6% larger). Targets the high-growth "mofa to rera carpet conversion" query. Reuses the conversion relationship documented in `AreaCalculator` and reuses `AreaConverter.scss` for styling. Emits `SoftwareApplication`, `FAQPage`, `HowTo`, and `BreadcrumbList` schema. Cross-linked from `AreaCalculator` to avoid keyword cannibalization.
+
+### SqFtCalculator (`/sq-ft-calculator`)
+
+A focused carpet-area ↔ square-feet converter (and sq ft ↔ sq m / sq yd). Targets the "carpet area to sq ft calculator" query with a simpler, sq-ft-first UX than the general `AreaConverter`. Reuses `AreaConverter` conversion rates and `AreaConverter.scss`. Emits tool + FAQ + HowTo schema. Cross-linked from `AreaConverter`.
+
+### AcreInGaj (`/acre-in-gaj`)
+
+An acre ↔ gaj unit converter leading with the headline answer "1 acre = 4840 gaj". Targets the trending "1 acre in gaj" query. Reuses `AreaConverter` conversion rates and `AreaConverter.scss`, and renders a short common-conversions table. Emits tool + FAQ + HowTo schema. Cross-linked from `AreaConverter`.
 
 ### ToolsIndex (`/tools`)
 

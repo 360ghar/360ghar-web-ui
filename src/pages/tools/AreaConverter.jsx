@@ -305,6 +305,8 @@ import './AreaConverter.scss';
                                  <ToolRelatedLinks
                                      heading="Related Calculators & Tools"
                                      links={[
+                                         { to: '/acre-in-gaj', label: 'Acre in Gaj Converter (1 acre = 4840 gaj)', icon: 'fas fa-mountain' },
+                                         { to: '/sq-ft-calculator', label: 'Carpet Area to Sq Ft Calculator', icon: 'fas fa-square' },
                                          { to: '/area-calculator', label: 'Carpet Area Calculator', icon: 'fas fa-ruler-combined' },
                                          { to: '/emi-calculator', label: 'EMI Calculator', icon: 'fas fa-calculator' },
                                          { to: '/stamp-duty-calculator', label: 'Stamp Duty Calculator', icon: 'fas fa-file-invoice-dollar' },

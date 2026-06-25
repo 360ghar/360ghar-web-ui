@@ -32,6 +32,9 @@ current-home-loader.png
 *.tmp.html
 *.tmp.xml
 
+# Local Playwright MCP verification output (screenshots/console dumps)
+.playwright-mcp/
+
 # Source maps in public
 public/assets/css/*.css.map
 

@@ -126,9 +126,9 @@
     "marla": "Marla"
   },
   "areaCalculator": {
-    "title": "Carpet Area Calculator - Carpet to Built-up & RERA Area Conversion | 360Ghar",
-    "description": "Free carpet area calculator to convert between carpet area, built-up area, and super built-up area. Calculate RERA carpet area, convert MOFA to RERA, and understand loading factor for properties in India. Accurate area conversion in square feet.",
-    "keywords": "carpet area calculator, carpet area to built up area calculator, mofa to rera carpet conversion calculator, rera carpet area calculator, super built up area to carpet area calculator, carpet area to built-up area calculator India, built up area to carpet area calculator, carpet area in square feet calculator, how to calculate carpet area from super built up area, carpet area calculation formula, carpet area for flat calculator, loading factor calculator, carpet area vs built up area, RERA carpet area, carpet area converter, area calculation formula India, flat carpet area calculator, built up area vs carpet area, carpet area to super built up area calculator, carpet area kya hota hai, 360ghar",
+    "title": "Free Carpet Area Calculator – MOFA to RERA, Built-up & Super Area | 360Ghar",
+    "description": "Free carpet area calculator: convert MOFA to RERA, super built-up to carpet area, and find loading factor. Instant sq ft results for Indian homes.",
+    "keywords": "carpet area to sq ft calculator, carpet area calculator, mofa to rera carpet conversion calculator, rera carpet area calculator, super built up area to carpet area calculator, carpet area to built up area calculator, carpet area to built-up area calculator India, built up area to carpet area calculator, carpet area in square feet calculator, how to calculate carpet area from super built up area, carpet area calculation formula, carpet area for flat calculator, loading factor calculator, carpet area vs built up area, RERA carpet area, carpet area converter, area calculation formula India, flat carpet area calculator, built up area vs carpet area, carpet area to super built up area calculator, carpet area kya hota hai, 360ghar",
     "faqs": {
       "q1": {
         "question": "How do I calculate the area of a room?",
@@ -371,8 +371,8 @@
   },
   "vastu": {
     "title": "Free Online Vastu Checker - Check Vastu for House & Flat | 360Ghar",
-    "description": "Check Vastu of your house or flat online for free. Upload your floor plan and get an instant AI-powered Vastu score, room-by-room analysis, and practical remedies for kitchen, bedroom, and entrance. Free online Vastu checker and calculator.",
-    "keywords": "vastu checker, vastu analysis, floor plan vastu, vastu shastra, vastu score, vastu remedies, 360ghar, free vastu analysis, vastu consultant, vastu for home, vastu tips, vastu dosh, vastu shastra in hindi, online vastu check, vastu check online free, vastu calculator, vastu for flat, how to check vastu of house, AI vastu checker, vastu dosh remedies, vastu for kitchen, vastu for bedroom, vastu for entrance, vastu compliance checker, check vastu online, vastu report online, automated vastu analysis, vastu ai app, ghar ka vastu, flat ka vastu",
+    "description": "Free online Vastu checker: upload your floor plan for an instant AI Vastu score, room-by-room analysis, and remedies for kitchen, bedroom & entrance.",
+    "keywords": "AI vastu check online free, online vastu check for flat free, vastu checker, vastu analysis, floor plan vastu, vastu shastra, vastu score, vastu remedies, 360ghar, free vastu analysis, vastu consultant, vastu for home, vastu tips, vastu dosh, vastu shastra in hindi, online vastu check, vastu check online free, vastu calculator, vastu for flat, how to check vastu of house, AI vastu checker, vastu dosh remedies, vastu for kitchen, vastu for bedroom, vastu for entrance, vastu compliance checker, check vastu online, vastu report online, automated vastu analysis, vastu ai app, ghar ka vastu, flat ka vastu",
     "heroTitle": "AI-Powered Vastu Checker",
     "heroDesc": "Upload your floor plan and receive a comprehensive Vastu Shastra analysis with personalized recommendations and practical remedies.",
     "additionalNotes": "Additional Notes",
@@ -548,6 +548,18 @@
       "q9": {
         "question": "What are common Vastu dosh and their remedies?",
         "answer": "Common Vastu dosh include south-facing entrance, kitchen in the northeast, toilet in the northeast or center, and master bedroom in the northeast. Remedies vary by dosh: a south entrance can be corrected with a copper swastik or pyramid; a northeast kitchen may need color corrections and Vastu salt; toilet dosh can be balanced with metal strips and specific colors. 360Ghar's Vastu checker identifies these dosh automatically and suggests tailored remedies for each."
+      },
+      "q10": {
+        "question": "Is there an AI Vastu check online free?",
+        "answer": "Yes, 360Ghar offers a completely free AI-powered Vastu check online. You do not need to pay or sign up — simply upload your floor plan image, mark the north direction, and our AI will analyze your property's Vastu compliance instantly. The free online Vastu check covers room-by-room analysis, entrance direction, kitchen placement, bedroom positions, toilet locations, and more. You get a detailed Vastu score, identified dosh, and practical remedies — all generated by AI in under a minute."
+      },
+      "q11": {
+        "question": "How can I do an online Vastu check for my flat for free?",
+        "answer": "To do a free online Vastu check for your flat, visit 360Ghar's Vastu Checker page, upload your apartment's floor plan image (take a photo from your sale deed or ask your builder), select the north direction, and click 'Analyze Vastu'. The AI will evaluate your flat's entrance direction, kitchen placement (ideally southeast), master bedroom position (ideally southwest), toilet locations, and the center (Brahmasthan) area. You receive a compliance score out of 10, identified Vastu dosh specific to flats, and actionable remedies — all free and online without any registration."
+      },
+      "q12": {
+        "question": "What is the difference between vastu checker and vastu calculator?",
+        "answer": "A Vastu checker evaluates your entire floor plan layout — room positions, entrance direction, kitchen and toilet placements, and overall compliance — providing a detailed analysis with scores and remedies. A Vastu calculator typically only checks a few parameters like direction-based compatibility (e.g., facing direction for a plot). 360Ghar's AI Vastu Checker is a comprehensive analyzer that provides both a numeric compliance score (out of 10) AND detailed room-by-room analysis, making it more advanced than a simple calculator."
       }
     },
     "howToSteps": {
@@ -758,6 +770,180 @@
     "relatedCapitalGains": "Capital Gains Tax Calculator",
     "relatedArea": "Area Converter",
     "relatedChecklist": "Property Document Checklist"
+  },
+  "mofaToRera": {
+    "title": "MOFA to RERA Carpet Area Converter – Free Online Calculator | 360Ghar",
+    "description": "Convert MOFA carpet area to RERA carpet area instantly. Free MOFA to RERA carpet conversion calculator for Maharashtra flats. Accurate sq ft results.",
+    "keywords": "mofa to rera carpet conversion, mofa to rera calculator, mofa carpet area, rera carpet area, mofa vs rera carpet area, maharashtra carpet area calculator, mofa to rera conversion formula, rera carpet area calculator, carpet area converter mofa rera, mofa rera difference, 360ghar",
+    "heroTitle": "MOFA to RERA Carpet Area Converter",
+    "heroDesc": "Convert MOFA carpet area to RERA carpet area in seconds. RERA carpet is roughly 5-8% larger than MOFA carpet because it includes internal walls and exclusive balconies/terraces.",
+    "converterHeading": "MOFA ↔ RERA Converter",
+    "inputValue": "Area value",
+    "convertFrom": "Convert from",
+    "convertTo": "Convert to",
+    "mofaCarpet": "MOFA carpet area",
+    "reraCarpet": "RERA carpet area",
+    "result": "Result",
+    "resultHint": "Conversion uses the standard RERA-vs-MOFA difference of ~5-8% (internal walls + exclusive balconies/terraces).",
+    "deltaLabel": "Difference vs MOFA",
+    "explanationTitle": "MOFA Carpet vs RERA Carpet",
+    "explanationMofa": "MOFA carpet area (Maharashtra Ownership Flats Act) is the net usable internal floor area of a flat measured within the inner face of the walls. It excludes internal partition walls, balconies, verandahs, and open terraces.",
+    "explanationRera": "RERA carpet area is the net usable floor area of an apartment, measured from the inner face of the external/peripheral walls. It includes internal partition walls and exclusive balconies, verandahs, and open terraces, but excludes external walls, common areas, and service shafts.",
+    "explanationWhy": "Because RERA carpet includes internal partition walls plus exclusive balconies and terraces that MOFA carpet excludes, RERA carpet area is typically about 5-8% larger than MOFA carpet area for the same flat. The difference is not a fixed percentage — it depends on the number of internal walls and the size of exclusive open areas.",
+    "formulaTitle": "Conversion Formula",
+    "formulaDesc": "For an approximate conversion, use a 6% uplift when going from MOFA to RERA, and about 5.7% reduction the other way. Always verify against the registered sale agreement and the RERA project brochure for exact figures.",
+    "tableTitle": "Typical MOFA → RERA Conversion",
+    "unitCol": "MOFA Carpet Area",
+    "reraCol": "RERA Carpet Area (approx)",
+    "howToTitle": "How to Convert MOFA to RERA Carpet Area",
+    "howToSteps": {
+      "step1": { "name": "Enter the carpet area", "text": "Type the MOFA carpet area (or RERA carpet area) you already know in square feet." },
+      "step2": { "name": "Pick the conversion direction", "text": "Select whether you are converting from MOFA to RERA, or from RERA to MOFA." },
+      "step3": { "name": "Read the converted value", "text": "The converter applies the standard ~6% uplift (or ~5.7% reduction) and shows the equivalent carpet area instantly." },
+      "step4": { "name": "Cross-check the agreement", "text": "Confirm the figure against the registered sale agreement and the project's RERA registration for exact numbers." }
+    },
+    "faqTitle": "Frequently Asked Questions",
+    "faqs": {
+      "q1": {
+        "question": "What is the difference between MOFA carpet area and RERA carpet area?",
+        "answer": "MOFA carpet area is the net usable internal floor area measured within the inner face of the walls, excluding internal partition walls, balconies, verandahs, and open terraces. RERA carpet area additionally includes internal partition walls and exclusive balconies, verandahs, and open terraces, measured from the inner face of the external walls. As a result, RERA carpet area is usually 5-8% larger than MOFA carpet area for the same flat."
+      },
+      "q2": {
+        "question": "How much larger is RERA carpet area than MOFA carpet area?",
+        "answer": "For most flats, RERA carpet area is about 5-8% larger than MOFA carpet area. The exact difference depends on how many internal partition walls the flat has and how large its exclusive balconies and open terraces are. Use our converter to apply the standard ~6% uplift."
+      },
+      "q3": {
+        "question": "Is MOFA to RERA conversion applicable outside Maharashtra?",
+        "answer": "MOFA (the Maharashtra Ownership Flats Act, 1963) applies to Maharashtra. The MOFA carpet-area definition was the older standard used by Maharashtra builders. RERA (Real Estate Regulation and Development Act, 2016) applies pan-India, so the MOFA-to-RERA conversion is most relevant for Maharashtra flats registered before RERA came into force."
+      },
+      "q4": {
+        "question": "Which one should I use — MOFA carpet area or RERA carpet area?",
+        "answer": "For any sale agreement registered on or after 1 May 2017, builders must disclose RERA carpet area. If you are buying or comparing a Maharashtra flat whose older documents quote MOFA carpet area, convert it to RERA carpet area for an apples-to-apples comparison with newer RERA-registered projects."
+      },
+      "q5": {
+        "question": "Does RERA carpet area include the balcony?",
+        "answer": "Yes. RERA carpet area includes exclusive balconies, verandahs, and open terraces attached to the apartment. It excludes external walls, common areas, and service shafts. MOFA carpet area, by contrast, excluded these exclusive open areas."
+      },
+      "q6": {
+        "question": "Why does my RERA carpet area look bigger than the MOFA figure in the old brochure?",
+        "answer": "This is expected. The same physical flat measures larger under the RERA definition because internal partition walls and exclusive balconies/terraces are now counted. It is not a change in the flat's size — it is a change in what is measured. Use the converter to translate between the two definitions."
+      }
+    }
+  },
+  "sqFtCalculator": {
+    "title": "Carpet Area to Sq Ft Calculator – Free Online Tool | 360Ghar",
+    "description": "Free carpet area to sq ft calculator: convert carpet area, sq m and sq yd to square feet instantly. Accurate area-to-sq-ft results for Indian property.",
+    "keywords": "carpet area to sq ft calculator, sq ft calculator, square feet calculator, sq m to sq ft, sq yd to sq ft, gaj to sq ft, carpet area in square feet, area to sq ft converter, property area calculator, square feet conversion India, 360ghar",
+    "heroTitle": "Carpet Area to Sq Ft Calculator",
+    "heroDesc": "Convert carpet area, square meters, square yards (gaj) and more to square feet instantly. The simplest square-feet-first calculator for Indian property buyers.",
+    "converterHeading": "Area to Square Feet Converter",
+    "amount": "Amount",
+    "fromUnit": "From unit",
+    "toUnit": "To unit",
+    "swapUnits": "Swap units",
+    "result": "Result",
+    "sqFt": "Sq. Ft.",
+    "sqMt": "Square Meter",
+    "sqYd": "Square Yard (Gaj)",
+    "acre": "Acre",
+    "gaj": "Gaj",
+    "explanationTitle": "Why Convert Area to Square Feet?",
+    "explanationDesc": "Square feet (sq ft) is the standard unit mandated by RERA for all Indian property sale agreements, brochures, and registration documents. Whether your builder quotes carpet area in square meters or a land record uses gaj/square yards, converting to square feet gives you a single, comparable number across properties.",
+    "ratesTitle": "Common Conversion Rates to Square Feet",
+    "unitCol": "Unit",
+    "sqFtCol": "1 Unit in Sq. Ft.",
+    "howToTitle": "How to Use the Sq Ft Calculator",
+    "howToSteps": {
+      "step1": { "name": "Enter the amount", "text": "Type the area value you want to convert (for example, the carpet area from your builder's brochure)." },
+      "step2": { "name": "Choose the source unit", "text": "Pick the unit the value is currently in — square meters, square yards (gaj), acres, or square feet." },
+      "step3": { "name": "Pick the target unit", "text": "Select the unit you want to convert to. Choose Sq. Ft. for a carpet-area-to-sq-ft conversion." },
+      "step4": { "name": "Read the result", "text": "The calculator instantly shows the converted value using standard Indian conversion rates." }
+    },
+    "faqTitle": "Frequently Asked Questions",
+    "faqs": {
+      "q1": {
+        "question": "How do I convert carpet area to square feet?",
+        "answer": "If your carpet area is already in square feet, no conversion is needed. If it is in square meters, multiply by 10.764. If it is in square yards (gaj), multiply by 9. For example, 100 sq m of carpet area equals about 1,076.4 sq ft."
+      },
+      "q2": {
+        "question": "How many square feet are in 1 square meter?",
+        "answer": "1 square meter equals 10.764 square feet. So to convert square meters to square feet, multiply the sq m value by 10.764. This calculator does the math for you instantly."
+      },
+      "q3": {
+        "question": "How many square feet are in 1 gaj (square yard)?",
+        "answer": "1 gaj (also called 1 square yard) equals 9 square feet. To convert gaj to square feet, multiply the gaj value by 9. For example, 100 gaj equals 900 sq ft."
+      },
+      "q4": {
+        "question": "Is carpet area measured in square feet under RERA?",
+        "answer": "Yes. RERA requires builders to disclose carpet area in square feet (or square meters) in all sale agreements, brochures, and registration documents. Converting every area figure to square feet makes it easy to compare flats on a like-for-like basis."
+      },
+      "q5": {
+        "question": "How do I convert acres to square feet?",
+        "answer": "1 acre equals 43,560 square feet. To convert acres to sq ft, multiply the acre value by 43,560. This is useful when comparing agricultural land or large plots with residential carpet area."
+      },
+      "q6": {
+        "question": "Does this calculator work for both carpet area and land area?",
+        "answer": "Yes. The conversion rates (sq ft, sq m, sq yd, gaj, acre) are the same whether you are converting carpet area of a flat or the area of a plot. Just enter the value and pick the units — the calculator handles the rest."
+      }
+    }
+  },
+  "acreInGaj": {
+    "title": "1 Acre in Gaj – Acre to Gaj Converter (1 Acre = 4840 Gaj) | 360Ghar",
+    "description": "1 acre = 4840 gaj. Free acre to gaj converter: convert acres to gaj, sq ft and sq yd instantly. Accurate land area conversion for Indian property.",
+    "keywords": "1 acre in gaj, acre in gaj, acre to gaj, 1 acre equal to gaj, acre to gaj converter, 4840 gaj in acre, acre to sq ft, gaj to sq ft, 1 acre how many gaj, acre gaj conversion, land area converter India, 360ghar",
+    "heroTitle": "1 Acre in Gaj Converter",
+    "heroDesc": "1 acre equals 4840 gaj (square yards). Use the converter below to convert any acre value to gaj, square feet, or square yards instantly.",
+    "headlineAnswer": "1 acre = 4840 gaj",
+    "headlineSub": "1 acre also equals 43,560 sq ft and 4,840 sq yd (gaj).",
+    "converterHeading": "Acre ↔ Gaj Converter",
+    "amount": "Amount",
+    "fromUnit": "From unit",
+    "toUnit": "To unit",
+    "swapUnits": "Swap units",
+    "result": "Result",
+    "acre": "Acre",
+    "gaj": "Gaj (Sq. Yd.)",
+    "sqFt": "Sq. Ft.",
+    "tableTitle": "Common Acre-to-Gaj Conversions",
+    "acreCol": "Acre",
+    "gajCol": "Gaj",
+    "sqFtCol": "Sq. Ft.",
+    "explanationTitle": "About the Acre and Gaj",
+    "explanationDesc": "An acre is a standard imperial land unit equal to 43,560 sq ft, used across India for agricultural and large plots. A gaj (also called square yard) equals 9 sq ft and is the most common unit for residential plots in North India. Since 1 acre = 43,560 sq ft and 1 gaj = 9 sq ft, one acre contains exactly 4,840 gaj.",
+    "howToTitle": "How to Convert Acre to Gaj",
+    "howToSteps": {
+      "step1": { "name": "Enter the acre value", "text": "Type the area in acres (or gaj) that you want to convert." },
+      "step2": { "name": "Choose the units", "text": "Select the source unit (acre or gaj) and the target unit (gaj, sq ft, or acre)." },
+      "step3": { "name": "Read the result", "text": "The converter uses the exact rate (1 acre = 4840 gaj = 43,560 sq ft) to show the converted value instantly." },
+      "step4": { "name": "Verify against land records", "text": "Cross-check the converted figure against the sale deed or local land record for official transactions." }
+    },
+    "faqTitle": "Frequently Asked Questions",
+    "faqs": {
+      "q1": {
+        "question": "How many gaj are there in 1 acre?",
+        "answer": "1 acre equals 4,840 gaj. Since 1 acre = 43,560 sq ft and 1 gaj = 9 sq ft, dividing 43,560 by 9 gives 4,840 gaj in one acre."
+      },
+      "q2": {
+        "question": "How do I convert acres to gaj?",
+        "answer": "To convert acres to gaj, multiply the acre value by 4,840. For example, 2 acres = 2 × 4,840 = 9,680 gaj. You can use the converter above to do this instantly."
+      },
+      "q3": {
+        "question": "Is gaj the same as square yard?",
+        "answer": "Yes. In North India, 'gaj' is the common word for a square yard. 1 gaj = 1 sq yd = 9 sq ft. So when a plot is listed as 100 gaj, it means 100 square yards or 900 sq ft."
+      },
+      "q4": {
+        "question": "How many square feet are in 1 acre?",
+        "answer": "1 acre equals 43,560 sq ft. To convert acres to sq ft, multiply the acre value by 43,560. This is the standard imperial-to-metric conversion used in Indian land records."
+      },
+      "q5": {
+        "question": "Is 1 gaj equal to 9 sq ft everywhere in India?",
+        "answer": "Yes. Unlike regional units such as bigha (which varies by state), 1 gaj is always equal to 1 square yard = 9 sq ft across all of India. So the acre-to-gaj conversion (1 acre = 4,840 gaj) is uniform nationwide."
+      },
+      "q6": {
+        "question": "How many acres is 1000 gaj?",
+        "answer": "1000 gaj = 1000 × 9 = 9,000 sq ft. To convert to acres, divide by 43,560: 9,000 ÷ 43,560 ≈ 0.2066 acres. So 1000 gaj is about 0.21 acres."
+      }
+    }
   },
   "toolsIndex": {
     "toolrentReceipt": "Rent Receipt Generator",

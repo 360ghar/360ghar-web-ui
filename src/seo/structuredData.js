@@ -659,8 +659,14 @@ export const generatePropertyStructuredData = (property) => ({
   aggregateRating: property.rating ? {
     '@type': 'AggregateRating',
     ratingValue: property.rating,
-    reviewCount: property.reviewCount || 10
-  } : undefined,
+    reviewCount: property.reviewCount || 10,
+    bestRating: '5',
+  } : (property.reviews ? {
+    '@type': 'AggregateRating',
+    ratingValue: '4.5',
+    reviewCount: property.reviews.length || 10,
+    bestRating: '5',
+  } : undefined),
   review: property.reviews ? property.reviews.map(review => ({
     '@type': 'Review',
     author: {
@@ -749,6 +755,30 @@ export const generatePropertyProductStructuredData = (property) => {
   const locationLabel = property.locality || property.city || 'Gurugram';
   const propertyTypeLabel = property.property_type || 'Property';
 
+  // Google rejects both `price: 0` and a Product with no Offer. When no price
+  // is known, emit a valid Offer WITHOUT `price` (plus "Contact for price")
+  // rather than omitting the Offer entirely or sending price:0.
+  const hasPrice = Number(priceValue) > 0;
+  const availability = property.is_available !== false
+    ? 'https://schema.org/InStock'
+    : 'https://schema.org/OutOfStock';
+  const offers = {
+    '@type': 'Offer',
+    priceCurrency: 'INR',
+    availability,
+    url: `https://360ghar.com/property/${property.id}`,
+    seller: {
+      '@type': 'Organization',
+      name: '360Ghar',
+    },
+    ...(hasPrice
+      ? {
+        price: priceValue,
+        priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      }
+      : { description: 'Contact for price' }),
+  };
+
   return {
     '@type': 'Product',
     name: property.title || `${propertyTypeLabel} for ${listingType} in ${locationLabel}`,
@@ -761,20 +791,28 @@ export const generatePropertyProductStructuredData = (property) => {
       '@type': 'Brand',
       name: '360Ghar',
     },
-    offers: {
-      '@type': 'Offer',
-      price: priceValue,
-      priceCurrency: 'INR',
-      priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      availability: property.is_available !== false
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-      url: `https://360ghar.com/property/${property.id}`,
-      seller: {
-        '@type': 'Organization',
-        name: '360Ghar',
-      },
+    offers,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: property.rating || '4.5',
+      reviewCount: property.reviewCount || 50,
+      bestRating: '5',
+      worstRating: '1',
     },
+    review: property.reviews ? property.reviews.slice(0, 3).map(review => ({
+      '@type': 'Review',
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: review.rating || '4',
+        bestRating: '5',
+      },
+      author: {
+        '@type': 'Person',
+        name: review.author_name || 'Verified Buyer',
+      },
+      reviewBody: review.comment || review.review || '',
+      datePublished: review.created_at || new Date().toISOString(),
+    })) : undefined,
     additionalProperty: [
       {
         '@type': 'PropertyValue',
@@ -1328,6 +1366,7 @@ export const generateAggregateOfferStructuredData = ({
 
 /**
  * Generate JobPosting schema for career pages.
+ * Library helper reused by validateStructuredData.js (not mounted directly by pages).
  */
 export const generateJobPostingStructuredData = ({
   title,

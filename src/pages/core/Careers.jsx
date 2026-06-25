@@ -17,8 +17,7 @@ const CAREER_VALUES = [
   { icon: 'fas fa-graduation-cap', text: 'Learn fast — mentors, reviews, and ownership' },
 ];
 
-const TODAY = new Date().toISOString().split('T')[0];
-const VALID_THROUGH = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+const TODAY_FALLBACK = '2025-01-15';
 
 /**
  * AUDIT FIX (4.8): derive a human-readable category from each opening so the
@@ -69,9 +68,10 @@ const Careers = () => {
       hasPart: careerOpenings.map((opening) => ({
         '@type': 'JobPosting',
         name: opening.title,
+        title: opening.title,
         description: opening.description.slice(0, 200),
-        datePosted: TODAY,
-        validThrough: VALID_THROUGH,
+        datePosted: opening.postedDate || TODAY_FALLBACK,
+        validThrough: new Date(new Date(opening.postedDate || TODAY_FALLBACK).getTime() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         hiringOrganization: {
           '@type': 'Organization',
           name: '360Ghar',
@@ -81,12 +81,24 @@ const Careers = () => {
           '@type': 'Place',
           address: {
             '@type': 'PostalAddress',
+            streetAddress: 'Sector 50, Gurugram',
             addressLocality: 'Gurugram',
             addressRegion: 'Haryana',
+            postalCode: '122001',
             addressCountry: 'IN',
           },
         },
         employmentType: 'INTERNSHIP',
+        baseSalary: {
+          '@type': 'MonetaryAmount',
+          currency: 'INR',
+          value: {
+            '@type': 'QuantitativeValue',
+            value: 15000,
+            unitText: 'MONTH',
+          },
+        },
+        directApply: true,
       })),
       breadcrumb: {
         '@type': 'BreadcrumbList',

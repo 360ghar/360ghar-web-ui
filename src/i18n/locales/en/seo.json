@@ -1,7 +1,7 @@
 {
   "home": {
     "title": "360Ghar – VR Home Tours & Property in Gurugram",
-    "description": "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. Explore verified flats, apartments & villas in Gurugram with studio-quality 360° guided walkthroughs. Zero upfront fees. No fake listings. AI-powered search."
+    "description": "360Ghar — India's AI + VR real estate platform. Tour verified flats, apartments & villas in Gurugram with 360° walkthroughs. No fake listings."
   },
   "about": {
     "title": "About 360Ghar | India's VR-First Way to Find a Home",
@@ -169,8 +169,8 @@
     "descriptionTemplate": "Find verified flats, apartments, and offices near {{name}} in {{city}}. 360° virtual tours available."
   },
   "blog": {
-    "fallbackTitle": "Real Estate Blog | 360Ghar",
-    "fallbackDescription": "Read verified insights on buying, renting, PGs, and real estate investment in Gurugram on 360Ghar blog."
+    "fallbackTitle": "Real Estate Blog 2026 | Vastu, Property Calculators & Buying Guide | 360Ghar",
+    "fallbackDescription": "Read 2026 insights on Vastu, area calculators, buying, renting, and real estate investment in Gurugram. Free guides from 360Ghar blog."
   },
   "truth": {
     "99acres": {

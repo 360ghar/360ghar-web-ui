@@ -6,22 +6,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>360Ghar – VR Home Tours & Property in Gurugram</title>
-  <meta name="description" content="360Ghar helps you buy, rent, and compare verified properties in Gurugram with 360° virtual tours, locality intelligence, and AI-assisted real estate workflows." />
   <meta name="theme-color" content="#ff6b00" />
-  <!-- Static OG fallback for non-JS social crawlers (WhatsApp, Facebook, iMessage).
-       react-helmet-async replaces these on hydration for JS-enabled crawlers. -->
+  <!-- No static <meta name="description"> here: react-helmet-async does NOT remove
+       static head tags (it only adds), so a static description would appear FIRST
+       and shadow the per-page description the SEO component renders via Helmet on
+       every route. The SEO component always emits a description (page-specific,
+       else the site default), so Google/prerendered HTML always has the right one.
+       The OG/Twitter tags below ARE kept static as a fallback for non-JS social
+       crawlers (WhatsApp, Facebook, iMessage) that don't execute Helmet. -->
   <meta property="og:title" content="360Ghar – VR Home Tours & Property in Gurugram" />
-  <meta property="og:description" content="360Ghar helps you buy, rent, and compare verified properties in Gurugram with 360° virtual tours, locality intelligence, and AI-assisted real estate workflows." />
+  <meta property="og:description" content="360Ghar — India's AI + VR real estate platform. Tour verified flats, apartments & villas in Gurugram with 360° walkthroughs. No fake listings." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://360ghar.com/" />
   <meta property="og:image" content="https://360ghar.com/og-image-home.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="360Ghar – VR Home Tours & Property in Gurugram" />
-  <meta name="twitter:description" content="360Ghar helps you buy, rent, and compare verified properties in Gurugram with 360° virtual tours, locality intelligence, and AI-assisted real estate workflows." />
+  <meta name="twitter:description" content="360Ghar — India's AI + VR real estate platform. Tour verified flats, apartments & villas in Gurugram with 360° walkthroughs. No fake listings." />
   <meta name="twitter:image" content="https://360ghar.com/og-image-home.jpg" />
-  <link rel="alternate" hreflang="en" href="https://360ghar.com/" />
-  <link rel="alternate" hreflang="hi" href="https://360ghar.com/hi" />
-  <link rel="alternate" hreflang="x-default" href="https://360ghar.com/" />
+  <!-- No static hreflang alternates here, for the same reason as canonical and
+       description: react-helmet-async only ADDS (never removes) static tags, so
+       static hreflang would coexist with the per-page alternates the SEO
+       component renders via Helmet — producing conflicting hreflang (e.g. "en"
+       pointing to both "/" and the current page). Hreflang is owned per-page by
+       Helmet (buildHreflangs in SEO.jsx) and baked into prerendered HTML. -->
+  <!-- NOTE: no static <link rel="canonical"> here. react-helmet-async does NOT
+       remove static head tags (it only adds), so a default canonical would
+       duplicate Helmet's per-page canonical on every route — and the static
+       (homepage) one, appearing first, would win, making every page appear to
+       canonicalize to "/". Canonical is owned per-page by the SEO component /
+       Helmet (and baked into prerendered HTML). Junk shell URLs are handled by
+       the soft-404 edge function (real 404) rather than a default canonical. -->
 
   <!-- Google tag (gtag.js) — deferred to idle so it never competes with first paint -->
   <script>

@@ -58,7 +58,14 @@ const SEO = ({
   const locale = pathLocale === 'hi' ? 'hi' : (storeLocale === 'hi' ? 'hi' : 'en');
   const localizedPath = localizeSeoPath(rawPath, locale);
   const computedUrl = absoluteUrl(localizeSeoPath(url || localizedPath, locale));
-  const canonicalUrl = absoluteUrl(localizeSeoPath((canonical || localizedPath).replace(/\/+$/, '') || '/', locale));
+  // Canonical must be DETERMINISTIC from the URL path, never from the store
+  // locale. The store value can flip between renders (initial render before
+  // LocaleGate's useLayoutEffect fires in concurrent mode), which makes the
+  // canonical href oscillate between /…/ and /hi/…/ and look like duplicate
+  // pages to crawlers. We therefore derive the canonical's locale from
+  // `pathLocale` (computed above from rawPath) so it is stable across renders.
+  // The explicit `canonical` prop override still wins when passed.
+  const canonicalUrl = absoluteUrl(localizeSeoPath((canonical || localizedPath).replace(/\/+$/, '') || '/', pathLocale));
 
   const metaTitle = title || siteMetadata.defaultTitle;
   const metaDesc = description || siteMetadata.defaultDescription;

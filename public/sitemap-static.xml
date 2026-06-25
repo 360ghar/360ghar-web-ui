@@ -354,6 +354,54 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/area-calculator" />
   </url>
   <url>
+    <loc>https://360ghar.com/mofa-to-rera-converter</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/mofa-to-rera-converter" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/mofa-to-rera-converter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/mofa-to-rera-converter" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/mofa-to-rera-converter</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/mofa-to-rera-converter" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/mofa-to-rera-converter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/mofa-to-rera-converter" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/sq-ft-calculator</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/sq-ft-calculator" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/sq-ft-calculator" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/sq-ft-calculator" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/sq-ft-calculator</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/sq-ft-calculator" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/sq-ft-calculator" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/sq-ft-calculator" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/acre-in-gaj</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/acre-in-gaj" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/acre-in-gaj" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/acre-in-gaj" />
+  </url>
+  <url>
+    <loc>https://360ghar.com/hi/acre-in-gaj</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://360ghar.com/acre-in-gaj" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/acre-in-gaj" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/acre-in-gaj" />
+  </url>
+  <url>
     <loc>https://360ghar.com/loan-eligibility-calculator</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

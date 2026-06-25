@@ -69,6 +69,27 @@ export const toolSchemas = {
         category: 'UtilitiesApplication',
         route: '/area-calculator'
     },
+    mofaToRera: {
+        name: 'MOFA to RERA Carpet Area Converter',
+        description: "Free MOFA to RERA carpet area converter for Maharashtra flats. Convert MOFA carpet area to RERA carpet area (or vice versa) instantly. RERA carpet is ~5-8% larger than MOFA carpet.",
+        keywords: 'mofa to rera carpet conversion, mofa to rera calculator, mofa carpet area, rera carpet area, mofa vs rera carpet area, maharashtra carpet area calculator, mofa to rera conversion formula, rera carpet area calculator, carpet area converter mofa rera, mofa rera difference, 360ghar',
+        category: 'UtilitiesApplication',
+        route: '/mofa-to-rera-converter'
+    },
+    sqFtCalculator: {
+        name: 'Carpet Area to Sq Ft Calculator',
+        description: "Free carpet area to square feet calculator. Convert carpet area, sq m, sq yd, gaj, and acres to square feet instantly. Accurate area-to-sq-ft conversion for Indian property buyers.",
+        keywords: 'carpet area to sq ft calculator, sq ft calculator, square feet calculator, sq m to sq ft, sq yd to sq ft, gaj to sq ft, carpet area in square feet, area to sq ft converter, property area calculator, square feet conversion India, 360ghar',
+        category: 'UtilitiesApplication',
+        route: '/sq-ft-calculator'
+    },
+    acreInGaj: {
+        name: 'Acre to Gaj Converter (1 Acre = 4840 Gaj)',
+        description: "Free acre to gaj converter. 1 acre equals 4840 gaj. Convert acres to gaj, square feet, or square yards instantly. Accurate land area conversion for Indian property.",
+        keywords: '1 acre in gaj, acre in gaj, acre to gaj, 1 acre equal to gaj, acre to gaj converter, 4840 gaj in acre, acre to sq ft, gaj to sq ft, 1 acre how many gaj, acre gaj conversion, land area converter India, 360ghar',
+        category: 'UtilitiesApplication',
+        route: '/acre-in-gaj'
+    },
     loanEligibility: {
         name: 'Home Loan Eligibility Calculator',
         description: 'Check your home loan eligibility based on income, existing EMIs, and other factors. Know how much loan you can get for buying property in India.',

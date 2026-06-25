@@ -10,6 +10,7 @@ import Cta from '../../components/ui/Cta';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateToolSchema, toolSchemas } from '../../seo/toolSchemas';
 import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHowToStructuredData } from '../../seo/structuredData';
+import { ToolRelatedLinks } from '../../components/tools/ToolContentSections';
 
 import './AreaCalculator.scss';
 
@@ -239,6 +240,15 @@ const AreaCalculator = () => {
                                         ))}
                                     </div>
                                 </div>
+
+                                <ToolRelatedLinks
+                                    heading="Related tools"
+                                    links={[
+                                        { to: '/mofa-to-rera-converter', label: 'MOFA to RERA Carpet Converter', icon: 'fas fa-arrows-rotate' },
+                                        { to: '/sq-ft-calculator', label: 'Carpet Area to Sq Ft Calculator', icon: 'fas fa-square' },
+                                        { to: '/area-converter', label: 'Area Unit Converter', icon: 'fas fa-exchange-alt' },
+                                    ]}
+                                />
                             </div>
                         </div>
                     </div>
