@@ -27,7 +27,7 @@ const FloorPlan = () => {
                 <div className="row gy-4 align-items-center">
                     <div className="col-lg-6">
                         <div className="floor-plan__thumb">
-                            <LazyImage src={FloorImage} alt="Image"/>
+                            <LazyImage src={FloorImage} alt="Property floor plan layout"/>
                         </div>
                     </div>
                     <div className="col-lg-6">
