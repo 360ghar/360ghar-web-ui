@@ -3,8 +3,9 @@ export const siteMetadata = {
   siteName: '360Ghar',
   defaultTitle:
     "360Ghar – VR Home Tours & Property in Gurugram",
+  // SEO AUDIT FIX (issues #24, #34): shortened from 238 to ~149 chars.
   defaultDescription:
-    "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. Explore verified flats, apartments & villas in Gurugram with studio-quality 360° guided walkthroughs. Zero upfront fees. No fake listings. AI-powered search.",
+    "Explore verified properties in Gurugram with immersive virtual tours. 360Ghar is India's AI + VR real estate platform. Zero fees. No fake listings.",
   defaultKeywords: [
     '360Ghar',
     'Gurugram real estate',

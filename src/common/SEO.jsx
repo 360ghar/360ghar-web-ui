@@ -58,15 +58,22 @@ const SEO = ({
   const locale = pathLocale === 'hi' ? 'hi' : (storeLocale === 'hi' ? 'hi' : 'en');
   const localizedPath = localizeSeoPath(rawPath, locale);
   const computedUrl = absoluteUrl(localizeSeoPath(url || localizedPath, locale));
-  const canonicalUrl = absoluteUrl(localizeSeoPath((canonical || localizedPath).replace(/\/+$/, '') || '/', locale));
+  // SEO AUDIT FIX (issue #31): canonical must ALWAYS point to the English
+  // (un-prefixed) URL, even on /hi/ pages. Previously localizeSeoPath
+  // localized the canonical, causing Hindi pages to self-canonical instead of
+  // pointing to the English equivalent.
+  const rawCanonical = (canonical || localizedPath).replace(/\/+$/, '') || '/';
+  const canonicalUrl = absoluteUrl(stripLocalePrefix(rawCanonical));
 
   const metaTitle = title || siteMetadata.defaultTitle;
   const metaDesc = description || siteMetadata.defaultDescription;
   const metaKeywords = keywords;
   const ogImage = absoluteUrl(image || siteMetadata.defaultOgImage);
 
-  // Auto-generate hreflang alternates based on current URL
-  const alternates = hreflangs || buildHreflangs(canonicalUrl);
+  // SEO AUDIT FIX (issues #6, #4, #21): suppress hreflang on noindex pages.
+  // Noindex pages can't confirm return links, causing "Missing Return Links"
+  // and "Noindex Return Links" audit warnings.
+  const alternates = noindex ? [] : (hreflangs || buildHreflangs(canonicalUrl));
 
   const ldBlocks = toArray(structuredData);
   const isArticle = type === 'article';
@@ -78,7 +85,9 @@ const SEO = ({
       <title>{metaTitle}</title>
       {metaDesc && <meta name="description" content={metaDesc} />}
       {metaKeywords && <meta name="keywords" content={metaKeywords} />}
-      <link rel="canonical" href={canonicalUrl} />
+      {/* SEO AUDIT FIX (issue #5): suppress canonical on noindex pages to
+           avoid "Non-Indexable Canonical" errors. */}
+      {!noindex && <link rel="canonical" href={canonicalUrl} />}
       {prevUrl && <link rel="prev" href={absoluteUrl(prevUrl)} />}
       {nextUrl && <link rel="next" href={absoluteUrl(nextUrl)} />}
 
@@ -87,13 +96,14 @@ const SEO = ({
         name="robots"
         content={
           noindex
-            ? 'noindex,nofollow'
+            ? 'noindex,follow'  /* SEO AUDIT FIX (issue #10): changed nofollow→follow
+                                   so noindex auth pages still pass link equity */
             : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
         }
       />
       <meta
         name="googlebot"
-        content={noindex ? 'noindex,nofollow' : 'index, follow'}
+        content={noindex ? 'noindex,follow' : 'index, follow'}
       />
 
       {/* Alternate languages */}

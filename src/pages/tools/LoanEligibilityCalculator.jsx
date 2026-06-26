@@ -268,7 +268,8 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
  
                                      <div className="col-lg-6">
                                          <div className="bg-main text-white p-4 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center text-center">
-                                             <h3 className="text-white mb-2">{t('loanEligibility.maxEligibleLoan')}</h3>
+                                             {/* SEO AUDIT FIX (issue #44): h3→h1 for primary heading */}
+                                            <h1 className="text-white mb-2">{t('loanEligibility.maxEligibleLoan')}</h1>
                                              <div className="display-4 fw-bold mb-4 text-white">
                                                  {formatCurrency(maxLoan)}
                                              </div>
