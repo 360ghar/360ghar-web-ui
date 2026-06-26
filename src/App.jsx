@@ -16,6 +16,9 @@ import SEO from './common/SEO';
 import UIScrollLockEffect from './common/UIScrollLockEffect';
 import { realEstateStructuredData, generateSpeakableStructuredData } from './seo/structuredData';
 import * as posthogService from './services/posthogService';
+import BuilderReputationScore from "./pages/geo/BuilderReputationScore";
+import TenantDemandHeatmap from "./pages/geo/TenantDemandHeatmap";
+import BestSectorsInvestment2026 from "./pages/geo/BestSectorsInvestment2026";
 
 const Home = lazy(() => import('./pages/Home'));
 const PropertySidebar = lazy(() => import('./pages/properties/PropertySidebar'));
@@ -310,6 +313,9 @@ function App() {
                 );
               })}
               <Route path="*" element={<NotFound />} />
+              <Route path="/builder-reputation-score" element={<BuilderReputationScore />} />
+              <Route path="/tenant-demand-heatmap" element={<TenantDemandHeatmap />} />
+              <Route path="/best-sectors-investment-2026" element={<BestSectorsInvestment2026 />} />
             </Route>
 
             {/* Default (English) routes — no prefix */}

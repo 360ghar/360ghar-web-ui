@@ -4,7 +4,7 @@ export const siteMetadata = {
   defaultTitle:
     "360Ghar – VR Home Tours & Property in Gurugram",
   defaultDescription:
-    "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. Explore verified flats, apartments & villas in Gurugram with studio-quality 360° guided walkthroughs. Zero upfront fees. No fake listings. AI-powered search.",
+    "India's first AI + VR real estate platform. Explore verified flats & apartments in Gurugram with 360° virtual tours. Zero upfront fees.",
   defaultKeywords: [
     '360Ghar',
     'Gurugram real estate',

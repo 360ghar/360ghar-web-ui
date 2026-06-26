@@ -2233,4 +2233,24 @@
     <xhtml:link rel="alternate" hreflang="hi" href="https://360ghar.com/hi/ghaziabad/pg/flats" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://360ghar.com/ghaziabad/pg/flats" />
   </url>
+<url>
+  <loc>https://360ghar.com/builder-reputation-score</loc>
+  <lastmod>2026-01-01</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://360ghar.com/tenant-demand-heatmap</loc>
+  <lastmod>2026-01-01</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://360ghar.com/best-sectors-investment-2026</loc>
+  <lastmod>2026-01-01</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
