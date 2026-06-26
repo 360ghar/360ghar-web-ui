@@ -158,6 +158,8 @@ const BuilderReputation = () => {
                     <li className="breadcrumb-item"><I18nLink to="/builder-reputation">Data Hub</I18nLink></li>
                     <li className="breadcrumb-item active">Builder Reputation</li>
                   </ol>
+                  <a href="/builder-reputation-score">Builder Reputation Score</a>
+                  <a href="/tenant-demand-heatmap">Tenant Demand Heatmap</a>
                 </nav>
                 <h1 className="fs-28 fw-600 mb-10">{t('builderReputation.title')}</h1>
                 <p className="mb-0 color-text-3">
@@ -382,6 +384,8 @@ const BuilderReputation = () => {
                 <div className="d-flex justify-content-center gap-3 flex-wrap">
                   <I18nLink to="/properties" className="btn btn-white btn-main">{t('builderReputation.cta.browseProperties')}</I18nLink>
                   <I18nLink to="/contact" className="btn btn-outline-white">{t('builderReputation.cta.contactUs')}</I18nLink>
+                  <a href="/best-sectors-investment-2026">Investment Guide 2026</a>
+                  <a href="/tenant-demand-heatmap">Tenant Demand Heatmap</a>
                 </div>
               </div>
             </div>
