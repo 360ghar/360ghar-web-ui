@@ -28,6 +28,7 @@ const STATIC_ROUTES = [
   'about-us',
   'faq',
   'project',
+  'blog',
   'contact',
   'policies',
   'gurugram-real-estate-guide',
@@ -71,6 +72,9 @@ const STATIC_ROUTES = [
   'ai-design-studio',
   'check-fake-listing',
   'rent-receipt',
+  'mofa-to-rera-converter',
+  'sq-ft-calculator',
+  'acre-in-gaj',
   // data hub
   'circle-rates',
   'stamp-duty-calculator',
