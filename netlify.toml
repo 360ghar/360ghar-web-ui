@@ -93,6 +93,21 @@
   to = "/index.html"
   status = 200
 
+# ── SEO AUDIT FIX: Global security headers (issues #8, #26, #1, #40) ──────
+# These were missing on ~99% of URLs. Applied to all responses.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(self)"
+    # Content-Security-Policy intentionally omitted for now. The previous CSP
+    # silently broke Formspree forms (form-action), Places/Maps autocomplete
+    # (connect-src), the AI Design Studio / Puter (script+connect-src) and Vimeo
+    # tours (frame-src). Add a deploy-preview-tested CSP in a dedicated
+    # security-hardening PR instead.
+
 # Hashed JS chunks — content-addressed, safe to cache forever
 [[headers]]
   for = "/assets/*.js"

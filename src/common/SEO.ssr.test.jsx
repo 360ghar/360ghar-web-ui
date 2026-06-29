@@ -29,14 +29,14 @@ describe('SEO localized metadata', () => {
     useLocaleStore.setState({ locale: 'en' });
   });
 
-  it('localizes internal canonical paths for Hindi routes', () => {
+  it('forces the canonical to the English path for Hindi routes', () => {
     const helmet = renderSeo({
       location: '/hi/about-us',
       locale: 'hi',
       canonical: '/about-us',
     });
 
-    expect(helmet.link.toString()).toContain('rel="canonical" href="https://360ghar.com/hi/about-us"');
+    expect(helmet.link.toString()).toContain('rel="canonical" href="https://360ghar.com/about-us"');
   });
 
   it('derives hreflang alternates from the canonical target', () => {
