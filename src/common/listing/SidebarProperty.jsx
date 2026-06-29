@@ -44,7 +44,7 @@ const SidebarProperty = () => {
                 {!loading && !error && items.map((p, idx) => (
                     <div className="col-lg-6 col-sm-4 col-6" key={p.id || idx}>
                         <I18nLink to={`/property/${p.id}`} className="properties-item d-block w-100">
-                            <LazyImage src={getThumb(p)} fallbackSrc={PROPERTY_IMAGE_FALLBACK} alt="Property Image" className="cover-img"/>
+                            <LazyImage src={getThumb(p)} fallbackSrc={PROPERTY_IMAGE_FALLBACK} alt={p.title || 'Property'} className="cover-img"/>
                             <span className="properties-item__text">{p.title || 'Property'}</span>
                         </I18nLink>
                     </div>
