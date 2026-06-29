@@ -28,7 +28,7 @@ const BannerTwo = () => {
                     </div>
                     <div className="banner-two__filter background-img" style={{ backgroundImage: `url(${BannerTwoThumb})` }}>
                         <div className="filter--box ms-auto">
-                            <TabFilter colClass="col-12"/>
+                            <TabFilter />
                         </div>
                     </div>
                 </div>
