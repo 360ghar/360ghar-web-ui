@@ -18,7 +18,7 @@ const getProfileDraft = (profile) => {
 };
 
 const AccountDetailsTab = () => {
-    const { profile, getProfile, updateProfile, isLoading, error, clearError } = useUserStore();
+    const { profile, getProfile, updateProfile, isProfileLoading, isUpdateLoading, error, clearError } = useUserStore();
     const [draft, setDraft] = useState(null);
     const { t } = useTranslation('account');
 
@@ -48,7 +48,7 @@ const AccountDetailsTab = () => {
         }
     };
 
-    if (isLoading && !profile) {
+    if (isProfileLoading && !profile) {
         return <div className="py-4">{t('tabs.details.loading')}</div>;
     }
 
@@ -85,8 +85,8 @@ const AccountDetailsTab = () => {
                         <div className="row gy-lg-4 gy-3">
                             {error && <div className="col-12 text-danger">{error}</div>}
                             <div className="col-12">
-                                <button type="submit" className="btn btn-main w-100" disabled={isLoading}>
-                                    {isLoading ? t('tabs.details.saving') : t('tabs.details.saveChanges')}
+                                <button type="submit" className="btn btn-main w-100" disabled={isUpdateLoading}>
+                                    {isUpdateLoading ? t('tabs.details.saving') : t('tabs.details.saveChanges')}
                                 </button>
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -59,6 +60,7 @@ const scoreBadgeStyle = (score) => ({
 
 const BuilderReputation = () => {
   const { t } = useTranslation('data-hub');
+  const { t: tCommon } = useTranslation('common');
   const [tSeo] = useTranslation('seo');
   const [builders, setBuilders] = useState([]);
   const [nextCursor, setNextCursor] = useState(null);
@@ -69,6 +71,7 @@ const BuilderReputation = () => {
   const [sortBy, setSortBy] = useState('score_desc');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const SORT_OPTIONS = [
@@ -92,7 +95,7 @@ const BuilderReputation = () => {
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [search, sortBy]);
+  }, [search, sortBy, refreshKey]);
 
   // Cursor "Load more": fetch the next page using the opaque cursor token.
   const handleLoadMore = async () => {
@@ -222,6 +225,12 @@ const BuilderReputation = () => {
             ) : error ? (
               <div className="text-center py-40">
                 <p className="color-danger fs-16">{t('builderReputation.error')}</p>
+                <button
+                  className="btn btn-sm btn-outline-main mt-10"
+                  onClick={() => setRefreshKey(k => k + 1)}
+                >
+                  {tCommon('common.tryAgain', 'Try Again')}
+                </button>
               </div>
             ) : (
               <>
@@ -328,11 +337,11 @@ const BuilderReputation = () => {
                       {loadingMore ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                          Loading...
+                          {tCommon('common.loading', 'Loading...')}
                         </>
                       ) : (
                         <>
-                          <i className="fas fa-plus me-1"></i> Load More
+                          <i className="fas fa-plus me-1"></i> {tCommon('common.loadMore', 'Load More')}
                         </>
                       )}
                     </button>
@@ -355,7 +364,7 @@ const BuilderReputation = () => {
         {/* FAQ Section */}
         <section className="pb-60">
           <div className="container">
-            <h2 className="fs-24 fw-600 mb-20">Frequently Asked Questions</h2>
+            <h2 className="fs-24 fw-600 mb-20">{tCommon('common.frequentlyAskedQuestions', 'Frequently Asked Questions')}</h2>
             <div className="accordion">
               {FAQS.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -20,7 +20,7 @@ import './VastuChecker.scss';
 const VastuChecker = () => {
     const { t } = useTranslation('tools');
 
-    const VASTU_CHECKER_FAQS = [
+    const VASTU_CHECKER_FAQS = useMemo(() => [
         { question: t('vastu.faqs.q1.question'), answer: t('vastu.faqs.q1.answer') },
         { question: t('vastu.faqs.q2.question'), answer: t('vastu.faqs.q2.answer') },
         { question: t('vastu.faqs.q3.question'), answer: t('vastu.faqs.q3.answer') },
@@ -30,14 +30,14 @@ const VastuChecker = () => {
         { question: t('vastu.faqs.q7.question'), answer: t('vastu.faqs.q7.answer') },
         { question: t('vastu.faqs.q8.question'), answer: t('vastu.faqs.q8.answer') },
         { question: t('vastu.faqs.q9.question'), answer: t('vastu.faqs.q9.answer') },
-    ];
+    ], [t]);
 
-    const VASTU_CHECKER_HOW_TO_STEPS = [
+    const VASTU_CHECKER_HOW_TO_STEPS = useMemo(() => [
         { name: t('vastu.howToSteps.step1.name'), text: t('vastu.howToSteps.step1.text') },
         { name: t('vastu.howToSteps.step2.name'), text: t('vastu.howToSteps.step2.text') },
         { name: t('vastu.howToSteps.step3.name'), text: t('vastu.howToSteps.step3.text') },
         { name: t('vastu.howToSteps.step4.name'), text: t('vastu.howToSteps.step4.text') },
-    ];
+    ], [t]);
 
     // Form state
     const [selectedFile, setSelectedFile] = useState(null);

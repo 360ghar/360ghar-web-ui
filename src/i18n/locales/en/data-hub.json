@@ -45,6 +45,8 @@
     }
   },
   "stampDuty": {
+    "enterPropertyValue": "Please enter a property value",
+    "calculationError": "Failed to calculate stamp duty. Please try again.",
     "title": "Haryana Stamp Duty Calculator",
     "description": "Calculate stamp duty and registration fees for property registration in Gurugram, Haryana.",
     "propertyValue": "Property Value (\u20b9)",

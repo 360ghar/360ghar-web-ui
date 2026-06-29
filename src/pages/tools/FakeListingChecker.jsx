@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
@@ -43,31 +43,61 @@ const FakeListingChecker = () => {
   // UX FIX (audit 3.9): add a brief loading state so users get feedback that
   // an analysis is running, even though the check is fast client-side work.
   const [checking, setChecking] = useState(false);
+  // The setTimeout handle and the URL captured at click time. The URL snapshot
+  // lets a deferred timer fire check that the input hasn't changed since the
+  // click — typing in the input during the 400ms delay should not produce a
+  // result for the now-stale URL. We also mirror the latest input into
+  // `latestUrlRef` via the onChange so the timer callback can read the live
+  // value (a closure on `url` would be stale).
+  const checkTimerRef = useRef(null);
+  const checkUrlRef = useRef('');
+  const latestUrlRef = useRef('');
+
+  // Clear any pending check on unmount so a route change mid-defer doesn't
+  // setState on an unmounted component.
+  useEffect(() => {
+    return () => {
+      if (checkTimerRef.current) clearTimeout(checkTimerRef.current);
+    };
+  }, []);
 
   const handleCheck = () => {
     if (!url.trim() || checking) return;
     setChecking(true);
+    // Snapshot the URL at click time so a deferred timer that fires after the
+    // user has typed more characters knows the result is stale and skips
+    // setting state.
+    checkUrlRef.current = url;
     // Small delay for UX feedback; the actual hostname check is instant.
-    setTimeout(() => {
-    // CRITICAL FIX (audit 3.7): `url.includes(p)` matched partial strings,
-    // so a query param containing "nobroker.in" on another site would
-    // falsely match. Extract the hostname and compare against the curated
-    // list of trusted portal domains.
-    let hostname = '';
-    try {
-      hostname = new URL(url).hostname.toLowerCase();
-    } catch {
-      // Not a valid absolute URL; fall back to the raw string so the user
-      // still gets a useful "unknown portal" result instead of a crash.
-      hostname = url.toLowerCase();
-    }
-    const domain = Object.keys(KNOWN_PORTALS).find((p) => {
-      const candidate = p.toLowerCase();
-      return hostname === candidate || hostname.endsWith(`.${candidate}`);
-    });
-    setPortalInfo(domain ? KNOWN_PORTALS[domain] : null);
-    setChecked(true);
-    setChecking(false);
+    if (checkTimerRef.current) clearTimeout(checkTimerRef.current);
+    checkTimerRef.current = setTimeout(() => {
+      checkTimerRef.current = null;
+      // If the user typed more characters between click and timer fire, the
+      // latest input is no longer the one they asked to check. Bail without
+      // updating state — let them re-click.
+      if (latestUrlRef.current !== checkUrlRef.current) {
+        setChecking(false);
+        return;
+      }
+      // CRITICAL FIX (audit 3.7): `url.includes(p)` matched partial strings,
+      // so a query param containing "nobroker.in" on another site would
+      // falsely match. Extract the hostname and compare against the curated
+      // list of trusted portal domains.
+      let hostname = '';
+      try {
+        hostname = new URL(latestUrlRef.current).hostname.toLowerCase();
+      } catch {
+        // Not a valid absolute URL; fall back to the raw string so the user
+        // still gets a useful "unknown portal" result instead of a crash.
+        hostname = latestUrlRef.current.toLowerCase();
+      }
+      const domain = Object.keys(KNOWN_PORTALS).find((p) => {
+        const candidate = p.toLowerCase();
+        return hostname === candidate || hostname.endsWith(`.${candidate}`);
+      });
+      setPortalInfo(domain ? KNOWN_PORTALS[domain] : null);
+      setChecked(true);
+      setChecking(false);
     }, 400);
   };
 
@@ -113,9 +143,9 @@ const FakeListingChecker = () => {
         <section className="padding-y-60">
           <div className="container container-two">
             <div className="section-heading text-center mb-4">
-              <h1 className="section-heading__title">Check if a Property Listing is Fake</h1>
+              <h1 className="section-heading__title">{t('fakeListingChecker.heroTitle')}</h1>
               <p className="section-heading__desc">
-                Paste a listing URL from 99acres, MagicBricks, or any portal. We&apos;ll show you known issues and red flags.
+                {t('fakeListingChecker.heroDesc')}
               </p>
             </div>
 
@@ -126,18 +156,22 @@ const FakeListingChecker = () => {
                   <input
                     type="url"
                     className="form-control form-control-lg"
-                    placeholder="Paste listing URL (e.g., https://www.99acres.com/...)"
+                    placeholder={t('fakeListingChecker.inputPlaceholder')}
                     value={url}
-                    onChange={(e) => { setUrl(e.target.value); setChecked(false); }}
+                    onChange={(e) => {
+                      latestUrlRef.current = e.target.value;
+                      setUrl(e.target.value);
+                      setChecked(false);
+                    }}
                     onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
                   />
                   <button className="btn btn-main px-4" onClick={handleCheck} disabled={checking}>
                     {checking ? (
                       <>
                         <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                        Analyzing...
+                        {t('fakeListingChecker.analyzing')}
                       </>
-                    ) : 'Check Listing'}
+                    ) : t('fakeListingChecker.checkListing')}
                   </button>
                 </div>
               </div>
@@ -151,9 +185,9 @@ const FakeListingChecker = () => {
                     <div className="p-4 rounded-3 border" style={{ background: '#fef9f3' }}>
                       <div className="d-flex align-items-center gap-3 mb-3">
                         <span className="badge" style={{ background: riskColor, color: '#fff', fontSize: '0.875rem', padding: '6px 14px' }}>
-                          {portalInfo.risk === 'high' ? 'High Risk' : portalInfo.risk === 'medium' ? 'Medium Risk' : 'Low Risk'}
+                          {portalInfo.risk === 'high' ? t('fakeListingChecker.highRisk') : portalInfo.risk === 'medium' ? t('fakeListingChecker.mediumRisk') : t('fakeListingChecker.lowRisk')}
                         </span>
-                        <h2 className="h5 mb-0">{portalInfo.name} — Known Issues</h2>
+                        <h2 className="h5 mb-0">{portalInfo.name} — {t('fakeListingChecker.knownIssues')}</h2>
                       </div>
                       <ul className="mb-3">
                         {portalInfo.issues.map((issue, i) => (
@@ -161,32 +195,32 @@ const FakeListingChecker = () => {
                         ))}
                       </ul>
                       <div className="p-3 bg-white rounded-3 border mt-3">
-                        <h3 className="h6 mb-2">Red Flags to Watch For</h3>
+                        <h3 className="h6 mb-2">{t('fakeListingChecker.redFlagsTitle')}</h3>
                         <ul className="mb-0" style={{ fontSize: '0.875rem' }}>
-                          <li>Price significantly below market rate</li>
-                          <li>Stock or low-quality photos (not actual property)</li>
-                          <li>Agent refuses video call or live walkthrough</li>
-                          <li>Demand for advance payment before site visit</li>
-                          <li>Cannot provide property documents or RERA number</li>
-                          <li>Listing older than 60 days with no price reduction</li>
+                          <li>{t('fakeListingChecker.redFlag1')}</li>
+                          <li>{t('fakeListingChecker.redFlag2')}</li>
+                          <li>{t('fakeListingChecker.redFlag3')}</li>
+                          <li>{t('fakeListingChecker.redFlag4')}</li>
+                          <li>{t('fakeListingChecker.redFlag5')}</li>
+                          <li>{t('fakeListingChecker.redFlag6')}</li>
                         </ul>
                       </div>
                       <div className="mt-3 p-3 rounded-3" style={{ background: '#f0fdf4' }}>
-                        <strong className="d-block mb-1">Prefer verified listings?</strong>
+                        <strong className="d-block mb-1">{t('fakeListingChecker.preferVerified')}</strong>
                         <p className="mb-2 text-muted" style={{ fontSize: '0.875rem' }}>
-                          Every listing on 360Ghar is physically verified by our on-site team with 360° virtual tours. No fake listings, no spam calls.
+                          {t('fakeListingChecker.preferVerifiedDesc')}
                         </p>
-                        <I18nLink to="/properties?city=Gurgaon" className="btn btn-sm btn-main">Browse Verified Properties</I18nLink>
+                        <I18nLink to="/properties?city=Gurgaon" className="btn btn-sm btn-main">{t('fakeListingChecker.browseVerifiedProperties')}</I18nLink>
                       </div>
                     </div>
                   ) : (
                     <div className="p-4 rounded-3 border bg-light text-center">
                       <i className="fas fa-check-circle text-success fa-2x mb-3" />
-                      <h3 className="h6">URL Not from a Known Problem Portal</h3>
+                      <h3 className="h6">{t('fakeListingChecker.urlNotKnown')}</h3>
                       <p className="text-muted mb-2" style={{ fontSize: '0.875rem' }}>
-                        This URL doesn&apos;t match known portals with verification gaps. However, always verify property documents and ownership before any transaction.
+                        {t('fakeListingChecker.urlNotKnownDesc')}
                       </p>
-                      <I18nLink to="/properties?city=Gurgaon" className="btn btn-sm btn-outline-main">Browse 360Ghar Verified Listings</I18nLink>
+                      <I18nLink to="/properties?city=Gurgaon" className="btn btn-sm btn-outline-main">{t('fakeListingChecker.browseVerifiedListings')}</I18nLink>
                     </div>
                   )}
                 </div>
@@ -197,27 +231,27 @@ const FakeListingChecker = () => {
             <div className="row justify-content-center mt-5">
               <div className="col-lg-8">
                 <div className="p-4 rounded-3 bg-white border">
-                  <h2 className="h5 mb-3">Why 360Ghar Listings Are Verified</h2>
+                  <h2 className="h5 mb-3">{t('fakeListingChecker.whyVerifiedTitle')}</h2>
                   <div className="row g-3">
                     <div className="col-md-4">
                       <div className="text-center p-3">
                         <i className="fas fa-shield-alt text-main fa-2x mb-2" />
-                        <h3 className="h6">Physical Verification</h3>
-                        <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>Our team visits every property before listing</p>
+                        <h3 className="h6">{t('fakeListingChecker.physicalVerification')}</h3>
+                        <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>{t('fakeListingChecker.physicalVerificationDesc')}</p>
                       </div>
                     </div>
                     <div className="col-md-4">
                       <div className="text-center p-3">
                         <i className="fas fa-vr-cardboard text-main fa-2x mb-2" />
-                        <h3 className="h6">360° Virtual Tours</h3>
-                        <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>See the actual property from anywhere</p>
+                        <h3 className="h6">{t('fakeListingChecker.virtualTours')}</h3>
+                        <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>{t('fakeListingChecker.virtualToursDesc')}</p>
                       </div>
                     </div>
                     <div className="col-md-4">
                       <div className="text-center p-3">
                         <i className="fas fa-phone-slash text-main fa-2x mb-2" />
-                        <h3 className="h6">No Spam Calls</h3>
-                        <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>Dedicated Relationship Manager, no tele-callers</p>
+                        <h3 className="h6">{t('fakeListingChecker.noSpamCalls')}</h3>
+                        <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>{t('fakeListingChecker.noSpamCallsDesc')}</p>
                       </div>
                     </div>
                   </div>
@@ -235,7 +269,15 @@ const FakeListingChecker = () => {
             {/* Related Tools */}
             <div className="row justify-content-center mt-5">
               <div className="col-lg-8">
-                <ToolRelatedLinks />
+                <ToolRelatedLinks
+                  heading={t('fakeListingChecker.relatedToolsHeading')}
+                  links={[
+                    { to: '/vastu-checker', label: t('fakeListingChecker.relatedVastuChecker'), icon: 'fas fa-compass' },
+                    { to: '/emi-calculator', label: t('fakeListingChecker.relatedEmiCalculator'), icon: 'fas fa-calculator' },
+                    { to: '/property-document-checklist', label: t('fakeListingChecker.relatedDocumentChecklist'), icon: 'fas fa-clipboard-check' },
+                    { to: '/properties', label: t('fakeListingChecker.relatedVerifiedProperties'), icon: 'fas fa-home' },
+                  ]}
+                />
               </div>
             </div>
           </div>

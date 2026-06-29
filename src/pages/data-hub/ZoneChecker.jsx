@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -70,6 +71,7 @@ const StatusBadge = ({ status }) => {
 
 const ZoneChecker = () => {
   const { t } = useTranslation('data-hub');
+  const { t: tCommon } = useTranslation('common');
   const [tSeo] = useTranslation('seo');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -79,6 +81,7 @@ const ZoneChecker = () => {
   const [zoneLoadingMore, setZoneLoadingMore] = useState(false);
   const [zonesLoading, setZonesLoading] = useState(true);
   const [zonesError, setZonesError] = useState(false);
+  const [zonesRefreshKey, setZonesRefreshKey] = useState(0);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const [colonies, setColonies] = useState([]);
@@ -87,6 +90,7 @@ const ZoneChecker = () => {
   const [colonyLoadingMore, setColonyLoadingMore] = useState(false);
   const [coloniesLoading, setColoniesLoading] = useState(true);
   const [coloniesError, setColoniesError] = useState(false);
+  const [coloniesRefreshKey, setColoniesRefreshKey] = useState(0);
 
   // AUDIT FIX (imp 3.16): FAR calculator inputs (plot size + FAR -> buildable area).
   const [farPlotSize, setFarPlotSize] = useState(2000);
@@ -115,7 +119,7 @@ const ZoneChecker = () => {
       })
       .catch(() => setZonesError(true))
       .finally(() => setZonesLoading(false));
-  }, [debouncedSearch]);
+  }, [debouncedSearch, zonesRefreshKey]);
 
   // Cursor "Load more" for zones.
   const handleLoadMoreZones = async () => {
@@ -147,7 +151,7 @@ const ZoneChecker = () => {
       })
       .catch(() => setColoniesError(true))
       .finally(() => setColoniesLoading(false));
-  }, []);
+  }, [coloniesRefreshKey]);
 
   // Cursor "Load more" for colonies.
   const handleLoadMoreColonies = async () => {
@@ -247,9 +251,17 @@ const ZoneChecker = () => {
                 <p className="mt-10 color-text-3">{t('zoneChecker.loading')}</p>
               </div>
             ) : zonesError ? (
-              <div className="alert alert-warning" role="alert">
-                <i className="fas fa-exclamation-triangle me-2"></i>
-                {t('zoneChecker.error')}
+              <div className="text-center">
+                <div className="alert alert-warning" role="alert">
+                  <i className="fas fa-exclamation-triangle me-2"></i>
+                  {t('zoneChecker.error')}
+                </div>
+                <button
+                  className="btn btn-sm btn-outline-main mt-10"
+                  onClick={() => setZonesRefreshKey(k => k + 1)}
+                >
+                  {tCommon('common.tryAgain', 'Try Again')}
+                </button>
               </div>
             ) : zones.length === 0 ? (
               <div className="text-center py-40">
@@ -308,11 +320,11 @@ const ZoneChecker = () => {
                       {zoneLoadingMore ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                          Loading...
+                          {tCommon('common.loading', 'Loading...')}
                         </>
                       ) : (
                         <>
-                          <i className="fas fa-plus me-1"></i> Load More
+                          <i className="fas fa-plus me-1"></i> {tCommon('common.loadMore', 'Load More')}
                         </>
                       )}
                     </button>
@@ -330,9 +342,17 @@ const ZoneChecker = () => {
                 {coloniesLoading ? (
                   <p className="color-text-3">{t('zoneChecker.colonyLoading')}</p>
                 ) : coloniesError ? (
-                  <div className="alert alert-warning" role="alert">
-                    <i className="fas fa-exclamation-triangle me-2"></i>
-                    {t('zoneChecker.colonyError')}
+                  <div>
+                    <div className="alert alert-warning" role="alert">
+                      <i className="fas fa-exclamation-triangle me-2"></i>
+                      {t('zoneChecker.colonyError')}
+                    </div>
+                    <button
+                      className="btn btn-sm btn-outline-main mt-10"
+                      onClick={() => setColoniesRefreshKey(k => k + 1)}
+                    >
+                      {tCommon('common.tryAgain', 'Try Again')}
+                    </button>
                   </div>
                 ) : colonies.length === 0 ? (
                   <p className="color-text-3">{t('zoneChecker.noColonyData')}</p>
@@ -371,11 +391,11 @@ const ZoneChecker = () => {
                           {colonyLoadingMore ? (
                             <>
                               <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                              Loading...
+                              {tCommon('common.loading', 'Loading...')}
                             </>
                           ) : (
                             <>
-                              <i className="fas fa-plus me-1"></i> Load More
+                              <i className="fas fa-plus me-1"></i> {tCommon('common.loadMore', 'Load More')}
                             </>
                           )}
                         </button>
@@ -417,7 +437,7 @@ const ZoneChecker = () => {
         {/* FAQ Section */}
         <section className="pb-60">
           <div className="container">
-            <h2 className="fs-24 fw-600 mb-20">Frequently Asked Questions</h2>
+            <h2 className="fs-24 fw-600 mb-20">{tCommon('common.frequentlyAskedQuestions', 'Frequently Asked Questions')}</h2>
             <div className="accordion">
               {FAQS.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;

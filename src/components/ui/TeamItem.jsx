@@ -29,7 +29,7 @@ const TeamItem = ({ team }) => {
     return (
         <div className="team-item">
             <div className="team-item__thumb">
-                <LazyImage src={thumb} alt="Team Image" className="cover-img"/>
+                <LazyImage src={thumb} alt={name} className="cover-img"/>
             </div>
             <div className="team-item__content flx-between flex-nowrap">
                 <div>

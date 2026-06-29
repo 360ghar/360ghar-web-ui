@@ -58,6 +58,7 @@
     "placeholderConfirm": "Confirm Password",
     "placeholderConfirmYour": "Confirm Your Password",
     "required": "Password is required",
+    "currentRequired": "Current password is required",
     "newRequired": "New password is required",
     "confirmRequired": "Confirm password is required",
     "minLength": "Password must be at least 8 characters",
@@ -67,7 +68,6 @@
     "confirmMustMatch": "Confirm password must match new password",
     "mustUppercase": "Password must contain at least 1 uppercase letter",
     "mustNumber": "Password must contain at least 1 number",
-    "currentRequired": "Current password is required",
     "strength": {
       "veryWeak": "Very Weak",
       "weak": "Weak",

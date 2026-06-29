@@ -16,7 +16,7 @@ const PROFILE_FRESH_MS = 30 * 1000; // 30s
 
 const AccountProfileTab = () => {
     const { t } = useTranslation(['account', 'forms']);
-    const { profile, getProfile, updateProfile, isLoading, error, clearError } = useUserStore();
+    const { profile, getProfile, updateProfile, isProfileLoading, isUpdateLoading, error, clearError } = useUserStore();
     const [isEditing, setIsEditing] = useState(false);
     const lastFetchAt = useRef(0);
 
@@ -65,7 +65,7 @@ const AccountProfileTab = () => {
         },
     });
 
-    if (isLoading && !profile) {
+    if (isProfileLoading && !profile) {
         return (
             <div className="text-center py-5">
                 <div className="spinner-border text-primary" role="status">
@@ -244,9 +244,9 @@ const AccountProfileTab = () => {
                                     <button
                                         type="submit"
                                         className="btn btn-main"
-                                        disabled={formik.isSubmitting || isLoading}
+                                        disabled={formik.isSubmitting || isUpdateLoading}
                                     >
-                                        {formik.isSubmitting || isLoading ? (
+                                        {formik.isSubmitting || isUpdateLoading ? (
                                             <>
                                                 <span className="spinner-border spinner-border-sm me-2" role="status"></span>
                                                 {t('account:tabs.profile.updating')}

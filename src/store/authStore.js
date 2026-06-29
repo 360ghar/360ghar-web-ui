@@ -7,6 +7,14 @@ import { fetchAuthStage } from '../utils/authStage';
 import * as posthogService from '../services/posthogService';
 import { isPrerendering } from '../utils/prerender';
 import { SKIP_AUTH_RETRY } from '../services/http';
+import { readStoredUser, writeStoredUser, clearStoredUser } from '../utils/userStorage';
+
+// Cross-module event used by services that need to signal "the cached session
+// is dead" without importing the auth store (which would create a circular
+// dependency). http.js's 401 handler dispatches this after clearing
+// localStorage so the auth store can flip isAuthenticated to false on the
+// next tick.
+const AUTH_CLEARED_EVENT = '360ghar:auth-cleared';
 
 // Request config passed to the profile + auth-stage fetches right after a
 // fresh sign-in. The access token is brand new, so a 401 means "no backend
@@ -19,53 +27,10 @@ const FRESH_SIGNIN_REQUEST_CONFIG = {
   timeout: 10000,
 };
 
-// AUDIT FIX (1.imp6): Cache TTL for the locally-cached user profile. The cache
-// is only used to render the UI instantly on init; a fresh profile is always
-// fetched via syncUserProfile. To avoid showing very stale data (e.g. a user
-// who just registered on another device), entries older than this TTL are
-// ignored and the store waits for the fresh fetch instead.
-const USER_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
-const USER_CACHE_KEY = 'user';
-
-function readStoredUser() {
-  try {
-    const raw = localStorage.getItem(USER_CACHE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    // Support both legacy (bare user object) and timestamped ({ user, ts })
-    // cache entries. Expired entries are treated as a miss.
-    if (parsed && typeof parsed === 'object' && 'user' in parsed && 'ts' in parsed) {
-      if (Date.now() - parsed.ts > USER_CACHE_TTL_MS) return null;
-      return parsed.user || null;
-    }
-    return parsed || null;
-  } catch {
-    return null;
-  }
-}
-
 let initializationInProgress = false;
 let authSubscriptionPromise = null;
 let profileSyncPromise = null;
 let profileSyncToken = null;
-
-function writeStoredUser(user) {
-  try {
-    // AUDIT FIX (1.imp6): store the user alongside a timestamp so the cache
-    // can expire (see readStoredUser / USER_CACHE_TTL_MS).
-    localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ user, ts: Date.now() }));
-  } catch {
-    // Ignore storage quota/private mode failures.
-  }
-}
-
-function clearStoredUser() {
-  try {
-    localStorage.removeItem(USER_CACHE_KEY);
-  } catch {
-    // Ignore storage failures during cleanup.
-  }
-}
 
 function clearAuthState(set) {
   clearStoredUser();
@@ -155,6 +120,7 @@ async function handleAuthStateChange(event, session, set, _get) {
   if (event === 'SIGNED_OUT' || !session) {
     posthogService.resetUser();
     clearAuthState(set);
+    authSubscriptionPromise = null;
     return;
   }
 
@@ -211,7 +177,44 @@ async function ensureAuthSubscription(set, get) {
   return authSubscriptionPromise;
 }
 
-const useAuthStore = create((set, get) => ({
+// Cross-module signal from services (specifically http.js's 401 handler) that
+// the cached session is dead. Services cannot import the auth store without a
+// circular dep, so they dispatch a window event after clearing localStorage;
+// this listener (installed once at store creation) flips isAuthenticated to
+// false and clears the in-memory token so route guards stop rendering
+// protected children and a subsequent navigate-to-/login lands on a real
+// logged-out state. Installed only on the client (typeof window) because
+// prerender / SSR has no window.
+// Module-scoped (NOT window-scoped) handler reference. A `window.__…` flag
+// survives vi.resetModules() / HMR module reloads, so a freshly-created store
+// would skip wiring its listener and auth-cleared events would update a
+// discarded store's `set`. A module-scoped ref resets with the module, so the
+// current store always rebinds.
+let authClearedHandler = null;
+function installAuthClearedListener(set) {
+  if (typeof window === 'undefined') return;
+  // Drop any handler this module instance previously installed before
+  // rebinding to the current store's `set` (defensive against double install).
+  if (authClearedHandler) {
+    window.removeEventListener(AUTH_CLEARED_EVENT, authClearedHandler);
+  }
+  authClearedHandler = () => {
+    posthogService.resetUser();
+    setCachedAccessToken(null);
+    set({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      isInitializing: false,
+      authStage: null,
+    });
+  };
+  window.addEventListener(AUTH_CLEARED_EVENT, authClearedHandler);
+}
+
+const useAuthStore = create((set, get) => {
+  installAuthClearedListener(set);
+  return {
   user: readStoredUser(),
   token: null,
   isAuthenticated: false,
@@ -265,42 +268,37 @@ const useAuthStore = create((set, get) => ({
       const data = await authService.login(emailOrPhone, password);
 
       if (data.access_token) {
-        // data.user is null when Supabase auth succeeded but no backend
-        // profile row exists yet (authService.login swallows the 401/404). Do
-        // NOT fall back to getCurrentUser() — that would re-issue the same
-        // failing request. Route the authenticated user to profile completion
-        // so they can create their row.
-        const userProfile = data.user || null;
-        if (userProfile) {
-          writeStoredUser(userProfile);
-          // Identify user in PostHog
-          if (userProfile.id) {
-            posthogService.identifyUser(userProfile.id, {
-              email: userProfile.email,
-              name: userProfile.name || userProfile.full_name,
-              phone: userProfile.phone,
-            });
+        // authService.login no longer fetches the backend profile — that
+        // happens exactly once via syncUserProfile, which is deduped with the
+        // SIGNED_IN event's call (same token). syncUserProfile writes the user
+        // into the store and, for a 401/404 response, sets authStage to
+        // 'profile_completion' (fresh signup with no profile row yet).
+        const profile = await syncUserProfile(
+          data.access_token,
+          set,
+          FRESH_SIGNIN_REQUEST_CONFIG
+        );
+
+        if (!profile) {
+          // syncUserProfile returns null for TWO different reasons — do NOT
+          // conflate them:
+          //   1. 401/404 → no backend profile row yet. It already set authStage
+          //      to 'profile_completion' (and error:null). Keep the session and
+          //      let the route guard send the user there.
+          //   2. transient 5xx/network failure → it set `error` and left
+          //      authStage untouched. The user most likely DOES have a profile;
+          //      forcing 'profile_completion' here would wrongly drop an
+          //      existing user onto the signup-completion screen. Surface the
+          //      error and bail so they can retry instead.
+          if (get().error) {
+            set({ isLoading: false, isInitializing: false });
+            return false;
           }
-        }
-
-        // syncUserProfile is deduped with the SIGNED_IN event's call (same
-        // token), so this awaits the single in-flight profile + auth-stage sync
-        // instead of issuing a separate serial fetchAuthStage request. The
-        // fresh-sign-in request config skips the 401 → refresh → retry cycle
-        // (the token is brand new; a 401 means "no profile row", not "expired").
-        await syncUserProfile(data.access_token, set, FRESH_SIGNIN_REQUEST_CONFIG);
-
-        // No backend profile yet → force profile completion regardless of what
-        // the gate endpoint returned (it may itself 401 for an unprovisioned
-        // user and default to 'active'). syncUserProfile already set
-        // authStage, but override it here using the authoritative data.user.
-        if (!userProfile) {
-          set({ authStage: 'profile_completion' });
         }
 
         set({
           token: data.access_token,
-          user: userProfile,
+          user: profile || null,
           isAuthenticated: true,
           isLoading: false,
           isInitializing: false,
@@ -376,8 +374,14 @@ const useAuthStore = create((set, get) => ({
         console.error('[authStore] deleteAccountImmediate failed:', err);
       }
     }
-    await authService.logout();
-    clearAuthState(set);
+    // Clear local auth state even if the network sign-out rejects or hangs.
+    // Otherwise the cached user survives in localStorage and the next app load
+    // rehydrates a "logged-in" UI whose every authenticated request 401s.
+    try {
+      await authService.logout();
+    } finally {
+      clearAuthState(set);
+    }
   },
 
   /**
@@ -421,7 +425,8 @@ const useAuthStore = create((set, get) => ({
       set({ isLoading: false });
     }
   },
-}));
+  };
+});
 
 export { useAuthStore };
 export default useAuthStore;

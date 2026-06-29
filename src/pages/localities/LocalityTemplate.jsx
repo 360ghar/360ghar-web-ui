@@ -10,6 +10,7 @@ import OffCanvas from '../../common/layout/OffCanvas';
 
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
+import { toast } from 'react-toastify';
 import { generateBreadcrumbStructuredData, generateLocalityStructuredData, generateEeaSignals } from '../../seo/structuredData';
 import PropertyTwo from '../../components/property/PropertyTwo';
 import Cta from '../../components/ui/Cta';
@@ -19,6 +20,7 @@ import ConnectivitySection from '../../components/locality/ConnectivitySection';
 import NearbyLocalities from '../../components/locality/NearbyLocalities';
 import LocalityFaq, { defaultFaqBuilder } from '../../components/locality/LocalityFaq';
 import { getLocalityLandingLinks } from '../../utils/internalLinks';
+import { cityToSlug, buildLocalitySlug } from '../../utils/localitySlug';
 
 let localitiesDataPromise = null;
 let cachedLocalitiesData = null;
@@ -475,8 +477,10 @@ const LocalityTemplate = () => {
     // getState() inside the conditional early return below, which bypassed
     // React's subscription model and could render a stale locale.
     const locale = useLocaleStore((s) => s.locale);
-    // URL param is the full slug (may include -gurgaon suffix for SEO)
-    const slug = (params.slug || '').replace(/-gurgaon$/i, '');
+    // Full URL slug from the route, e.g. "dlf-phase-1-gurgaon" or
+    // "crossing-republik-ghaziabad". Matched against each locality's canonical
+    // slug in loadLocality below — we no longer assume a hardcoded "-gurgaon".
+    const urlSlug = params.slug || '';
 
     const [localityInfo, setLocalityInfo] = useState(null);
     const [allLocalities, setAllLocalities] = useState([]);
@@ -489,7 +493,11 @@ const LocalityTemplate = () => {
             try {
                 const data = await getLocalitiesData();
                 if (!cancelled) {
-                    const found = data.find((loc) => loc.slug === slug);
+                    const found =
+                        data.find((loc) => buildLocalitySlug(loc) === urlSlug) ||
+                        // Back-compat: legacy "{slug}-gurgaon" links (NearbyLocalities,
+                        // indexed SEO URLs) and bare-slug lookups still resolve.
+                        data.find((loc) => loc.slug === urlSlug.replace(/-gurgaon$/i, ''));
                     setLocalityInfo(found || null);
                     setAllLocalities(data);
                     setIsLoading(false);
@@ -506,7 +514,7 @@ const LocalityTemplate = () => {
 
         loadLocality();
         return () => { cancelled = true; };
-    }, [slug]);
+    }, [urlSlug]);
 
     const computed = useMemo(() => {
         if (!localityInfo) return null;
@@ -605,8 +613,9 @@ const LocalityTemplate = () => {
         return <Navigate to={localizePath('/properties', locale)} replace />;
     }
 
-    // Derive URL-safe city slug for cross-linking (e.g. "Gurugram" -> "gurgaon")
-    const canonicalCitySlug = (computed.city || 'gurgaon').toLowerCase().replace(/\s+/g, '-').replace('gurugram', 'gurgaon');
+    // Derive URL-safe city slug for cross-linking (e.g. "Gurugram" -> "gurgaon").
+    // Shared helper so this stays in lock-step with the directory link + lookup.
+    const canonicalCitySlug = cityToSlug(computed.city);
     // CRITICAL FIX (audit 4.1): previously canonical/structured-data URLs
     // hardcoded a "-gurgaon" suffix, breaking SEO for non-Gurgaon localities.
     // Derive the suffix from the actual city slug instead.
@@ -637,7 +646,7 @@ const LocalityTemplate = () => {
             '@type': 'WebPage',
             name: `${computed.localityName}, ${computed.city}`,
             url: `https://360ghar.com/locality/${localityFullSlug}`,
-            dateModified: localityInfo.lastVerifiedAt || new Date().toISOString().split('T')[0]
+            ...(localityInfo.lastVerifiedAt ? { dateModified: localityInfo.lastVerifiedAt } : {})
         },
         {
             '@type': 'FAQPage',
@@ -732,8 +741,13 @@ const LocalityTemplate = () => {
                                     <button
                                         type="button"
                                         className="btn btn-sm btn-outline-main"
-                                        onClick={() => {
-                                            navigator.clipboard?.writeText(shareUrl);
+                                        onClick={async () => {
+                                            try {
+                                                await navigator.clipboard.writeText(shareUrl);
+                                                toast.success(t('common:linkCopied', 'Link copied!'));
+                                            } catch {
+                                                toast.error(t('common:copyFailed', 'Failed to copy link'));
+                                            }
                                         }}
                                     >
                                         <i className="fas fa-link me-1" />{t('common:contentSeo.copyLink')}
