@@ -1,4 +1,49 @@
 {
+  "common": {
+    "tryAgain": "Try Again",
+    "loading": "Loading...",
+    "loadMore": "Load More",
+    "fetchError": "Failed to load data",
+    "frequentlyAskedQuestions": "Frequently Asked Questions",
+    "linkCopied": "Link copied!",
+    "copyFailed": "Failed to copy link"
+  },
+  "fakeListingChecker": {
+    "heroTitle": "Check if a Property Listing is Fake",
+    "heroDesc": "Paste a listing URL from 99acres, MagicBricks, Housing.com, or NoBroker and our AI checks for red flags.",
+    "inputPlaceholder": "Paste listing URL (e.g. https://www.99acres.com/...)",
+    "analyzing": "Analyzing...",
+    "checkListing": "Check Listing",
+    "highRisk": "High Risk",
+    "mediumRisk": "Medium Risk",
+    "lowRisk": "Low Risk",
+    "knownIssues": "Known Issues",
+    "redFlagsTitle": "Common Red Flags to Watch For",
+    "redFlag1": "Price significantly below market rate",
+    "redFlag2": "Agent refuses physical site visits",
+    "redFlag3": "Demand for advance payment before verification",
+    "redFlag4": "Stock photos or heavily edited images",
+    "redFlag5": "Vague or missing property details",
+    "redFlag6": "Newly created listing with no history",
+    "preferVerified": "Prefer Verified Listings",
+    "preferVerifiedDesc": "360Ghar verifies every listing with physical visits and document checks.",
+    "browseVerifiedProperties": "Browse Verified Properties",
+    "urlNotKnown": "URL Not Recognized",
+    "urlNotKnownDesc": "We don't have data for this portal yet. Try a URL from 99acres, MagicBricks, Housing.com, or NoBroker.",
+    "browseVerifiedListings": "Browse Verified Listings",
+    "whyVerifiedTitle": "Why Choose 360Ghar Verified?",
+    "physicalVerification": "Physical Verification",
+    "physicalVerificationDesc": "Every listing is personally visited and verified by our team.",
+    "virtualTours": "360° Virtual Tours",
+    "virtualToursDesc": "Explore properties remotely with immersive virtual tours.",
+    "noSpamCalls": "No Spam Calls",
+    "noSpamCallsDesc": "We never share your number with multiple agents.",
+    "relatedToolsHeading": "Related Tools",
+    "relatedVastuChecker": "Vastu Checker",
+    "relatedEmiCalculator": "EMI Calculator",
+    "relatedDocumentChecklist": "Document Checklist",
+    "relatedVerifiedProperties": "Verified Properties"
+  },
   "nav": {
     "home": "Home",
     "properties": "Properties",
@@ -52,7 +97,9 @@
     "myVisits": "My Visits",
     "logout": "Logout",
     "loggedOutSuccess": "Logged out successfully!",
-    "postProperty": "Post Property"
+    "postProperty": "Post Property",
+    "toggleMobileMenu": "Toggle mobile menu",
+    "openMenu": "Open menu"
   },
   "breadcrumb": {
     "home": "Home"
@@ -115,7 +162,8 @@
     "signUp": "Sign Up",
     "searchPlaceholder": "Search properties, localities...",
     "searchAriaLabel": "Search",
-    "searchBtn": "Search"
+    "searchBtn": "Search",
+    "closeMenu": "Close menu"
   },
   "commonData": {
     "addressLabel": "Address",
@@ -254,5 +302,13 @@
   },
   "offlineIndicator": {
     "message": "You are offline. Some features may be unavailable."
-  }
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again or navigate back to the home page.",
+    "goHome": "Go Home",
+    "tryAgain": "Try Again"
+  },
+  "profileAlt": "Profile",
+  "userFallback": "User"
 }

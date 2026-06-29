@@ -45,58 +45,36 @@ describe('authService.login', () => {
     vi.resetModules();
   });
 
-  it('returns user: null (does not throw) when the profile is missing (401)', async () => {
+  it('returns only the session fields and does NOT fetch the profile', async () => {
     ensureSupabaseClient.mockResolvedValue(fakeClient());
-    apiGet.mockRejectedValue({ response: { status: 401 } });
 
     const authService = await loadAuthService();
     const result = await authService.login('9999999999', 'password');
 
-    expect(result).toMatchObject({ access_token: 'tok', user: null });
+    // login() returns the raw Supabase session only. The backend profile is
+    // fetched exactly once by the auth store (syncUserProfile), not here — so
+    // login no longer returns a `user` key and never calls /users/profile/.
+    expect(result).toEqual({
+      access_token: 'tok',
+      refresh_token: 'r',
+      expires_in: 3600,
+      token_type: 'bearer',
+    });
+    expect(apiGet).not.toHaveBeenCalled();
   });
 
-  it('returns user: null when the profile is missing (404)', async () => {
-    ensureSupabaseClient.mockResolvedValue(fakeClient());
-    apiGet.mockRejectedValue({ response: { status: 404 } });
+  it('throws when Supabase sign-in fails', async () => {
+    ensureSupabaseClient.mockResolvedValue({
+      auth: {
+        signInWithPassword: vi
+          .fn()
+          .mockResolvedValue({ data: { session: null }, error: { message: 'Invalid login credentials' } }),
+      },
+    });
 
     const authService = await loadAuthService();
-    const result = await authService.login('9999999999', 'password');
-
-    expect(result).toMatchObject({ access_token: 'tok', user: null });
-  });
-
-  it('returns the profile when it exists', async () => {
-    ensureSupabaseClient.mockResolvedValue(fakeClient());
-    apiGet.mockResolvedValue({ data: { id: 'u1', phone: '+919999999999' } });
-
-    const authService = await loadAuthService();
-    const result = await authService.login('9999999999', 'password');
-
-    expect(result).toMatchObject({ access_token: 'tok', user: { id: 'u1' } });
-  });
-
-  it('still throws on a genuine (non-401/404) profile error', async () => {
-    ensureSupabaseClient.mockResolvedValue(fakeClient());
-    apiGet.mockRejectedValue({ response: { status: 500 } });
-
-    const authService = await loadAuthService();
-    await expect(authService.login('9999999999', 'password')).rejects.toBeDefined();
-  });
-
-  it('passes skipAuthRetry + a shorter timeout to the profile fetch (fresh token)', async () => {
-    ensureSupabaseClient.mockResolvedValue(fakeClient());
-    apiGet.mockResolvedValue({ data: { id: 'u1' } });
-
-    const authService = await loadAuthService();
-    await authService.login('9999999999', 'password');
-
-    const config = apiGet.mock.calls[0][1] || {};
-    expect(config.timeout).toBe(10000);
-    // skipAuthRetry flag is a Symbol-keyed property.
-    const sym = Object.getOwnPropertySymbols(config).find(
-      (s) => String(s) === 'Symbol(http.skipAuthRetry)'
-    );
-    expect(sym && config[sym]).toBe(true);
+    await expect(authService.login('9999999999', 'wrong')).rejects.toThrow(/invalid login credentials/i);
+    expect(apiGet).not.toHaveBeenCalled();
   });
 });
 

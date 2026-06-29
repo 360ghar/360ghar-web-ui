@@ -72,6 +72,12 @@ const statusBadgeStyle = (status) => {
   return { background: '#fef3c7', color: '#92400e', padding: '2px 10px', borderRadius: 4, fontSize: 12, fontWeight: 600 };
 };
 
+const formatDate = (dateStr) => {
+  if (!dateStr) return 'N/A';
+  const date = new Date(dateStr);
+  return isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString('en-IN', { year: 'numeric', month: 'short' });
+};
+
 const ReraProjectDirectory = () => {
   const { t } = useTranslation('data-hub');
   const [tSeo] = useTranslation('seo');
@@ -82,6 +88,7 @@ const ReraProjectDirectory = () => {
   const [filters, setFilters] = useState({ search: '', status: '', property_type: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchInput, setSearchInput] = useState(filters.search);
 
   // RERA Verify widget state
   const [verifyInput, setVerifyInput] = useState('');
@@ -107,6 +114,14 @@ const ReraProjectDirectory = () => {
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, [filters]);
+
+  // Debounce search input to avoid firing an API call on every keystroke
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilters(f => ({ ...f, search: searchInput }));
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   // Cursor "Load more": fetch the next page using the opaque cursor token.
   const handleLoadMore = async () => {
@@ -249,8 +264,8 @@ const ReraProjectDirectory = () => {
                   type="text"
                   className="form-control form-control-sm"
                   placeholder={t('rera.searchPlaceholder')}
-                  value={filters.search}
-                  onChange={(e) => handleFilterChange('search', e.target.value)}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                 />
               </div>
               <div className="col-md-3 col-sm-6">
@@ -338,7 +353,7 @@ const ReraProjectDirectory = () => {
                               <div>
                                 <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>{t('rera.possession')}</span>
                                 <span style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>
-                                  {new Date(project.possession_date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
+                                  {formatDate(project.possession_date)}
                                 </span>
                               </div>
                             )}

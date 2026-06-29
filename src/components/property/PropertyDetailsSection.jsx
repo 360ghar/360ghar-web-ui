@@ -92,11 +92,16 @@ MediaTabButton.propTypes = {
 const PropertyDetailsSection = ({ property }) => {
   const { t } = useTranslation('properties');
   const navigate = useI18nNavigate();
-  const images = Array.isArray(property?.images) ? property.images : [];
+  // Memoize `images` (incl. the empty-array fallback) on property.images so the
+  // memo below actually caches. A fresh `[]` literal each render would bust
+  // galleryImages on every parent re-render for an image-less property.
+  const images = useMemo(
+    () => (Array.isArray(property?.images) ? property.images : []),
+    [property?.images]
+  );
   const galleryImages = useMemo(
     () => images.filter((i) => i?.image_url && !/kuula\.co/i.test(i.image_url)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(images.map(i => i?.image_url))]
+    [images]
   );
   const mainImage =
     galleryImages.find((i) => i?.is_main_image)?.image_url ||
@@ -109,7 +114,7 @@ const PropertyDetailsSection = ({ property }) => {
   const purpose = property?.purpose || property?.price_type;
   const priceValue = purpose === 'rent' ? (property?.monthly_rent || property?.daily_rate || property?.base_price) : property?.base_price;
   const price = formatCurrency(priceValue);
-  const day = purpose === 'rent' ? (property?.daily_rate ? '/per day' : '/per month') : '';
+  const day = purpose === 'rent' ? (property?.daily_rate ? t('listing.perDay', '/per day') : t('listing.perMonth', '/per month')) : '';
   const address = property?.full_address || [property?.locality, property?.city, property?.state].filter(Boolean).join(', ');
 
   const virtualTourUrl = property?.virtual_tour_url;
@@ -124,16 +129,14 @@ const PropertyDetailsSection = ({ property }) => {
   const tourRef = useRef(null);
   const galleryRef = useRef(null);
   const [swipeFeedback, setSwipeFeedback] = useState(null);
-  const [preloadedImages, setPreloadedImages] = useState(new Set());
+  const preloadedImagesRef = useRef(new Set());
 
   const preloadImage = useCallback((url) => {
-    if (!url || preloadedImages.has(url)) return;
+    if (!url || preloadedImagesRef.current.has(url)) return;
+    preloadedImagesRef.current.add(url);
     const img = new Image();
     img.src = url;
-    img.onload = () => {
-      setPreloadedImages(prev => new Set(prev).add(url));
-    };
-  }, [preloadedImages]);
+  }, []);
 
   const preloadAdjacentImages = useCallback((centerIdx) => {
     const indices = [];
@@ -238,7 +241,7 @@ const PropertyDetailsSection = ({ property }) => {
   ].filter(Boolean)), [property, t]);
 
   const { recordSwipe } = usePropertyStore();
-  const { scheduleVisit, isLoading: visitLoading } = useVisitStore();
+  const { scheduleVisit, isScheduleLoading: visitLoading } = useVisitStore();
   const { isAuthenticated, user } = useAuthStore();
 
   const [visitDatePart, setVisitDatePart] = useState('');
@@ -402,12 +405,12 @@ const PropertyDetailsSection = ({ property }) => {
     // Validate form
     const errors = {};
     if (!visitDate) {
-      errors.visitDate = 'Please select a date and time';
+      errors.visitDate = t('details.selectDateError', 'Please select a date and time');
     } else {
       const selectedDate = new Date(visitDate);
       const now = new Date();
       if (selectedDate <= now) {
-        errors.visitDate = 'Please select a future date and time';
+        errors.visitDate = t('details.selectFutureDateError', 'Please select a future date and time');
       }
     }
     
@@ -421,7 +424,7 @@ const PropertyDetailsSection = ({ property }) => {
     setVisitErrors({});
     const isoDate = localInputToServerTimestamp(visitDate);
     if (!isoDate) {
-      setVisitErrors({ visitDate: 'Please enter a valid date and time' });
+      setVisitErrors({ visitDate: t('details.enterValidDateError', 'Please enter a valid date and time') });
       return;
     }
     const res = await scheduleVisit({ property_id: property?.id, scheduled_date: isoDate, special_requirements: visitNotes });
@@ -767,8 +770,8 @@ const PropertyDetailsSection = ({ property }) => {
                       </div>
                       {Array.isArray(property.tags) && property.tags.length > 0 && (
                         <div className="mt-3 d-flex flex-wrap gap-2">
-                          {property.tags.map((t, idx) => (
-                            <span key={idx} className="badge bg-light text-dark border">{t}</span>
+                          {property.tags.map((tag, idx) => (
+                            <span key={idx} className="badge bg-light text-dark border">{tag}</span>
                           ))}
                         </div>
                       )}

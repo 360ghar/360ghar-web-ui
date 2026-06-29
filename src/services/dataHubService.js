@@ -51,7 +51,7 @@ export const dataHubService = {
     api.put(`/data-hub/auctions/alerts/${id}`, data).then(r => r.data),
 
   deleteAuctionAlert: (id) =>
-    api.delete(`/data-hub/auctions/alerts/${id}`),
+    api.delete(`/data-hub/auctions/alerts/${id}`).then(r => r.data),
 
   // ─── BANK RATES ───────────────────────────────────────────────────────────
   getBankRates: (params = {}) =>

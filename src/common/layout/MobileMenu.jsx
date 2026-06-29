@@ -82,6 +82,7 @@ const MobileMenu = () => {
             <div
                 ref={overlayRef}
                 className={`side-overlay ${toggleMobileMenu ? 'show' : ''}`}
+                aria-hidden={!toggleMobileMenu}
                 onClick={handleMobileMenuClose}
             />
 
@@ -95,7 +96,7 @@ const MobileMenu = () => {
                     type="button"
                     className="close-button"
                     onClick={handleMobileMenuClose}
-                    aria-label="Close menu"
+                    aria-label={t('mobileMenu.closeMenu', 'Close menu')}
                 >
                     <i className="fas fa-times" />
                 </button>
@@ -134,7 +135,7 @@ const MobileMenu = () => {
                                         {user?.profile_image_url ? (
                                             <LazyImage
                                                 src={user.profile_image_url}
-                                                alt="Profile"
+                                                alt={t('profileAlt')}
                                                 className="rounded-circle"
                                                 style={{ width: '40px', height: '40px', objectFit: 'cover' }}
                                             />
@@ -145,13 +146,14 @@ const MobileMenu = () => {
                                         )}
                                     </div>
                                     <div>
-                                        <div className="text-white fw-semibold">{user?.full_name || user?.email || 'User'}</div>
+                                        <div className="text-white fw-semibold">{user?.full_name || user?.email || t('userFallback')}</div>
                                         <div className="text-white-50 small">{t('mobileMenu.welcomeBack')}</div>
                                     </div>
                                 </div>
 
                                 <div className="mobile-user-menu">
                                     <button
+                                        type="button"
                                         className="btn btn-outline-light btn-sm w-100 text-start mb-2"
                                         onClick={() => handleNavigation('/account')}
                                     >
@@ -159,6 +161,7 @@ const MobileMenu = () => {
                                         {t('header.myAccount')}
                                     </button>
                                     <button
+                                        type="button"
                                         className="btn btn-outline-light btn-sm w-100 text-start mb-2"
                                         onClick={() => handleNavigation('/account?tab=favorites')}
                                     >
@@ -166,6 +169,7 @@ const MobileMenu = () => {
                                         {t('header.favorites')}
                                     </button>
                                     <button
+                                        type="button"
                                         className="btn btn-outline-light btn-sm w-100 text-start mb-2"
                                         onClick={() => handleNavigation('/account?tab=visits')}
                                     >
@@ -173,6 +177,7 @@ const MobileMenu = () => {
                                         {t('header.myVisits')}
                                     </button>
                                     <button
+                                        type="button"
                                         className="btn btn-danger btn-sm w-100 text-start"
                                         onClick={() => void handleLogout()}
                                     >

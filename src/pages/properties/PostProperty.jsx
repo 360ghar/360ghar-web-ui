@@ -13,6 +13,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { I18nLink } from '../../i18n/I18nLink';
 import { PROPERTY_TYPE_OPTIONS } from '../../utils/propertyTaxonomy';
 import { propertyService } from '../../services/propertyService';
+import { extractError } from '../../utils/apiError';
 import GooglePlacesInput from '../../common/search/GooglePlacesInput';
 
 const PostPropertyForm = () => {
@@ -103,12 +104,16 @@ const PostPropertyForm = () => {
                     theme: 'colored'
                 });
             } catch (err) {
-                const msg =
-                    err?.response?.data?.detail?.message ||
-                    err?.response?.data?.detail ||
-                    t('postProperty.submitError');
-                setGlobalError(typeof msg === 'string' ? msg : t('postProperty.submitError'));
-                toast.error(t('postProperty.submitError'), {
+                // Use extractError to surface the actual backend message
+                // (Pydantic validation lists, FastAPI detail strings, etc.)
+                // instead of a generic toast. The form posts a lead-capture
+                // shape; the backend's property-create endpoint expects a
+                // full Pydantic record and may return 422 with field-level
+                // details — showing those gives the user (and support) a
+                // chance to know which fields are missing.
+                const detail = extractError(err, t('postProperty.submitError'));
+                setGlobalError(detail);
+                toast.error(detail, {
                     theme: 'colored'
                 });
             } finally {
@@ -129,10 +134,20 @@ const PostPropertyForm = () => {
                             <h2 className="section-heading__title">{t('postProperty.successTitle')}</h2>
                             <p className="section-heading__desc">{t('postProperty.successDescription')}</p>
                         </div>
-                        <div className="text-center mt-4">
+                        <div className="text-center mt-4 d-flex gap-3 justify-content-center flex-wrap">
                             <I18nLink to="/" className="btn btn-main">
                                 {t('postProperty.backToHome')}
                             </I18nLink>
+                            <button
+                                type="button"
+                                className="btn btn-outline-main"
+                                onClick={() => {
+                                    formik.resetForm();
+                                    setIsSuccess(false);
+                                }}
+                            >
+                                {t('postProperty.postAnotherProperty')}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -256,7 +271,9 @@ const PostPropertyForm = () => {
                                 <div className="col-sm-6 col-xs-6">
                                     <label htmlFor="property_size" className="form-label">{t('postProperty.propertySize')}</label>
                                     <input
-                                        type="text"
+                                        type="number"
+                                        inputMode="numeric"
+                                        min="0"
                                         id="property_size"
                                         name="property_size"
                                         className="common-input"
@@ -269,7 +286,9 @@ const PostPropertyForm = () => {
                                 <div className="col-sm-6 col-xs-6">
                                     <label htmlFor="budget_range" className="form-label">{t('postProperty.expectedPrice')}</label>
                                     <input
-                                        type="text"
+                                        type="number"
+                                        inputMode="numeric"
+                                        min="0"
                                         id="budget_range"
                                         name="budget_range"
                                         className="common-input"
