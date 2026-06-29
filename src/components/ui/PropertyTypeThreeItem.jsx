@@ -14,7 +14,7 @@ const PropertyTypeThreeItem = ({ propertyTypeItem }) => {
                 <div className="property-type-three-item__content">
                     <h6 className="property-type-three-item__title">{title}</h6>
                     <p className="property-type-three-item__desc font-18">{desc}</p>
-                    <I18nLink to={btnLink} className="simple-btn text-heading fw-semibold">
+                    <I18nLink to={btnLink} className="btn btn-outline-main text-heading fw-semibold">
                         {btnText} 
                         <span className="icon-right"> <i className="fas fa-arrow-right"></i> </span>
                     </I18nLink>

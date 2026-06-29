@@ -101,7 +101,8 @@
       "guest": "अतिथि",
       "manageDesc": "एक ही जगह से अपनी प्रोफ़ाइल, सहेजी गई लिस्टिंग और विज़िट प्रबंधित करें।",
       "upcomingVisits": "आगामी विज़िट",
-      "profileCompletion": "प्रोफ़ाइल पूर्णता"
+      "profileCompletion": "प्रोफ़ाइल पूर्णता",
+      "quickActions": "त्वरित क्रियाएँ"
     },
     "profile": {
       "propertySeeker": "संपत्ति खोजकर्ता",
@@ -149,6 +150,7 @@
       "phone": "फ़ोन:"
     },
     "myProperties": {
+      "title": "लिस्टिंग प्रबंधित करें",
       "caption": "360Ghar पर आपकी दी गई संपत्तियां",
       "colProperty": "मेरी संपत्तियां",
       "colDate": "जोड़ने की तारीख",

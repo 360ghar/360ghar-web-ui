@@ -61,19 +61,19 @@ const AccountDetailsTab = () => {
                         <h6 className="loginRegister__title text-poppins">{t('tabs.details.personalInfo')}</h6>
 
                         <div className="row gy-lg-4 gy-3">
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="FirstNamee" className="form-label">{t('tabs.details.firstName')}</label>
                                 <input type="text" className="common-input" value={formValues.firstName} onChange={(e)=>updateDraft('firstName', e.target.value)} placeholder={t('tabs.details.firstNamePlaceholder')} id="FirstNamee"/>
                             </div>
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="lastName" className="form-label">{t('tabs.details.lastName')}</label>
                                 <input type="text" className="common-input" value={formValues.lastName} onChange={(e)=>updateDraft('lastName', e.target.value)} placeholder={t('tabs.details.lastNamePlaceholder')} id="lastName"/>
                             </div>
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="displayName" className="form-label">{t('tabs.details.displayName')}</label>
                                 <input type="text" className="common-input" value={formValues.displayName} onChange={(e)=>updateDraft('displayName', e.target.value)} placeholder={t('tabs.details.displayNamePlaceholder')} id="displayName"/>
                             </div>
-                            <div className="col-sm-6 col-xs-6">
+                            <div className="col-sm-6 col-6">
                                 <label htmlFor="DisplayEmail" className="form-label">{t('tabs.details.displayEmail')}</label>
                                 <input type="email" className="common-input"  placeholder={t('tabs.details.displayEmailPlaceholder')} value={formValues.displayEmail} onChange={(e)=>updateDraft('displayEmail', e.target.value)} id="DisplayEmail"/>
                             </div>

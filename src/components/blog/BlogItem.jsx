@@ -50,7 +50,7 @@ const BlogItem = ({ blog }) => {
                         <h6 className="blog-item__title">
                             <I18nLink to={blogURL} onClick={()=>handleBlogClick() } className="blog-item__title-link border-effect"> {title}</I18nLink>
                         </h6>
-                        <I18nLink to={blogURL} onClick={()=>handleBlogClick()} aria-label={linkAriaLabel} className="simple-btn text-heading fw-semibold">
+                        <I18nLink to={blogURL} onClick={()=>handleBlogClick()} aria-label={linkAriaLabel} className="btn btn-outline-main text-heading fw-semibold">
                             {linkText}
                             <span className="icon-right text-gradient"> <i className="fas fa-plus"></i> </span>
                         </I18nLink>

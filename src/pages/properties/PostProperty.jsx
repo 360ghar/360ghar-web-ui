@@ -174,7 +174,7 @@ const PostPropertyForm = () => {
                     <div className="contact-form__form">
                         <form onSubmit={formik.handleSubmit} className="contact-form__form">
                             <div className="row gy-4">
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <label htmlFor="full_name" className="form-label">{t('postProperty.fullName')} <span className="text-danger">*</span></label>
                                     <input
                                         type="text"
@@ -190,7 +190,7 @@ const PostPropertyForm = () => {
                                         <span className="text-danger">{formik.errors.full_name}</span>
                                     )}
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <label htmlFor="email" className="form-label">{t('postProperty.emailAddress')} <span className="text-danger">*</span></label>
                                     <input
                                         type="email"
@@ -206,7 +206,7 @@ const PostPropertyForm = () => {
                                         <span className="text-danger">{formik.errors.email}</span>
                                     )}
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <label htmlFor="phone" className="form-label">{t('postProperty.phoneNumber')} <span className="text-danger">*</span></label>
                                     <input
                                         type="tel"
@@ -227,7 +227,7 @@ const PostPropertyForm = () => {
                                     )}
                                     <small className="text-muted">{t('postProperty.phoneHint')}</small>
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <label htmlFor="property_type" className="form-label">{t('postProperty.propertyType')} <span className="text-danger">*</span></label>
                                     <div className="select-has-icon icon-black">
                                         <select
@@ -250,7 +250,7 @@ const PostPropertyForm = () => {
                                         <span className="text-danger">{formik.errors.property_type}</span>
                                     )}
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <label htmlFor="property_location" className="form-label">{t('postProperty.propertyLocation')} <span className="text-danger">*</span></label>
                                     {/* UX FIX (audit 2.6): use GooglePlacesInput for location autocomplete
                                         instead of a plain text input, so location data is consistent
@@ -268,7 +268,7 @@ const PostPropertyForm = () => {
                                         <span className="text-danger">{formik.errors.property_location}</span>
                                     )}
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <label htmlFor="property_size" className="form-label">{t('postProperty.propertySize')}</label>
                                     <input
                                         type="number"
@@ -283,7 +283,7 @@ const PostPropertyForm = () => {
                                         value={formik.values.property_size}
                                     />
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <label htmlFor="budget_range" className="form-label">{t('postProperty.expectedPrice')}</label>
                                     <input
                                         type="number"
@@ -298,7 +298,7 @@ const PostPropertyForm = () => {
                                         value={formik.values.budget_range}
                                     />
                                 </div>
-                                <div className="col-sm-6 col-xs-6">
+                                <div className="col-sm-6 col-6">
                                     <label htmlFor="listing_type" className="form-label">{t('postProperty.listingType')}</label>
                                     <div className="select-has-icon icon-black">
                                         <select

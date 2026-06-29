@@ -48,7 +48,7 @@ const Apartment = () => {
                                                 <td>{apartmentTd.area}</td>
                                                 <td>{apartmentTd.pricing}</td>
                                                 <td>
-                                                    <I18nLink to={apartmentTd.actionLink} className="simple-btn text-gradient fw-semibold font-14">
+                                                    <I18nLink to={apartmentTd.actionLink} className="btn btn-outline-main text-gradient fw-semibold font-14">
                                                         {apartmentTd.action} 
                                                         <span className="icon-right"> <i className="fas fa-arrow-right"></i> </span> 
                                                     </I18nLink>

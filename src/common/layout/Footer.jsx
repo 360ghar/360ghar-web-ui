@@ -24,12 +24,12 @@ const Footer = () => {
                         </div>
 
                         {/* Quick Links */}
-                        <div className="col-xl-2 col-lg-6 col-sm-6 col-xsm-6">
+                        <div className="col-xl-2 col-lg-6 col-sm-6 col-6">
                             <FooterUsefulItem/>
                         </div>
 
                         {/* Services */}
-                        <div className="col-xl-2 col-lg-6 col-sm-6 col-xsm-6">
+                        <div className="col-xl-2 col-lg-6 col-sm-6 col-6">
                             <FooterServiceItem/>
                         </div>
 
