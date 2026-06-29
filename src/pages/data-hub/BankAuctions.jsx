@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { I18nLink } from '../../i18n/I18nLink';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -85,6 +86,7 @@ const CITY_LABELS = {
 
 const BankAuctions = () => {
   const { t } = useTranslation('data-hub');
+  const { t: tCommon } = useTranslation('common');
   const [tSeo] = useTranslation('seo');
   const [auctions, setAuctions] = useState([]);
   const [nextCursor, setNextCursor] = useState(null);
@@ -135,10 +137,20 @@ const BankAuctions = () => {
   useEffect(() => {
     dataHubService.getAuctionBanks()
       .then((data) => setBanks(Array.isArray(data) ? data : (Array.isArray(data?.items) ? data.items : [])))
-      .catch(() => {});
+      .catch((err) => {
+        toast.error(tCommon('common.fetchError', 'Failed to load data'));
+        console.error(err);
+      });
     dataHubService.getAuctionCities()
       .then((data) => setCities(Array.isArray(data) ? data : (Array.isArray(data?.items) ? data.items : [])))
-      .catch(() => {});
+      .catch((err) => {
+        toast.error(tCommon('common.fetchError', 'Failed to load data'));
+        console.error(err);
+      });
+    // Banks + cities are language-independent; fetch once on mount. Do NOT
+    // depend on tCommon — its identity changes on language switch, which would
+    // needlessly refetch (and flash a spurious "failed to load" toast).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Fetch the first page (cursor=null) whenever filters change.
@@ -402,6 +414,12 @@ const BankAuctions = () => {
                 ) : error ? (
                   <div className="text-center py-40">
                     <p className="color-danger fs-16">{t('bankAuctions.error')}</p>
+                    <button
+                      className="btn btn-sm btn-outline-main mt-10"
+                      onClick={() => setFilters(f => ({ ...f }))}
+                    >
+                      {tCommon('common.tryAgain', 'Try Again')}
+                    </button>
                   </div>
                 ) : auctions.length === 0 ? (
                   <div className="text-center py-40">
@@ -431,11 +449,11 @@ const BankAuctions = () => {
                           {loadingMore ? (
                             <>
                               <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                              Loading...
+                              {tCommon('common.loading', 'Loading...')}
                             </>
                           ) : (
                             <>
-                              <i className="fas fa-plus me-1"></i> Load More
+                              <i className="fas fa-plus me-1"></i> {tCommon('common.loadMore', 'Load More')}
                             </>
                           )}
                         </button>

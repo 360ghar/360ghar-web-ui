@@ -168,15 +168,19 @@ const usePropertyStore = create((set, get) => ({
     }
   },
   
-  // Public property details (no auth required)
-  fetchPropertyById: async (id) => {
+  // Public property details (no auth required).
+  // Accepts an optional AbortSignal so a route change (or any caller that no
+  // longer needs the result) can cancel the in-flight fetch. Without
+  // cancellation, navigating /property/A → /property/B with a slow network
+  // can leave A's later-arriving response overwriting B's already-set data.
+  fetchPropertyById: async (id, { signal } = {}) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await propertyAPIService.getPropertyById(id);
+      const response = await propertyAPIService.getPropertyById(id, { signal });
       const property = response.data;
       // Images are included in the property response; no additional media fetch required
       const media = Array.isArray(property?.images) ? property.images : [];
-      
+
       set({
         currentProperty: property,
         propertyMedia: media,
@@ -184,6 +188,16 @@ const usePropertyStore = create((set, get) => ({
       });
       return property;
     } catch (error) {
+      // AbortError: the caller cancelled (e.g. navigated to a different
+      // property). Leave any data the new fetch may have already set; don't
+      // surface as a user-visible error.
+      if (error?.name === 'CanceledError' || signal?.aborted) {
+        // Do NOT clear isLoading here: a newer fetchPropertyById (property B)
+        // may already have set isLoading:true, and clearing it would blank B's
+        // loader mid-flight and flash a false "not found". The next fetch
+        // resets isLoading at its own start, so a stale `true` is harmless.
+        return null;
+      }
       set({
         isLoading: false,
         error: extractError(error, 'Failed to fetch property details')

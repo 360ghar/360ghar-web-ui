@@ -35,10 +35,23 @@ const PropertyDetails = () => {
         fetchPropertyById
     } = usePropertyStore();
 
+    // Clear stale property data and abort the in-flight fetch when navigating
+    // to a different property. The previous version used `[]` deps so the
+    // cleanup only fired on unmount — but React Router reuses this component
+    // instance across /property/:id → /property/:id, so the cleanup never ran
+    // and property B briefly rendered with property A's data. Depending on
+    // `id` runs the cleanup before each new fetch, and aborting the controller
+    // stops a slow A-response from overwriting B's already-loaded data.
     useEffect(() => {
-        if (id) {
-            fetchPropertyById(id);
-        }
+        if (!id) return;
+        // Clear synchronously so the user doesn't see property A's
+        // title/images/CTAs for a frame while property B's fetch resolves.
+        usePropertyStore.setState({ currentProperty: null });
+        const controller = new AbortController();
+        fetchPropertyById(id, { signal: controller.signal });
+        return () => {
+            controller.abort();
+        };
     }, [id, fetchPropertyById]);
 
     const propertyTypeLabel = getPropertyTypeLabel(propertyData?.property_type, t);
@@ -295,16 +308,16 @@ const PropertyDetails = () => {
                             <div className="col-lg-8">
                                 <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.5rem', marginBottom: '0.5rem' }}>
                                     <i className="fas fa-wand-magic-sparkles me-2" style={{ color: 'var(--main-color)' }}></i>
-                                    Visualize This Property with AI
+                                    {t('details.aiDesignStudioTitle')}
                                 </h3>
                                 <p className="mb-lg-0 mb-3 text-muted">
-                                    Curious how this home could look with a fresh design? Use AI Design Studio to generate photorealistic interior and exterior renders — free.
+                                    {t('details.aiDesignStudioDescription')}
                                 </p>
                             </div>
                             <div className="col-lg-4 text-lg-end">
                                 <I18nLink to="/ai-design-studio" className="btn btn-main">
                                     <i className="fas fa-palette me-2"></i>
-                                    Try AI Design Studio
+                                    {t('details.tryAiDesignStudio')}
                                 </I18nLink>
                             </div>
                         </div>

@@ -74,15 +74,22 @@ const ProfileCompletion = () => {
                 toast.success(t('profileCompletion.successMessage') || 'Profile updated successfully!');
                 // Re-fetch auth stage to determine correct redirect (may be
                 // app_onboarding if the backend has additional gates).
-                const stage = await fetchAuthStage(api);
-                // Write the freshly-fetched stage into the store BEFORE
-                // navigating, so the global ProfileCompletionRouteGuard sees
-                // the updated stage and doesn't bounce the user back here
-                // (loop). If the backend still reports profile_completion
-                // (data not saved / backend bug), break the loop by sending
-                // the user home with a cleared stage.
-                useAuthStore.setState({ authStage: stage === 'profile_completion' ? 'active' : stage });
-                navigate(getRedirectPathForStage(stage));
+                try {
+                    const stage = await fetchAuthStage(api);
+                    // Write the freshly-fetched stage into the store BEFORE
+                    // navigating, so the global ProfileCompletionRouteGuard sees
+                    // the updated stage and doesn't bounce the user back here
+                    // (loop). If the backend still reports profile_completion
+                    // (data not saved / backend bug), break the loop by sending
+                    // the user home with a cleared stage.
+                    useAuthStore.setState({ authStage: stage === 'profile_completion' ? 'active' : stage });
+                    navigate(getRedirectPathForStage(stage));
+                } catch {
+                    // Profile was saved but stage fetch failed — fall back to
+                    // /account so the user isn't stuck on this page.
+                    useAuthStore.setState({ authStage: 'active' });
+                    navigate('/account');
+                }
             } else {
                 toast.error(t('profileCompletion.errorMessage') || 'Failed to update profile');
             }

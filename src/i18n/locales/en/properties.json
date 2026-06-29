@@ -128,7 +128,10 @@
     "created": "Created",
     "updated": "Updated",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "aiDesignStudioTitle": "Visualize This Property with AI",
+    "aiDesignStudioDescription": "Curious how this home could look with a fresh design? Use AI Design Studio to generate photorealistic interior and exterior renders — free.",
+    "tryAiDesignStudio": "Try AI Design Studio"
   },
   "filters": {
     "purpose": "Purpose",
@@ -162,6 +165,10 @@
     "max": "Max",
     "any": "Any",
     "anyBhk": "Any",
+    "1bhk": "1 BHK",
+    "2bhk": "2 BHK",
+    "3bhk": "3 BHK",
+    "4plusBhk": "4+ BHK",
     "sortLabel": "Sort properties",
     "searchLocation": "City, area, locality...",
     "searchKeyword": "Keyword, title, description...",
@@ -260,6 +267,7 @@
     "locationNotSpecified": "Location not specified",
     "propertyListing": "Property listing on 360Ghar",
     "shareTitle": "Share Property",
+    "closeShare": "Close share dialog",
     "copyLink": "Copy Link",
     "share": "Share",
     "linkCopied": "Link copied to clipboard!",
@@ -313,6 +321,7 @@
     "successTitle": "Thank You for Your Interest",
     "successDescription": "We have received your property posting request! Our team will review your details and contact you within 24 hours to help you post your property on 360Ghar.",
     "backToHome": "Back to Home",
+    "postAnotherProperty": "Post Another Property",
     "submitting": "Submitting...",
     "submitButton": "Request Property Listing Assistance",
     "submitSuccess": "Your property listing request has been submitted!",

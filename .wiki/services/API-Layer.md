@@ -55,7 +55,7 @@ The service layer is the single boundary between 360Ghar's React UI and the Fast
 
 On `401`:
 1. If `withAuth` and the request has not already been auth-retried, call `refreshSupabaseSession()`. If a fresh access token comes back, clone the config, set the new bearer, and retry once (`Symbol.for('http.authRetry')` guard).
-2. If refresh fails, and the request is not on the public-allowlist (`/properties/`, `/properties/recommendations/`), and an `Authorization` header was sent, clear the cached `user` from `localStorage`. Route guards and the auth store handle the redirect to `/login`.
+2. If the refresh fails or returns no token, clear the cached `user` (`clearStoredUser()`) and dispatch the `360ghar:auth-cleared` window event so the auth store flips `isAuthenticated` to false; route guards then redirect to `/login`. **Exception:** requests flagged `SKIP_AUTH_RETRY` (the post-fresh-signin profile fetch) skip both the refresh and this cleanup — there a 401 means "no backend profile row yet" and is mapped to `authStage: 'profile_completion'`, not a dead session.
 
 ### Timeout
 
@@ -80,7 +80,7 @@ All auth runs through the **Supabase Auth SDK** - there are no backend `/api/v1/
 
 | Method | Endpoint / SDK | Notes |
 |--------|----------------|-------|
-| `login(phoneOrEmail, password)` | `supabase.auth.signInWithPassword` | Auto-detects email vs phone; normalizes Indian numbers to E.164; then `GET /users/profile/` |
+| `login(phoneOrEmail, password)` | `supabase.auth.signInWithPassword` | Auto-detects email vs phone; normalizes Indian numbers to E.164. Returns the **session only** — the backend profile is fetched once by `authStore.syncUserProfile` (via the `SIGNED_IN` event / awaited in `authStore.login`), not here |
 | `signInWithGoogle(next)` | `supabase.auth.signInWithOAuth({ provider: 'google' })` | Redirect to `/auth/callback?code=...` |
 | `exchangeCodeForSession(code)` | `supabase.auth.exchangeCodeForSession` | Used by `AuthCallbackPage` |
 | `checkIdentifierStatus(identifier)` | `POST /auth/identifier-status` (public) | Login state-machine: exists / verified / has_password / next_step |
@@ -92,7 +92,7 @@ All auth runs through the **Supabase Auth SDK** - there are no backend `/api/v1/
 | `startAddPhone` / `verifyAddPhone` | `updateUser({ phone })` / `verifyOtp({ type: 'phone_change' })` | Attach phone to Google account |
 | `getCurrentUser()` | `GET /users/profile/` | |
 | `updateCurrentUser(data)` | `PUT /users/profile/` | |
-| `logout()` | `supabase.auth.signOut()` + `localStorage.removeItem('user')` | |
+| `logout()` | clear cached token, then `supabase.auth.signOut()` | Local `localStorage` cleanup is done by `authStore.clearAuthState()` in a `finally`, so it runs even if `signOut()` rejects |
 | `resetPassword(newPassword)` | `supabase.auth.updateUser({ password })` | After OTP-verified reset |
 | `changePassword(current, new)` | Re-sign-in to verify, then `updateUser` | |
 | `afterAuthSuccess(method, identifier)` | - | Persists last method locally + mirrors to backend |

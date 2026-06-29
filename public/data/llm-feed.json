@@ -3,7 +3,7 @@
   "homepage": "https://360ghar.com/",
   "description": "Real estate platform for Buy, Rent and PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.",
   "metadata": {
-    "last_updated": "2026-06-25",
+    "last_updated": "2026-06-29",
     "coverage": [
       "Gurugram",
       "Delhi",
@@ -354,6 +354,21 @@
       "category": "tools"
     },
     {
+      "title": "MOFA to RERA Converter",
+      "url": "https://360ghar.com/mofa-to-rera-converter",
+      "category": "tools"
+    },
+    {
+      "title": "Sq Ft Calculator",
+      "url": "https://360ghar.com/sq-ft-calculator",
+      "category": "tools"
+    },
+    {
+      "title": "Acre to Gaj Converter",
+      "url": "https://360ghar.com/acre-in-gaj",
+      "category": "tools"
+    },
+    {
       "title": "RERA Projects",
       "url": "https://360ghar.com/rera-projects",
       "category": "dataHub"
@@ -588,6 +603,21 @@
       {
         "title": "Verify Ownership",
         "url": "https://360ghar.com/verify-ownership",
+        "category": "tools"
+      },
+      {
+        "title": "MOFA to RERA Converter",
+        "url": "https://360ghar.com/mofa-to-rera-converter",
+        "category": "tools"
+      },
+      {
+        "title": "Sq Ft Calculator",
+        "url": "https://360ghar.com/sq-ft-calculator",
+        "category": "tools"
+      },
+      {
+        "title": "Acre to Gaj Converter",
+        "url": "https://360ghar.com/acre-in-gaj",
         "category": "tools"
       }
     ],

@@ -38,6 +38,7 @@ const Header = ({
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
+            if (!showUserDropdown) return;
             if (!event.target.closest('.user-dropdown')) {
                 setShowUserDropdown(false);
             }
@@ -45,7 +46,7 @@ const Header = ({
 
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
-    }, []);
+    }, [showUserDropdown]);
 
     const handleLogout = async () => {
         // UX FIX (audit 1.6): await logout() so the auth store clears
@@ -135,7 +136,7 @@ const Header = ({
                                             {user?.profile_image_url ? (
                                                 <LazyImage
                                                     src={user.profile_image_url}
-                                                    alt="Profile"
+                                                    alt={t('profileAlt')}
                                                     className="user-avatar-img rounded-circle"
                                                 />
                                             ) : (
@@ -144,7 +145,7 @@ const Header = ({
                                                 </div>
                                             )}
                                         </div>
-                                        <span className="user-name">{user?.full_name || user?.email || 'User'}</span>
+                                        <span className="user-name">{user?.full_name || user?.email || t('userFallback')}</span>
                                         <i className={`fas fa-chevron-${showUserDropdown ? 'up' : 'down'} font-12`}></i>
                                     </button>
 
@@ -211,6 +212,7 @@ const Header = ({
                                 showOffCanvasBtn && (
                                     <button type="button" className={`offcanvas-btn d-lg-block d-none ${offCanvasBtnClass}`}
                                         onClick={handleOffCanvasToggle}
+                                        aria-label={t('header.openMenu', 'Open menu')}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none">
                                             <line x1="0.0078125" y1="12.293" x2="30.0078" y2="12.293" stroke="#181616" strokeWidth="3"/>
@@ -224,7 +226,7 @@ const Header = ({
                             {/* Post Property button is included above within header-cta-group for guests */}
 
                             <button type="button" className="toggle-mobileMenu d-lg-none ms-3"
-                                aria-label="Toggle mobile menu"
+                                aria-label={t('header.toggleMobileMenu')}
                                 aria-expanded={toggleMobileMenu}
                                 onClick={handleMobileMenuToggle}
                             >

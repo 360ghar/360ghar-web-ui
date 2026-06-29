@@ -26,10 +26,11 @@ const searchProperties = (filters = {}, cursor = null, limit = 12) => {
  * Corresponds to: GET /properties/{property_id}
  * NO AUTHENTICATION REQUIRED
  * @param {number} propertyId - The ID of the property.
+ * @param {object} [options] - Optional axios request config (e.g. `{ signal }` to cancel an in-flight fetch).
  * @returns {Promise<object>} The property data.
  */
-const getPropertyById = (propertyId) => {
-  return publicApi.get(`/properties/${propertyId}`);
+const getPropertyById = (propertyId, options = {}) => {
+  return publicApi.get(`/properties/${propertyId}`, options);
 };
 
 /**
@@ -40,7 +41,7 @@ const getPropertyById = (propertyId) => {
  * @returns {Promise<array>} A list of recommended properties.
  */
 const getRecommendations = (limit = 6) => {
-  return publicApi.get(`/properties/recommendations/?limit=${limit}`);
+  return publicApi.get('/properties/recommendations/', { params: { limit } });
 };
 
 export const propertyAPIService = {

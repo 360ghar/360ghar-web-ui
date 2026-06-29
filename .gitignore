@@ -62,3 +62,6 @@ gsc_report/
 # Remotion video project dependencies (source is tracked, deps are not)
 .wiki/video/node_modules/
 .wiki/video/out/
+
+# Playwright MCP page dumps (local browser automation)
+.playwright-mcp/

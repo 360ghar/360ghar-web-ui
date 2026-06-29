@@ -5,10 +5,13 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import BlogDetailsSection from '../../components/blog/BlogDetailsSection';
+import SEO from '../../common/SEO';
+import ErrorBoundary from '../../common/ErrorBoundary';
 const BlogDetails = () => {
     const { t } = useTranslation();
     return (
         <>
+            <SEO title={t('blog:blogDetails.defaultSeoTitle', 'Real Estate Blog | 360Ghar')} description={t('blog:blogDetails.defaultSeoDesc', 'Read the latest real estate insights')} />
             <OffCanvas />
             <MobileMenu />
 
@@ -23,7 +26,9 @@ const BlogDetails = () => {
                     showContactNumber={false}
                 />
 
-                <BlogDetailsSection />
+                <ErrorBoundary>
+                    <BlogDetailsSection />
+                </ErrorBoundary>
 
                 <Cta ctaClass="" />
 

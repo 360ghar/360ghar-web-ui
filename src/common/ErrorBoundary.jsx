@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import i18n from '../i18n';
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class ErrorBoundary extends Component {
             marginBottom: '12px',
             fontFamily: 'var(--font-heading, Cinzel, serif)',
           }}>
-            Something went wrong
+            {i18n.t('errorBoundary.title', { ns: 'common' })}
           </h2>
           <p style={{
             color: 'var(--text-secondary, #777777)',
@@ -60,24 +61,26 @@ class ErrorBoundary extends Component {
             maxWidth: '480px',
             marginBottom: '24px',
           }}>
-            An unexpected error occurred. Please try again or navigate back to the home page.
+            {i18n.t('errorBoundary.description', { ns: 'common' })}
           </p>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <a
-              href="/"
+            <button
+              type="button"
+              onClick={() => this.props.navigate ? this.props.navigate('/') : (window.location.href = '/')}
               style={{
                 display: 'inline-block',
                 padding: '10px 24px',
                 background: 'var(--main-color, #ff6b00)',
                 color: '#fff',
                 borderRadius: '8px',
-                textDecoration: 'none',
+                border: 'none',
                 fontWeight: 600,
                 fontSize: '14px',
+                cursor: 'pointer',
               }}
             >
-              Go Home
-            </a>
+              {i18n.t('errorBoundary.goHome', { ns: 'common' })}
+            </button>
             <button
               onClick={this.handleReset}
               type="button"
@@ -93,7 +96,7 @@ class ErrorBoundary extends Component {
                 cursor: 'pointer',
               }}
             >
-              Try Again
+              {i18n.t('errorBoundary.tryAgain', { ns: 'common' })}
             </button>
           </div>
         </div>
@@ -110,7 +113,8 @@ class ErrorBoundary extends Component {
  */
 function ErrorBoundaryWithRoute(props) {
   const location = useLocation();
-  return <ErrorBoundary resetKey={location.pathname} {...props} />;
+  const navigate = useNavigate();
+  return <ErrorBoundary resetKey={location.pathname} navigate={navigate} {...props} />;
 }
 
 export default ErrorBoundaryWithRoute;

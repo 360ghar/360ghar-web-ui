@@ -1,7 +1,6 @@
 import api, { publicApi } from './api';
 import { ensureSupabaseClient, setCachedAccessToken } from './supabaseClient';
 import { setLastAuthMethod, AUTH_METHODS } from './lastAuthMethod';
-import { SKIP_AUTH_RETRY } from './http';
 
 // Normalize an identifier and detect whether it is an email or a phone number.
 const isEmailIdentifier = (identifier) => (identifier || '').includes('@');
@@ -17,7 +16,12 @@ const normalizePhoneForAuth = (phone) => {
 };
 
 export const authService = {
-  // Login user directly with Supabase Auth (email-or-phone + password)
+  // Login user directly with Supabase Auth (email-or-phone + password).
+  // Returns the session fields only; the backend profile is fetched by the
+  // auth store's syncUserProfile (called via the SIGNED_IN auth event and
+  // awaited by authStore.login) so there is exactly one /users/profile/ fetch
+  // per sign-in instead of two. The store maps 401/404 to authStage =
+  // 'profile_completion' for fresh signups that lack a backend profile row.
   login: async (phoneOrEmail, password) => {
     const client = await ensureSupabaseClient();
     const identifier = (phoneOrEmail || '').trim();
@@ -30,11 +34,11 @@ export const authService = {
       throw new Error(error?.message || 'Login failed');
     }
 
-    // Populate the token cache immediately so the profile fetch below (and the
+    // Populate the token cache immediately so the post-signIn fetches (and the
     // fire-and-forget recordLastMethod, and the SIGNED_IN-triggered sync) all
     // read the token synchronously instead of each acquiring the supabase auth
     // lock via getSession() — the root cause of the login AbortError. The
-    // onAuthStateChange listener also sets this, but the fetch below can race it.
+    // onAuthStateChange listener also sets this, but the next fetch can race it.
     setCachedAccessToken(data.session.access_token);
 
     // Record the last-used method (best-effort, never blocks login).
@@ -43,37 +47,11 @@ export const authService = {
       : AUTH_METHODS.PHONE_PASSWORD;
     authService.afterAuthSuccess(method, identifier);
 
-    // Fetch the backend profile. Supabase auth just succeeded, so a 401/404
-    // here means the user is authenticated but has no backend profile row yet
-    // (common for fresh phone-auth signups before the profile is provisioned).
-    // Return user: null so the auth store keeps the session and routes the
-    // authenticated user to profile completion, instead of throwing and being
-    // treated as a failed login (which previously also seeded an infinite
-    // refresh↔fetch loop). Any other failure is a genuine error.
-    //
-    // SKIP_AUTH_RETRY + a shorter timeout: the access token is brand new, so a
-    // 401 is "no profile row", not "token expired". Bypassing the 401 → refresh
-    // → retry cycle (which would refresh, retry, and 401 again) avoids doubling
-    // the latency and, across the several concurrent post-login fetches, the
-    // long apparent hang users saw on the login spinner.
-    let profile = null;
-    try {
-      const response = await api.get('/users/profile/', {
-        [SKIP_AUTH_RETRY]: true,
-        timeout: 10000,
-      });
-      profile = response.data;
-    } catch (err) {
-      const status = err?.response?.status;
-      if (status !== 401 && status !== 404) throw err;
-    }
-
     return {
       access_token: data.session.access_token,
       refresh_token: data.session.refresh_token,
       expires_in: data.session.expires_in,
       token_type: data.session.token_type,
-      user: profile,
     };
   },
 
@@ -259,12 +237,15 @@ export const authService = {
     return response.data;
   },
 
-  // Logout - clear localStorage
+  // Logout - clear cached token BEFORE awaiting signOut so any in-flight
+  // authenticated request that 401s during the signOut window does not trigger
+  // the 401 → refresh-retry cycle against a session that is being torn down.
+  // localStorage cleanup is handled by the store's clearAuthState() which calls
+  // clearStoredUser() — no direct localStorage manipulation here to avoid desync.
   logout: async () => {
     const client = await ensureSupabaseClient();
-    await client.auth.signOut();
     setCachedAccessToken(null);
-    localStorage.removeItem('user');
+    await client.auth.signOut();
   },
 
   // NOTE: Password reset now uses a 6-digit OTP for BOTH email and phone
@@ -280,19 +261,24 @@ export const authService = {
     return { success: true };
   },
 
-  // Change password - requires current password verification
+  // Change password - requires current-password verification.
+  // The active session alone is NOT proof the *person* at the keyboard knows
+  // the password: a walk-up attacker on an unlocked/hijacked session could
+  // otherwise silently take the account over. So we re-verify the current
+  // password via signInWithPassword first. This is a single deliberate call
+  // (not the post-login concurrent request burst), so it does not trip the
+  // AbortError lock-contention path that the hot request flow guards against.
   changePassword: async (currentPassword, newPassword) => {
     const client = await ensureSupabaseClient();
 
-    // Get current user and their email/phone
+    // Get current user and their email/phone.
     const { data: { user } } = await client.auth.getUser();
 
     if (!user) {
       throw new Error('User not authenticated');
     }
 
-    // Verify current password by attempting to sign in
-    // This ensures the user actually knows their current password
+    // Verify the current password by attempting to sign in with it.
     const identifier = user.email || user.phone;
     if (!identifier) {
       throw new Error('User has no email or phone associated');
@@ -308,7 +294,7 @@ export const authService = {
       throw new Error('Current password is incorrect');
     }
 
-    // Current password verified, now update to new password
+    // Current password verified — update to the new password.
     const { error } = await client.auth.updateUser({
       password: newPassword,
     });

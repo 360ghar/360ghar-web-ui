@@ -46,11 +46,11 @@ const ShareModal = ({ isOpen, onClose, propertyTitle, propertyURL }) => {
   };
 
   return (
-    <div className="share-modal-overlay" onClick={onClose}>
+    <div className="share-modal-overlay" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} tabIndex={-1}>
       <div className="share-modal" onClick={(e) => e.stopPropagation()}>
         <div className="share-modal__header">
           <h5>{t('propertyItem.shareTitle')}</h5>
-          <button className="share-modal__close" onClick={onClose}>
+          <button className="share-modal__close" onClick={onClose} aria-label={t('propertyItem.closeShare', 'Close share dialog')}>
             <i className="fas fa-times"></i>
           </button>
         </div>
@@ -213,13 +213,19 @@ const PropertyItem = ({
 
   // Server-side filtering is now used, no client-side filtering needed
 
-  const handleSaveClick = (e) => {
+  const handleSaveClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     const newValue = !isFavorite;
     setIsFavorite(newValue);
     if (isAuthenticated && id) {
-      recordSwipe(id, newValue);
+      // recordSwipe in propertyStore swallows errors and returns false rather
+      // than throwing, so a try/catch around it would be dead code. Check the
+      // return value and roll back the optimistic local flip on failure.
+      const ok = await recordSwipe(id, newValue);
+      if (ok === false) {
+        setIsFavorite(!newValue);
+      }
     }
   };
 

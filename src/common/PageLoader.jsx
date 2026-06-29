@@ -93,10 +93,10 @@ const PageLoader = () => {
 
       {/* Text */}
       <div className="loader-text">
-        <h1 className="brand-name">
+        <div className="brand-name">
           <span className="brand-number">360</span>
           <span className="brand-ghar">Ghar</span>
-        </h1>
+        </div>
 
         <p className="brand-message">
           <span aria-hidden="true">{MESSAGES[messageIndex]}</span>

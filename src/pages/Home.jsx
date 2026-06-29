@@ -272,11 +272,9 @@ const Home = () => {
                     </Suspense>
                 </LazySection>
 
-                <LazySection minHeight="400px">
-                    <Suspense fallback={<SectionLoader height="400px" />}>
-                        <Footer />
-                    </Suspense>
-                </LazySection>
+                <Suspense fallback={<SectionLoader height="400px" />}>
+                    <Footer />
+                </Suspense>
 
             </main>
         </>

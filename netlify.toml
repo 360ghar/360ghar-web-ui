@@ -103,6 +103,21 @@
   to = "/:city/pg/flats"
   status = 301
 
+# Deep-link verification files — served by the backend so a single source of
+# truth (APP_REGISTRY + DEEPLINK_*_ANDROID_SHA256 env) owns every app's
+# fingerprints. force=true keeps these above the SPA catch-all below.
+[[redirects]]
+  from = "/.well-known/assetlinks.json"
+  to = "https://api.360ghar.com/.well-known/assetlinks.json"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/.well-known/apple-app-site-association"
+  to = "https://api.360ghar.com/.well-known/apple-app-site-association"
+  status = 200
+  force = true
+
 # SPA fallback - serve index.html for all unmatched routes
 [[redirects]]
   from = "/*"

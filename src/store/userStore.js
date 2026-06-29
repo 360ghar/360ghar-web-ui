@@ -5,55 +5,58 @@ import { extractError } from '../utils/apiError';
 const useUserStore = create((set, get) => ({
   profile: null,
   preferences: null,
-  isLoading: false,
+  isProfileLoading: false,
+  isUpdateLoading: false,
+  isPreferencesLoading: false,
+  isLocationLoading: false,
   error: null,
 
   getProfile: async () => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isProfileLoading: true, error: null });
       const data = await userService.getProfile();
-      set({ profile: data, preferences: data?.preferences || null, isLoading: false });
+      set({ profile: data, preferences: data?.preferences || null, isProfileLoading: false });
       return data;
     } catch (err) {
-      set({ isLoading: false, error: extractError(err, 'Failed to load profile') });
+      set({ isProfileLoading: false, error: extractError(err, 'Failed to load profile') });
       return null;
     }
   },
 
   updateProfile: async (profileData) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isUpdateLoading: true, error: null });
       const data = await userService.updateProfile(profileData);
-      set({ profile: data, preferences: data?.preferences || get().preferences, isLoading: false });
+      set({ profile: data, preferences: data?.preferences || get().preferences, isUpdateLoading: false });
       return data;
     } catch (err) {
-      set({ isLoading: false, error: extractError(err, 'Failed to update profile') });
+      set({ isUpdateLoading: false, error: extractError(err, 'Failed to update profile') });
       return null;
     }
   },
 
   updatePreferences: async (prefs) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isPreferencesLoading: true, error: null });
       await userService.updatePreferences(prefs);
       // Refresh profile to get normalized preferences
       const data = await userService.getProfile();
-      set({ profile: data, preferences: data?.preferences || prefs, isLoading: false });
+      set({ profile: data, preferences: data?.preferences || prefs, isPreferencesLoading: false });
       return true;
     } catch (err) {
-      set({ isLoading: false, error: extractError(err, 'Failed to update preferences') });
+      set({ isPreferencesLoading: false, error: extractError(err, 'Failed to update preferences') });
       return false;
     }
   },
 
   updateLocation: async ({ latitude, longitude }) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isLocationLoading: true, error: null });
       await userService.updateLocation({ latitude, longitude });
-      set({ isLoading: false });
+      set({ isLocationLoading: false });
       return true;
     } catch (err) {
-      set({ isLoading: false, error: extractError(err, 'Failed to update location') });
+      set({ isLocationLoading: false, error: extractError(err, 'Failed to update location') });
       return false;
     }
   },
