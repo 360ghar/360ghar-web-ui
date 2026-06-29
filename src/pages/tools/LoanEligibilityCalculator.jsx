@@ -208,6 +208,8 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
              <main className="body-bg">
                  <Header />
  
+                 <h1 className="visually-hidden">{t('loanEligibility.title')}</h1>
+
                  <section className="padding-y-50">
                      <div className="container">
                          <div className="row justify-content-center">
@@ -269,7 +271,7 @@ import { generateBreadcrumbStructuredData, generateFaqStructuredData, generateHo
                                      <div className="col-lg-6">
                                          <div className="bg-main text-white p-4 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center text-center">
                                              {/* SEO AUDIT FIX (issue #44): h3→h1 for primary heading */}
-                                            <h1 className="text-white mb-2">{t('loanEligibility.maxEligibleLoan')}</h1>
+                                            <h2 className="text-white mb-2">{t('loanEligibility.maxEligibleLoan')}</h2>
                                              <div className="display-4 fw-bold mb-4 text-white">
                                                  {formatCurrency(maxLoan)}
                                              </div>
