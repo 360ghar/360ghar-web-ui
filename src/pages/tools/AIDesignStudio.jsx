@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect }  from 'react';
+import { useState, useCallback, useEffect, useRef }  from 'react';
 import { useTranslation } from 'react-i18next';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
@@ -123,6 +123,7 @@ const AIDesignStudio = () => {
   // Image upload state (for img2img)
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const previewUrlRef = useRef(null);
 
   // Loading state
   const [loadingStep, setLoadingStep] = useState('understanding');
@@ -135,6 +136,14 @@ const AIDesignStudio = () => {
   // Error state
   const [errorMessage, setErrorMessage] = useState('');
   const [errorType, setErrorType] = useState('general');
+
+  // In-flight guard + tracked timer handles for the step-transition timers.
+  // Using a ref because the guards are imperative (we want to re-check the
+  // current value inside an async callback, not a stale state value) and the
+  // timers leak across re-renders if stored as state.
+  const isSubmittingRef = useRef(false);
+  const stepTimersRef = useRef([]);
+  const mountedRef = useRef(true);
 
   // Check authentication on mount
   useEffect(() => {
@@ -178,11 +187,47 @@ const AIDesignStudio = () => {
 
   const handleImageSelect = useCallback((file, preview) => {
     setSelectedFile(file);
-    setPreviewUrl(preview);
+    setPreviewUrl((prev) => {
+      if (prev && prev.startsWith('blob:')) {
+        try { URL.revokeObjectURL(prev); } catch { /* noop */ }
+      }
+      return preview;
+    });
+    previewUrlRef.current = preview;
+  }, []);
+
+  // Revoke any lingering blob URL on unmount. Read from the ref directly —
+  // setState inside an unmount cleanup is discarded before the updater runs.
+  useEffect(() => {
+    return () => {
+      const url = previewUrlRef.current;
+      if (url && url.startsWith('blob:')) {
+        try { URL.revokeObjectURL(url); } catch { /* noop */ }
+      }
+    };
+  }, []);
+
+  // On unmount: clear pending step-transition timers and mark the component
+  // unmounted. The Puter API call itself cannot be aborted, so we cannot truly
+  // cancel an in-flight generation — instead handleSubmit checks mountedRef
+  // after the await and skips the result-state write, so a late-resolving
+  // generation neither updates a dead instance nor clobbers a fresh mount.
+  useEffect(() => {
+    return () => {
+      isSubmittingRef.current = false;
+      mountedRef.current = false;
+      stepTimersRef.current.forEach((id) => clearTimeout(id));
+      stepTimersRef.current = [];
+    };
   }, []);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
+
+    // Re-entry guard. handleRegenerate re-enters handleSubmit, and a fast
+    // double-click on Generate fires two submissions. Without this guard,
+    // two concurrent Puter API calls run and the user is billed twice.
+    if (isSubmittingRef.current) return;
 
     // Validation for img2img mode
     if (generationMode === 'image-to-image' && !selectedFile) {
@@ -192,8 +237,11 @@ const AIDesignStudio = () => {
       return;
     }
 
-    let stepTimer1 = null;
-    let stepTimer2 = null;
+    isSubmittingRef.current = true;
+    // Clear any timers left over from a previous submission (e.g. a quick
+    // Regenerate right after a fast Puter response).
+    stepTimersRef.current.forEach((id) => clearTimeout(id));
+    stepTimersRef.current = [];
 
     try {
       setAppState('loading');
@@ -202,8 +250,8 @@ const AIDesignStudio = () => {
       setIsSaved(false);
 
       // Simulate step transitions
-      stepTimer1 = setTimeout(() => setLoadingStep('generating'), 2000);
-      stepTimer2 = setTimeout(() => setLoadingStep('enhancing'), 15000);
+      stepTimersRef.current.push(setTimeout(() => setLoadingStep('generating'), 2000));
+      stepTimersRef.current.push(setTimeout(() => setLoadingStep('enhancing'), 15000));
 
       let imageUrl;
 
@@ -234,16 +282,20 @@ const AIDesignStudio = () => {
         imageUrl = await puterService.reimagineImage(reimaginePrompt, base64, mimeType);
       }
 
-      clearTimeout(stepTimer1);
-      clearTimeout(stepTimer2);
+      stepTimersRef.current.forEach((id) => clearTimeout(id));
+      stepTimersRef.current = [];
+
+      // Component unmounted while the (un-abortable) Puter call was in flight —
+      // skip the result-state write instead of updating a dead instance.
+      if (!mountedRef.current) return;
 
       setGeneratedImage(imageUrl);
       setAppState('result');
 
     } catch (error) {
       console.error('Generation error:', error);
-      if (stepTimer1) clearTimeout(stepTimer1);
-      if (stepTimer2) clearTimeout(stepTimer2);
+      stepTimersRef.current.forEach((id) => clearTimeout(id));
+      stepTimersRef.current = [];
 
       if (error.message?.includes('sign in') || error.message?.includes('authenticated')) {
         setErrorMessage('Please sign in with Puter to generate images.');
@@ -262,6 +314,8 @@ const AIDesignStudio = () => {
       setErrorMessage(message);
       setErrorType(type);
       setAppState('error');
+    } finally {
+      isSubmittingRef.current = false;
     }
   }, [generationMode, designType, roomType, style, customPrompt, selectedFile]);
 
@@ -298,6 +352,7 @@ const AIDesignStudio = () => {
     setCustomPrompt('');
     setSelectedFile(null);
     setPreviewUrl(null);
+    previewUrlRef.current = null;
     setGeneratedImage(null);
     setUsedPrompt('');
     setIsSaved(false);
@@ -336,7 +391,7 @@ const AIDesignStudio = () => {
           generateToolSchema(toolSchemas.aiDesignStudio),
           generateBreadcrumbStructuredData([
             { name: 'Home', url: 'https://360ghar.com/' },
-            { name: 'Tools', url: 'https://360ghar.com/emi-calculator' },
+            { name: 'Tools', url: 'https://360ghar.com/tools' },
             { name: 'AI Design Studio', url: 'https://360ghar.com/ai-design-studio' }
           ]),
           generateFaqStructuredData(AI_DESIGN_FAQS),
@@ -486,53 +541,53 @@ const AIDesignStudio = () => {
                   )}
                 </div>
                 <h3 className="mb-3">
-                  {errorType === 'network' ? 'Connection Error' :
-                   errorType === 'timeout' ? 'Request Timeout' :
-                   errorType === 'validation' ? 'Invalid Input' :
-                   errorType === 'quota' ? 'Usage Limit Reached' :
-                   'Generation Failed'}
+                  {errorType === 'network' ? t('aiDesignStudio.errorConnection') :
+                   errorType === 'timeout' ? t('aiDesignStudio.errorTimeout') :
+                   errorType === 'validation' ? t('aiDesignStudio.errorValidation') :
+                   errorType === 'quota' ? t('aiDesignStudio.errorQuota') :
+                   t('aiDesignStudio.errorGeneral')}
                 </h3>
                 <p className="text-muted mb-4">{errorMessage}</p>
 
                 <div className="error-suggestions bg-light p-3 rounded-3 mb-4 text-start mx-auto" style={{ maxWidth: '500px' }}>
                   <h6 className="mb-2">
                     <i className="fas fa-lightbulb text-warning me-2"></i>
-                    Suggestions
+                    {t('aiDesignStudio.suggestions')}
                   </h6>
                   <ul className="mb-0 small text-muted">
                     {errorType === 'network' && (
                       <>
-                        <li>Check your internet connection</li>
-                        <li>Try refreshing the page</li>
-                        <li>Disable any VPN or proxy</li>
+                        <li>{t('aiDesignStudio.suggestionNetwork1')}</li>
+                        <li>{t('aiDesignStudio.suggestionNetwork2')}</li>
+                        <li>{t('aiDesignStudio.suggestionNetwork3')}</li>
                       </>
                     )}
                     {errorType === 'timeout' && (
                       <>
-                        <li>Try a simpler prompt</li>
-                        <li>Use a smaller image (for img2img)</li>
-                        <li>Try again in a few minutes</li>
+                        <li>{t('aiDesignStudio.suggestionTimeout1')}</li>
+                        <li>{t('aiDesignStudio.suggestionTimeout2')}</li>
+                        <li>{t('aiDesignStudio.suggestionTimeout3')}</li>
                       </>
                     )}
                     {errorType === 'validation' && (
                       <>
-                        <li>Make sure all required fields are filled</li>
-                        <li>Upload a valid image (JPEG, PNG, WebP)</li>
-                        <li>Check that you are signed in</li>
+                        <li>{t('aiDesignStudio.suggestionValidation1')}</li>
+                        <li>{t('aiDesignStudio.suggestionValidation2')}</li>
+                        <li>{t('aiDesignStudio.suggestionValidation3')}</li>
                       </>
                     )}
                     {errorType === 'quota' && (
                       <>
-                        <li>Check your Puter account usage limits</li>
-                        <li>Try again later when quota resets</li>
-                        <li>Consider upgrading your Puter plan</li>
+                        <li>{t('aiDesignStudio.suggestionQuota1')}</li>
+                        <li>{t('aiDesignStudio.suggestionQuota2')}</li>
+                        <li>{t('aiDesignStudio.suggestionQuota3')}</li>
                       </>
                     )}
                     {errorType === 'general' && (
                       <>
-                        <li>Try a different style or room type</li>
-                        <li>Simplify your custom prompt</li>
-                        <li>Refresh the page and try again</li>
+                        <li>{t('aiDesignStudio.suggestionGeneral1')}</li>
+                        <li>{t('aiDesignStudio.suggestionGeneral2')}</li>
+                        <li>{t('aiDesignStudio.suggestionGeneral3')}</li>
                       </>
                     )}
                   </ul>
@@ -541,11 +596,11 @@ const AIDesignStudio = () => {
                 <div className="d-flex gap-3 justify-content-center flex-wrap">
                   <button onClick={handleRetry} className="btn btn-main">
                     <i className="fas fa-redo me-2"></i>
-                    Try Again
+                    {t('aiDesignStudio.tryAgain')}
                   </button>
                   <button onClick={handleReset} className="btn btn-outline-main">
                     <i className="fas fa-home me-2"></i>
-                    Start Over
+                    {t('aiDesignStudio.startOver')}
                   </button>
                 </div>
               </div>

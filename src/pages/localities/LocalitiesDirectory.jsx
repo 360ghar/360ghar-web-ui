@@ -11,6 +11,7 @@ import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
 import { useLocalitiesIndex } from '../../hooks/useLocalitiesIndex';
+import { buildLocalitySlug } from '../../utils/localitySlug';
 
 // Render locality groups in progressive batches to avoid mounting hundreds of
 // DOM nodes at once when the directory first loads.
@@ -27,14 +28,14 @@ const LocalitiesDirectory = () => {
     const { data: localities, loading } = useLocalitiesIndex();
 
     const entityTypes = useMemo(() => {
-        const types = new Set(localities.map((item) => item.entityType || item.type || 'Locality'));
+        const types = new Set((localities || []).map((item) => item.entityType || item.type || 'Locality'));
         return ['all', ...Array.from(types).sort((a, b) => a.localeCompare(b))];
     }, [localities]);
 
     const filteredLocalities = useMemo(() => {
         const normalizedSearch = searchQuery.trim().toLowerCase();
 
-        return localities.filter((item) => {
+        return (localities || []).filter((item) => {
             const itemType = item.entityType || item.type || 'Locality';
             const matchesType = selectedType === 'all' || itemType === selectedType;
 
@@ -88,7 +89,7 @@ const LocalitiesDirectory = () => {
     }, [visibleCount, letters.length]);
 
     const latestVerification = useMemo(() => {
-        const values = localities
+        const values = (localities || [])
             .map((item) => item.lastVerifiedAt)
             .filter(Boolean)
             .map((value) => new Date(value))
@@ -306,7 +307,7 @@ const LocalitiesDirectory = () => {
                                         <div className="row g-3">
                                             {groupedLocalities[letter].map((loc) => (
                                                 <div className="col-sm-6 col-lg-4" key={loc.slug}>
-                                                    <I18nLink to={`/locality/${loc.slug}-gurgaon`} className="locality-directory-card text-decoration-none">
+                                                    <I18nLink to={`/locality/${buildLocalitySlug(loc)}`} className="locality-directory-card text-decoration-none">
                                                         <div className="d-flex justify-content-between align-items-start gap-3">
                                                             <h3 className="locality-directory-card__title mb-0">{loc.name}</h3>
                                                             <span className="locality-directory-card__type">{loc.entityType || loc.type || 'Locality'}</span>

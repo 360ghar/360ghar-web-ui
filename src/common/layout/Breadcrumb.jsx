@@ -11,7 +11,7 @@ const Breadcrumb = (props) => {
         <>
             {/* =============================== Breadcrumb Start ===========================    */}
             <section className={sectionClass}>
-                <LazyImage src={BreadcrumbImage} alt="Breadcrumb Image" className="breadcrumb__img" priority />
+                <LazyImage src={BreadcrumbImage} alt="" className="breadcrumb__img" priority />
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-lg-8">

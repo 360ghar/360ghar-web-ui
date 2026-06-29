@@ -16,7 +16,7 @@ const ProfileSchema = Yup.object().shape({
 });
 
 const UserProfile = () => {
-  const { profile, getProfile, updateProfile, isLoading, error, clearError } = useUserStore();
+  const { profile, getProfile, updateProfile, isUpdateLoading, error, clearError } = useUserStore();
   const [isEditing, setIsEditing] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const { t } = useTranslation(['account', 'forms']);
@@ -122,9 +122,9 @@ const UserProfile = () => {
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      disabled={isSubmitting || isLoading}
+                      disabled={isSubmitting || isUpdateLoading}
                     >
-                      {isLoading ? t('account:userProfile.saving') : t('account:userProfile.saveChanges')}
+                      {isUpdateLoading ? t('account:userProfile.saving') : t('account:userProfile.saveChanges')}
                     </button>
                     <button
                       type="button"

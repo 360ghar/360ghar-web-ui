@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useUserStore } from '../../store';
 
 const AccountAddressTab = () => {
-    const { profile, getProfile, isLoading, error } = useUserStore();
+    const { profile, getProfile, isProfileLoading, error } = useUserStore();
     const { t } = useTranslation('account');
 
     useEffect(() => {
@@ -25,9 +25,9 @@ const AccountAddressTab = () => {
     return (
         <>
             <p className="account-alert">{t('tabs.address.description')}</p>
-            {isLoading && <div className="py-3">{t('tabs.address.loading')}</div>}
-            {error && !isLoading && <div className="alert alert-danger">{error}</div>}
-            {!isLoading && (
+            {isProfileLoading && <div className="py-3">{t('tabs.address.loading')}</div>}
+            {error && !isProfileLoading && <div className="alert alert-danger">{error}</div>}
+            {!isProfileLoading && (
                 <div className="row gy-4">
                     {addressBlocks.map((block, idx) => (
                         <div className="col-sm-6" key={idx}>

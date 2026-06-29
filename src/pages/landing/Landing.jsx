@@ -106,7 +106,7 @@ const Landing = () => {
 
   const intentLabel = validIntent === 'rent' ? 'Rent' : validIntent === 'pg' ? 'PG' : 'Sale';
   const verb = validIntent === 'rent' ? 'renting' : validIntent === 'pg' ? 'staying in a PG in' : 'buying';
-  const vrHook = validIntent === 'buy' ? ' [360° VR Tour]' : '';
+
   const title = validIntent === 'pg'
     ? t('landing:seo.titlePg', { city })
     : t('landing:seo.titleBuyRent', { facet, verb, city });
@@ -201,7 +201,6 @@ const Landing = () => {
             name: title,
             description,
             url: `https://360ghar.com${canonicalPath}`,
-            numberOfItems: validIntent === 'buy' ? 50 : validIntent === 'rent' ? 30 : 20,
             itemListElement: [
               { '@type': 'ListItem', position: 1, url: `https://360ghar.com/properties?${browseQuery}` },
             ],
@@ -248,7 +247,7 @@ const Landing = () => {
           <div className="container container-two">
             {/* Hero */}
             <div className="section-heading text-center mb-4">
-              <h1 className="section-heading__title">{title.replace(' | 360Ghar', '').replace(' [360° VR Tour]', '')}</h1>
+              <h1 className="section-heading__title">{title.replace(/\s*\|\s*360Ghar\s*$/, '').replace(/\s*\[360°?\s*VR\s*Tour\]\s*$/, '')}</h1>
               <p className="section-heading__desc">{description}</p>
             </div>
 

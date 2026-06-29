@@ -7,7 +7,7 @@ import Cta from '../../components/ui/Cta';
 import BlogClassicSection from '../../components/blog/BlogClassicSection';
 import SEO from '../../common/SEO';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { I18nLink, stripLocalePrefix } from '../../i18n/I18nLink';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
@@ -17,6 +17,7 @@ const BlogClassic = () => {
     const { t } = useTranslation('blog');
     const [tC] = useTranslation('common');
     const location = useLocation();
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
     // Category / tag awareness (cursor pagination — no page count)
@@ -29,18 +30,6 @@ const BlogClassic = () => {
     // search box that redirects to the property search when no blog match.
     const [popularPosts, setPopularPosts] = useState([]);
     const [blogSearch, setBlogSearch] = useState('');
-
-    useEffect(() => {
-        const params = { limit: POSTS_PER_PAGE };
-        if (category) params.category = category;
-        if (tag) params.tag = tag;
-        blogService.getPosts(params)
-            .then(data => {
-                const posts = Array.isArray(data?.items) ? data.items : [];
-                setPopularPosts(Array.isArray(posts) ? posts.slice(0, 4) : []);
-            })
-            .catch(() => setPopularPosts([]));
-    }, [category, tag]);
 
     // AUDIT FIX (4.5): fetch a few popular/recent posts for cross-linking.
     useEffect(() => {
@@ -171,9 +160,9 @@ const BlogClassic = () => {
                                 onSubmit={(e) => {
                                     e.preventDefault();
                                     if (blogSearch.trim()) {
-                                        // Redirect to the property search as the app-wide
+                                        // Navigate to the property search as the app-wide
                                         // search experience when looking up a keyword.
-                                        window.location.href = `/properties?q=${encodeURIComponent(blogSearch.trim())}&city=Gurgaon`;
+                                        navigate(`/properties?q=${encodeURIComponent(blogSearch.trim())}&city=Gurgaon`);
                                     }
                                 }}
                             >

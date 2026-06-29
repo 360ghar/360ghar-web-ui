@@ -30,8 +30,6 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
   const { setLocation } = useLocationStore();
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(showAdvanced);
   const [removingChip, setRemovingChip] = useState(null);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
 
   // AUDIT FIX (improvement 2.2): saved searches (localStorage, no auth needed
   // for the minimal version). Users can save the current filter set and
@@ -87,25 +85,46 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
   // Bedroom options
   const bedroomOptions = [
-    { value: '', label: 'Any' },
-    { value: '1', label: '1 BHK' },
-    { value: '2', label: '2 BHK' },
-    { value: '3', label: '3 BHK' },
-    { value: '4', label: '4+ BHK' }
+    { value: '', label: t('filters.any', 'Any') },
+    { value: '1', label: t('filters.1bhk', '1 BHK') },
+    { value: '2', label: t('filters.2bhk', '2 BHK') },
+    { value: '3', label: t('filters.3bhk', '3 BHK') },
+    { value: '4', label: t('filters.4plusBhk', '4+ BHK') }
   ];
 
   // Amenities list
   const amenities = [
-    'Parking', 'Security', 'Garden', 'Gym', 'Swimming Pool', 'Power Backup',
-    'Water Supply', 'Waste Management', 'Intercom', 'Gas Pipeline', 'WiFi',
-    'Air Conditioning', 'RO Water System', 'Servant Room', 'Study Room'
+    { key: 'Parking', label: t('amenities.parking', 'Parking') },
+    { key: 'Security', label: t('amenities.security', 'Security') },
+    { key: 'Garden', label: t('amenities.garden', 'Garden') },
+    { key: 'Gym', label: t('amenities.gym', 'Gym') },
+    { key: 'Swimming Pool', label: t('amenities.swimmingPool', 'Swimming Pool') },
+    { key: 'Power Backup', label: t('amenities.powerBackup', 'Power Backup') },
+    { key: 'Water Supply', label: t('amenities.waterSupply', 'Water Supply') },
+    { key: 'Waste Management', label: t('amenities.wasteManagement', 'Waste Management') },
+    { key: 'Intercom', label: t('amenities.intercom', 'Intercom') },
+    { key: 'Gas Pipeline', label: t('amenities.gasPipeline', 'Gas Pipeline') },
+    { key: 'WiFi', label: t('amenities.wifi', 'WiFi') },
+    { key: 'Air Conditioning', label: t('amenities.airConditioning', 'Air Conditioning') },
+    { key: 'RO Water System', label: t('amenities.roWaterSystem', 'RO Water System') },
+    { key: 'Servant Room', label: t('amenities.servantRoom', 'Servant Room') },
+    { key: 'Study Room', label: t('amenities.studyRoom', 'Study Room') }
   ];
 
   // Features list
   const features = [
-    'Furnished', 'Semi-Furnished', 'Unfurnished', 'Modular Kitchen',
-    'Built-in Wardrobes', 'False Ceiling', 'Wooden Flooring', 'Marble Flooring',
-    'Corner Property', 'Park Facing', 'Main Road Facing', 'East Facing'
+    { key: 'Furnished', label: t('featureOptions.furnished', 'Furnished') },
+    { key: 'Semi-Furnished', label: t('featureOptions.semiFurnished', 'Semi-Furnished') },
+    { key: 'Unfurnished', label: t('featureOptions.unfurnished', 'Unfurnished') },
+    { key: 'Modular Kitchen', label: t('featureOptions.modularKitchen', 'Modular Kitchen') },
+    { key: 'Built-in Wardrobes', label: t('featureOptions.builtInWardrobes', 'Built-in Wardrobes') },
+    { key: 'False Ceiling', label: t('featureOptions.falseCeiling', 'False Ceiling') },
+    { key: 'Wooden Flooring', label: t('featureOptions.woodenFlooring', 'Wooden Flooring') },
+    { key: 'Marble Flooring', label: t('featureOptions.marbleFlooring', 'Marble Flooring') },
+    { key: 'Corner Property', label: t('featureOptions.cornerProperty', 'Corner Property') },
+    { key: 'Park Facing', label: t('featureOptions.parkFacing', 'Park Facing') },
+    { key: 'Main Road Facing', label: t('featureOptions.mainRoadFacing', 'Main Road Facing') },
+    { key: 'East Facing', label: t('featureOptions.eastFacing', 'East Facing') }
   ];
 
   // Helper to format price
@@ -251,10 +270,11 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
     // Amenities
     if (filters.amenities?.length > 0) {
       filters.amenities.forEach(amenity => {
+        const amenityObj = amenities.find(a => a.key === amenity);
         chips.push({
           id: `amenity-${amenity}`,
-          label: 'Amenity',
-          value: amenity,
+          label: t('filters.amenityChip', 'Amenity'),
+          value: amenityObj ? amenityObj.label : amenity,
           onRemove: () => handleAmenityChange(amenity, false)
         });
       });
@@ -263,10 +283,11 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
     // Features
     if (filters.features?.length > 0) {
       filters.features.forEach(feature => {
+        const featureObj = features.find(f => f.key === feature);
         chips.push({
           id: `feature-${feature}`,
-          label: 'Feature',
-          value: feature,
+          label: t('filters.featureChip', 'Feature'),
+          value: featureObj ? featureObj.label : feature,
           onRemove: () => handleFeatureChange(feature, false)
         });
       });
@@ -313,15 +334,6 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
       chip.onRemove();
       setRemovingChip(null);
     }, 200);
-  };
-
-  // Show toast notification
-  const showToastMessage = (message) => {
-    setToastMessage(message);
-    setShowToast(true);
-    setTimeout(() => {
-      setShowToast(false);
-    }, 3000);
   };
 
   // Handle property type change (multi-select)
@@ -402,8 +414,8 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
   // Handle clear filters
   const handleClearFilters = () => {
     clearFilters();
-    setLocation({ lat: null, lng: null, name: 'Search any location...' });
-    showToastMessage('All filters cleared');
+    setLocation({ lat: null, lng: null, name: t('filters.searchAnyLocation', 'Search any location...') });
+    toast.info(t('filters.allFiltersCleared', 'All filters cleared'), { theme: 'colored' });
   };
 
   // Render active filter chips
@@ -574,7 +586,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
         <div className="filter-group filter-group--advanced" id={advancedFiltersId}>
           {/* Bathrooms */}
           <div className="filter-group__section">
-            <h6 className="filter-group__subtitle">Bathrooms</h6>
+            <h6 className="filter-group__subtitle">{t('filters.bathrooms', 'Bathrooms')}</h6>
             <div className="filter-group__row">
               <input
                 type="number"
@@ -600,7 +612,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
           {/* Area */}
           <div className="filter-group__section">
-            <h6 className="filter-group__subtitle">Area (sqft)</h6>
+            <h6 className="filter-group__subtitle">{t('filters.areaSqft', 'Area (sqft)')}</h6>
             <div className="filter-group__row">
               <input
                 type="number"
@@ -624,7 +636,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
           {/* Floor */}
           <div className="filter-group__section">
-            <h6 className="filter-group__subtitle">Floor</h6>
+            <h6 className="filter-group__subtitle">{t('filters.floor', 'Floor')}</h6>
             <div className="filter-group__row">
               <input
                 type="number"
@@ -650,7 +662,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
           {/* Additional Filters */}
           <div className="filter-group__section">
-            <h6 className="filter-group__subtitle">Other</h6>
+            <h6 className="filter-group__subtitle">{t('filters.other', 'Other')}</h6>
             <div className="filter-group__row mb-2">
               <input
                 type="number"
@@ -675,7 +687,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
           {/* Location Details */}
           <div className="filter-group__section">
-            <h6 className="filter-group__subtitle">Location</h6>
+            <h6 className="filter-group__subtitle">{t('filters.location', 'Location')}</h6>
             <input
               type="text"
               placeholder="City"
@@ -701,7 +713,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
           {includesPgOrFlatmateType(filters.property_type || []) && (
             <div className="filter-group__section">
-              <h6 className="filter-group__subtitle">PG / Flatmate Preferences</h6>
+              <h6 className="filter-group__subtitle">{t('filters.pgFlatmatePrefs', 'PG / Flatmate Preferences')}</h6>
               <div className="mb-2">
                 <label className="form-label small">Gender Preference</label>
                 <select
@@ -736,7 +748,7 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
           {/* Short Stay Filters */}
           {filters.purpose === 'short_stay' && (
             <div className="filter-group__section">
-              <h6 className="filter-group__subtitle">Short Stay</h6>
+              <h6 className="filter-group__subtitle">{t('filters.shortStay', 'Short Stay')}</h6>
               <div className="mb-2">
                 <label className="form-label small">Check-in</label>
                 <input
@@ -769,19 +781,19 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
           {/* Amenities */}
           <div className="filter-group__section">
-            <h6 className="filter-group__subtitle">Amenities</h6>
+            <h6 className="filter-group__subtitle">{t('filters.amenities', 'Amenities')}</h6>
             <div className="filter-group__grid filter-group__grid--two-col">
               {amenities.map(amenity => (
-                <div key={amenity} className="common-check">
+                <div key={amenity.key} className="common-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    id={`amenity-${amenity}`}
-                    checked={filters.amenities?.includes(amenity) || false}
-                    onChange={(e) => handleAmenityChange(amenity, e.target.checked)}
+                    id={`amenity-${amenity.key}`}
+                    checked={filters.amenities?.includes(amenity.key) || false}
+                    onChange={(e) => handleAmenityChange(amenity.key, e.target.checked)}
                   />
-                  <label className="form-check-label" htmlFor={`amenity-${amenity}`}>
-                    {amenity}
+                  <label className="form-check-label" htmlFor={`amenity-${amenity.key}`}>
+                    {amenity.label}
                   </label>
                 </div>
               ))}
@@ -790,19 +802,19 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
 
           {/* Features */}
           <div className="filter-group__section">
-            <h6 className="filter-group__subtitle">Features</h6>
+            <h6 className="filter-group__subtitle">{t('filters.features', 'Features')}</h6>
             <div className="filter-group__grid filter-group__grid--two-col">
               {features.map(feature => (
-                <div key={feature} className="common-check">
+                <div key={feature.key} className="common-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    id={`feature-${feature}`}
-                    checked={filters.features?.includes(feature) || false}
-                    onChange={(e) => handleFeatureChange(feature, e.target.checked)}
+                    id={`feature-${feature.key}`}
+                    checked={filters.features?.includes(feature.key) || false}
+                    onChange={(e) => handleFeatureChange(feature.key, e.target.checked)}
                   />
-                  <label className="form-check-label" htmlFor={`feature-${feature}`}>
-                    {feature}
+                  <label className="form-check-label" htmlFor={`feature-${feature.key}`}>
+                    {feature.label}
                   </label>
                 </div>
               ))}
@@ -953,12 +965,6 @@ const PropertyFilters = ({ showAdvanced = false, isMobile = false, onCloseDrawer
       {renderActiveChips()}
       <div className="property-filter-sidebar">
         {renderFilterContent()}
-      </div>
-      
-      {/* Toast Notification */}
-      <div className={`filter-toast ${showToast ? 'show' : ''}`}>
-        <i className="fas fa-check-circle"></i>
-        {toastMessage}
       </div>
     </>
   );

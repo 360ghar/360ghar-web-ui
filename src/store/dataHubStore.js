@@ -7,6 +7,7 @@ export const useDataHubStore = create((set, get) => ({
   circleRateSectors: [],
   isLoadingAlerts: false,
   isLoadingSectors: false,
+  error: null,
 
   // Actions
   fetchAuctionAlerts: async () => {
@@ -24,24 +25,39 @@ export const useDataHubStore = create((set, get) => ({
   },
 
   addAlert: async (alertData) => {
-    const alert = await dataHubService.createAuctionAlert(alertData);
-    set((state) => ({ auctionAlerts: [...state.auctionAlerts, alert] }));
-    return alert;
+    try {
+      const alert = await dataHubService.createAuctionAlert(alertData);
+      set((state) => ({ auctionAlerts: [alert, ...state.auctionAlerts] }));
+      return alert;
+    } catch (error) {
+      set({ error: error.message });
+      throw error;
+    }
   },
 
   updateAlert: async (id, data) => {
-    const updated = await dataHubService.updateAuctionAlert(id, data);
-    set((state) => ({
-      auctionAlerts: state.auctionAlerts.map((a) => (a.id === id ? updated : a)),
-    }));
-    return updated;
+    try {
+      const updated = await dataHubService.updateAuctionAlert(id, data);
+      set((state) => ({
+        auctionAlerts: state.auctionAlerts.map((a) => (a.id === id ? updated : a)),
+      }));
+      return updated;
+    } catch (error) {
+      set({ error: error.message });
+      throw error;
+    }
   },
 
   deleteAlert: async (id) => {
-    await dataHubService.deleteAuctionAlert(id);
-    set((state) => ({
-      auctionAlerts: state.auctionAlerts.filter((a) => a.id !== id),
-    }));
+    try {
+      await dataHubService.deleteAuctionAlert(id);
+      set((state) => ({
+        auctionAlerts: state.auctionAlerts.filter((a) => a.id !== id),
+      }));
+    } catch (error) {
+      set({ error: error.message });
+      throw error;
+    }
   },
 
   fetchCircleRateSectors: async () => {

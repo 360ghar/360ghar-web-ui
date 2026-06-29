@@ -1,4 +1,49 @@
 {
+  "common": {
+    "tryAgain": "पुनः प्रयास करें",
+    "loading": "लोड हो रहा है...",
+    "loadMore": "और लोड करें",
+    "fetchError": "डेटा लोड करने में विफल",
+    "frequentlyAskedQuestions": "अक्सर पूछे जाने वाले प्रश्न",
+    "linkCopied": "लिंक कॉपी हो गया!",
+    "copyFailed": "लिंक कॉपी करने में विफल"
+  },
+  "fakeListingChecker": {
+    "heroTitle": "जानें कि क्या प्रॉपर्टी लिस्टिंग नकली है",
+    "heroDesc": "99acres, MagicBricks, Housing.com, या NoBroker से लिस्टिंग URL पेस्ट करें और हमारा AI रेड फ्लैग्स जांचेगा।",
+    "inputPlaceholder": "लिस्टिंग URL पेस्ट करें (जैसे https://www.99acres.com/...)",
+    "analyzing": "जांच हो रही है...",
+    "checkListing": "लिस्टिंग जांचें",
+    "highRisk": "उच्च जोखिम",
+    "mediumRisk": "मध्यम जोखिम",
+    "lowRisk": "कम जोखिम",
+    "knownIssues": "ज्ञात समस्याएं",
+    "redFlagsTitle": "देखने के लिए सामान्य रेड फ्लैग्स",
+    "redFlag1": "बाजार दर से काफी कम कीमत",
+    "redFlag2": "एजेंट शारीरिक विजिट से इनकार करता है",
+    "redFlag3": "सत्यापन से पहले एडवांस पेमेंट की मांग",
+    "redFlag4": "स्टॉक फोटो या भारी एडिटेड इमेज",
+    "redFlag5": "अस्पष्ट या गायब प्रॉपर्टी विवरण",
+    "redFlag6": "बिना इतिहास वाली नई लिस्टिंग",
+    "preferVerified": "सत्यापित लिस्टिंग प्राथमिकता दें",
+    "preferVerifiedDesc": "360Ghar भौतिक विजिट और दस्तावेज़ जांच से प्रत्येक लिस्टिंग सत्यापित करता है।",
+    "browseVerifiedProperties": "सत्यापित प्रॉपर्टी ब्राउज़ करें",
+    "urlNotKnown": "URL पहचाना नहीं गया",
+    "urlNotKnownDesc": "इस पोर्टल के लिए हमारे पास डेटा नहीं है। 99acres, MagicBricks, Housing.com, या NoBroker से URL आज़माएं।",
+    "browseVerifiedListings": "सत्यापित लिस्टिंग ब्राउज़ करें",
+    "whyVerifiedTitle": "360Ghar सत्यापित क्यों चुनें?",
+    "physicalVerification": "भौतिक सत्यापन",
+    "physicalVerificationDesc": "प्रत्येक लिस्टिंग हमारी टीम द्वारा व्यक्तिगत रूप से विजिट और सत्यापित की जाती है।",
+    "virtualTours": "360° वर्चुअल टूर",
+    "virtualToursDesc": "इमर्सिव वर्चुअल टूर से रिमोट से प्रॉपर्टी एक्सप्लोर करें।",
+    "noSpamCalls": "कोई स्पैम कॉल नहीं",
+    "noSpamCallsDesc": "हम कभी आपका नंबर कई एजेंटों के साथ साझा नहीं करते।",
+    "relatedToolsHeading": "संबंधित टूल्स",
+    "relatedVastuChecker": "वास्तु चेकर",
+    "relatedEmiCalculator": "EMI कैलकुलेटर",
+    "relatedDocumentChecklist": "दस्तावेज़ चेकलिस्ट",
+    "relatedVerifiedProperties": "सत्यापित प्रॉपर्टी"
+  },
   "nav": {
     "home": "होम",
     "properties": "संपत्तियां",
@@ -52,7 +97,9 @@
     "myVisits": "मेरी विज़िट",
     "logout": "लॉग आउट",
     "loggedOutSuccess": "सफलतापूर्वक लॉग आउट हो गया!",
-    "postProperty": "प्रॉपर्टी पोस्ट करें"
+    "postProperty": "प्रॉपर्टी पोस्ट करें",
+    "toggleMobileMenu": "मोबाइल मेन्यू टॉगल करें",
+    "openMenu": "मेन्यू खोलें"
   },
   "breadcrumb": {
     "home": "होम"
@@ -115,7 +162,8 @@
     "signUp": "साइन अप",
     "searchPlaceholder": "प्रॉपर्टी, लोकैलिटी खोजें...",
     "searchAriaLabel": "खोज",
-    "searchBtn": "खोजें"
+    "searchBtn": "खोजें",
+    "closeMenu": "मेन्यू बंद करें"
   },
   "commonData": {
     "addressLabel": "पता",
@@ -254,5 +302,13 @@
   },
   "offlineIndicator": {
     "message": "आप ऑफ़लाइन हैं। कुछ सुविधाएँ अनुपलब्ध हो सकती हैं।"
-  }
+  },
+  "errorBoundary": {
+    "title": "कुछ गलत हो गया",
+    "description": "एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें या होम पेज पर वापस जाएं।",
+    "goHome": "होम पर जाएं",
+    "tryAgain": "पुनः प्रयास करें"
+  },
+  "profileAlt": "प्रोफ़ाइल",
+  "userFallback": "उपयोगकर्ता"
 }

@@ -9,7 +9,6 @@ import MobileMenu from '../../common/layout/MobileMenu';
 import OffCanvas from '../../common/layout/OffCanvas';
 import Cta from '../../components/ui/Cta';
 import AiFactSheet from '../../components/seo/AiFactSheet';
-import ReviewDisplay from '../../components/reviews/ReviewDisplay';
 import SEO from '../../common/SEO';
 import { Helmet } from 'react-helmet-async';
 import { generateBreadcrumbStructuredData } from '../../seo/structuredData';
@@ -376,13 +375,6 @@ const CityHub = () => {
         />
 
         <AiFactSheet context="cityHub" />
-        <ReviewDisplay
-          reviews={[
-            { rating: 5, text: 'Found a verified apartment through 360Ghar. The VR tour saved me multiple visits.', name: 'Verified User', role: 'Buyer' },
-          ]}
-          averageRating={4.7}
-          totalCount={128}
-        />
 
         <Cta ctaClass="" />
         <Footer />

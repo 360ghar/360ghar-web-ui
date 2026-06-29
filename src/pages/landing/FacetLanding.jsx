@@ -259,7 +259,6 @@ const FacetLanding = () => {
             name: title,
             description,
             url: `https://360ghar.com${shouldIndex ? canonicalPath : baseCanonicalPath}`,
-            numberOfItems: validIntent === 'buy' ? 50 : validIntent === 'rent' ? 30 : 20,
             itemListElement: [
               { '@type': 'ListItem', position: 1, url: `https://360ghar.com${targetUrl()}` },
             ],
@@ -312,7 +311,7 @@ const FacetLanding = () => {
         <section className="padding-y-60">
           <div className="container container-two">
             <div className="section-heading text-center mb-4">
-              <h1 className="section-heading__title">{title.replace(' | 360Ghar','').replace(' [360° VR Tour]', '')}</h1>
+              <h1 className="section-heading__title">{title.replace(/\s*\|\s*360Ghar\s*$/, '').replace(/\s*\[360°?\s*VR\s*Tour\]\s*$/, '')}</h1>
               <p className="section-heading__desc">{description}</p>
             </div>
 
@@ -341,7 +340,7 @@ const FacetLanding = () => {
                   {priceRange && (
                     <p className="mb-2">
                       {t('landing:budgetEnrichment.typicalPrices', { facetTextLower: facetText.toLowerCase(), city: validCity, priceRange })}
-                      {' '}{t('landing:budgetEnrichment.budgetFilterNarrows', { budgetText: budgetText.replace('under ', 'under ') })}
+                      {' '}{t('landing:budgetEnrichment.budgetFilterNarrows', { budgetText })}
                     </p>
                   )}
                   <p className="mb-0 text-muted" style={{ fontSize: '0.875rem' }}>

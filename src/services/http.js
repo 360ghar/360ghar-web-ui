@@ -10,8 +10,25 @@ import {
   isPrerendering,
 } from '../utils/prerender';
 import { buildRequestKey } from '../utils/prerenderDataKey';
+import { clearStoredUser } from '../utils/userStorage';
 
 const LOCAL_HOSTNAMES = ['localhost', '127.0.0.1', '::1'];
+
+// Cross-module signal to the auth store that the cached session is dead.
+// Services cannot import the auth store (would create a circular dep), so
+// they dispatch this event after clearing localStorage; the auth store
+// listens (see authStore.installAuthClearedListener) and flips
+// isAuthenticated to false. Without this dispatch, route guards would
+// keep rendering protected children for a user whose session is gone.
+const AUTH_CLEARED_EVENT = '360ghar:auth-cleared';
+function signalAuthCleared() {
+  if (typeof window === 'undefined') return;
+  try {
+    window.dispatchEvent(new CustomEvent(AUTH_CLEARED_EVENT));
+  } catch {
+    // CustomEvent / window may be unavailable in non-browser test envs.
+  }
+}
 
 // Retry configuration
 const MAX_RETRIES = 3;
@@ -264,11 +281,12 @@ export const createAxiosInstance = ({ withAuth = false, enableRetry = true } = {
       // mutated.
       const RETRY_KEY = Symbol.for('http.retryCount');
 
+      const isNetworkError = !error.response;
       if (
         enableRetry &&
         config &&
         config.method?.toLowerCase() === 'get' &&
-        RETRY_STATUS_CODES.includes(error.response?.status)
+        (RETRY_STATUS_CODES.includes(error.response?.status) || isNetworkError)
       ) {
         const current = config[RETRY_KEY] || 0;
         if (current < MAX_RETRIES) {
@@ -293,28 +311,42 @@ export const createAxiosInstance = ({ withAuth = false, enableRetry = true } = {
             ...config,
             [Symbol.for('http.authRetry')]: true,
           };
-          const refreshedSession = await refreshSessionOnce();
-          if (refreshedSession?.access_token) {
-            // The cache is now the source of truth for the auth header (see the
-            // request interceptor). Update it here directly so any concurrent or
-            // subsequent request picks up the rotated token immediately — don't
-            // wait for the TOKEN_REFRESHED event, which may run after this resolves.
-            setCachedAccessToken(refreshedSession.access_token);
-            retryConfig.headers = retryConfig.headers || {};
-            retryConfig.headers.Authorization = `Bearer ${refreshedSession.access_token}`;
-            return instance(retryConfig);
+          try {
+            const refreshedSession = await refreshSessionOnce();
+            if (refreshedSession?.access_token) {
+              // The cache is now the source of truth for the auth header (see the
+              // request interceptor). Update it here directly so any concurrent or
+              // subsequent request picks up the rotated token immediately — don't
+              // wait for the TOKEN_REFRESHED event, which may run after this resolves.
+              setCachedAccessToken(refreshedSession.access_token);
+              retryConfig.headers = retryConfig.headers || {};
+              retryConfig.headers.Authorization = `Bearer ${refreshedSession.access_token}`;
+              return instance(retryConfig);
+            }
+          } catch {
+            // Refresh failed — drop the stale local profile so the next render
+            // / route guard sees the user as logged-out and redirects to /login.
+            // Without this, isAuthenticated stays true (driven only by Supabase
+            // SIGNED_OUT events, which never fire here) and the user is stuck
+            // on a page where every API call 401s.
+            clearStoredUser();
+            signalAuthCleared();
+            return Promise.reject(error);
           }
         }
 
-        // Check if this is a public endpoint (property viewing)
-        const publicEndpoints = ['/properties/?', '/properties/', '/properties/recommendations/'];
-        const isPublicEndpoint = publicEndpoints.some(endpoint =>
-          error.config?.url?.includes(endpoint)
-        );
-
-        // Let route guards and calling components handle re-authentication.
-        if (!isPublicEndpoint && error.config?.headers?.Authorization) {
-          localStorage.removeItem('user');
+        // Refresh returned no token (or auth-retry was already attempted):
+        // clear the cached profile so route guards redirect to /login instead
+        // of leaving the user on a 401-looping page.
+        //
+        // EXCEPTION: the skipAuthRetry path. There a 401 means "fresh sign-in,
+        // no backend profile row yet" (syncUserProfile maps it to authStage
+        // 'profile_completion'), NOT a dead session. Clearing here would log the
+        // just-authenticated user straight back out and make signup impossible —
+        // defeating the entire purpose of skipAuthRetry.
+        if (withAuth && !skipAuthRetry) {
+          clearStoredUser();
+          signalAuthCleared();
         }
       }
 

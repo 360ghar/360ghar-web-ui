@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import Header from '../../common/layout/Header';
 import Footer from '../../common/layout/Footer';
 import MobileMenu from '../../common/layout/MobileMenu';
@@ -72,11 +73,17 @@ const StampDutyCalculator = () => {
   const [form, setForm] = useState({ property_value: '', buyer_type: 'male', sector: '', property_type: '' });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => { fetchCircleRateSectors(); }, [fetchCircleRateSectors]);
 
   const calculate = async () => {
-    if (!form.property_value) return;
+    if (!form.property_value) {
+      toast.error(t('stampDuty.enterPropertyValue', 'Please enter a property value'));
+      return;
+    }
+    setLoading(true);
+    setError(null);
     try {
       const data = await dataHubService.calculateStampDuty({
         property_value: Number(form.property_value),
@@ -86,6 +93,8 @@ const StampDutyCalculator = () => {
       setResult(data);
     } catch (e) {
       console.error('Stamp duty calculation error', e);
+      setError(t('stampDuty.calculationError', 'Failed to calculate stamp duty. Please try again.'));
+      toast.error(t('stampDuty.calculationError', 'Failed to calculate stamp duty. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -172,6 +181,13 @@ const StampDutyCalculator = () => {
                     {loading ? t('stampDuty.calculating') : t('stampDuty.calculate')}
                   </button>
                 </div>
+
+                {/* Error */}
+                {error && (
+                  <div className="p-30 border-radius-8 mb-20" style={{ background: '#fef2f2', border: '1px solid #fca5a5' }}>
+                    <p className="fs-14 mb-0" style={{ color: '#991b1b' }}>{error}</p>
+                  </div>
+                )}
 
                 {/* Result */}
                 {result && (
