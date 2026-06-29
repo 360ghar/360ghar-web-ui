@@ -129,9 +129,18 @@ Each item is XML-escaped and dated with `toRfc2822()`. Property titles synthesiz
 - `generateBreadcrumbStructuredData`
 - `generateFaqStructuredData`
 - `generateHowToStructuredData`
+- `generatePropertyProductStructuredData` — `Product` with `offers` (a priceless "Contact for price" `Offer` when price data is missing, since `price:0` and offerless Products are both rejected), `aggregateRating`, and `review[]`.
+- `generateJobPostingStructuredData` (library helper; careers pages build JobPosting inline in `Careers.jsx` / `CareerDetails.jsx` with `title`, `datePosted`/`validThrough` sourced from `src/data/careers.js` `postedDate`, `baseSalary`, and a complete `PostalAddress`).
+- Review blocks (`CustomerReviews.jsx`, `ReviewDisplay.jsx`) emit a typed parent (`@type: RealEstateAgent`, a `LocalBusiness` subtype) wrapping `aggregateRating` **and** `review[]` together — a standalone `AggregateRating` with `itemReviewed` is rejected by Google.
 - Tool-page schemas via `src/seo/toolSchemas.js`
 
 These are emitted through `<Helmet>` in each page's `SEO` component (`src/common/SEO.jsx`).
+
+## Canonical, Meta & hreflang
+
+- **Canonical** is deterministic from the URL path (`pathLocale`), never the i18n store, so it cannot flip between `/` and `/hi/` across renders. The `canonical` prop override still wins when passed. There is **no** static `<link rel="canonical">` in `index.html` (see the head-tag dedup gotcha in [Build Pipeline](../build/Build-Pipeline)).
+- **Meta description** is owned per-page by the `SEO` component (`description || siteMetadata.defaultDescription`); `index.html` ships no static `name="description"` so the per-page value is the sole one Google sees.
+- **hreflang** alternates are built per-page by `buildHreflangs(canonicalUrl)` in `SEO.jsx`; `index.html` ships no static hreflang to avoid conflicting alternates (e.g. `en` pointing to both `/` and the current page).
 
 ## Prerendering
 

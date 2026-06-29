@@ -215,12 +215,16 @@ const BlogDetailsSection = () => {
     const seoMeta = useMemo(() => {
         const rawTitle = post?.title || tSeo('blog.fallbackTitle');
         const year = new Date().getFullYear();
-        // Use backend meta_title if available, otherwise enhance title with year and brand suffix
-        const titleText = post?.meta_title || (
-            rawTitle.includes('360Ghar')
-                ? rawTitle
-                : `${rawTitle} (${year}) | 360Ghar`
-        );
+        // Use backend meta_title if available, otherwise enrich fallback title
+        const isLuckyNumbersTopic = /lucky\s+(flat\s+)?numbers?/i.test(rawTitle);
+        const fallbackTitle = (() => {
+            if (rawTitle.includes('360Ghar')) return rawTitle;
+            if (isLuckyNumbersTopic && !/\d+\s*lucky/i.test(rawTitle)) {
+                return `7 Lucky Flat Numbers as Per Vastu (${year}) | 360Ghar`;
+            }
+            return `${rawTitle} (${year}) | 360Ghar`;
+        })();
+        const titleText = post?.meta_title || fallbackTitle;
         // Use backend meta_description if available, otherwise derive from excerpt
         const rawDesc = post?.meta_description || post?.excerpt || post?.summary || '';
         const isLegalTopic = ['document', 'checklist', 'legal', 'loan against property', 'registration', 'mutation', 'rera', 'stamp duty'].some(

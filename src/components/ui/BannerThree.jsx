@@ -25,7 +25,7 @@ const BannerThree = () => {
         <>
             {/* ============================ Banner Three Start =============================    */}
             <section className="banner-three">
-                <LazyImage src="assets/images/thumbs/dotted-bg.webp" alt="Decorative dotted background pattern" className="banner-three__dotted"/>
+                <LazyImage src="assets/images/thumbs/dotted-bg.webp" avifSrc="assets/images/thumbs/dotted-bg.avif" alt="Decorative dotted background pattern" className="banner-three__dotted"/>
                 <LazyImage src="assets/images/shapes/banner-shape.webp" alt="Decorative banner shape element" className="banner-three__shape"/>
                 <div className="container container-two">
                     <div className="banner-three__inner position-relative padding-y-120">

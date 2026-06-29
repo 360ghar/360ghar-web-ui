@@ -178,7 +178,16 @@ Key redirects:
 - Hindi equivalents under `/hi/*`
 - SPA catch-all `/*` -> `/index.html` (200)
 
-Cache headers: hashed JS/CSS/fonts are `immutable` (1 year); images 30 days + `stale-while-revalidate`; HTML always revalidates; service worker never cached. The root `/` advertises AI-discovery `Link` headers (RFC 8288) for `api-catalog`, `service-doc`, `service-meta`, `mcp-server`, `agent-skills`, `llms-txt`, `openid-configuration`.
+Cache headers: hashed JS/CSS/fonts are `immutable` (1 year); images 30 days + `stale-while-revalidate`; HTML always revalidates (browser `max-age=60` + a longer `CDN-Cache-Control` edge window, since Netlify purges the edge on every deploy); service worker never cached. The root `/` advertises AI-discovery `Link` headers (RFC 8288) for `api-catalog`, `service-doc`, `service-meta`, `mcp-server`, `agent-skills`, `llms-txt`, `openid-configuration`.
+
+## Edge Functions
+
+Netlify auto-discovers Deno edge functions under `netlify/edge-functions/` (in-file `export const config = { path, excludedPath }`, no `netlify.toml` block needed):
+
+- `markdown-negotiation.js` — content negotiation for `/for-ai`.
+- `soft-404-guard.js` — runs on `/*` before the SPA catch-all. Paths that match NONE of the SPA's valid route grammar (static pages, `/property/:id`, `/blog/:slug`, `/project/:slug`, `/policies/:slug`, tools, `/:city/:intent/:type` + facet variants, `/localities`, with a tolerated `/hi` locale prefix) are rewritten to `/404.html` and returned with HTTP **404** + `X-Robots-Tag: noindex`. Static assets, the `/api/*` proxy, and well-known files always pass through. This converts soft-404s (the `/* -> /index.html 200` catch-all otherwise serves a 200 SPA shell for every path) into hard 404s. Verify post-deploy: a junk URL returns 404, valid dynamic routes still return 200.
+
+> **Head-tag dedup gotcha:** react-helmet-async only *adds* head tags — it never removes static tags authored in `index.html`. So `index.html` must NOT ship static `<meta name="description">`, `<link rel="canonical">`, or hreflang alternates, or they will appear first and shadow the per-page tags the `SEO` component renders via Helmet on every route. `index.html` keeps only OG/Twitter tags as a fallback for non-JS social crawlers.
 
 ## Dependency Constraints
 

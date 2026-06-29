@@ -1,9 +1,3 @@
 /api/*   https://api.360ghar.com/api/v1/:splat   200
 
-# Redirect /gurugram/ landing pages to /gurgaon/ (canonical slug)
-/gurugram/:intent/:type/budget/:budget  /gurgaon/:intent/:type/budget/:budget  301
-/gurugram/:intent/:type/amenity/:amenity  /gurgaon/:intent/:type/amenity/:amenity  301
-/gurugram/:intent/:type/:bhk  /gurgaon/:intent/:type/:bhk  301
-/gurugram/:intent/:type  /gurgaon/:intent/:type  301
-
 /*    /index.html   200

@@ -12,8 +12,7 @@ import { siteMetadata } from '../../seo/siteMetadata';
 import { careerOpenings } from '../../data/careers';
 
 const CAREERS_EMAIL = 'info@360ghar.com';
-const TODAY = new Date().toISOString().split('T')[0];
-const VALID_THROUGH = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+const TODAY_FALLBACK = '2025-01-15';
 
 const CAREER_DETAILS_LAYOUT = {
   content: {
@@ -64,6 +63,7 @@ const CareerDetails = () => {
           canonical={`/careers/${slug}`}
           image={siteMetadata.defaultOgImage}
           type="website"
+          noindex={true}
         />
 
         <OffCanvas />
@@ -117,6 +117,15 @@ const CareerDetails = () => {
     '@type': 'JobPosting',
     title: opening.title,
     description: expandedDesc || opening.description,
+    baseSalary: {
+      '@type': 'MonetaryAmount',
+      currency: 'INR',
+      value: {
+        '@type': 'QuantitativeValue',
+        value: 15000,
+        unitText: 'MONTH',
+      },
+    },
     hiringOrganization: {
       '@type': 'Organization',
       name: '360Ghar',
@@ -128,14 +137,17 @@ const CareerDetails = () => {
         '@type': 'PostalAddress',
         addressLocality: 'Gurugram',
         addressRegion: 'Haryana',
+        postalCode: '122001',
+        streetAddress: 'Sector 50, Gurugram',
         addressCountry: 'IN',
       },
     },
-    employmentType: 'INTERNSHIP',
+    employmentType: 'INTERN',
     jobDuration: opening.duration,
-    datePosted: TODAY,
-    validThrough: VALID_THROUGH,
+    datePosted: opening.postedDate || TODAY_FALLBACK,
+    validThrough: new Date(new Date(opening.postedDate || TODAY_FALLBACK).getTime() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     directApply: true,
+    industry: 'Real Estate',
   };
 
   const mailtoSubject = encodeURIComponent(

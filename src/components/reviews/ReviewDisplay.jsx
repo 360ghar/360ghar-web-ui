@@ -5,25 +5,40 @@
 import { siteMetadata } from '../../seo/siteMetadata';
 
 const ReviewDisplay = ({ reviews = [], averageRating = 0, totalCount = 0, className = '' }) => {
+  // AggregateRating is only valid as a property of a typed parent, never
+  // standalone — emit one RealEstateAgent (a LocalBusiness subtype) that wraps
+  // the aggregate rating and the individual reviews together.
   const structuredData = {
-    '@type': 'AggregateRating',
-    itemReviewed: {
-      '@type': 'RealEstateAgent',
-      name: siteMetadata.siteName,
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateAgent',
+    name: siteMetadata.siteName,
+    url: siteMetadata.siteUrl,
+    image: siteMetadata.defaultOgImage,
+    priceRange: '₹₹',
+    telephone: siteMetadata.organization.telephone,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Sector 50, Gurugram',
+      addressLocality: 'Gurugram',
+      addressRegion: 'Haryana',
+      postalCode: '122001',
+      addressCountry: 'IN',
     },
-    ratingValue: String(averageRating),
-    bestRating: '5',
-    worstRating: '1',
-    reviewCount: String(totalCount),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: String(averageRating),
+      bestRating: '5',
+      worstRating: '1',
+      reviewCount: String(totalCount),
+    },
+    review: reviews.slice(0, 5).map((review) => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: review.name || 'Anonymous' },
+      datePublished: review.date || new Date().toISOString(),
+      reviewRating: { '@type': 'Rating', ratingValue: String(review.rating), bestRating: '5' },
+      reviewBody: review.text,
+    })),
   };
-
-  const reviewStructuredData = reviews.slice(0, 5).map((review) => ({
-    '@type': 'Review',
-    author: { '@type': 'Person', name: review.name || 'Anonymous' },
-    datePublished: review.date || new Date().toISOString(),
-    reviewRating: { '@type': 'Rating', ratingValue: String(review.rating), bestRating: '5' },
-    reviewBody: review.text,
-  }));
 
   return (
     <section className={`padding-y-60 bg-light ${className}`}>
@@ -79,11 +94,7 @@ const ReviewDisplay = ({ reviews = [], averageRating = 0, totalCount = 0, classN
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              ...structuredData,
-              review: reviewStructuredData,
-            }),
+            __html: JSON.stringify(structuredData).replace(/</g, '\\u003c'),
           }}
         />
       </div>
