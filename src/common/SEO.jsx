@@ -153,10 +153,11 @@ const SEO = ({
       {video && <meta name="twitter:player:width" content="1280" />}
       {video && <meta name="twitter:player:height" content="720" />}
 
-      {/* Structured Data */}
+      {/* Structured Data — escape '<' so a review body or other string with
+          '</script>' can't break out of the JSON-LD block (matters on SSR). */}
       {ldBlocks.map((ld, idx) => (
         <script key={idx} type="application/ld+json">
-          {JSON.stringify({ '@context': 'https://schema.org', ...ld })}
+          {JSON.stringify({ '@context': 'https://schema.org', ...ld }).replace(/</g, '\\u003c')}
         </script>
       ))}
     </Helmet>
