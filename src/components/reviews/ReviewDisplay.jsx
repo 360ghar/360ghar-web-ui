@@ -15,6 +15,7 @@ const ReviewDisplay = ({ reviews = [], averageRating = 0, totalCount = 0, classN
     url: siteMetadata.siteUrl,
     image: siteMetadata.defaultOgImage,
     priceRange: '₹₹',
+    telephone: siteMetadata.organization.telephone,
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Sector 50, Gurugram',
@@ -93,7 +94,7 @@ const ReviewDisplay = ({ reviews = [], averageRating = 0, totalCount = 0, classN
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
+            __html: JSON.stringify(structuredData).replace(/</g, '\\u003c'),
           }}
         />
       </div>

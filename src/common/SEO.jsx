@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { siteMetadata, absoluteUrl } from '../seo/siteMetadata';
 import { useLocation } from 'react-router-dom';
-import useLocaleStore from '../store/localeStore';
 import { localizePath, stripLocalePrefix } from '../i18n/I18nLink';
 
 const toArray = (maybeArray) => (Array.isArray(maybeArray) ? maybeArray : [maybeArray].filter(Boolean));
@@ -50,12 +49,12 @@ const SEO = ({
   video,
 }) => {
   const location = useLocation();
-  const storeLocale = useLocaleStore((s) => s.locale);
   const rawPath = (location.pathname || '').replace(/\/+$/, '') || '/';
   const pathLocale = inferLocaleFromPath(rawPath);
-  // Prefer store locale when explicitly set; fall back to path inference to handle
-  // the initial render before LocaleGate's useLayoutEffect fires in concurrent mode.
-  const locale = pathLocale === 'hi' ? 'hi' : (storeLocale === 'hi' ? 'hi' : 'en');
+  // SEO locale must be DETERMINISTIC from the URL path (same reasoning as the
+  // canonical below): deriving it from the store locale can make og:url /
+  // og:locale / <html lang> disagree with the canonical across renders.
+  const locale = pathLocale;
   const localizedPath = localizeSeoPath(rawPath, locale);
   const computedUrl = absoluteUrl(localizeSeoPath(url || localizedPath, locale));
   // Canonical must be DETERMINISTIC from the URL path, never from the store

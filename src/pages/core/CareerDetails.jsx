@@ -142,7 +142,7 @@ const CareerDetails = () => {
         addressCountry: 'IN',
       },
     },
-    employmentType: 'INTERNSHIP',
+    employmentType: 'INTERN',
     jobDuration: opening.duration,
     datePosted: opening.postedDate || TODAY_FALLBACK,
     validThrough: new Date(new Date(opening.postedDate || TODAY_FALLBACK).getTime() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],

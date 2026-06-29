@@ -15,7 +15,7 @@ export const careerOpenings = [
     location: 'Gurugram, Haryana',
     type: 'internship',
     duration: '2-6 months',
-    postedDate: '2025-01-15',
+    postedDate: '2026-06-01',
   },
   {
     slug: 'real-estate-agent',
@@ -33,7 +33,7 @@ export const careerOpenings = [
     location: 'Gurugram, Haryana',
     type: 'internship',
     duration: '2-6 months (extendable based on performance)',
-    postedDate: '2025-02-01',
+    postedDate: '2026-06-08',
   },
   {
     slug: 'software-developer-intern',
@@ -52,6 +52,6 @@ export const careerOpenings = [
     location: 'Gurugram, Haryana',
     type: 'internship',
     duration: '2-6 months (extendable based on performance)',
-    postedDate: '2025-02-20',
+    postedDate: '2026-06-15',
   },
 ];

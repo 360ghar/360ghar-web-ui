@@ -16,8 +16,12 @@ import { ToolFaq, ToolRelatedLinks, ToolComparisonTable } from '../../components
 import './AreaConverter.scss';
 
 // MOFA → RERA carpet conversion.
-// RERA carpet is typically 5-8% larger than MOFA carpet because it includes
-// internal partition walls plus exclusive balconies/verandahs/open terraces.
+// RERA carpet (RERA Act 2016 §2(k)) is typically 5-8% larger than MOFA carpet
+// because it INCLUDES internal partition walls that MOFA excluded. RERA carpet
+// still EXCLUDES exclusive balconies/verandahs/open terraces, external walls,
+// and service shafts — the size gap vs MOFA comes from the internal walls, not
+// open areas. The 6% factor is an estimate; the real ratio depends on the
+// number/thickness of internal walls.
 // We use a 6% uplift (the midpoint) for MOFA→RERA, and ~5.66% reduction for
 // RERA→MOFA so the round-trip is consistent (1 / 1.06 ≈ 0.9434).
 const MOFA_TO_RERA_FACTOR = 1.06;

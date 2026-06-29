@@ -45,6 +45,9 @@
 - 3D Blueprint Designer: https://360ghar.com/design-blueprint
 - AI Design Studio: https://360ghar.com/ai-design-studio
 - Verify Ownership: https://360ghar.com/verify-ownership
+- MOFA to RERA Converter: https://360ghar.com/mofa-to-rera-converter
+- Sq Ft Calculator: https://360ghar.com/sq-ft-calculator
+- Acre to Gaj Converter: https://360ghar.com/acre-in-gaj
 - RERA Projects: https://360ghar.com/rera-projects
 - Zone Checker: https://360ghar.com/zone-checker
 - Regulatory Updates: https://360ghar.com/regulatory-updates

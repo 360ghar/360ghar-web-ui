@@ -656,17 +656,14 @@ export const generatePropertyStructuredData = (property) => ({
       value: 'Yes'
     }
   ],
-  aggregateRating: property.rating ? {
-    '@type': 'AggregateRating',
-    ratingValue: property.rating,
-    reviewCount: property.reviewCount || 10,
-    bestRating: '5',
-  } : (property.reviews ? {
-    '@type': 'AggregateRating',
-    ratingValue: '4.5',
-    reviewCount: property.reviews.length || 10,
-    bestRating: '5',
-  } : undefined),
+  aggregateRating: property.rating
+    ? {
+        '@type': 'AggregateRating',
+        ratingValue: property.rating,
+        reviewCount: property.reviewCount || property.reviews?.length || 1,
+        bestRating: '5',
+      }
+    : undefined,
   review: property.reviews ? property.reviews.map(review => ({
     '@type': 'Review',
     author: {
@@ -792,13 +789,19 @@ export const generatePropertyProductStructuredData = (property) => {
       name: '360Ghar',
     },
     offers,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: property.rating || '4.5',
-      reviewCount: property.reviewCount || 50,
-      bestRating: '5',
-      worstRating: '1',
-    },
+    // Only emit aggregateRating when we have a REAL rating — fabricated
+    // ratings (4.5/50 fallbacks) violate Google's Review/Snippet spam policy.
+    ...(property.rating
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: property.rating,
+            reviewCount: property.reviewCount || property.reviews?.length || 1,
+            bestRating: '5',
+            worstRating: '1',
+          },
+        }
+      : {}),
     review: property.reviews ? property.reviews.slice(0, 3).map(review => ({
       '@type': 'Review',
       reviewRating: {

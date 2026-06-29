@@ -88,7 +88,7 @@ const Careers = () => {
             addressCountry: 'IN',
           },
         },
-        employmentType: 'INTERNSHIP',
+        employmentType: 'INTERN',
         baseSalary: {
           '@type': 'MonetaryAmount',
           currency: 'INR',

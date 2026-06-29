@@ -53,6 +53,9 @@ export const aiDiscoveryImportantPages = [
   { title: '3D Blueprint Designer', url: `${siteUrl}/design-blueprint`, category: 'tools' },
   { title: 'AI Design Studio', url: `${siteUrl}/ai-design-studio`, category: 'tools' },
   { title: 'Verify Ownership', url: `${siteUrl}/verify-ownership`, category: 'tools' },
+  { title: 'MOFA to RERA Converter', url: `${siteUrl}/mofa-to-rera-converter`, category: 'tools' },
+  { title: 'Sq Ft Calculator', url: `${siteUrl}/sq-ft-calculator`, category: 'tools' },
+  { title: 'Acre to Gaj Converter', url: `${siteUrl}/acre-in-gaj`, category: 'tools' },
   // Data Hub
   { title: 'RERA Projects', url: `${siteUrl}/rera-projects`, category: 'dataHub' },
   { title: 'Zone Checker', url: `${siteUrl}/zone-checker`, category: 'dataHub' },

@@ -183,7 +183,7 @@ const EXTENSION_RE = /\.(?!well-known)[a-z0-9]{1,8}$/i;
 
 function isPassthrough(pathname) {
   if (EXACT_PASSTHROUGH.has(pathname)) return true;
-  if (pathname.startsWith('sitemap')) return true; // /sitemap.xml, /sitemap-static.xml, ...
+  if (pathname.startsWith('/sitemap')) return true; // /sitemap.xml, /sitemap-static.xml, ...
   if (pathname.startsWith('/workbox-')) return true;
   for (const prefix of PREFIX_PASSTHROUGH) {
     if (pathname.startsWith(prefix)) return true;

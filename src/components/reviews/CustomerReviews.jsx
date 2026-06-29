@@ -180,6 +180,7 @@ const CustomerReviews = ({ className = '' }) => {
     url: siteMetadata.siteUrl,
     image: siteMetadata.defaultOgImage,
     priceRange: '₹₹',
+    telephone: siteMetadata.organization.telephone,
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Sector 50, Gurugram',
@@ -253,7 +254,7 @@ const CustomerReviews = ({ className = '' }) => {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(reviewsJsonLd),
+            __html: JSON.stringify(reviewsJsonLd).replace(/</g, '\\u003c'),
           }}
         />
       </div>

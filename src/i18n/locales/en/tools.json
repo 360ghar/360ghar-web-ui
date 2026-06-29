@@ -776,7 +776,7 @@
     "description": "Convert MOFA carpet area to RERA carpet area instantly. Free MOFA to RERA carpet conversion calculator for Maharashtra flats. Accurate sq ft results.",
     "keywords": "mofa to rera carpet conversion, mofa to rera calculator, mofa carpet area, rera carpet area, mofa vs rera carpet area, maharashtra carpet area calculator, mofa to rera conversion formula, rera carpet area calculator, carpet area converter mofa rera, mofa rera difference, 360ghar",
     "heroTitle": "MOFA to RERA Carpet Area Converter",
-    "heroDesc": "Convert MOFA carpet area to RERA carpet area in seconds. RERA carpet is roughly 5-8% larger than MOFA carpet because it includes internal walls and exclusive balconies/terraces.",
+    "heroDesc": "Convert MOFA carpet area to RERA carpet area in seconds. RERA carpet is roughly 5-8% larger than MOFA carpet because it includes internal partition walls that MOFA excluded. RERA carpet excludes balconies, verandahs, and open terraces (RERA Act 2016 §2(k)).",
     "converterHeading": "MOFA ↔ RERA Converter",
     "inputValue": "Area value",
     "convertFrom": "Convert from",
@@ -784,12 +784,12 @@
     "mofaCarpet": "MOFA carpet area",
     "reraCarpet": "RERA carpet area",
     "result": "Result",
-    "resultHint": "Conversion uses the standard RERA-vs-MOFA difference of ~5-8% (internal walls + exclusive balconies/terraces).",
+    "resultHint": "Conversion uses the standard RERA-vs-MOFA difference of ~5-8% (RERA counts the internal partition walls that MOFA excluded).",
     "deltaLabel": "Difference vs MOFA",
     "explanationTitle": "MOFA Carpet vs RERA Carpet",
     "explanationMofa": "MOFA carpet area (Maharashtra Ownership Flats Act) is the net usable internal floor area of a flat measured within the inner face of the walls. It excludes internal partition walls, balconies, verandahs, and open terraces.",
-    "explanationRera": "RERA carpet area is the net usable floor area of an apartment, measured from the inner face of the external/peripheral walls. It includes internal partition walls and exclusive balconies, verandahs, and open terraces, but excludes external walls, common areas, and service shafts.",
-    "explanationWhy": "Because RERA carpet includes internal partition walls plus exclusive balconies and terraces that MOFA carpet excludes, RERA carpet area is typically about 5-8% larger than MOFA carpet area for the same flat. The difference is not a fixed percentage — it depends on the number of internal walls and the size of exclusive open areas.",
+    "explanationRera": "RERA carpet area is the net usable floor area of an apartment, measured from the inner face of the external/peripheral walls. It INCLUDES internal partition walls, but EXCLUDES external walls, service shafts, common areas, and exclusive balconies, verandahs, and open terraces (RERA Act 2016 §2(k)).",
+    "explanationWhy": "Because RERA carpet includes internal partition walls that MOFA carpet excluded, RERA carpet area is typically about 5-8% larger than MOFA carpet area for the same flat. Both definitions exclude exclusive balconies and open terraces — the size gap comes from the internal walls. The difference is not a fixed percentage — it depends on the number and thickness of internal walls.",
     "formulaTitle": "Conversion Formula",
     "formulaDesc": "For an approximate conversion, use a 6% uplift when going from MOFA to RERA, and about 5.7% reduction the other way. Always verify against the registered sale agreement and the RERA project brochure for exact figures.",
     "tableTitle": "Typical MOFA → RERA Conversion",
@@ -806,7 +806,7 @@
     "faqs": {
       "q1": {
         "question": "What is the difference between MOFA carpet area and RERA carpet area?",
-        "answer": "MOFA carpet area is the net usable internal floor area measured within the inner face of the walls, excluding internal partition walls, balconies, verandahs, and open terraces. RERA carpet area additionally includes internal partition walls and exclusive balconies, verandahs, and open terraces, measured from the inner face of the external walls. As a result, RERA carpet area is usually 5-8% larger than MOFA carpet area for the same flat."
+        "answer": "MOFA carpet area is the net usable internal floor area measured within the inner face of the walls, excluding internal partition walls. RERA carpet area additionally includes internal partition walls (but still excludes external walls, service shafts, and exclusive balconies/verandahs/open terraces under RERA Act 2016 §2(k)), measured from the inner face of the external walls. As a result, RERA carpet area is usually 5-8% larger than MOFA carpet area for the same flat."
       },
       "q2": {
         "question": "How much larger is RERA carpet area than MOFA carpet area?",
@@ -822,11 +822,11 @@
       },
       "q5": {
         "question": "Does RERA carpet area include the balcony?",
-        "answer": "Yes. RERA carpet area includes exclusive balconies, verandahs, and open terraces attached to the apartment. It excludes external walls, common areas, and service shafts. MOFA carpet area, by contrast, excluded these exclusive open areas."
+        "answer": "No. Under RERA Act 2016 §2(k), RERA carpet area EXCLUDES exclusive balconies, verandahs, and open terraces, as well as external walls and service shafts. It includes only the net usable floor area within the external walls plus internal partition walls. (Balconies and open terraces are typically counted separately under the built-up or super built-up area.)"
       },
       "q6": {
         "question": "Why does my RERA carpet area look bigger than the MOFA figure in the old brochure?",
-        "answer": "This is expected. The same physical flat measures larger under the RERA definition because internal partition walls and exclusive balconies/terraces are now counted. It is not a change in the flat's size — it is a change in what is measured. Use the converter to translate between the two definitions."
+        "answer": "This is expected. The same physical flat measures larger under the RERA definition because internal partition walls (which MOFA excluded) are now counted. Exclusive balconies and open terraces are still excluded under both definitions — the difference comes from the internal walls. It is not a change in the flat's size — it is a change in what is measured. Use the converter to translate between the two definitions."
       }
     }
   },
