@@ -1,6 +1,8 @@
 # Build Pipeline
 
-360Ghar's `npm run build` is a 10-stage pipeline that ingests external entity data, generates SEO/AI-discovery artifacts, builds sitemaps and RSS feeds, optimizes images, runs the Vite production build, purges CSS, and prerenders pages with Puppeteer. Each stage is an idempotent Node.js script in `scripts/`; the orchestrator is the `build` script in `package.json`.
+360Ghar's `npm run build` is a production-aware pipeline with 11 stages.
+On non-production builds, API-heavy stages are skipped to keep previews fast;
+production runs include all stages plus IndexNow submission.
 
 ## Key Files
 
@@ -27,11 +29,12 @@
 | `scripts/prerender-pages.mjs` | Stage 9c: Puppeteer prerendering (concurrent + cached) |
 | `scripts/lib/prerenderCache.mjs` | Stage 9 cache: content-hash HTML cache |
 | `scripts/purge-bootstrap.mjs` | Stage 10: PurgeCSS on Bootstrap |
+| `scripts/indexnow-submit.mjs` | Stage 11: Submit same-host URLs to IndexNow |
 
 ## The `build` Script
 
 ```json
-"build": "npm run build:entities && npm run build:ai-discovery && npm run build:sitemaps && npm run build:rss && npm run build:images && node scripts/generate-og-image.mjs && vite build && node scripts/purge-main-css.mjs && npm run build:prerender && node scripts/purge-bootstrap.mjs"
+"build": "node scripts/build.mjs"
 ```
 
 Sub-scripts:
@@ -44,7 +47,8 @@ Sub-scripts:
 "build:images": "node scripts/optimize-images.mjs --quiet",
 "build:prerender": "npm run build:prerender-routes && node scripts/fetch-prerender-data.mjs && node scripts/prerender-pages.mjs",
 "build:prerender-routes": "node scripts/generate-prerender-routes.mjs",
-"build:prerender-data": "node scripts/fetch-prerender-data.mjs"
+"build:prerender-data": "node scripts/fetch-prerender-data.mjs",
+"build:indexnow": "node scripts/indexnow-submit.mjs",
 ```
 
 ## Stages in Order
@@ -125,6 +129,14 @@ The `isPrerendering` flag is checked by `authStore.initializeAuth`, `locationSto
 
 **purge-bootstrap.mjs** runs PurgeCSS on `public/assets/css/bootstrap.min.css` (~190KB) against built HTML/JS + source JSX, reducing it to ~40-50KB. Safelist preserves dynamically-added classes (`show`, `collapsing`, `collapse`, `modal`, `tooltip`, `popover`, `fade`, `active`, `disabled`, `open`, `btn-`, `form-`, and `col-` responsive variants).
 
+### 11. IndexNow Submission (Production only)
+
+`indexnow-submit.mjs` scans generated `sitemap*.xml` files from `dist/` (fallback: `public/`), extracts same-host URLs, and submits them in batches to `https://api.indexnow.org/IndexNow` after build completion. It deduplicates URLs across all sitemap files and sends the payload fields expected by Bing IndexNow (`host`, `key`, `keyLocation`, `urlList`).
+
+Production builds use the static key `ba96fa507cb7447aa74f5ddd2f516a6d` with its companion file at `public/ba96fa507cb7447aa74f5ddd2f516a6d.txt`.
+- Batch size defaults to `1000` and can be overridden via `INDEXNOW_BATCH_SIZE`.
+- Optional tuning env vars: `INDEXNOW_ENDPOINT`, `INDEXNOW_DRY_RUN`, `INDEXNOW_ENFORCE_SUCCESS`.
+
 ## Build Pipeline Diagram
 
 ```mermaid
@@ -138,7 +150,8 @@ flowchart TD
     S7 --> S8[8. Main CSS Purge]
     S8 --> S9[9. Prerender]
     S9 --> S10[10. Bootstrap Purge]
-    S10 --> Dist[dist/ deployed to Netlify]
+    S10 --> S11[11. IndexNow Submission]
+    S11 --> Dist[dist/ deployed to Netlify]
 ```
 
 ## Netlify Deployment
@@ -168,6 +181,18 @@ Puppeteer's Chrome is installed explicitly before the build so prerendering work
 | `PRERENDER_CACHE_DISABLED` | unset | `1` forces every route to render |
 | `PRERENDER_DATA_DISABLED` | unset | `1` writes an empty bulk bundle |
 | `VITE_PRERENDER_DATA_SOURCE` | `bulk` (prod) / `empty` (other) | Overrides the SPA adapter data source |
+
+IndexNow tuning env vars:
+
+| Var | Default | Effect |
+|-----|---------|--------|
+| `INDEXNOW_API_KEY` | `ba96fa507cb7447aa74f5ddd2f516a6d` | API key used in request payload |
+| `INDEXNOW_ENDPOINT` | `https://api.indexnow.org/IndexNow` | Submission endpoint |
+| `INDEXNOW_KEY_LOCATION` | `https://360ghar.com/ba96fa507cb7447aa74f5ddd2f516a6d.txt` | Public key file URL |
+| `INDEXNOW_SOURCE_DIR` | `dist` (fallback `public`) | Directory to parse sitemap files from |
+| `INDEXNOW_BATCH_SIZE` | `1000` | URLs per API payload |
+| `INDEXNOW_DRY_RUN` | `0` | `1` logs submission attempts without network calls |
+| `INDEXNOW_ENFORCE_SUCCESS` | `0` | `1` fails the build on any failed batch |
 
 Key redirects:
 

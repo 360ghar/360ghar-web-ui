@@ -90,7 +90,8 @@ Brand tokens live in `src/styles/_theme.scss` as CSS custom properties: `--main-
 5. Open Graph image generation
 6. Vite production build
 7. CSS purge and Bootstrap purge
-8. HTML prerendering for key routes
+8. HTML prerendering for key routes (production builds)
+9. IndexNow URL submission (`scripts/indexnow-submit.mjs`) after build output and prerender
 
 The result is a `dist/` directory deployed to Netlify. See [Build Pipeline](build/Build-Pipeline) for details.
 

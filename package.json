@@ -18,6 +18,7 @@
     "build:rss": "node scripts/generate-rss.mjs",
     "build:sitemaps:static": "node scripts/generate-sitemaps.mjs",
     "build:sitemaps:dynamic": "node scripts/generate-dynamic-sitemaps.mjs",
+    "build:indexnow": "node scripts/indexnow-submit.mjs",
     "build:image-refresh-assets": "node scripts/refresh-image-assets.mjs",
     "build:image-refresh-manifest": "node scripts/generate-image-refresh-manifest.mjs",
     "validate:schemas": "node scripts/validate-structured-data.mjs",

@@ -23,6 +23,13 @@ machine-specific values go in `.env.local` (never committed).
 | `VITE_AUTH_REDIRECT_URL` | No | `window.location.origin` | Override the Google OAuth redirect base for Docker / reverse-proxy setups. |
 | `VITE_GOOGLE_OAUTH_CLIENT_ID` | No | — | Optional, only if Google One-Tap is enabled. Google sign-in via Supabase OAuth redirect does **not** need this. |
 | `BUILD_CACHE_DISABLED` | No | — | Set to `1` to bypass the 12h sitemap cache in `.build-cache/`. |
+| `INDEXNOW_API_KEY` | No | `ba96fa507cb7447aa74f5ddd2f516a6d` | Optional override for IndexNow payload key. |
+| `INDEXNOW_ENDPOINT` | No | `https://api.indexnow.org/IndexNow` | Optional override for IndexNow endpoint. |
+| `INDEXNOW_KEY_LOCATION` | No | `https://360ghar.com/ba96fa507cb7447aa74f5ddd2f516a6d.txt` | URL of the key file sent in IndexNow payload. |
+| `INDEXNOW_SOURCE_DIR` | No | `dist` (fallback `public`) | Directory to scan for `sitemap*.xml` files during submission. |
+| `INDEXNOW_BATCH_SIZE` | No | `1000` | Number of URLs per IndexNow request payload. |
+| `INDEXNOW_DRY_RUN` | No | `0` | Set to `1` to skip network requests and only log payload batches. |
+| `INDEXNOW_ENFORCE_SUCCESS` | No | `0` | Set to `1` to fail full builds when any IndexNow batch fails. |
 
 Notes from `.env.example`:
 
@@ -238,13 +245,10 @@ From `package.json`:
 | `test` | `vitest run src` | Run unit tests once |
 | `preview` | `vite preview` | Serve the built `dist/` locally |
 
-The `build` script chains:
+The `build` script is orchestrated by `node scripts/build.mjs`:
 
-```
-build:entities → build:ai-discovery → build:sitemaps → build:rss →
-build:images → generate-og-image → vite build → purge-main-css →
-build:prerender → purge-bootstrap
-```
+- Full build (`FULL_BUILD=1` or Netlify production): `entities → ai-discovery → sitemaps → rss → images → OG → vite → CSS purge → prerender → bootstrap purge → IndexNow`
+- Fast build (local/preview): `ai-discovery → images → OG → vite → CSS purge → bootstrap purge`
 
 Sub-scripts of note:
 
@@ -256,6 +260,7 @@ Sub-scripts of note:
 | `build:images` | Optimise images (`--quiet`) |
 | `build:ai-discovery` | Write `.well-known` agent discovery files |
 | `build:rss` | Generate RSS feeds |
+| `build:indexnow` | Read generated `sitemap*.xml` and submit URLs to IndexNow |
 | `validate:schemas` | Validate structured data |
 | `build:image-refresh-assets` / `build:image-refresh-manifest` | Image refresh tooling |
 

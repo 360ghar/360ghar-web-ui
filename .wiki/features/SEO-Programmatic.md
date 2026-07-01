@@ -29,6 +29,8 @@
 | `scripts/generate-rss.mjs` | RSS feed generation |
 | `scripts/generate-prerender-routes.mjs` | Build prerender route manifest |
 | `scripts/prerender-pages.mjs` | Puppeteer prerendering |
+| `scripts/indexnow-submit.mjs` | Submit same-host URLs from generated sitemaps to IndexNow |
+| `public/ba96fa507cb7447aa74f5ddd2f516a6d.txt` | IndexNow verification key file served at root path |
 
 ## Dynamic Landing Routes
 
@@ -97,6 +99,27 @@ The pipeline (run by `npm run build:entities`):
 - `SITEMAP_MAX_LANDING_PER_CITY` / `SITEMAP_BATCH` env vars cap the count per city for phased releases.
 - `validateSitemapUrl()` skips redirected patterns (`/gurugram/`, `/apartments`).
 
+## Search Index Notification
+
+On production builds, after sitemaps are generated and prerendering is complete,
+the new `build:indexnow` step calls `scripts/indexnow-submit.mjs` to notify Bing IndexNow of publish-ready URLs.
+
+The script:
+- reads all generated `sitemap*.xml` files (`dist/` then `public/` fallback),
+- extracts `<loc>` URLs, filters same-host links,
+- submits deduplicated URLs in batches to `api.indexnow.org`.
+
+Configuration is through optional environment variables:
+
+| Variable | Default | Effect |
+|---|---|---|
+| `INDEXNOW_API_KEY` | `ba96fa507cb7447aa74f5ddd2f516a6d` | API key in notification payload |
+| `INDEXNOW_ENDPOINT` | `https://api.indexnow.org/IndexNow` | Submission endpoint |
+| `INDEXNOW_KEY_LOCATION` | `https://360ghar.com/ba96fa507cb7447aa74f5ddd2f516a6d.txt` | Public key file URL |
+| `INDEXNOW_BATCH_SIZE` | `1000` | Maximum URLs per request |
+| `INDEXNOW_DRY_RUN` | `0` | `1` to disable network calls for testing |
+| `INDEXNOW_ENFORCE_SUCCESS` | `0` | `1` to fail the full build if any batch fails |
+
 ## AI Discovery (`write-ai-discovery.mjs`)
 
 `buildAiDiscoveryArtifacts()` from `src/seo/aiDiscovery.js` produces:
@@ -162,11 +185,13 @@ flowchart TD
     Land --> SM[generate-sitemaps]
     LIdx --> SM
     SM --> Sitemaps[sitemap-*.xml]
+    Sitemaps --> IDX[submit to IndexNow]
+    IDX --> Dist[dist/*.html]
     Pol --> PR[generate-prerender-routes]
     Land --> PR
     LIdx --> PR
     PR --> PP[prerender-pages Puppeteer]
-    PP --> Dist[dist/*.html]
+    PP --> Dist
 ```
 
 ## Cross-References

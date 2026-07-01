@@ -62,3 +62,6 @@ gsc_report/
 
 # Playwright MCP page dumps (local browser automation)
 .playwright-mcp/
+
+# Codename/scratch files
+codex.*

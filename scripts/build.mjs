@@ -9,7 +9,7 @@
  *
  * Production build (Netlify CONTEXT=production, or FULL_BUILD=1):
  *   Full pipeline — entities, sitemaps, RSS, images, OG, vite, CSS purge,
- *   prerender (Puppeteer), bootstrap purge.
+ *   prerender (Puppeteer), bootstrap purge, IndexNow submission.
  *
  * Non-production build (everything else):
  *   Fast pipeline — ai-discovery, images, OG, vite, CSS purge, bootstrap
@@ -82,6 +82,10 @@ if (isFullBuild) {
 }
 
 run('node scripts/purge-bootstrap.mjs');
+
+if (isFullBuild) {
+  run('npm run build:indexnow');
+}
 
 console.log(
   isFullBuild
