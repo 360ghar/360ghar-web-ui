@@ -47,6 +47,12 @@ const CAREER_DETAILS_LAYOUT = {
       description:
         'As a Founder\'s Office Intern at 360Ghar, you will sit beside the founder and work on whatever matters most that week — market and competitor research, pricing and unit-economics analysis, investor and partner material, hiring support, and the operational glue that keeps a small team shipping. You will own projects end to end: write the memo that frames a decision, then help execute it alongside the content, engineering, and field teams. It is the fastest way to learn how an early-stage company actually runs, and you will leave with real judgement rather than theory.',
     },
+    'AI Generalist Intern': {
+      icon: 'fas fa-robot',
+      color: '#7c3aed',
+      description:
+        'As an AI Generalist Intern at 360Ghar, you will use AI as leverage across the whole startup — product, content, operations, and growth. You will build AI workflows that automate research, drafting, and lead triage, prototype AI-assisted property search and internal dashboards, and turn ambiguous problems into shipped systems used by real buyers, sellers, and agents. You will pair with the founding team, ship from day one, and leave with a portfolio of working AI systems rather than slideware.',
+    },
     'Software Developer Intern': {
       icon: 'fas fa-laptop-code',
       color: '#2563eb',

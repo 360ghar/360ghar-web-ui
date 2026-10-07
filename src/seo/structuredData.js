@@ -1565,7 +1565,7 @@ export const careerFaqStructuredData = {
       name: 'What internships are available at 360Ghar?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: '360Ghar currently offers internships for Content Creator Intern, Real Estate Agent, and Founder\'s Office Intern roles. All positions are based in Gurugram, Haryana and run for 2-6 months with the possibility of extension based on performance.',
+        text: '360Ghar currently offers internships for Content Creator Intern, Real Estate Agent, Founder\'s Office Intern, and AI Generalist Intern roles. All positions are based in Gurugram, Haryana and run for 2-6 months with the possibility of extension based on performance.',
       },
     },
     {

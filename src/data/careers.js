@@ -55,6 +55,25 @@ export const careerOpenings = [
     postedDate: '2026-08-06',
   },
   {
+    slug: 'ai-generalist-intern',
+    icon: 'fas fa-robot',
+    title: 'AI Generalist Intern',
+    description:
+      'Work across product, content, operations, and growth with AI as your leverage. You will build AI workflows, automate research and drafting, prototype AI-assisted property search, and turn ambiguous problems into shipped systems. A builder role with startup-wide exposure.',
+    requirements: [
+      'Deep fluency with modern AI tools (LLMs, agents, automation) for research, drafting, coding, and analysis',
+      'Prototypes fast — prompts, scripts, no-code/low-code workflows; basic JS/Python a plus',
+      'Structured thinking — able to break an open-ended problem into a clear, defensible analysis',
+      'Excellent written and verbal communication in English',
+      'High ownership and follow-through with minimal supervision',
+      'Interest in real estate, prop-tech, or early-stage startups',
+    ],
+    location: 'Gurugram, Haryana',
+    type: 'internship',
+    duration: '2-6 months (extendable based on performance)',
+    postedDate: '2026-10-07',
+  },
+  {
     slug: 'software-developer-intern',
     icon: 'fas fa-laptop-code',
     title: 'Software Developer Intern',

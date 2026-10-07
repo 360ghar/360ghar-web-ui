@@ -72,7 +72,7 @@ const Careers = () => {
     {
       '@type': 'CollectionPage',
       name: 'Internships at 360Ghar',
-      description: 'Explore internship opportunities at 360Ghar across content, real estate, and the founder\'s office.',
+      description: 'Explore internship opportunities at 360Ghar across content, real estate, the founder\'s office, and AI.',
       hasPart: openCareerOpenings.map((opening) => ({
         '@type': 'JobPosting',
         name: opening.title,
@@ -124,7 +124,7 @@ const Careers = () => {
       <SEO
         title={tSeo('careers.title')}
         description={tSeo('careers.description')}
-        keywords="360Ghar careers, internships in Gurugram, content creator internship, real estate agent internship, founder's office internship, 360Ghar hiring, prop-tech internships India, real estate startup jobs"
+        keywords="360Ghar careers, internships in Gurugram, content creator internship, real estate agent internship, founder's office internship, ai generalist internship, 360Ghar hiring, prop-tech internships India, real estate startup jobs"
         canonical="/careers"
         image={siteMetadata.defaultOgImage}
         type="website"

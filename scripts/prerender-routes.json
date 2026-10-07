@@ -257,6 +257,10 @@
     "waitForSelector": "main"
   },
   {
+    "route": "/careers/ai-generalist-intern",
+    "waitForSelector": "main"
+  },
+  {
     "route": "/celebrity-homes",
     "waitForSelector": "main"
   },
@@ -787,6 +791,10 @@
   },
   {
     "route": "/hi/careers/founders-office-intern",
+    "waitForSelector": "html[lang=\"hi\"] main"
+  },
+  {
+    "route": "/hi/careers/ai-generalist-intern",
     "waitForSelector": "html[lang=\"hi\"] main"
   },
   {
