@@ -10,6 +10,7 @@ import Cta from '../../components/ui/Cta';
 import SEO from '../../common/SEO';
 import { siteMetadata } from '../../seo/siteMetadata';
 import { careerOpenings, isOpeningOpen } from '../../data/careers';
+import { buildCareerApplicationMailto } from '../../utils/careerApplicationEmail';
 
 const CAREERS_EMAIL = 'info@360ghar.com';
 
@@ -178,10 +179,7 @@ const CareerDetails = () => {
     industry: 'Real Estate',
   };
 
-  const mailtoSubject = encodeURIComponent(
-    `Application for ${opening.title} - Career at 360Ghar`,
-  );
-  const mailtoLink = `mailto:${CAREERS_EMAIL}?subject=${mailtoSubject}`;
+  const mailtoLink = buildCareerApplicationMailto(CAREERS_EMAIL, opening.title);
 
   return (
     <>
@@ -386,7 +384,7 @@ const CareerDetails = () => {
                             Apply Now
                           </a>
                           <a
-                            href={`mailto:${CAREERS_EMAIL}`}
+                            href={mailtoLink}
                             className="btn btn-outline-main w-100"
                             role="button"
                           >
@@ -399,7 +397,7 @@ const CareerDetails = () => {
 
                         <div className="text-center">
                           <p className="text-muted small mb-2">Or email us directly at</p>
-                          <a href={`mailto:${CAREERS_EMAIL}`} className="text-main fw-semibold small text-decoration-none">
+                          <a href={mailtoLink} className="text-main fw-semibold small text-decoration-none">
                             {CAREERS_EMAIL}
                           </a>
                         </div>
