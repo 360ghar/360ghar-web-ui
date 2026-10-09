@@ -10,7 +10,15 @@
     .toggle-mobileMenu  {
         color: hsl(var(--white));
     }
-    
+
+    .offcanvas-btn {
+        svg {
+            line, path {
+                stroke: hsl(var(--white));
+            }
+        }
+    }
+
     .nav-menu {
         &__link {
             color: hsl(var(--white));
