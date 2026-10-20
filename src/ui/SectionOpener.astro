@@ -1,0 +1,94 @@
+---
+/**
+ * The start of a marketing section: a heading, an optional one-line lead and
+ * link, and a small paper vignette at the right that says what the section is
+ * about. No kicker label. Use it once or twice on a page, not on every section.
+ *
+ *   <SectionOpener id="tools" title="Check the numbers" lead="..." theme="calculator"
+ *     action={{ href: '/tools', label: 'All tools' }} />
+ */
+import type { VignetteTheme } from '@/lib/paper/vignettes';
+import Icon from '@/ui/icons/Icon.astro';
+import PaperVignette from '@/ui/paper/PaperVignette.astro';
+
+type Props = {
+  title: string;
+  lead?: string;
+  theme?: VignetteTheme;
+  seed?: string;
+  /** Id for the heading, for aria-labelledby on the section. */
+  id?: string;
+  level?: 2 | 3;
+  action?: { href: string; label: string };
+  class?: string;
+};
+
+const { title, lead, theme, seed, id, level = 2, action, class: className } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<div class:list={['opener', theme && 'has-art', className]}>
+  <Heading id={id} class="opener-title">{title}</Heading>
+  <div class="opener-copy">
+    {lead && <p class="opener-lead">{lead}</p>}
+    <slot />
+    {
+      action && (
+        <a class="link opener-action" href={action.href}>
+          {action.label}
+          <Icon name="arrow-up-right" size={16} class="arrow" />
+        </a>
+      )
+    }
+  </div>
+  {theme && <PaperVignette theme={theme} seed={seed ?? id ?? 'opener'} class="opener-art" />}
+</div>
+
+<style>
+  /* Phones: the title takes the full width (two lines at most), the vignette
+     sits beside the lead. Wider: the vignette stands beside the whole block. */
+  .opener {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem 1.5rem;
+  }
+
+  .opener.has-art {
+    grid-template-columns: minmax(0, 1fr) clamp(5.5rem, 26vw, 11rem);
+  }
+
+  .opener-title {
+    grid-column: 1 / -1;
+    max-width: 44rem;
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+  }
+
+  .opener-copy {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    justify-items: start;
+    max-width: 44rem;
+  }
+
+  .opener-lead {
+    color: var(--color-ink-800);
+    max-width: 60ch;
+  }
+
+  .opener :global(.opener-art) {
+    align-self: end;
+    filter: drop-shadow(1px 1px 0 rgb(var(--tint) / 0.1)) drop-shadow(2px 3px 1.5px rgb(var(--tint) / 0.12));
+  }
+
+  @media (min-width: 48rem) {
+    .opener-title {
+      grid-column: 1;
+    }
+
+    .opener :global(.opener-art) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+</style>

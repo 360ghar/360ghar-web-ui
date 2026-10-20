@@ -1,0 +1,138 @@
+---
+/** Places with live homes now: the newest listing photo, the name and the real count. */
+import { formatNum, imageUrl, srcSet } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizePath } from '@/lib/i18n/locale';
+import { displayName, localitySlug, TYPE_LABEL } from './data';
+import type { ListedPlace } from './live';
+
+type Props = { places: ListedPlace[]; locale: Locale; class?: string };
+const { places, locale, class: className } = Astro.props;
+const hi = locale === 'hi';
+const homesText = (n: number) => (hi ? `${formatNum(n, 'en')} घर` : `${formatNum(n, 'en')} ${n === 1 ? 'home' : 'homes'}`);
+---
+
+<ul class:list={['lp', className]}>
+  {
+    places.map(({ locality: l, homes, photo }) => {
+      const name = displayName(l.name);
+      return (
+        <li class="lp-card">
+          <div class="lp-img">
+            {photo && (
+              <img
+                src={imageUrl(photo, 480)}
+                srcset={srcSet(photo, [320, 480, 640])}
+                sizes="(min-width: 64rem) 22vw, (min-width: 40rem) 45vw, 90vw"
+                alt={hi ? `${name} में लिस्ट एक घर` : `A home listed in ${name}`}
+                width="480"
+                height="360"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </div>
+          <h3 class="lp-name">
+            <a href={localizePath(`/locality/${localitySlug(l)}`, locale)}>{name}</a>
+          </h3>
+          <p class="lp-meta">
+            <span class="lp-count">{homesText(homes.length)}</span>
+            <span>{TYPE_LABEL[l.entityType]?.[hi ? 1 : 0] ?? l.type}</span>
+          </p>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .lp {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1rem;
+  }
+
+  @media (min-width: 64rem) {
+    .lp {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+    }
+  }
+
+  .lp-card {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .lp-img {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+
+  .lp-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 500ms ease-out;
+  }
+
+  .lp-card:hover .lp-img img {
+    scale: 1.03;
+  }
+
+  .lp-name {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .lp-name a {
+    display: inline-block;
+    min-height: 24px;
+    text-decoration: none;
+  }
+
+  .lp-name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .lp-name a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .lp-name a:focus-visible {
+    outline: none;
+  }
+
+  .lp-name a:focus-visible::after {
+    outline: 3px solid var(--color-kesar-700);
+    outline-offset: 4px;
+    border-radius: var(--radius-md);
+  }
+
+  .lp-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .lp-count {
+    font-weight: 700;
+    color: var(--color-kesar-700);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lp-img img {
+      transition: none;
+    }
+  }
+</style>

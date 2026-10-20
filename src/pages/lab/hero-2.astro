@@ -1,0 +1,29 @@
+---
+import HomePage from '@/features/home/HomePage.astro';
+import SectorMapHero from '@/features/lab/SectorMapHero.astro';
+import MapTable from '@/features/lab/MapTable.astro';
+import { loadLab } from '@/features/lab/load';
+import Page from '@/layouts/Page.astro';
+import { Toaster } from '@/ui/react/Toaster';
+
+// Dev only: hero study, not in the production build.
+export const prerender = false;
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+
+const locale = Astro.locals.locale;
+const data = await loadLab(locale);
+---
+
+<Page title="Lab: Sector map" description="Hero study" path="/lab/hero-2" overHero noindex>
+  {
+    data.mapped.length ? (
+      <HomePage locale={locale} data={data}>
+        <SectorMapHero slot="hero" locale={locale} homes={data.mapped} />
+        <MapTable slot="after-hero" locale={locale} homes={data.mapped} stats={data.stats} />
+      </HomePage>
+    ) : (
+      <HomePage locale={locale} data={data} />
+    )
+  }
+  <Toaster client:idle />
+</Page>

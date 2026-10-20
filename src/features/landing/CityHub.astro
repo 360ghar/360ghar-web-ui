@@ -1,0 +1,387 @@
+---
+/**
+ * City guide: a paper city vignette, live counts, the landing pages for each
+ * intent, the places with homes now, the newest homes, homes near office
+ * hubs, localities and the tools to check before deciding.
+ */
+import priceContext from '@/data/priceContext.json';
+import type { Property } from '@/lib/api/types';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import FavouriteButton from '@/features/favourites/FavouriteButton';
+import { PropertyCardView } from '@/features/property/PropertyCardView';
+import { LISTED_LOCALITIES, citySlug, displayName, localitySlug, POPULAR } from '@/features/localities/data';
+import { LANDMARK_GLYPH } from '@/features/localities/glyphs';
+import ListedPlaces from '@/features/localities/ListedPlaces.astro';
+import type { ListedPlace } from '@/features/localities/live';
+import PlaceFacts, { type FactRow } from '@/features/localities/PlaceFacts.astro';
+import PlaceHero from '@/features/localities/PlaceHero.astro';
+import type { PlaceKind } from '@/features/localities/vignette';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import { CITIES } from './model';
+import { CITY_META, cityFaqs } from './cities';
+import { LANDMARKS, NEAR_HI } from './loadNear';
+
+type Props = { city: string; homes: Property[]; listed: ListedPlace[]; failed: boolean; locale: Locale };
+const { city, homes, listed, failed, locale } = Astro.props;
+const hi = locale === 'hi';
+const L = localizer(locale);
+const meta = CITY_META[city]!;
+const name = hi ? CITIES[city]!.hi : meta.fullName;
+const prices = (priceContext as Record<string, Record<string, Record<string, string>>>)[city];
+const cityData = LISTED_LOCALITIES.filter((l) => citySlug(l.city) === city);
+const top =
+  city === 'gurgaon'
+    ? POPULAR.map((s) => cityData.find((l) => l.slug === s)).filter((l) => l !== undefined)
+    : cityData.filter((l) => l.entityType === 'locality' || l.entityType === 'sector').slice(0, 12);
+const groups = [
+  { title: hi ? 'खरीदें' : 'Buy', links: [['flats', 'Flats', 'फ़्लैट'], ['independent-house', 'Independent houses', 'स्वतंत्र मकान'], ['builder-floor', 'Builder floors', 'बिल्डर फ़्लोर'], ['villa', 'Villas', 'विला'], ['plots', 'Plots', 'प्लॉट']].map(([s, en, h]) => ({ href: `/${city}/buy/${s}`, label: hi ? h! : en!, price: prices?.buy?.[({ flats: 'apartment', 'independent-house': 'house', 'builder-floor': 'builder_floor', villa: 'villa', plots: 'plot' } as Record<string, string>)[s!]!] })) },
+  { title: hi ? 'किराया' : 'Rent', links: [['flats', 'Flats', 'फ़्लैट'], ['independent-house', 'Independent houses', 'स्वतंत्र मकान'], ['builder-floor', 'Builder floors', 'बिल्डर फ़्लोर'], ['villa', 'Villas', 'विला'], ['office-space', 'Office space', 'ऑफ़िस स्पेस']].map(([s, en, h]) => ({ href: `/${city}/rent/${s}`, label: hi ? h! : en!, price: prices?.rent?.[({ flats: 'apartment', 'independent-house': 'house', 'builder-floor': 'builder_floor', villa: 'villa' } as Record<string, string>)[s!] ?? 'x'] })) },
+  { title: hi ? 'पीजी' : 'PG', links: [{ href: `/${city}/pg/flats`, label: hi ? `${name} में पीजी` : `PG in ${name}`, price: prices?.pg?.default }] },
+];
+const faqs = cityFaqs(meta, name, locale);
+const count = (p: string) => homes.filter((h) => h.purpose === p).length;
+const mix = [
+  count('buy') && (hi ? `${count('buy')} बिक्री के लिए` : `${count('buy')} for sale`),
+  count('rent') && (hi ? `${count('rent')} किराये पर` : `${count('rent')} for rent`),
+  count('short_stay') && (hi ? `${count('short_stay')} कम समय के लिए` : `${count('short_stay')} short stays`),
+]
+  .filter(Boolean)
+  .join(' · ');
+const live: FactRow[] = failed
+  ? [{ text: hi ? 'लाइव घर अभी लोड नहीं हो सके' : 'Live homes could not load right now', strong: true }]
+  : homes.length
+    ? [{ text: hi ? `${listed.length} इलाकों में ${homes.length} घर लिस्ट` : `${homes.length} homes listed in ${listed.length} localities`, strong: true }, { text: mix }]
+    : [{ text: hi ? 'अभी कोई घर लिस्ट नहीं' : 'No homes listed yet', strong: true }];
+const homesWord = (n: number) => (hi ? `${n} घर` : `${n} ${n === 1 ? 'home' : 'homes'}`);
+const heroGroups = listed.length
+  ? [
+      { title: hi ? '360Ghar पर अभी' : 'Live on 360Ghar', rows: live },
+      { title: hi ? 'सबसे ज़्यादा घर' : 'Most homes in', rows: listed.slice(0, 3).map((x) => ({ text: displayName(x.locality.name), value: homesWord(x.homes.length), href: L(`/locality/${localitySlug(x.locality)}`) })) },
+    ]
+  : [
+      { title: hi ? '360Ghar पर अभी' : 'Live on 360Ghar', rows: live },
+      { title: hi ? 'हमारी सूची के इलाके' : 'Localities on our list', rows: top.slice(0, 3).map((l) => ({ text: displayName(l.name), href: L(`/locality/${localitySlug(l)}`) })) },
+    ];
+const near = LANDMARKS.filter((x) => x.city === city);
+const glyphFor: Record<string, string> = { transit: 'metro', hospital: 'hospital', commercial: 'mall' };
+const nearType: Record<string, [string, string]> = {
+  it_hub: ['IT hub', 'IT हब'],
+  corporate: ['Office corridor', 'ऑफ़िस कॉरिडोर'],
+  industrial: ['Industrial area', 'औद्योगिक इलाका'],
+  transit: ['Transit', 'मेट्रो और सड़क'],
+  hospital: ['Hospital', 'अस्पताल'],
+  commercial: ['Mall', 'मॉल'],
+};
+const latest = homes.slice(0, 6);
+const CITY_KIND: Record<string, PlaceKind> = { gurgaon: 'city', delhi: 'delhi', noida: 'noida', faridabad: 'faridabad', ghaziabad: 'ghaziabad' };
+---
+
+<div class="container-page hub">
+  <Breadcrumbs items={[{ name: hi ? 'होम' : 'Home', path: '/' }, { name }]} />
+  <PlaceHero kind={CITY_KIND[city] ?? 'city'} seed={city} locale={locale}>
+    <h1>{hi ? `${name} में घर` : `Homes in ${name}`}</h1>
+    <p class="hub-lead">{hi ? meta.descriptionHi : meta.description}</p>
+    <PlaceFacts slot="aside" groups={heroGroups} />
+  </PlaceHero>
+
+  <div class="hub-groups">
+    {
+      groups.map((g) => (
+        <section class="hub-group" aria-label={g.title}>
+          <h2 class="hub-h3">{g.title}</h2>
+          <ul>
+            {g.links.map((x) => (
+              <li>
+                <a href={L(x.href)}>
+                  <span>{x.label}</span>
+                  {x.price && <span class="hub-price tabular">₹{x.price}</span>}
+                  <Icon name="chevron-right" size={18} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+  <p class="hub-small">{hi ? 'कीमतें पूरे शहर की अनुमानित रेंज हैं।' : 'Prices are city-wide ranges.'}</p>
+
+  {
+    listed.length > 0 && (
+      <section class="hub-block" aria-labelledby="hub-where">
+        <div class="hub-row">
+          <h2 id="hub-where" class="hub-h2">{hi ? 'घर कहाँ लिस्ट हैं' : 'Where the homes are'}</h2>
+          <a class="link" href={L('/localities')}>
+            {hi ? 'सभी लोकेलिटीज़' : 'All localities'} <Icon name="arrow-up-right" size={16} class="arrow" />
+          </a>
+        </div>
+        <ListedPlaces places={listed.slice(0, 8)} locale={locale} />
+      </section>
+    )
+  }
+
+  <section class="hub-block" aria-labelledby="hub-homes">
+    <div class="hub-row">
+      <h2 id="hub-homes" class="hub-h2">{hi ? 'नए घर' : 'Latest homes'}</h2>
+      <a class="link" href={`${L('/properties')}?city=${encodeURIComponent(meta.fullName)}`}>
+        {hi ? 'सभी घर' : 'All homes'} <Icon name="arrow-up-right" size={16} class="arrow" />
+      </a>
+    </div>
+    {
+      latest.length ? (
+        <ul class="hub-grid">
+          {latest.map((p) => (
+            <li>
+              <PropertyCardView property={p} locale={locale}>
+                <FavouriteButton slot="favourite" client:visible propertyId={p.id} locale={locale} />
+              </PropertyCardView>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="sheet">
+          <StateBlock
+            scene={failed ? 'offline' : 'empty'}
+            level={3}
+            title={failed ? (hi ? 'अभी घर लोड नहीं हो सके' : 'We could not load homes right now') : hi ? `${name} में अभी कोई घर लिस्ट नहीं है` : `No homes listed in ${name} yet`}
+            body={hi ? 'हम पहले गुरुग्राम में घर लिस्ट कर रहे हैं। वहाँ देखें, या अपना घर मुफ़्त लिस्ट करें।' : 'We list homes in Gurugram first. Look there, or list your own home free.'}
+            action={{ href: L('/gurgaon'), label: hi ? 'गुड़गाँव देखें' : 'See Gurgaon' }}
+            secondary={{ href: L('/post-property'), label: hi ? 'प्रॉपर्टी पोस्ट करें' : 'Post a property' }}
+          />
+        </div>
+      )
+    }
+  </section>
+
+  {
+    near.length > 0 && (
+      <section class="hub-block" aria-labelledby="hub-near">
+        <h2 id="hub-near" class="hub-h2 hub-h2-gap">{hi ? 'ऑफ़िस, अस्पताल और मेट्रो के पास घर' : 'Homes near offices, hospitals and the metro'}</h2>
+        <ul class="hub-near">
+          {near.map((x) => (
+            <li>
+              <a href={L(`/near/${x.slug}`)}>
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+                  <path fill-rule="evenodd" d={LANDMARK_GLYPH[glyphFor[x.type] ?? 'commercial']} />
+                </svg>
+                <span class="hub-near-name">
+                  {hi ? `${NEAR_HI[x.slug]?.name ?? x.name} के पास` : `Near ${x.name}`}
+                  <span class="hub-near-type">{nearType[x.type]?.[hi ? 1 : 0]}</span>
+                </span>
+                <Icon name="chevron-right" size={18} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    top.length > 0 && (
+      <section class="hub-block" aria-labelledby="hub-loc">
+        <div class="hub-row">
+          <h2 id="hub-loc" class="hub-h2">{hi ? 'लोकप्रिय लोकेलिटीज़' : 'Popular localities'}</h2>
+          <a class="link" href={L('/localities')}>
+            {hi ? 'सभी लोकेलिटीज़' : 'All localities'} <Icon name="arrow-up-right" size={16} class="arrow" />
+          </a>
+        </div>
+        <ul class="hub-links">
+          {top.map((l) => (
+            <li>
+              <a href={L(`/locality/${localitySlug(l)}`)}>{displayName(l.name)}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="hub-block hub-tools" aria-labelledby="hub-tools">
+    <h2 id="hub-tools" class="hub-h2 hub-h2-gap">{hi ? 'फ़ैसले से पहले जाँचें' : 'Check before you decide'}</h2>
+    <ul class="hub-links">
+      <li><a href={L('/circle-rates')}>{hi ? 'सर्कल रेट' : 'Circle rates'}</a></li>
+      <li><a href={L('/stamp-duty-calculator')}>{hi ? 'स्टैंप ड्यूटी' : 'Stamp duty calculator'}</a></li>
+      <li><a href={L('/emi-calculator')}>{hi ? 'EMI कैलकुलेटर' : 'EMI calculator'}</a></li>
+      <li><a href={L('/rera-projects')}>{hi ? 'RERA प्रोजेक्ट' : 'RERA projects'}</a></li>
+      <li><a href={L(`/price-index/${city}`)}>{hi ? 'कीमत इंडेक्स' : 'Price index'}</a></li>
+      <li><a href={L('/vs')}>{hi ? '360Ghar बनाम अन्य' : '360Ghar vs other portals'}</a></li>
+    </ul>
+  </section>
+
+  <section class="hub-block">
+    <Faq items={faqs} title={hi ? `${name} के बारे में सवाल` : `Questions about ${meta.fullName}`} id="hub-faq" open={0} />
+  </section>
+</div>
+
+<style>
+  .hub {
+    padding-top: 0.5rem;
+  }
+
+  .hub-lead {
+    font-size: 1.0625rem;
+    color: var(--color-ink-800);
+    max-width: 58ch;
+  }
+
+  .hub-groups {
+    display: grid;
+    gap: 1.5rem 2rem;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  @media (min-width: 48rem) {
+    .hub-groups {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .hub-group a {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 52px;
+    border-bottom: 1px solid var(--color-ink-200);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .hub-group a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .hub-group a :global(svg) {
+    color: var(--color-ink-400);
+  }
+
+  .hub-price {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink-600);
+  }
+
+  .hub-small {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .hub-h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+  }
+
+  .hub-h2-gap {
+    margin-bottom: 1rem;
+  }
+
+  .hub-h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .hub-block {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .hub-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0.25rem 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .hub-grid {
+    display: grid;
+    gap: 2rem 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .hub-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .hub-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .hub-near {
+    display: grid;
+    gap: 0 2rem;
+  }
+
+  @media (min-width: 40rem) {
+    .hub-near {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .hub-near {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .hub-near a {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 56px;
+    padding-block: 0.375rem;
+    border-bottom: 1px solid var(--color-ink-200);
+    text-decoration: none;
+  }
+
+  .hub-near a > svg:first-child {
+    color: var(--color-kesar-700);
+  }
+
+  .hub-near a > :global(svg:last-child) {
+    color: var(--color-ink-400);
+  }
+
+  .hub-near a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .hub-near-name {
+    display: grid;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .hub-near-type {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink-600);
+  }
+
+  .hub-links {
+    display: grid;
+    gap: 0 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  }
+
+  .hub-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-ink-800);
+    font-weight: 600;
+  }
+
+  .hub-links a:hover {
+    color: var(--color-kesar-700);
+  }
+</style>

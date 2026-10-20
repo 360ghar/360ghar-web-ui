@@ -1,0 +1,161 @@
+---
+/**
+ * Header for place pages: the paper vignette (or a real photo cut like a
+ * print), with a white sheet that holds the title and the facts crossing its
+ * lower edge, as the home search sheet crosses the diorama.
+ */
+import type { Locale } from '@/lib/i18n/locale';
+import Vignette from './Vignette.astro';
+import type { PlaceKind } from './vignette';
+
+type Props = {
+  kind?: PlaceKind;
+  seed: string;
+  locale: Locale;
+  sign?: string;
+  /** A real photo instead of the vignette (project pages). Shown at most 640 px wide: the files are 630 px. */
+  image?: { src: string; alt: string; width: number; height: number };
+  /** Length of the title: long titles get smaller sizes, so every title stays within two lines. */
+  titleLength?: number;
+  class?: string;
+};
+const { kind = 'city', seed, locale, sign, image, titleLength = 0, class: className } = Astro.props;
+const size = titleLength > 32 ? 'is-xlong' : titleLength > 22 ? 'is-long' : null;
+const aside = Astro.slots.has('aside');
+---
+
+<header class:list={['ph', image && 'has-photo', className]}>
+  {
+    image ? (
+      <div class="ph-photo soft-lift is-clip" data-depth="2">
+        <div class="ph-photo-in">
+          <img src={image.src} alt={image.alt} width={image.width} height={image.height} fetchpriority="high" decoding="async" />
+        </div>
+      </div>
+    ) : (
+      <Vignette kind={kind} seed={seed} locale={locale} sign={sign} />
+    )
+  }
+  <div class:list={['ph-sheet sheet', size, aside && 'has-aside']}>
+    <div class="ph-main"><slot /></div>
+    {
+      aside && (
+        <div class="ph-aside">
+          <slot name="aside" />
+        </div>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .ph {
+    position: relative;
+    margin-top: 0.5rem;
+  }
+
+  .ph-sheet {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1.25rem;
+    margin: -2.75rem 0.75rem 0;
+    padding: 1.125rem 1.125rem 1.25rem;
+  }
+
+  .ph-main {
+    display: grid;
+    gap: 0.625rem;
+    align-content: start;
+  }
+
+  .ph-aside {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  /* With an aside the sheet spans the scene: title on the left, the live facts on the right. */
+  @media (min-width: 48rem) {
+    .ph-sheet.has-aside {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      column-gap: clamp(2rem, 4vw, 4rem);
+    }
+
+    .ph-sheet.has-aside .ph-aside {
+      padding-top: 0.375rem;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .ph-sheet {
+      max-width: 46rem;
+      margin: -5rem 0 0 2rem;
+      padding: 1.75rem 2rem 1.875rem;
+    }
+
+    .ph-sheet.has-aside {
+      max-width: none;
+      margin-right: 2rem;
+    }
+  }
+
+  .ph-sheet :global(h1) {
+    font-size: clamp(2rem, 1.4rem + 2.8vw, 3.5rem);
+  }
+
+  .ph-sheet.is-long :global(h1) {
+    font-size: clamp(1.625rem, 1.1rem + 2.6vw, 3rem);
+  }
+
+  .ph-sheet.is-xlong :global(h1) {
+    font-size: clamp(1.125rem, 0.75rem + 1.9vw, 2.5rem);
+  }
+
+  /* Beside an aside the title column is narrower: smaller sizes keep titles to two lines. */
+  @media (min-width: 48rem) {
+    .ph-sheet.has-aside :global(h1) {
+      font-size: clamp(2rem, 1rem + 2.4vw, 3.25rem);
+    }
+
+    .ph-sheet.has-aside.is-long :global(h1) {
+      font-size: clamp(1.625rem, 0.9rem + 1.8vw, 2.5rem);
+    }
+
+    .ph-sheet.has-aside.is-xlong :global(h1) {
+      font-size: clamp(1.25rem, 0.6rem + 1.4vw, 2.125rem);
+    }
+  }
+
+  .ph-photo {
+    --tint: 94 33 0;
+    max-width: 40rem;
+  }
+
+  .ph-photo-in {
+    aspect-ratio: 4 / 3;
+    background: var(--color-mist-100);
+  }
+
+  .ph-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 48rem) {
+    .ph-photo-in {
+      aspect-ratio: 16 / 10;
+    }
+
+    .has-photo .ph-sheet {
+      max-width: 44rem;
+      margin: -7rem 0 0 min(18rem, 30%);
+    }
+
+    .has-photo .ph-sheet.has-aside {
+      max-width: none;
+      margin-right: 0;
+    }
+  }
+</style>

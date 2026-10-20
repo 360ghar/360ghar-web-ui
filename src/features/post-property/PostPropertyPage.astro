@@ -1,0 +1,554 @@
+---
+/**
+ * Post-property page shell. The wizard is client only: it needs the session
+ * and the draft in sessionStorage, and the page has no SEO value (noindex).
+ */
+import Page from '@/layouts/Page.astro';
+import Paper from '@/ui/Paper.astro';
+import PostProperty from './PostProperty';
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+---
+
+<Page title={hi ? 'प्रॉपर्टी पोस्ट करें | 360Ghar' : 'Post a Property | 360Ghar'} description="Post your property on 360Ghar." path="/post-property" noindex>
+  <div class="container-page post-wrap">
+    <div class="post-head">
+      <h1 class="post-h1">{hi ? 'अपनी प्रॉपर्टी लिस्ट करें' : 'List your property'}</h1>
+      <p class="post-lead">
+        {hi ? 'छह छोटे चरण। लिस्टिंग मुफ़्त है। हमारी टीम विवरण देखकर आपको कॉल करती है।' : 'Six short steps. Listing is free. Our team checks the details and calls you.'}
+      </p>
+    </div>
+    <PostProperty client:only="react" locale={locale}>
+      <div slot="fallback" class="post-layout">
+        <Paper seed="post-sheet" tone="paper" depth={2} class="post-sheet" innerClass="post-inner">
+          <div class="grid gap-4" aria-busy="true">
+            <span class="skeleton h-6 w-48"></span>
+            <span class="skeleton h-2 w-full"></span>
+            <span class="skeleton mt-4 h-5 w-32"></span>
+            <span class="skeleton h-11 w-full"></span>
+            <span class="skeleton mt-2 h-5 w-32"></span>
+            <span class="skeleton h-24 w-full"></span>
+          </div>
+        </Paper>
+      </div>
+    </PostProperty>
+  </div>
+</Page>
+
+<style>
+  .post-wrap {
+    display: grid;
+    gap: 1.5rem;
+    padding-block: 1.5rem 4rem;
+    max-width: 52rem;
+  }
+
+  @media (min-width: 64rem) {
+    .post-wrap {
+      max-width: 76rem;
+    }
+  }
+
+  .post-h1 {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  }
+
+  .post-lead {
+    margin-top: 0.5rem;
+    color: var(--color-ink-800);
+    max-width: 56ch;
+  }
+
+  /* The form sheet, and the live preview beside it on wide screens. */
+  .post-wrap :global(.post-layout) {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .post-wrap :global(.post-layout) {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      gap: 2.5rem;
+    }
+  }
+
+  .post-wrap :global(.post-sheet) {
+    min-width: 0;
+    scroll-margin-top: 5rem;
+  }
+
+  .post-wrap :global(.post-inner) {
+    padding: clamp(1.25rem, 0.8rem + 2vw, 2.25rem);
+  }
+
+  .post-wrap :global(.post) {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  /* ---------- Progress: the paper house and the step bar ---------- */
+
+  .post-wrap :global(.post-progress) {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 0.75rem 1rem;
+    align-items: center;
+    scroll-margin-top: 5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .post-wrap :global(.post-progress) {
+      grid-template-columns: 9rem minmax(0, 1fr);
+    }
+  }
+
+  .post-wrap :global(.post-house) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+  }
+
+  /* The piece placed at this step settles onto the paper. It is drawn in place
+     from the first frame; only its position eases in. */
+  @media (prefers-reduced-motion: no-preference) {
+    .post-wrap :global(.post-house[data-fresh='0'] svg > g > g:nth-of-type(1)),
+    .post-wrap :global(.post-house[data-fresh='1'] svg > g > g:nth-of-type(2)),
+    .post-wrap :global(.post-house[data-fresh='2'] svg > g > g:nth-of-type(3)),
+    .post-wrap :global(.post-house[data-fresh='3'] svg > g > g:nth-of-type(4)),
+    .post-wrap :global(.post-house[data-fresh='4'] svg > g > g:nth-of-type(5)),
+    .post-wrap :global(.post-house[data-fresh='5'] svg > g > g:nth-of-type(6)) {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: post-place 480ms var(--ease-paper) both;
+    }
+  }
+
+  @keyframes post-place {
+    from {
+      transform: translateY(-7px) rotate(-2deg);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  .post-wrap :global(.post-bar),
+  .post-wrap :global(.post-restored) {
+    grid-column: 1 / -1;
+  }
+
+  .post-wrap :global(.post-bar) {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.375rem;
+  }
+
+  .post-wrap :global(.post-seg-btn) {
+    display: grid;
+    align-content: center;
+    gap: 0.375rem;
+    width: 100%;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-ink-600);
+    font: 600 0.8125rem/1.2 var(--font-sans);
+    text-align: left;
+  }
+
+  .post-wrap :global(button.post-seg-btn) {
+    cursor: pointer;
+  }
+
+  .post-wrap :global(.post-seg) {
+    display: block;
+    height: 6px;
+    border-radius: var(--radius-sm);
+    background: var(--color-ink-100);
+    transition: background-color 200ms var(--ease-paper);
+  }
+
+  .post-wrap :global(.post-bar li[data-on] .post-seg) {
+    background: var(--color-kesar-600);
+  }
+
+  .post-wrap :global(button.post-seg-btn:hover .post-seg) {
+    background: var(--color-kesar-700);
+  }
+
+  .post-wrap :global(button.post-seg-btn:hover) {
+    color: var(--color-kesar-700);
+  }
+
+  .post-wrap :global(.post-seg-btn[aria-current='step']) {
+    color: var(--color-ink-950);
+  }
+
+  /* Step names show from tablet width; on phones the heading names the step. */
+  @media (max-width: 39.99rem) {
+    .post-wrap :global(.post-seg-l) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  .post-wrap :global(.post-step) {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Fields in a row keep their inputs on one line when a hint sits under one of them. */
+  .post-wrap :global(.post-step .field) {
+    align-content: start;
+  }
+
+  /* Read-only after posting (the backend ignores these on edit): a flat, quieter field. */
+  .post-wrap :global(.post-step .input[readonly]) {
+    border-color: var(--color-ink-200);
+    background: var(--color-ink-100);
+    color: var(--color-ink-800);
+  }
+
+  /* The terms box: the box sits on the first line of a long label. */
+  .post-wrap :global(.post-terms) {
+    align-items: flex-start;
+    padding-block: 0.625rem;
+  }
+
+  .post-wrap :global(.post-terms input) {
+    margin-top: 0.125rem;
+  }
+
+  .post-wrap :global(.post-inline-link) {
+    color: var(--color-kesar-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .post-wrap :global(.post-inline-link:hover) {
+    color: var(--color-kesar-800);
+  }
+
+  /* ---------- Photos ---------- */
+
+  .post-wrap :global(.post-drop) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding: 1rem;
+    border: 1.5px dashed var(--color-ink-400);
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
+    transition: background-color 140ms var(--ease-paper), border-color 140ms var(--ease-paper);
+  }
+
+  .post-wrap :global(.post-drop[data-over]) {
+    border-color: var(--color-kesar-700);
+    background: var(--color-mist-100);
+  }
+
+  .post-wrap :global(.post-drop-hint) {
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  @media (pointer: coarse) {
+    .post-wrap :global(.post-drop-hint) {
+      display: none;
+    }
+  }
+
+  .post-wrap :global(.post-photos) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+    gap: 1rem 0.75rem;
+  }
+
+  .post-wrap :global(.post-photos li) {
+    display: grid;
+    align-content: start;
+  }
+
+  @media (pointer: fine) {
+    .post-wrap :global(.post-photos li[draggable='true']) {
+      cursor: grab;
+    }
+  }
+
+  .post-wrap :global(.post-photos li[data-dragging]) {
+    opacity: 0.45;
+  }
+
+  .post-wrap :global(.post-photos img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+
+  .post-wrap :global(.post-pending img) {
+    opacity: 0.55;
+  }
+
+  .post-wrap :global(.post-pending p) {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .post-wrap :global(.post-photo-bar) {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .post-wrap :global(.post-cover) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-leaf-700);
+  }
+
+  .post-wrap :global(.post-make-cover) {
+    margin-left: -0.625rem;
+    padding-inline: 0.625rem;
+  }
+
+  .post-wrap :global(.post-photo-tools) {
+    display: flex;
+    margin-inline: -0.375rem;
+  }
+
+  .post-wrap :global(.post-photo-tools > :last-child) {
+    margin-left: auto;
+  }
+
+  .post-wrap :global(.post-tool-gap) {
+    width: 44px;
+  }
+
+  .post-wrap :global(.post-nav) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-ink-100);
+  }
+
+  /* "Draft saved": quiet, and its line is reserved before the first save. */
+  .post-wrap :global(.post-draft) {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 1.25rem;
+    margin-top: -0.75rem;
+    font-size: 0.8125rem;
+    color: var(--color-ink-600);
+  }
+
+  .post-wrap :global(.post-more summary) {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .post-wrap :global(.post-more summary::-webkit-details-marker) {
+    display: none;
+  }
+
+  .post-wrap :global(.post-more[open] summary) {
+    display: none;
+  }
+
+  /* ---------- Live preview ---------- */
+
+  /* Phones and tablets: a strip above the form. Desktop: the sticky aside. */
+  .post-wrap :global(.post-peek) {
+    position: relative;
+    z-index: 3;
+  }
+
+  .post-wrap :global(.post-peek-sum) {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .post-wrap :global(.post-peek-sum::-webkit-details-marker) {
+    display: none;
+  }
+
+  .post-wrap :global(.post-peek-thumb) {
+    width: 3rem;
+    height: 2.25rem;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+  }
+
+  .post-wrap :global(.post-peek-chev) {
+    color: var(--color-kesar-700);
+    transition: rotate 160ms var(--ease-paper);
+  }
+
+  .post-wrap :global(.post-peek[open] .post-peek-chev) {
+    rotate: 180deg;
+  }
+
+  /* Opens over the form, not in the flow, so the form does not move. */
+  .post-wrap :global(.post-peek-body) {
+    position: absolute;
+    top: calc(100% + 0.375rem);
+    left: 0;
+    right: 0;
+    display: grid;
+    gap: 1rem;
+    max-height: min(34rem, 70vh);
+    overflow: auto;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
+  }
+
+  .post-wrap :global(.post-peek-body .post-preview) {
+    max-width: 20rem;
+  }
+
+  @media (min-width: 64rem) {
+    .post-wrap :global(.post-peek) {
+      display: none;
+    }
+  }
+
+  .post-wrap :global(.post-aside) {
+    display: none;
+    align-content: start;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
+  }
+
+  @media (min-width: 64rem) {
+    .post-wrap :global(.post-aside) {
+      display: grid;
+      position: sticky;
+      top: 6rem;
+    }
+  }
+
+  .post-wrap :global(.post-aside-h) {
+    font-size: 1.25rem;
+  }
+
+  .post-wrap :global(.post-preview) {
+    display: grid;
+    gap: 0.625rem;
+    max-width: 22rem;
+  }
+
+  .post-wrap :global(.post-preview-title) {
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .post-wrap :global(.post-preview-empty) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-paper);
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .post-wrap :global(.post-preview-empty svg) {
+    color: var(--color-kesar-700);
+  }
+
+  .post-wrap :global(.post-tip) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 44px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink-800);
+  }
+
+  .post-wrap :global(.post-tip-btn) {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-kesar-700);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .post-wrap :global(.post-tip-btn:hover) {
+    color: var(--color-kesar-800);
+  }
+
+  /* ---------- Done ---------- */
+
+  .post-wrap :global(.post-done) {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .post-wrap :global(.post-done) {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  .post-wrap :global(.post-done-art) {
+    width: min(100%, 18rem);
+  }
+
+  .post-wrap :global(.post-next) {
+    display: grid;
+    gap: 0.875rem;
+  }
+
+  .post-wrap :global(.post-next li) {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+    color: var(--color-ink-800);
+  }
+
+  .post-wrap :global(.post-next svg) {
+    color: var(--color-kesar-700);
+  }
+</style>

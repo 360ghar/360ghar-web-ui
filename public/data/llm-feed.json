@@ -20,7 +20,7 @@
       "penthouse",
       "studio"
     ],
-    "total_localities": 3215,
+    "total_localities": 2043,
     "total_societies": 179
   },
   "inLanguage": [
@@ -450,7 +450,7 @@
     },
     {
       "title": "मुख्य पृष्ठ (Hindi)",
-      "url": "https://360ghar.com/hi/",
+      "url": "https://360ghar.com/hi",
       "category": "hindi"
     },
     {
@@ -717,7 +717,7 @@
     "hindi": [
       {
         "title": "मुख्य पृष्ठ (Hindi)",
-        "url": "https://360ghar.com/hi/",
+        "url": "https://360ghar.com/hi",
         "category": "hindi"
       },
       {
@@ -758,354 +758,354 @@
   },
   "top_localities": [
     {
-      "name": "1000 trees sai kripa floors 10",
-      "slug": "1000-trees-sai-kripa-floors-10",
+      "name": "Golf Course Road",
+      "slug": "golf-course-road",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/1000-trees-sai-kripa-floors-10"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/golf-course-road-gurgaon"
     },
     {
-      "name": "102 eden state",
-      "slug": "102-eden-state",
+      "name": "Sohna Road",
+      "slug": "sohna-road",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/102-eden-state"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/sohna-road-gurgaon"
     },
     {
-      "name": "102A",
-      "slug": "102a",
+      "name": "DLF Phase 1",
+      "slug": "dlf-phase-1",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/dlf-phase-1-gurgaon"
+    },
+    {
+      "name": "DLF Phase 5",
+      "slug": "dlf-phase-5",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/dlf-phase-5-gurgaon"
+    },
+    {
+      "name": "MG Road",
+      "slug": "mg-road",
       "city": "Gurgaon",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/102a"
+      "url": "https://360ghar.com/locality/mg-road-gurgaon"
     },
     {
-      "name": "103A",
-      "slug": "103a",
+      "name": "Palam Vihar",
+      "slug": "palam-vihar",
       "city": "Gurgaon",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/103a"
+      "url": "https://360ghar.com/locality/palam-vihar-gurgaon"
     },
     {
-      "name": "104A",
-      "slug": "104a",
+      "name": "Sushant Lok 1",
+      "slug": "sushant-lok-1",
       "city": "Gurgaon",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/104a"
+      "url": "https://360ghar.com/locality/sushant-lok-1-gurgaon"
     },
     {
-      "name": "107A",
-      "slug": "107a",
-      "city": "Gurgaon",
+      "name": "Dwarka",
+      "slug": "dwarka",
+      "city": "Delhi",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/107a"
+      "url": "https://360ghar.com/locality/dwarka-delhi"
     },
     {
-      "name": "10A",
-      "slug": "10a",
-      "city": "Gurgaon",
+      "name": "Janakpuri",
+      "slug": "janakpuri",
+      "city": "Delhi",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/10a"
+      "url": "https://360ghar.com/locality/janakpuri-delhi"
     },
     {
-      "name": "11 estate harpreet floors 1",
-      "slug": "11-estate-harpreet-floors-1",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/11-estate-harpreet-floors-1"
-    },
-    {
-      "name": "2s ub sushant lok 1",
-      "slug": "2s-ub-sushant-lok-1",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/2s-ub-sushant-lok-1"
-    },
-    {
-      "name": "32 lemon street",
-      "slug": "32-lemon-street",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/32-lemon-street"
-    },
-    {
-      "name": "37A",
-      "slug": "37a",
-      "city": "Gurgaon",
+      "name": "Lajpat Nagar",
+      "slug": "lajpat-nagar",
+      "city": "Delhi",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/37a"
+      "url": "https://360ghar.com/locality/lajpat-nagar-delhi"
     },
     {
-      "name": "37B",
-      "slug": "37b",
-      "city": "Gurgaon",
+      "name": "Rohini",
+      "slug": "rohini",
+      "city": "Delhi",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/37b"
+      "url": "https://360ghar.com/locality/rohini-delhi"
     },
     {
-      "name": "37C",
-      "slug": "37c",
-      "city": "Gurgaon",
+      "name": "Vasant Kunj",
+      "slug": "vasant-kunj",
+      "city": "Delhi",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/37c"
+      "url": "https://360ghar.com/locality/vasant-kunj-delhi"
     },
     {
-      "name": "37D",
-      "slug": "37d",
-      "city": "Gurgaon",
+      "name": "Expressway Sectors",
+      "slug": "expressway-sectors",
+      "city": "Noida",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/37d"
+      "url": "https://360ghar.com/locality/expressway-sectors-noida"
     },
     {
-      "name": "3d ventures floors",
-      "slug": "3d-ventures-floors",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/3d-ventures-floors"
-    },
-    {
-      "name": "4 directions floors 1",
-      "slug": "4-directions-floors-1",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/4-directions-floors-1"
-    },
-    {
-      "name": "4 directions floors 2",
-      "slug": "4-directions-floors-2",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/4-directions-floors-2"
-    },
-    {
-      "name": "4 directions floors 3",
-      "slug": "4-directions-floors-3",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/4-directions-floors-3"
-    },
-    {
-      "name": "4s aradhya homes",
-      "slug": "4s-aradhya-homes",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/4s-aradhya-homes"
-    },
-    {
-      "name": "82A",
-      "slug": "82a",
-      "city": "Gurgaon",
+      "name": "NIT Faridabad",
+      "slug": "nit-faridabad",
+      "city": "Faridabad",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/82a"
+      "url": "https://360ghar.com/locality/nit-faridabad-faridabad"
     },
     {
-      "name": "83 avenue oodles sky walk",
-      "slug": "83-avenue-oodles-sky-walk",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/83-avenue-oodles-sky-walk"
-    },
-    {
-      "name": "88A",
-      "slug": "88a",
-      "city": "Gurgaon",
+      "name": "Surajkund",
+      "slug": "surajkund",
+      "city": "Faridabad",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/88a"
+      "url": "https://360ghar.com/locality/surajkund-faridabad"
     },
     {
-      "name": "88B",
-      "slug": "88b",
-      "city": "Gurgaon",
+      "name": "Crossing Republik",
+      "slug": "crossing-republik",
+      "city": "Ghaziabad",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/88b"
+      "url": "https://360ghar.com/locality/crossing-republik-ghaziabad"
     },
     {
-      "name": "89A",
-      "slug": "89a",
-      "city": "Gurgaon",
+      "name": "Indirapuram",
+      "slug": "indirapuram",
+      "city": "Ghaziabad",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/89a"
+      "url": "https://360ghar.com/locality/indirapuram-ghaziabad"
     },
     {
-      "name": "95A",
-      "slug": "95a",
-      "city": "Gurgaon",
+      "name": "Raj Nagar Extension",
+      "slug": "raj-nagar-extension",
+      "city": "Ghaziabad",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/95a"
+      "url": "https://360ghar.com/locality/raj-nagar-extension-ghaziabad"
     },
     {
-      "name": "95B",
-      "slug": "95b",
-      "city": "Gurgaon",
+      "name": "Vaishali",
+      "slug": "vaishali",
+      "city": "Ghaziabad",
       "entityType": "locality",
-      "url": "https://360ghar.com/locality/95b"
+      "url": "https://360ghar.com/locality/vaishali-ghaziabad"
     },
     {
-      "name": "99A",
-      "slug": "99a",
+      "name": "Sector 43",
+      "slug": "sector-43",
       "city": "Gurgaon",
-      "entityType": "locality",
-      "url": "https://360ghar.com/locality/99a"
+      "entityType": "sector",
+      "url": "https://360ghar.com/locality/sector-43-gurgaon"
     },
     {
-      "name": "a3s homes 1",
-      "slug": "a3s-homes-1",
+      "name": "Sector 49",
+      "slug": "sector-49",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/a3s-homes-1"
+      "entityType": "sector",
+      "url": "https://360ghar.com/locality/sector-49-gurgaon"
     },
     {
-      "name": "a3s homes 2",
-      "slug": "a3s-homes-2",
+      "name": "Sector 56",
+      "slug": "sector-56",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/a3s-homes-2"
+      "entityType": "sector",
+      "url": "https://360ghar.com/locality/sector-56-gurgaon"
     },
     {
-      "name": "aaa vision floors 1",
-      "slug": "aaa-vision-floors-1",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/aaa-vision-floors-1"
+      "name": "Sector 137",
+      "slug": "sector-137",
+      "city": "Noida",
+      "entityType": "sector",
+      "url": "https://360ghar.com/locality/sector-137-noida"
     },
     {
-      "name": "aadhar r k homes 1",
-      "slug": "aadhar-r-k-homes-1",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/aadhar-r-k-homes-1"
+      "name": "Sector 50",
+      "slug": "sector-50-sector",
+      "city": "Noida",
+      "entityType": "sector",
+      "url": "https://360ghar.com/locality/sector-50-sector-noida"
     },
     {
-      "name": "aakriti vastus",
-      "slug": "aakriti-vastus",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/aakriti-vastus"
+      "name": "Sector 62",
+      "slug": "sector-62-sector",
+      "city": "Noida",
+      "entityType": "sector",
+      "url": "https://360ghar.com/locality/sector-62-sector-noida"
     },
     {
-      "name": "aaron ville",
-      "slug": "aaron-ville",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/aaron-ville"
+      "name": "Sector 78",
+      "slug": "sector-78-sector",
+      "city": "Noida",
+      "entityType": "sector",
+      "url": "https://360ghar.com/locality/sector-78-sector-noida"
     },
     {
-      "name": "aashirwad homes",
-      "slug": "aashirwad-homes",
-      "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/aashirwad-homes"
+      "name": "Sector 14",
+      "slug": "sector-14-sector",
+      "city": "Faridabad",
+      "entityType": "sector",
+      "url": "https://360ghar.com/locality/sector-14-sector-faridabad"
     },
     {
-      "name": "aashrya chgs",
-      "slug": "aashrya-chgs",
+      "name": "Cyber City",
+      "slug": "cyber-city-road",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/aashrya-chgs"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/cyber-city-road-gurgaon"
     },
     {
-      "name": "abhas apartment",
-      "slug": "abhas-apartment",
+      "name": "Delhi-Alwar Expressway",
+      "slug": "delhi-alwar-expressway",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abhas-apartment"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/delhi-alwar-expressway-gurgaon"
     },
     {
-      "name": "abhinandan cghs",
-      "slug": "abhinandan-cghs",
+      "name": "Delhi-Gurgaon Expressway",
+      "slug": "delhi-gurgaon-expressway",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abhinandan-cghs"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/delhi-gurgaon-expressway-gurgaon"
     },
     {
-      "name": "abhinav apartment",
-      "slug": "abhinav-apartment",
+      "name": "Dwarka Expressway",
+      "slug": "dwarka-expressway",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abhinav-apartment"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/dwarka-expressway-gurgaon"
     },
     {
-      "name": "abl prime",
-      "slug": "abl-prime",
+      "name": "Faridabad Road",
+      "slug": "faridabad-road",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abl-prime"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/faridabad-road-gurgaon"
     },
     {
-      "name": "abs vayusena enclave plot",
-      "slug": "abs-vayusena-enclave-plot",
+      "name": "Golf Course Extension Road",
+      "slug": "golf-course-extension-road",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abs-vayusena-enclave-plot"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/golf-course-extension-road-gurgaon"
     },
     {
-      "name": "abw aditya niketan",
-      "slug": "abw-aditya-niketan",
+      "name": "Gwal Pahari",
+      "slug": "gwal-pahari",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abw-aditya-niketan"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/gwal-pahari-gurgaon"
     },
     {
-      "name": "abw la lagune",
-      "slug": "abw-la-lagune",
+      "name": "KMP Expressway",
+      "slug": "kmp-expressway",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abw-la-lagune"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/kmp-expressway-gurgaon"
     },
     {
-      "name": "abw palash floors",
-      "slug": "abw-palash-floors",
+      "name": "MG Road",
+      "slug": "mg-road-road",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abw-palash-floors"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/mg-road-road-gurgaon"
     },
     {
-      "name": "abw verona hills",
-      "slug": "abw-verona-hills",
+      "name": "NH-8",
+      "slug": "nh-8",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abw-verona-hills"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/nh-8-gurgaon"
     },
     {
-      "name": "abw verona villas",
-      "slug": "abw-verona-villas",
+      "name": "Northern Peripheral Road (NPR)",
+      "slug": "northern-peripheral-road-npr",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/abw-verona-villas"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/northern-peripheral-road-npr-gurgaon"
     },
     {
-      "name": "ac tower",
-      "slug": "ac-tower",
+      "name": "Old Delhi Road",
+      "slug": "old-delhi-road",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/ac-tower"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/old-delhi-road-gurgaon"
     },
     {
-      "name": "ace palm floors",
-      "slug": "ace-palm-floors",
+      "name": "Pataudi Road",
+      "slug": "pataudi-road",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/ace-palm-floors"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/pataudi-road-gurgaon"
     },
     {
-      "name": "adani aangan",
-      "slug": "adani-aangan",
+      "name": "Rajesh Pilot Marg",
+      "slug": "rajesh-pilot-marg",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/adani-aangan"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/rajesh-pilot-marg-gurgaon"
     },
     {
-      "name": "adani brahma samsara vilasa",
-      "slug": "adani-brahma-samsara-vilasa",
+      "name": "Southern Peripheral Road (SPR)",
+      "slug": "southern-peripheral-road-spr",
       "city": "Gurgaon",
-      "entityType": "project",
-      "url": "https://360ghar.com/locality/adani-brahma-samsara-vilasa"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/southern-peripheral-road-spr-gurgaon"
     },
     {
-      "name": "Adani Lushlands",
-      "slug": "adani-lushlands",
+      "name": "Udyog Vihar",
+      "slug": "udyog-vihar-road",
       "city": "Gurgaon",
-      "entityType": "society",
-      "url": "https://360ghar.com/locality/adani-lushlands"
+      "entityType": "road",
+      "url": "https://360ghar.com/locality/udyog-vihar-road-gurgaon"
+    },
+    {
+      "name": "DLF Alameda",
+      "slug": "dlf-alameda",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/dlf-alameda-gurgaon"
+    },
+    {
+      "name": "DLF Garden City",
+      "slug": "dlf-garden-city",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/dlf-garden-city-gurgaon"
+    },
+    {
+      "name": "DLF Phase 2",
+      "slug": "dlf-phase-2",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/dlf-phase-2-gurgaon"
+    },
+    {
+      "name": "DLF Phase 3",
+      "slug": "dlf-phase-3",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/dlf-phase-3-gurgaon"
+    },
+    {
+      "name": "DLF Phase 4",
+      "slug": "dlf-phase-4",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/dlf-phase-4-gurgaon"
+    },
+    {
+      "name": "Sushant Lok Phase 1",
+      "slug": "sushant-lok-phase-1",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/sushant-lok-phase-1-gurgaon"
+    },
+    {
+      "name": "Sushant Lok Phase 2",
+      "slug": "sushant-lok-phase-2",
+      "city": "Gurgaon",
+      "entityType": "phase",
+      "url": "https://360ghar.com/locality/sushant-lok-phase-2-gurgaon"
     }
   ],
   "top_societies": [
@@ -1113,121 +1113,121 @@
       "name": "Adani Lushlands",
       "slug": "adani-lushlands",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/adani-lushlands"
+      "url": "https://360ghar.com/locality/adani-lushlands-gurgaon"
     },
     {
       "name": "Adani Oyster Grande",
       "slug": "adani-oyster-grande",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/adani-oyster-grande"
+      "url": "https://360ghar.com/locality/adani-oyster-grande-gurgaon"
     },
     {
       "name": "Adani Samsara",
       "slug": "adani-samsara",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/adani-samsara"
+      "url": "https://360ghar.com/locality/adani-samsara-gurgaon"
     },
     {
       "name": "Adani Samsara Ivana",
       "slug": "adani-samsara-ivana",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/adani-samsara-ivana"
+      "url": "https://360ghar.com/locality/adani-samsara-ivana-gurgaon"
     },
     {
       "name": "Adani Samsara Vilasa",
       "slug": "adani-samsara-vilasa",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/adani-samsara-vilasa"
+      "url": "https://360ghar.com/locality/adani-samsara-vilasa-gurgaon"
     },
     {
       "name": "Adani Tatva Estates",
       "slug": "adani-tatva-estates",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/adani-tatva-estates"
+      "url": "https://360ghar.com/locality/adani-tatva-estates-gurgaon"
     },
     {
       "name": "Adani Veris",
       "slug": "adani-veris",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/adani-veris"
+      "url": "https://360ghar.com/locality/adani-veris-gurgaon"
     },
     {
       "name": "Adani Watermark",
       "slug": "adani-watermark",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/adani-watermark"
+      "url": "https://360ghar.com/locality/adani-watermark-gurgaon"
     },
     {
       "name": "Apex Apartments",
       "slug": "apex-apartments",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/apex-apartments"
+      "url": "https://360ghar.com/locality/apex-apartments-gurgaon"
     },
     {
       "name": "Apex Our Homes",
       "slug": "apex-our-homes",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/apex-our-homes"
+      "url": "https://360ghar.com/locality/apex-our-homes-gurgaon"
     },
     {
       "name": "Apex Our Homes 1",
       "slug": "apex-our-homes-1",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/apex-our-homes-1"
+      "url": "https://360ghar.com/locality/apex-our-homes-1-gurgaon"
     },
     {
       "name": "ATS Grandstand",
       "slug": "ats-grandstand",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/ats-grandstand"
+      "url": "https://360ghar.com/locality/ats-grandstand-gurgaon"
     },
     {
       "name": "ATS Kocoon",
       "slug": "ats-kocoon",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/ats-kocoon"
+      "url": "https://360ghar.com/locality/ats-kocoon-gurgaon"
     },
     {
       "name": "ATS Marigold",
       "slug": "ats-marigold",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/ats-marigold"
+      "url": "https://360ghar.com/locality/ats-marigold-gurgaon"
     },
     {
       "name": "ATS Tourmaline",
       "slug": "ats-tourmaline",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/ats-tourmaline"
+      "url": "https://360ghar.com/locality/ats-tourmaline-gurgaon"
     },
     {
       "name": "ATS Triumph",
       "slug": "ats-triumph",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/ats-triumph"
+      "url": "https://360ghar.com/locality/ats-triumph-gurgaon"
     },
     {
       "name": "Aura World",
       "slug": "aura-world",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/aura-world"
+      "url": "https://360ghar.com/locality/aura-world-gurgaon"
     },
     {
       "name": "Bestech Altura",
       "slug": "bestech-altura",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/bestech-altura"
+      "url": "https://360ghar.com/locality/bestech-altura-gurgaon"
     },
     {
       "name": "Bestech Park View Ananda",
       "slug": "bestech-park-view-ananda",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/bestech-park-view-ananda"
+      "url": "https://360ghar.com/locality/bestech-park-view-ananda-gurgaon"
     },
     {
       "name": "Bestech Park View City",
       "slug": "bestech-park-view-city",
       "city": "Gurgaon",
-      "url": "https://360ghar.com/locality/bestech-park-view-city"
+      "url": "https://360ghar.com/locality/bestech-park-view-city-gurgaon"
     }
   ]
 }

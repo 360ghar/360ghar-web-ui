@@ -1,0 +1,43 @@
+---
+/** The short list of remaining facts, and compare and print. */
+import type { Locale } from '@/lib/i18n/locale';
+import PropertyActions from './PropertyActions';
+
+type Props = { id: number; title: string; rows: [string, string | number][]; locale: Locale };
+const { id, title, rows, locale } = Astro.props;
+---
+
+<dl class="md">
+  {
+    rows.map(([k, v]) => (
+      <>
+        <dt>{k}</dt>
+        <dd>{v}</dd>
+      </>
+    ))
+  }
+</dl>
+<PropertyActions client:idle id={id} title={title} locale={locale} part="more" />
+
+<style>
+  .md {
+    display: grid;
+    grid-template-columns: minmax(8rem, max-content) 1fr;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 64rem) {
+    .md {
+      grid-template-columns: repeat(2, minmax(9rem, max-content) 1fr);
+    }
+  }
+
+  dt {
+    color: var(--color-ink-600);
+  }
+
+  dd {
+    font-weight: 600;
+  }
+</style>

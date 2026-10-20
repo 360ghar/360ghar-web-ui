@@ -1,0 +1,121 @@
+<!doctype html>
+<!--
+  Shown by /sw.js when a page cannot load because the device is offline.
+  Self-contained on purpose: no fonts, images, scripts or styles from any other
+  file, because none of them are available offline. Colours are copies of the
+  site tokens (ink-950, ink-600, pine-800, kesar-700, mist-100). If you change
+  this file, raise VERSION in /sw.js so the new copy is cached.
+-->
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#ff6b00" />
+    <title>You are offline | 360Ghar</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 1.5rem 1rem;
+        background: #ffffff;
+        color: #0f1d19;
+        font: 1.0625rem/1.55 system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
+      }
+      main {
+        width: 100%;
+        max-width: 30rem;
+      }
+      .brand {
+        margin: 0 0 1.5rem;
+        font-size: 1.125rem;
+        font-weight: 800;
+        color: #b54600;
+      }
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.75rem;
+        line-height: 1.2;
+        text-wrap: balance;
+      }
+      p {
+        margin: 0 0 1.5rem;
+        color: #3c5148;
+        max-width: 34ch;
+      }
+      section + section {
+        margin-top: 1.5rem;
+        padding: 1.25rem;
+        border-radius: 22px;
+        background: #e9f1ed;
+      }
+      section + section h2 {
+        margin: 0 0 0.25rem;
+        font-size: 1.25rem;
+        line-height: 1.3;
+      }
+      section + section p {
+        margin: 0;
+        color: #0f1d19;
+      }
+      button {
+        min-height: 44px;
+        padding: 0 1.25rem;
+        border: 0;
+        border-radius: 12px;
+        background: #1f4a41;
+        color: #ffffff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0f1d19;
+      }
+      button:focus-visible {
+        outline: 3px solid #b54600;
+        outline-offset: 2px;
+      }
+      button[hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="brand">360Ghar</p>
+      <section lang="en">
+        <h1>You are offline</h1>
+        <p>This page needs the internet. Check your connection. It will load again when you are back online.</p>
+        <button type="button" data-retry hidden>Try again</button>
+      </section>
+      <section lang="hi">
+        <h2>आप ऑफ़लाइन हैं</h2>
+        <p>यह पेज खोलने के लिए इंटरनेट चाहिए। अपना कनेक्शन जाँचें। इंटरनेट आते ही पेज खुल जाएगा।</p>
+      </section>
+    </main>
+    <script>
+      (function () {
+        var retry = document.querySelector('[data-retry]');
+        if (retry) {
+          retry.hidden = false;
+          retry.addEventListener('click', function () {
+            location.reload();
+          });
+        }
+        window.addEventListener('online', function () {
+          location.reload();
+        });
+      })();
+    </script>
+  </body>
+</html>

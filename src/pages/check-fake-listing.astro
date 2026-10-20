@@ -1,0 +1,43 @@
+---
+import { getT } from '@/i18n';
+import { localizePath } from '@/lib/i18n/locale';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import FakeListing from '@/features/tools/fake-listing/FakeListing';
+import { FAKE_FAQ, FAKE_HOWTO, FAKE_PAGE } from '@/features/tools/fake-listing/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = FAKE_PAGE[locale];
+const k = (key: string) => t(`common:fakeListingChecker.${key}`);
+const old = {
+  placeholder: k('inputPlaceholder'),
+  redFlagsTitle: k('redFlagsTitle'),
+  redFlags: [1, 2, 3, 4, 5, 6].map((n) => k(`redFlag${n}`)),
+  preferVerified: k('preferVerified'),
+  preferVerifiedDesc: k('preferVerifiedDesc'),
+  browse: k('browseVerifiedProperties'),
+};
+---
+
+<ToolPage
+  tool="fakeListing"
+  title={t('seo:fakeListingChecker.title')}
+  description={c.description}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={FAKE_FAQ[locale]}
+  faqTitle={c.faqTitle}
+  howTo={FAKE_HOWTO[locale]}
+  related={['propertyChecklist', 'verifyOwnership', 'vastu', 'emi']}
+>
+  <FakeListing client:load locale={locale} old={old} />
+  <Fragment slot="body">
+    <h2>{c.beforeTitle}</h2>
+    <p>
+      {c.before}{' '}
+      <a href={localizePath('/property-document-checklist', locale)}>{locale === 'hi' ? 'दस्तावेज़ चेकलिस्ट खोलें' : 'Open the document checklist'}</a>
+    </p>
+  </Fragment>
+</ToolPage>

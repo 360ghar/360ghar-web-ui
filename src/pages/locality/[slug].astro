@@ -1,0 +1,62 @@
+---
+import Page from '@/layouts/Page.astro';
+import { cachePage } from '@/lib/cache';
+import { localizePath } from '@/lib/i18n/locale';
+import { breadcrumbs, canonicalFor, faqPage } from '@/lib/seo/site';
+import { displayName, isNoindexLocality, localitySlug, resolveLocality } from '@/features/localities/data';
+import { localityFaqs } from '@/features/localities/faq';
+import LocalityPage from '@/features/localities/LocalityPage.astro';
+import { loadLocality } from '@/features/localities/load';
+import NotFoundState from '@/ui/states/NotFoundState.astro';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const found = resolveLocality(Astro.params.slug ?? '');
+if (found?.redirect) return Astro.redirect(localizePath(`/locality/${found.redirect}`, locale) + Astro.url.search, 301);
+
+const l = found?.locality ?? null;
+const data = l ? await loadLocality(l) : null;
+if (!l) Astro.response.status = 404;
+cachePage(Astro, 'day', { error: Boolean(data?.failed) });
+
+const name = l ? displayName(l.name) : '';
+const faqs = l ? localityFaqs(name, l.entityType, locale).map((f) => ({ q: f.question, a: f.answer })) : [];
+const slug = l ? localitySlug(l) : '';
+const cityName = l && l.city.toLowerCase() !== 'gurgaon' ? displayName(l.city) : 'Gurugram';
+---
+
+<Page
+  title={l ? (l.seo?.title ?? `${name} ${cityName} - Property Prices, Reviews & Locality Guide | 360Ghar`) : 'Locality not found | 360Ghar'}
+  description={l ? (l.seo?.description ?? l.description ?? '') : 'This locality is not on our map.'}
+  keywords={l?.seo?.keywords}
+  path={l ? `/locality/${slug}` : Astro.url.pathname}
+  noindex={isNoindexLocality(l)}
+  jsonLd={l
+    ? [
+        breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Localities', path: '/localities' }, { name, path: `/locality/${slug}` }], locale),
+        {
+          '@type': 'Place',
+          name,
+          address: { '@type': 'PostalAddress', addressLocality: cityName, addressRegion: 'Haryana', addressCountry: 'IN' },
+          ...(l.geo ? { geo: { '@type': 'GeoCoordinates', latitude: l.geo.lat, longitude: l.geo.lng } } : {}),
+        },
+        { '@type': 'WebPage', name: l.seo?.title ?? name, url: canonicalFor(`/locality/${slug}`, locale), ...(l.lastVerifiedAt ? { dateModified: l.lastVerifiedAt } : {}) },
+        faqPage(faqs),
+      ]
+    : []}
+>
+  {
+    l && data ? (
+      <LocalityPage locality={l} data={data} faqs={faqs} locale={locale} />
+    ) : (
+      <NotFoundState
+        title={hi ? 'यह लोकेलिटी हमारे नक्शे पर नहीं है' : 'This locality is not on our map'}
+        body={hi ? 'सभी लोकेलिटीज़ की सूची देखें।' : 'See the list of all localities.'}
+        action={{ href: localizePath('/localities', locale), label: hi ? 'सभी लोकेलिटीज़' : 'All localities' }}
+        secondary={{ href: localizePath('/properties', locale), label: hi ? 'घर खोजें' : 'Search homes' }}
+      />
+    )
+  }
+</Page>

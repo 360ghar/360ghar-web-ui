@@ -1,0 +1,12 @@
+---
+import PostPage from '@/features/blog/PostPage.astro';
+import { loadPostPage } from '@/features/blog/load';
+import { localizePath } from '@/lib/i18n/locale';
+
+export const prerender = false;
+const locale = Astro.locals.locale;
+const data = await loadPostPage(Astro, (p) => localizePath(p, locale));
+if (data instanceof Response) return data;
+---
+
+<PostPage {...data} />

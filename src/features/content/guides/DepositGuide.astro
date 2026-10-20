@@ -1,0 +1,395 @@
+---
+/** /landlord-not-returning-security-deposit. English body (as on the old site), Hindi page chrome on /hi. */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import { localizer } from '@/lib/i18n/locale';
+import { canonicalFor, faqPage } from '@/lib/seo/site';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import { article, howTo, trail } from '@/features/content/shared/schema';
+import Steps from '@/features/content/shared/Steps.astro';
+import { shared } from '@/features/content/shared/text';
+import { centralLaws, DEPOSIT_DATE, facts, faqs, lawful, moveIn, moveOut, neverLawful, noticeItems, stateRules, steps } from './deposit';
+import TableScroll from '@/features/content/shared/TableScroll.astro';
+import PageArt from '@/features/content/shared/PageArt.astro';
+import PageToc from '@/features/content/shared/PageToc.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const PATH = '/landlord-not-returning-security-deposit';
+const url = canonicalFor(PATH, locale);
+
+const headline = 'Landlord Not Returning Security Deposit? Complete Legal Guide & Steps to Recover';
+const summary =
+  'What to do when a landlord refuses to return the security deposit: central laws, state-wise rules, legal notice, refund timelines, and a 10-step recovery action plan for Indian tenants.';
+const answer =
+  'Send a written demand for refund with an itemised deduction list and a 15-day deadline. If the owner refuses, escalate to the state Rent Authority or Rent Controller, a consumer forum (if a company is involved), or a civil suit for recovery with interest. Keep the rent agreement, deposit receipt, payment proofs, and move-in/move-out photos: courts decide these cases on documents.';
+
+const name = hi ? 'सिक्योरिटी डिपॉज़िट वापसी गाइड' : 'Security Deposit Refund Guide';
+const { crumbs, ld } = trail(locale, [{ name, path: PATH }]);
+const jsonLd = [
+  ld,
+  article({ headline, description: summary, path: PATH, locale, published: DEPOSIT_DATE }),
+  faqPage(faqs),
+  howTo(
+    'How to Recover Your Security Deposit When the Owner Does Not Return It',
+    'Step-by-step action plan for Indian tenants to recover a security deposit withheld by a landlord: documentation, written demand, legal notice, and escalation to rent authorities, consumer forums, and courts.',
+    steps,
+  ),
+  {
+    '@type': 'QAPage',
+    name: faqs[0]!.q,
+    url,
+    mainEntity: {
+      '@type': 'Question',
+      name: faqs[0]!.q,
+      text: faqs[0]!.q,
+      answerCount: 1,
+      datePublished: DEPOSIT_DATE,
+      author: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
+      acceptedAnswer: { '@type': 'Answer', text: answer, url, dateCreated: DEPOSIT_DATE, author: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' } },
+    },
+  },
+];
+// Short labels for the contents list (the body is English on both locales).
+const toc = [
+  { id: 'sd-answer', text: 'Quick answer' },
+  { id: 'sd-facts', text: 'Key facts' },
+  { id: 'sd-keep', text: 'Can the landlord keep it?' },
+  { id: 'sd-laws', text: 'Central laws' },
+  { id: 'sd-states', text: 'State-wise rules' },
+  { id: 'sd-deduct', text: 'What can be deducted' },
+  { id: 'sd-time', text: 'Refund time limits' },
+  { id: 'sd-steps', text: '10-step plan' },
+  { id: 'sd-notice', text: 'The legal notice' },
+  { id: 'sd-protect', text: 'Protect your deposit' },
+  { id: 'sd-faq', text: shared(locale).faqs },
+];
+const heading = hi ? 'मकान मालिक सिक्योरिटी डिपॉज़िट वापस नहीं कर रहा?' : 'Landlord Not Returning Your Security Deposit?';
+---
+
+<Content
+  title={t('seo:securityDepositGuide.title')}
+  description={t('seo:securityDepositGuide.description')}
+  path={PATH}
+  type="article"
+  article={{ published: `${DEPOSIT_DATE}T00:00:00+05:30`, modified: `${DEPOSIT_DATE}T00:00:00+05:30`, section: 'Tenant Rights', tags: ['security deposit', 'tenant rights', 'rental laws', 'Model Tenancy Act'] }}
+  heading={heading}
+  lead={hi
+    ? 'कानून क्या कहता है, राज्य-वार नियम, रिफंड की समय-सीमा और पैसे वापस पाने के 10 कदम। नीचे की जानकारी अंग्रेज़ी में है।'
+    : 'A complete legal guide: what the law says, state-wise rules, central acts, refund timelines, and a 10-step plan to get your money back.'}
+  crumbs={crumbs}
+  jsonLd={jsonLd}
+  wide
+  newsletter
+>
+  <PageArt slot="head" scene="keys" seed="deposit" />
+  <PageToc items={toc.map((x) => ({ ...x, lang: hi && x.id !== 'sd-faq' ? 'en' : undefined }))} title={shared(locale).onThisPage}>
+  <div lang={hi ? 'en' : undefined}>
+    <div class="sd-answer">
+      <Paper seed="sd-answer" tone="mist-100" depth={2} innerClass="sd-answer-inner" as="section">
+        <h2 id="sd-answer" class="sd-answer-title">Quick answer: what to do</h2>
+        <p>
+          A security deposit is <strong>your money</strong> held by the landlord as security. When the tenancy ends, it must be refunded after deducting only unpaid rent, unpaid bills, and documented damage beyond normal wear and tear.
+        </p>
+        <ol>
+          <li>Send a written demand for refund with an itemised deduction list (15-day deadline).</li>
+          <li>Send a formal legal notice by registered post if the owner refuses.</li>
+          <li>Complain to the Rent Authority or Rent Controller, or file a consumer complaint if a company holds the deposit.</li>
+          <li>File a civil suit for recovery with interest; try Lok Adalat or mediation first.</li>
+        </ol>
+      </Paper>
+    </div>
+
+    <section class="sd-facts" aria-labelledby="sd-facts">
+      <h2 id="sd-facts">Key facts at a glance</h2>
+      <div class="sd-cap">
+        <p class="sd-cap-num" aria-hidden="true">2<span>months</span></p>
+        <p class="sd-cap-text">
+          <strong>Deposit cap under the Model Tenancy Act, 2021:</strong> 2 months' rent for a home, 6 months' rent for commercial premises. It applies where the state adopts the Act, and the deposit is returned when vacant possession is handed over.
+        </p>
+      </div>
+      <dl class="sd-fact-list">
+        {
+          facts.map((f) => (
+            <div>
+              <dt>{f.name}</dt>
+              <dd>{f.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <h2 id="sd-keep">Can the landlord keep the deposit?</h2>
+    <p>
+      No, not as a general rule. In Indian law a security deposit is an <strong>advance sum paid by the tenant</strong>, held by the landlord as security against unpaid rent, unpaid utility bills, and damage caused by the tenant beyond normal wear and tear. It remains the tenant's money throughout the tenancy. Once the tenancy ends and the tenant hands over vacant possession, the deposit must be returned, <strong>after deducting only lawful amounts</strong>.
+    </p>
+    <p>
+      A landlord who refuses to refund without a lawful, documented reason is not entitled to keep the money. Even where the landlord claims damage or arrears, the deduction must be genuine, itemised, and backed by receipts or invoices. Courts award interest on deposits wrongfully withheld, which is why the written-demand step matters: it establishes the date from which interest runs.
+    </p>
+
+    <h2 id="sd-laws">Central laws that protect you</h2>
+    <p>
+      Rental housing is a <strong>State subject</strong> under the Seventh Schedule of the Constitution of India, so the day-to-day rules come from state rent control acts. But several central laws and the Model Tenancy Act, 2021 frame your rights at the national level:
+    </p>
+    <TableScroll label="Central laws and acts">
+      <table class="sd-table">
+        <thead>
+          <tr>
+            <th scope="col">Law or act</th>
+            <th scope="col">What it says</th>
+            <th scope="col">How it helps you</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            centralLaws.map(([law, says, helps]) => (
+              <tr>
+                <th scope="row">{law}</th>
+                <td>{says}</td>
+                <td>{helps}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </TableScroll>
+
+    <h2 id="sd-states">State-wise deposit rules</h2>
+    <p>
+      Except in Tamil Nadu and states that have adopted the Model Tenancy Act framework, most Indian states do <strong>not</strong> cap the deposit by statute. The table separates <strong>what the law says</strong> from <strong>what the market practises</strong>, so you know what you can legally insist on.
+    </p>
+    <TableScroll label="State-wise security deposit rules">
+      <table class="sd-table sd-states">
+        <thead>
+          <tr>
+            <th scope="col">State or city</th>
+            <th scope="col">Governing law</th>
+            <th scope="col">Statutory deposit cap</th>
+            <th scope="col">Market practice</th>
+            <th scope="col">Refund forum</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            stateRules.map(([state, law, cap, practice, forum]) => (
+              <tr>
+                <th scope="row">{state}</th>
+                <td>{law}</td>
+                <td>{cap}</td>
+                <td class="sd-nowrap">{practice}</td>
+                <td>{forum}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </TableScroll>
+    <p class="sd-warn">
+      <Icon name="alert" size={18} />
+      <span>
+        <strong>Before you rely on any figure:</strong> state tenancy laws change often, and states keep notifying rules under the Model Tenancy Act framework. Check the current position on your state's housing or revenue department portal, or with a local lawyer, before you act. Where no cap exists, you can always demand the full deposit minus lawful deductions under general contract and property law.
+      </span>
+    </p>
+
+    <h2 id="sd-deduct">What the landlord can deduct</h2>
+    <p>Deductions are lawful only if they are genuine, itemised, and documented. If the owner refuses to give you a written deduction statement with receipts, the deduction is almost certainly not lawful.</p>
+    <div class="sd-two">
+      <section>
+        <h3><Icon name="check" size={20} class="sd-ok" /> Lawful deductions</h3>
+        <ul>{lawful.map((x) => <li>{x}</li>)}</ul>
+      </section>
+      <section>
+        <h3><Icon name="close" size={20} class="sd-no" /> Never lawful</h3>
+        <ul>{neverLawful.map((x) => <li>{x}</li>)}</ul>
+      </section>
+    </div>
+
+    <h2 id="sd-time">How long the owner can take</h2>
+    <ul>
+      <li><strong>Model Tenancy Act framework:</strong> the deposit is returned when the landlord takes over vacant possession.</li>
+      <li><strong>Tamil Nadu (statutory):</strong> refund within <strong>one month</strong> of vacation, after due deductions (Section 11, Tenancy Act 2017).</li>
+      <li><strong>Accepted practice elsewhere:</strong> 15-30 days after handover, used to verify final bills and inspect the property.</li>
+      <li><strong>Your agreement:</strong> if the rent agreement fixes a refund period, that clause governs. Cite it in your demand letter.</li>
+    </ul>
+    <p>Delays beyond a reasonable window entitle you to interest: courts commonly award 9-12% per annum from the date of vacation on wrongfully withheld deposits. State it in your notice.</p>
+
+    <h2 id="sd-steps">10-step plan to get your deposit back</h2>
+    <p>Work through these steps in order. Most deposits are recovered at step 2 or 3; the legal steps exist to make the owner take the demand seriously.</p>
+    <Steps items={steps} cols={2} />
+
+    <h2 id="sd-notice">What your legal notice must say</h2>
+    <p>A legal notice is not a court document. It is a formal demand that puts the owner on notice and creates the paper trail you will need in court. It should include:</p>
+    <ul>{noticeItems.map((x) => <li>{x}</li>)}</ul>
+    <p>Send it by registered post with acknowledgement due, and keep a copy with the postal receipt. Many owners refund on receiving a lawyer's notice because the cost of defending a suit, plus interest, exceeds the deposit.</p>
+
+    <h2 id="sd-protect">Protect your deposit from day one</h2>
+    <p>The strongest protection is documentation created <em>before</em> the dispute starts. Follow this checklist at move-in and move-out:</p>
+    <div class="sd-two">
+      <section>
+        <h3>At move-in</h3>
+        <ul>{moveIn.map((x) => <li>{x}</li>)}</ul>
+      </section>
+      <section>
+        <h3>At move-out</h3>
+        <ul>{moveOut.map((x) => <li>{x}</li>)}</ul>
+      </section>
+    </div>
+
+    <h2 id="sd-faq">{shared(locale).faqs}</h2>
+    <Faq items={faqs} open={0} />
+  </div>
+
+  <div class="page-actions">
+    <a class="btn btn-primary btn-lg" href={L('/gurgaon/rent/flats')}>
+      {hi ? 'वेरिफाइड किराये के घर देखें' : 'Browse verified rentals'}
+      <Icon name="arrow-up-right" size={18} class="arrow" />
+    </a>
+    <a class="link" href={L('/rent-receipt')}>{hi ? 'किराये की रसीद बनाएँ' : 'Make a rent receipt'}</a>
+    <a class="link" href={L('/contact')}>{t('common:nav.contact')}</a>
+  </div>
+
+  <p class="sd-disclaimer" lang={hi ? 'en' : undefined}>
+    <strong>Disclaimer:</strong> this page is general information for education, not legal advice. Rental laws in India vary by state and change often. Check the current position in your state with the official authorities or a qualified lawyer before you take any legal step. For state gazette notifications, see our <a href={L('/regulatory-updates')}>regulatory updates</a>.
+  </p>
+  </PageToc>
+</Content>
+
+<style>
+  .sd-answer :global(.sd-answer-inner) {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    color: var(--color-ink-950);
+  }
+
+  .sd-answer .sd-answer-title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+  }
+
+  .sd-answer p,
+  .sd-answer li {
+    color: var(--color-ink-950);
+  }
+
+  /* The one real number on the page, set big. */
+  .sd-cap {
+    display: grid;
+    gap: 0.5rem 1.5rem;
+    align-items: center;
+    margin-top: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .sd-cap {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+  }
+
+  .sd-facts .sd-cap-num {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(5rem, 3rem + 8vw, 8rem);
+    line-height: 0.85;
+    color: var(--color-kesar-600);
+  }
+
+  .sd-cap-num span {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .sd-facts .sd-cap-text {
+    max-width: 46ch;
+    font-size: 1.0625rem;
+  }
+
+  .sd-fact-list {
+    display: grid;
+    gap: 1rem 2rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .sd-fact-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .sd-fact-list dt {
+    font-weight: 800;
+  }
+
+  .sd-fact-list dd {
+    margin-top: 0.125rem;
+    color: var(--color-ink-800);
+  }
+
+  .sd-table th[scope='row'] {
+    min-width: 11rem;
+    background: transparent;
+  }
+
+  .sd-table td {
+    min-width: 12rem;
+  }
+
+  .sd-states td.sd-nowrap {
+    min-width: 8rem;
+  }
+
+  .sd-warn {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+    margin-top: 1rem;
+    padding: 1rem 1.125rem;
+    background: var(--color-haldi-100);
+    border-radius: var(--radius-md);
+    color: var(--color-ink-950);
+  }
+
+  .sd-warn :global(svg) {
+    flex: none;
+    margin-top: 0.125rem;
+    color: var(--color-haldi-700);
+  }
+
+  .sd-two {
+    display: grid;
+    gap: 0 2.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .sd-two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .sd-two h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .sd-two :global(.sd-ok) {
+    color: var(--color-leaf-700);
+  }
+
+  .sd-two :global(.sd-no) {
+    color: var(--color-chili-700);
+  }
+
+  p.sd-disclaimer {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+</style>

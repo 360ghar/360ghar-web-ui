@@ -1,0 +1,96 @@
+---
+import { getT, pick } from '@/i18n';
+import { localizePath } from '@/lib/i18n/locale';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import VastuChecker from '@/features/tools/vastu/VastuChecker';
+import { VASTU_KEYS, VASTU_PAGE } from '@/features/tools/vastu/content';
+import { noDash } from '@/features/tools/area/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const tr = getT(locale);
+// The source text uses em dashes; the site style does not.
+const t = (k: string) => noDash(tr(k));
+const c = VASTU_PAGE[locale];
+const all = pick(locale, 'tools:vastu');
+const strings = Object.fromEntries(VASTU_KEYS.map((k) => [k, typeof all[k] === 'string' ? all[k] : '']));
+const faqs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => ({ q: t(`tools:vastu.faqs.q${i}.question`), a: t(`tools:vastu.faqs.q${i}.answer`) }));
+const steps = [1, 2, 3, 4].map((i) => ({ name: t(`tools:vastu.howToSteps.step${i}.name`), text: t(`tools:vastu.howToSteps.step${i}.text`) }));
+---
+
+<ToolPage
+  tool="vastu"
+  title={t('tools:vastu.title')}
+  description={t('tools:vastu.description')}
+  keywords={t('tools:vastu.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={faqs}
+  faqTitle={t('tools:vastu.faqTitle')}
+  howTo={{ name: c.howToName, description: c.howToDesc, steps }}
+  related={['designBlueprint', 'aiDesignStudio', 'propertyChecklist', 'areaCalculator', 'emi']}
+>
+  <VastuChecker client:load locale={locale} strings={strings} />
+  <Fragment slot="body">
+    <p>
+      <a href={localizePath('/design-blueprint', locale)}>{c.fromPlanner}</a>
+    </p>
+    <h2>{t('tools:vastu.whatIsVastu')}</h2>
+    <p>{t('tools:vastu.whatIsVastuDesc')}</p>
+    <h2>{c.tipsTitle}</h2>
+    <ul class="vastu-rules">
+      {
+        // The zone codes follow the order of the tips in tools.json: entrance, kitchen, master bedroom, centre.
+        ['N · E', 'SE', 'SW', 'C'].map((zone, i) => (
+          <li>
+            <b>{zone}</b>
+            <span>{t(`tools:vastu.vastuTip${i + 1}`)}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <h2>{t('tools:vastu.howToCheckOnlineTitle')}</h2>
+    <p>{t('tools:vastu.howToCheckOnlineDesc')}</p>
+    <ol>
+      <li>{t('tools:vastu.howToCheckOnlineStep1')}</li>
+      <li>{t('tools:vastu.howToCheckOnlineStep2')}</li>
+      <li>{t('tools:vastu.howToCheckOnlineStep3')}</li>
+    </ol>
+    <h2>{t('tools:vastu.vastuFlatVsHouseTitle')}</h2>
+    <p>{t('tools:vastu.vastuFlatVsHouseDesc')}</p>
+  </Fragment>
+</ToolPage>
+
+<style>
+  /* Four rules, each led by the zone it is about. Written with .tool-prose so it beats the plain list rules there. */
+  :global(.tool-prose) .vastu-rules {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 40rem) {
+    :global(.tool-prose) .vastu-rules {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem 1.5rem;
+    }
+  }
+
+  :global(.tool-prose) .vastu-rules li {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0 0.75rem;
+    margin: 0;
+  }
+
+  :global(.tool-prose) .vastu-rules b {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color-kesar-700);
+  }
+</style>

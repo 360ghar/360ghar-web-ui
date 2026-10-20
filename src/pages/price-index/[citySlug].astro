@@ -1,0 +1,16 @@
+---
+import prices from '@/data/priceContext.json';
+import PriceIndexPage from '@/features/data-hub/PriceIndexPage.astro';
+
+export const prerender = true;
+
+// Five cities. Any other slug falls through to the catch-all route, which returns a real 404.
+export function getStaticPaths() {
+  return Object.keys(prices).map((citySlug) => ({ params: { citySlug } }));
+}
+
+const locale = Astro.locals.locale;
+const slug = Astro.params.citySlug as keyof typeof prices;
+---
+
+<PriceIndexPage locale={locale} slug={slug} />

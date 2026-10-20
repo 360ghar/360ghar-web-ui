@@ -1,0 +1,15 @@
+---
+import CareerPage from '@/features/content/careers/CareerPage.astro';
+import { OPENINGS } from '@/features/content/careers/data';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return OPENINGS.map((opening) => ({ params: { slug: opening.slug }, props: { opening } }));
+}
+
+const locale = Astro.locals.locale;
+const { opening } = Astro.props;
+---
+
+<CareerPage locale={locale} opening={opening} />

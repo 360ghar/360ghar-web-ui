@@ -1,0 +1,715 @@
+---
+/**
+ * /blog/:title. The post is rendered on the server with cleaned HTML.
+ * The route loads the data and handles the 301 and the status (loadPostPage).
+ */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import { imageUrl, srcSet } from '@/lib/format';
+import { localizer } from '@/lib/i18n/locale';
+import { absoluteUrl, breadcrumbs } from '@/lib/seo/site';
+import Icon from '@/ui/icons/Icon.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import { coverScene, coverScenes, hasRealCover } from './art/cover';
+import { SceneArt } from './art/SceneArt';
+import { paperArt } from './art/scenes';
+import { BlogCardView, formatDate, postDate } from './BlogCardView';
+import { prepareContent, readingMinutes } from './content';
+import { postTools } from './tools';
+import type { loadPostPage } from './load';
+import type { components } from '@/lib/api/schema';
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const t = getT(locale);
+const L = localizer(locale);
+type Props = Exclude<Awaited<ReturnType<typeof loadPostPage>>, Response>;
+const { post, notFound, related } = Astro.props;
+const body = post ? prepareContent(post.content || post.excerpt, post.title) : null;
+const minutes = post ? (post.reading_time_minutes ?? readingMinutes(post.word_count ?? body!.words)) : 0;
+const date = post ? postDate(post) : null;
+const category = post?.categories?.[0];
+const tags = (post?.tags ?? []).filter((x): x is typeof x & { slug: string; name: string } => Boolean(x.slug && x.name));
+// The API types sources as plain objects; they follow BlogSource.
+const sources = (post?.sources ?? []) as components['schemas']['BlogSource'][];
+const path = post ? `/blog/${post.slug}` : Astro.url.pathname;
+const url = absoluteUrl(L(path));
+const image = post ? (post.og_image_url ?? post.cover_image_url ?? null) : null;
+const rawDesc = post ? (post.meta_description || post.excerpt || '').replace(/\s+/g, ' ').trim() : '';
+const description = post ? (rawDesc.length > 155 ? `${rawDesc.slice(0, 152).trim()}...` : rawDesc) || post.title : hi ? 'यह पोस्ट नहीं मिली।' : 'This post was not found.';
+const title = post ? post.meta_title || (post.title.includes('360Ghar') ? post.title : `${post.title} | 360Ghar`) : hi ? 'पोस्ट नहीं मिली | 360Ghar' : 'Post not found | 360Ghar';
+
+// Tools that match the post's words and category.
+const tools = post ? postTools(post.title, tags.map((x) => x.name).join(' '), category?.slug ?? '') : [];
+const realCover = hasRealCover(post?.cover_image_url);
+const toc = body?.toc ?? [];
+const hasToc = toc.length >= 3;
+// Related covers differ from this post's cover and from each other.
+const relatedScenes = post ? coverScenes([post, ...related]).slice(1) : [];
+
+const shareUrl = `${url}?utm_source=share&utm_medium=social&utm_campaign=blog_share`;
+const share = post
+  ? [
+      { brand: 'whatsapp', label: 'WhatsApp', href: `https://wa.me/?text=${encodeURIComponent(`${post.title} ${shareUrl}`)}` },
+      { brand: 'facebook', label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}` },
+      { brand: 'linkedin', label: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}` },
+      { brand: 'x', label: 'X', href: `https://x.com/intent/post?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(shareUrl)}` },
+    ]
+  : [];
+
+const crumbs = [
+  { name: hi ? 'होम' : 'Home', path: '/' },
+  { name: hi ? 'ब्लॉग' : 'Blog', path: '/blog' },
+  ...(post ? [{ name: post.title, path }] : []),
+];
+const schemaMarkup = post?.seo_metadata?.schema_markup;
+const jsonLd = post
+  ? [
+      {
+        ...(schemaMarkup && typeof schemaMarkup === 'object' ? schemaMarkup : {}),
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description,
+        image: image ? [image] : undefined,
+        datePublished: date ?? undefined,
+        dateModified: post.updated_at ?? date ?? undefined,
+        author: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
+        publisher: { '@type': 'Organization', name: '360Ghar', logo: { '@type': 'ImageObject', url: 'https://360ghar.com/assets/images/logo/logo.png' } },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+        articleSection: category?.name,
+        keywords: [post.focus_keyword, ...tags.map((x) => x.name)].filter(Boolean).join(', ') || undefined,
+        wordCount: post.word_count ?? body!.words,
+        inLanguage: 'en-IN',
+      },
+      breadcrumbs(crumbs, locale),
+    ]
+  : [];
+const heading = notFound ? (hi ? 'यह पोस्ट नहीं मिली' : 'This post is not here') : hi ? 'अभी यह पोस्ट लोड नहीं हो सकी' : 'We could not load this post';
+---
+
+{
+  post ? (
+    <Content
+      title={title}
+      description={description}
+      path={path}
+      type="article"
+      image={image}
+      keywords={[post.focus_keyword, category?.name, 'real estate blog', 'property tips', '360Ghar'].filter(Boolean).join(', ')}
+      article={{ published: date, modified: post.updated_at ?? date, section: category?.name ?? null, tags: tags.map((x) => x.name) }}
+      jsonLd={jsonLd}
+      heading={post.title}
+      longHeading
+      wide
+      crumbs={crumbs}
+    >
+      <p slot="head" class="post-meta">
+        {category?.slug && (
+          <a href={`${L('/blog')}?category=${encodeURIComponent(category.slug)}`}>{category.name}</a>
+        )}
+        {date && <time datetime={date}>{formatDate(date, locale)}</time>}
+        <span>{hi ? `${minutes} मिनट पढ़ें` : `${minutes} min read`}</span>
+      </p>
+
+      <div class:list={['post-hero', !realCover && 'is-art']}>
+        {
+          realCover ? (
+            <img
+              src={imageUrl(post.cover_image_url!, 960)}
+              srcset={srcSet(post.cover_image_url!, [480, 720, 960, 1400])}
+              sizes="(min-width: 80rem) 64rem, 92vw"
+              alt=""
+              width="1400"
+              height="788"
+              fetchpriority="high"
+              decoding="async"
+            />
+          ) : (
+            <SceneArt art={paperArt(coverScene(post), post.slug, { wide: true })} fit="strip" />
+          )
+        }
+      </div>
+
+      <div class:list={['post-grid', hasToc && 'has-toc']}>
+        {
+          hasToc && (
+            <details class="post-toc-small">
+              <summary>{hi ? 'इस पोस्ट में' : 'In this post'}</summary>
+              <ol>
+                {toc.map((h) => (
+                  <li>
+                    <a href={`#${h.id}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ol>
+            </details>
+          )
+        }
+
+        <div class="post-main">
+          <div class="post-body" set:html={body!.html} />
+
+          {tags.length > 0 && (
+            <ul class="post-tags" role="list" aria-label={hi ? 'टैग' : 'Tags'}>
+              {tags.map((x) => (
+                <li>
+                  <a href={`${L('/blog')}?tag=${encodeURIComponent(x.slug)}`}>#{x.name}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {sources.length > 0 && (
+            <section class="post-section" aria-labelledby="post-sources">
+              <h2 id="post-sources" class="post-h2">{hi ? 'स्रोत' : 'Sources'}</h2>
+              <ol class="post-sources">
+                {sources.map((s) => {
+                  const ok = /^https?:\/\//i.test(s.url);
+                  let host = s.url;
+                  try {
+                    host = new URL(s.url).hostname;
+                  } catch {
+                    // Keep the raw text.
+                  }
+                  return (
+                    <li>
+                      {ok ? (
+                        <a href={s.url} target="_blank" rel="noopener noreferrer">
+                          {s.name || host}
+                        </a>
+                      ) : (
+                        <span>{s.name || host}</span>
+                      )}
+                      {s.retrieved_at && <span class="text-ink-600"> ({hi ? 'देखा' : 'accessed'} {formatDate(s.retrieved_at, locale)})</span>}
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
+          )}
+        </div>
+
+        <aside class="post-rail" aria-label={hi ? 'इस पोस्ट के साथ' : 'With this post'}>
+          {
+            hasToc && (
+              <nav class="post-toc-rail" aria-labelledby="post-toc-title">
+                <h2 id="post-toc-title" class="post-rail-h">{hi ? 'इस पोस्ट में' : 'In this post'}</h2>
+                <ol>
+                  {toc.map((h) => (
+                    <li>
+                      <a href={`#${h.id}`}>{h.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )
+          }
+
+          {
+            tools.length > 0 && (
+              <section aria-labelledby="post-tools">
+                <h2 id="post-tools" class="post-rail-h">{hi ? 'काम के टूल' : 'Tools for this'}</h2>
+                <ul class="post-tools" role="list">
+                  {tools.map((x) => (
+                    <li>
+                      <a href={L(x.href)}>
+                        {x.icon && <Icon name={x.icon} size={22} class="post-tool-icon" />}
+                        <span class="post-tool-text">
+                          <span class="post-tool-name">{t(x.key)}</span>
+                          {x.desc && <span class="post-tool-desc">{x.desc[locale]}</span>}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+
+          <div class="post-share">
+            <h2 class="post-rail-h">{hi ? 'शेयर करें' : 'Share'}</h2>
+            <ul role="list">
+              {share.map((s) => (
+                <li>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`${hi ? 'शेयर करें:' : 'Share on'} ${s.label}`}>
+                    <Icon name={`brand:${s.brand}` as 'brand:x'} size={20} />
+                  </a>
+                </li>
+              ))}
+              <li>
+                <button type="button" class="post-copy" data-url={shareUrl} data-done={hi ? 'लिंक कॉपी हो गया' : 'Link copied'} aria-label={hi ? 'लिंक कॉपी करें' : 'Copy link'}>
+                  <Icon name="copy" size={20} />
+                </button>
+              </li>
+            </ul>
+            <span class="post-copied text-sm text-ink-600" role="status" />
+          </div>
+        </aside>
+      </div>
+
+      {related.length > 0 && (
+        <section class="post-related-wrap" aria-labelledby="post-related">
+          <h2 id="post-related" class="post-h2">{hi ? 'आगे पढ़ें' : 'Read next'}</h2>
+          <ul class="post-related" role="list">
+            {related.map((p, i) => (
+              <li>
+                <BlogCardView post={p} locale={locale} scene={relatedScenes[i]} sizes="(min-width: 64rem) 22rem, (min-width: 48rem) 30vw, 92vw" />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <p class="post-end">
+        <a class="btn btn-primary" href={L('/properties')}>
+          {hi ? 'गुरुग्राम में घर देखें' : 'See homes in Gurugram'}
+          <Icon name="arrow-up-right" size={18} class="arrow" />
+        </a>
+        <a class="link" href={L('/blog')}>{hi ? 'सभी पोस्ट' : 'All posts'}</a>
+      </p>
+    </Content>
+  ) : (
+    <Content title={title} description={description} noindex heading={heading}>
+      <StateBlock
+        scene={notFound ? 'notFound' : 'offline'}
+        title={notFound ? (hi ? 'पता बदल गया होगा या पोस्ट हट गई' : 'It may have moved or been removed') : hi ? 'हमारे सर्वर ने जवाब नहीं दिया' : 'Our server did not answer'}
+        body={notFound ? (hi ? 'ब्लॉग में दूसरी गाइड देखें।' : 'See the other guides on the blog.') : hi ? 'एक मिनट बाद कोशिश करें।' : 'Try again in a minute.'}
+        action={notFound ? { href: L('/blog'), label: hi ? 'ब्लॉग देखें' : 'Go to the blog' } : { href: Astro.url.pathname, label: hi ? 'फिर कोशिश करें' : 'Try again', icon: 'retry' }}
+      />
+    </Content>
+  )
+}
+
+<script>
+  for (const b of document.querySelectorAll<HTMLButtonElement>('.post-copy')) {
+    b.addEventListener('click', async () => {
+      const out = b.closest('.post-share')?.querySelector('.post-copied');
+      try {
+        if (navigator.share) await navigator.share({ title: document.title, url: b.dataset.url });
+        else {
+          await navigator.clipboard.writeText(b.dataset.url ?? location.href);
+          if (out) out.textContent = b.dataset.done ?? '';
+        }
+      } catch {
+        // Share sheet closed or clipboard blocked: nothing to do.
+      }
+    });
+  }
+</script>
+
+<style>
+  /* The prose styles of the layout give lists bullets; these lists are UI. */
+  .post-tags,
+  .post-share ul,
+  .post-tools,
+  .post-related,
+  .post-toc-rail ol {
+    list-style: none;
+    padding: 0;
+  }
+
+  .post-tags li,
+  .post-share li,
+  .post-tools li,
+  .post-related li,
+  .post-toc-rail li {
+    margin: 0;
+    max-width: none;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    color: var(--color-ink-600);
+    font-weight: 600;
+  }
+
+  .post-meta a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-block: -0.625rem;
+    color: var(--color-kesar-700);
+    text-decoration: none;
+  }
+
+  .post-meta a:hover {
+    text-decoration: underline;
+  }
+
+  /* One grid for the whole post: the hero, the body with its rail, and
+     "Read next" all span the page width, so they share one right edge. */
+  .post-hero {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-100);
+  }
+
+  .post-hero img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .post-hero.is-art {
+    aspect-ratio: 16 / 9;
+  }
+
+  @media (min-width: 48rem) {
+    .post-hero.is-art {
+      aspect-ratio: 16 / 7;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .post-hero img {
+      aspect-ratio: 21 / 9;
+    }
+
+    .post-hero.is-art {
+      aspect-ratio: 3 / 1;
+    }
+  }
+
+  /* Reading column, and a rail at the side from 64rem. */
+  .post-grid {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  @media (min-width: 64rem) {
+    .post-grid {
+      grid-template-columns: minmax(0, 1fr) 18rem;
+      gap: 4rem;
+      margin-top: 2.75rem;
+    }
+
+    .post-rail {
+      position: sticky;
+      top: 96px;
+      align-self: start;
+    }
+
+    .post-toc-small {
+      display: none;
+    }
+  }
+
+  @media (max-width: 63.99rem) {
+    .post-toc-rail {
+      display: none;
+    }
+  }
+
+  .post-toc-small {
+    padding: 0.25rem 1rem 0.75rem;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+  }
+
+  .post-toc-small summary {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .post-toc-small ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+
+  .post-toc-small li + li {
+    margin-top: 0.375rem;
+  }
+
+  .post-main {
+    min-width: 0;
+    max-width: 44rem;
+  }
+
+  .post-body {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  @media (min-width: 64rem) {
+    .post-body {
+      font-size: 1.125rem;
+    }
+  }
+
+  .post-body :global(:where(p, li)) {
+    max-width: 66ch;
+    color: var(--color-ink-800);
+  }
+
+  /* The first paragraph opens the post a little larger. */
+  .post-body :global(> p:first-child) {
+    font-size: 1.125em;
+    line-height: 1.6;
+    color: var(--color-ink-950);
+  }
+
+  .post-body :global(h2) {
+    margin-top: 2.75rem;
+    scroll-margin-top: 5.5rem;
+  }
+
+  .post-body :global(:where(p, ul, ol, table, blockquote, figure, pre)) + :global(:where(p, ul, ol, table, blockquote, figure, pre, h2, h3)) {
+    margin-top: 1.125em;
+  }
+
+  .post-body :global(table) {
+    display: block;
+    overflow-x: auto;
+    font-size: 0.9375rem;
+  }
+
+  .post-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+  }
+
+  .post-body :global(blockquote) {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+    color: var(--color-ink-800);
+  }
+
+  .post-body :global(pre) {
+    overflow-x: auto;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-ink-100);
+    font-size: 0.875rem;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .post-tags a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-ink-800);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .post-tags a:hover {
+    color: var(--color-kesar-700);
+    text-decoration: underline;
+  }
+
+  .post-section {
+    margin-top: 3rem;
+  }
+
+  .post-h2 {
+    font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+    margin-bottom: 1rem;
+  }
+
+  .post-sources {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+
+  .post-sources li + li {
+    margin-top: 0.375rem;
+  }
+
+  /* Rail: contents, tools and share. On phones it follows the post. */
+  .post-rail {
+    display: grid;
+    gap: 2rem;
+    align-content: start;
+  }
+
+  .post-rail-h {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: var(--color-ink-950);
+  }
+
+  .post-toc-rail ol {
+    display: grid;
+    counter-reset: toc;
+  }
+
+  .post-toc-rail a {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    min-height: 44px;
+    padding-block: 0.625rem;
+    color: var(--color-ink-800);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .post-toc-rail a::before {
+    counter-increment: toc;
+    content: counter(toc);
+    flex: none;
+    width: 1.25rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-kesar-700);
+  }
+
+  .post-toc-rail a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .post-tools {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .post-tools a {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    min-height: 44px;
+    padding: 0.625rem 0;
+    color: var(--color-ink-950);
+    text-decoration: none;
+  }
+
+  .post-tools :global(.post-tool-icon) {
+    flex: none;
+    color: var(--color-kesar-700);
+  }
+
+  .post-tool-text {
+    display: grid;
+    gap: 0.125rem;
+  }
+
+  .post-tool-name {
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .post-tool-desc {
+    color: var(--color-ink-600);
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+
+  .post-tools a:hover .post-tool-name {
+    color: var(--color-kesar-700);
+  }
+
+  @media (min-width: 40rem) and (max-width: 63.99rem) {
+    .post-tools {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+  }
+
+  .post-share ul {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: -0.625rem;
+  }
+
+  .post-share a,
+  .post-copy {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: none;
+    color: var(--color-ink-800);
+    cursor: pointer;
+    transition: color 140ms var(--ease-paper);
+  }
+
+  .post-share a:hover,
+  .post-copy:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .post-related-wrap {
+    margin-top: clamp(3.5rem, 7vw, 5rem);
+  }
+
+  .post-related {
+    display: grid;
+    gap: 2rem 1.5rem;
+  }
+
+  /* Tablets: one card per row, the scene at the left, so titles keep two lines. */
+  @media (min-width: 40rem) and (max-width: 63.99rem) {
+    .post-related :global(.blog-card) {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      align-items: center;
+      gap: 1.25rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .post-related {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* The three cards share lines: meta, title and excerpt start at the same height. */
+    .post-related li,
+    .post-related :global(.blog-card) {
+      display: grid;
+      grid-row: span 4;
+      grid-template-rows: subgrid;
+      row-gap: 0.375rem;
+    }
+
+    .post-related :global(.blog-card > div:last-child) {
+      display: contents;
+    }
+
+    .post-related :global(.blog-card-img) {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .post-related :global(.blog-card-title) {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+
+  .post-related :global(.blog-card-title a) {
+    color: var(--color-ink-950);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .post-related :global(.blog-card-title a:hover) {
+    color: var(--color-kesar-700);
+  }
+
+  .post-end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 3.5rem;
+    padding-bottom: 3rem;
+  }
+</style>

@@ -1,0 +1,269 @@
+---
+/** /careers (SSG). Open roles from ./data; apply by e-mail. The old search and category filter (for 3 roles) is not kept. */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { careerFaqStructuredData } from '@/lib/seo/legacy/structuredData.js';
+import { canonicalFor, faqPage } from '@/lib/seo/site';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import { trail, webPage } from '@/features/content/shared/schema';
+import { shared, undash } from '@/features/content/shared/text';
+import { CAREERS_EMAIL, jobPosting, OPEN_ROLES } from './data';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const PATH = '/careers';
+
+const H = byLocale(locale, {
+  en: {
+    name: 'Careers',
+    h1: 'Internships at 360Ghar',
+    lead: 'Work on real products in Gurugram, with direct guidance from the founding team.',
+    open: 'internships open now, all in Gurugram.',
+    view: 'View the role',
+    get: "What you'll get",
+    apply: 'How to apply',
+    applyBody: 'Email your resume and a short note about yourself. Put the role in the subject line.',
+  },
+  hi: {
+    name: 'करियर',
+    h1: '360Ghar में इंटर्नशिप',
+    lead: 'गुरुग्राम में असली प्रोडक्ट पर काम करें, सीधे फ़ाउंडिंग टीम के साथ।',
+    open: 'इंटर्नशिप अभी खुली हैं, सभी गुरुग्राम में।',
+    view: 'भूमिका देखें',
+    get: 'आपको क्या मिलेगा',
+    apply: 'आवेदन कैसे करें',
+    applyBody: 'अपना रिज़्यूमे और अपने बारे में एक छोटा नोट ईमेल करें। विषय में भूमिका का नाम लिखें।',
+  },
+});
+
+const perks = [
+  { name: 'Real ownership', text: 'Ship features real users use, not side projects.' },
+  { name: 'Hands-on mentoring', text: 'Direct guidance from the founding team. No layers, just learning.' },
+  { name: 'Fast growth', text: 'Build with real feedback loops, the fastest way to level up.' },
+];
+const faqs = (careerFaqStructuredData.mainEntity as { name: string; acceptedAnswer: { text: string } }[]).map((q) => ({ q: q.name, a: undash(q.acceptedAnswer.text) }));
+
+const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
+const jsonLd = [
+  {
+    ...webPage({ name: 'Internships at 360Ghar', description: t('seo:careers.description'), path: PATH, locale, type: 'CollectionPage' }),
+    hasPart: OPEN_ROLES.map((o) => jobPosting(o, canonicalFor(`/careers/${o.slug}`, locale))),
+  },
+  faqPage(faqs),
+  ld,
+];
+---
+
+<Content title={t('seo:careers.title')} description={t('seo:careers.description')} path={PATH} heading={H.h1} lead={H.lead} crumbs={crumbs} wide jsonLd={jsonLd} newsletter>
+  <PageArt slot="head" scene="desk" />
+  <p class="jobs-count"><span class="jobs-count-num tabular">{OPEN_ROLES.length}</span> <span class="jobs-count-text">{H.open}</span></p>
+
+  <ul class="jobs" role="list" lang={hi ? 'en' : undefined}>
+    {
+      OPEN_ROLES.map((o) => (
+        <li>
+          <Paper seed={`job-${o.slug}`} tone="paper" depth={2} innerClass="job" as="article">
+            <h2 class="job-title">
+              <a href={L(`/careers/${o.slug}`)}>{o.title}</a>
+            </h2>
+            <p class="job-meta">
+              <span><Icon name="pin" size={16} />{o.location}</span>
+              <span><Icon name="clock" size={16} />{o.duration}</span>
+            </p>
+            <p class="job-body">{o.description}</p>
+            <span class="job-link" aria-hidden="true">
+              {H.view}
+              <Icon name="arrow-up-right" size={16} class="arrow" />
+            </span>
+          </Paper>
+        </li>
+      ))
+    }
+  </ul>
+
+  <section class="jobs-block" aria-labelledby="jobs-get">
+    <h2 id="jobs-get">{H.get}</h2>
+    <dl class="jobs-perks" lang={hi ? 'en' : undefined}>
+      {
+        perks.map((p) => (
+          <div>
+            <dt>{p.name}</dt>
+            <dd>{p.text}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="jobs-block jobs-apply" aria-labelledby="jobs-apply">
+    <h2 id="jobs-apply">{H.apply}</h2>
+    <p>{H.applyBody}</p>
+    <a class="link" href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>
+  </section>
+
+  <section class="jobs-block" aria-labelledby="jobs-faq">
+    <h2 id="jobs-faq">{shared(locale).faqs}</h2>
+    <div lang={hi ? 'en' : undefined}><Faq items={faqs} /></div>
+  </section>
+</Content>
+
+<style>
+  .jobs-count {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .jobs-count .jobs-count-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(4.5rem, 2.5rem + 8vw, 8rem);
+    line-height: 0.85;
+    color: var(--color-kesar-600);
+  }
+
+  .jobs-count .jobs-count-text {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    line-height: 1.15;
+    color: var(--color-ink-950);
+  }
+
+  ul.jobs {
+    display: grid;
+    gap: 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jobs > li {
+    display: grid;
+    max-width: none;
+    margin: 0;
+  }
+
+  .jobs > li > :global(*) {
+    display: grid;
+  }
+
+  .jobs :global(.job) {
+    position: relative;
+    display: grid;
+    gap: 0.625rem;
+    align-content: start;
+    padding: 1.5rem;
+  }
+
+  .jobs .job-title {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .jobs .job-title a {
+    color: var(--color-ink-950);
+    text-decoration: none;
+  }
+
+  /* The whole sheet is the link target. */
+  .jobs .job-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .jobs .job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: flex-start;
+    gap: 0.25rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-kesar-700);
+  }
+
+  .job-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .jobs .job-body {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  .job-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 700;
+    color: var(--color-kesar-700);
+  }
+
+  .jobs li:hover :global(.arrow) {
+    translate: 2px -2px;
+  }
+
+  .jobs :global(.arrow) {
+    transition: translate 160ms var(--ease-paper);
+  }
+
+  .jobs li:hover .job-title a {
+    color: var(--color-kesar-700);
+  }
+
+  .jobs-block {
+    max-width: 60rem;
+  }
+
+  .jobs-perks {
+    display: grid;
+    gap: 1rem 2rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .jobs-perks {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .jobs-perks dt {
+    font-weight: 800;
+    font-size: 1.0625rem;
+  }
+
+  .jobs-perks dd {
+    margin-top: 0.25rem;
+    color: var(--color-ink-800);
+  }
+  /* Titles, meta, text and links line up across the sheets (subgrid through the Paper wrappers). */
+  @media (min-width: 56rem) {
+    ul.jobs {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      row-gap: 0;
+    }
+
+    .jobs > li,
+    .jobs > li > :global(.paper-card),
+    .jobs :global(.job) {
+      grid-row: span 4;
+      grid-template-rows: subgrid;
+    }
+
+    .jobs :global(.job) {
+      row-gap: 0.625rem;
+    }
+  }
+</style>

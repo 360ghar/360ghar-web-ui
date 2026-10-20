@@ -1,0 +1,24 @@
+---
+/**
+ * A paper-cut vignette (see vignettes.ts). Every one sits below the first
+ * screen, so it loads as a cached file (src/pages/art, the same drawing with
+ * its own filters) instead of inline SVG. Decorative: the text next to it says
+ * the same.
+ */
+import { SIZE, type VignetteName } from './vignettes';
+
+type Props = { name: VignetteName; class?: string; bare?: boolean };
+const { name, class: className, bare = false } = Astro.props;
+const [w, h] = SIZE[name];
+---
+
+<img class:list={['home-vignette', className]} src={`/art/home/${name}${bare ? '-bare' : ''}.svg`} alt="" width={w} height={h} loading="lazy" decoding="async" />
+
+<style>
+  .home-vignette {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+  }
+</style>

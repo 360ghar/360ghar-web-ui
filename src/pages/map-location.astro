@@ -1,0 +1,32 @@
+---
+/** Map view of the property search (old URL, noindex). Same island as /properties. */
+import Page from '@/layouts/Page.astro';
+import { cachePage } from '@/lib/cache';
+import { loadListing } from '@/features/search/load';
+import { parseFilters } from '@/features/search/filters';
+import ListingHeader from '@/features/search/ListingHeader.astro';
+import SearchResults from '@/features/search/SearchResults';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const filters = parseFilters(Astro.url.searchParams);
+const { first, inventory } = await loadListing(filters);
+cachePage(Astro, 'minute', { error: Boolean(first.error) });
+---
+
+<Page title={locale === 'hi' ? 'मैप पर घर खोजें | 360Ghar' : 'Search homes on the map | 360Ghar'} description="Verified homes in Gurugram on a map." path="/map-location" noindex>
+  <ListingHeader heading={locale === 'hi' ? 'मैप पर घर' : 'Homes on the map'} total={inventory} locale={locale} theme="map" />
+  <div class="container-page">
+    <SearchResults
+      client:load
+      locale={locale}
+      initialFilters={filters}
+      initialPage={first.page}
+      initialError={first.error?.message ?? null}
+      amenities={first.amenities}
+      basePath="/map-location"
+      initialView="map"
+    />
+  </div>
+</Page>

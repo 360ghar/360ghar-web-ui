@@ -1,0 +1,14 @@
+---
+/**
+ * Registers the WebMCP tools (search_properties, schedule_visit,
+ * calculate_emi) for AI agents in browsers that support
+ * `navigator.modelContext`. Other browsers download nothing: the check runs
+ * first, and the tool code is a separate chunk.
+ */
+---
+
+<script>
+  if ('modelContext' in navigator) {
+    void import('@/features/webmcp/register').then((m) => m.registerWebMcpWhenIdle());
+  }
+</script>

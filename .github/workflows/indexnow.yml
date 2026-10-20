@@ -1,0 +1,57 @@
+# Submits the site's URLs to IndexNow. Manual only (workflow_dispatch). No secrets: the key is public
+# (public/ba96fa507cb7447aa74f5ddd2f516a6d.txt). A run does nothing unless "submit" is set to "yes".
+# Deploy the site first: the script reads the live sitemap index.
+
+name: IndexNow
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Site whose sitemap index is read (no trailing slash)
+        required: true
+        default: https://360ghar.com
+      include:
+        description: Optional regular expression on the URL path, for example ^/blog
+        required: false
+        default: ''
+      limit:
+        description: Optional maximum number of URLs
+        required: false
+        default: ''
+      submit:
+        description: 'Type "yes" to POST to IndexNow. Anything else is a dry run.'
+        required: true
+        default: 'no'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # The script has no dependencies, so there is no install step.
+      - name: Run
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+          INCLUDE: ${{ inputs.include }}
+          LIMIT: ${{ inputs.limit }}
+          SUBMIT: ${{ inputs.submit }}
+        run: |
+          set -euo pipefail
+          args=(--base "$BASE_URL" --strict)
+          if [ -n "$INCLUDE" ]; then args+=(--include "$INCLUDE"); fi
+          if [ -n "$LIMIT" ]; then args+=(--limit "$LIMIT"); fi
+          if [ "$SUBMIT" = "yes" ]; then args+=(--submit); else echo "Dry run: set submit to yes to POST."; fi
+          node scripts/indexnow-submit.mjs "${args[@]}"

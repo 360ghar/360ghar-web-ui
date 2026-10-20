@@ -1,0 +1,184 @@
+---
+/** Homes near an office hub or landmark (10 landmarks from the old site), with a vignette of the landmark type. */
+import { getT } from '@/i18n';
+import Page from '@/layouts/Page.astro';
+import { formatNum } from '@/lib/format';
+import { localizePath } from '@/lib/i18n/locale';
+import { breadcrumbs, canonicalFor } from '@/lib/seo/site';
+import { LANDMARK_GLYPH } from '@/features/localities/glyphs';
+import PlaceFacts, { type FactRow } from '@/features/localities/PlaceFacts.astro';
+import PlaceHero from '@/features/localities/PlaceHero.astro';
+import { kindForLandmark } from '@/features/localities/vignette';
+import { listingItemList } from '@/features/search/itemList';
+import SearchResults from '@/features/search/SearchResults';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import NotFoundState from '@/ui/states/NotFoundState.astro';
+import { LANDMARKS, NEAR_EN, NEAR_HI, type loadNear } from './loadNear';
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const t = getT(locale);
+type Props = Awaited<ReturnType<typeof loadNear>>;
+const { lm, first, filters } = Astro.props;
+const name = lm ? (hi ? (NEAR_HI[lm.slug]?.name ?? lm.name) : lm.name) : '';
+const heading = lm ? (hi ? `${name} के पास घर` : `Homes near ${lm.name}`) : '';
+const about = lm ? (hi ? (NEAR_HI[lm.slug]?.description ?? lm.description) : (NEAR_EN[lm.slug] ?? lm.description)) : '';
+const title = lm ? t('seo:nearOffice.titleTemplate', { name: lm.name, city: 'Gurgaon' }) || `Property near ${lm.name}, Gurgaon | 360Ghar` : 'Not found | 360Ghar';
+const items = first?.page?.items ?? [];
+const total = first?.page?.total ?? null;
+const distances = items.map((p) => p.distance_km).filter((d): d is number => typeof d === 'number');
+const nearest = distances.length ? Math.min(...distances) : null;
+const km = (d: number) => formatNum(d, locale, { maximumFractionDigits: 1 });
+const live: FactRow[] =
+  !first || first.error
+    ? [{ text: hi ? 'लाइव घर अभी लोड नहीं हो सके' : 'Live homes could not load right now', strong: true }]
+    : total
+      ? [
+          { text: hi ? `5 किमी के अंदर ${total} घर` : `${total} ${total === 1 ? 'home' : 'homes'} within 5 km`, strong: true },
+          ...(nearest !== null ? [{ text: hi ? `सबसे पास का घर ${km(nearest)} किमी दूर` : `The nearest is ${km(nearest)} km away` }] : []),
+        ]
+      : [{ text: hi ? '5 किमी के अंदर अभी कोई घर नहीं' : 'No homes within 5 km yet', strong: true }];
+/** Straight-line distance in km between two points (haversine). */
+const dist = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
+  const r = (d: number) => (d * Math.PI) / 180;
+  const h = Math.sin(r(b.lat - a.lat) / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(r(b.lng - a.lng) / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(h));
+};
+const others = lm ? LANDMARKS.filter((x) => x.city === lm.city && x.slug !== lm.slug) : [];
+const glyphFor: Record<string, string> = { transit: 'metro', hospital: 'hospital', commercial: 'mall' };
+const close = lm
+  ? others
+      .map((x) => ({ x, d: dist(lm, x) }))
+      .sort((a, b) => a.d - b.d)
+      .slice(0, 3)
+  : [];
+const heroGroups = [
+  { title: hi ? '360Ghar पर अभी' : 'Live on 360Ghar', rows: live },
+  {
+    title: hi ? 'पास की दूसरी जगहें (सीधी दूरी)' : 'Other places close by (straight line)',
+    rows: close.map(({ x, d }) => ({ text: hi ? (NEAR_HI[x.slug]?.name ?? x.name) : x.name, value: `${km(d)} ${hi ? 'किमी' : 'km'}`, glyph: glyphFor[x.type] ?? 'commercial', href: localizePath(`/near/${x.slug}`, locale) })),
+  },
+];
+---
+
+<Page
+  title={title}
+  description={lm ? `${NEAR_EN[lm.slug] ?? lm.description} Verified homes for sale and rent within 5 km of ${lm.name}.` : ''}
+  path={lm ? `/near/${lm.slug}` : Astro.url.pathname}
+  noindex={!lm}
+  jsonLd={lm && first
+    ? [
+        breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Gurgaon', path: '/gurgaon' }, { name: heading, path: `/near/${lm.slug}` }], locale),
+        { '@type': 'WebPage', name: heading, url: canonicalFor(`/near/${lm.slug}`, locale), about: { '@type': 'Place', name: lm.name, geo: { '@type': 'GeoCoordinates', latitude: lm.lat, longitude: lm.lng } } },
+        listingItemList(heading, items, locale),
+      ]
+    : []}
+>
+  {
+    lm && first && filters ? (
+      <>
+        <div class="container-page pt-2">
+          <Breadcrumbs items={[{ name: hi ? 'होम' : 'Home', path: '/' }, { name: hi ? 'गुड़गाँव' : 'Gurgaon', path: '/gurgaon' }, { name: heading }]} />
+          <PlaceHero kind={kindForLandmark(lm.type, lm.slug)} seed={lm.slug} locale={locale} titleLength={heading.length}>
+            <h1>{heading}</h1>
+            <p class="near-lead">{about}</p>
+            <PlaceFacts slot="aside" groups={heroGroups} />
+          </PlaceHero>
+        </div>
+        <div class="container-page mt-8">
+          <SearchResults
+            client:load
+            locale={locale}
+            initialFilters={filters}
+            initialPage={first.page}
+            initialError={first.error?.message ?? null}
+            amenities={first.amenities}
+            basePath={`/near/${lm.slug}`}
+            locked={{ lat: true, lng: true, radius: true, place: true }}
+          />
+        </div>
+        {others.length > 0 && (
+          <section class="container-page near-others" aria-labelledby="near-others">
+            <h2 id="near-others" class="near-h2">{hi ? 'दूसरी जगहों के पास घर' : 'Homes near other places'}</h2>
+            <ul class="near-list">
+              {others.map((x) => (
+                <li>
+                  <a href={localizePath(`/near/${x.slug}`, locale)}>
+                    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+                      <path fill-rule="evenodd" d={LANDMARK_GLYPH[glyphFor[x.type] ?? 'commercial']} />
+                    </svg>
+                    <span>{hi ? `${NEAR_HI[x.slug]?.name ?? x.name} के पास` : `Near ${x.name}`}</span>
+                    <Icon name="chevron-right" size={18} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </>
+    ) : (
+      <NotFoundState
+        title={hi ? 'यह जगह हमारे नक्शे पर नहीं है' : 'This place is not on our map'}
+        action={{ href: localizePath('/properties', locale), label: hi ? 'घर खोजें' : 'Search homes', icon: 'search' }}
+      />
+    )
+  }
+</Page>
+
+<style>
+  .near-lead {
+    font-size: 1.0625rem;
+    color: var(--color-ink-800);
+    max-width: 58ch;
+  }
+
+  .near-others {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .near-h2 {
+    margin-bottom: 1rem;
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+  }
+
+  .near-list {
+    display: grid;
+    gap: 0 2rem;
+  }
+
+  @media (min-width: 40rem) {
+    .near-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .near-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .near-list a {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 52px;
+    border-bottom: 1px solid var(--color-ink-200);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .near-list a > svg:first-child {
+    color: var(--color-kesar-700);
+  }
+
+  .near-list a > :global(svg:last-child) {
+    color: var(--color-ink-400);
+  }
+
+  .near-list a:hover {
+    color: var(--color-kesar-700);
+  }
+</style>

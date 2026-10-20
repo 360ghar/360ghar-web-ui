@@ -1,0 +1,150 @@
+---
+/**
+ * This home's price per sq ft against the other homes of its type for sale in
+ * its locality: one sentence, and a dot strip cut from paper (each dot is one
+ * real listing). The sentence carries all the numbers; the strip is decorative.
+ */
+import { rupees, typeLabel } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { makeTools } from '@/lib/paper/shapes';
+import { compactPath } from '@/ui/paper/compact';
+import type { PropertyType } from '@/lib/api/types';
+import type { PriceContext } from './market';
+
+type Props = { ctx: PriceContext; locality: string; type: PropertyType; locale: Locale };
+const { ctx, locality, type, locale } = Astro.props;
+const hi = locale === 'hi';
+const r = (v: number) => rupees(v, locale);
+const n = ctx.values.length;
+const kind = hi ? typeLabel(type, locale) : `${typeLabel(type, locale).toLowerCase()}${n === 1 ? '' : 's'}`;
+const abs = Math.abs(ctx.diffPct);
+const lead = hi
+  ? `यह घर ${locality} में 360Ghar पर बिक रहे ${n} और ${kind} की मीडियन कीमत से ${abs <= 2 ? 'लगभग बराबर है' : `${abs}% ${ctx.diffPct < 0 ? 'कम' : 'ज़्यादा'} है`}।`
+  : abs <= 2
+    ? `This home is priced about the same as the median of ${n} other ${kind} for sale in ${locality} on 360Ghar.`
+    : `This home is ${abs}% ${ctx.diffPct < 0 ? 'below' : 'above'} the median of ${n} other ${kind} for sale in ${locality} on 360Ghar.`;
+
+// The strip: 360 units wide, shown at most 32rem wide. Dots in the same
+// 11-unit column stack upwards 12 units apart, so each dot reads as one home
+// (a dot is about 9 units: 7 px across on a 360 px phone). The strip grows
+// taller when a column holds more homes.
+const W = 360;
+const COL = 11;
+const STEP = 12;
+const lo = Math.min(ctx.min, ctx.own);
+const span = Math.max(ctx.max, ctx.own) - lo;
+const x = (v: number) => (span ? 14 + ((v - lo) / span) * (W - 28) : W / 2);
+const t = makeTools(`price-${locality}-${type}`, 0.5);
+const cols = new Map<number, number>();
+const place = (v: number) => {
+  const c = Math.round((x(v) - 14) / COL);
+  const k = cols.get(c) ?? 0;
+  cols.set(c, k + 1);
+  return { cx: Math.min(W - 14, 14 + c * COL), k };
+};
+const mine = place(ctx.own);
+const others = ctx.values.map(place);
+const levels = Math.max(...[...cols.values()]);
+const base = 12 + (levels - 1) * STEP;
+const H = base + 18;
+const dotY = (k: number) => base - k * STEP;
+const strip = t.path([
+  [6, base - 3],
+  [W - 6, base - 3.6],
+  [W - 6, base + 3],
+  [6, base + 3.6],
+]);
+const xm = x(ctx.median);
+const notch = t.path([
+  [xm, base + 6],
+  [xm + 5.5, base + 14.5],
+  [xm - 5.5, base + 14.5],
+]);
+---
+
+<div class="pc">
+  <h3 class="pc-title">{hi ? `${locality} में प्रति वर्ग फ़ुट कीमत` : `Price per sq ft in ${locality}`}</h3>
+  <p class="pc-lead">{lead}</p>
+  <svg class="pc-strip" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+    <!-- Only the strip and this home cast a shadow; shadows between stacked dots would fill the gaps. -->
+    <path d={compactPath(strip)} fill="var(--color-kesar-100)" filter="url(#pc-s2)" />
+    <g fill="var(--color-kesar-600)">{others.map((o) => <path d={compactPath(t.oct(o.cx, dotY(o.k), 4.8))} />)}</g>
+    <path d={compactPath(notch)} fill="var(--color-kesar-800)" />
+    <path d={compactPath(t.oct(mine.cx, dotY(mine.k), 6.6))} fill="var(--color-ink-950)" filter="url(#pc-s2)" />
+  </svg>
+  <p class="pc-axis tabular">
+    <span>{r(Math.min(ctx.min, ctx.own))}</span>
+    <span>{r(Math.max(ctx.max, ctx.own))}</span>
+  </p>
+  <ul class="pc-key tabular">
+    <li>
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d={t.oct(8, 8, 6.4)} fill="var(--color-ink-950)" /></svg>
+      {hi ? 'यह घर' : 'This home'} <strong>{r(ctx.own)}</strong>
+    </li>
+    <li>
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 3.5 13.5 12.5H2.5Z" fill="var(--color-kesar-800)" /></svg>
+      {hi ? 'मीडियन' : 'Median'} <strong>{r(ctx.median)}</strong>
+    </li>
+    <li>
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d={t.oct(8, 8, 4.8)} fill="var(--color-kesar-600)" /></svg>
+      {hi ? `एक बिंदु = एक घर (${n})` : `One dot = one home (${n})`}
+    </li>
+  </ul>
+</div>
+
+<style>
+  .pc {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 40rem;
+    padding: 1.125rem 1.25rem 1rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-paper);
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.06), 0 6px 14px -6px rgb(var(--tint) / 0.16);
+  }
+
+  .pc-title {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 700;
+  }
+
+  .pc-lead {
+    color: var(--color-ink-800);
+  }
+
+  .pc-strip {
+    display: block;
+    width: 100%;
+    max-width: 32rem;
+    height: auto;
+    margin-top: 0.5rem;
+  }
+
+  .pc-axis {
+    display: flex;
+    max-width: 32rem;
+    justify-content: space-between;
+    font-size: 0.8125rem;
+    color: var(--color-ink-600);
+  }
+
+  .pc-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 1.25rem;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .pc-key li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .pc-key strong {
+    color: var(--color-ink-950);
+  }
+</style>

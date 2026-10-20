@@ -1,0 +1,88 @@
+---
+/**
+ * /policies/:slug (SSR + CDN 1 day). The body is rendered from the page's
+ * `format` (markdown or html, sanitized). The route sets status and caching.
+ */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import type { components } from '@/lib/api/schema';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import { trail } from '@/features/content/shared/schema';
+import { shared } from '@/features/content/shared/text';
+import { policyBySlug } from './data';
+import { renderPolicy } from './render';
+import PageToc from '@/features/content/shared/PageToc.astro';
+
+type PageData = components['schemas']['PagePublicResponse'];
+type Props = { locale: Locale; slug: string; page: PageData | null; state: 'ok' | 'notFound' | 'error' };
+const { locale, slug, page, state } = Astro.props;
+const t = getT(locale);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const known = policyBySlug(slug);
+const listName = hi ? 'नीतियाँ' : 'Policies';
+
+const title = page?.title ?? known?.[locale].title ?? (hi ? 'नीति' : 'Policy');
+const body = page ? renderPolicy(page) : null;
+const description = known ? `${known[locale].description}` : t('seo:policyDetails.description', { title });
+const { crumbs, ld } = trail(locale, [
+  { name: listName, path: '/policies' },
+  { name: title, path: `/policies/${slug}` },
+]);
+const jsonLd = page
+  ? [{ '@type': 'CreativeWork', name: title, description, url: canonicalFor(`/policies/${slug}`, locale), inLanguage: 'en-IN', publisher: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' } }, ld]
+  : [];
+const notice = hi ? 'यह दस्तावेज़ केवल अंग्रेज़ी में उपलब्ध है।' : '';
+const heading = page ? title : state === 'notFound' ? (hi ? 'यह नीति हमारे पास नहीं है' : 'We do not have this policy') : hi ? 'अभी यह नीति लोड नहीं हो सकी' : 'We could not load this policy';
+---
+
+<Content
+  title={page ? t('seo:policyDetails.title', { title }) : hi ? 'नीति नहीं मिली | 360Ghar' : 'Policy not found | 360Ghar'}
+  description={description}
+  path={`/policies/${slug}`}
+  noindex={!page}
+  type="article"
+  heading={heading}
+  lead={page ? notice || undefined : undefined}
+  crumbs={crumbs}
+  wide
+  jsonLd={jsonLd}
+>
+  {
+    body ? (
+      <PageToc items={body.toc.map((h) => ({ ...h, lang: hi ? 'en' : undefined }))} title={shared(locale).onThisPage}>
+        <article class="policy-body" lang="en" set:html={body.html} />
+      </PageToc>
+    ) : (
+      <StateBlock
+        scene={state === 'notFound' ? 'notFound' : 'error'}
+        title={state === 'notFound' ? (hi ? 'लिंक पुराना या गलत हो सकता है' : 'The link may be old or mistyped') : hi ? 'हमारे सर्वर ने जवाब नहीं दिया' : 'Our server did not answer'}
+        body={state === 'notFound' ? (hi ? 'सभी नीतियाँ एक पेज पर हैं।' : 'All our policies are listed on one page.') : hi ? 'एक मिनट बाद दोबारा कोशिश करें।' : 'Try again in a minute.'}
+        action={state === 'notFound' ? { href: L('/policies'), label: listName } : { href: L(`/policies/${slug}`), label: hi ? 'दोबारा कोशिश करें' : 'Try again', icon: 'retry' }}
+      />
+    )
+  }
+</Content>
+
+<style>
+  .policy-body {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .policy-body > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .policy-body :global(h2) {
+    scroll-margin-top: 88px;
+  }
+
+  .policy-body :global(pre) {
+    white-space: pre-wrap;
+    font-size: 0.875rem;
+  }
+</style>

@@ -1,0 +1,126 @@
+---
+/**
+ * The circle rates of every sector as a skyline: one column per sector, sorted
+ * from the highest rate, from real API rows. An optional dark tick marks a
+ * second property type of the same sector; `highlight` picks out one sector
+ * (detail pages). Marks are SVG; every word is HTML, so it reads at 360 px.
+ */
+import { formatNum, rupees } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import type { CircleRate } from './api';
+import { chartText, median, niceCeil } from './charts';
+import { fmtDate } from './format';
+import { label, text } from './text';
+
+type Props = { locale: Locale; rows: CircleRate[]; type: string; compare?: string; highlight?: string; headingId: string };
+const { locale, rows, type, compare, highlight, headingId } = Astro.props;
+const c = chartText(locale);
+const t = text(locale);
+const typeName = label(t.types, type);
+const otherName = compare ? label(t.types, compare) : '';
+
+const main = rows.filter((r) => r.property_type === type && (r.rate_per_sqyd ?? 0) > 0).sort((a, b) => b.rate_per_sqyd! - a.rate_per_sqyd!);
+const other = new Map(rows.filter((r) => r.property_type === compare && (r.rate_per_sqyd ?? 0) > 0).map((r) => [r.sector, r.rate_per_sqyd!]));
+const n = main.length;
+const top = niceCeil(Math.max(...main.map((r) => r.rate_per_sqyd!), ...other.values()));
+const H = 100;
+const STEP = 10;
+const h = (v: number) => (v / top) * H;
+const guides = [1, 2, 3, 4, 5].map((k) => k * (top >= 400_000 ? 200_000 : top >= 150_000 ? 100_000 : 50_000)).filter((v) => v < top);
+const at = (i: number) => ((i + 0.5) / n) * 100;
+const hi = main[0];
+const lo = main[n - 1];
+const mid = median(main.map((r) => r.rate_per_sqyd!));
+const mine = highlight ? main.findIndex((r) => r.sector === highlight) : -1;
+const year = main.reduce((y, r) => Math.max(y, r.revision_year), 0) || null;
+const effective = fmtDate(main.find((r) => r.effective_date)?.effective_date, locale, 'long');
+const lakh = (v: number) => `₹${formatNum(v / 1e5, locale, { maximumFractionDigits: 1 })} ${locale === 'hi' ? 'लाख' : 'L'}`;
+const lead = compare && other.size ? c.skyLeadCompare(n, typeName, otherName) : c.skyLead(n, typeName);
+const summary = hi && lo ? `${c.skyHighest}: ${hi.sector} ${rupees(hi.rate_per_sqyd!, locale)}. ${c.skyLowest}: ${lo.sector} ${rupees(lo.rate_per_sqyd!, locale)}.` : '';
+const rank = mine >= 0 ? c.skyRank(highlight!, n - 1 - mine, n - 1) : null;
+const flagEdge = (x: number) => (x < 18 ? 'is-start' : x > 82 ? 'is-end' : '');
+---
+
+{
+  n > 1 && (
+    <section class="dh-section dh-sky" aria-labelledby={headingId}>
+      <h2 id={headingId} class="dh-h2">
+        {c.skyTitle}
+      </h2>
+      <p class="dh-sky-lead">
+        {rank ? `${rank} ` : ''}
+        {lead}
+      </p>
+      <figure class="dh-sky-fig">
+        <div class:list={['dh-sky-plot', mine >= 0 && 'has-flag']}>
+          {mine >= 0 && (
+            <span class:list={['dh-sky-flag', flagEdge(at(mine))]} style={`--x:${at(mine)}%`} aria-hidden="true">
+              {highlight}
+            </span>
+            <i class="dh-sky-notch" style={`--x:${at(mine)}%`} aria-hidden="true" />
+          )}
+          <div class="dh-sky-area">
+          {guides.map((g) => (
+            <span class="dh-sky-guide" style={`--y:${(g / top) * 100}%`} aria-hidden="true">
+              <span>{lakh(g)}</span>
+            </span>
+          ))}
+          <svg viewBox={`0 0 ${n * STEP} ${H}`} preserveAspectRatio="none" role="img" aria-label={`${c.skyTitle}. ${lead} ${summary}`}>
+            {main.map((r, i) => {
+              const v = r.rate_per_sqyd!;
+              const o = other.get(r.sector);
+              return (
+                <g>
+                  <rect class:list={['dh-sky-col', i === mine && 'is-mine']} x={i * STEP + 1} y={H - h(v)} width={STEP - 2} height={h(v)} />
+                  {o && <rect class="dh-sky-tick" x={i * STEP + 0.5} y={H - h(o) - 0.9} width={STEP - 1} height={1.8} />}
+                </g>
+              );
+            })}
+          </svg>
+          </div>
+        </div>
+        <figcaption class="dh-sky-cap">
+          <dl class="dh-sky-facts">
+            {hi && (
+              <div>
+                <dt>{c.skyHighest}</dt>
+                <dd>
+                  <b>{rupees(hi.rate_per_sqyd!, locale)}</b> {hi.sector}
+                </dd>
+              </div>
+            )}
+            {mid && (
+              <div>
+                <dt>{c.skyMedian}</dt>
+                <dd>
+                  <b>{rupees(Math.round(mid), locale)}</b>
+                </dd>
+              </div>
+            )}
+            {lo && (
+              <div>
+                <dt>{c.skyLowest}</dt>
+                <dd>
+                  <b>{rupees(lo.rate_per_sqyd!, locale)}</b> {lo.sector}
+                </dd>
+              </div>
+            )}
+          </dl>
+          <ul class="dh-sky-keys">
+            <li>
+              <i class="is-col" aria-hidden="true" />
+              {c.skyRate(typeName)}, {c.perSqyd}
+            </li>
+            {other.size > 0 && (
+              <li>
+                <i class="is-tick" aria-hidden="true" />
+                {c.skyTick(otherName)}
+              </li>
+            )}
+          </ul>
+          <p class="dh-meta">{c.source(year, effective)}</p>
+        </figcaption>
+      </figure>
+    </section>
+  )
+}

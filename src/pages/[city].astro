@@ -1,0 +1,55 @@
+---
+import { getT } from '@/i18n';
+import Page from '@/layouts/Page.astro';
+import type { Property } from '@/lib/api/types';
+import { cachePage, respond } from '@/lib/cache';
+import { localizePath } from '@/lib/i18n/locale';
+import { breadcrumbs, faqPage } from '@/lib/seo/site';
+import CityHub from '@/features/landing/CityHub.astro';
+import { CITY_META, cityFaqs } from '@/features/landing/cities';
+import { CITIES } from '@/features/landing/model';
+import { citySlug } from '@/features/localities/data';
+import { listedPlaces, liveHomes, newestFirst } from '@/features/localities/live';
+import { cardPhotos } from '@/features/property/PropertyCardView';
+import NotFoundPage from '@/ui/states/NotFoundPage.astro';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const city = (Astro.params.city ?? '').toLowerCase();
+const meta = CITY_META[city];
+let homes: Property[] = [];
+let failed = false;
+if (meta && CITIES[city]) {
+  const all = await liveHomes();
+  failed = !all;
+  homes = (all ?? []).filter((p) => citySlug(p.city ?? '') === city).sort(newestFirst);
+  cachePage(Astro, 'hour', { error: failed });
+} else {
+  respond(Astro, 'hour', { notFound: true });
+}
+const t = getT(locale);
+const name = meta ? (hi ? CITIES[city]!.hi : meta.fullName) : '';
+---
+
+{
+  meta ? (
+    <Page
+      title={t('seo:cityHub.titleTemplate', { city: meta.fullName }) || `${meta.fullName} Real Estate | Buy, Rent & PG in ${meta.fullName} | 360Ghar`}
+      description={t('seo:cityHub.descriptionTemplate', { city: meta.fullName }) || meta.description}
+      path={`/${city}`}
+      noindex={!failed && homes.length === 0}
+      jsonLd={[
+        breadcrumbs([{ name: 'Home', path: '/' }, { name: meta.fullName, path: `/${city}` }], locale),
+        { '@type': 'CollectionPage', name: `${meta.fullName} real estate`, url: `https://360ghar.com${localizePath(`/${city}`, locale)}` },
+        { '@type': 'Place', name: meta.fullName, geo: { '@type': 'GeoCoordinates', latitude: CITIES[city]!.lat, longitude: CITIES[city]!.lng } },
+        faqPage(cityFaqs(meta, name, locale)),
+      ]}
+    >
+      <CityHub city={city} homes={homes} listed={listedPlaces(homes, city, new Set(homes.slice(0, 6).flatMap(cardPhotos)))} failed={failed} locale={locale} />
+    </Page>
+  ) : (
+    <NotFoundPage />
+  )
+}

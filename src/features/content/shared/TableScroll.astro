@@ -1,0 +1,20 @@
+---
+/**
+ * Horizontal scroll box for a wide table. Focusable and named, so keyboard
+ * users can scroll it (axe: scrollable-region-focusable).
+ */
+type Props = { label: string; class?: string };
+const { label, class: className } = Astro.props;
+---
+
+<div class:list={['table-scroll', className]} role="region" aria-label={label} tabindex="0">
+  <slot />
+</div>
+
+<style>
+  .table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+</style>

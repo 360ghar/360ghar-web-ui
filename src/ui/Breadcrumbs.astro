@@ -1,0 +1,96 @@
+---
+/** Visible breadcrumbs. Pair with `breadcrumbs()` from lib/seo/site for JSON-LD. */
+import { localizePath } from '@/lib/i18n/locale';
+
+type Props = { items: { name: string; path?: string }[]; class?: string };
+const { items, class: className } = Astro.props;
+const locale = Astro.locals.locale;
+---
+
+<nav class:list={['crumbs', className]} aria-label={locale === 'hi' ? 'ब्रेडक्रम्ब' : 'Breadcrumb'}>
+  <ol>
+    {
+      items.map((it, i) =>
+        i === items.length - 1 ? (
+          <li aria-current="page">
+            <span>{it.name}</span>
+          </li>
+        ) : it.path ? (
+          <li>
+            <a href={localizePath(it.path, locale)}>{it.name}</a>
+          </li>
+        ) : (
+          <li>
+            <span class="crumbs-text">{it.name}</span>
+          </li>
+        ),
+      )
+    }
+  </ol>
+</nav>
+
+<style>
+  /* One line. Every crumb after Home can shrink and ends in an ellipsis, so a
+     long name never wraps under its "/" or pushes the page sideways. */
+  .crumbs {
+    position: relative;
+  }
+
+  .crumbs ol {
+    display: flex;
+    gap: 0 0.5rem;
+    min-width: 0;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .crumbs li {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  /* Home and the section (Localities, Blog, Tools...) are short: never cut them. */
+  .crumbs li:nth-child(-n + 2) {
+    flex: none;
+  }
+
+  .crumbs li[aria-current] {
+    min-width: 4.5rem;
+    color: var(--color-ink-950);
+    font-weight: 600;
+  }
+
+  /* Phones: the page heading right below repeats the current crumb, so it is
+     only hidden from view; screen readers still read it. */
+  @media (max-width: 39.99rem) {
+    .crumbs li[aria-current]:not(:first-child) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      min-width: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    flex: none;
+    margin-right: 0.5rem;
+    color: var(--color-ink-400);
+  }
+
+  .crumbs a,
+  .crumbs-text,
+  .crumbs li[aria-current] span {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 44px;
+  }
+</style>

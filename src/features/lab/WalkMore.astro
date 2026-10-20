@@ -1,0 +1,171 @@
+---
+/**
+ * Under the doorway: three more homes, each as a strip of its rooms with the
+ * room name under each photo. The whole row is one link to the home.
+ */
+import type { Property } from '@/lib/api/types';
+import { homeKind, imageUrl, listingPrice, placeLine } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import type { Room } from './load';
+import { ROOM_NAMES } from './rooms';
+
+type Props = { locale: Locale; walks: { p: Property; rooms: Room[] }[] };
+const { locale, walks } = Astro.props;
+const L = localizer(locale);
+const title = locale === 'hi' ? 'तीन और घर, कमरा दर कमरा' : 'Three more homes, room by room';
+---
+
+{
+  walks.length ? (
+    <section class="container-page wm" aria-labelledby="wm-title">
+      <h2 id="wm-title" class="wm-title">{title}</h2>
+      <ul class="wm-list" role="list">
+        {walks.map(({ p, rooms }) => {
+          const price = listingPrice(p, locale);
+          return (
+            <li>
+              <a class="wm-row" href={L(`/property/${p.id}`)}>
+                <span class="wm-info">
+                  <span class="wm-price tabular">
+                    {price.amount}
+                    {price.period ? <small>{price.period}</small> : null}
+                  </span>
+                  <span class="wm-kind">{homeKind(p, locale)}</span>
+                  <span class="wm-place">{placeLine(p)}</span>
+                  <Icon name="arrow-up-right" size={18} class="wm-arrow" />
+                </span>
+                <span class="wm-rooms">
+                  {rooms.slice(0, 4).map((r) => (
+                    <span class="wm-room">
+                      <img src={imageUrl(r.url, 480)} alt="" width={480} height={360} loading="lazy" decoding="async" />
+                      <span>{ROOM_NAMES[locale][r.group]}</span>
+                    </span>
+                  ))}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ) : null
+}
+
+<style>
+  .wm {
+    margin-top: clamp(4.5rem, 9vw, 7rem);
+  }
+
+  .wm-title {
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  }
+
+  .wm-list {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+  }
+
+  .wm-row {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 160ms;
+  }
+
+  .wm-row:hover {
+    background: var(--color-mist-50);
+  }
+
+  .wm-row:focus-visible {
+    outline: 3px solid var(--color-kesar-700);
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 56rem) {
+    .wm-row {
+      grid-template-columns: 15rem 1fr;
+      align-items: center;
+      gap: 2rem;
+    }
+  }
+
+  .wm-info {
+    position: relative;
+    display: grid;
+    gap: 0.1rem;
+    padding-right: 2rem;
+  }
+
+  .wm-price {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+
+  .wm-price small {
+    margin-left: 0.2rem;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-ink-600);
+  }
+
+  .wm-kind {
+    font-weight: 600;
+  }
+
+  .wm-place {
+    color: var(--color-ink-600);
+    font-size: 0.95rem;
+  }
+
+  .wm-info :global(.wm-arrow) {
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+    color: var(--color-kesar-700);
+    transition: transform 160ms var(--ease-paper);
+  }
+
+  .wm-row:hover :global(.wm-arrow) {
+    transform: translate(3px, -3px);
+  }
+
+  /* Rooms: a strip that scrolls on phones, four equal frames from 56rem. */
+  .wm-rooms {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(42vw, 11rem);
+    gap: 0.6rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  @media (min-width: 56rem) {
+    .wm-rooms {
+      grid-auto-columns: 1fr;
+      overflow: visible;
+    }
+  }
+
+  .wm-room {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--color-ink-600);
+  }
+
+  .wm-room img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+</style>

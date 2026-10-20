@@ -1,0 +1,283 @@
+---
+/**
+ * /property/:id/virtual-tour. With a tour: a poster (the main photo) and one
+ * button; the tour frame loads only on click. Without one: a paper-cut room
+ * that says so, the home's real photos and the way to visit it.
+ */
+import Page from '@/layouts/Page.astro';
+import { homeKind, imageUrl, placeLine, srcSet } from '@/lib/format';
+import { headlinePrice } from './facts';
+import { localizePath } from '@/lib/i18n/locale';
+import { breadcrumbs } from '@/lib/seo/site';
+import Icon from '@/ui/icons/Icon.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import type { loadTour } from './loadTour';
+import PaperArt from '@/ui/paper/PaperArt.astro';
+import { galleryPhotos } from './photos';
+import { TOUR_H, TOUR_W, tourScene } from './scenes';
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+type Props = Awaited<ReturnType<typeof loadTour>>;
+const { id, p } = Astro.props;
+const tour = p?.virtual_tour_url ?? null;
+const heading = p ? homeKind(p, locale) : '';
+const back = id ? localizePath(`/property/${id}`, locale) : localizePath('/properties', locale);
+const photos = p ? galleryPhotos(p) : [];
+const img = photos[0]?.url ?? null;
+const price = p ? headlinePrice(p, locale) : null;
+const where = p ? `${heading}${p.locality ? `, ${p.locality}` : ''}` : '';
+---
+
+<Page
+  title={p ? `${p.title} - 360° Virtual Tour | 360Ghar` : '360° Virtual Tour | 360Ghar'}
+  description={p ? `Take a 360° virtual tour of ${p.title} in ${p.locality ?? p.city ?? 'Gurugram'}.` : '360° virtual tour'}
+  path={id ? `/property/${id}/virtual-tour` : Astro.url.pathname}
+  noindex={!tour}
+  image={img}
+  video={tour}
+  jsonLd={p
+    ? [
+        breadcrumbs(
+          [
+            { name: 'Home', path: '/' },
+            { name: 'Properties', path: '/properties' },
+            { name: heading || p.title, path: `/property/${p.id}` },
+            { name: '360° tour', path: `/property/${p.id}/virtual-tour` },
+          ],
+          locale,
+        ),
+        ...(tour && img ? [{ '@type': 'VideoObject', name: `${p.title} - 360° virtual tour`, description: `360° virtual tour of ${p.title}`, thumbnailUrl: img, uploadDate: p.updated_at ?? p.created_at, embedUrl: tour }] : []),
+      ]
+    : []}
+>
+  <div class="container-page tour">
+    <a class="link" href={back}><Icon name="arrow-left" size={16} /> {hi ? 'प्रॉपर्टी पर वापस' : 'Back to the home'}</a>
+    {
+      p && tour ? (
+        <>
+          <h1 class="tour-title">{hi ? '360° टूर' : '360° tour'}: {where}</h1>
+          <p class="tour-sub tabular">
+            <strong>{price!.amount}{price!.period}</strong> · {p.full_address ?? placeLine(p)}
+          </p>
+          <div class="tour-stage" data-tour={tour} data-tour-title={hi ? '360° वर्चुअल टूर' : '360° virtual tour'}>
+            {img && (
+              <img
+                src={imageUrl(img, 1024)}
+                srcset={srcSet(img, [480, 768, 1024, 1440])}
+                sizes="(min-width: 80rem) 76rem, 100vw"
+                alt=""
+                width="1024"
+                height="584"
+                fetchpriority="high"
+              />
+            )}
+            <button type="button" class="btn btn-primary btn-lg tour-start" data-tour-start>
+              <Icon name="tour" size={24} /> {hi ? 'टूर शुरू करें' : 'Start the tour'}
+            </button>
+          </div>
+          <p class="tour-hint">{hi ? 'खींचकर चारों ओर देखें। फ़ोन पर पूरी स्क्रीन सबसे अच्छी रहती है।' : 'Drag to look around. On a phone, full screen works best.'}</p>
+          <div class="tour-links">
+            <a class="link" href={tour} target="_blank" rel="noopener">
+              {hi ? 'नए टैब में खोलें' : 'Open in a new tab'} <Icon name="arrow-up-right" size={14} class="arrow" />
+            </a>
+            <a class="link" href={`${back}#prop-book`}>
+              {hi ? 'विज़िट बुक करें' : 'Book a visit'} <Icon name="arrow-up-right" size={14} class="arrow" />
+            </a>
+          </div>
+        </>
+      ) : p ? (
+        <>
+          <section class="tour-empty" aria-labelledby="tour-none">
+            <div class="tour-art">
+              <PaperArt layers={tourScene()} width={TOUR_W} height={TOUR_H} bg="var(--color-kesar-50)" />
+            </div>
+            <div>
+              <h1 id="tour-none" class="tour-title">{hi ? 'इस घर का 360° टूर अभी नहीं है' : 'This home has no 360° tour yet'}</h1>
+              <p class="tour-lead">
+                {where}. {hi ? 'मालिक ने अभी टूर नहीं जोड़ा। फ़ोटो और फ़्लोर प्लान देखें, या घर देखने जाएँ।' : 'The owner has not added a tour. See the photos and the floor plan, or go and see the home.'}
+              </p>
+              <div class="tour-links">
+                <a class="btn btn-primary" href={back}>
+                  {hi ? 'फ़ोटो और फ़्लोर प्लान देखें' : 'See the photos and floor plan'}
+                </a>
+                <a class="link" href={`${back}#prop-book`}>
+                  {hi ? 'विज़िट बुक करें' : 'Book a visit'} <Icon name="arrow-up-right" size={14} class="arrow" />
+                </a>
+              </div>
+            </div>
+          </section>
+          {photos.length > 0 && (
+            <section class="tour-photos" aria-labelledby="tour-photos">
+              <h2 id="tour-photos" class="tour-h2">{hi ? `इस घर की ${photos.length} फ़ोटो` : `${photos.length} photos of this home`}</h2>
+              <ul>
+                {photos.slice(0, 8).map((ph, i) => (
+                  <li>
+                    <a href={back}>
+                      <img src={imageUrl(ph.url, 480)} srcset={srcSet(ph.url, [320, 480])} sizes="(min-width: 64rem) 18rem, 45vw" alt={`${hi ? 'फ़ोटो' : 'Photo'} ${i + 1} ${hi ? '/' : 'of'} ${photos.length}`} width="480" height="274" loading="lazy" decoding="async" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </>
+      ) : (
+        <StateBlock
+          scene="notFound"
+          level={1}
+          title={hi ? 'यह प्रॉपर्टी नहीं मिली' : 'We could not find this home'}
+          action={{ href: back, label: hi ? 'घर खोजें' : 'Search homes', icon: 'search' }}
+        />
+      )
+    }
+  </div>
+</Page>
+
+<style>
+  .tour {
+    padding-block: 1.5rem 3rem;
+  }
+
+  .tour-title {
+    margin-top: 0.75rem;
+    font-size: clamp(1.625rem, 1.3rem + 1.4vw, 2.5rem);
+  }
+
+  .tour-sub {
+    margin-top: 0.375rem;
+    color: var(--color-ink-800);
+  }
+
+  .tour-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    margin-top: 1.25rem;
+    aspect-ratio: 4 / 5;
+    max-height: 78dvh;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--color-ink-800);
+  }
+
+  @media (min-width: 48rem) {
+    .tour-stage {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .tour-stage img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tour-stage :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .tour-start {
+    position: relative;
+  }
+
+  .tour-hint {
+    margin-top: 0.625rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .tour-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .tour-empty {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .tour-empty {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 3rem;
+    }
+  }
+
+  .tour-art {
+    aspect-ratio: 320 / 200;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .tour-lead {
+    margin-top: 0.75rem;
+    max-width: 44ch;
+    color: var(--color-ink-800);
+  }
+
+  .tour-photos {
+    margin-top: 3rem;
+  }
+
+  .tour-h2 {
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .tour-photos ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 0.75rem;
+  }
+
+  @media (min-width: 64rem) {
+    .tour-photos ul {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.5rem 1rem;
+    }
+  }
+
+  .tour-photos a {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+
+  .tour-photos img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+</style>
+
+<script>
+  for (const stage of document.querySelectorAll<HTMLElement>('[data-tour]')) {
+    stage.querySelector('[data-tour-start]')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = stage.dataset.tour ?? '';
+      f.title = stage.dataset.tourTitle ?? '360° virtual tour';
+      f.allow = 'fullscreen; xr-spatial-tracking; gyroscope; accelerometer';
+      f.allowFullscreen = true;
+      stage.append(f);
+      stage.querySelector('[data-tour-start]')?.remove();
+      f.focus();
+    });
+    stage.dataset.ready = '';
+  }
+</script>

@@ -1,0 +1,245 @@
+/*
+ * Chat history and widgets. Loaded with the chat panel (imported by
+ * ChatPanel.tsx), never with the launcher. Unlayered, so keep selectors to one
+ * class and do not mix Tailwind utilities on the same properties.
+ * The base panel styles (.chat-panel, .chat-list, .chat-bot ...) are in global.css.
+ */
+
+.chat-head-title {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.chat-muted {
+  font-size: 0.8125rem;
+  color: var(--color-ink-600);
+}
+
+/* ---------- History ---------- */
+
+.chat-hist {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.chat-hist-head {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.chat-hist-head:focus-visible {
+  outline-offset: 4px;
+  border-radius: var(--radius-xs);
+}
+
+.chat-hist-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat-hist-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 56px;
+  padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-mist-100);
+}
+
+.chat-hist-row.is-confirm {
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.chat-hist-open {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.25rem 0;
+  text-align: start;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.chat-hist-open[aria-disabled='true'] {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.chat-hist-open[aria-busy='true'] {
+  cursor: progress;
+  opacity: 1;
+}
+
+.chat-hist-title {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-hist-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.chat-hist-state {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+  color: var(--color-ink-800);
+}
+
+.chat-hist-more {
+  justify-self: start;
+}
+
+/* ---------- Widgets ---------- */
+
+.chat-widget {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.chat-widget-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.chat-rows {
+  display: grid;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat-rows > li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-md);
+  background: var(--color-paper);
+  box-shadow: 0 1px 1px rgb(var(--tint) / 0.06), 0 2px 6px -2px rgb(var(--tint) / 0.1);
+}
+
+.chat-rows .grid {
+  min-width: 0;
+  gap: 0.125rem;
+}
+
+.chat-rows .link {
+  min-height: 0;
+}
+
+/* Status as plain weighted text. It is not a chip. */
+.chat-state {
+  flex: none;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-ink-800);
+}
+
+.chat-home {
+  display: grid;
+  gap: 0.25rem;
+  justify-items: start;
+}
+
+.chat-home img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 8 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: var(--color-mist-200);
+}
+
+.chat-home-price {
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+
+.chat-home .link {
+  min-height: 0;
+}
+
+.chat-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.chat-stats > div {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-md);
+  background: var(--color-paper);
+}
+
+.chat-stats dd {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.chat-stats dt {
+  font-size: 0.8125rem;
+  color: var(--color-ink-600);
+}
+
+.chat-kv {
+  display: grid;
+  gap: 0.375rem;
+  margin: 0;
+}
+
+.chat-kv > div {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.chat-kv > div:has(> dd:only-child) {
+  grid-template-columns: 1fr;
+}
+
+.chat-kv dt {
+  font-size: 0.8125rem;
+  color: var(--color-ink-600);
+}
+
+.chat-kv dd {
+  margin: 0;
+}
+
+.chat-earlier {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  padding-bottom: 0.5rem;
+}

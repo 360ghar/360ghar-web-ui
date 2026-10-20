@@ -1,0 +1,138 @@
+---
+/**
+ * The chat launcher is plain HTML and a few lines of script. The React chat
+ * panel downloads only when the user opens it, so pages stay light.
+ *
+ * `part="button"` is the button, rendered by the header so the keyboard
+ * reaches it in visual order; `part="host"` is the panel host and the script,
+ * rendered by the page after the footer. Without `part` it renders both.
+ *
+ * Below 1024 px the button is a quiet icon in the header bar, because the page gutter is too narrow for a floating button
+ * that does not cover text. From 1024 px it is a rounded pine card at the
+ * bottom right. There it steps out of the way: it rises
+ * above a bar fixed at the bottom, and it slides to the screen edge while any
+ * content (text, a photo, a card, a control) is under it.
+ */
+import { pick } from '@/i18n';
+import Icon from '@/ui/icons/Icon.astro';
+
+type Props = { part?: 'button' | 'host' };
+
+const { part } = Astro.props;
+const locale = Astro.locals.locale;
+const strings = pick(locale, 'common:chatbot');
+const label = typeof strings.openAssistant === 'string' ? strings.openAssistant : 'Open chat assistant';
+---
+
+{part !== 'host' && (
+<button
+  type="button"
+  class="chat-launcher"
+  data-chat-launcher
+  aria-expanded="false"
+  aria-controls="chat-host"
+  aria-label={label}
+  data-locale={locale}
+>
+  <Icon name="chat" size={22} />
+  <span>{locale === 'hi' ? 'पूछें' : 'Ask'}</span>
+</button>
+)}
+{part !== 'button' && (
+<Fragment>
+<div id="chat-host" class="chat-host" hidden></div>
+<script type="application/json" id="chat-strings" set:html={JSON.stringify(strings).replace(/</g, '\\u003c')} />
+</Fragment>
+)}
+
+<script>
+  const launcher = document.querySelector<HTMLElement>('[data-chat-launcher]');
+  const host = document.getElementById('chat-host');
+  if (launcher && host) {
+    const CONTROLS = 'a[href], button, input, select, textarea, summary, label, [role="button"], [tabindex]:not([tabindex="-1"])';
+    const MEDIA = 'img, svg, video, canvas, iframe, picture';
+    const inBar = window.matchMedia('(max-width: 63.99rem)');
+    // Content: a control, text, or a photo, card or panel narrower than the
+    // screen. Full-width bands and the page background do not count.
+    const isContent = (el: Element) => {
+      for (let n: Element | null = el; n && n !== document.body; n = n.parentElement) {
+        if (n.matches(CONTROLS)) return true;
+        if ([...n.childNodes].some((c) => c.nodeType === Node.TEXT_NODE && c.textContent?.trim())) return true;
+        const cs = getComputedStyle(n);
+        const painted = n.matches(MEDIA) || cs.backgroundImage !== 'none' || !/^(transparent|rgba\(0, 0, 0, 0\))$/.test(cs.backgroundColor);
+        if (painted && n.getBoundingClientRect().width < window.innerWidth - 40) return true;
+      }
+      return false;
+    };
+
+    // What sits under the launcher's resting place: a bar fixed or stuck to
+    // the bottom (lift above it), and any content (step aside from it).
+    let frame = 0;
+    const place = () => {
+      frame = 0;
+      if (inBar.matches) {
+        launcher.removeAttribute('data-tucked');
+        launcher.style.setProperty('--chat-lift', '0px');
+        return;
+      }
+      if (!host.hidden) return;
+      const x = launcher.offsetLeft;
+      const w = launcher.offsetWidth;
+      const h = launcher.offsetHeight;
+      const probe = (top: number) => {
+        let bar = Infinity;
+        let content = false;
+        for (const [px, py] of [
+          [x + 4, top + 4],
+          [x + w - 4, top + 4],
+          [x + w / 2, top + h / 2],
+          [x + 4, top + h - 4],
+          [x + w - 4, top + h - 4],
+        ] as const) {
+          for (const el of document.elementsFromPoint(px, py)) {
+            if (launcher.contains(el) || el.closest('[data-header], .toaster')) continue;
+            if (isContent(el)) content = true;
+            for (let n: Element | null = el; n && n !== document.body; n = n.parentElement) {
+              const pos = getComputedStyle(n).position;
+              if (pos === 'fixed' || pos === 'sticky') {
+                const r = n.getBoundingClientRect();
+                if (r.bottom >= window.innerHeight - 2 && r.top > window.innerHeight / 2) bar = Math.min(bar, r.top);
+                break;
+              }
+            }
+            break;
+          }
+        }
+        return { bar, content };
+      };
+      const base = launcher.offsetTop;
+      const { bar } = probe(base);
+      const lift = bar < Infinity ? Math.max(0, base + h - bar + 12) : 0;
+      launcher.style.setProperty('--chat-lift', `${lift}px`);
+      launcher.toggleAttribute('data-tucked', probe(base - lift).content && document.activeElement !== launcher);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(place);
+    };
+    place();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    inBar.addEventListener('change', schedule);
+    document.addEventListener('focusin', schedule);
+    document.addEventListener('focusout', schedule);
+    // Late content (islands, images) can move controls under it without a scroll.
+    window.setTimeout(schedule, 1500);
+    launcher.addEventListener('click', async () => {
+      if (!host.hidden) {
+        host.hidden = true;
+        launcher.setAttribute('aria-expanded', 'false');
+        return;
+      }
+      launcher.setAttribute('aria-busy', 'true');
+      const { openChat } = await import('./mount');
+      const strings = JSON.parse(document.getElementById('chat-strings')?.textContent ?? '{}');
+      openChat(host, (launcher.dataset.locale as 'en' | 'hi') ?? 'en', strings, launcher);
+      launcher.removeAttribute('aria-busy');
+    });
+  }
+</script>

@@ -1,0 +1,465 @@
+---
+import Page from '@/layouts/Page.astro';
+import Account from '@/features/account/Account';
+
+const locale = Astro.locals.locale;
+---
+
+<Page title={locale === 'hi' ? 'मेरा अकाउंट | 360Ghar' : 'My account | 360Ghar'} description="Your 360Ghar account" noindex>
+  <div class="container-page acct py-6">
+    <Account client:only="react" locale={locale}>
+      <div slot="fallback" class="grid gap-4" aria-busy="true">
+        <span class="skeleton h-10 w-64"></span>
+        <span class="skeleton h-12 w-full"></span>
+        <span class="skeleton h-40 w-full"></span>
+      </div>
+    </Account>
+  </div>
+</Page>
+
+<style>
+  /* ---------- Shared parts ---------- */
+
+  .acct :global(.acct-thumb) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    background: var(--color-mist-100);
+  }
+
+  /* No photo yet: the paper camera fills the photo's box (cropped like a photo). */
+  .acct :global(.acct-nophoto) {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .acct :global(.acct-nophoto svg) {
+    flex: none;
+    width: auto !important;
+    height: 100% !important;
+  }
+
+  .acct :global(.acct-title-link) {
+    justify-self: start;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--color-ink-950);
+    text-decoration: underline;
+    text-decoration-color: var(--color-ink-200);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 140ms var(--ease-paper), text-decoration-color 140ms var(--ease-paper);
+  }
+
+  .acct :global(.acct-title-link:hover) {
+    color: var(--color-kesar-700);
+    text-decoration-color: currentColor;
+  }
+
+  .acct :global(.acct-see) {
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: 600 0.9375rem/1.2 var(--font-sans);
+  }
+
+  /* A tear-off calendar leaf. The band carries the month, the sheet the day. */
+  .acct :global(.acct-leaf) {
+    --tint: 94 33 0;
+    flex: none;
+    width: 3.5rem;
+    align-self: start;
+  }
+
+  .acct :global(.acct-leaf > span) {
+    display: grid;
+    justify-items: center;
+    padding-bottom: 0.375rem;
+    background: var(--color-mist-50);
+    text-align: center;
+  }
+
+  .acct :global(.acct-leaf-m) {
+    justify-self: stretch;
+    padding: 0.25rem 0 0.1875rem;
+    background: var(--color-pine-800);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .acct :global(.acct-leaf-d) {
+    margin-top: 0.125rem;
+    font-family: var(--font-display);
+    font-size: 1.625rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--color-ink-950);
+  }
+
+  .acct :global(.acct-leaf-w) {
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: var(--color-ink-600);
+  }
+
+  .acct :global(.acct-leaf[data-past] .acct-leaf-m) {
+    background: var(--color-ink-600);
+  }
+
+  .acct :global(.acct-leaf[data-past] > span) {
+    background: var(--color-ink-100);
+  }
+
+  /* ---------- Overview ---------- */
+
+  .acct :global(.acct-ov) {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 64rem) {
+    .acct :global(.acct-ov) {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+
+    .acct :global(.acct-ov-saved) {
+      grid-column: 1 / -1;
+    }
+
+    /* The visit card shares its row with the listings card: the photo grows to
+       the card's height, so no empty band is left under the text. */
+    .acct :global(.acct-ov-visit) {
+      grid-template-rows: auto 1fr;
+    }
+
+    .acct :global(.acct-ov-visit .acct-next-photo) {
+      align-self: stretch;
+      height: 100%;
+      min-height: 11.25rem;
+      aspect-ratio: auto;
+    }
+  }
+
+  .acct :global(.acct-card) {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+    padding: 1.25rem;
+    min-width: 0;
+  }
+
+  .acct :global(.acct-card-head) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 1rem;
+    min-height: 44px;
+  }
+
+  .acct :global(.acct-card-head h2) {
+    font-size: 1.25rem;
+  }
+
+  .acct :global(.acct-count) {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink-600);
+  }
+
+  /* Phone: the photo, the leaf beside the text, then the two links across the card. */
+  .acct :global(.acct-next) {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    grid-template-areas: 'photo photo' 'leaf text' 'links links';
+    gap: 0.75rem 1rem;
+    align-items: start;
+  }
+
+  .acct :global(.acct-next-photo) {
+    grid-area: photo;
+    aspect-ratio: 16 / 9;
+  }
+
+  .acct :global(.acct-next > .acct-leaf) {
+    grid-area: leaf;
+  }
+
+  .acct :global(.acct-next-text) {
+    grid-area: text;
+  }
+
+  .acct :global(.acct-next-links) {
+    grid-area: links;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+  }
+
+  /* Wider: the photo on the left; the links sit under the text, on its left edge. */
+  @media (min-width: 40rem) {
+    .acct :global(.acct-next) {
+      grid-template-columns: minmax(0, 15rem) 3.5rem minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      grid-template-areas: 'photo leaf text' 'photo leaf links';
+      row-gap: 0;
+    }
+
+    .acct :global(.acct-next-photo) {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .acct :global(.acct-saved) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 0.75rem;
+  }
+
+  @media (min-width: 40rem) {
+    .acct :global(.acct-saved) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .acct :global(.acct-saved-link) {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+  }
+
+  .acct :global(.acct-saved-link:hover .tabular) {
+    color: var(--color-kesar-700);
+  }
+
+  .acct :global(.acct-empty) {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+  }
+
+  @media (min-width: 40rem) {
+    .acct :global(.acct-empty) {
+      grid-template-columns: 9rem minmax(0, 1fr);
+    }
+  }
+
+  .acct :global(.acct-missing) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--color-haldi-100);
+    color: var(--color-haldi-700);
+    font-weight: 600;
+  }
+
+  /* ---------- Saved homes: pick homes to compare ---------- */
+
+  /* Stays under the sticky header (64 px) while the list scrolls. */
+  .acct :global(.acct-compare-bar) {
+    position: sticky;
+    top: 4rem;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.25rem;
+    padding: 0.625rem 0;
+    background: var(--color-paper);
+  }
+
+  /* ---------- Visits ---------- */
+
+  .acct :global(.acct-month) {
+    font-size: 1.125rem;
+    color: var(--color-ink-800);
+  }
+
+  /* Phone: the leaf and the text, then a row of buttons and a row of links. */
+  .acct :global(.acct-visit) {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    grid-template-areas: 'leaf text' 'act act';
+    gap: 0.75rem 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-paper);
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 2px 6px -2px rgb(var(--tint) / 0.14);
+  }
+
+  .acct :global(.acct-visit > .acct-leaf) {
+    grid-area: leaf;
+  }
+
+  .acct :global(.acct-visit-text) {
+    grid-area: text;
+  }
+
+  .acct :global(.acct-visit-photo) {
+    display: none;
+    grid-area: photo;
+  }
+
+  .acct :global(.acct-visit-actions) {
+    grid-area: act;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .acct :global(.acct-visit-btns) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .acct :global(.acct-visit-links) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+  }
+
+  /* Tablet: the photo joins the top row; buttons and links share one row. */
+  @media (min-width: 40rem) {
+    .acct :global(.acct-visit) {
+      grid-template-columns: 3.5rem 9rem minmax(0, 1fr);
+      grid-template-areas: 'leaf photo text' 'act act act';
+    }
+
+    .acct :global(.acct-visit-photo) {
+      display: block;
+    }
+
+    .acct :global(.acct-visit-actions) {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 1.25rem;
+    }
+  }
+
+  /* Desktop: the links sit under the status line; the two buttons stack on the right, one width. */
+  @media (min-width: 64rem) {
+    .acct :global(.acct-visit) {
+      grid-template-columns: 3.5rem 9rem minmax(0, 1fr) auto;
+      grid-template-rows: auto 1fr;
+      grid-template-areas: 'leaf photo text btns' 'leaf photo links btns';
+      gap: 0 1rem;
+      align-items: start;
+    }
+
+    .acct :global(.acct-visit-actions) {
+      display: contents;
+    }
+
+    .acct :global(.acct-visit-btns) {
+      grid-area: btns;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .acct :global(.acct-visit-links) {
+      grid-area: links;
+    }
+  }
+
+  /* ---------- Listings ---------- */
+
+  .acct :global(.acct-table) {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .acct :global(.acct-row) {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 0.75rem 1rem;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .acct :global(.acct-row:last-child) {
+    border-bottom: 0;
+  }
+
+  .acct :global(.acct-row-sm) {
+    grid-template-columns: 72px minmax(0, 1fr);
+    padding-block: 0.5rem;
+  }
+
+  .acct :global(.acct-row-actions) {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  @media (min-width: 48rem) {
+    .acct :global(.acct-row:not(.acct-row-sm)) {
+      grid-template-columns: 96px minmax(0, 1fr) auto;
+    }
+
+    .acct :global(.acct-row-actions) {
+      grid-column: auto;
+    }
+  }
+
+  /* ---------- Profile and security: the same cards as the overview ---------- */
+
+  .acct :global(.acct-tab-grid) {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 64rem) {
+    .acct :global(.acct-tab-grid) {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: start;
+    }
+  }
+
+  .acct :global(.acct-tab-note) {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--color-leaf-700);
+  }
+
+  .acct :global(.acct-tab-note svg) {
+    margin-top: 0.125rem;
+  }
+
+  .acct :global(.acct-tab-note-todo) {
+    color: var(--color-haldi-700);
+  }
+
+  .acct :global(.acct-avatar) {
+    display: grid;
+    place-items: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 9999px;
+    background: var(--color-mist-100);
+    color: var(--color-kesar-700);
+  }
+</style>

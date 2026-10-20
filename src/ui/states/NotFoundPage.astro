@@ -1,0 +1,17 @@
+---
+/**
+ * A whole "page not found" page: layout, title and the NotFound block, in the
+ * locale of the URL. Set the 404 status in the route (a prerendered 404.html
+ * needs none).
+ *
+ *   <NotFoundPage />
+ */
+import Page from '@/layouts/Page.astro';
+import NotFound from './NotFound.astro';
+
+const hi = Astro.locals.locale === 'hi';
+---
+
+<Page title={hi ? 'पेज नहीं मिला | 360Ghar' : 'Page not found | 360Ghar'} description={hi ? 'यह पेज हमारे नक्शे पर नहीं है।' : 'This page is not on our map.'} noindex>
+  <NotFound />
+</Page>

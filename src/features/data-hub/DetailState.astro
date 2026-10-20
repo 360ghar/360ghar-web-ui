@@ -1,0 +1,27 @@
+---
+/** 404 or 503 body for a data hub detail page. The route sets the status. */
+import Page from '@/layouts/Page.astro';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizePath } from '@/lib/i18n/locale';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import type { PageState } from './route';
+import { text } from './text';
+
+type Props = { state: Exclude<PageState, 'ok'>; locale: Locale; title: string; missingTitle: string; missingBody: string; back: { path: string; label: string } };
+const { state, locale, title, missingTitle, missingBody, back } = Astro.props;
+const t = text(locale);
+const missing = state === 'missing';
+---
+
+<Page title={title} description={missing ? missingBody : t.down.body} noindex>
+  <div class="container-page py-10 md:py-16">
+    <StateBlock
+      scene={missing ? 'notFound' : 'error'}
+      level={1}
+      title={missing ? missingTitle : t.down.title}
+      body={missing ? missingBody : t.down.body}
+      action={missing ? { href: localizePath(back.path, locale), label: back.label } : { href: Astro.url.pathname, label: t.retry, icon: 'retry' }}
+      secondary={missing ? undefined : { href: localizePath(back.path, locale), label: back.label }}
+    />
+  </div>
+</Page>

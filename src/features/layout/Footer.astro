@@ -1,0 +1,385 @@
+---
+/**
+ * Site footer: the street ends in two layers of paper skyline (far towers with
+ * lit windows, near blocks with roof tanks), then the light mist floor with the links
+ * on the page grid. On phones each link group folds into a disclosure, so the
+ * footer stays short; without JavaScript every group stays open.
+ */
+import { getT } from '@/i18n';
+import { COMPANY_EMAIL, COMPANY_PHONE, COMPANY_PHONE_DISPLAY } from '@/lib/company';
+import { localizer } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import { FOOTER, LEGAL, PLAY_STORE, SOCIAL } from './nav';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const L = localizer(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  {/* The skyline (skylineLayers in skyline.ts) is a cached file: src/pages/art, skyline/footer. */}
+  <img class="footer-skyline" src="/art/skyline/footer.svg" alt="" width="1600" height="120" loading="lazy" decoding="async" />
+  <div class="footer-floor grain">
+    <div class="container-page footer-grid">
+      <section class="footer-brand" aria-label="360Ghar">
+        <a href={L('/')} class="footer-logo" aria-label="360Ghar home">
+          <img src="/assets/images/logo/logo-horizontal.webp" alt="360Ghar" width="424" height="112" loading="lazy" decoding="async" />
+        </a>
+        <p class="footer-tagline">{t('site:footer.tagline')}</p>
+        <ul class="footer-contact">
+          <li>
+            <a href={`mailto:${COMPANY_EMAIL}`}><Icon name="mail" size={18} />{COMPANY_EMAIL}</a>
+          </li>
+          <li>
+            <a href={`tel:${COMPANY_PHONE}`}><Icon name="phone" size={18} />{COMPANY_PHONE_DISPLAY}</a>
+          </li>
+          <li>
+            <span><Icon name="pin" size={18} sprite />{t('site:footer.address')}</span>
+          </li>
+        </ul>
+        <div class="footer-app-row">
+          <a class="btn btn-primary footer-app" href={PLAY_STORE} rel="noopener">
+            {t('site:footer.app')}
+            <Icon name="arrow-up-right" size={18} class="arrow" />
+          </a>
+          <ul class="footer-social" aria-label={t('site:footer.follow')}>
+            {
+              SOCIAL.map((s) => (
+                <li>
+                  <a href={s.href} rel="noopener me" aria-label={s.label}>
+                    <Icon name={`brand:${s.brand}`} size={22} />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-links">
+        {
+          FOOTER.map((g) => (
+            <nav class="footer-col" aria-label={t(g.key)}>
+              <details open data-footer-group>
+                <summary>
+                  <h2>{t(g.key)}</h2>
+                  <Icon name="chevron-down" size={20} class="footer-chevron" sprite />
+                </summary>
+                <ul>
+                  {g.links.map((l) => (
+                    <li>
+                      <a href={L(l.href)}>{t(l.key)}</a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </nav>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="container-page">
+      <div class="footer-base">
+        <p>{t('site:footer.rights', { year })}</p>
+        <ul>
+          {
+            LEGAL.map((l) => (
+              <li>
+                <a href={L(l.href)}>{t(l.key)}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 4rem;
+    color: var(--color-ink-800);
+  }
+
+  /* Cropped like the old inline art: centred, the ground line kept. */
+  .footer-skyline {
+    display: block;
+    width: 100%;
+    height: 96px;
+    margin-bottom: -1px;
+    object-fit: cover;
+    object-position: 50% 100%;
+  }
+
+  @media (min-width: 48rem) {
+    .footer-skyline {
+      height: 120px;
+    }
+  }
+
+  /* The bottom padding keeps the last row clear of the chat launcher (fixed at
+     the bottom right) when the page is scrolled to the end. */
+  .footer-floor {
+    background-color: var(--color-mist-200);
+    padding-block: 2.5rem 5.5rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .footer-brand {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    max-width: 26rem;
+  }
+
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    width: fit-content;
+  }
+
+  .footer-logo img {
+    height: 40px;
+    width: auto;
+  }
+
+  .footer-tagline {
+    color: var(--color-ink-800);
+    max-width: 34ch;
+  }
+
+  .footer-contact {
+    display: grid;
+    font-size: 0.9375rem;
+  }
+
+  .footer-contact a,
+  .footer-contact span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 44px;
+    width: fit-content;
+    color: var(--color-ink-950);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 140ms var(--ease-paper);
+  }
+
+  .footer-contact span {
+    color: var(--color-ink-800);
+    font-weight: 400;
+  }
+
+  .footer-contact :global(svg) {
+    color: var(--color-kesar-700);
+  }
+
+  .footer-contact a:hover {
+    color: var(--color-kesar-800);
+  }
+
+  .footer-app-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: 0.25rem;
+  }
+
+  /* The glyphs, not their 44 px boxes, line up with the text above. */
+  .footer-social {
+    display: flex;
+    gap: 0.125rem;
+    margin-left: -11px;
+  }
+
+  .footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--color-ink-800);
+    border-radius: 9999px;
+    transition: color 140ms var(--ease-paper), background-color 140ms var(--ease-paper);
+  }
+
+  .footer-social a:hover {
+    color: var(--color-ink-950);
+    background: var(--color-mist-100);
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .footer-col summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 52px;
+    list-style: none;
+    cursor: pointer;
+    border-bottom: 1px solid rgb(var(--tint) / 0.16);
+  }
+
+  .footer-col summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .footer-col h2 {
+    font-size: 1.0625rem;
+    color: var(--color-ink-950);
+  }
+
+  .footer-col :global(.footer-chevron) {
+    color: var(--color-kesar-700);
+    transition: rotate 180ms var(--ease-paper);
+  }
+
+  .footer-col details[open] :global(.footer-chevron) {
+    rotate: 180deg;
+  }
+
+  .footer-col ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+    padding: 0.25rem 0 0.75rem;
+  }
+
+  .footer-col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-ink-800);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: color 140ms var(--ease-paper);
+  }
+
+  .footer-col a:hover {
+    color: var(--color-kesar-800);
+  }
+
+  .footer-base {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    align-items: center;
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgb(var(--tint) / 0.16);
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .footer-base ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+  }
+
+  .footer-base a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-ink-800);
+  }
+
+  .footer-base a:hover {
+    color: var(--color-kesar-800);
+  }
+
+  /* Tablet and up: every group open, laid out as columns on the page grid. */
+  @media (min-width: 48rem) {
+    .footer-links {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+    }
+
+    .footer-col summary {
+      min-height: 0;
+      margin-bottom: 0.5rem;
+      border: 0;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .footer-col :global(.footer-chevron) {
+      display: none;
+    }
+
+    .footer-col ul {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 0;
+    }
+
+    /* Room at the right end of the last row for the chat launcher. */
+    .footer-base {
+      padding-right: 8rem;
+    }
+  }
+
+  /* Tablet: the brand block spreads over two columns, contact on the right. */
+  @media (min-width: 48rem) and (max-width: 71.99rem) {
+    .footer-brand {
+      max-width: none;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 1.5rem;
+    }
+
+    .footer-contact {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      align-self: start;
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .footer-grid {
+      grid-template-columns: minmax(18rem, 3fr) 9fr;
+      gap: 3rem;
+    }
+
+    .footer-base ul {
+      margin-left: auto;
+    }
+
+    /* Columns take the width of their longest link, so labels stay on one line. */
+    .footer-links {
+      grid-template-columns: repeat(5, auto);
+      justify-content: space-between;
+      column-gap: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Phones: fold the link groups. Wider screens: keep them open, as plain headings.
+  const groups = [...document.querySelectorAll<HTMLDetailsElement>('[data-footer-group]')];
+  const phone = window.matchMedia('(max-width: 47.99rem)');
+  const apply = () => {
+    for (const g of groups) {
+      g.open = !phone.matches;
+      const s = g.querySelector('summary');
+      if (s) s.tabIndex = phone.matches ? 0 : -1;
+    }
+  };
+  apply();
+  phone.addEventListener('change', apply);
+  for (const g of groups) {
+    g.querySelector('summary')?.addEventListener('click', (e) => {
+      if (!phone.matches) e.preventDefault();
+    });
+  }
+</script>

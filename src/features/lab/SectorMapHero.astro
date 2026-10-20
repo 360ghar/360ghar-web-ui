@@ -1,0 +1,435 @@
+---
+/**
+ * Lab hero 2, "Sector map". The first screen is a paper map of the listed
+ * homes at their real coordinates: one punched card square per home, a tag per
+ * locality, and the real office hubs as reference marks. Server-rendered, so it
+ * needs no JavaScript: every tag is a link to that locality's homes, and its
+ * slip (on hover or focus) gives the lowest price per purpose. Two layouts
+ * (phone and wide) are computed on the server; CSS shows one.
+ */
+import offices from '@/data/office-landmarks.json';
+import HeroSearch from '@/features/search/HeroSearch';
+import type { ListingItem } from '@/features/search/listingItem';
+import { estimateTagWidth, groupHomes, layoutMap, niceScale, TAG_H, type MapGroup } from '@/features/search/mapLayout';
+import { isPlaceholderPrice } from '@/features/search/prices';
+import { askPrice, compactPrice, formatNum } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import { makeTools } from '@/lib/paper/shapes';
+
+type Props = { locale: Locale; homes: ListingItem[] };
+const { locale, homes } = Astro.props;
+const L = localizer(locale);
+const hi = locale === 'hi';
+const c = hi
+  ? {
+      title: 'गुरुग्राम, घर दर घर',
+      ring: (km: number) => `साइबर सिटी से ${km} किमी`,
+      map: (n: number) => `गुरुग्राम के ${n} घरों का नक्शा`,
+      homes: (n: number) => `${n} घर`,
+      buy: 'खरीदें',
+      rent: 'किराया',
+      short_stay: 'ठहरें',
+      from: 'से',
+      onRequest: 'कीमत पूछने पर',
+      also: 'साथ में',
+    }
+  : {
+      title: 'Gurugram, home by home',
+      ring: (km: number) => `${km} km from Cyber City`,
+      map: (n: number) => `Map of ${n} homes in Gurugram`,
+      homes: (n: number) => `${n} ${n === 1 ? 'home' : 'homes'}`,
+      buy: 'Buy',
+      rent: 'Rent',
+      short_stay: 'Stay',
+      from: 'from',
+      onRequest: 'price on request',
+      also: 'Also here',
+    };
+const PERIOD = { buy: '', rent: hi ? '/माह' : '/mo', short_stay: hi ? '/रात' : '/night' } as const;
+
+const groups = groupHomes(homes, askPrice);
+/** Lowest real price per purpose in some groups: "Buy from ₹62.6 L". */
+function prices(gs: MapGroup[]) {
+  const all = gs.flatMap((g) => g.homes);
+  return (['buy', 'rent', 'short_stay'] as const).flatMap((purpose) => {
+    const of = all.filter((p) => p.purpose === purpose);
+    if (!of.length) return [];
+    const priced = of.filter((p) => !isPlaceholderPrice(p)).map(askPrice);
+    const value = priced.length ? `${c.from} ${compactPrice(Math.min(...priced), locale)}${PERIOD[purpose]}` : c.onRequest;
+    return [{ purpose, label: c[purpose], n: of.length, value }];
+  });
+}
+const marks = (offices as { name: string; lat: number; lng: number }[]).filter((o) => o.lat && o.lng);
+const tagWidth = (gs: MapGroup[]) => estimateTagWidth(`${gs[0]!.name}${gs.length > 1 ? ` +${gs.length - 1}` : ''}`, c.homes(gs.reduce((a, g) => a + g.homes.length, 0)));
+
+/** One layout for a W x H box. `left`: room kept free for the search slip. */
+function board(W: number, H: number, left: number, seed: string) {
+  const lay = layoutMap(groups, W, H, { top: TAG_H + 24, right: 40, bottom: 70, left }, tagWidth, marks.map((m) => [m.lat, m.lng] as const));
+  const tools = makeTools(`smap-${seed}`, 0.8);
+  // Each home: a small square of card, turned a little, with a hole punched in it (same as the results map).
+  const chips = lay.blocks.flatMap((b) =>
+    b.dots.map(([x, y]) => {
+      const r = 7 + tools.rand() * 1.5;
+      const a = (tools.rand() - 0.5) * 0.7;
+      const corner = (k: number): [number, number] => [x + r * Math.SQRT2 * Math.cos(a + Math.PI / 4 + (k * Math.PI) / 2), y + r * Math.SQRT2 * Math.sin(a + Math.PI / 4 + (k * Math.PI) / 2)];
+      return tools.path([corner(0), corner(1), corner(2), corner(3)]) + tools.oct(x, y, 2.2);
+    }),
+  );
+  const scale = niceScale(lay.pxPerKm, W * 0.18);
+  // Label boxes already on the board: the tags, then each kept mark or ring label. A new label that touches one is moved or skipped.
+  const taken = lay.tags.map((t) => ({ x0: t.x - t.w / 2 - 6, x1: t.x + t.w / 2 + 6, y0: t.y - TAG_H - 14, y1: t.y + 4 }));
+  const free = (x0: number, x1: number, y0: number, y1: number) =>
+    x0 > 8 && x1 < W - 8 && y0 > 8 && y1 < H - 48 && !taken.some((b) => x0 < b.x1 && x1 > b.x0 && y0 < b.y1 && y1 > b.y0);
+  const take = (x0: number, x1: number, y0: number, y1: number) => taken.push({ x0, x1, y0, y1 });
+  const halfW = (text: string) => text.length * 3.4 + 6;
+  // Cyber City first: the rings are drawn around it. ponytail: greedy placement, fine for 10 marks.
+  const kept: { name: string; at: [number, number] }[] = [];
+  for (const m of [...marks].sort((a, z) => Number(z.name === 'Cyber City') - Number(a.name === 'Cyber City'))) {
+    const at = lay.at(m.lat, m.lng);
+    const h = halfW(m.name);
+    if (!free(at[0] - h, at[0] + h, at[1] - 2, at[1] + 28)) continue;
+    take(at[0] - h, at[0] + h, at[1] - 2, at[1] + 28);
+    kept.push({ name: m.name, at });
+  }
+  // Commute rings around Cyber City, the main office hub: 5, 10 and 15 km. Each label sits at the first free spot on its ring.
+  const hub = marks.find((m) => m.name === 'Cyber City');
+  const rings = hub
+    ? [5, 10, 15].map((km) => {
+        const at = lay.at(hub.lat, hub.lng);
+        const r = km * lay.pxPerKm;
+        const h = halfW(c.ring(km));
+        let label: [number, number] | null = null;
+        for (const deg of [-90, -120, -60, -150, -30, 180, 0, 150, 30, 120, 60, 90]) {
+          const x = at[0] + r * Math.cos((deg * Math.PI) / 180);
+          const y = at[1] + r * Math.sin((deg * Math.PI) / 180);
+          if (free(x - h, x + h, y - 9, y + 9)) {
+            take(x - h, x + h, y - 9, y + 9);
+            label = [x, y];
+            break;
+          }
+        }
+        return { km, at, r, label };
+      })
+    : [];
+  return { W, H, lay, chips, scale, marks: kept, rings };
+}
+const boards = groups.length ? [board(400, 520, 40, 'phone'), board(1440, 780, 560, 'wide')] : [];
+const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(3)}%`;
+---
+
+<section class="smap" aria-labelledby="smap-title">
+  <div class="smap-slip">
+    <h1 id="smap-title" class="smap-title">{c.title}</h1>
+    <HeroSearch client:load locale={locale} />
+  </div>
+  <div class="smap-board grain" role="region" aria-label={c.map(homes.length)}>
+    {
+      boards.map((b, bi) => (
+        <div class:list={['smap-box', bi ? 'is-wide' : 'is-phone']} style={`--w:${b.W};--h:${b.H}`}>
+          <svg class="smap-art" viewBox={`0 0 ${b.W} ${b.H}`} aria-hidden="true" focusable="false">
+            <defs>
+              <filter id={`smap-lift-${bi}`} x="-10%" y="-10%" width="130%" height="140%">
+                <feDropShadow dx="1.5" dy="2.5" stdDeviation="1" flood-color="rgb(181 70 0 / 0.35)" />
+              </filter>
+            </defs>
+            {b.rings.map((r) => (
+              <g class="smap-ring">
+                <circle cx={r.at[0].toFixed(1)} cy={r.at[1].toFixed(1)} r={r.r.toFixed(1)} />
+                {r.label ? (
+                  <text x={r.label[0].toFixed(1)} y={r.label[1].toFixed(1)} text-anchor="middle" dominant-baseline="central">
+                    {c.ring(r.km)}
+                  </text>
+                ) : null}
+              </g>
+            ))}
+            {b.marks.map((m) => (
+              <g class="smap-mark" transform={`translate(${m.at[0].toFixed(1)} ${m.at[1].toFixed(1)})`}>
+                <path d="M-6 6V-3L0 -8L6 -3V6Z" />
+                <text y="20" text-anchor="middle" dominant-baseline="central">
+                  {m.name}
+                </text>
+              </g>
+            ))}
+            <g class="smap-chips" filter={`url(#smap-lift-${bi})`}>
+              {b.chips.map((d) => (
+                <path d={d} fill-rule="evenodd" />
+              ))}
+            </g>
+            {b.scale ? (
+              <g class="smap-scale">
+                <path d={`M${b.W - 40 - b.scale.px} ${b.H - 34}V${b.H - 28}H${b.W - 40}V${b.H - 34}`} fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <text x={b.W - 40 - b.scale.px / 2} y={b.H - 14} text-anchor="middle" dominant-baseline="central">
+                  {b.scale.km} km
+                </text>
+              </g>
+            ) : null}
+          </svg>
+          {b.lay.tags.map((t) => {
+            const lead = [...t.groups].sort((a, z) => z.homes.length - a.homes.length)[0]!;
+            const n = t.groups.reduce((a, g) => a + g.homes.length, 0);
+            return (
+              <a
+                class="smap-tag"
+                href={L(`/properties?locality=${encodeURIComponent(lead.name)}`)}
+                style={`left:${pct(t.x, b.W)};top:${pct(t.y, b.H)};--notch:${(Math.max(-t.w / 2 + 12, Math.min(t.w / 2 - 12, t.ax - t.x)) / b.W) * 100}cqw`}
+              >
+                <span class="smap-tag-name">
+                  {lead.name}
+                  {t.groups.length > 1 ? <span class="smap-tag-more"> +{t.groups.length - 1}</span> : null}
+                </span>
+                <span class="smap-tag-meta tabular">{c.homes(n)}</span>
+                <span class="smap-tag-slip">
+                  {prices(t.groups).map((p) => (
+                    <span class="smap-slip-row">
+                      <strong>{p.label}</strong>
+                      <span class="tabular">
+                        {formatNum(p.n, locale)} · {p.value}
+                      </span>
+                    </span>
+                  ))}
+                  {t.groups.length > 1 ? (
+                    <span class="smap-slip-also">
+                      {c.also}: {t.groups.filter((g) => g !== lead).map((g) => g.name).join(', ')}
+                    </span>
+                  ) : null}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .smap {
+    position: relative;
+    display: grid;
+    background: var(--color-mist-50);
+  }
+
+  /* ---------- The board: one of two computed layouts, scaled to fit ---------- */
+
+  .smap-board {
+    position: relative;
+    height: max(24rem, 62svh);
+    container-type: size;
+    display: grid;
+    place-items: center;
+    overflow: clip;
+    background-color: var(--color-mist-100);
+  }
+
+  .smap-box {
+    position: relative;
+    width: min(100cqw, calc(100cqh * var(--w) / var(--h)));
+    aspect-ratio: var(--w) / var(--h);
+    container-type: inline-size;
+    /* Type on the board scales with the board: 13 px in a box of --w units. */
+    --u: calc(100cqw / var(--w));
+  }
+
+  .smap-box.is-wide {
+    display: none;
+  }
+
+  .smap-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .smap-chips {
+    fill: var(--color-kesar-300);
+  }
+
+  .smap-ring circle {
+    fill: none;
+    stroke: var(--color-mist-300);
+    stroke-width: 1.5;
+    stroke-dasharray: 2 7;
+    stroke-linecap: round;
+  }
+
+  .smap-ring text {
+    fill: var(--color-ink-600);
+    font: 500 12px/1 var(--font-sans);
+    paint-order: stroke;
+    stroke: var(--color-mist-100);
+    stroke-width: 6px;
+    stroke-linejoin: round;
+  }
+
+  .smap-mark path {
+    fill: var(--color-mist-300);
+  }
+
+  .smap-mark text {
+    fill: var(--color-ink-600);
+    font: 600 12px/1 var(--font-sans);
+  }
+
+  .smap-scale path {
+    stroke: var(--color-ink-800);
+  }
+
+  .smap-scale text {
+    fill: var(--color-ink-800);
+    font: 700 12px/1 var(--font-sans);
+  }
+
+  /* ---------- Tags (as on the results map), each a link with a price slip ---------- */
+
+  .smap-tag {
+    --tint: 20 45 38;
+    position: absolute;
+    display: grid;
+    justify-items: center;
+    min-height: 44px;
+    padding: 0.3125rem 0.625rem;
+    translate: -50% calc(-100% - 7px);
+    border-radius: 8px;
+    background: var(--color-paper);
+    color: var(--color-ink-950);
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 2px 6px -2px rgb(var(--tint) / 0.14);
+    transition:
+      background-color 120ms var(--ease-paper),
+      color 120ms var(--ease-paper);
+  }
+
+  .smap-tag::after {
+    content: '';
+    position: absolute;
+    left: calc(50% + var(--notch, 0px));
+    bottom: -6px;
+    width: 12px;
+    height: 7px;
+    translate: -50% 0;
+    background: inherit;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  .smap-tag-name {
+    font: 800 0.8125rem/1.2 var(--font-sans);
+  }
+
+  .smap-tag-more {
+    color: var(--color-kesar-700);
+  }
+
+  .smap-tag-meta {
+    font: 600 0.75rem/1.25 var(--font-sans);
+    color: var(--color-ink-600);
+  }
+
+  .smap-tag:is(:hover, :focus-visible) {
+    z-index: 3;
+    background: var(--color-pine-800);
+    color: #fff;
+  }
+
+  .smap-tag:is(:hover, :focus-visible) :is(.smap-tag-meta, .smap-tag-more) {
+    color: var(--color-mist-200);
+  }
+
+  .smap-tag:focus-visible {
+    outline: 2px solid var(--color-kesar-700);
+    outline-offset: 2px;
+  }
+
+  /* The slip under a tag: hidden at rest, shown on hover or focus. It is extra detail; the tag already names the place and the count. */
+  .smap-tag-slip {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: 50%;
+    display: none;
+    gap: 0.3rem;
+    min-width: 12.5rem;
+    padding: 0.7rem 0.85rem;
+    translate: -50% 0;
+    border-radius: var(--radius-sm);
+    background: var(--color-paper);
+    color: var(--color-ink-950);
+    text-align: left;
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 8px 16px -8px rgb(var(--tint) / 0.3);
+  }
+
+  .smap-tag:is(:hover, :focus-visible) .smap-tag-slip {
+    display: grid;
+  }
+
+  .smap-slip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .smap-slip-row strong {
+    font-weight: 700;
+  }
+
+  .smap-slip-row .tabular {
+    color: var(--color-ink-600);
+  }
+
+  .smap-slip-also {
+    font-size: 0.8rem;
+    color: var(--color-ink-600);
+    white-space: normal;
+  }
+
+  /* ---------- The slip with the title and the search ---------- */
+
+  .smap-slip {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    gap: 1.25rem;
+    padding: 1.5rem 1rem 1.25rem;
+    background: var(--color-paper);
+  }
+
+  .smap-title {
+    max-width: 16ch;
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.6rem);
+    font-weight: 500;
+    line-height: 1.08;
+  }
+
+  /* Wide screens: the map fills the first screen; the slip floats on it, top left, over the room kept free for it. */
+  @media (min-width: 64rem) {
+    .smap {
+      display: block;
+    }
+
+    .smap-board {
+      height: max(36rem, calc(100svh - 64px));
+    }
+
+    .smap-box.is-phone {
+      display: none;
+    }
+
+    .smap-box.is-wide {
+      display: block;
+    }
+
+    .smap-slip {
+      --tint: 20 45 38;
+      position: absolute;
+      top: clamp(1.5rem, 5vh, 3.5rem);
+      left: max(1.5rem, calc((100vw - 84rem) / 2));
+      width: min(30rem, 36vw);
+      padding: 1.75rem 1.5rem 1.25rem;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 2px 2px rgb(var(--tint) / 0.06), 0 18px 32px -14px rgb(var(--tint) / 0.24);
+    }
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+/**
+ * A full-width band of card stock with hand-cut top and bottom edges, so a
+ * coloured section meets the page as paper, not as a hard line.
+ */
+import { cutBandPath } from '@/lib/paper/cut';
+
+type Props = { seed: string; tone?: string; class?: string; as?: 'section' | 'div'; labelledby?: string };
+const { seed, tone = 'var(--color-mist-100)', class: className, as: Tag = 'section', labelledby } = Astro.props;
+const top = cutBandPath(`${seed}-top`, 1440, 22, 40);
+const bottom = cutBandPath(`${seed}-bottom`, 1440, 22, 40);
+---
+
+<Tag class:list={['cut-band', className]} aria-labelledby={labelledby}>
+  <svg class="cut-band-edge" viewBox="0 0 1440 22" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={top} fill={tone} />
+  </svg>
+  <div class="cut-band-body grain" style={`background-color:${tone}`}>
+    <slot />
+  </div>
+  <svg class="cut-band-edge is-bottom" viewBox="0 0 1440 22" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={bottom} fill={tone} />
+  </svg>
+</Tag>
+
+<style>
+  .cut-band {
+    position: relative;
+  }
+
+  .cut-band-edge {
+    display: block;
+    width: 100%;
+    height: 14px;
+    margin-bottom: -1px;
+    filter: drop-shadow(0 -1px 0 rgb(var(--tint) / 0.08));
+  }
+
+  .cut-band-edge.is-bottom {
+    margin: -1px 0 0;
+    transform: scaleY(-1);
+    filter: drop-shadow(0 -2px 1px rgb(var(--tint) / 0.14));
+  }
+</style>

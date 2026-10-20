@@ -1,0 +1,200 @@
+---
+/**
+ * Shell for sign-in pages: the form island (client only, no SEO value) on a
+ * paper sheet. The street diorama sits beside it on wide screens; on phones
+ * and tablets it is a short band above, and the sheet crosses its lower edge.
+ */
+import Page from '@/layouts/Page.astro';
+import Diorama from '@/features/home/diorama/Diorama.astro';
+import AuthFlows, { type Mode } from './AuthFlows';
+
+type Props = { mode: Mode; title: string };
+const { mode, title } = Astro.props;
+const locale = Astro.locals.locale;
+---
+
+<Page title={title} description="Sign in to 360Ghar" noindex>
+  <div class="auth-wrap">
+    <div class="container-page auth-grid">
+      <div class="auth-art" aria-hidden="true">
+        <Diorama class="auth-diorama" label="" />
+      </div>
+      <div class="auth-sheet sheet">
+        <AuthFlows client:only="react" mode={mode} locale={locale}>
+          <div slot="fallback" class="auth-card" aria-busy="true">
+            <span class="skeleton h-9 w-48"></span>
+            <span class="skeleton mt-3 h-5 w-64"></span>
+            <span class="skeleton mt-6 h-11 w-full"></span>
+            <span class="skeleton mt-4 h-11 w-full"></span>
+          </div>
+        </AuthFlows>
+      </div>
+    </div>
+  </div>
+</Page>
+
+<style>
+  .auth-wrap {
+    padding-block: 0 3rem;
+  }
+
+  .auth-grid {
+    display: grid;
+    align-items: stretch;
+  }
+
+  /* Phone and tablet: a band of the street, full bleed, under the header. */
+  .auth-art {
+    margin-inline: calc(50% - 50vw);
+    height: clamp(8.5rem, 26vw, 13rem);
+    overflow: hidden;
+  }
+
+  .auth-art :global(.auth-diorama) {
+    height: 100%;
+  }
+
+  .auth-sheet {
+    position: relative;
+    z-index: 1;
+    margin-top: -1.75rem;
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+    max-width: 30rem;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 64rem) {
+    .auth-wrap {
+      padding-block: 1.5rem 3rem;
+    }
+
+    .auth-grid {
+      grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .auth-art {
+      order: 2;
+      margin-inline: 0;
+      height: auto;
+      border-radius: var(--radius-lg);
+    }
+
+    .auth-art :global(.auth-diorama) {
+      min-height: 34rem;
+    }
+
+    .auth-sheet {
+      margin-top: 0;
+    }
+  }
+
+  .auth-sheet :global(.auth-title) {
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  }
+
+  .auth-sheet :global(.auth-lead) {
+    margin-top: 0.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .auth-sheet :global(.auth-change) {
+    min-height: 44px;
+    margin-left: 0.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+  }
+
+  /* Steps: plain text, the current one in ink, done ones with a tick. */
+  .auth-sheet :global(.auth-steps) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.125rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .auth-sheet :global(.auth-steps li) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .auth-sheet :global(.auth-steps li > span) {
+    font-weight: 700;
+  }
+
+  .auth-sheet :global(.auth-steps [data-state='now']) {
+    color: var(--color-ink-950);
+    font-weight: 600;
+  }
+
+  .auth-sheet :global(.auth-steps [data-state='done']) {
+    color: var(--color-leaf-700);
+  }
+
+  .auth-sheet :global(.auth-body) {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .auth-sheet :global(.auth-or) {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-ink-600);
+    font-size: 0.875rem;
+  }
+
+  .auth-sheet :global(.auth-or)::before,
+  .auth-sheet :global(.auth-or)::after {
+    content: '';
+    height: 1px;
+    border-radius: 9999px;
+    background: var(--color-ink-200);
+  }
+
+  /* Secondary actions under a form: stacked, text aligned with the fields. */
+  .auth-sheet :global(.auth-more) {
+    display: grid;
+    justify-items: start;
+    margin-inline-start: -1.125rem;
+  }
+
+  .auth-sheet :global(.auth-switch) {
+    text-align: center;
+    color: var(--color-ink-800);
+  }
+
+  .auth-sheet :global(.auth-last) {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .auth-sheet :global(.auth-last svg) {
+    margin-top: 0.125rem;
+    color: var(--color-kesar-700);
+  }
+
+  .auth-sheet :global(.auth-note) {
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+  }
+
+  .auth-sheet :global(.auth-code) {
+    font-size: 1.5rem;
+    letter-spacing: 0.3em;
+  }
+</style>

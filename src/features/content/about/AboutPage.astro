@@ -1,0 +1,440 @@
+---
+/**
+ * /about-us. The team section shows only the founder, from lib/seo/legacy/authors.js,
+ * and the Person JSON-LD uses the same record. The old page showed three
+ * template team members that did not match its own schema.
+ */
+import { getT } from '@/i18n';
+import Page from '@/layouts/Page.astro';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { authors } from '@/lib/seo/legacy/authors.js';
+import { SITE_URL } from '@/lib/seo/site';
+import { SceneArt } from '@/features/blog/art/SceneArt';
+import { paperArt, type SceneName } from '@/features/blog/art/scenes';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Paper from '@/ui/Paper.astro';
+import CutBand from '@/ui/CutBand.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import NewsletterBand from '@/features/content/shared/NewsletterBand.astro';
+import { trail, webPage } from '@/features/content/shared/schema';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const L = localizer(locale);
+const hi = locale === 'hi';
+
+const H = byLocale(locale, {
+  en: {
+    title: 'About 360Ghar',
+    lead: 'We list homes in Gurugram that our team has visited and checked, so you can shortlist from home and visit only the ones you like.',
+    how: "From the owner's door to your phone",
+    what: 'What you can find',
+    who: 'Who runs 360Ghar',
+    areas: 'Areas we cover in Gurugram',
+    areasBody: 'Our team visits and checks homes in these areas.',
+    owners: 'List your home for free',
+    ownersBody: 'We come to your home, shoot the photos and the 360° walkthrough, and set up the listing. Rent, PG or sale: no upfront fee.',
+    ownersCta: 'Post your property',
+    linkedin: 'Saksham Mittal on LinkedIn',
+    role: 'Founder and CEO',
+    bio: 'Saksham Mittal is the founder and CEO of 360Ghar. He leads product strategy and technology.',
+  },
+  hi: {
+    title: '360Ghar के बारे में',
+    lead: 'हम गुरुग्राम के वे घर लिस्ट करते हैं जिन्हें हमारी टीम ने जाकर जाँचा है, ताकि आप घर बैठे शॉर्टलिस्ट करें और सिर्फ़ पसंद के घर देखने जाएँ।',
+    how: 'मालिक के दरवाज़े से आपके फ़ोन तक',
+    what: 'आपको क्या मिलेगा',
+    who: '360Ghar कौन चलाता है',
+    areas: 'गुरुग्राम में हमारे इलाके',
+    areasBody: 'इन इलाकों में हमारी टीम घर पर जाकर जाँच करती है।',
+    owners: 'अपना घर मुफ़्त में लिस्ट करें',
+    ownersBody: 'हम आपके घर आते हैं, फ़ोटो और 360° वॉकथ्रू बनाते हैं और लिस्टिंग तैयार करते हैं। किराया, PG या बिक्री: कोई अग्रिम शुल्क नहीं।',
+    ownersCta: 'अपनी प्रॉपर्टी पोस्ट करें',
+    linkedin: 'LinkedIn पर Saksham Mittal',
+    role: 'संस्थापक और CEO',
+    bio: 'Saksham Mittal 360Ghar के संस्थापक और CEO हैं। वे प्रोडक्ट रणनीति और टेक्नोलॉजी का काम देखते हैं।',
+  },
+});
+
+// The path of a listing, from the old About, home and FAQ copy. No numbers that we cannot back up.
+const story: { scene: SceneName; title: string; body: string }[] = hi
+  ? [
+      { scene: 'toran', title: 'हम घर पर जाते हैं', body: 'हमारी टीम मालिक के दरवाज़े तक जाती है। लिस्टिंग मुफ़्त है: मालिक से कोई अग्रिम शुल्क नहीं।' },
+      { scene: 'tour', title: 'हम 360° वॉकथ्रू बनाते हैं', body: 'मौके पर स्टूडियो-क्वालिटी फ़ोटो और हर कमरे का गाइडेड 360° टूर।' },
+      { scene: 'seal', title: 'हम जानकारी जाँचते हैं', body: 'लिस्टिंग लाइव होने से पहले मालिकाना कागज़, साइज़, कीमत और नक्शे पर सही पिन।' },
+      { scene: 'chat', title: 'आप घर बैठे शॉर्टलिस्ट करते हैं', body: 'फ़ोन पर घर देखें, फिर ऐप में विज़िट बुक करें। खोज से कागज़ात तक एक रिलेशनशिप मैनेजर मदद करता है।' },
+    ]
+  : [
+      { scene: 'toran', title: 'We visit the home', body: "Our team goes to the owner's door. Listing is free: owners pay no upfront fee." },
+      { scene: 'tour', title: 'We shoot a 360° walkthrough', body: 'Studio-quality photos and a guided 360° tour of every room, taken on site.' },
+      { scene: 'seal', title: 'We check the details', body: 'Ownership papers, specs, price and the exact pin on the map, before the listing goes live.' },
+      { scene: 'chat', title: 'You shortlist from home', body: 'Look through homes on your phone, then book a visit in the app. A Relationship Manager helps from search to paperwork.' },
+    ];
+
+// What is listed (old AboutThree / PropertyTypeThree copy, cut to the three kinds of home).
+const services = hi
+  ? [
+      { title: 'गुरुग्राम में किराया और PG', body: 'किराये के लिए जाँचे गए कमरे, PG और अपार्टमेंट।', href: '/gurgaon/rent/flats' },
+      { title: 'अपार्टमेंट और घर ख़रीदें', body: 'DLF, गोल्फ़ कोर्स रोड, सोहना रोड और दूसरे इलाकों में जाँची गई प्रॉपर्टी।', href: '/gurgaon/buy/flats' },
+      { title: 'कमर्शियल ऑफ़िस और दुकानें', body: 'सही जानकारी के साथ ऑफ़िस और दुकानें।', href: '/gurgaon/rent/office-space' },
+    ]
+  : [
+      { title: 'Rentals and PG in Gurugram', body: 'Checked rooms, PGs and apartments for rent.', href: '/gurgaon/rent/flats' },
+      { title: 'Buy apartments and homes', body: 'Checked homes across DLF, Golf Course Road, Sohna Road and more.', href: '/gurgaon/buy/flats' },
+      { title: 'Commercial offices and shops', body: 'Office space and shops with correct details.', href: '/gurgaon/rent/office-space' },
+    ];
+
+const AREAS = [
+  'DLF Phase 1', 'DLF Phase 2', 'DLF Phase 3', 'DLF Phase 4', 'DLF Phase 5', 'Golf Course Road', 'Golf Course Extension', 'MG Road', 'Sohna Road', 'Cyber City',
+  'Udyog Vihar', 'Sushant Lok 1/2/3', 'South City 1/2', 'Palam Vihar', 'Sector 28 / 29', 'Sector 45 / 46 / 47', 'Sector 57 / 58', 'Sector 62 / 63 / 65 / 67', 'Sector 70 to 79',
+];
+
+// The name, link and credentials come from the shared author record. Its bio is replaced here (H.bio): it claims "India's first AI + VR-first real estate platform", which we cannot back up.
+const founder = authors['saksham-mittal'];
+const { crumbs, ld } = trail(locale, [{ name: H.title, path: '/about-us' }]);
+const description = t('seo:about.description');
+const jsonLd = [
+  { ...webPage({ name: t('seo:about.title'), description, path: '/about-us', locale, type: 'AboutPage' }), mainEntity: { '@id': `${SITE_URL}/#organization` } },
+  ld,
+  // The founder Person node is site-wide (siteBlocks() in lib/seo/siteSchemas.ts, @id #founder): a second one here would duplicate it.
+];
+---
+
+<Page title={t('seo:about.title')} description={description} path="/about-us" jsonLd={jsonLd}>
+  <div class="container-page about">
+    <Breadcrumbs items={crumbs} />
+    <header class="about-head">
+      <h1 class="about-h1">{H.title}</h1>
+      <p class="about-lead">{H.lead}</p>
+    </header>
+
+    <section class="about-story" aria-labelledby="about-how">
+      <h2 id="about-how" class="about-h2">{H.how}</h2>
+      <Paper seed="about-story" tone="mist-100" depth={2} innerClass="story-sheet">
+        <ol class="story-list" role="list">
+          {
+            story.map((st, i) => (
+              <li class="story-step">
+                <div class="story-art">
+                  <SceneArt art={paperArt(st.scene, `about-${i}`, { dusk: i % 2 === 1 })} />
+                </div>
+                <h3 class="story-title">
+                  <span class="story-n tabular" aria-hidden="true">{i + 1}</span>
+                  {st.title}
+                </h3>
+                <p class="story-body">{st.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </Paper>
+    </section>
+
+    <section class="about-block" aria-labelledby="about-what">
+      <h2 id="about-what" class="about-h2">{H.what}</h2>
+      <ul class="about-services" role="list">
+        {
+          services.map((s) => (
+            <li>
+              <a href={L(s.href)}>
+                <span class="about-service-title">
+                  {s.title}
+                  <Icon name="arrow-up-right" size={18} class="arrow" />
+                </span>
+                <span class="about-service-body">{s.body}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="about-block about-founder" aria-labelledby="about-who">
+      <h2 id="about-who" class="about-h2">{H.who}</h2>
+      <div class="about-founder-grid">
+        <p class="about-founder-name" aria-hidden="true">{founder.name}</p>
+        <div class="about-founder-copy">
+          <h3 class="about-founder-role"><span class="visually-hidden">{founder.name}, </span>{H.role}</h3>
+          <p>{H.bio}</p>
+          <a class="link" href={founder.linkedin} rel="noopener me">
+            <Icon name="brand:linkedin" size={18} />
+            {H.linkedin}
+            <Icon name="arrow-up-right" size={16} class="arrow" />
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <CutBand seed="about-areas" class="about-areas" labelledby="about-areas">
+    <div class="container-page about-areas-inner">
+      <div>
+        <h2 id="about-areas" class="about-h2">{H.areas}</h2>
+        <p class="about-areas-body">{H.areasBody}</p>
+      </div>
+      <ul class="about-area-list" role="list">
+        {AREAS.map((a) => <li>{a}</li>)}
+      </ul>
+    </div>
+  </CutBand>
+
+  <div class="container-page">
+    <section class="about-block about-owners" aria-labelledby="about-owners">
+      <h2 id="about-owners" class="about-h2">{H.owners}</h2>
+      <p>{H.ownersBody}</p>
+      <a class="btn btn-primary btn-lg" href={L('/post-property')}>
+        {H.ownersCta}
+        <Icon name="arrow-up-right" size={18} class="arrow" />
+      </a>
+    </section>
+
+    <NewsletterBand locale={locale} />
+  </div>
+</Page>
+
+<style>
+  .about {
+    padding-top: 0.5rem;
+  }
+
+  .about-head {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    max-width: 52rem;
+  }
+
+  .about-h1 {
+    font-size: clamp(2.25rem, 1.3rem + 4vw, 4.5rem);
+  }
+
+  .about-lead {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    color: var(--color-ink-800);
+    max-width: 60ch;
+  }
+
+  .about-block {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  /* The story: one storyboard sheet with four scenes. */
+  .about-story {
+    margin-top: clamp(2rem, 5vw, 3rem);
+  }
+
+  .about-story :global(.story-sheet) {
+    margin-top: 1.25rem;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+  }
+
+  .story-list {
+    display: grid;
+    gap: 1.75rem 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 40rem) {
+    .story-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .story-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* Art, title and text share rows across the panels, so they line up. */
+  .story-step {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .story-art {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    margin-bottom: 0.5rem;
+  }
+
+  .story-title {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .story-n {
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: var(--color-kesar-700);
+  }
+
+  .story-body {
+    color: var(--color-ink-800);
+    max-width: 44ch;
+  }
+
+  .about-h2 {
+    font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.5rem);
+    max-width: 24ch;
+  }
+
+  .about-services {
+    display: grid;
+    gap: 0 2.5rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 60rem) {
+    .about-services {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .about-services a {
+    display: grid;
+    align-content: start;
+    gap: 0.375rem;
+    height: 100%;
+    padding: 1.125rem 0 1.25rem;
+    border-top: 1px solid var(--color-ink-200);
+    text-decoration: none;
+  }
+
+  .about-service-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-weight: 800;
+    font-size: 1.125rem;
+    transition: color 140ms var(--ease-paper);
+  }
+
+  .about-services a:hover .about-service-title {
+    color: var(--color-kesar-700);
+  }
+
+  .about-service-title :global(.arrow) {
+    color: var(--color-kesar-700);
+    transition: translate 160ms var(--ease-paper);
+  }
+
+  .about-services a:hover :global(.arrow) {
+    translate: 2px -2px;
+  }
+
+  .about-service-body {
+    color: var(--color-ink-800);
+    max-width: 42ch;
+  }
+
+  .about-founder-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .about-founder-grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      align-items: end;
+      gap: 3rem;
+    }
+  }
+
+  /*
+   * The founder's name: the page's one big display line, in deep kesar (tonal, not the brand fill).
+   * The name is 7.64 em wide, so from 64rem the size follows the name column: one line at 1024 and 1440.
+   * Phones get two lines.
+   */
+  .about-founder-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(3.25rem, 1.5rem + 7vw, 5.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    color: var(--color-kesar-900);
+  }
+
+  @media (min-width: 64rem) {
+    .about-founder-name {
+      font-size: min(6.2vw, 5rem);
+    }
+  }
+
+  .about-founder-copy {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+  }
+
+  .about-founder-role {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    font-weight: 800;
+  }
+
+  .about-founder-copy p {
+    color: var(--color-ink-800);
+    max-width: 52ch;
+  }
+
+  :global(.about-areas) {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .about-areas-inner {
+    display: grid;
+    gap: 1.5rem;
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  @media (min-width: 64rem) {
+    .about-areas-inner {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr);
+      gap: 3rem;
+    }
+  }
+
+  .about-areas-body {
+    margin-top: 0.5rem;
+    color: var(--color-ink-950);
+  }
+
+  .about-area-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.625rem 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  @media (min-width: 48rem) {
+    .about-area-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .about-owners {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    max-width: 44rem;
+  }
+
+  .about-owners p {
+    color: var(--color-ink-800);
+    max-width: 60ch;
+  }
+</style>

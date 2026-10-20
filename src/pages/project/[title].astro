@@ -1,0 +1,9 @@
+---
+import ProjectPage from '@/features/projects/ProjectPage.astro';
+import { loadProject } from '@/features/projects/load';
+
+export const prerender = false;
+const data = await loadProject(Astro);
+---
+
+<ProjectPage {...data} />

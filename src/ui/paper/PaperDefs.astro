@@ -1,0 +1,20 @@
+---
+/**
+ * The shared paper shadow filters (see lib/paper/defs), rendered once per page
+ * by the base layout. The SVG is 0 x 0 and positioned out of flow; it is never
+ * display: none, because browsers do not apply filters defined in a hidden SVG.
+ */
+import { SHARED_SHADOWS } from '@/lib/paper/defs';
+---
+
+<svg class="paper-defs" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    {
+      SHARED_SHADOWS.map((s) => (
+        <filter id={s.id} x="-5%" y="-10%" width="115%" height="130%">
+          <feDropShadow dx={s.shadow[0]} dy={s.shadow[1]} stdDeviation={s.shadow[2]} flood-color={s.color} />
+        </filter>
+      ))
+    }
+  </defs>
+</svg>

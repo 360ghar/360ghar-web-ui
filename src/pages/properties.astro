@@ -1,0 +1,59 @@
+---
+import { getT } from '@/i18n';
+import Page from '@/layouts/Page.astro';
+import { respond } from '@/lib/cache';
+import { breadcrumbs } from '@/lib/seo/site';
+import { legacySearchRedirect, parseFilters } from '@/features/search/filters';
+import { listingItemList } from '@/features/search/itemList';
+import { loadListing } from '@/features/search/load';
+import ListingHeader from '@/features/search/ListingHeader.astro';
+import SearchResults from '@/features/search/SearchResults';
+import { cardPreload } from '@/features/property/photos';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const filters = parseFilters(Astro.url.searchParams);
+
+// Old aliases (intent, bhk, min_price, ...) move to canonical names in one hop.
+// Other params (utm_*, gclid) are kept as they are.
+const redirect = legacySearchRedirect(Astro.url.searchParams, filters);
+if (redirect !== null) return Astro.redirect(`${Astro.url.pathname}${redirect ? `?${redirect}` : ''}`, 301);
+
+const { first, inventory } = await loadListing(filters);
+// The list is the page: a failed load must not be stored by crawlers as an empty page.
+respond(Astro, 'minute', { error: Boolean(first.error) });
+const title = t('seo:properties.title') || 'Flats in Gurgaon | Verified Properties for Sale & Rent | 360Ghar';
+const heading = locale === 'hi' ? 'गुरुग्राम में घर' : 'Homes in Gurugram';
+const items = first.page?.items ?? [];
+---
+
+<Page
+  title={title}
+  description={t('seo:properties.description')}
+  path="/properties"
+  preloadImages={items[0]?.main_image_url ? [cardPreload(items[0].main_image_url)] : []}
+  jsonLd={[
+    listingItemList(heading, items, locale),
+    breadcrumbs(
+      [
+        { name: locale === 'hi' ? 'होम' : 'Home', path: '/' },
+        { name: locale === 'hi' ? 'प्रॉपर्टी' : 'Properties', path: '/properties' },
+      ],
+      locale,
+    ),
+  ]}
+>
+  <ListingHeader heading={heading} total={inventory} locale={locale} theme="society" />
+  <div class="container-page">
+    <SearchResults
+      client:load
+      locale={locale}
+      initialFilters={filters}
+      initialPage={first.page}
+      initialError={first.error?.message ?? null}
+      amenities={first.amenities}
+    />
+  </div>
+</Page>

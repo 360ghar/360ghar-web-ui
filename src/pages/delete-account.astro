@@ -1,0 +1,54 @@
+---
+import Content from '@/layouts/Content.astro';
+import DeleteAccount from '@/features/account/DeleteAccount';
+
+export const prerender = true;
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+---
+
+<Content
+  title={hi ? 'अकाउंट डिलीट करें | 360Ghar' : 'Delete your account | 360Ghar'}
+  description="Delete your 360Ghar account and data."
+  noindex
+  heading={hi ? 'अपना अकाउंट डिलीट करें' : 'Delete your account'}
+  crumbs={[{ name: hi ? 'होम' : 'Home', path: '/' }, { name: hi ? 'अकाउंट डिलीट करें' : 'Delete account' }]}
+>
+  <DeleteAccount client:only="react" locale={locale}>
+    <span slot="fallback" class="skeleton block h-40 w-full max-w-lg"></span>
+  </DeleteAccount>
+</Content>
+
+<style>
+  /* The list of what is deleted: a calm panel, not prose. The doubled class
+     outranks the prose rules of the Content layout. */
+  :global(.del-what) {
+    padding: 1rem 1.25rem 1.125rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-mist-50);
+  }
+
+  :global(.del-what.del-what h2) {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+  }
+
+  :global(.del-what.del-what ul) {
+    display: grid;
+    gap: 0.625rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  :global(.del-what.del-what li) {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  :global(.del-what.del-what svg) {
+    margin-top: 0.125rem;
+    color: var(--color-kesar-700);
+  }
+</style>

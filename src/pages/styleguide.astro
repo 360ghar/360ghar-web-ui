@@ -1,0 +1,586 @@
+---
+import Base from '@/layouts/Base.astro';
+import Diorama from '@/features/home/diorama/Diorama.astro';
+import { PropertyCardSkeleton, PropertyCardView, type CardProperty } from '@/features/property/PropertyCardView';
+import StyleguideDemo from '@/features/styleguide/StyleguideDemo';
+import { VIGNETTE_THEMES } from '@/lib/paper/vignettes';
+import Button from '@/ui/Button.astro';
+import Paper from '@/ui/Paper.astro';
+import SectionOpener from '@/ui/SectionOpener.astro';
+import { FACT_ICONS } from '@/ui/icons/amenities';
+import Icon from '@/ui/icons/Icon.astro';
+import { brands, icons, type IconName } from '@/ui/icons/paths';
+import PaperVignette from '@/ui/paper/PaperVignette.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+
+// Dev only: rendered on request so the production build has no /styleguide page.
+export const prerender = false;
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+
+const kesar = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+const ink = [
+  ['ink-950', 'Text'],
+  ['ink-800', 'Strong secondary text'],
+  ['ink-600', 'Secondary text, 8.5:1 on white'],
+  ['ink-400', 'Field borders, 3.3:1'],
+  ['ink-200', 'Dividers'],
+  ['ink-100', 'Skeleton, quiet fills'],
+  ['mist-50', 'Quiet cards, hover fills'],
+  ['mist-100', 'Section bands, footer'],
+  ['mist-200', 'Answer slips, footer floor'],
+  ['mist-300', 'Far skyline, tracks'],
+  ['pine-700', 'Chart series, hover on pine'],
+  ['pine-800', 'Active states, toast, chat, one deep band'],
+  ['pine-900', 'Reserved'],
+];
+const status = [
+  ['leaf', 'Success'],
+  ['chili', 'Error'],
+  ['haldi', 'Warning'],
+];
+
+const sample: CardProperty[] = [
+  {
+    id: 182,
+    title: 'Palam Vihar 3BHK builder floor',
+    property_type: 'builder_floor',
+    purpose: 'buy',
+    base_price: 18500000,
+    monthly_rent: null,
+    daily_rate: null,
+    bedrooms: 3,
+    bathrooms: 3,
+    area_sqft: 1650,
+    locality: 'Palam Vihar',
+    sub_locality: null,
+    city: 'Gurugram',
+    main_image_url:
+      'https://res.cloudinary.com/ddbhzlzy1/image/upload/v1782286282/360ghar/360ghar/seed/hc_properties/00210-palam-vihar-palam-vihar-3bhk-builder-floor/listing_images/building_exterior.jpg',
+    virtual_tour_url: 'https://example.com/tour',
+    distance_km: null,
+  },
+  {
+    id: 181,
+    title: 'Signature Global Rosalia 2BHK',
+    property_type: 'apartment',
+    purpose: 'rent',
+    base_price: 22000,
+    monthly_rent: 22000,
+    daily_rate: null,
+    bedrooms: 2,
+    bathrooms: 2,
+    area_sqft: 1050,
+    locality: 'Sector 85',
+    sub_locality: null,
+    city: 'Gurugram',
+    main_image_url:
+      'https://res.cloudinary.com/ddbhzlzy1/image/upload/v1782286215/360ghar/360ghar/seed/hc_properties/00209-signature-global-rosalia-sector-85-2bhk-apartment-for-rent/listing_images/dining_room.jpg',
+    virtual_tour_url: null,
+    distance_km: 3.4,
+  },
+];
+
+const iconNames = Object.keys(icons) as IconName[];
+const facts = Object.entries(FACT_ICONS) as [string, IconName][];
+const vignetteUse: Record<(typeof VIGNETTE_THEMES)[number], string> = {
+  home: 'Independent houses, builder floors',
+  tower: 'High-rise flats, new launches',
+  society: 'Gated societies, projects',
+  office: 'Offices, commercial space',
+  metro: 'Commute, metro distance',
+  document: 'Papers, RERA, registry, data hub',
+  calculator: 'EMI, loan and tax tools',
+  map: 'Localities, map search, zones',
+  key: 'Rent, move-in, owners',
+  camera: '360° tours, photo shoots',
+  plot: 'Plots and land',
+  villa: 'Villas, independent houses',
+  pg: 'PG rooms, shared stays',
+  shop: 'Shops, retail space',
+  warehouse: 'Warehouses, industrial sheds',
+  hospital: 'Hospitals nearby',
+  mall: 'Malls, markets nearby',
+  school: 'Schools nearby',
+  park: 'Parks, green space',
+};
+---
+
+<Base title="Styleguide | 360Ghar" description="360Ghar design system: soft paper." noindex>
+  <Diorama class="sg-hero">
+    <div class="sg-hero-copy container-page">
+      <h1 class="sg-hero-title">Walk in before you visit.</h1>
+    </div>
+  </Diorama>
+
+  <main class="container-page grid gap-20 py-16">
+    <section class="grid gap-6" aria-labelledby="sg-colour">
+      <h2 id="sg-colour" class="text-3xl md:text-4xl">Colour</h2>
+      <p class="max-w-2xl text-ink-800">
+        Kesar is the brand hue (#ff6b00 is kesar-500): the main action and the accent. Mist is the sage surface colour,
+        pine the only dark. Text is green-neutral ink, not black. Accents on text are tonal: kesar-700 on white, never
+        kesar-500.
+      </p>
+      <ol class="sg-swatches">
+        {
+          kesar.map((k) => (
+            <li style={`background:var(--color-kesar-${k});color:${k >= 700 ? 'var(--color-kesar-50)' : 'var(--color-ink-950)'}`}>
+              <span class="font-semibold">kesar-{k}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <ol class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          ink.map(([name, use]) => (
+            <li class="flex items-center gap-3">
+              <span class="sg-chip-swatch" style={`background:var(--color-${name})`} />
+              <span>
+                <span class="block font-semibold">{name}</span>
+                <span class="text-sm text-ink-600">{use}</span>
+              </span>
+            </li>
+          ))
+        }
+        {
+          status.map(([name, use]) => (
+            <li class="flex items-center gap-3">
+              <span class="sg-chip-swatch" style={`background:var(--color-${name}-100);color:var(--color-${name}-700)`}>
+                Aa
+              </span>
+              <span>
+                <span class="block font-semibold">{name}-700 on {name}-100</span>
+                <span class="text-sm text-ink-600">{use}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-type">
+      <h2 id="sg-type" class="text-3xl md:text-4xl">Type</h2>
+      <p class="max-w-2xl text-ink-800">
+        Display: Supreme by Indian Type Foundry. A clean grotesque that stays easy to read at every size, and has the rupee sign.
+        Body and data: the system sans, so text stays neutral and fast. Hindi falls back to the system Devanagari face.
+      </p>
+      <div class="grid gap-5">
+        <p class="font-display text-5xl md:text-7xl">Sector 57, Gurugram</p>
+        <p class="font-display text-4xl">2 BHK with a balcony that gets the morning sun</p>
+        <p class="font-display text-2xl">गुड़गाँव में घर, बिना चक्कर लगाए</p>
+        <p class="max-w-prose text-lg">
+          Body text is 16 to 18 px with a line height of 1.55. Numbers in lists use tabular figures:
+          <span class="tabular font-semibold">₹85,00,000 · ₹1,25,00,000 · ₹22,000/month</span>.
+        </p>
+        <p class="max-w-prose text-sm text-ink-600">Secondary text is ink-600, which passes AA on white and on skeleton fills.</p>
+      </div>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-paper">
+      <h2 id="sg-paper" class="text-3xl md:text-4xl">Paper layers</h2>
+      <p class="max-w-2xl text-ink-800">
+        One light from the top. Shadows are soft, fall below the sheet with a negative spread (no bloom), and take the tint
+        of the surface. Sheets have rounded corners: 22 px for cards, 12 px for controls. Hand-cut edges stay only on the
+        bands, the header strip, the footer skyline and the home scene.
+      </p>
+      <div class="sg-stack grain">
+        <Paper seed="sg-a" tone="mist-200" depth={1} class="sg-stack-a" innerClass="p-6">
+          <p class="font-semibold">Depth 1 · mist-200</p>
+        </Paper>
+        <Paper seed="sg-b" tone="kesar-500" depth={2} class="sg-stack-b on-kesar" innerClass="p-6">
+          <p class="font-semibold">Depth 2 · kesar-500</p>
+        </Paper>
+        <Paper seed="sg-c" tone="paper" depth={3} class="sg-stack-c on-kesar" innerClass="p-6">
+          <p class="font-display text-2xl">Depth 3 · paper</p>
+          <p class="mt-1 text-ink-600">The shadow on orange is orange.</p>
+        </Paper>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div class="sheet p-5">Sheet: lists, forms, tables.</div>
+        <Paper seed="sg-d" tone="mist-50" innerClass="p-5">Paper: marketing and states.</Paper>
+        <Paper seed="sg-e" tone="ink" innerClass="p-5">Pine paper: toasts, chat, active states.</Paper>
+      </div>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-icons">
+      <h2 id="sg-icons" class="text-3xl md:text-4xl">Icons</h2>
+      <p class="max-w-2xl text-ink-800">
+        Knife-cut: solid shapes, straight cuts only, octagons for circles. Where cuts cross, the paper falls out; parts that
+        would touch keep a stencil bridge. Brand marks are the real marks from Simple Icons.
+      </p>
+      <ul class="sg-icons">
+        {
+          iconNames.map((n) => (
+            <li>
+              <Icon name={n} size={28} />
+              <span>{n}</span>
+            </li>
+          ))
+        }
+        {
+          (Object.keys(brands) as (keyof typeof brands)[]).map((n) => (
+            <li>
+              <Icon name={`brand:${n}`} size={28} />
+              <span>{n}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-facts">
+      <h2 id="sg-facts" class="text-3xl md:text-4xl">Facts and amenities</h2>
+      <p class="max-w-2xl text-ink-800">
+        Fixed facts of a home use <code>FACT_ICONS</code> from <code>@/ui/icons/amenities</code>. Amenities from the API carry an
+        icon key; <code>amenityIcon(a.icon)</code> maps it to a knife-cut icon, with <code>check</code> for keys that have no
+        match. Icons stay bare: no tile, no chip behind them.
+      </p>
+      <ul class="sg-facts">
+        {
+          facts.map(([fact, name]) => (
+            <li>
+              <Icon name={name} size={22} />
+              <span>{fact}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <pre class="sg-code"><code>{`import { amenityIcon, FACT_ICONS } from '@/ui/icons/amenities';
+<Icon name={FACT_ICONS.floor} /> 2nd of 4 floors
+<Icon name={amenityIcon('elevator')} /> Lift`}</code></pre>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-vignettes">
+      <h2 id="sg-vignettes" class="text-3xl md:text-4xl">Paper vignettes</h2>
+      <p class="max-w-2xl text-ink-800">
+        Small scenes from the same street as the home diorama, 160 x 100, four to six layers of card each. Use one to say
+        what a menu, a section or an empty row is about. The seed changes the hand-cut jitter; the same seed always draws the
+        same scene. About 2 to 4 KB of inline SVG each, so keep it to a few per page.
+      </p>
+      <ul class="sg-vignettes">
+        {
+          VIGNETTE_THEMES.map((theme) => (
+            <li>
+              <PaperVignette theme={theme} seed="sg" />
+              <span class="font-semibold">{theme}</span>
+              <span class="text-sm text-ink-600">{vignetteUse[theme]}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="sg-vignette-frames">
+        <figure>
+          <PaperVignette theme="map" seed="sg-frame" frame="cut" />
+          <figcaption>frame="cut" (default): hand-cut sheet</figcaption>
+        </figure>
+        <figure>
+          <PaperVignette theme="map" seed="sg-frame" frame="square" />
+          <figcaption>frame="square": straight edge</figcaption>
+        </figure>
+        <figure class="sg-on-band">
+          <PaperVignette theme="map" seed="sg-frame" frame="none" />
+          <figcaption>frame="none": on a kesar band</figcaption>
+        </figure>
+      </div>
+      <figure class="sg-slice">
+        <div class="sg-slice-box"><PaperVignette theme="park" seed="sg-slice" frame="none" fit="slice" /></div>
+        <figcaption>fit="slice": the scene fills a wide box like a cover photo; the sky is cropped and the street stays. Give the box a height; use frame="none" or "square", since the crop removes the cut edge.</figcaption>
+      </figure>
+      <pre class="sg-code"><code>{`import PaperVignette from '@/ui/paper/PaperVignette.astro';   // islands: '@/ui/paper/PaperVignette' (tsx)
+<PaperVignette theme="calculator" seed="emi" class="w-40" />
+<PaperVignette theme="camera" label="A 360° camera on a tripod" />  // with a label it is an image
+<div style="height: 10rem"><PaperVignette theme="park" frame="none" fit="slice" /></div>  // cover a box`}</code></pre>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-opener">
+      <h2 id="sg-opener" class="text-3xl md:text-4xl">Section opener</h2>
+      <p class="max-w-2xl text-ink-800">
+        A heading, one line and one link, with a vignette at the right. No kicker label above the heading. Use it once or
+        twice on a page.
+      </p>
+      <div class="sheet p-5 md:p-8">
+        <SectionOpener
+          id="sg-opener-demo"
+          title="Check the numbers before you commit"
+          lead="EMI, loan eligibility and stamp duty, worked out from your own numbers."
+          theme="calculator"
+          action={{ href: '#sg-opener', label: 'All tools' }}
+        />
+      </div>
+      <pre class="sg-code"><code>{`import SectionOpener from '@/ui/SectionOpener.astro';
+<section aria-labelledby="tools">
+  <SectionOpener id="tools" title="..." lead="..." theme="calculator" action={{ href: '/tools', label: 'All tools' }} />
+  ...
+</section>`}</code></pre>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-buttons">
+      <h2 id="sg-buttons" class="text-3xl md:text-4xl">Buttons and links</h2>
+      <p class="max-w-2xl text-ink-800">
+        Buttons are paper tabs. Hover changes the colour only. Press flattens the tab onto the page. Every target is 44 px
+        or larger. One primary action per view.
+      </p>
+      <div class="flex flex-wrap items-center gap-4">
+        <Button variant="primary" arrow>Schedule a visit</Button>
+        <Button variant="ink" icon="phone">Call owner</Button>
+        <Button icon="heart">Save</Button>
+        <Button variant="quiet" icon="share">Share</Button>
+        <Button variant="primary" size="lg" arrow>Search homes</Button>
+        <button class="btn" disabled>Disabled</button>
+        <button class="btn btn-icon" aria-label="Close"><Icon name="close" /></button>
+        <a class="link" href="#sg-buttons">See all 24 homes <Icon name="arrow-up-right" size={16} class="arrow" /></a>
+      </div>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-cards">
+      <h2 id="sg-cards" class="text-3xl md:text-4xl">Listing cards</h2>
+      <p class="max-w-2xl text-ink-800">
+        Flat for easy scanning: price first, then type, place and facts. The whole card is one link. The skeleton has the
+        same boxes, so the layout does not shift when data arrives.
+      </p>
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          sample.map((p, i) => (
+            <PropertyCardView property={p} priority={i === 0}>
+              <button slot="favourite" type="button" class="btn btn-icon" aria-label="Save to shortlist" aria-pressed="false">
+                <Icon name="heart" />
+              </button>
+            </PropertyCardView>
+          ))
+        }
+        <PropertyCardSkeleton />
+      </div>
+      <div class="grid max-w-3xl gap-6">
+        <PropertyCardView property={sample[1]!} layout="list" />
+        <PropertyCardSkeleton layout="list" />
+      </div>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-states">
+      <h2 id="sg-states" class="text-3xl md:text-4xl">Empty, error, 404 and offline</h2>
+      <p class="max-w-2xl text-ink-800">
+        Each state is a small paper scene from the same street, five layers deep: an empty plot with a blank board, a
+        building left half-built with a broken sign, a road that ends at a milestone reading 404, and a kite caught on the
+        power lines. Each names the problem in one line and gives one next action. With <code>level=&#123;1&#125;</code> (a whole
+        page) the art and title are larger; <code>NotFound.astro</code> is the full 404 block.
+      </p>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="sheet">
+          <StateBlock
+            scene="empty"
+            level={3}
+            title="No homes match these filters"
+            body="Try a bigger budget or remove the BHK filter."
+            action={{ href: '#sg-states', label: 'Clear filters' }}
+            secondary={{ href: '#sg-states', label: 'Get alerts for new homes' }}
+          />
+        </div>
+        <div class="sheet">
+          <StateBlock
+            scene="error"
+            level={3}
+            title="Something broke on our side"
+            body="We could not load these homes. Try again."
+            action={{ href: '#sg-states', label: 'Try again', icon: 'retry' }}
+          />
+        </div>
+        <div class="sheet">
+          <StateBlock
+            scene="notFound"
+            level={3}
+            title="This page is not on our map"
+            body="The link may be old. Search for a home, or start from the home page."
+            action={{ href: '#sg-states', label: 'Search homes' }}
+            secondary={{ href: '#sg-states', label: 'Go to home page' }}
+          />
+        </div>
+        <div class="sheet">
+          <StateBlock
+            scene="offline"
+            level={3}
+            title="You seem to be offline"
+            body="Check your connection. Saved pages still work."
+            action={{ href: '#sg-states', label: 'Try again', icon: 'retry' }}
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="sg-live">
+      <h2 id="sg-live" class="text-3xl md:text-4xl">Live components</h2>
+      <p class="max-w-2xl text-ink-800">
+        This part is a React island. The filter sheet docks to the bottom on phones and to the right from 768 px. Toasts,
+        tabs, form validation, the error boundary and the 150 ms skeleton delay all work here.
+      </p>
+      <StyleguideDemo client:visible />
+    </section>
+  </main>
+  <script>
+    // This page uses Base, not Page, so it loads the card photo-strip module itself.
+    import { startPhotoStrips } from '@/ui/photoStrip';
+    startPhotoStrips();
+  </script>
+</Base>
+
+<style>
+  :global(.sg-hero) {
+    min-height: min(100svh, 56rem);
+    display: flex;
+  }
+
+  .sg-hero-copy {
+    position: relative;
+    z-index: 10;
+    padding-top: clamp(2rem, 8vh, 6rem);
+  }
+
+  .sg-hero-title {
+    max-width: 13ch;
+    font-size: clamp(2.75rem, 1.4rem + 5.6vw, 6rem);
+    color: var(--color-ink-950);
+  }
+
+  .sg-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: 0.5rem;
+  }
+
+  .sg-swatches li {
+    display: flex;
+    align-items: flex-end;
+    min-height: 5rem;
+    padding: 0.625rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.8125rem;
+  }
+
+  .sg-chip-swatch {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-xs);
+    font-weight: 700;
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 2px 6px -2px rgb(var(--tint) / 0.14);
+  }
+
+  .sg-stack {
+    position: relative;
+    min-height: 19rem;
+    padding: 1.5rem;
+    background-color: var(--color-mist-100);
+    border-radius: var(--radius-xs);
+  }
+
+  .sg-stack :global(.sg-stack-a) {
+    width: min(100%, 22rem);
+  }
+
+  .sg-stack :global(.sg-stack-b) {
+    width: min(100% - 2rem, 22rem);
+    margin: -1.25rem 0 0 2rem;
+  }
+
+  .sg-stack :global(.sg-stack-c) {
+    width: min(100% - 4rem, 22rem);
+    margin: -1.25rem 0 0 4rem;
+  }
+
+  .sg-icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: 0.5rem;
+  }
+
+  .sg-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    gap: 0.25rem 1rem;
+  }
+
+  .sg-facts li {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 40px;
+    color: var(--color-ink-800);
+  }
+
+  .sg-facts li :global(svg) {
+    color: var(--color-kesar-700);
+  }
+
+  .sg-vignettes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(9rem, 45%), 1fr));
+    gap: 1.5rem 1rem;
+  }
+
+  .sg-vignettes li {
+    display: grid;
+    gap: 0.25rem;
+    align-content: start;
+  }
+
+  .sg-vignettes li :global(svg) {
+    margin-bottom: 0.375rem;
+  }
+
+  .sg-vignette-frames {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: 1rem;
+  }
+
+  .sg-vignette-frames figure {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .sg-slice {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .sg-slice-box {
+    max-width: 36rem;
+    height: 9rem;
+    overflow: hidden;
+    border-radius: var(--radius-xs);
+    background: var(--color-mist-100);
+  }
+
+  .sg-on-band {
+    background: var(--color-mist-100);
+    border-radius: var(--radius-xs);
+  }
+
+  .sg-code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding: 1rem;
+    border-radius: var(--radius-xs);
+    background: var(--color-mist-50);
+    color: var(--color-ink-800);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+
+  .sg-icons li {
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 0.5rem;
+    border-radius: var(--radius-xs);
+    background: var(--color-mist-50);
+    font-size: 0.75rem;
+    color: var(--color-ink-800);
+    text-align: center;
+  }
+</style>

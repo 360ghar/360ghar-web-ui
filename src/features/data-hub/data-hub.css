@@ -1,0 +1,968 @@
+/*
+ * Data hub pages. Dense screens: flat white sheets, tables with tabular
+ * figures and a sticky header row, one primary action per view. The one paper
+ * moment is the "figure slip": a cut sheet that holds the key number of a
+ * detail page (rate, reserve price, FAR, score) in the display face.
+ */
+
+/* Same order as Tailwind, so utilities on these elements still win. */
+@layer theme, base, components, utilities;
+
+@layer components {
+  .dh-page {
+    padding-top: 0.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .dh-head {
+    margin: 0.5rem 0 1.75rem;
+  }
+
+  .dh-head-text {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 52rem;
+  }
+
+  /* The page's paper scene stands at the right of the heading. Phones skip it. */
+  .dh-head-art {
+    display: none;
+  }
+
+  @media (min-width: 48rem) {
+    .dh-head.has-art {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .dh-head-art {
+      display: block;
+      width: clamp(10rem, 16vw, 14rem);
+      aspect-ratio: 240 / 150;
+      margin-right: 1.5rem;
+    }
+  }
+
+  .dh-h1 {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  }
+
+  .dh-h1.is-long {
+    font-size: clamp(1.625rem, 1.25rem + 1.6vw, 2.5rem);
+  }
+
+  .dh-lead {
+    max-width: 62ch;
+    color: var(--color-ink-800);
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  }
+
+  .dh-meta {
+    color: var(--color-ink-600);
+    font-size: 0.9375rem;
+  }
+
+  .dh-h2 {
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  }
+
+  .dh-section {
+    margin-top: 3rem;
+  }
+
+  .dh-section > .dh-h2 + * {
+    margin-top: 1rem;
+  }
+
+  .dh-prose {
+    margin-top: 3rem;
+    max-width: 68ch;
+  }
+
+  .dh-prose h2 {
+    margin: 2.5rem 0 0.75rem;
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  }
+
+  .dh-prose h2:first-child {
+    margin-top: 0;
+  }
+
+  .dh-prose p,
+  .dh-prose li {
+    color: var(--color-ink-800);
+  }
+
+  .dh-prose p + p,
+  .dh-prose p + ol,
+  .dh-prose p + ul,
+  .dh-prose ol + p,
+  .dh-prose ul + p {
+    margin-top: 0.875rem;
+  }
+
+  .dh-prose ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+
+  .dh-prose ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+
+  .dh-prose li + li {
+    margin-top: 0.5rem;
+  }
+
+  .dh-prose a:not(.btn) {
+    color: var(--color-kesar-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .dh-faq {
+    margin-top: 3.5rem;
+  }
+
+  /* Phones: tighter tabs, so the next tab peeks in at the edge and the row reads as scrollable. */
+  @media (max-width: 39.99rem) {
+    .dh-page .tabs-tab {
+      padding-inline: 0.625rem;
+    }
+  }
+
+  /* ---------- Toolbar, counts, list footer ---------- */
+
+  .dh-toolbar {
+    display: grid;
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+
+  /* A toggle group that does not fit beside the field moves to its own line whole,
+     so its buttons never break across two rows. */
+  @media (min-width: 48rem) {
+    .dh-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.25rem;
+    }
+
+    .dh-toolbar > .field {
+      flex: 0 1 16rem;
+    }
+  }
+
+  .dh-toolbar .field {
+    min-width: 0;
+  }
+
+  .dh-seg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .dh-fieldset {
+    display: grid;
+    gap: 0.375rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .dh-count {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin: 0 0 0.75rem;
+    color: var(--color-ink-800);
+  }
+
+  .dh-count strong {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  .dh-body.is-stale {
+    opacity: 0.7;
+    transition: opacity 160ms var(--ease-paper);
+  }
+
+  .dh-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.25rem;
+  }
+
+  .dh-end {
+    margin-top: 1.25rem;
+    text-align: center;
+    color: var(--color-ink-600);
+    font-size: 0.9375rem;
+  }
+
+  /* ---------- Tables ---------- */
+
+  .dh-sheet {
+    padding: 0.25rem 0;
+  }
+
+  .dh-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9375rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Middle: a 44 px link in one cell must not push its text below the rest of the row. */
+  .dh-table th,
+  .dh-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .dh-table tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  /* Sticky header row under the 64 px site header. */
+  .dh-table thead th {
+    position: sticky;
+    top: 64px;
+    z-index: 2;
+    background: var(--color-paper);
+    color: var(--color-ink-800);
+    font-size: 0.875rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--color-ink-200);
+    white-space: nowrap;
+  }
+
+  .dh-table .num {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .dh-table tbody tr:hover td {
+    background: var(--color-mist-50);
+  }
+
+  /* 44 px tall tap target inside the row. */
+  .dh-table a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-ink-950);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-ink-200);
+    text-underline-offset: 3px;
+  }
+
+  .dh-table a:hover {
+    color: var(--color-kesar-700);
+    text-decoration-color: currentColor;
+  }
+
+  /* Cells marked .wide show only when the table has room. */
+  @media (max-width: 39.99rem) {
+    .dh-table .wide {
+      display: none;
+    }
+
+    .dh-table th,
+    .dh-table td {
+      padding-inline: 0.75rem;
+    }
+  }
+
+  /* Wide tables that cannot drop columns scroll inside the page, never the page. */
+  .dh-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  /* ---------- Row lists (projects, notices, auctions on phones) ---------- */
+
+  .dh-rows > li {
+    padding: 1rem 1.125rem;
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .dh-rows > li:last-child {
+    border-bottom: 0;
+  }
+
+  .dh-row-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+
+  .dh-row-title {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .dh-row-sub {
+    margin-top: 0.125rem;
+    color: var(--color-ink-600);
+    font-size: 0.9375rem;
+  }
+
+  .dh-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin-top: 0.625rem;
+    font-size: 0.9375rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dh-facts dt {
+    color: var(--color-ink-600);
+  }
+
+  .dh-facts > div {
+    display: flex;
+    gap: 0.375rem;
+  }
+
+  .dh-facts dd {
+    font-weight: 600;
+    color: var(--color-ink-950);
+  }
+
+  /* ---------- Status text (no pill) ---------- */
+
+  .dh-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .dh-status.is-good {
+    color: var(--color-leaf-700);
+  }
+
+  .dh-status.is-bad {
+    color: var(--color-chili-700);
+  }
+
+  .dh-status.is-wait {
+    color: var(--color-haldi-700);
+  }
+
+  .dh-status.is-plain {
+    color: var(--color-ink-600);
+  }
+
+  /* ---------- The figure slip ---------- */
+
+  .dh-slip-wrap {
+    --tint: 110 38 0;
+    max-width: 60rem;
+  }
+
+  .dh-slip {
+    display: grid;
+    gap: 1.25rem 2.5rem;
+    padding: 1.5rem 1.5rem 1.625rem;
+  }
+
+  @media (min-width: 40rem) {
+    .dh-slip {
+      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+      padding: 1.75rem 2rem 2rem;
+    }
+  }
+
+  .dh-slip.is-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dh-fig {
+    display: grid;
+    gap: 0.25rem;
+    align-content: start;
+    container-type: inline-size;
+  }
+
+  .dh-fig-label {
+    color: var(--color-ink-800);
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .dh-fig-value {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 1.7rem + 2.2vw, 3.25rem);
+    /* Scale with the figure's own width so a crore amount never wraps. */
+    font-size: clamp(1.625rem, 13cqi, 3.25rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-950);
+    white-space: nowrap;
+  }
+
+  .dh-fig-value small {
+    margin-left: 0.35rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--color-ink-800);
+  }
+
+  .dh-fig-note {
+    color: var(--color-ink-800);
+    font-size: 0.9375rem;
+  }
+
+  /* ---------- Definition grid on detail pages ---------- */
+
+  .dh-dl {
+    display: grid;
+    grid-template-columns: minmax(8rem, max-content) 1fr;
+    gap: 0;
+    font-size: 0.9375rem;
+  }
+
+  .dh-dl dt,
+  .dh-dl dd {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .dh-dl dt {
+    padding-right: 1.5rem;
+    color: var(--color-ink-600);
+  }
+
+  .dh-dl dd {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .dh-dl dt:last-of-type,
+  .dh-dl dd:last-of-type {
+    border-bottom: 0;
+  }
+
+  /* ---------- Two-column layouts ---------- */
+
+  .dh-split {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 64rem) {
+    .dh-split {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      align-items: start;
+      gap: 2.5rem;
+    }
+
+    .dh-split.is-even {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+  .dh-panel {
+    padding: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .dh-panel {
+      padding: 1.5rem 1.75rem;
+    }
+  }
+
+  .dh-panel-title {
+    font-size: 1.375rem;
+    margin-bottom: 1rem;
+  }
+
+  .dh-form {
+    display: grid;
+    gap: 1.125rem;
+  }
+
+  .dh-form-row {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 30rem) {
+    .dh-form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ---------- Related links ---------- */
+
+  .dh-links {
+    margin-top: 3.5rem;
+  }
+
+  .dh-links-title {
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  }
+
+  .dh-links ul {
+    display: grid;
+    gap: 0 2rem;
+    margin-top: 1rem;
+    border-top: 1px solid var(--color-ink-200);
+  }
+
+  @media (min-width: 40rem) {
+    .dh-links ul {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .dh-links ul {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .dh-links li {
+    border-bottom: 1px solid var(--color-ink-200);
+  }
+
+  .dh-links a {
+    display: grid;
+    gap: 0.125rem;
+    min-height: 44px;
+    padding: 0.875rem 0;
+    text-decoration: none;
+  }
+
+  .dh-links-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    color: var(--color-ink-950);
+    transition: color 140ms var(--ease-paper);
+  }
+
+  .dh-links a:hover .dh-links-name {
+    color: var(--color-kesar-700);
+  }
+
+  .dh-links a .arrow {
+    transition: translate 160ms var(--ease-paper);
+  }
+
+  .dh-links a:hover .arrow {
+    translate: 2px -2px;
+  }
+
+  .dh-links-desc {
+    color: var(--color-ink-600);
+    font-size: 0.9375rem;
+  }
+
+  /* ---------- Filters: sidebar from 1024 px, sheet below ---------- */
+
+  .dh-results {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .dh-results-side {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .dh-results {
+      grid-template-columns: 17rem minmax(0, 1fr);
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .dh-results-side {
+      display: block;
+      position: sticky;
+      top: 88px;
+    }
+
+    .dh-results-filter-btn {
+      display: none;
+    }
+  }
+
+  .dh-cards {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .dh-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .dh-cards.is-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .dh-card {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    height: 100%;
+    padding: 1.125rem 1.25rem 1.25rem;
+    transition: background-color 140ms var(--ease-paper);
+  }
+
+  .dh-card:has(.dh-card-link):hover {
+    background-color: var(--color-mist-50);
+  }
+
+  .dh-card-link {
+    color: var(--color-ink-950);
+    text-decoration: none;
+  }
+
+  /* The whole card is the link target. */
+  .dh-card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .dh-card-link:focus-visible {
+    outline: none;
+  }
+
+  .dh-card:has(.dh-card-link:focus-visible) {
+    outline: 3px solid var(--color-kesar-700);
+    outline-offset: 2px;
+  }
+
+  .dh-price {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dh-badge-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.375rem;
+    height: 1.375rem;
+    padding: 0 0.3rem;
+    border-radius: var(--radius-xs);
+    background: var(--color-pine-800);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* ---------- Demand strip (tenant heatmap) ---------- */
+
+  .dh-heat {
+    position: relative;
+    height: 12px;
+    border-radius: 6px;
+    background: var(--color-ink-100);
+    overflow: hidden;
+  }
+
+  .dh-heat > span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 6px;
+  }
+
+  .dh-rank {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-kesar-700);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Sector skyline (circle rates, real rows) ---------- */
+
+  .dh-sky-lead {
+    max-width: 68ch;
+    margin-top: 0.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .dh-sky-fig {
+    display: grid;
+    gap: 0.875rem;
+    margin: 1.25rem 0 0;
+  }
+
+  .dh-sky-plot,
+  .dh-sky-area {
+    position: relative;
+  }
+
+  .dh-sky-plot.has-flag {
+    padding-top: 1.75rem;
+  }
+
+  .dh-sky-plot svg {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 10rem;
+  }
+
+  @media (min-width: 48rem) {
+    .dh-sky-plot svg {
+      height: 13rem;
+    }
+  }
+
+  .dh-sky-col {
+    fill: var(--color-kesar-300);
+  }
+
+  .dh-sky-col.is-mine {
+    fill: var(--color-kesar-800);
+  }
+
+  .dh-sky-tick {
+    fill: var(--color-ink-950);
+  }
+
+  /* Value guides sit behind the columns; the label rides on the line. */
+  .dh-sky-guide {
+    position: absolute;
+    right: 0;
+    bottom: var(--y);
+    left: 0;
+    border-top: 1px dashed var(--color-ink-200);
+    color: var(--color-ink-600);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    text-align: right;
+  }
+
+  /* The value sits on a small paper patch above the line, so ticks under it do not blur it. */
+  .dh-sky-guide > span {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0.125rem;
+    padding: 0.125rem 0 0.125rem 0.375rem;
+    background: var(--color-paper);
+  }
+
+  .dh-sky-flag {
+    position: absolute;
+    top: 0;
+    left: var(--x);
+    translate: -50% 0;
+    color: var(--color-kesar-700);
+    font-size: 0.875rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .dh-sky-notch {
+    position: absolute;
+    top: 1.25rem;
+    left: var(--x);
+    translate: -50% 0;
+    border: 5px solid transparent;
+    border-bottom: 0;
+    border-top: 5px solid var(--color-kesar-800);
+  }
+
+  .dh-sky-flag.is-start {
+    left: 0;
+    translate: 0 0;
+  }
+
+  .dh-sky-flag.is-end {
+    left: auto;
+    right: 0;
+    translate: 0 0;
+  }
+
+  .dh-sky-cap {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .dh-sky-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin: 0;
+  }
+
+  .dh-sky-facts dt {
+    color: var(--color-ink-600);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .dh-sky-facts dd {
+    color: var(--color-ink-800);
+  }
+
+  .dh-sky-facts b {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-ink-950);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dh-sky-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    color: var(--color-ink-800);
+    font-size: 0.875rem;
+  }
+
+  .dh-sky-keys li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .dh-sky-keys i {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 4px;
+  }
+
+  .dh-sky-keys .is-col {
+    background: var(--color-kesar-300);
+  }
+
+  .dh-sky-keys .is-tick {
+    height: 3px;
+    background: var(--color-ink-950);
+  }
+
+  /* ---------- Price ranges (price index) ---------- */
+
+  .dh-ranges {
+    max-width: 64rem;
+  }
+
+  .dh-ranges-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  /* ---------- Stamp duty result ---------- */
+
+  .dh-sd-empty {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .dh-sd-art {
+    width: min(100%, 16rem);
+    aspect-ratio: 300 / 150;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+
+  .dh-sd-base {
+    display: grid;
+    gap: 0.625rem;
+  }
+
+  .dh-sd-base li {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .dh-sd-base-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 1rem;
+    color: var(--color-ink-800);
+    font-size: 0.9375rem;
+  }
+
+  .dh-sd-used {
+    color: var(--color-kesar-700);
+    font-weight: 700;
+  }
+
+  .dh-sd-base svg {
+    display: block;
+    width: 100%;
+    height: 0.625rem;
+  }
+
+  .dh-sd-base rect {
+    fill: var(--color-ink-400);
+  }
+
+  .dh-sd-base .is-used rect {
+    fill: var(--color-kesar-800);
+  }
+
+  .dh-sd-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .dh-sd-bar {
+    display: block;
+    width: 4.5rem;
+    height: 0.5rem;
+  }
+
+  .dh-sd-bar rect {
+    fill: var(--color-kesar-300);
+  }
+
+  @media (max-width: 39.99rem) {
+    .dh-sd-bar {
+      width: 2.5rem;
+    }
+  }
+}

@@ -1,0 +1,90 @@
+# Smoke test of a live site with curl only. No secrets. Read-only GET and HEAD requests. It does not deploy anything.
+# Runs by hand (manual) or after the "CI" workflow finishes on main, against the production URL (default https://360ghar.com).
+# Manual plus retry: a run right after a push can reach the previous deploy, so the whole set of checks is tried
+# up to 10 times, 30 seconds apart, and the job fails only if the last try fails too.
+
+name: Post-deploy smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Site to check (no trailing slash)
+        required: true
+        default: https://360ghar.com
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Smoke ${{ inputs.base_url || 'https://360ghar.com' }}
+    # After a workflow_run, only when CI passed.
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BASE: ${{ inputs.base_url || 'https://360ghar.com' }}
+    steps:
+      - name: Smoke checks (up to 10 tries, 30 s apart)
+        run: |
+          base="${BASE%/}"
+
+          checks() (
+            set -euo pipefail
+            tmp="$(mktemp -d)"
+
+            echo "-- homepage answers 200 and has JSON-LD"
+            code=$(curl -sS -o "$tmp/home.html" -w '%{http_code}' --max-time 30 "$base/")
+            test "$code" = "200" || { echo "homepage answered $code"; exit 1; }
+            grep -q 'application/ld+json' "$tmp/home.html" || { echo "homepage has no JSON-LD"; exit 1; }
+
+            echo "-- no redirect loop (at most 5 redirects)"
+            for path in / /properties /hi /gurugram/buy/apartments /property-sidebar; do
+              curl -sSIL --max-redirs 5 --max-time 30 -o /dev/null -w "$path -> %{http_code} after %{num_redirects} redirect(s), final %{url_effective}\n" "$base$path"
+            done
+
+            echo "-- old duplicate URLs answer 301"
+            redirect() {
+              out=$(curl -sS -o /dev/null --max-time 30 -w '%{http_code} %{redirect_url}' "$base$1")
+              echo "$1 -> $out"
+              test "${out%% *}" = "301" || { echo "expected 301 for $1"; exit 1; }
+              case "$out" in *"$2") ;; *) echo "expected a redirect to $2"; exit 1;; esac
+            }
+            redirect /property-sidebar /properties
+            redirect /add-new-listing /post-property
+            redirect /hi/property-sidebar /hi/properties
+
+            echo "-- a Hindi page answers 200 with lang hi"
+            code=$(curl -sS -o "$tmp/hi.html" -w '%{http_code}' --max-time 30 "$base/hi/properties")
+            test "$code" = "200" || { echo "/hi/properties answered $code"; exit 1; }
+            grep -qi '<html[^>]*lang="hi' "$tmp/hi.html" || { echo "/hi/properties is not lang=hi"; exit 1; }
+
+            echo "-- a missing page answers 404"
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$base/this-page-does-not-exist-smoke-check")
+            test "$code" = "404" || { echo "missing page answered $code"; exit 1; }
+
+            echo "-- sitemap index answers 200 and lists sitemaps"
+            code=$(curl -sS -o "$tmp/sitemap.xml" -w '%{http_code}' --max-time 60 "$base/sitemap.xml")
+            test "$code" = "200" || { echo "sitemap.xml answered $code"; exit 1; }
+            grep -q '<sitemapindex' "$tmp/sitemap.xml" || { echo "sitemap.xml is not a sitemap index"; exit 1; }
+            code=$(curl -sS -o "$tmp/static.xml" -w '%{http_code}' --max-time 60 "$base/sitemap-static.xml")
+            test "$code" = "200" || { echo "sitemap-static.xml answered $code"; exit 1; }
+            grep -q 'hreflang="hi"' "$tmp/static.xml" || { echo "sitemap-static.xml has no hreflang alternates"; exit 1; }
+
+            echo "-- robots.txt and the IndexNow key file"
+            curl -fsS --max-time 30 "$base/robots.txt" | grep -q '^Sitemap: ' || { echo "robots.txt lists no sitemap"; exit 1; }
+            curl -fsS --max-time 30 "$base/ba96fa507cb7447aa74f5ddd2f516a6d.txt" | grep -q 'ba96fa507cb7447aa74f5ddd2f516a6d' || { echo "IndexNow key file is missing"; exit 1; }
+          )
+
+          for try in $(seq 1 10); do
+            echo "=== try $try of 10: $base"
+            if checks; then echo "All checks passed on try $try."; exit 0; fi
+            if [ "$try" -lt 10 ]; then echo "Failed. Waiting 30 s before the next try."; sleep 30; fi
+          done
+          echo "Smoke checks failed on all 10 tries."
+          exit 1

@@ -1,0 +1,188 @@
+---
+/**
+ * /truth/:slug (SSG, 5 slugs, one template). English body. Article JSON-LD
+ * with a fixed date (TRUTH_PUBLISHED). Breadcrumb: Home > Compare (/vs) > page.
+ */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { faqPage } from '@/lib/seo/site';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import { article, trail } from '@/features/content/shared/schema';
+import ClaimsTable from './ClaimsTable.astro';
+import type { Competitor } from './competitors';
+import { nextCompetitors } from './related';
+import { TRUTH_PUBLISHED, type TruthPage } from './truth';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+type Props = { locale: Locale; page: TruthPage; c: Competitor };
+const { locale, page, c } = Astro.props;
+const t = getT(locale);
+const k = (key: string) => t(`compare:${key}`);
+const tr = (key: string) => t(`truth:${key}`);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const path = `/truth/${page.slug}`;
+const en = hi ? 'en' : undefined;
+
+const H = byLocale(locale, {
+  en: { claims: `What ${c.name} claims, and what users report`, reported: 'What users report', source: 'Source', faq: 'Common questions answered', all: 'See all comparisons' },
+  hi: { claims: `${c.name} के दावे और उपयोगकर्ताओं के अनुभव`, reported: 'उपयोगकर्ता क्या बताते हैं', source: 'स्रोत', faq: 'आम सवालों के जवाब', all: 'सभी तुलनाएँ देखें' },
+});
+
+const title = t(`seo:truth.${page.seoKey}.title`);
+const description = t(`seo:truth.${page.seoKey}.description`);
+const others = nextCompetitors(c.slug);
+const { crumbs, ld } = trail(locale, [
+  { name: k('breadcrumb.compare'), path: '/vs' },
+  { name: page.title, path },
+]);
+const jsonLd = [ld, article({ headline: title, description, path, locale, published: TRUTH_PUBLISHED }), faqPage(c.faqs)];
+---
+
+<Content
+  title={title}
+  description={description}
+  keywords={c.keywords}
+  path={path}
+  type="article"
+  article={{ published: TRUTH_PUBLISHED, modified: TRUTH_PUBLISHED, section: 'Comparisons' }}
+  heading={page.title}
+  lead={page.intro}
+  crumbs={crumbs}
+  jsonLd={jsonLd}
+  newsletter
+>
+  <PageArt slot="head" scene="book" seed={page.slug} />
+  <div lang={en}>
+    <h2 class="tr-first">{tr('issuesSection.title')}</h2>
+    <ol class="tr-issues" role="list">
+      {
+        page.issues.map((i, n) => (
+          <li>
+            <span class="tr-n" aria-hidden="true">{n + 1}</span>
+            <div>
+              <h3>{i.title}</h3>
+              <p>{i.description}</p>
+              <p class="tr-source">
+                <span lang={locale}>{H.source}:</span> {i.source}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <h2>{H.claims}</h2>
+    <ClaimsTable claims={c.claims} claimLabel={k('claimsVsReality.claimBadge')} realityLabel={H.reported} />
+
+    <h2>{H.faq}</h2>
+    <Faq items={c.faqs} />
+  </div>
+
+  <h2>{tr('compareSection.title')}</h2>
+  <ul class="tr-see" role="list">
+    <li>
+      <a href={L(`/vs/${c.slug}`)}>
+        <span>{tr('compareSection.compareVs')} {c.name}</span>
+        <Icon name="chevron-right" size={18} />
+      </a>
+    </li>
+    {
+      others.map((o) => (
+        <li>
+          <a href={L(`/vs/${o.slug}`)}>
+            <span>{tr('compareSection.compareVs')} {o.name}</span>
+            <Icon name="chevron-right" size={18} />
+          </a>
+        </li>
+      ))
+    }
+    <li>
+      <a href={L('/vs')}>
+        <span>{H.all}</span>
+        <Icon name="chevron-right" size={18} />
+      </a>
+    </li>
+  </ul>
+
+  <div class="tr-cta">
+    <a class="btn btn-primary btn-lg" href={L('/properties')}>
+      {tr('ctaSection.startSearch')}
+      <Icon name="arrow-up-right" size={18} class="arrow" />
+    </a>
+  </div>
+</Content>
+
+<style>
+  .tr-first {
+    margin-top: 0.5rem;
+  }
+
+  ol.tr-issues {
+    display: grid;
+    gap: 1.75rem;
+    margin-top: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tr-issues > li {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 0 0.75rem;
+    max-width: none;
+    margin: 0;
+  }
+
+  .tr-n {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 3.5rem;
+    line-height: 0.9;
+    color: var(--color-kesar-600);
+  }
+
+  .tr-issues h3 {
+    margin: 0.25rem 0 0.375rem;
+  }
+
+  .tr-issues .tr-source {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  ul.tr-see {
+    display: grid;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tr-see > li {
+    margin: 0;
+    max-width: none;
+  }
+
+  .tr-see a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 52px;
+    border-bottom: 1px solid var(--color-ink-200);
+    color: var(--color-ink-950);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .tr-see a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .tr-cta {
+    margin-top: 2.5rem;
+  }
+</style>

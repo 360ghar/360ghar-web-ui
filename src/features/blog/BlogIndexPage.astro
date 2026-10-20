@@ -1,0 +1,343 @@
+---
+/**
+ * /blog: page 1 is rendered on the server; the island adds more pages.
+ * The route loads the data (src/pages/blog.astro) and sets the status.
+ * Filters use the old URL params (?category, ?tag, ?q). Filtered pages and
+ * ?cursor pages are noindex; the canonical is always /blog.
+ */
+import { getT } from '@/i18n';
+import Page from '@/layouts/Page.astro';
+import { localizer } from '@/lib/i18n/locale';
+import { absoluteUrl, breadcrumbs } from '@/lib/seo/site';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import PaperVignette from '@/ui/paper/PaperVignette.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import BlogList from './BlogList';
+import type { loadBlogIndex } from './load';
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const t = getT(locale);
+const L = localizer(locale);
+type Props = Awaited<ReturnType<typeof loadBlogIndex>>;
+const { query, cursor, first, recent } = Astro.props;
+const filtered = Boolean(query.q || query.category || query.tag);
+
+const cats = new Map<string, { name: string; n: number }>();
+for (const p of recent) for (const c of p.categories ?? []) if (c.slug) cats.set(c.slug, { name: c.name, n: (cats.get(c.slug)?.n ?? 0) + 1 });
+const categories = [...cats.entries()].sort((a, b) => b[1].n - a[1].n);
+const activeName = query.category ? (cats.get(query.category)?.name ?? query.category) : null;
+const tagName = query.tag ? (recent.flatMap((p) => p.tags ?? []).find((x) => x.slug === query.tag)?.name ?? query.tag) : null;
+
+const baseTitle = t('blog:blogClassicPage.baseTitle');
+const baseDescription = t('blog:blogClassicPage.baseDescription');
+const label = activeName ?? (tagName ? `#${tagName}` : null);
+const title = label ? `${label} | ${baseTitle}` : baseTitle;
+const description = activeName
+  ? t('blog:blogClassicPage.categoryArticles', { category: activeName, baseDescription })
+  : tagName
+    ? t('blog:blogClassicPage.taggedPosts', { tag: tagName, baseDescription })
+    : baseDescription;
+const heading = query.q ? (hi ? `"${query.q}" के नतीजे` : `Results for ${query.q}`) : (label ?? (hi ? 'गुरुग्राम के घरों की गाइड' : 'Home guides for Gurugram'));
+const items = first.page?.items ?? [];
+const crumbs = [
+  { name: t('blog:blogClassicPage.breadcrumbHome'), path: '/' },
+  { name: t('blog:blogClassicPage.breadcrumbBlog'), path: '/blog' },
+  ...(filtered ? [{ name: heading }] : []),
+];
+
+const guides: { theme: 'document' | 'map' | 'calculator'; title: string; links: { label: string; href: string }[] }[] = [
+  { theme: 'document', title: t('blog:featuredGuides.marketReports.title'), links: [{ label: t('blog:featuredGuides.marketReports.guideLabel'), href: '/gurugram-real-estate-guide' }, { label: t('blog:featuredGuides.marketReports.investmentLabel'), href: '/property-investment-gurugram' }] },
+  { theme: 'map', title: t('blog:featuredGuides.localityResearch.title'), links: [{ label: t('blog:featuredGuides.localityResearch.directoryLabel'), href: '/localities' }, { label: t('blog:featuredGuides.localityResearch.searchLabel'), href: '/properties' }] },
+  { theme: 'calculator', title: t('blog:featuredGuides.planningTools.title'), links: [{ label: t('blog:featuredGuides.planningTools.emiLabel'), href: '/emi-calculator' }, { label: t('blog:featuredGuides.planningTools.checklistLabel'), href: '/property-document-checklist' }] },
+];
+
+const jsonLd = [
+  {
+    '@type': 'CollectionPage',
+    name: title,
+    description,
+    url: absoluteUrl(L('/blog')),
+    about: { '@type': 'Thing', name: 'Real Estate in Gurugram' },
+    mainEntity: {
+      '@type': 'ItemList',
+      name: t('blog:blogClassicPage.collectionName'),
+      itemListElement: items.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: absoluteUrl(L(`/blog/${p.slug}`)), name: p.title })),
+    },
+  },
+  breadcrumbs(crumbs.filter((c): c is { name: string; path: string } => Boolean(c.path)), locale),
+];
+---
+
+<Page title={title} description={description} path="/blog" noindex={filtered || Boolean(cursor)} jsonLd={jsonLd}>
+  <div class="container-page blog-index">
+    <Breadcrumbs items={crumbs} />
+    <div class="blog-top">
+      <h1 class="blog-h1">{heading}</h1>
+      <form class="blog-search" action={L('/blog')} method="get" role="search">
+        <label class="visually-hidden" for="blog-q">{hi ? 'ब्लॉग में खोजें' : 'Search the blog'}</label>
+        <input id="blog-q" class="input" type="search" name="q" value={query.q ?? ''} placeholder={hi ? 'जैसे: किराया, RERA, सोहना रोड' : 'Try: rent, RERA, Sohna Road'} enterkeyhint="search" />
+        <button class="btn btn-ink btn-icon" type="submit" aria-label={hi ? 'खोजें' : 'Search'}><Icon name="search" size={20} /></button>
+      </form>
+    </div>
+
+    {
+      categories.length > 0 && (
+        <nav class="blog-cats" aria-label={hi ? 'श्रेणियाँ' : 'Categories'}>
+          <ul role="list">
+            <li>
+              <a class="toggle" href={L('/blog')} aria-current={!filtered ? 'page' : undefined}>
+                {hi ? 'सभी' : 'All'}
+              </a>
+            </li>
+            {categories.map(([slug, c]) => (
+              <li>
+                <a class="toggle" href={`${L('/blog')}?category=${encodeURIComponent(slug)}`} aria-current={query.category === slug ? 'page' : undefined}>
+                  {c.name} <span class="tabular text-ink-600">{c.n}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+
+    <div class="blog-body">
+      {
+        first.error ? (
+          <StateBlock
+            scene={first.error.kind === 'network' || first.error.status >= 500 ? 'offline' : 'error'}
+            title={hi ? 'अभी पोस्ट लोड नहीं हो सके' : 'We could not load the posts'}
+            body={hi ? 'हमारे सर्वर ने जवाब नहीं दिया। एक मिनट बाद कोशिश करें।' : 'Our server did not answer. Try again in a minute.'}
+            action={{ href: Astro.url.pathname + Astro.url.search, label: hi ? 'फिर कोशिश करें' : 'Try again', icon: 'retry' }}
+            secondary={{ href: L('/properties'), label: hi ? 'घर देखें' : 'Browse homes' }}
+          />
+        ) : items.length === 0 ? (
+          <StateBlock
+            scene="empty"
+            title={filtered ? (hi ? 'इससे मेल खाती कोई पोस्ट नहीं' : 'No posts match this') : hi ? 'अभी कोई पोस्ट नहीं' : 'No posts yet'}
+            body={filtered ? (hi ? 'दूसरा शब्द आज़माएँ या सभी पोस्ट देखें।' : 'Try another word, or see every post.') : hi ? 'जल्द ही नई गाइड आएँगी।' : 'New guides are on the way.'}
+            action={filtered ? { href: L('/blog'), label: hi ? 'सभी पोस्ट' : 'See all posts' } : { href: L('/properties'), label: hi ? 'घर देखें' : 'Browse homes', icon: 'search' }}
+          />
+        ) : (
+          <BlogList client:idle locale={locale} query={query} initialPage={first.page!} />
+        )
+      }
+    </div>
+
+    <section class="blog-guides" aria-labelledby="blog-guides">
+      <h2 id="blog-guides" class="blog-h2">{hi ? 'पढ़ते समय काम की चीज़ें' : 'Keep these open while you read'}</h2>
+      <div class="blog-guides-grid">
+        {
+          guides.map((g) => (
+            <div class="blog-guide">
+              <div class="blog-guide-art">
+                <PaperVignette theme={g.theme} seed={`blog-${g.theme}`} />
+              </div>
+              <h3 class="blog-h3">{g.title}</h3>
+              <ul role="list">
+                {g.links.map((l) => (
+                  <li>
+                    <a class="link" href={L(l.href)}>
+                      {l.label}
+                      <Icon name="arrow-up-right" size={16} class="arrow" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</Page>
+
+<style>
+  .blog-index {
+    padding-block: 0.5rem 4rem;
+  }
+
+  .blog-top {
+    display: grid;
+    gap: 1rem 2rem;
+    margin-top: 0.75rem;
+  }
+
+  @media (min-width: 64rem) {
+    .blog-top {
+      grid-template-columns: minmax(0, 1fr) 24rem;
+      align-items: end;
+    }
+  }
+
+  .blog-h1 {
+    font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem);
+    max-width: 18ch;
+  }
+
+  .blog-search {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .blog-search .input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .blog-cats {
+    margin-top: 1.5rem;
+    margin-inline: -1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .blog-cats ul {
+    display: flex;
+    gap: 0.5rem;
+    padding-inline: 1rem;
+    width: max-content;
+  }
+
+  @media (min-width: 64rem) {
+    .blog-cats {
+      margin-inline: 0;
+      overflow: visible;
+    }
+
+    .blog-cats ul {
+      flex-wrap: wrap;
+      width: auto;
+      padding-inline: 0;
+    }
+  }
+
+  .blog-cats a {
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .blog-cats a[aria-current='page'] span {
+    color: var(--color-kesar-200);
+  }
+
+  .blog-body {
+    margin-top: 2rem;
+  }
+
+  .blog-index :global(.blog-grid) {
+    display: grid;
+    gap: 2.5rem 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .blog-index :global(.blog-grid) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .blog-index :global(.blog-grid > li[data-lead]) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .blog-index :global(.blog-grid) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* The newest post leads: image and text side by side across the row.
+       The text column is wide enough, and a long title is capped (--fit, from
+       titleFit), so the title stays on two lines. */
+    .blog-index :global(.blog-grid > li[data-lead] .blog-card) {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .blog-index :global(.blog-grid > li[data-lead] .blog-card > div:last-child) {
+      container-type: inline-size;
+    }
+
+    .blog-index :global(.blog-grid > li[data-lead] .blog-card-title) {
+      font-family: var(--font-display);
+      font-size: min(2.25rem, var(--fit, 2.25rem));
+      line-height: 1.1;
+      text-wrap: balance;
+    }
+  }
+
+  /* Cards in one row share lines: meta, title and excerpt start at the same height. */
+  @media (min-width: 40rem) {
+    .blog-index :global(.blog-grid > li:not([data-lead])),
+    .blog-index :global(.blog-grid > li:not([data-lead]) .blog-card) {
+      display: grid;
+      grid-row: span 4;
+      grid-template-rows: subgrid;
+      row-gap: 0.375rem;
+    }
+
+    .blog-index :global(.blog-grid > li:not([data-lead]) .blog-card > div:last-child) {
+      display: contents;
+    }
+
+    .blog-index :global(.blog-grid > li:not([data-lead]) .blog-card-img) {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .blog-index :global(.blog-more) {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+
+  .blog-guides {
+    margin-top: 5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--color-ink-100);
+  }
+
+  .blog-h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  }
+
+  .blog-h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+
+  .blog-guides-grid {
+    display: grid;
+    gap: 1.5rem 2rem;
+    margin-top: 1.25rem;
+  }
+
+  @media (min-width: 48rem) {
+    .blog-guides-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .blog-guide {
+    display: grid;
+    align-content: start;
+    gap: 0.25rem;
+  }
+
+  .blog-guide-art {
+    width: min(100%, 12rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .blog-guides-grid :global(a) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 44px;
+  }
+</style>

@@ -1,0 +1,11 @@
+---
+import DirectoryPage from '@/features/localities/DirectoryPage.astro';
+import { listedPlaces, liveHomes } from '@/features/localities/live';
+import { cachePage } from '@/lib/cache';
+
+export const prerender = false;
+const homes = await liveHomes();
+cachePage(Astro, 'hour', { error: !homes });
+---
+
+<DirectoryPage listed={homes ? listedPlaces(homes) : null} />

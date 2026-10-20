@@ -1,0 +1,108 @@
+# CI for 360ghar-web-ui-2: typecheck, lint, unit tests and the pSEO gate on every push and pull request.
+# The Playwright job is optional: set the repository variable E2E_DISABLED to "true" to skip it.
+# No secrets are used. Nothing here deploys.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Typecheck, lint, unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm version comes from "packageManager" in package.json.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Runs sync-hi-routes, astro check and tsc.
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      # Landing, price-context and locality page rules (scripts/data/pseo-quality-check.mjs). Exit 1 on errors; warnings do not fail.
+      - name: pSEO quality gate
+        run: pnpm check:pseo
+
+  e2e:
+    name: Playwright (one dev server)
+    needs: checks
+    if: ${{ vars.E2E_DISABLED != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      # Same names as .env.example. The two Supabase values are public, so they are variables, not secrets.
+      PUBLIC_API_BASE: /dev-api
+      API_ORIGIN: https://api.360ghar.com
+      PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
+      PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      BASE_URL: http://127.0.0.1:4321
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # playwright.config.ts uses the installed Chrome channel.
+      - name: Install Chrome for Playwright
+        run: pnpm exec playwright install --with-deps chrome
+
+      # Rule: one astro dev per folder. This job starts exactly one and stops it at the end.
+      - name: Start the dev server
+        run: |
+          nohup pnpm dev --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/astro-dev.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/astro-dev.pid"
+          for i in $(seq 1 90); do
+            if curl -fsS -o /dev/null http://127.0.0.1:4321/; then echo "dev server ready after ${i}s"; exit 0; fi
+            sleep 2
+          done
+          echo "dev server did not start"; cat "$RUNNER_TEMP/astro-dev.log"; exit 1
+
+      # Retries come from playwright.config.ts (not overridden). --output keeps results out of test-results/.
+      - name: Playwright
+        run: pnpm exec playwright test --output="$RUNNER_TEMP/pw-output" --workers=3
+
+      - name: Stop the dev server
+        if: always()
+        run: kill "$(cat "$RUNNER_TEMP/astro-dev.pid")" 2>/dev/null || true
+
+      - name: Upload the dev log and traces on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-failure
+          path: |
+            ${{ runner.temp }}/astro-dev.log
+            ${{ runner.temp }}/pw-output
+          retention-days: 7

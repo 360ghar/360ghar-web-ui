@@ -1,8 +1,0 @@
-/api/*   https://api.360ghar.com/api/v1/:splat   200
-
-# Legacy /data-hub/* paths -> canonical data-hub routes (fix soft-404s)
-/data-hub/circle-rates    /circle-rates    301
-/data-hub/rera-projects   /rera-projects   301
-/data-hub/bank-auctions   /bank-auctions   301
-
-/*    /index.html   200

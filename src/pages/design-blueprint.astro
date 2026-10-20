@@ -1,0 +1,54 @@
+---
+import { getT } from '@/i18n';
+import { localizePath } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import Blueprint from '@/features/tools/blueprint/Blueprint';
+import { BP_FAQ, BP_HOWTO, BP_PAGE, BP_UI } from '@/features/tools/blueprint/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = BP_PAGE[locale];
+const ui = BP_UI[locale];
+---
+
+<ToolPage
+  tool="designBlueprint"
+  title={t('tools:designBlueprint.title')}
+  description={t('tools:designBlueprint.description')}
+  keywords={t('tools:designBlueprint.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={BP_FAQ[locale]}
+  faqTitle={c.faqTitle}
+  howTo={BP_HOWTO[locale]}
+  related={['vastu', 'aiDesignStudio', 'areaCalculator', 'areaConverter', 'propertyChecklist']}
+>
+  <Blueprint client:load locale={locale} title={t('tools:designBlueprint.iframeTitle')} loadingText={t('tools:designBlueprint.loading')} />
+  <div class="bp-links">
+    <a class="link" href={localizePath('/vastu-checker', locale)}>
+      {ui.vastu}
+      <Icon name="arrow-up-right" size={16} class="arrow" />
+    </a>
+    <a class="link" href="/blueprint3d/index.html" target="_blank" rel="noopener">
+      {ui.full}
+      <Icon name="arrow-up-right" size={16} class="arrow" />
+    </a>
+  </div>
+  <Fragment slot="body">
+    <h2>{c.stepsTitle}</h2>
+    <ol>
+      {BP_HOWTO[locale].steps.map((s) => (
+        <li>
+          <strong>{s.name}.</strong> {s.text}
+        </li>
+      ))}
+    </ol>
+    <h2>{c.tipsTitle}</h2>
+    <ul>
+      {c.tips.map((tip) => <li>{tip}</li>)}
+    </ul>
+  </Fragment>
+</ToolPage>

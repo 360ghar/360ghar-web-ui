@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "360Ghar API",
-    "description": "Real estate platform API for property search, visit scheduling, and management",
+    "description": "Real estate platform API for property search, visit scheduling, and management. This file describes the public subset. The full contract is at https://api.360ghar.com/api/v1/openapi.json. Lists are cursor pages: { items, next_cursor, has_more, limit, total }. Every error body is { error: { code, message, details } }.",
     "version": "1.0.0",
     "contact": {
       "name": "360Ghar",
@@ -20,23 +20,37 @@
     "categories": ["real_estate", "property_search", "tools"]
   },
   "paths": {
-    "/properties/": {
+    "/properties": {
       "get": {
         "summary": "Search properties",
-        "description": "Search and filter verified property listings",
+        "description": "Search and filter verified property listings. A PG or flatmate listing is property_type pg or flatmate with purpose rent. Pass cursor back unchanged with the same filters to read the next page.",
         "operationId": "searchProperties",
         "tags": ["Properties"],
         "parameters": [
           { "name": "q", "in": "query", "schema": { "type": "string" }, "description": "Text search query" },
           { "name": "city", "in": "query", "schema": { "type": "string" }, "description": "City filter" },
-          { "name": "purpose", "in": "query", "schema": { "type": "string", "enum": ["buy", "rent", "pg"] } },
-          { "name": "price_min", "in": "query", "schema": { "type": "number" } },
-          { "name": "price_max", "in": "query", "schema": { "type": "number" } },
-          { "name": "bedrooms_min", "in": "query", "schema": { "type": "integer" } },
-          { "name": "bedrooms_max", "in": "query", "schema": { "type": "integer" } }
+          { "name": "purpose", "in": "query", "schema": { "type": "string", "enum": ["buy", "rent", "short_stay"] } },
+          {
+            "name": "property_type",
+            "in": "query",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["house", "apartment", "builder_floor", "room", "villa", "plot", "condo", "penthouse", "studio", "loft", "pg", "flatmate", "office", "shop", "warehouse"] }
+            }
+          },
+          { "name": "price_min", "in": "query", "schema": { "type": "number", "minimum": 0 } },
+          { "name": "price_max", "in": "query", "schema": { "type": "number", "minimum": 0 } },
+          { "name": "bedrooms_min", "in": "query", "schema": { "type": "integer", "minimum": 0, "maximum": 50 } },
+          { "name": "bedrooms_max", "in": "query", "schema": { "type": "integer", "minimum": 0, "maximum": 50 } },
+          { "name": "sort_by", "in": "query", "schema": { "type": "string", "enum": ["distance", "price_low", "price_high", "newest", "popular", "relevance"], "default": "newest" } },
+          { "name": "cursor", "in": "query", "schema": { "type": "string" }, "description": "Opaque value from next_cursor of the previous page" },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 } },
+          { "name": "include_total", "in": "query", "schema": { "type": "boolean", "default": false }, "description": "Adds total to the page. It is null otherwise." }
         ],
         "responses": {
-          "200": { "description": "Paginated property results" }
+          "200": { "description": "A cursor page of properties" },
+          "422": { "description": "A query key or value the route does not declare" }
         },
         "x-payment-info": {
           "intent": "charge",
@@ -47,16 +61,17 @@
         }
       }
     },
-    "/properties/{id}/": {
+    "/properties/{property_id}": {
       "get": {
         "summary": "Get property details",
         "operationId": "getPropertyById",
         "tags": ["Properties"],
         "parameters": [
-          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+          { "name": "property_id", "in": "path", "required": true, "schema": { "type": "integer" } }
         ],
         "responses": {
-          "200": { "description": "Property details" }
+          "200": { "description": "Property details. owner_contact is the agent or company number unless the caller owns the listing." },
+          "404": { "description": "No such property" }
         },
         "x-payment-info": {
           "intent": "charge",
@@ -66,14 +81,18 @@
         }
       }
     },
-    "/visits/": {
+    "/visits": {
       "get": {
         "summary": "List visits",
         "operationId": "listVisits",
         "tags": ["Visits"],
         "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "cursor", "in": "query", "schema": { "type": "string" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 } }
+        ],
         "responses": {
-          "200": { "description": "List of visits" }
+          "200": { "description": "A cursor page of visits" }
         }
       },
       "post": {
@@ -87,10 +106,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "additionalProperties": false,
                 "required": ["property_id", "scheduled_date"],
                 "properties": {
-                  "property_id": { "type": "string" },
-                  "scheduled_date": { "type": "string", "format": "date" },
+                  "property_id": { "type": "integer" },
+                  "scheduled_date": { "type": "string", "format": "date-time", "description": "ISO 8601 with a UTC offset, for example 2026-11-01T10:00:00+05:30 or 2026-11-01T04:30:00Z" },
                   "special_requirements": { "type": "string" }
                 }
               }
@@ -98,7 +118,9 @@
           }
         },
         "responses": {
-          "201": { "description": "Visit scheduled" }
+          "201": { "description": "Visit scheduled" },
+          "409": { "description": "VISIT_CONFLICT: the time overlaps another visit" },
+          "422": { "description": "A missing UTC offset, or an unknown key" }
         },
         "x-payment-info": {
           "intent": "charge",
@@ -130,7 +152,8 @@
           }
         },
         "responses": {
-          "200": { "description": "Vastu analysis result" }
+          "200": { "description": "Vastu analysis result" },
+          "502": { "description": "VASTU_UNUSABLE_OUTPUT: the model output could not be used. Try again." }
         },
         "x-payment-info": {
           "intent": "charge",

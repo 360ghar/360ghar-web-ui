@@ -1,0 +1,608 @@
+---
+/**
+ * Locality guide. A paper vignette of the kind of place, the live homes
+ * matched exactly to this place, distances to landmarks, circle rates,
+ * a checklist for this kind of place, FAQs and nearby places.
+ */
+import priceContext from '@/data/priceContext.json';
+import { compactPrice, formatDate, formatNum, rupees } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import FavouriteButton from '@/features/favourites/FavouriteButton';
+import { CITY_META } from '@/features/landing/cities';
+import { PropertyCardView } from '@/features/property/PropertyCardView';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import CutBand from '@/ui/CutBand.astro';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import { citySlug, displayName, INTENT_TYPES, landmarksFor, localitySlug, nearbyLocalities, TYPE_LABEL, type Locality } from './data';
+import LandmarkList from './LandmarkList.astro';
+import ListedPlaces from './ListedPlaces.astro';
+import { PRICE_ON_REQUEST } from '@/features/search/prices';
+import { summarize, type Range } from './live';
+import PlaceFacts, { type FactRow } from './PlaceFacts.astro';
+import type { LocalityData } from './load';
+import PlaceHero from './PlaceHero.astro';
+import { kindForEntity } from './vignette';
+
+type Props = { locality: Locality; data: LocalityData; faqs: { q: string; a: string }[]; locale: Locale };
+
+const { locality: l, data, faqs, locale } = Astro.props;
+const { homes, listed, nearbyCounts, circle, failed } = data;
+const hi = locale === 'hi';
+const L = localizer(locale);
+const name = displayName(l.name);
+const city = citySlug(l.city);
+const meta = CITY_META[city];
+const cityName = city === 'gurgaon' ? (hi ? 'गुरुग्राम' : 'Gurugram') : displayName(l.city);
+const type = TYPE_LABEL[l.entityType]?.[hi ? 1 : 0] ?? l.type;
+const slug = localitySlug(l);
+const landmarks = landmarksFor(l);
+const nearby = nearbyLocalities(l);
+const prices = (priceContext as Record<string, { buy?: Record<string, string>; rent?: Record<string, string>; pg?: Record<string, string> }>)[city];
+const hasIntent = INTENT_TYPES.has(l.entityType);
+const sum = summarize(homes);
+const km = (s: string) => Number.parseFloat(s.replace(/[^0-9.]/g, '')) || 0;
+const nearest = (t: string) => landmarks.filter((m) => m.type === t).sort((a, b) => km(a.distance) - km(b.distance))[0];
+const metro = nearest('metro');
+const hospital = nearest('hospital');
+const verified = l.lastVerifiedAt ? formatDate(l.lastVerifiedAt, locale, { day: 'numeric', month: 'long', year: 'numeric' }) : null;
+const n = (x: number) => formatNum(x, 'en');
+const circleLabel: Record<string, [string, string]> = { residential: ['Residential', 'रिहायशी'], commercial: ['Commercial', 'कमर्शियल'], plot: ['Plot', 'प्लॉट'] };
+const money = (v: number) => compactPrice(v, locale);
+const rent = (v: number) => rupees(v, locale);
+
+// Facts in the header: live counts and price ranges, then the nearest landmarks.
+const roundRent = (v: number) => Math.round(v / 100) * 100;
+const priceLine = (r: Range, count: string, f: (v: number) => string, per = '') =>
+  r.lo !== null && r.hi !== null
+    ? hi
+      ? `${count} · ज़्यादातर घर ${f(r.lo)} से ${f(r.hi)}${per}`
+      : `${count} · most homes ${f(r.lo)} to ${f(r.hi)}${per}`
+    : r.min !== null
+      ? hi
+        ? `${count} · ${f(r.min)}${per} से`
+        : `${count} · from ${f(r.min)}${per}`
+      : `${count} · ${PRICE_ON_REQUEST[hi ? 'hi' : 'en'].toLowerCase()}`;
+const live: FactRow[] = failed
+  ? [{ text: hi ? 'लाइव घर अभी लोड नहीं हो सके' : 'Live homes could not load right now', strong: true }]
+  : !sum.total
+    ? [{ text: hi ? 'अभी कोई घर लिस्ट नहीं' : 'No homes listed yet', strong: true }]
+    : [
+        { text: hi ? `${n(sum.total)} घर लिस्ट` : `${n(sum.total)} ${sum.total === 1 ? 'home' : 'homes'} listed`, strong: true },
+        ...(sum.buy ? [{ text: priceLine(sum.buy, hi ? `${sum.buy.n} बिक्री के लिए` : `${sum.buy.n} for sale`, money) }] : []),
+        ...(sum.rent ? [{ text: priceLine(sum.rent, hi ? `${sum.rent.n} किराये पर` : `${sum.rent.n} for rent`, (v) => rent(roundRent(v)), hi ? ' माह' : ' a month') }] : []),
+        ...(sum.stay ? [{ text: priceLine({ ...sum.stay, lo: null, hi: null }, hi ? `${sum.stay.n} कम समय के लिए` : `${sum.stay.n} short ${sum.stay.n === 1 ? 'stay' : 'stays'}`, rent, hi ? ' रात' : ' a night') }] : []),
+      ];
+const kmText = (s: string) => (hi ? s.replace('km', 'किमी') : s);
+const nearestRows: FactRow[] = [...landmarks]
+  .sort((a, b) => km(a.distance) - km(b.distance))
+  .slice(0, 3)
+  .map((m) => ({ text: m.name, value: kmText(m.distance), glyph: m.type }));
+const circleRows: FactRow[] = !nearestRows.length && circle.length ? circle.slice(0, 3).map((c) => ({ text: circleLabel[c.property_type]?.[hi ? 1 : 0] ?? c.property_type, value: `${rupees(c.rate_per_sqft, locale)}/${hi ? 'वर्ग फ़ुट' : 'sq ft'}` })) : [];
+const heroGroups = [
+  { title: hi ? '360Ghar पर अभी' : 'Live on 360Ghar', rows: live },
+  { title: hi ? 'सबसे पास' : 'Nearest', rows: nearestRows },
+  { title: hi ? 'सर्कल रेट' : 'Circle rates', rows: circleRows },
+];
+
+// A short summary built only from facts on this page.
+const WORD: Record<string, [string, string]> = {
+  sector: ['a sector', 'एक सेक्टर'],
+  locality: ['a locality', 'एक इलाका'],
+  phase: ['a phase of a larger colony', 'एक बड़ी कॉलोनी का फ़ेज़'],
+  society: ['a housing society', 'एक हाउसिंग सोसाइटी'],
+  project: ['a housing project', 'एक हाउसिंग प्रोजेक्ट'],
+  township: ['a township', 'एक टाउनशिप'],
+  road: ['a road', 'एक सड़क'],
+  village: ['a village', 'एक गाँव'],
+};
+const word = WORD[l.entityType]?.[hi ? 1 : 0] ?? (hi ? 'एक जगह' : 'a place');
+const state = meta ? (hi ? meta.stateHi : meta.state) : '';
+const summary = [
+  hi ? `${name} ${cityName}${state && state !== cityName ? `, ${state}` : ''} में ${word} है।` : `${name} is ${word} in ${cityName}${state && state !== cityName ? `, ${state}` : ''}.`,
+  metro && (hi ? `सबसे पास का मेट्रो स्टेशन ${metro.name} है (${metro.distance.replace('km', 'किमी')})।` : `The nearest metro station is ${metro.name}, ${metro.distance} away.`),
+  hospital && (hi ? `सबसे पास का बड़ा अस्पताल ${hospital.name} है (${hospital.distance.replace('km', 'किमी')})।` : `The nearest large hospital on our list is ${hospital.name}, ${hospital.distance} away.`),
+  !failed && (sum.total ? (hi ? `अभी 360Ghar पर यहाँ ${n(sum.total)} घर लिस्ट हैं।` : `${n(sum.total)} ${sum.total === 1 ? 'home is' : 'homes are'} listed here on 360Ghar now.`) : hi ? 'अभी 360Ghar पर यहाँ कोई घर लिस्ट नहीं है।' : 'No homes are listed here on 360Ghar yet.'),
+]
+  .filter(Boolean)
+  .join(' ');
+
+// What to check for this kind of place (from the old site's sidebar), with the tools that help.
+const CHECKS: Record<string, [string, string][]> = {
+  area: [
+    ['Check the circle rate before you agree a price. Stamp duty is paid on the higher of the deal value and the circle rate.', 'कीमत तय करने से पहले सर्कल रेट देखें। स्टैंप ड्यूटी सौदे की कीमत और सर्कल रेट में से जो ज़्यादा हो, उस पर लगती है।'],
+    ['Check that the plot or building is in an approved layout: an HSVP sector or a DTCP-licensed colony.', 'जाँचें कि प्लॉट या बिल्डिंग मंज़ूर लेआउट में है: HSVP सेक्टर या DTCP लाइसेंस वाली कॉलोनी।'],
+    ['Visit at peak hours to see the traffic, the parking and the water supply.', 'भीड़ के समय जाकर ट्रैफ़िक, पार्किंग और पानी की सप्लाई देखें।'],
+    ['Ask for the title papers and the latest property tax receipt.', 'मालिकाना काग़ज़ और ताज़ा प्रॉपर्टी टैक्स की रसीद माँगें।'],
+  ],
+  society: [
+    ['Ask the RWA or the seller for the latest maintenance bill and what it covers.', 'RWA या विक्रेता से ताज़ा मेंटेनेंस बिल और उसमें क्या शामिल है, यह माँगें।'],
+    ['Check the parking allotment and the visitor parking rules.', 'पार्किंग का आवंटन और मेहमानों की पार्किंग के नियम देखें।'],
+    ['Confirm the power backup for the flat and the common areas.', 'फ़्लैट और कॉमन एरिया का पावर बैकअप पक्का करें।'],
+    ['Ask how old the society is and which large repairs are planned.', 'पूछें कि सोसाइटी कितनी पुरानी है और कौन-सी बड़ी मरम्मत होनी है।'],
+  ],
+  project: [
+    ['Check the H-RERA registration on the official portal.', 'आधिकारिक पोर्टल पर H-RERA रजिस्ट्रेशन देखें।'],
+    ['Compare the approved building plan with what is built.', 'मंज़ूर नक्शे की तुलना बनी हुई इमारत से करें।'],
+    ['Look up the builder’s delivery record on other projects.', 'बिल्डर के दूसरे प्रोजेक्ट का डिलीवरी रिकॉर्ड देखें।'],
+    ['Compare the full cost: base price, PLC, EDC and IDC, club and maintenance deposit.', 'पूरी लागत की तुलना करें: बेस कीमत, PLC, EDC और IDC, क्लब और मेंटेनेंस डिपॉज़िट।'],
+  ],
+  township: [
+    ['Check which phases are delivered and which are still being built.', 'देखें कि कौन-से फ़ेज़ तैयार हैं और कौन-से अभी बन रहे हैं।'],
+    ['Compare the amenities promised with the ones that work today.', 'वादा की गई सुविधाओं की तुलना आज चालू सुविधाओं से करें।'],
+    ['Check the width of the internal roads and the parking.', 'अंदर की सड़कों की चौड़ाई और पार्किंग देखें।'],
+    ['Ask who runs the maintenance and what it costs.', 'पूछें कि रखरखाव कौन करता है और उसका शुल्क कितना है।'],
+  ],
+  road: [
+    ['Visit at peak hours to judge the noise and the traffic.', 'शोर और ट्रैफ़िक परखने के लिए भीड़ के समय जाएँ।'],
+    ['Check the protection from dust and noise: trees, setbacks, window seals.', 'धूल और शोर से बचाव देखें: पेड़, सड़क से दूरी, खिड़कियों की सील।'],
+    ['Check the parking. Road-facing buildings often have little.', 'पार्किंग देखें। सड़क की तरफ़ की इमारतों में अक्सर कम होती है।'],
+    ['Walk to the nearest shops and the bus or metro stop.', 'पास की दुकानों और बस या मेट्रो स्टॉप तक पैदल जाकर देखें।'],
+  ],
+  village: [
+    ['Check the land record (jamabandi) and the khasra number.', 'ज़मीन का रिकॉर्ड (जमाबंदी) और खसरा नंबर देखें।'],
+    ['Check that the area is inside the municipal limit and has an approved access road.', 'जाँचें कि इलाका नगर निगम सीमा में है और पहुँच की सड़क मंज़ूर है।'],
+    ['Confirm the water, sewer and power connections.', 'पानी, सीवर और बिजली के कनेक्शन पक्के करें।'],
+    ['Have a lawyer check the title before you pay.', 'पैसे देने से पहले किसी वकील से मालिकाना हक जँचवाएँ।'],
+  ],
+};
+const checkKey = ({ sector: 'area', locality: 'area', phase: 'township', society: 'society', project: 'project', township: 'township', road: 'road', village: 'village' } as Record<string, string>)[l.entityType] ?? 'area';
+const checks = CHECKS[checkKey]!.map((c) => c[hi ? 1 : 0]);
+const residential = circle.find((c) => c.property_type === 'residential') ?? circle[0];
+const tools = [
+  circle.length
+    ? { href: `/circle-rate/${residential!.slug}`, label: hi ? `${name} के सर्कल रेट` : `Circle rates in ${name}` }
+    : city === 'gurgaon' && ['area', 'road'].includes(checkKey) && { href: '/circle-rates', label: hi ? 'सर्कल रेट' : 'Circle rates' },
+  ['project', 'society', 'township'].includes(checkKey) && { href: '/rera-projects', label: hi ? 'RERA प्रोजेक्ट' : 'RERA projects' },
+  checkKey === 'village' && { href: '/verify-ownership', label: hi ? 'मालिकाना हक जाँचें' : 'Verify ownership' },
+  { href: '/stamp-duty-calculator', label: hi ? 'स्टैंप ड्यूटी' : 'Stamp duty calculator' },
+  { href: '/emi-calculator', label: hi ? 'EMI कैलकुलेटर' : 'EMI calculator' },
+].filter(Boolean) as { href: string; label: string }[];
+
+const priceRows = prices
+  ? ([
+      [hi ? 'फ़्लैट खरीदें' : 'Buy a flat', prices.buy?.apartment],
+      [hi ? 'बिल्डर फ़्लोर खरीदें' : 'Buy a builder floor', prices.buy?.builder_floor],
+      [hi ? 'फ़्लैट किराये पर' : 'Rent a flat', prices.rent?.apartment],
+      [hi ? 'पीजी' : 'PG', prices.pg?.default],
+    ].filter(([, v]) => v) as [string, string][])
+  : [];
+const shown = homes.slice(0, 6);
+// The main action goes where the homes are: rent first when a place has homes for rent only.
+const first = !sum.buy && sum.rent ? 'rent' : 'buy';
+const second = first === 'buy' ? 'rent' : 'buy';
+const buyCount = homes.filter((p) => p.purpose === 'buy').length;
+const rentCount = homes.filter((p) => p.purpose === 'rent').length;
+---
+
+<div class="container-page loc">
+  <Breadcrumbs items={[{ name: hi ? 'होम' : 'Home', path: '/' }, { name: hi ? 'लोकेलिटीज़' : 'Localities', path: '/localities' }, { name }]} />
+
+  <PlaceHero kind={kindForEntity(l.entityType)} seed={slug} locale={locale} sign={l.entityType === 'sector' ? name : undefined} titleLength={name.length}>
+    <h1>{name}</h1>
+    <p class="loc-type">{type} · {cityName}</p>
+    {
+      hasIntent && (
+        <div class="loc-actions">
+          <a class="btn btn-primary" href={L(`/locality/${slug}/${first}`)}>
+            {first === 'buy' ? (hi ? `${name} में घर खरीदें` : `Buy in ${name}`) : hi ? `${name} में किराये पर घर` : `Rent in ${name}`}
+            <Icon name="arrow-up-right" size={18} class="arrow" />
+          </a>
+          <a class="link" href={L(`/locality/${slug}/${second}`)}>
+            {second === 'buy' ? (hi ? `${name} में घर खरीदें` : `Buy in ${name}`) : hi ? `${name} में किराये पर घर` : `Rent in ${name}`}
+          </a>
+        </div>
+      )
+    }
+    <PlaceFacts slot="aside" groups={heroGroups} />
+  </PlaceHero>
+
+  <section class="loc-block" aria-labelledby="loc-homes">
+    {
+      shown.length > 0 ? (
+        <>
+          <div class="loc-row">
+            <h2 id="loc-homes" class="loc-h2">{hi ? `${name} में घर` : `Homes in ${name}`}</h2>
+            {hasIntent && (
+              <p class="loc-more">
+                {buyCount > 0 && (
+                  <a class="link" href={L(`/locality/${slug}/buy`)}>
+                    {hi ? `सभी ${buyCount} बिक्री वाले` : `All ${buyCount} for sale`}
+                  </a>
+                )}
+                {rentCount > 0 && (
+                  <a class="link" href={L(`/locality/${slug}/rent`)}>
+                    {hi ? `सभी ${rentCount} किराये वाले` : `All ${rentCount} for rent`}
+                  </a>
+                )}
+              </p>
+            )}
+          </div>
+          <ul class="loc-grid">
+            {shown.map((p) => (
+              <li>
+                <PropertyCardView property={p} locale={locale}>
+                  <FavouriteButton slot="favourite" client:visible propertyId={p.id} locale={locale} />
+                </PropertyCardView>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : failed ? (
+        <div class="sheet">
+          <StateBlock
+            scene="offline"
+            level={2}
+            title={hi ? 'अभी घर लोड नहीं हो सके' : 'We could not load homes right now'}
+            body={hi ? 'थोड़ी देर बाद फिर देखें, या पूरे शहर में खोजें।' : 'Try again in a few minutes, or search the whole city.'}
+            action={{ href: L('/properties'), label: hi ? 'घर खोजें' : 'Search homes', icon: 'search' }}
+          />
+        </div>
+      ) : (
+        <>
+          <h2 id="loc-homes" class="loc-h2">{hi ? `${name} में अभी कोई घर लिस्ट नहीं है` : `No homes are listed in ${name} yet`}</h2>
+          <p class="loc-note">
+            {hi ? 'इन जगहों पर अभी घर लिस्ट हैं। या ' : 'These places have homes listed now. Or '}
+            <a class="link" href={L('/post-property')}>{hi ? `${name} में अपना घर मुफ़्त लिस्ट करें` : `list your own home in ${name} free`}</a>
+            {hi ? '।' : '.'}
+          </p>
+          {listed.length > 0 && <ListedPlaces places={listed} locale={locale} />}
+        </>
+      )
+    }
+  </section>
+</div>
+
+<CutBand seed={`loc-${l.slug}`} class="loc-band" labelledby="loc-about">
+  <div class="container-page loc-about">
+    <h2 id="loc-about" class="loc-h2">{hi ? `${name} के बारे में` : `About ${name}`}</h2>
+    <div class="loc-about-grid">
+      <div class="loc-summary">
+        <p>{summary}</p>
+        {
+          circle.length > 0 && (
+            <div class="loc-circle">
+              <h3 class="loc-h3">{hi ? `सर्कल रेट${residential?.revision_year ? ` (${residential.revision_year})` : ''}` : `Circle rates${residential?.revision_year ? ` (${residential.revision_year})` : ''}`}</h3>
+              <dl class="loc-dl tabular">
+                {circle.map((c) => (
+                  <>
+                    <dt>{circleLabel[c.property_type]?.[hi ? 1 : 0] ?? c.property_type}</dt>
+                    <dd>
+                      {rupees(c.rate_per_sqft, locale)} {hi ? 'प्रति वर्ग फ़ुट' : 'per sq ft'}
+                    </dd>
+                  </>
+                ))}
+              </dl>
+            </div>
+          )
+        }
+        {verified && <p class="loc-verified">{hi ? `जानकारी जाँची गई: ${verified}` : `Details checked on ${verified}`}</p>}
+      </div>
+      {
+        landmarks.length > 0 && (
+          <div>
+            <h3 class="loc-h3">{hi ? 'कितनी दूर' : 'How far things are'}</h3>
+            <LandmarkList items={landmarks} locale={locale} />
+          </div>
+        )
+      }
+    </div>
+  </div>
+</CutBand>
+
+<div class="container-page">
+  <section class="loc-block loc-check" aria-labelledby="loc-check">
+    <div>
+      <h2 id="loc-check" class="loc-h2">{hi ? 'फ़ैसले से पहले जाँचें' : 'Check before you decide'}</h2>
+      <ol class="loc-steps">
+        {checks.map((c) => <li>{c}</li>)}
+      </ol>
+    </div>
+    <div class="loc-side">
+      <ul class="loc-tools">
+        {
+          tools.map((t) => (
+            <li>
+              <a href={L(t.href)}>
+                <span>{t.label}</span>
+                <Icon name="arrow-up-right" size={18} class="arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      {
+        priceRows.length > 0 && (
+          <div class="loc-prices-box">
+            <h3 class="loc-h3">{hi ? `${cityName} में आम कीमतें` : `Typical prices in ${cityName}`}</h3>
+            <dl class="loc-dl tabular">
+              {priceRows.map(([k, v]) => (
+                <>
+                  <dt>{k}</dt>
+                  <dd>₹{v}</dd>
+                </>
+              ))}
+            </dl>
+            <p class="loc-small">{hi ? 'पूरे शहर की अनुमानित रेंज। असली कीमत घर, सोसाइटी और मंज़िल पर निर्भर करती है।' : 'City-wide ranges. The real price depends on the home, the society and the floor.'}</p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="loc-block">
+    <Faq items={faqs} title={hi ? `${name} के बारे में सवाल` : `Questions about ${name}`} id="loc-faq" />
+  </section>
+
+  {
+    nearby.length > 0 && (
+      <section class="loc-block" aria-labelledby="loc-nearby">
+        <h2 id="loc-nearby" class="loc-h2">{hi ? 'आस-पास और मिलती-जुलती जगहें' : 'Nearby and similar places'}</h2>
+        <ul class="loc-links">
+          {nearby.map((x) => (
+            <li>
+              <a href={L(`/locality/${localitySlug(x)}`)}>
+                <span>{displayName(x.name)}</span>
+                {nearbyCounts[x.slug] ? <span class="loc-count">{hi ? `${nearbyCounts[x.slug]} घर` : `${nearbyCounts[x.slug]} ${nearbyCounts[x.slug] === 1 ? 'home' : 'homes'}`}</span> : null}
+                <Icon name="chevron-right" size={18} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</div>
+
+<style>
+  .loc {
+    padding-top: 0.5rem;
+  }
+
+  .loc-type {
+    font-weight: 600;
+    color: var(--color-ink-600);
+  }
+
+  .loc-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .loc-block {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .loc-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .loc-row .loc-h2 {
+    margin-bottom: 0;
+  }
+
+  .loc-more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+  }
+
+  .loc-h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+    margin-bottom: 1rem;
+  }
+
+  .loc-h3 {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .loc-note {
+    margin: -0.25rem 0 1.5rem;
+    color: var(--color-ink-800);
+    max-width: 62ch;
+  }
+
+  .loc-note .link {
+    display: inline;
+  }
+
+  .loc-grid {
+    display: grid;
+    gap: 2rem 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .loc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .loc-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  :global(.loc-band) {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .loc-about {
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .loc-about-grid {
+    display: grid;
+    gap: 2rem 3rem;
+  }
+
+  @media (min-width: 56rem) {
+    .loc-about-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+
+  .loc-summary > p {
+    font-size: 1.0625rem;
+    color: var(--color-ink-950);
+    max-width: 58ch;
+  }
+
+  .loc-circle {
+    margin-top: 1.5rem;
+  }
+
+  .loc-dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.375rem 1.5rem;
+  }
+
+  .loc-dl dt {
+    color: var(--color-ink-800);
+  }
+
+  .loc-dl dd {
+    font-weight: 700;
+  }
+
+  .loc-verified {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .loc-check {
+    display: grid;
+    gap: 2rem 4rem;
+  }
+
+  @media (min-width: 56rem) {
+    .loc-check {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+  }
+
+  .loc-steps {
+    display: grid;
+    gap: 0.875rem;
+    counter-reset: step;
+    max-width: 62ch;
+  }
+
+  .loc-steps li {
+    position: relative;
+    padding-left: 2.5rem;
+    color: var(--color-ink-800);
+    counter-increment: step;
+  }
+
+  .loc-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: -0.125rem;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-kesar-700);
+  }
+
+  .loc-side {
+    display: grid;
+    gap: 1.75rem;
+    align-content: start;
+  }
+
+  .loc-tools a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 48px;
+    border-bottom: 1px solid var(--color-ink-200);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .loc-tools a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .loc-tools a :global(.arrow) {
+    color: var(--color-kesar-700);
+    transition: translate 160ms var(--ease-paper);
+  }
+
+  .loc-tools a:hover :global(.arrow) {
+    translate: 2px -2px;
+  }
+
+  .loc-small {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .loc-links {
+    display: grid;
+    gap: 0 2rem;
+  }
+
+  @media (min-width: 40rem) {
+    .loc-links {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .loc-links {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .loc-links a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 48px;
+    border-bottom: 1px solid var(--color-ink-200);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .loc-links a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .loc-links a :global(svg) {
+    color: var(--color-ink-400);
+  }
+
+  .loc-count {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-kesar-700);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loc-tools a :global(.arrow) {
+      transition: none;
+    }
+  }
+</style>

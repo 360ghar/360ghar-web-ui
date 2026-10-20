@@ -1,0 +1,172 @@
+/* Capital gains comparison table. Selectors beat tools.css (.tool-table th). */
+
+.cg-table.tool-table thead th {
+  white-space: normal;
+  vertical-align: bottom;
+  min-width: 7.5rem;
+}
+
+.cg-table.tool-table :is(th, td) {
+  padding-inline: 0.5rem;
+}
+
+.cg-table.tool-table :is(th, td):first-child {
+  padding-left: 0;
+}
+
+.cg-status {
+  display: block;
+  color: var(--color-ink-600);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.cg-table .is-pay .cg-status {
+  color: var(--color-leaf-700);
+  font-weight: 700;
+}
+
+.cg-table .cg-total :is(th, td) {
+  border-bottom: 0;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.cg-term {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink-600);
+}
+
+/* Phones: each row shows its label on one line and the two values under it, side by side. */
+@media (max-width: 40rem) {
+  .cg-two.tool-table,
+  .cg-two.tool-table :is(thead, tbody) {
+    display: block;
+  }
+
+  .cg-two.tool-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 0.75rem;
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .cg-two.tool-table thead tr {
+    border-bottom-color: var(--color-ink-200);
+  }
+
+  .cg-two.tool-table :is(th, td) {
+    border-bottom: 0;
+    padding: 0.125rem 0 0.5rem;
+    text-align: left;
+    white-space: normal;
+    min-width: 0;
+  }
+
+  .cg-two.tool-table tbody tr > th:first-child {
+    grid-column: 1 / -1;
+    padding-top: 0.5rem;
+    padding-bottom: 0;
+    color: var(--color-ink-600);
+    font-size: 0.875rem;
+  }
+
+  .cg-two.tool-table thead tr > th:first-child {
+    display: none;
+  }
+
+  .cg-two.tool-table thead th {
+    position: static;
+    min-width: 0;
+  }
+
+  .cg-two .cg-total td {
+    font-size: 1.25rem;
+  }
+}
+
+/* ---------- The two rules as bars on one scale ---------- */
+
+.cg-bars {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+
+.cg-bar {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.cg-bar-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.cg-bar-name {
+  color: var(--color-ink-800);
+  font-weight: 700;
+}
+
+.cg-bar-tax {
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cg-bar svg {
+  display: block;
+  width: 100%;
+  height: 1.25rem;
+  border-radius: 6px;
+}
+
+.cg-bar-status {
+  color: var(--color-ink-600);
+  font-size: 0.8125rem;
+}
+
+.cg-bar.is-pay .cg-bar-status {
+  color: var(--color-leaf-700);
+  font-weight: 700;
+}
+
+.cg-bars .is-bought {
+  fill: var(--color-ink-400);
+  background: var(--color-ink-400);
+}
+
+.cg-bars .is-indexed {
+  fill: var(--color-ink-200);
+  background: var(--color-ink-200);
+}
+
+.cg-bars .is-exempt {
+  fill: var(--color-kesar-100);
+  background: var(--color-mist-100);
+}
+
+.cg-bars .is-rest {
+  fill: var(--color-kesar-300);
+  background: var(--color-kesar-300);
+}
+
+.cg-bars .is-tax {
+  fill: var(--color-pine-700);
+  background: var(--color-pine-700);
+}
+
+.cg-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 4px;
+}

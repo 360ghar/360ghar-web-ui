@@ -1,0 +1,16 @@
+---
+import TruthPage from '@/features/content/compare/TruthPage.astro';
+import { competitorBySlug } from '@/features/content/compare/competitors';
+import { TRUTH_PAGES } from '@/features/content/compare/truth';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return TRUTH_PAGES.map((page) => ({ params: { slug: page.slug }, props: { page, c: competitorBySlug(page.competitor)! } }));
+}
+
+const locale = Astro.locals.locale;
+const { page, c } = Astro.props;
+---
+
+<TruthPage locale={locale} page={page} c={c} />

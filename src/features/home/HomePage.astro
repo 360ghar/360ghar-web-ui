@@ -1,0 +1,1323 @@
+---
+/**
+ * Home. Server-rendered: the diorama, the real listing count, a lead home with
+ * its photos, a rail of recommended homes, the paper-cut "how it works" steps,
+ * localities with live counts, the owner enquiry, refer and earn, the app, the
+ * tools with live counts, the AI assistant, the review form, FAQ, latest posts,
+ * the fact sheet and the newsletter are in the HTML. Islands: the search (above
+ * the fold), the favourite buttons, the two forms and the copy button (all
+ * hydrate when visible). One small script adds the rail's previous and next buttons.
+ */
+import { getT } from '@/i18n';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import Diorama from './diorama/Diorama.astro';
+import type { HomeData } from './load';
+import HeroSearch from '@/features/search/HeroSearch';
+import { cardPlace, PropertyCardView } from '@/features/property/PropertyCardView';
+import FavouriteButton from '@/features/favourites/FavouriteButton';
+import { BlogCardView } from '@/features/blog/BlogCardView';
+import CutBand from '@/ui/CutBand.astro';
+import Paper from '@/ui/Paper.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import { PLAY_STORE } from '@/features/layout/nav';
+import { galleryPhotos } from '@/features/property/photos';
+import { areaSqft, formatNum, homeKind, imageUrl, listingPrice, srcSet } from '@/lib/format';
+import Vignette from './vignettes/Vignette.astro';
+import PaperVignette from '@/ui/paper/PaperVignette.astro';
+import { COPY } from './copy';
+import { MORE } from './more';
+import AppSection from './sections/AppSection.astro';
+import AiSection from './sections/AiSection.astro';
+import FreeAiSection from './sections/FreeAiSection.astro';
+import Facts from './sections/Facts.astro';
+import Refer from './sections/Refer.astro';
+import HomeEnquiry from '@/features/content/home-enquiry/HomeEnquiry.astro';
+import NewsletterBand from '@/features/content/shared/NewsletterBand.astro';
+import ReviewSection from '@/features/reviews/ReviewSection.astro';
+
+type Props = { locale: Locale; data: HomeData };
+const { locale, data } = Astro.props;
+const t = getT(locale);
+const L = localizer(locale);
+const { lead, homes, count, localities, localityTotal, posts: blog, faqs, homesError, stats, facts } = data;
+const c = COPY[locale];
+const num = (n: number) => formatNum(n, locale);
+type StatKey = keyof typeof stats;
+/** "183 listed" for a tool whose count is known; nothing when the API did not answer. */
+const statOf = (key?: StatKey) => (key && stats[key] ? MORE[locale].stat(num(stats[key]!)) : null);
+
+const leadPhotos = lead ? galleryPhotos(lead).slice(0, 5) : [];
+const leadName = lead ? homeKind(lead, locale) : '';
+const leadPrice = lead ? listingPrice(lead, locale) : null;
+const leadArea = lead ? areaSqft(lead.area_sqft, locale) : null;
+const leadCount = lead ? galleryPhotos(lead).length : 0;
+const ExploreHeading = localities.length ? 'h3' : 'h2';
+
+const explore = [
+  ['site:home.explore.rent2', '/gurgaon/rent/flats/2-bhk'],
+  ['site:home.explore.rentBudget', '/gurgaon/rent/flats/budget/under-20k'],
+  ['site:home.explore.pg', '/gurgaon/pg/flats'],
+  ['site:home.explore.offices', '/gurgaon/rent/office-space'],
+  ['site:home.explore.buyFlats', '/gurgaon/buy/flats'],
+  ['site:home.explore.buy2', '/gurgaon/buy/flats/2-bhk'],
+  ['site:home.explore.buyBudget', '/gurgaon/buy/flats/budget/under-1-crore'],
+  ['site:home.explore.builderFloor', '/gurgaon/buy/builder-floor'],
+  ['site:home.explore.villas', '/gurgaon/buy/villa'],
+  ['site:home.explore.plots', '/gurgaon/buy/plots'],
+  ['site:home.explore.localities', '/localities'],
+  ['site:home.explore.map', '/map-location'],
+] as const;
+
+const pmFeatures = c.owner;
+
+---
+
+{/* Lab pages (src/pages/lab) pass their own hero and the sections that follow it. */}
+{Astro.slots.has('hero') ? <slot name="hero" /> : (
+<section class="home-hero" aria-labelledby="home-title">
+  <Diorama class="home-diorama" label={c.diorama}>
+    <div class="container-page home-hero-copy">
+      <h1 id="home-title" class="home-title">{t('site:home.title')}</h1>
+    </div>
+  </Diorama>
+  <div class="container-page home-search-wrap">
+    <div class="home-search-lift">
+      <div class="home-search-sheet">
+        <HeroSearch client:load locale={locale} />
+      </div>
+    </div>
+  </div>
+</section>
+)}
+<slot name="after-hero" />
+
+<section class="home-block home-homes" aria-labelledby="home-homes" data-rail>
+  <div class="container-page home-count">
+    {
+      count ? (
+        <p class="home-count-num tabular" aria-hidden="true">
+          {count}
+        </p>
+      ) : null
+    }
+    <h2 id="home-homes" class="home-count-lead">
+      {count ? <span class="visually-hidden">{count} </span> : null}
+      {count ? t('site:home.countLead') : t('site:home.countFallback')}
+    </h2>
+    <a class="link home-count-link" href={L('/properties')}>
+      {t('site:home.seeAll')}
+      <Icon name="arrow-up-right" size={16} class="arrow" />
+    </a>
+  </div>
+
+  {
+    lead && leadPrice ? (
+      <div class="container-page">
+        <article class="home-lead">
+          <div class="home-lead-photos">
+            {leadPhotos.map((ph, i) => (
+              <img
+                src={imageUrl(ph.url, i ? 480 : 960)}
+                srcset={srcSet(ph.url, i ? [320, 480, 640] : [480, 768, 960, 1280])}
+                sizes={i ? '(min-width: 64rem) 16vw, 30vw' : '(min-width: 64rem) 42vw, 92vw'}
+                alt={c.photoAlt(i + 1, leadCount, leadName)}
+                width={i ? 480 : 960}
+                height={i ? 360 : 720}
+                loading="lazy"
+                decoding="async"
+                class:list={['home-lead-img', i === 0 && 'is-main']}
+              />
+            ))}
+            <div class="home-lead-fav">
+              <FavouriteButton client:visible propertyId={lead.id} locale={locale} initial={Boolean(lead.liked)} />
+            </div>
+          </div>
+          <div class="home-lead-info">
+            <p class="home-lead-price tabular">
+              {leadPrice.amount}
+              {leadPrice.period ? <span>{leadPrice.period}</span> : null}
+            </p>
+            <h3 class="home-lead-name">
+              <a href={L(`/property/${lead.id}`)}>
+                {leadName}
+                <span class="visually-hidden">. {lead.title}</span>
+              </a>
+            </h3>
+            <p class="home-lead-place">
+              <Icon name="pin" size={16} />
+              {cardPlace(lead)}
+              {leadArea ? <span>· {leadArea}</span> : null}
+            </p>
+            <p class="home-lead-photos-note">
+              <Icon name="camera" size={18} />
+              {c.photos(leadCount)}
+            </p>
+            <span class="link home-lead-open" aria-hidden="true">
+              {c.open}
+              <Icon name="arrow-up-right" size={16} class="arrow" />
+            </span>
+          </div>
+        </article>
+      </div>
+    ) : null
+  }
+
+  {
+    homes.length ? (
+      <div class="home-rail-wrap">
+        <div class="container-page home-rail-bar">
+          <h3 class="home-rail-title">{c.rail}</h3>
+          <button type="button" class="btn btn-icon" data-rail-prev aria-label={c.prev} hidden>
+            <Icon name="chevron-left" size={20} />
+          </button>
+          <button type="button" class="btn btn-icon" data-rail-next aria-label={c.next} hidden>
+            <Icon name="chevron-right" size={20} />
+          </button>
+        </div>
+        <ul class="home-rail" role="list" tabindex="0" aria-label={c.rail}>
+          {homes.map((p) => (
+            <li>
+              <PropertyCardView property={p} locale={locale} strip={false}>
+                <FavouriteButton slot="favourite" client:visible propertyId={p.id} locale={locale} initial={Boolean(p.liked)} />
+              </PropertyCardView>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : lead ? null : (
+      <div class="container-page">
+        <div class="sheet">
+          <StateBlock
+            scene={homesError ? 'offline' : 'empty'}
+            level={3}
+            title={t('site:home.listingsError')}
+            body={t('site:home.listingsErrorBody')}
+            action={{ href: L('/properties'), label: t('site:home.seeAll'), icon: 'search' }}
+          />
+        </div>
+      </div>
+    )
+  }
+</section>
+
+<CutBand seed="home-how" class="home-how" labelledby="home-how">
+  <div class="container-page home-how-inner">
+    <h2 id="home-how" class="home-how-title">{t('site:home.howTitle')}</h2>
+    <ol class="home-steps" role="list">
+      {
+        c.steps.map((s, i) => (
+          <li>
+            <Paper seed={`step-${i}`} tone="paper" depth={2} class:list={['home-step', `home-step-${i}`]} innerClass="home-step-inner">
+              <Vignette name={s.art} class="home-step-art" />
+              <h3 class="home-step-title">{s.title}</h3>
+              <p class="home-step-body">{s.body}</p>
+            </Paper>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</CutBand>
+
+<section class="container-page home-block" aria-labelledby={localities.length ? 'home-places' : 'home-explore'}>
+  {
+    localities.length ? (
+      <>
+        <div class="home-head">
+          <h2 id="home-places" class="home-h2">
+            {c.placesTitle}
+          </h2>
+          <a class="link" href={L('/localities')}>
+            {c.allPlaces(num(localityTotal))}
+            <Icon name="arrow-up-right" size={16} class="arrow" />
+          </a>
+        </div>
+        <ul class="home-places" role="list">
+          {localities.map((l) => (
+            <li>
+              <a href={L(l.href)}>
+                {l.home?.main_image_url ? (
+                  <img
+                    src={imageUrl(l.home.main_image_url, 320)}
+                    srcset={srcSet(l.home.main_image_url, [160, 320, 480])}
+                    sizes="(min-width: 48rem) 9rem, 6.5rem"
+                    alt=""
+                    width={320}
+                    height={240}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span class="home-places-ph" />
+                )}
+                <span class="home-places-text">
+                  <span class="home-places-name">{locale === 'hi' ? l.hi : l.name}</span>
+                  <span class="home-places-count tabular">
+                    {c.homes(l.count)}
+                    <Icon name="arrow-up-right" size={16} class="arrow" />
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    ) : null
+  }
+  <ExploreHeading id="home-explore" class:list={[localities.length ? 'home-h3' : 'home-h2']}>{t('site:home.exploreTitle')}</ExploreHeading>
+  <ul class="home-explore" role="list">
+    {
+      explore
+        .filter(([, href]) => !(localities.length && href === '/localities'))
+        .map(([key, href]) => (
+        <li>
+          <a href={L(href)}>
+            {t(key)}
+            <Icon name="chevron-right" size={18} />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+{/* Deep pine paper with light text: the one dark band on the page. */}
+<CutBand seed="home-owners" tone="var(--color-pine-800)" class="home-owners on-ink" labelledby="home-owners">
+  <div class="container-page home-owners-inner">
+    <div class="home-owners-copy">
+      <h2 id="home-owners" class="home-owners-title">{t('site:home.ownersTitle')}</h2>
+      <p class="home-owners-body">{c.ownersBody}</p>
+      <div class="home-owners-actions">
+        <a class="btn btn-lg" href={L('/post-property')}>
+          {t('site:home.ownersCta')}
+          <Icon name="arrow-up-right" size={18} class="arrow" />
+        </a>
+        <a class="home-owners-app" href={PLAY_STORE} rel="noopener">
+          <Icon name="download" size={18} />
+          {t('site:home.ownersApp')}
+        </a>
+      </div>
+    </div>
+    <Vignette name="owners" bare class="home-owners-art" />
+    <ul class="home-pm" role="list">
+      {
+        pmFeatures.map((f) => (
+          <li>
+            <h3>{f.title}</h3>
+            <p>{f.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</CutBand>
+
+{/* The owner enquiry rises out of the bottom of the Owners band (like the search sheet out of the scene). */}
+<HomeEnquiry locale={locale} class="home-enq" />
+<Refer locale={locale} />
+<AppSection locale={locale} />
+
+<section class="container-page home-block" aria-labelledby="home-tools">
+  <h2 id="home-tools" class="home-h2">{t('site:home.toolsTitle')}</h2>
+  <div class="home-toolsets">
+    {
+      c.toolsets.map((g, gi) => (
+        <div class="home-toolset">
+          <div class="home-toolset-head">
+            <PaperVignette theme={g.art} seed={`home-${gi}`} class="home-toolset-art" lazy />
+            <div>
+              <h3 id={`home-tools-${gi}`} class="home-toolset-title">
+                {g.title}
+              </h3>
+              <p class="home-toolset-lead">{g.lead}</p>
+            </div>
+          </div>
+          <ul class="home-tools" role="list" aria-labelledby={`home-tools-${gi}`}>
+            {g.tools.map((tool) => (
+              <li>
+                <a href={L(tool.href)}>
+                  <Icon name={tool.icon} size={22} />
+                  <span class="home-tool-name">
+                    {tool.name}
+                    {statOf((tool as { stat?: StatKey }).stat) ? <span class="home-tool-stat tabular">{statOf((tool as { stat?: StatKey }).stat)}</span> : null}
+                  </span>
+                  <span class="home-tool-note">{tool.note}</span>
+                  <Icon name="arrow-up-right" size={16} class="arrow" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<FreeAiSection locale={locale} />
+<AiSection locale={locale} />
+<ReviewSection locale={locale} id="home-review" class="home-review" />
+
+<section class="container-page home-block home-faq" aria-labelledby="home-faq">
+  <h2 id="home-faq" class="home-h2">{t('site:home.faqTitle')}</h2>
+  {/* The first five questions are open to read; the rest stay in the HTML (and the FAQ JSON-LD) under one toggle. */}
+  <div class="faq-list">
+    {
+      faqs.slice(0, 5).map((f) => (
+        <details class="faq-item">
+          <summary>
+            <span>{f.q}</span>
+            <Icon name="plus" size={18} class="faq-icon" />
+          </summary>
+          <p>{f.a}</p>
+        </details>
+      ))
+    }
+    {
+      faqs.length > 5 ? (
+        <details class="home-faq-more">
+          <summary>
+            <span>{c.moreQuestions(faqs.length - 5)}</span>
+            <Icon name="chevron-down" size={18} class="home-faq-chev" />
+          </summary>
+          <div class="faq-list">
+            {faqs.slice(5).map((f) => (
+              <details class="faq-item">
+                <summary>
+                  <span>{f.q}</span>
+                  <Icon name="plus" size={18} class="faq-icon" />
+                </summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </details>
+      ) : null
+    }
+  </div>
+</section>
+
+{
+  blog.length ? (
+    <section class="container-page home-block" aria-labelledby="home-blog">
+      <div class="home-head">
+        <h2 id="home-blog" class="home-h2">
+          {t('site:home.blogTitle')}
+        </h2>
+        <a class="link" href={L('/blog')}>
+          {t('site:home.blogAll')}
+          <Icon name="arrow-up-right" size={16} class="arrow" />
+        </a>
+      </div>
+      <ul class="home-blog" role="list">
+        {blog.map((post) => (
+          <li>
+            <BlogCardView post={post} locale={locale} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null
+}
+
+<Facts title={facts.title} rows={facts.rows} />
+{/* NewsletterBand is a bare section; on the home page it needs the page gutter. */}
+<div class="container-page">
+  <NewsletterBand locale={locale} />
+</div>
+
+<script>
+  // Previous and next buttons for the homes rail. Without JS the rail still scrolls by touch, trackpad and keys.
+  const smooth = window.matchMedia('(prefers-reduced-motion: no-preference)');
+  for (const root of document.querySelectorAll<HTMLElement>('[data-rail]')) {
+    const rail = root.querySelector<HTMLElement>('.home-rail');
+    const prev = root.querySelector<HTMLButtonElement>('[data-rail-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-rail-next]');
+    if (!rail || !prev || !next) continue;
+    const step = () => {
+      const card = rail.querySelector('li');
+      const w = card ? card.getBoundingClientRect().width + 24 : rail.clientWidth;
+      return Math.max(w, Math.floor((rail.clientWidth - 64) / w) * w);
+    };
+    const go = (dir: number) => rail.scrollBy({ left: dir * step(), behavior: smooth.matches ? 'smooth' : 'auto' });
+    const sync = () => {
+      prev.disabled = rail.scrollLeft < 8;
+      next.disabled = rail.scrollLeft + rail.clientWidth > rail.scrollWidth - 8;
+    };
+    // A card that gets keyboard focus scrolls fully into view, not just its edge.
+    rail.addEventListener('focusin', (e) => {
+      const card = (e.target as HTMLElement).closest('li');
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const box = rail.getBoundingClientRect();
+      if (r.left < box.left || r.right > box.right) card.scrollIntoView({ inline: 'start', block: 'nearest' });
+    });
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    rail.addEventListener('scroll', sync, { passive: true });
+    prev.hidden = false;
+    next.hidden = false;
+    sync();
+  }
+</script>
+
+<style>
+  .home-hero {
+    position: relative;
+  }
+
+  .home-hero :global(.home-diorama) {
+    height: clamp(30rem, calc(100svh - 64px - 9rem), 46rem);
+  }
+
+  .home-hero-copy {
+    position: relative;
+    z-index: 10;
+    padding-top: clamp(1.5rem, 6vh, 4.5rem);
+    text-align: center;
+  }
+
+  .home-title {
+    max-width: 14ch;
+    margin-inline: auto;
+    font-size: clamp(2.6rem, 1rem + 6.6vw, 6.25rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--color-ink-950);
+  }
+
+  /* The search sheet crosses the edge of the scene: half on the street, half on the page. */
+  .home-search-wrap {
+    position: relative;
+    z-index: 20;
+    margin-top: -4.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .home-search-wrap {
+      margin-top: -5.5rem;
+    }
+  }
+
+  .home-search-lift {
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .home-search-sheet {
+    padding: 1rem;
+    background: var(--color-paper);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 2px 2px rgb(var(--tint) / 0.06), 0 18px 32px -14px rgb(var(--tint) / 0.24);
+  }
+
+  @media (min-width: 48rem) {
+    .home-search-sheet {
+      padding: 1.25rem 1.5rem;
+    }
+  }
+
+  .home-block {
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  .home-h2 {
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+    max-width: 22ch;
+  }
+
+  .home-h3 {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+  }
+
+  .home-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0.25rem 2rem;
+  }
+
+  /* ---------- Homes: count, lead home, rail ---------- */
+
+  /* Phone: the number on its own line, the heading below it (two lines at most). */
+  .home-count {
+    display: grid;
+    align-items: end;
+    gap: 0.25rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (min-width: 40rem) {
+    .home-count {
+      grid-template-columns: auto 1fr;
+    }
+
+    .home-count-num {
+      grid-row: span 2;
+    }
+  }
+
+  .home-count-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(4.5rem, 2rem + 10vw, 9rem);
+    line-height: 0.85;
+    color: var(--color-kesar-600);
+    letter-spacing: 0.01em;
+  }
+
+  .home-count-lead {
+    font-size: clamp(1.25rem, 1rem + 1.2vw, 2rem);
+    max-width: 26ch;
+  }
+
+  .home-count-link {
+    justify-self: start;
+  }
+
+  .home-lead {
+    position: relative;
+    display: grid;
+    gap: 1rem 2rem;
+  }
+
+  @media (min-width: 64rem) {
+    .home-lead {
+      grid-template-columns: minmax(0, 2.4fr) minmax(16rem, 1fr);
+      align-items: start;
+    }
+  }
+
+  /* One large photo and four small ones, like prints laid on a table. */
+  .home-lead-photos {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.375rem;
+  }
+
+  .home-lead-img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-100);
+  }
+
+  .home-lead-img.is-main {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 10;
+  }
+
+  @media (min-width: 48rem) {
+    .home-lead-photos {
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+
+    .home-lead-img.is-main {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      aspect-ratio: auto;
+    }
+  }
+
+  .home-lead-fav {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+  }
+
+  @media (min-width: 48rem) {
+    .home-lead-fav {
+      right: auto;
+      left: calc(50% - 0.5rem - 52px);
+    }
+  }
+
+  /* Desktop: the text column starts at the top of the gallery; the price caps meet the photo's top edge. */
+  .home-lead-info {
+    display: grid;
+    gap: 0.25rem;
+    align-content: start;
+  }
+
+  @media (min-width: 64rem) {
+    .home-lead-price {
+      margin-top: -0.2em;
+    }
+  }
+
+  .home-lead-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .home-lead-price span {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink-600);
+  }
+
+  .home-lead-name {
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  }
+
+  /* The whole lead is one link, like the listing cards. */
+  .home-lead-name a {
+    text-decoration: none;
+  }
+
+  .home-lead-name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: var(--radius-lg);
+  }
+
+  .home-lead-name a:focus-visible {
+    outline: none;
+  }
+
+  .home-lead-name a:focus-visible::after {
+    outline: 3px solid var(--color-kesar-700);
+    outline-offset: 4px;
+  }
+
+  .home-lead-place,
+  .home-lead-photos-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.375rem;
+    color: var(--color-ink-600);
+  }
+
+  .home-lead-photos-note {
+    margin-top: 0.25rem;
+    color: var(--color-ink-800);
+    font-weight: 600;
+  }
+
+  .home-lead-open {
+    justify-self: start;
+  }
+
+  .home-lead:hover .home-lead-open {
+    color: var(--color-kesar-800);
+  }
+
+  .home-lead:hover .home-lead-open :global(.arrow) {
+    translate: 2px -2px;
+  }
+
+  .home-rail-wrap {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  /* Fixed height: the buttons appear with JS and must not move the page. */
+  .home-rail-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    margin-bottom: 1rem;
+  }
+
+  .home-rail-title {
+    margin-right: auto;
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+  }
+
+  .home-rail-bar :global(.btn:not([hidden])) {
+    display: inline-grid;
+    place-items: center;
+  }
+
+  /*
+   * The rail runs to the edges of the screen, and its first card lines up with
+   * the page grid. The card cut at the right edge shows that the row scrolls.
+   */
+  .home-rail {
+    --gutter: max(1rem, calc((100% - 80rem) / 2 + 1rem));
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    padding: 0.25rem var(--gutter) 0.75rem;
+    scrollbar-width: none;
+  }
+
+  .home-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 48rem) {
+    .home-rail {
+      --gutter: max(2rem, calc((100% - 80rem) / 2 + 2rem));
+    }
+  }
+
+  .home-rail > li {
+    flex: 0 0 clamp(16rem, 76vw, 19rem);
+    scroll-snap-align: start;
+  }
+
+  .home-rail:focus-visible {
+    outline-offset: -3px;
+  }
+
+  /* ---------- How it works ---------- */
+
+  :global(.home-how) {
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  .home-how-inner {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .home-how-title {
+    font-size: clamp(1.875rem, 1.2rem + 2.6vw, 3.25rem);
+    max-width: 18ch;
+  }
+
+  .home-steps {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  /* Equal sheets: one top edge, one height, and the same slot for art, title and text. */
+  .home-steps > li {
+    display: grid;
+  }
+
+  .home-how-inner :global(.home-step) {
+    height: 100%;
+  }
+
+  .home-how-inner :global(.home-step-inner) {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 0.5rem;
+    height: 100%;
+    padding: 0.75rem 0.75rem 1.5rem;
+  }
+
+  .home-how-inner :global(.home-step-art) {
+    margin-bottom: 0.75rem;
+  }
+
+  .home-step-title,
+  .home-step-body {
+    padding-inline: 0.75rem;
+  }
+
+  .home-step-title {
+    font-size: 1.375rem;
+  }
+
+  .home-step-body {
+    color: var(--color-ink-800);
+  }
+
+  /* Tablet: one step per row, the vignette beside its text. */
+  @media (min-width: 36rem) and (max-width: 55.99rem) {
+    .home-how-inner :global(.home-step-inner) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      grid-template-rows: 1fr auto auto 1fr;
+      column-gap: 0.5rem;
+      padding: 0.75rem;
+    }
+
+    .home-how-inner :global(.home-step-art) {
+      grid-row: 1 / -1;
+      margin-bottom: 0;
+    }
+
+    .home-step-title {
+      grid-area: 2 / 2;
+    }
+
+    .home-step-body {
+      grid-area: 3 / 2;
+    }
+  }
+
+  /*
+   * Desktop: the three sheets share rows (subgrid), so every vignette, title
+   * and text starts on the same line even when one title wraps.
+   */
+  @media (min-width: 56rem) {
+    .home-steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 1.5rem;
+      row-gap: 0.5rem;
+    }
+
+    .home-steps > li,
+    .home-how-inner :global(.home-step),
+    .home-how-inner :global(.home-step-inner) {
+      grid-row: span 3;
+      display: grid;
+      grid-template-rows: subgrid;
+    }
+  }
+
+  .home-reviews {
+    margin-top: 1.5rem;
+  }
+
+  /* ---------- Localities and searches ---------- */
+
+  .home-places {
+    display: grid;
+    gap: 0.75rem 2rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .home-places {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .home-places a {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    transition: background-color 140ms var(--ease-paper);
+  }
+
+  @media (min-width: 48rem) {
+    .home-places a {
+      grid-template-columns: 9rem minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+  }
+
+  .home-places a:hover {
+    background-color: var(--color-mist-100);
+  }
+
+  .home-places img,
+  .home-places-ph {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+
+  .home-places-text {
+    display: grid;
+    gap: 0.125rem;
+  }
+
+  .home-places-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .home-places-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-kesar-700);
+    font-weight: 600;
+  }
+
+  .home-places a :global(.arrow) {
+    color: var(--color-kesar-700);
+    transition: translate 160ms var(--ease-paper);
+  }
+
+  .home-places a:hover :global(.arrow) {
+    translate: 2px -2px;
+  }
+
+  .home-explore {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0 2rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .home-explore {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .home-explore {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .home-explore a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 52px;
+    border-bottom: 1px solid var(--color-ink-200);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 140ms var(--ease-paper);
+  }
+
+  .home-explore a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .home-explore a :global(svg) {
+    color: var(--color-ink-400);
+    transition: translate 160ms var(--ease-paper);
+  }
+
+  .home-explore a:hover :global(svg) {
+    translate: 3px 0;
+    color: var(--color-kesar-700);
+  }
+
+  /* ---------- Owners ---------- */
+
+  /* Light text on deep pine: white is 9.9:1, mist-200 about 7.5:1. */
+  :global(.home-owners) {
+    --ink: #fff;
+    --ink-soft: var(--color-mist-200);
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  /* Focus rings stay visible on the deep band. */
+  :global(.home-owners) :focus-visible {
+    outline-color: #fff;
+  }
+
+  /* The bottom padding leaves room for the enquiry sheet that rises over it (--enq-rise, also used below). */
+  .home-owners-inner {
+    display: grid;
+    gap: 1.5rem 2.5rem;
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) calc(clamp(2.5rem, 6vw, 4.5rem) + 4rem);
+    grid-template-areas: 'copy' 'art' 'pm';
+  }
+
+  @media (min-width: 60rem) {
+    .home-owners-inner {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      grid-template-areas: 'copy art' 'pm pm';
+      align-items: center;
+      /* Room between the buttons and the four app features, so they read as a second group. */
+      row-gap: 3.5rem;
+    }
+  }
+
+  .home-owners-copy {
+    grid-area: copy;
+  }
+
+  :global(.home-owners-art) {
+    grid-area: art;
+    max-width: 30rem;
+    justify-self: center;
+  }
+
+  .home-owners-title {
+    font-size: clamp(2rem, 1.3rem + 2.8vw, 3.5rem);
+    color: var(--ink);
+  }
+
+  .home-owners-body {
+    margin-top: 0.75rem;
+    max-width: 38ch;
+    font-size: 1.0625rem;
+    color: var(--ink-soft);
+  }
+
+  .home-owners-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .home-owners-app {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 44px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .home-pm {
+    grid-area: pm;
+    display: grid;
+    gap: 1rem 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .home-pm {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .home-pm {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .home-pm h3 {
+    font-size: 1.125rem;
+    color: var(--ink);
+  }
+
+  .home-pm p {
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  /* The enquiry sheet covers the last 4 rem of the Owners band. */
+  :global(.home-enq) {
+    margin-top: -4rem;
+  }
+
+  :global(.home-review) {
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  /* ---------- Tools, FAQ, blog ---------- */
+
+  .home-toolsets {
+    display: grid;
+    gap: 2.5rem 2rem;
+    margin-top: 1.75rem;
+  }
+
+  /* Three groups: two side by side and the third across both from 56 rem (its tools in three columns), all three side by side from 64 rem. */
+  @media (min-width: 56rem) {
+    .home-toolsets {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .home-toolset:nth-child(3) {
+      grid-column: 1 / -1;
+    }
+
+    .home-toolset:nth-child(3) .home-tools {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .home-toolsets {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .home-toolset:nth-child(3) {
+      grid-column: auto;
+    }
+
+    .home-toolset:nth-child(3) .home-tools {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* One shared row for the three heads and one for the three lists, so the first cards line up whatever the copy length (Hindi wraps more). */
+    .home-toolsets {
+      row-gap: 0;
+    }
+
+    .home-toolset {
+      display: grid;
+      grid-row: span 2;
+      grid-template-rows: subgrid;
+    }
+  }
+
+  .home-toolset-head {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    min-height: 5.125rem;
+  }
+
+  :global(.home-toolset-art) {
+    width: 100%;
+    height: auto;
+  }
+
+  .home-toolset-title {
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+  }
+
+  .home-toolset-lead {
+    margin-top: 0.125rem;
+    color: var(--color-ink-600);
+  }
+
+  .home-tools {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  /* Icon | name over note | arrow. The icons span both text rows; the rows sit in the middle. */
+  .home-tools a {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    align-content: center;
+    gap: 0.125rem 0.875rem;
+    min-height: 60px;
+    padding: 0.625rem 1rem;
+    background: var(--color-paper);
+    border-radius: var(--radius-md);
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 2px 6px -2px rgb(var(--tint) / 0.14);
+    text-decoration: none;
+    transition: background-color 140ms var(--ease-paper);
+  }
+
+  .home-tools a:hover {
+    background: var(--color-mist-100);
+  }
+
+  .home-tools a > :global(svg) {
+    grid-row: 1 / 3;
+  }
+
+  .home-tools a > :global(svg:first-child) {
+    grid-column: 1;
+    color: var(--color-kesar-700);
+  }
+
+  .home-tools a > :global(.arrow) {
+    grid-column: 3;
+  }
+
+  .home-tools a :global(.arrow) {
+    color: var(--color-kesar-700);
+    transition: translate 160ms var(--ease-paper);
+  }
+
+  .home-tools a:hover :global(.arrow) {
+    translate: 2px -2px;
+  }
+
+  .home-tool-name,
+  .home-tool-note {
+    grid-column: 2;
+  }
+
+  .home-tool-name {
+    font-weight: 700;
+  }
+
+  .home-tool-stat {
+    margin-inline-start: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--color-ink-600);
+  }
+
+  .home-tool-note {
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .home-faq .faq-list {
+    max-width: 52rem;
+  }
+
+  .home-faq-more > summary {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 56px;
+    color: var(--color-kesar-700);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .home-faq-more > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .home-faq-more > summary:hover {
+    color: var(--color-kesar-800);
+  }
+
+  .home-faq-more :global(.home-faq-chev) {
+    transition: rotate 180ms var(--ease-paper);
+  }
+
+  .home-faq-more[open] :global(.home-faq-chev) {
+    rotate: 180deg;
+  }
+
+  .home-faq-more > .faq-list {
+    margin-top: 0;
+  }
+
+  /* Desktop: the question list takes the wide column, the heading stays beside it. */
+  @media (min-width: 64rem) {
+    .home-faq {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .home-faq .home-h2 {
+      position: sticky;
+      top: 6rem;
+    }
+
+    .home-faq > .faq-list {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .home-blog {
+    display: grid;
+    gap: 2rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .home-blog {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

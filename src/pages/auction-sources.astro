@@ -1,0 +1,14 @@
+---
+import { settleList } from '@/features/data-hub/route';
+import { safe, sourceCategories } from '@/features/data-hub/api';
+import SourcesPage from '@/features/data-hub/SourcesPage.astro';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const live = await safe(sourceCategories);
+// The static portal list is a full page, so a failed count lookup stays 200 with a short cache.
+settleList(Astro, 'day', null, live);
+---
+
+<SourcesPage locale={locale} live={live.data} />

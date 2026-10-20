@@ -1,0 +1,270 @@
+/* AI Design Studio. Shared tool styles are in ../tools.css. */
+
+.aid-group {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.aid-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.aid-modes {
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 30rem) {
+  .aid-modes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.aid-mode {
+  display: grid;
+  justify-content: stretch;
+  justify-items: start;
+  gap: 0.125rem;
+  padding: 0.75rem 0.875rem;
+  text-align: left;
+}
+
+.aid-mode-name {
+  font-weight: 700;
+}
+
+.aid-mode-desc {
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--color-ink-600);
+}
+
+.aid-mode[aria-checked='true'] .aid-mode-desc {
+  color: var(--color-mist-200);
+}
+
+.aid-drop {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  padding: 1.75rem 1rem;
+  border: 2px dashed var(--color-ink-400);
+  border-radius: var(--radius-lg);
+  background: var(--color-mist-50);
+  color: var(--color-ink-800);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 140ms var(--ease-paper),
+    background-color 140ms var(--ease-paper);
+}
+
+.aid-drop.is-small {
+  padding: 0.875rem 1rem;
+}
+
+.aid-drop:hover {
+  border-color: var(--color-kesar-700);
+  background: var(--color-mist-100);
+}
+
+.aid-drop:focus-within {
+  outline: 3px solid var(--color-kesar-700);
+  outline-offset: 2px;
+}
+
+.aid-drop-icon {
+  color: var(--color-kesar-700);
+}
+
+.aid-source,
+.aid-image {
+  display: block;
+  width: 100%;
+  max-height: 28rem;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  background: var(--color-ink-100);
+}
+
+.aid-free {
+  font-weight: 600;
+  color: var(--color-ink-800);
+}
+
+.aid-out {
+  display: grid;
+  gap: 1rem;
+  scroll-margin-top: 5rem;
+}
+
+.aid-out:empty {
+  display: none;
+}
+
+.aid-step {
+  margin-top: 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.aid-track {
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.14);
+}
+
+.aid-track span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 30%;
+  border-radius: 9999px;
+  background: var(--color-kesar-500);
+  animation: aid-slide 1.6s var(--ease-paper) infinite alternate;
+}
+
+@keyframes aid-slide {
+  to {
+    left: 70%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aid-track span {
+    animation: none;
+    width: 100%;
+    opacity: 0.5;
+  }
+}
+
+/* Before and after: the redesign is clipped from the left at --cmp. */
+.aid-compare-wrap {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.aid-compare {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-ink-100);
+}
+
+.aid-compare img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.aid-compare .aid-after {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+  clip-path: inset(0 0 0 var(--cmp));
+}
+
+.aid-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--cmp);
+  width: 2px;
+  margin-left: -1px;
+  background: var(--color-paper);
+  box-shadow: 1px 0 0 rgb(15 29 25 / 0.35);
+}
+
+.aid-compare-legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: -0.375rem;
+  color: var(--color-ink-800);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.aid-prompt summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-kesar-800);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.aid-prompt p {
+  margin-top: 0.25rem;
+  color: var(--color-ink-800);
+  font-size: 0.875rem;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.aid-gallery-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.aid-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aid-gallery li {
+  position: relative;
+}
+
+.aid-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-ink-100);
+  cursor: pointer;
+}
+
+.aid-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.aid-thumb:focus-visible {
+  outline: 3px solid var(--color-kesar-700);
+  outline-offset: 2px;
+}
+
+.aid-del.btn {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+}
+
+.aid-suggest {
+  margin-top: 1rem;
+  text-align: left;
+  color: var(--color-ink-800);
+}
+
+.aid-suggest ul {
+  margin-top: 0.25rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+}

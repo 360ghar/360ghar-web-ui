@@ -1,0 +1,82 @@
+---
+/** /builder-reputation-score: the old static 2026 guide (8 builders), data as it was. */
+import { absoluteUrl } from '@/lib/seo/site';
+import { BUILDERS, FAQ } from './content';
+import DataHubPage from './DataHubPage.astro';
+import { fmtDate, scoreBand } from './format';
+import { ScoreRing } from './ScoreRing';
+import { text } from './text';
+
+const locale = Astro.locals.locale;
+const t = text(locale);
+const hi = locale === 'hi';
+const MODIFIED = '2026-01-01';
+const L = hi
+  ? { h1: 'बिल्डर स्कोर गाइड 2026', lead: 'गुरुग्राम के आठ बड़े बिल्डर, HRERA रजिस्ट्रेशन, शिकायतों और डिलीवरी रिकॉर्ड के आधार पर। ज़्यादा स्कोर मतलब ज़्यादा भरोसेमंद।', projects: 'RERA प्रोजेक्ट', complaints: 'शिकायतें', delivery: 'डिलीवरी', areas: 'इलाके', crumb: 'बिल्डर गाइड 2026' }
+  : { h1: 'Builder score guide 2026', lead: 'Eight large Gurugram builders, scored from HRERA registrations, complaints and delivery records. A higher score means a more reliable builder.', projects: 'RERA projects', complaints: 'Complaints', delivery: 'Delivery', areas: 'Areas', crumb: 'Builder guide 2026' };
+---
+
+<DataHubPage
+  art="builderScore"
+  title="Builder Reputation Score Gurugram 2026 | RERA & Complaint Data | 360Ghar"
+  description="Check reputation scores for all major builders in Gurugram. Ranked by HRERA compliance, complaints, and delivery history. Updated 2026 data by 360Ghar."
+  keywords="builder reputation score Gurugram, reliable builders Gurgaon 2026, RERA score builders Gurugram, HRERA complaint history, best developers Gurugram, DLF reputation, M3M reputation score"
+  path="/builder-reputation-score"
+  heading={L.h1}
+  lead={L.lead}
+  crumbs={[{ name: L.crumb, path: '/builder-reputation-score' }]}
+  faqs={FAQ.builderScore}
+  jsonLd={[
+    {
+      '@type': 'Dataset',
+      name: 'Builder Reputation Scores, Gurugram 2026',
+      description: 'Reputation scores for real estate builders and developers active in Gurugram, based on HRERA registrations, complaint history, and delivery track record.',
+      url: absoluteUrl('/builder-reputation-score'),
+      creator: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
+      dateModified: MODIFIED,
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      spatialCoverage: { '@type': 'Place', name: 'Gurugram, Haryana, India' },
+      keywords: ['builder reputation Gurugram', 'RERA score Gurugram builders', 'reliable builders Gurgaon', 'HRERA complaint history'],
+    },
+  ]}
+  related={['builders', 'rera', 'tenant', 'bestSectors']}
+>
+  <p slot="head" class="dh-meta">{t.updated(fmtDate(MODIFIED, locale, 'long') ?? MODIFIED)} {t.bands.good}. {t.bands.average}. {t.bands.poor}.</p>
+
+  <ul class="dh-cards">
+    {
+      BUILDERS.map((b) => (
+        <li>
+          <article class="sheet dh-card gap-3">
+            <div class="flex items-center gap-4">
+              <ScoreRing score={b.reraScore} size={84} label={`${t.bdScore}: ${b.reraScore} ${t.bdOutOf}`} />
+              <div>
+                <h2 class="dh-row-title text-xl">{b.name}</h2>
+                <p class:list={['dh-status mt-1', { good: 'is-good', average: 'is-wait', poor: 'is-bad' }[scoreBand(b.reraScore)]]}>{t.bandShort[scoreBand(b.reraScore)]}</p>
+              </div>
+            </div>
+            <dl class="dh-facts mt-0">
+              <div>
+                <dt>{L.projects}</dt>
+                <dd>{b.projects}</dd>
+              </div>
+              <div>
+                <dt>{L.complaints}</dt>
+                <dd>{b.complaints}</dd>
+              </div>
+              <div>
+                <dt>{L.delivery}</dt>
+                <dd>{b.delivery}</dd>
+              </div>
+            </dl>
+            <p class="text-ink-800">{b.note}</p>
+            <p class="dh-row-sub">
+              <span class="font-semibold text-ink-800">{L.areas}:</span> {b.areas.join(' · ')}
+            </p>
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="dh-meta mt-6">{t.disclaimer}</p>
+</DataHubPage>

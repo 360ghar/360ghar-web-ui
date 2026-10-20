@@ -1,0 +1,58 @@
+---
+/**
+ * A small paper-cut scene by theme (160 x 100): home, tower, society, office,
+ * metro, document, calculator, map, key, camera. Static SVG, about 2 to 4 KB.
+ *
+ *   <PaperVignette theme="calculator" class="w-40" />
+ *
+ * Decorative by default; pass `label` when the scene carries meaning.
+ * `frame="cut"` gives it a hand-cut sheet edge; `frame="none"` a transparent
+ * background, for use on a kesar band.
+ *
+ * `lazy`: below the first screen or in a closed menu, load the same drawing
+ * as a cached file (`<img>`, src/pages/art) instead of inline SVG. Only with
+ * the default frame and fit, and the theme and seed pair must be listed in
+ * src/pages/art/[kind]/[name].svg.ts.
+ */
+import { VIGNETTE_H, VIGNETTE_W, vignetteArt, type VignetteTheme } from '@/lib/paper/vignettes';
+import PaperArt from './PaperArt.astro';
+
+type Props = {
+  theme: VignetteTheme;
+  /** Changes the hand-cut jitter. Same seed, same drawing. */
+  seed?: string;
+  frame?: 'cut' | 'square' | 'none';
+  /** "slice" fills a box of any shape, cropping the scene (give the box a height). */
+  fit?: 'meet' | 'slice';
+  label?: string;
+  class?: string;
+  lazy?: boolean;
+};
+
+const { theme, seed = '1', frame = 'cut', fit = 'meet', label, class: className, lazy = false } = Astro.props;
+---
+
+{
+  lazy ? (
+    <img
+      class:list={['paper-vignette', 'is-file', className]}
+      src={`/art/vignette/${theme}-${seed}.svg`}
+      alt={label ?? ''}
+      width={VIGNETTE_W}
+      height={VIGNETTE_H}
+      loading="lazy"
+      decoding="async"
+    />
+  ) : (
+    <PaperArt {...vignetteArt(theme, seed, frame)} fit={fit} label={label} class:list={['paper-vignette', className]} />
+  )
+}
+
+<style>
+  /* No specificity, so a caller's class can size it. */
+  :where(.is-file) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

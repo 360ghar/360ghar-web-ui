@@ -1,0 +1,59 @@
+---
+import Page from '@/layouts/Page.astro';
+import { localizePath } from '@/lib/i18n/locale';
+import { breadcrumbs, faqPage } from '@/lib/seo/site';
+import { listingItemList } from '@/features/search/itemList';
+import NotFound from '@/ui/states/NotFound.astro';
+import LandingPage from './LandingPage.astro';
+import { landingCopy } from './copy';
+import type { LandingResult } from './load';
+
+type Props = { result: LandingResult };
+const { result } = Astro.props;
+// Unknown city, intent, type or facet: the shared 404 page. loadLanding set the 404 status in the route, before streaming.
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const copy = result.ok ? landingCopy(result.landing, result.facet, locale) : null;
+const path = result.ok
+  ? result.facet?.kind === 'bhk'
+    ? `${result.landing.path}/${result.facet.bhk}-bhk`
+    : result.facet?.kind === 'budget'
+      ? `${result.landing.path}/budget/${result.facet.key}`
+      : result.facet?.kind === 'amenity'
+        ? `${result.landing.path}/amenity/${result.facet.slug}`
+        : result.landing.path
+  : Astro.url.pathname;
+---
+
+{
+  result.ok && copy ? (
+    <Page
+      title={copy.title}
+      description={copy.description}
+      path={path}
+      noindex={!result.indexable}
+      jsonLd={[
+        breadcrumbs(copy.crumbs.map((c) => ({ name: c.name, path: c.path ?? path })), locale),
+        { '@type': 'CollectionPage', name: copy.h1, url: `https://360ghar.com${localizePath(path, locale)}` },
+        listingItemList(copy.h1, result.first.page?.items ?? [], locale),
+        faqPage(copy.faqs),
+      ]}
+    >
+      <LandingPage
+        landing={result.landing}
+        facet={result.facet}
+        filters={result.filters}
+        page={result.first.page}
+        error={result.first.error}
+        amenities={result.first.amenities}
+        locale={locale}
+        homes={result.homes}
+        related={result.related}
+      />
+    </Page>
+  ) : (
+    <Page title={hi ? 'पेज नहीं मिला | 360Ghar' : 'Page not found | 360Ghar'} description={hi ? 'यह पेज हमारे नक्शे पर नहीं है।' : 'This page is not on our map.'} noindex>
+      <NotFound />
+    </Page>
+  )
+}

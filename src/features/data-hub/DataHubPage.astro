@@ -1,0 +1,92 @@
+---
+/**
+ * Shell for every data hub page: breadcrumbs, H1 and lead, the page body
+ * (default slot), short explanatory text (slot "prose"), FAQ, links to the
+ * other data pages, and the JSON-LD (BreadcrumbList, FAQPage, HowTo + extras).
+ * The markup is in `@/ui/HubShell.astro`.
+ */
+import { howTo as howToLd } from '@/features/content/shared/schema';
+import { breadcrumbs, faqPage } from '@/lib/seo/site';
+import HubShell from '@/ui/HubShell.astro';
+import type { Faq as FaqItem, Step } from './content';
+import { hubLinks, type HubKey } from './pages';
+import { text } from './text';
+import type { VignetteKey } from '@/ui/paper/vignettes';
+import './data-hub.css';
+
+type Props = {
+  title: string;
+  description: string;
+  keywords?: string;
+  /** English path, used for the canonical and the last breadcrumb. */
+  path: string;
+  noindex?: boolean;
+  image?: string | null;
+  type?: 'website' | 'article';
+  article?: { published?: string | null; modified?: string | null };
+  heading: string;
+  lead?: string;
+  /** Crumbs after "Home". The last one is the current page. */
+  crumbs: { name: string; path?: string }[];
+  faqs?: readonly FaqItem[];
+  howTo?: { name: string; description: string; steps: readonly Step[] };
+  jsonLd?: unknown[];
+  related?: HubKey[];
+  /** Smaller H1 for headings that come from data (auction descriptions, builder names). */
+  longHeading?: boolean;
+  /** The paper scene beside the heading (from 768 px). */
+  art?: VignetteKey;
+};
+
+const { title, description, keywords, path, noindex, image, type, article, heading, lead, crumbs, faqs = [], howTo, jsonLd = [], related = [], longHeading = false, art } = Astro.props;
+const locale = Astro.locals.locale;
+const t = text(locale);
+const trail = [{ name: t.home, path: '/' }, ...crumbs];
+const ld = noindex
+  ? []
+  : [
+      breadcrumbs(
+        trail.map((c, i) => ({ name: c.name, path: c.path ?? (i === trail.length - 1 ? path : '/') })),
+        locale,
+      ),
+      faqs.length ? faqPage([...faqs]) : null,
+      howTo ? howToLd(howTo.name, howTo.description, howTo.steps) : null,
+      ...jsonLd,
+    ].filter(Boolean);
+const shell = {
+  prefix: 'dh' as const,
+  title,
+  description,
+  keywords,
+  path,
+  noindex,
+  image,
+  type,
+  article,
+  jsonLd: ld,
+  crumbs: trail,
+  heading,
+  lead,
+  longHeading,
+  art: art && { key: art, mode: 'stage' as const },
+  faqs,
+  faqTitle: t.faq,
+  links: hubLinks(related, locale),
+  linksTitle: t.more,
+};
+---
+
+{
+  Astro.slots.has('prose') ? (
+    <HubShell {...shell}>
+      <slot name="head" slot="head" />
+      <slot />
+      <slot name="prose" slot="prose" />
+    </HubShell>
+  ) : (
+    <HubShell {...shell}>
+      <slot name="head" slot="head" />
+      <slot />
+    </HubShell>
+  )
+}

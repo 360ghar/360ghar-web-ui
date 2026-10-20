@@ -1,0 +1,40 @@
+---
+/** /verify-ownership: sign-in gate, Jamabandi lookup island, and what the record shows. */
+import { getT } from '@/i18n';
+import { generateToolSchema, toolSchemas } from '@/lib/seo/legacy/toolSchemas.js';
+import { STEPS, TEHSILS } from './content';
+import DataHubPage from './DataHubPage.astro';
+import { hubName } from './pages';
+import VerifyOwnership from './VerifyOwnership';
+
+const locale = Astro.locals.locale;
+const tt = getT(locale);
+const hi = locale === 'hi';
+const plain = (html: string) => html.replace(/<[^>]+>/g, '');
+---
+
+<DataHubPage
+  art="verifyOwnership"
+  title={tt('seo:verifyOwnership.title')}
+  description={tt('seo:verifyOwnership.description')}
+  keywords="verify property ownership Gurugram, Jamabandi Haryana land records, Khasra number lookup, mutation status Haryana, property ownership check Gurgaon"
+  path="/verify-ownership"
+  heading={hi ? 'प्रॉपर्टी का मालिकाना हक जाँचें' : 'Verify property ownership'}
+  lead={tt('data-hub:verifyOwnership.description')}
+  crumbs={[{ name: hubName('ownership', locale), path: '/verify-ownership' }]}
+  howTo={{ name: 'How to Verify Property Ownership', description: 'Look up official Haryana Jamabandi land records by tehsil, village, and khasra number to verify property ownership.', steps: STEPS.verifyOwnership }}
+  jsonLd={[generateToolSchema(toolSchemas.verifyOwnership)]}
+  related={['circleRates', 'zones', 'auctions', 'stampDuty']}
+>
+  <p slot="head" class="dh-meta">{plain(tt('data-hub:verifyOwnership.important'))}</p>
+
+  <div class="dh-split">
+    <VerifyOwnership client:load locale={locale} tehsils={TEHSILS} />
+    <section class="dh-prose mt-0" aria-labelledby="vo-about">
+      <h2 id="vo-about">{hi ? tt('data-hub:verifyOwnership.aboutJamabandi.title') : 'What a Jamabandi record shows'}</h2>
+      <p>{tt('data-hub:verifyOwnership.aboutJamabandi.description')}</p>
+      <ul>{[0, 1, 2, 3].map((i) => <li>{tt(`data-hub:verifyOwnership.aboutJamabandi.tips.${i}`)}</li>)}</ul>
+      <p>{plain(tt('data-hub:verifyOwnership.dataSourced'))}</p>
+    </section>
+  </div>
+</DataHubPage>

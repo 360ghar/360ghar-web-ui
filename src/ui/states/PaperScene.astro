@@ -1,0 +1,9 @@
+---
+import PaperArt from '@/ui/paper/PaperArt.astro';
+import { SCENE_H, SCENE_W, sceneLayers, type SceneName } from './scenes';
+
+type Props = { name: SceneName; class?: string };
+const { name, class: className } = Astro.props;
+---
+
+<PaperArt layers={sceneLayers(name)} width={SCENE_W} height={SCENE_H} bg="var(--color-kesar-50)" cutEdge={`scene-${name}`} class:list={['paper-scene', className]} />

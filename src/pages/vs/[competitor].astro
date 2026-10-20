@@ -1,0 +1,15 @@
+---
+import ComparePage from '@/features/content/compare/ComparePage.astro';
+import { COMPETITORS } from '@/features/content/compare/competitors';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return COMPETITORS.map((c) => ({ params: { competitor: c.slug }, props: { c } }));
+}
+
+const locale = Astro.locals.locale;
+const { c } = Astro.props;
+---
+
+<ComparePage locale={locale} c={c} />
