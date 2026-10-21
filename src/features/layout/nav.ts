@@ -95,6 +95,8 @@ export const FOOTER: NavGroup[] = [
       { key: 'site:links.contact', href: '/contact' },
       { key: 'site:footer.compare', href: '/vs' },
       { key: 'site:links.forAi', href: '/for-ai' },
+      { key: 'site:links.methodology', href: '/methodology' },
+      { key: 'site:links.editorialPolicy', href: '/editorial-policy' },
     ],
   },
 ];

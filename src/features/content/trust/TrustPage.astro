@@ -1,0 +1,63 @@
+---
+/** /authors, /editorial-policy and /methodology: plain text pages from ./copy.ts. */
+import Content from '@/layouts/Content.astro';
+import { DATA_UPDATED } from '@/lib/dataDates';
+import { localizePath } from '@/lib/i18n/locale';
+import { trail, webPage } from '@/features/content/shared/schema';
+import Provenance from '@/ui/Provenance.astro';
+import { trustCopy, type TrustKey } from './copy';
+
+type Props = { page: TrustKey };
+const { page } = Astro.props;
+const locale = Astro.locals.locale;
+const c = trustCopy(page, locale);
+const PATH = `/${page}`;
+const { crumbs, ld } = trail(locale, [{ name: c.name, path: PATH }]);
+const OTHERS: TrustKey[] = (['authors', 'editorial-policy', 'methodology'] as const).filter((k) => k !== page);
+---
+
+<Content title={c.title} description={c.description} path={PATH} heading={c.h1} lead={c.lead} crumbs={crumbs} jsonLd={[webPage({ name: c.title, description: c.description, path: PATH, locale, type: page === 'authors' ? 'ProfilePage' : 'AboutPage' }), ld]}>
+  {
+    c.sections.map((s) => (
+      <section id={s.id} class="trust-section" aria-labelledby={`t-${s.id}`}>
+        <h2 id={`t-${s.id}`}>{s.title}</h2>
+        {s.body.map((p) => (
+          <p>{p}</p>
+        ))}
+      </section>
+    ))
+  }
+  {page === 'methodology' && <Provenance date={DATA_UPDATED.priceContext} sources={[{ label: '360Ghar price index', href: '/price-index' }]} class="mt-6" />}
+  <nav class="trust-links" aria-label={locale === 'hi' ? 'संबंधित पेज' : 'Related pages'}>
+    {OTHERS.map((k) => <a href={localizePath(`/${k}`, locale)}>{trustCopy(k, locale).name}</a>)}
+  </nav>
+</Content>
+
+<style>
+  .trust-section {
+    margin-top: 2rem;
+    max-width: 44rem;
+  }
+
+  .trust-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .trust-section p {
+    margin-top: 0.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .trust-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .trust-links a {
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

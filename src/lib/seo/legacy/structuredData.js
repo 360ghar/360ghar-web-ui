@@ -167,7 +167,7 @@ export const realEstateStructuredData = {
         name: 'What is 360Ghar?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: '360Ghar is India\'s first AI-Enabled and Virtual Tour first Real Estate Platform. All properties are verified by our on-site team. Our dedicated Relationship Manager handles your end-to-end flow so that you can relax and enjoy. We provide end-to-end visibility, convenience, and transparency for the same brokerage amount.'
+          text: '360Ghar is India\'s first AI + VR real estate platform. All properties are verified by our on-site team. Our dedicated Relationship Manager handles your end-to-end flow so that you can relax and enjoy. We provide end-to-end visibility, convenience, and transparency for the same brokerage amount.'
         }
       },
       {
@@ -244,7 +244,7 @@ export const realEstateStructuredData = {
       },
       {
         '@type': 'Question',
-        name: 'What makes 360Ghar India\'s first AI-Enabled real estate platform?',
+        name: 'What makes 360Ghar India\'s first AI + VR real estate platform?',
         acceptedAnswer: {
           '@type': 'Answer',
           text: '360Ghar leverages AI technology to power smart property search, personalized recommendations, and immersive 360° virtual tours. We combine this technology with on-site verification and human expertise (Relationship Managers) to offer a seamless, transparent experience.'
@@ -1006,7 +1006,7 @@ export const generatePersonStructuredData = ({ name, jobTitle, image, bio, linke
     name: '360Ghar',
     url: 'https://360ghar.com',
   },
-  description: bio || `Key team member at 360Ghar, India's first AI + VR-first real estate platform.`,
+  description: bio || `Key team member at 360Ghar, India's first AI + VR real estate platform.`,
   url: 'https://360ghar.com/about-us',
   image: image || 'https://360ghar.com/team/member.jpg',
   sameAs: [

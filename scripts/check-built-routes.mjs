@@ -50,7 +50,7 @@ globalThis.fetch = async (input, init) => {
 const handler = (await import(pathToFileURL(fn).href)).default;
 const get = async (path) => {
   const res = await handler(new Request(`https://360ghar.com${path}`), { ip: '127.0.0.1' });
-  return { status: res.status, body: await res.text() };
+  return { status: res.status, body: await res.text(), cdn: res.headers.get('netlify-cdn-cache-control') };
 };
 
 const failures = [];
@@ -70,6 +70,7 @@ const expect = (ok, msg) => ok || failures.push(msg);
 for (const prefix of ['', '/hi']) {
   const found = await get(`${prefix}/blog/built-output-check`);
   expect(found.status === 200, `${prefix}/blog/<slug>: expected 200, got ${found.status}`);
+  expect(Boolean(found.cdn), `${prefix}/blog/<slug>: no Netlify-CDN-Cache-Control header`);
   expect(found.body.includes('Built output check post'), `${prefix}/blog/<slug>: post title missing (catch-all 404 page?)`);
   const missing = await get(`${prefix}/blog/no-such-post`);
   expect(missing.status === 404, `${prefix}/blog/<unknown>: expected 404, got ${missing.status}`);
@@ -80,6 +81,7 @@ for (const prefix of ['', '/hi']) {
 }
 
 const policy = await get('/policies/privacy-policy');
+expect(Boolean(policy.cdn), '/policies/<slug>: no Netlify-CDN-Cache-Control header');
 expect(policy.status === 200, `/policies/<slug>: expected 200, got ${policy.status}`);
 expect(policy.body.includes('Policy body text.'), '/policies/<slug>: policy text missing (catch-all 404 page?)');
 

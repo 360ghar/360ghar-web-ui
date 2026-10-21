@@ -1,6 +1,7 @@
 import type { AstroGlobal } from 'astro';
 import landmarks from '@/data/office-landmarks.json';
 import { cachePage, respond } from '@/lib/cache';
+import { localizePath } from '@/lib/i18n/locale';
 import { emptyFilters, parseFilters, type Filters } from '@/features/search/filters';
 import { loadFirstPage } from '@/features/search/load';
 
@@ -39,9 +40,22 @@ export const NEAR_HI: Record<string, { name: string; description: string }> = {
   'hero-honda-chowk': { name: 'हीरो होंडा चौक / NH-8', description: 'NH-48 (पुराना NH-8) का बड़ा जंक्शन, जो गुड़गाँव को दिल्ली और एयरपोर्ट से जोड़ता है।' },
 };
 
+/**
+ * The landmark an unknown slug most likely means: a slug that starts with the landmark's slug or the other
+ * way round ("golf-course-road" and "golf-course-road-corporate"). Anything else stays a 404.
+ */
+export function nearAlias(slug: string): Landmark | null {
+  const s = slug.toLowerCase();
+  if (s.length < 4 || LANDMARKS.some((x) => x.slug === s)) return null;
+  const hits = LANDMARKS.filter((x) => x.slug.startsWith(`${s}-`) || s.startsWith(`${x.slug}-`));
+  return hits.length === 1 ? hits[0]! : null;
+}
+
 /** Data, status and caching for /near/:slug (homes near an office hub). Call from the route file. */
 export async function loadNear(Astro: AstroGlobal) {
   const lm = LANDMARKS.find((x) => x.slug === (Astro.params.slug ?? '').toLowerCase()) ?? null;
+  const alias = lm ? null : nearAlias(Astro.params.slug ?? '');
+  if (alias) return Astro.redirect(localizePath(`/near/${alias.slug}`, Astro.locals.locale) + Astro.url.search, 301);
   let first = null;
   let filters: Filters | null = null;
   if (lm) {

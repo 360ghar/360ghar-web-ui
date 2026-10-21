@@ -1,0 +1,127 @@
+---
+/** /price-index: the five cities of src/data/priceContext.json with their apartment ranges, each linking to its page. */
+import prices from '@/data/priceContext.json';
+import { DATA_UPDATED } from '@/lib/dataDates';
+import { byLocale, localizePath } from '@/lib/i18n/locale';
+import { absoluteUrl } from '@/lib/seo/site';
+import Provenance from '@/ui/Provenance.astro';
+import DataHubPage from './DataHubPage.astro';
+
+const locale = Astro.locals.locale;
+const NAMES: Record<string, [string, string]> = {
+  gurgaon: ['Gurgaon', 'गुड़गाँव'],
+  delhi: ['Delhi', 'दिल्ली'],
+  noida: ['Noida', 'नोएडा'],
+  faridabad: ['Faridabad', 'फ़रीदाबाद'],
+  ghaziabad: ['Ghaziabad', 'गाज़ियाबाद'],
+};
+const H = byLocale(locale, {
+  en: {
+    title: 'Property Price Index for Delhi NCR cities, May 2026 | 360Ghar',
+    description: 'Buy and rent price ranges for apartments in Gurgaon, Delhi, Noida, Faridabad and Ghaziabad, from 360Ghar price data.',
+    name: 'Price index',
+    h1: 'Property price index',
+    lead: 'Apartment price ranges for five NCR cities. Pick a city for every property type.',
+    city: 'City',
+    buy: 'Apartment, buy',
+    rent: 'Apartment, rent',
+    open: (c: string) => `${c} price index`,
+    note: 'Ranges, not averages. The price of a home depends on the locality, floor, facing and amenities.',
+  },
+  hi: {
+    title: 'दिल्ली NCR शहरों का प्रॉपर्टी प्राइस इंडेक्स, मई 2026 | 360Ghar',
+    description: 'गुड़गाँव, दिल्ली, नोएडा, फ़रीदाबाद और गाज़ियाबाद में अपार्टमेंट की खरीद और किराये की कीमत रेंज, 360Ghar के कीमत डेटा से।',
+    name: 'प्राइस इंडेक्स',
+    h1: 'प्रॉपर्टी प्राइस इंडेक्स',
+    lead: 'NCR के पाँच शहरों में अपार्टमेंट की कीमत रेंज। हर प्रॉपर्टी प्रकार के लिए शहर चुनें।',
+    city: 'शहर',
+    buy: 'अपार्टमेंट, खरीद',
+    rent: 'अपार्टमेंट, किराया',
+    open: (c: string) => `${c} प्राइस इंडेक्स`,
+    note: 'ये रेंज हैं, औसत नहीं। घर की कीमत लोकेलिटी, फ़्लोर, दिशा और सुविधाओं पर निर्भर करती है।',
+  },
+});
+type City = { buy?: Record<string, string>; rent?: Record<string, string> };
+const rows = Object.entries(prices as Record<string, City>).map(([slug, c]) => ({
+  slug,
+  name: NAMES[slug]?.[locale === 'hi' ? 1 : 0] ?? slug,
+  buy: c.buy?.apartment ?? c.buy?.default ?? '–',
+  rent: c.rent?.apartment ?? c.rent?.default ?? '–',
+}));
+---
+
+<DataHubPage
+  art="priceIndex"
+  title={H.title}
+  description={H.description}
+  path="/price-index"
+  heading={H.h1}
+  lead={H.lead}
+  crumbs={[{ name: H.name, path: '/price-index' }]}
+  jsonLd={[
+    {
+      '@type': 'ItemList',
+      name: H.h1,
+      itemListElement: rows.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: `${r.name} price index`, url: absoluteUrl(`/price-index/${r.slug}`) })),
+    },
+  ]}
+  related={['circleRates', 'stampDuty', 'tenant', 'bestSectors']}
+>
+  <div>
+    <table class="pi-table">
+      <caption class="sr-only">{H.h1}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{H.city}</th>
+          <th scope="col">{H.buy}</th>
+          <th scope="col">{H.rent}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((r) => (
+            <tr>
+              <th scope="row">
+                <a href={localizePath(`/price-index/${r.slug}`, locale)}>{H.open(r.name)}</a>
+              </th>
+              <td class="tabular">{r.buy}</td>
+              <td class="tabular">{r.rent}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="dh-meta mt-3 max-w-[68ch]">{H.note}</p>
+  <Provenance date={DATA_UPDATED.priceContext} class="mt-1" />
+</DataHubPage>
+
+<style>
+  .pi-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .pi-table th,
+  .pi-table td {
+    padding: 0.875rem 0.75rem 0.875rem 0;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .pi-table thead th {
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .pi-table tbody th a {
+    font-weight: 700;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .pi-table tbody th a:hover {
+    color: var(--color-kesar-700);
+  }
+</style>

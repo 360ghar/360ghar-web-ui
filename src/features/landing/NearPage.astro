@@ -19,7 +19,7 @@ import { LANDMARKS, NEAR_EN, NEAR_HI, type loadNear } from './loadNear';
 const locale = Astro.locals.locale;
 const hi = locale === 'hi';
 const t = getT(locale);
-type Props = Awaited<ReturnType<typeof loadNear>>;
+type Props = Exclude<Awaited<ReturnType<typeof loadNear>>, Response>;
 const { lm, first, filters } = Astro.props;
 const name = lm ? (hi ? (NEAR_HI[lm.slug]?.name ?? lm.name) : lm.name) : '';
 const heading = lm ? (hi ? `${name} के पास घर` : `Homes near ${lm.name}`) : '';

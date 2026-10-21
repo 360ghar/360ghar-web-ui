@@ -4,6 +4,7 @@ import { cachePage } from '@/lib/cache';
 import { localizePath } from '@/lib/i18n/locale';
 import { breadcrumbs, canonicalFor, faqPage } from '@/lib/seo/site';
 import { displayName, isNoindexLocality, localitySlug, resolveLocality } from '@/features/localities/data';
+import { localityTitle, saleBounds } from '@/features/localities/live';
 import { localityFaqs } from '@/features/localities/faq';
 import LocalityPage from '@/features/localities/LocalityPage.astro';
 import { loadLocality } from '@/features/localities/load';
@@ -25,10 +26,13 @@ const name = l ? displayName(l.name) : '';
 const faqs = l ? localityFaqs(name, l.entityType, locale).map((f) => ({ q: f.question, a: f.answer })) : [];
 const slug = l ? localitySlug(l) : '';
 const cityName = l && l.city.toLowerCase() !== 'gurgaon' ? displayName(l.city) : 'Gurugram';
+const month = new Date().toLocaleDateString('en-IN', { month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
+const dataTitle = l && data && !data.failed ? localityTitle(name, cityName, data.homes, month) : null;
+const sale = data && !data.failed ? saleBounds(data.homes) : null;
 ---
 
 <Page
-  title={l ? (l.seo?.title ?? `${name} ${cityName} - Property Prices, Reviews & Locality Guide | 360Ghar`) : 'Locality not found | 360Ghar'}
+  title={l ? (dataTitle ?? l.seo?.title ?? `${name} ${cityName} - Property Prices, Reviews & Locality Guide | 360Ghar`) : 'Locality not found | 360Ghar'}
   description={l ? (l.seo?.description ?? l.description ?? '') : 'This locality is not on our map.'}
   keywords={l?.seo?.keywords}
   path={l ? `/locality/${slug}` : Astro.url.pathname}
@@ -43,6 +47,7 @@ const cityName = l && l.city.toLowerCase() !== 'gurgaon' ? displayName(l.city) :
           ...(l.geo ? { geo: { '@type': 'GeoCoordinates', latitude: l.geo.lat, longitude: l.geo.lng } } : {}),
         },
         { '@type': 'WebPage', name: l.seo?.title ?? name, url: canonicalFor(`/locality/${slug}`, locale), ...(l.lastVerifiedAt ? { dateModified: l.lastVerifiedAt } : {}) },
+        ...(sale ? [{ '@type': 'Product', name: `Homes for sale in ${name}, ${cityName}`, url: canonicalFor(`/locality/${slug}`, locale), offers: { '@type': 'AggregateOffer', priceCurrency: 'INR', lowPrice: sale.low, highPrice: sale.high, offerCount: sale.n } }] : []),
         faqPage(faqs),
       ]
     : []}

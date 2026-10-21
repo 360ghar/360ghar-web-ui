@@ -4,7 +4,7 @@
 Site: https://360ghar.com
 Owner: 360Ghar
 Contact: info@360ghar.com
-Purpose: Real estate platform for Buy, Rent, PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.
+Purpose: India's first AI + VR real estate platform for Buy, Rent, PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.
 
 Language-Available: en, hi
 Access: allow

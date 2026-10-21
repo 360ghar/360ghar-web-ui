@@ -4,6 +4,7 @@ import { loadNear } from '@/features/landing/loadNear';
 
 export const prerender = false;
 const data = await loadNear(Astro);
+if (data instanceof Response) return data;
 ---
 
 <NearPage {...data} />

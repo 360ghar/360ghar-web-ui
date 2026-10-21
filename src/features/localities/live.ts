@@ -128,3 +128,22 @@ export function listedPlaces(homes: Property[], city = 'gurgaon', used: Set<stri
     .sort((a, b) => b.homes.length - a.homes.length || a.locality.name.localeCompare(b.locality.name))
     .map((x) => ({ ...x, photo: bestPhoto(x.homes, used) }));
 }
+
+/** Lowest and highest real asking price of the homes for sale, or null when none has one. Stand-in prices are skipped. */
+export function saleBounds(homes: Property[]): { n: number; low: number; high: number } | null {
+  const v = homes
+    .filter((p) => p.purpose === 'buy' && !isPlaceholderPrice(p))
+    .map((p) => p.base_price)
+    .filter((x): x is number => typeof x === 'number' && Number.isFinite(x) && x > 0);
+  return v.length ? { n: v.length, low: Math.min(...v), high: Math.max(...v) } : null;
+}
+
+/**
+ * Title of a locality page from its data: the place, what the page holds (prices; 2 BHK rates when a
+ * 2 BHK home is listed; listings when any home is) and the month. Falls back to null when too long.
+ */
+export function localityTitle(name: string, city: string, homes: Property[], month: string): string | null {
+  const parts = ['prices', ...(homes.some((p) => p.bedrooms === 2) ? ['2 BHK rates'] : []), ...(homes.length ? ['listings'] : [])];
+  const t = `${name}, ${city}: ${parts.join(', ')} (${month})`;
+  return t.length <= 68 ? t : null;
+}

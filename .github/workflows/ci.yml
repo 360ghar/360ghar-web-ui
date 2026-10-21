@@ -50,6 +50,10 @@ jobs:
       - name: pSEO quality gate
         run: pnpm check:pseo
 
+      # Validates the site-wide JSON-LD (scripts/validate-structured-data.mjs).
+      - name: Structured data
+        run: pnpm seo:schemas
+
       # Builds the Netlify function and runs it without require(esm), as Netlify does (scripts/check-built-routes.mjs).
       - name: Build and check built routes
         run: pnpm build && pnpm check:built

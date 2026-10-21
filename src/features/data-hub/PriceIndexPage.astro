@@ -9,7 +9,9 @@ import { isThinLocality } from '@/features/localities/data';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
 import { absoluteUrl } from '@/lib/seo/site';
+import { DATA_UPDATED } from '@/lib/dataDates';
 import Icon from '@/ui/icons/Icon.astro';
+import Provenance from '@/ui/Provenance.astro';
 import { chartText } from './charts';
 import DataHubPage from './DataHubPage.astro';
 import PriceRanges from './PriceRanges.astro';
@@ -70,6 +72,7 @@ const faqs = [
       description: `Property price ranges for ${nameEn} across apartments, villas, builder floors, plots, and more. Includes buy and rent segments.`,
       url: absoluteUrl(`/price-index/${slug}`),
       temporalCoverage: '2026-05',
+      dateModified: DATA_UPDATED.priceContext,
       spatialCoverage: { '@type': 'City', name: nameEn, address: { '@type': 'PostalAddress', addressRegion: region, addressCountry: 'IN' } },
       creator: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
       license: 'https://creativecommons.org/licenses/by/4.0/',
@@ -93,6 +96,7 @@ const faqs = [
       />
     </div>
     <p class="dh-meta mt-4">{c.piSource(name)}</p>
+    <Provenance date={DATA_UPDATED.priceContext} class="mt-1" />
   </section>
   <p class="dh-meta mt-3 max-w-[68ch]">{t.piNote}</p>
 

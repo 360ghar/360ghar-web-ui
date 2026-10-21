@@ -73,7 +73,8 @@ const jsonLd = post
         image: image ? [image] : undefined,
         datePublished: date ?? undefined,
         dateModified: post.updated_at ?? date ?? undefined,
-        author: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
+        // The API has no author field; the editorial team answers for every post (see /authors).
+        author: { '@type': 'Organization', name: '360Ghar editorial team', url: absoluteUrl('/authors') },
         publisher: { '@type': 'Organization', name: '360Ghar', logo: { '@type': 'ImageObject', url: 'https://360ghar.com/assets/images/logo/logo.png' } },
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
         articleSection: category?.name,

@@ -1,0 +1,43 @@
+---
+/**
+ * "Updated <date> · Sources: ..." under a block of data. The date is the real date the data changed
+ * (src/lib/dataDates.ts, a record's `lastVerifiedAt` or `updated_at`), never the render time.
+ * `sources` link to where the numbers come from; with none, the line links to /methodology.
+ */
+import { formatDate } from '@/lib/format';
+import { localizePath } from '@/lib/i18n/locale';
+
+type Props = { date: string; sources?: { label: string; href?: string }[]; class?: string };
+const { date, sources, class: className } = Astro.props;
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const list = sources?.length ? sources : [{ label: hi ? 'हमारी पद्धति' : 'Our methodology', href: '/methodology#sources' }];
+---
+
+<p class:list={['provenance', className]}>
+  {hi ? 'अपडेट' : 'Updated'}{' '}
+  <time datetime={date}>{formatDate(date, locale, { day: 'numeric', month: 'long', year: 'numeric' })}</time>
+  {' '}<span aria-hidden="true">·</span>{' '}
+  {hi ? 'स्रोत' : 'Sources'}:{' '}
+  {
+    list.map((s, i) => (
+      <>
+        {i > 0 && ', '}
+        {s.href ? <a href={s.href.startsWith('/') ? localizePath(s.href, locale) : s.href}>{s.label}</a> : s.label}
+      </>
+    ))
+  }
+</p>
+
+<style>
+  .provenance {
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .provenance a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
