@@ -163,7 +163,7 @@ test('home: locality, search, tool and owner links go to live pages', async ({ p
   await page.goBack();
 
   await expect(m.getByRole('link', { name: /All [\d,]+ localities/ })).toHaveAttribute('href', '/localities');
-  await expect(m.getByRole('link', { name: 'Get the owner app' })).toHaveAttribute('href', /play\.google\.com/);
+  await expect(m.getByRole('link', { name: 'Get the owner app' })).toHaveAttribute('href', '/app');
   await expect(m.getByRole('link', { name: /Read reviews on Google/ })).toHaveAttribute('href', /google\.com\/search/);
   await w.check();
 });
