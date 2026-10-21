@@ -50,6 +50,10 @@ jobs:
       - name: pSEO quality gate
         run: pnpm check:pseo
 
+      # Builds the Netlify function and runs it without require(esm), as Netlify does (scripts/check-built-routes.mjs).
+      - name: Build and check built routes
+        run: pnpm build && pnpm check:built
+
   e2e:
     name: Playwright (one dev server)
     needs: checks
