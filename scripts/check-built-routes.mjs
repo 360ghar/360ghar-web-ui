@@ -61,7 +61,11 @@ for (const file of ['app.html', 'hi/app.html']) {
   if (!existsSync(path)) failures.push(`dist/${file} is missing`);
   else {
     const html = readFileSync(path, 'utf8');
-    for (const needle of ['com.the360ghar.ghar360', 'com.the360ghar.flatmates360', 'id6771899300']) if (!html.includes(needle)) failures.push(`dist/${file} has no link with ${needle}`);
+    // Check the badge links themselves (href values): the FlatMates JSON-LD holds the same store ids as text.
+    const hrefs = [...html.matchAll(/<a [^>]*href="([^"]+)"/g)].map((m) => m[1].replaceAll('&amp;', '&'));
+    for (const url of ['https://play.google.com/store/apps/details?id=com.the360ghar.ghar360', 'https://play.google.com/store/apps/details?id=com.the360ghar.flatmates360', 'https://apps.apple.com/in/app/360-flatmates/id6771899300']) {
+      if (!hrefs.includes(url)) failures.push(`dist/${file} has no badge link to ${url}`);
+    }
   }
 }
 
