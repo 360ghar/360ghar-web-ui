@@ -473,7 +473,7 @@ test('property: a stand-in ₹10 Cr price shows "Price on request" everywhere', 
 });
 
 test('property: the day buttons are never cut, the price dots are readable, gallery captions are counts', async ({ page }, info) => {
-  test.skip(process.platform === 'linux', 'Linux fonts make the tablet day grid wider than the panel, see handoff');
+  test.skip(process.platform === 'linux' && info.project.name === 'tablet', 'Linux fonts make the tablet day grid wider than the panel, see handoff');
   const w = watch(page);
   await page.goto(SALE);
   await hydrated(page);

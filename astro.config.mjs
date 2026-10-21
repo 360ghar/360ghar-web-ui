@@ -55,6 +55,8 @@ export default defineConfig({
       ],
     },
     server: {
+      // CI e2e: a late dependency re-optimisation raises the error overlay, which blocks clicks. Page errors still fail the tests (watch()).
+      hmr: process.env.CI ? { overlay: false } : undefined,
       proxy: {
         // Local dev only: the browser calls /dev-api/api/v1/... (PUBLIC_API_BASE=/dev-api).
         // A separate prefix keeps the Netlify dev plugin's netlify.toml proxy out of the way.
