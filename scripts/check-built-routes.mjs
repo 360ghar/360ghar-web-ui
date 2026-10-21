@@ -54,12 +54,14 @@ const get = async (path) => {
 
 const failures = [];
 
-// /app is prerendered (static output, not a function route): check the generated file.
-const appHtml = new URL('../dist/app.html', import.meta.url);
-if (!existsSync(appHtml)) failures.push('dist/app.html is missing');
-else {
-  const html = readFileSync(appHtml, 'utf8');
-  for (const needle of ['com.the360ghar.ghar360', 'com.the360ghar.flatmates360', 'id6771899300']) if (!html.includes(needle)) failures.push(`dist/app.html has no link with ${needle}`);
+// /app and /hi/app are prerendered (static output, not function routes): check the generated files.
+for (const file of ['app.html', 'hi/app.html']) {
+  const path = new URL(`../dist/${file}`, import.meta.url);
+  if (!existsSync(path)) failures.push(`dist/${file} is missing`);
+  else {
+    const html = readFileSync(path, 'utf8');
+    for (const needle of ['com.the360ghar.ghar360', 'com.the360ghar.flatmates360', 'id6771899300']) if (!html.includes(needle)) failures.push(`dist/${file} has no link with ${needle}`);
+  }
 }
 
 const expect = (ok, msg) => ok || failures.push(msg);
