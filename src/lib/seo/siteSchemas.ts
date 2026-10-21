@@ -77,7 +77,7 @@ export function mobileApplicationBlock(): Block {
   return appBlock(APP_ID, APPS.ghar360, { name, applicationCategory, inLanguage, description, featureList });
 }
 
-/** 360 FlatMates. Description from the store listing (360-flatmates/docs/app_store_metadata.md). */
+/** 360 FlatMates, for /app and /links only. Description from the store listing (360-flatmates/docs/app_store_metadata.md). */
 export function flatmatesApplicationBlock(): Block {
   return appBlock(FLATMATES_APP_ID, APPS.flatmates, {
     name: APPS.flatmates.name,
@@ -94,7 +94,7 @@ export function speakableWebPage(url: string, cssSelectors: string[]): Block | n
   return { '@type': 'WebPage', '@id': `${url}#webpage`, url, speakable: { '@type': 'SpeakableSpecification', cssSelector: selectors } };
 }
 
-/** Every page: Organization, WebSite, LocalBusiness, Person and one MobileApplication per app. */
+/** Every page: Organization, WebSite, LocalBusiness, Person and the 360Ghar MobileApplication. FlatMates is described on its own pages (/app, /links). */
 export function siteBlocks(): Block[] {
-  return [organizationBlock(), old.website, old.localBusiness, personBlock(), mobileApplicationBlock(), flatmatesApplicationBlock()];
+  return [organizationBlock(), old.website, old.localBusiness, personBlock(), mobileApplicationBlock()];
 }

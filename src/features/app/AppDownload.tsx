@@ -10,13 +10,14 @@ type Props = {
 
 const subscribe = () => () => {};
 
-function detectOs(): Os {
-  const ua = navigator.userAgent;
-  if (/Android/i.test(ua)) return 'android';
+export function osOf(nav: Pick<Navigator, 'userAgent' | 'platform' | 'maxTouchPoints'>): Os {
+  if (/Android/i.test(nav.userAgent)) return 'android';
   // iPadOS reports itself as a Mac with a touch screen.
-  if (/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) return 'ios';
+  if (/iPhone|iPad|iPod/i.test(nav.userAgent) || (nav.platform === 'MacIntel' && nav.maxTouchPoints > 1)) return 'ios';
   return 'other';
 }
+
+const detectOs = () => osOf(navigator);
 
 /**
  * Tells the visitor which store fits their phone. Without JavaScript, and on a desktop, it shows the
@@ -38,7 +39,7 @@ export default function AppDownload({ notice, qr, qrLabel }: Props) {
   return (
     <figure className="app-qr">
       <svg viewBox={`${-pad} ${-pad} ${box} ${box}`} role="img" aria-label={qrLabel} shapeRendering="crispEdges">
-        <rect x={-pad} y={-pad} width={box} height={box} fill="#fff" />
+        <rect x={-pad} y={-pad} width={box} height={box} fill="var(--color-paper)" />
         <path d={qr.path} fill="var(--color-ink-950)" />
       </svg>
       <figcaption>{qrLabel}</figcaption>

@@ -13,6 +13,7 @@ import { EXTRA_BRANDS, LINKS, type LinkIcon } from './data';
 import PageArt from '@/features/content/shared/PageArt.astro';
 import StoreBadges from '@/ui/StoreBadges.astro';
 import { APPS, APP_KEYS } from '@/lib/apps';
+import { flatmatesApplicationBlock } from '@/lib/seo/siteSchemas';
 
 const locale = Astro.locals.locale;
 const PATH = '/links';
@@ -48,8 +49,9 @@ const pageUrl = canonicalFor(PATH, locale);
 const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
 const jsonLd = [
   webPage({ name: H.title, description: H.description, path: PATH, locale }),
-  { '@type': 'Organization', name: SITE_NAME, url: SITE_URL, sameAs: [...new Set([...LINKS.map((l) => l.url), ...APP_KEYS.flatMap((k) => APPS[k].ios ?? [])])] },
+  { '@type': 'Organization', name: SITE_NAME, url: SITE_URL, sameAs: [...new Set(LINKS.map((l) => l.url))] },
   ld,
+  flatmatesApplicationBlock(),
 ];
 ---
 

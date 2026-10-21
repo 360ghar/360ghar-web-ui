@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { APP_PAGE_QR, PLAY_QR } from './qr';
+import { APPS } from '@/lib/apps';
+import { APP_PAGE_QR, APP_PAGE_QR_HI, PLAY_QR } from './qr';
 
 /** Rebuilds the module grid from the path runs. */
 function grid({ size, path }: { size: number; path: string } = PLAY_QR) {
@@ -42,11 +43,23 @@ describe('PLAY_QR', () => {
   });
 });
 
-describe('APP_PAGE_QR', () => {
-  it('is a 25 module symbol with the three finder squares', () => {
-    expect(APP_PAGE_QR.size).toBe(25);
-    const g = grid(APP_PAGE_QR);
-    const n = APP_PAGE_QR.size;
+describe('page QR codes', () => {
+  it('encode the apps page and the store URL they claim', () => {
+    expect(PLAY_QR.url).toBe(APPS.ghar360.play);
+    expect(APP_PAGE_QR.url).toBe('https://360ghar.com/app');
+    expect(APP_PAGE_QR_HI.url).toBe('https://360ghar.com/hi/app');
+  });
+
+  it.each([APP_PAGE_QR, APP_PAGE_QR_HI])('$url: 25 modules, runs inside the grid, three finder squares', (qr) => {
+    expect(qr.size).toBe(25);
+    const runs = [...qr.path.matchAll(/M(\d+) (\d+)h(\d+)v1h-(\d+)z/g)];
+    expect(runs.map((m) => m[0]).join('')).toHaveLength(qr.path.length);
+    for (const m of runs) {
+      expect(Number(m[1]) + Number(m[3])).toBeLessThanOrEqual(qr.size);
+      expect(Number(m[2])).toBeLessThan(qr.size);
+    }
+    const g = grid(qr);
+    const n = qr.size;
     for (const [ox, oy] of [
       [0, 0],
       [n - 7, 0],

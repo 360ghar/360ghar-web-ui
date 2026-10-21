@@ -27,6 +27,4 @@ export const LINKS: SocialLink[] = [
   { platform: 'Google Business Profile', url: 'https://www.google.com/search?q=360Ghar+Reviews#lrd=0x390d172407f3e11f:0x1c1fef0917d13d5e,3,,,,', handle: 'Write a review', icon: 'google', group: 'review' },
   { platform: 'Google Play Store', url: APPS.ghar360.play, handle: 'Write a review', icon: 'googleplay', group: 'review' },
   { platform: 'Google Play Store (360 Flatmates)', url: APPS.flatmates.play, handle: 'Write a review', icon: 'googleplay', group: 'review' },
-  { platform: 'Android app', url: APPS.ghar360.play, handle: '360Ghar on Google Play', icon: 'googleplay', group: 'app' },
-  { platform: 'Android app (360 Flatmates)', url: APPS.flatmates.play, handle: '360 Flatmates on Google Play', icon: 'googleplay', group: 'app' },
 ];

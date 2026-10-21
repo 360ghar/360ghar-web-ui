@@ -27,6 +27,6 @@ test('an iPhone sees the store notice', async ({ browser }) => {
   const page = await ctx.newPage();
   await page.goto('/app');
   await hydrated(page);
-  await expect(page.getByRole('status').filter({ hasText: 'You are on an iPhone' })).toContainText('360Ghar for iPhone is not out yet');
+  await expect(page.getByRole('status').filter({ hasText: 'You are on an iPhone or iPad' })).toContainText('360Ghar for iPhone is not out yet');
   await ctx.close();
 });

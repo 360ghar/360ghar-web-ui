@@ -11,7 +11,8 @@ import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import StoreBadges from '@/ui/StoreBadges.astro';
 import { trail, webPage } from '@/features/content/shared/schema';
 import Vignette from '@/features/home/vignettes/Vignette.astro';
-import { APP_PAGE_QR } from '@/features/home/qr';
+import { APP_PAGE_QR, APP_PAGE_QR_HI } from '@/features/home/qr';
+import { flatmatesApplicationBlock } from '@/lib/seo/siteSchemas';
 import AppDownload from './AppDownload';
 
 const locale = Astro.locals.locale;
@@ -20,7 +21,7 @@ const gharIos = Boolean(APPS.ghar360.ios);
 
 const H = byLocale(locale, {
   en: {
-    title: 'Get the 360Ghar apps | Android and iPhone',
+    title: 'Get the 360Ghar and 360 FlatMates apps',
     description: '360Ghar on Google Play, and 360 FlatMates on Google Play and the App Store. Search verified homes, book visits and find flatmates.',
     name: 'Apps',
     h1: 'Get the 360 apps',
@@ -30,10 +31,10 @@ const H = byLocale(locale, {
     flatmates: 'Find flatmates who match your routine, and flats to share. Chat and schedule visits in the app.',
     qr: 'Scan with your phone to open this page there',
     android: 'You are on Android. Both apps are on Google Play, below.',
-    ios: gharIos ? 'You are on an iPhone. Both apps are on the App Store, below.' : 'You are on an iPhone. 360 FlatMates is on the App Store, below. 360Ghar for iPhone is not out yet, so use 360ghar.com in your browser for now.',
+    ios: gharIos ? 'You are on an iPhone or iPad. Both apps are on the App Store, below.' : 'You are on an iPhone or iPad. 360 FlatMates is on the App Store, below. 360Ghar for iPhone is not out yet, so use 360ghar.com in your browser for now.',
   },
   hi: {
-    title: '360Ghar ऐप डाउनलोड करें | Android और iPhone',
+    title: '360Ghar और 360 FlatMates ऐप पाएँ',
     description: 'Google Play पर 360Ghar, और Google Play व App Store पर 360 FlatMates। वेरिफाइड घर खोजें, विज़िट बुक करें और फ़्लैटमेट ढूँढें।',
     name: 'ऐप',
     h1: '360 ऐप पाएँ',
@@ -43,12 +44,12 @@ const H = byLocale(locale, {
     flatmates: 'अपनी दिनचर्या से मेल खाते फ़्लैटमेट और शेयर करने लायक फ़्लैट खोजें। ऐप में चैट करें और विज़िट तय करें।',
     qr: 'अपने फ़ोन से स्कैन करके यह पेज वहाँ खोलें',
     android: 'आप Android पर हैं। दोनों ऐप नीचे Google Play पर उपलब्ध हैं।',
-    ios: gharIos ? 'आप iPhone पर हैं। दोनों ऐप नीचे App Store पर उपलब्ध हैं।' : 'आप iPhone पर हैं। 360 FlatMates नीचे App Store पर उपलब्ध है। iPhone के लिए 360Ghar अभी उपलब्ध नहीं है, तब तक ब्राउज़र में 360ghar.com इस्तेमाल करें।',
+    ios: gharIos ? 'आप iPhone या iPad पर हैं। दोनों ऐप नीचे App Store पर उपलब्ध हैं।' : 'आप iPhone या iPad पर हैं। 360 FlatMates नीचे App Store पर उपलब्ध है। iPhone के लिए 360Ghar अभी उपलब्ध नहीं है, तब तक ब्राउज़र में 360ghar.com इस्तेमाल करें।',
   },
 });
 
 const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
-const jsonLd = [webPage({ name: H.title, description: H.description, path: PATH, locale }), ld];
+const jsonLd = [webPage({ name: H.title, description: H.description, path: PATH, locale }), ld, flatmatesApplicationBlock()];
 ---
 
 <Page title={H.title} description={H.description} path={PATH} jsonLd={jsonLd} smartBanner="flatmates">
@@ -80,7 +81,7 @@ const jsonLd = [webPage({ name: H.title, description: H.description, path: PATH,
 
       <aside class="app-side">
         <Vignette name="app" bare class="app-phone" />
-        <AppDownload client:load notice={{ android: H.android, ios: H.ios }} qr={APP_PAGE_QR} qrLabel={H.qr} />
+        <AppDownload client:load notice={{ android: H.android, ios: H.ios }} qr={locale === 'hi' ? APP_PAGE_QR_HI : APP_PAGE_QR} qrLabel={H.qr} />
       </aside>
     </div>
   </div>

@@ -7,7 +7,7 @@
  *   node scripts/check-built-routes.mjs
  */
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const fn = fileURLToPath(new URL('../.netlify/v1/functions/ssr/ssr.mjs', import.meta.url));
@@ -19,7 +19,7 @@ if (process.argv[2] !== '--child') {
   }
   const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--child'], {
     stdio: 'inherit',
-    env: { ...process.env, NODE_OPTIONS: '--no-experimental-require-module --no-experimental-detect-module' },
+    env: { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --no-experimental-require-module --no-experimental-detect-module`.trim() },
   });
   process.exit(r.status ?? 1);
 }
@@ -53,6 +53,15 @@ const get = async (path) => {
 };
 
 const failures = [];
+
+// /app is prerendered (static output, not a function route): check the generated file.
+const appHtml = new URL('../dist/app.html', import.meta.url);
+if (!existsSync(appHtml)) failures.push('dist/app.html is missing');
+else {
+  const html = readFileSync(appHtml, 'utf8');
+  for (const needle of ['com.the360ghar.ghar360', 'com.the360ghar.flatmates360', 'id6771899300']) if (!html.includes(needle)) failures.push(`dist/app.html has no link with ${needle}`);
+}
+
 const expect = (ok, msg) => ok || failures.push(msg);
 
 for (const prefix of ['', '/hi']) {
