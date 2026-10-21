@@ -16,7 +16,7 @@ const { crumbs, ld } = trail(locale, [{ name: c.name, path: PATH }]);
 const OTHERS: TrustKey[] = (['authors', 'editorial-policy', 'methodology'] as const).filter((k) => k !== page);
 ---
 
-<Content title={c.title} description={c.description} path={PATH} heading={c.h1} lead={c.lead} crumbs={crumbs} jsonLd={[webPage({ name: c.title, description: c.description, path: PATH, locale, type: page === 'authors' ? 'ProfilePage' : 'AboutPage' }), ld]}>
+<Content title={c.title} description={c.description} path={PATH} heading={c.h1} lead={c.lead} crumbs={crumbs} jsonLd={[webPage({ name: c.title, description: c.description, path: PATH, locale, type: 'AboutPage' }), ld]}>
   {
     c.sections.map((s) => (
       <section id={s.id} class="trust-section" aria-labelledby={`t-${s.id}`}>
@@ -27,7 +27,7 @@ const OTHERS: TrustKey[] = (['authors', 'editorial-policy', 'methodology'] as co
       </section>
     ))
   }
-  {page === 'methodology' && <Provenance date={DATA_UPDATED.priceContext} sources={[{ label: '360Ghar price index', href: '/price-index' }]} class="mt-6" />}
+  {page === 'methodology' && <Provenance date={DATA_UPDATED.priceContext} sources={[{ label: locale === 'hi' ? '360Ghar प्राइस इंडेक्स' : '360Ghar price index', href: '/price-index' }]} class="mt-6" />}
   <nav class="trust-links" aria-label={locale === 'hi' ? 'संबंधित पेज' : 'Related pages'}>
     {OTHERS.map((k) => <a href={localizePath(`/${k}`, locale)}>{trustCopy(k, locale).name}</a>)}
   </nav>

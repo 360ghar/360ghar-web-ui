@@ -13,6 +13,7 @@ import { DATA_UPDATED } from '@/lib/dataDates';
 import Icon from '@/ui/icons/Icon.astro';
 import Provenance from '@/ui/Provenance.astro';
 import { chartText } from './charts';
+import { PRICE_CITY_NAMES } from './cities';
 import DataHubPage from './DataHubPage.astro';
 import PriceRanges from './PriceRanges.astro';
 import { text } from './text';
@@ -25,14 +26,7 @@ const t = text(locale);
 const c = chartText(locale);
 const hi = locale === 'hi';
 const city = prices[slug] as City;
-const NAMES: Record<string, [string, string, string]> = {
-  gurgaon: ['Gurgaon', 'गुड़गाँव', 'Haryana'],
-  delhi: ['Delhi', 'दिल्ली', 'Delhi'],
-  noida: ['Noida', 'नोएडा', 'Uttar Pradesh'],
-  faridabad: ['Faridabad', 'फ़रीदाबाद', 'Haryana'],
-  ghaziabad: ['Ghaziabad', 'गाज़ियाबाद', 'Uttar Pradesh'],
-};
-const [nameEn, nameHi, region] = NAMES[slug] ?? [slug, slug, 'Haryana'];
+const [nameEn, nameHi, region] = PRICE_CITY_NAMES[slug] ?? [slug, slug, 'Haryana'];
 const name = hi ? nameHi : nameEn;
 const types = [...new Set([...Object.keys(city.buy ?? {}), ...Object.keys(city.rent ?? {})])].filter((k) => k !== 'default');
 const rows = types.map((k) => ({ type: k, buy: city.buy?.[k] ?? city.buy?.default ?? '–', rent: city.rent?.[k] ?? city.rent?.default ?? '–' }));

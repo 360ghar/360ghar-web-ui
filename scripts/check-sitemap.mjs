@@ -22,6 +22,10 @@ if (args.help) {
 const base = args.base.replace(/\/$/, '');
 const limit = Number(args.limit);
 const concurrency = Number(args.concurrency);
+if (!Number.isInteger(limit) || limit < 0 || !Number.isInteger(concurrency) || concurrency < 1) {
+  console.error('--limit must be a whole number from 0, --concurrency a whole number from 1.');
+  process.exit(2);
+}
 const SITE = 'https://360ghar.com';
 // Netlify previews send X-Robots-Tag: noindex on every page, so the header counts only on the real site.
 const headerCounts = new URL(base).hostname.endsWith('360ghar.com');
@@ -37,10 +41,17 @@ const get = async (url, tries = 3) => {
   }
 };
 
-const index = await (await get(`${base}/sitemap.xml`)).text();
+/** The text of a sitemap file. A failed fetch stops the run: an unavailable sitemap must not look like an empty one. */
+const sitemapText = async (url) => {
+  const res = await get(url);
+  if (!res.ok) throw new Error(`${url} answered ${res.status}`);
+  return res.text();
+};
+
+const index = await sitemapText(`${base}/sitemap.xml`);
 const urls = [];
 for (const sm of locs(index)) {
-  let list = locs(await (await get(local(sm))).text());
+  let list = locs(await sitemapText(local(sm)));
   if (limit && list.length > limit) list = Array.from({ length: limit }, (_, i) => list[Math.floor((i * list.length) / limit)]);
   console.log(`${sm}: ${list.length} URL(s) to check`);
   urls.push(...new Set(list));

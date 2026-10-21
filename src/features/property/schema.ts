@@ -53,7 +53,6 @@ export function propertySchema(p: Property, locale: Locale) {
               ...(isPlaceholderPrice(p) ? {} : { price, priceCurrency: 'INR' }),
               // 360Ghar lists and verifies the home; the Organization node is on every page.
               seller: { '@id': ORGANIZATION_ID },
-              ...(p.updated_at ? { dateModified: p.updated_at } : {}),
               availability: p.is_available ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
               businessFunction: rent ? 'http://purl.org/goodrelations/v1#LeaseOut' : 'http://purl.org/goodrelations/v1#Sell',
               url,

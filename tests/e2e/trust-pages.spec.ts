@@ -20,6 +20,8 @@ for (const [path, h1] of [
   ['/authors', 'Authors and editorial team'],
   ['/editorial-policy', 'Editorial policy'],
   ['/methodology', 'Methodology and data sources'],
+  ['/hi/methodology', 'पद्धति और डेटा स्रोत'],
+  ['/hi/price-index', 'प्रॉपर्टी प्राइस इंडेक्स'],
 ] as const) {
   test(`${path} renders`, async ({ page }) => {
     const w = watch(page);

@@ -70,7 +70,7 @@ const expect = (ok, msg) => ok || failures.push(msg);
 for (const prefix of ['', '/hi']) {
   const found = await get(`${prefix}/blog/built-output-check`);
   expect(found.status === 200, `${prefix}/blog/<slug>: expected 200, got ${found.status}`);
-  expect(Boolean(found.cdn), `${prefix}/blog/<slug>: no Netlify-CDN-Cache-Control header`);
+  expect(/s-maxage=[1-9]/.test(found.cdn ?? ''), `${prefix}/blog/<slug>: no Netlify-CDN-Cache-Control with s-maxage`);
   expect(found.body.includes('Built output check post'), `${prefix}/blog/<slug>: post title missing (catch-all 404 page?)`);
   const missing = await get(`${prefix}/blog/no-such-post`);
   expect(missing.status === 404, `${prefix}/blog/<unknown>: expected 404, got ${missing.status}`);
@@ -81,7 +81,7 @@ for (const prefix of ['', '/hi']) {
 }
 
 const policy = await get('/policies/privacy-policy');
-expect(Boolean(policy.cdn), '/policies/<slug>: no Netlify-CDN-Cache-Control header');
+expect(/s-maxage=[1-9]/.test(policy.cdn ?? ''), '/policies/<slug>: no Netlify-CDN-Cache-Control with s-maxage');
 expect(policy.status === 200, `/policies/<slug>: expected 200, got ${policy.status}`);
 expect(policy.body.includes('Policy body text.'), '/policies/<slug>: policy text missing (catch-all 404 page?)');
 

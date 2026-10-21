@@ -29,8 +29,11 @@ export async function urlsFromSitemapIndex(base, fetchImpl = fetch, { sinceMs } 
     }
     for (const [, block] of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
       const loc = extractLocs(block)[0];
-      const mod = Date.parse(/<lastmod>([^<]+)<\/lastmod>/.exec(block)?.[1] ?? '');
-      if (loc && Number.isFinite(mod) && mod >= sinceMs) urls.push(loc);
+      const raw = /<lastmod>([^<]+)<\/lastmod>/.exec(block)?.[1] ?? '';
+      const mod = Date.parse(raw);
+      // A date-only lastmod means midnight UTC: compare with the start of that day, or a change from earlier the same day is lost.
+      const floor = /^\d{4}-\d\d-\d\d$/.test(raw.trim()) ? Math.floor(sinceMs / 86_400_000) * 86_400_000 : sinceMs;
+      if (loc && Number.isFinite(mod) && mod >= floor) urls.push(loc);
     }
   }
   return urls;
