@@ -62,6 +62,8 @@ jobs:
       API_ORIGIN: https://api.360ghar.com
       PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL || 'https://ci-test.supabase.co' }}
       PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_ci_test' }}
+      # A fake key: the map tests replace window.google with a stub, but the page only loads Maps when a key is set.
+      PUBLIC_GOOGLE_MAPS_API_KEY: ci-test-key
       BASE_URL: http://127.0.0.1:4321
     steps:
       - uses: actions/checkout@v4

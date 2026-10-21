@@ -8,7 +8,8 @@ export default defineConfig({
   // One retry on CI: the Vite dev server compiles each page on first request.
   retries: process.env.CI ? 1 : 0,
   reporter: [['list']],
-  use: { baseURL, channel: 'chrome', trace: 'retain-on-failure' },
+  // Booking windows and "In 2 days" depend on the clock zone; fix it so a UTC runner matches a developer laptop in India.
+  use: { baseURL, channel: 'chrome', trace: 'retain-on-failure', timezoneId: 'Asia/Kolkata' },
   projects: [
     { name: 'phone', use: { ...devices['Pixel 7'], viewport: { width: 360, height: 780 } } },
     { name: 'tablet', use: { viewport: { width: 768, height: 1024 } } },
