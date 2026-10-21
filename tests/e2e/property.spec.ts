@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { axe, backendDown, hydrated, signedIn, watch } from './helpers';
+import { axe, backendDown, hydrated, liveHas, signedIn, watch } from './helpers';
 
 // Listings on the live API: 182 is for sale (9 photos, floor plan), 165 is for
 // rent (deposit), 181 is a short stay. No live listing has a 360° tour, so the
@@ -207,6 +207,7 @@ test('property: contact panel, callback dialog, actions and the phone dock', asy
 });
 
 test('property: rent shows the move-in cost; a short stay shows nights and guests', async ({ page }) => {
+  test.skip(!(await liveHas('/api/v1/properties/165')), 'listing 165 is not on the live API');
   const w = watch(page);
   await page.goto(RENT);
   const costs = page.getByRole('region', { name: 'What it costs' });

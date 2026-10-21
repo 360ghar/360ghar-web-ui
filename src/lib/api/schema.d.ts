@@ -4359,9 +4359,11 @@ export interface paths {
          * Stitch scene frames
          * @description Stitch captured frames into a panorama for a scene in the cloud.
          *
-         *     Downloads the frames, stitches them with OpenCV, pads the result to a
-         *     2:1 equirect canvas, and replaces the scene image. Returns a job ID for
-         *     tracking progress (also broadcast over the jobs WebSocket).
+         *     With per-frame metadata (`frames` + `camera_profile`) the metadata-driven
+         *     equirect blend runs and the scene image is replaced only when quality
+         *     validation passes. Legacy requests (frame_urls only) use the OpenCV
+         *     path. Returns a job ID for tracking progress (also broadcast over the
+         *     jobs WebSocket).
          */
         post: operations["stitch_scene_api_v1_scenes__scene_id__stitch_post"];
         delete?: never;
@@ -8385,6 +8387,24 @@ export interface components {
             rera_projects: components["schemas"]["ReraProjectResponse"][];
             /** Recent Complaints */
             recent_complaints: components["schemas"]["ReraComplaintResponse"][];
+        };
+        /**
+         * CameraProfileIn
+         * @description Camera geometry the capture was planned with (fallback 55x69 when
+         *     absent — matches the mobile documented fallback profile). FOVs must be
+         *     strictly below 180°: the pinhole projection is singular at 180°.
+         */
+        CameraProfileIn: {
+            /**
+             * Horizontal Fov
+             * @default 55
+             */
+            horizontal_fov?: number;
+            /**
+             * Vertical Fov
+             * @default 69
+             */
+            vertical_fov?: number;
         };
         /** CaptureCameraInfo */
         CaptureCameraInfo: {
@@ -15492,6 +15512,43 @@ export interface components {
             /** Height */
             height: number;
         };
+        /**
+         * SceneFrameMetadata
+         * @description Per-frame capture metadata for the metadata-driven cloud stitcher.
+         *
+         *     When omitted (legacy requests), the frame is assumed to carry no
+         *     orientation and the legacy OpenCV path is used.
+         */
+        SceneFrameMetadata: {
+            /** Url */
+            url: string;
+            /**
+             * Yaw
+             * @description Degrees, east-positive
+             * @default 0
+             */
+            yaw?: number;
+            /**
+             * Pitch
+             * @default 0
+             */
+            pitch?: number;
+            /**
+             * Roll
+             * @default 0
+             */
+            roll?: number;
+            /**
+             * Target Index
+             * @description Client bookkeeping only (capture-plan slot); the blend worker does not consume it.
+             */
+            target_index?: number | null;
+            /**
+             * Low Quality
+             * @default false
+             */
+            low_quality?: boolean;
+        };
         /** SceneGps */
         SceneGps: {
             /** Latitude */
@@ -15554,10 +15611,17 @@ export interface components {
         /**
          * SceneStitchRequest
          * @description Request payload for cloud panorama stitching of captured frames.
+         *
+         *     Backward compatible: `frame_urls` alone (legacy) still works — the
+         *     worker falls back to the OpenCV path. When `frames` (with orientation
+         *     metadata) is present, the metadata-driven equirect blend is used.
          */
         SceneStitchRequest: {
             /** Frame Urls */
             frame_urls: string[];
+            /** Frames */
+            frames?: components["schemas"]["SceneFrameMetadata"][] | null;
+            camera_profile?: components["schemas"]["CameraProfileIn"] | null;
         };
         /**
          * SceneUpdate
@@ -15860,6 +15924,10 @@ export interface components {
             width: number;
             /** Height */
             height: number;
+            /** Quality */
+            quality?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * StorageFolderType

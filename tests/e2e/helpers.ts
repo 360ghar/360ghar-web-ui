@@ -75,3 +75,22 @@ export async function signedIn(page: Page) {
   await page.route(/\/api\/v1\/users\/profile/, (route) => route.fulfill({ json: { id: 1, email: user.email, full_name: 'Test User', phone: '+919876543210', is_active: true } }));
   await page.route(/\/api\/v1\/users\/me\/auth-state/, (route) => route.fulfill({ json: { stage: 'active', next_action: 'grant_access', missing_fields: [] } }));
 }
+
+const API = process.env.API_ORIGIN ?? 'https://api.360ghar.com';
+const probes = new Map<string, Promise<boolean>>();
+
+/**
+ * True when the live API answers 200 for `path`. Tests that need the
+ * contract-2026-10 backend (or one specific listing) skip when it does not,
+ * so CI does not depend on what production serves today.
+ */
+export function liveHas(path: string): Promise<boolean> {
+  let p = probes.get(path);
+  if (!p) {
+    p = fetch(`${API}${path}`).then((r) => r.ok, () => false);
+    probes.set(path, p);
+  }
+  return p;
+}
+
+export const CONTRACT_PROBE = '/api/v1/data-hub/bank-auctions';

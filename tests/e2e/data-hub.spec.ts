@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { axe, backendDown, hydrated, watch } from './helpers';
+import { CONTRACT_PROBE, axe, backendDown, hydrated, liveHas, watch } from './helpers';
 
 /** Opens a page, checks the H1 and waits for every island. */
 async function open(page: Page, path: string) {
@@ -19,6 +19,7 @@ async function a11y(page: Page) {
 const OFFLINE = /offline|server is busy|Something broke|taking too long/i;
 
 test('circle rates: filters, load more, calculator, detail', async ({ page }) => {
+  test.skip(!(await liveHas(CONTRACT_PROBE)), 'needs the contract-2026-10 backend (not on the live API yet)');
   const w = watch(page);
   await open(page, '/circle-rates');
   await expect(page.getByText('183 rates')).toBeVisible();
@@ -57,6 +58,7 @@ test('circle rate: unknown slug is a real 404', async ({ page }) => {
 });
 
 test('stamp duty calculator: buyer, sector rate and state table', async ({ page }) => {
+  test.skip(!(await liveHas(CONTRACT_PROBE)), 'needs the contract-2026-10 backend (not on the live API yet)');
   const w = watch(page);
   await open(page, '/stamp-duty-calculator');
   await page.getByRole('button', { name: 'Calculate' }).click();
@@ -100,6 +102,7 @@ test('rera: search, status, load more, number check', async ({ page }) => {
 });
 
 test('bank auctions: filters, load more, alert asks for login, detail', async ({ page }, info) => {
+  test.skip(!(await liveHas(CONTRACT_PROBE)), 'needs the contract-2026-10 backend (not on the live API yet)');
   const w = watch(page);
   await open(page, '/bank-auctions');
   const cards = page.locator('.dh-cards > li');
@@ -159,6 +162,7 @@ test('bank auctions: filters, load more, alert asks for login, detail', async ({
 });
 
 test('bank auction: court row opens, unknown id is a 404', async ({ page }) => {
+  test.skip(!(await liveHas(CONTRACT_PROBE)), 'needs the contract-2026-10 backend (not on the live API yet)');
   await open(page, '/bank-auctions/31');
   await expect(page.getByText('DRT/480/2023')).toBeVisible();
   const res = await page.goto('/bank-auctions/999999');
@@ -278,6 +282,7 @@ test.describe('backend down', () => {
   });
 
   test('bank auctions: load more fails with a clear message', async ({ page }) => {
+    test.skip(!(await liveHas(CONTRACT_PROBE)), 'needs the contract-2026-10 backend (not on the live API yet)');
     await page.goto('/bank-auctions');
     await hydrated(page);
     await backendDown(page);
@@ -343,6 +348,7 @@ test('price index: range bars for buy and rent', async ({ page }) => {
 });
 
 test('stamp duty: paper empty state, deal against circle value (mocked)', async ({ page }) => {
+  test.skip(!(await liveHas(CONTRACT_PROBE)), 'needs the contract-2026-10 backend (not on the live API yet)');
   const w = watch(page);
   await page.route(/calculator\/stamp-duty/, async (route) => {
     const body = route.request().postDataJSON() as { property_value: number; buyer_type: 'male' | 'female' | 'joint' };
@@ -369,6 +375,7 @@ test('stamp duty: paper empty state, deal against circle value (mocked)', async 
 });
 
 test('data hub headers: the page scene from 768 px', async ({ page }, info) => {
+  test.skip(!(await liveHas(CONTRACT_PROBE)), 'needs the contract-2026-10 backend (not on the live API yet)');
   for (const path of ['/circle-rates', '/rera-projects', '/bank-auctions', '/tenant-demand-heatmap']) {
     await page.goto(path, { waitUntil: 'domcontentloaded' });
     const art = page.locator('.dh-head-art');

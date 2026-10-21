@@ -4,8 +4,9 @@ const baseURL = process.env.BASE_URL ?? 'http://localhost:4321';
 
 export default defineConfig({
   testDir: 'tests/e2e',
-  timeout: 60_000,
-  retries: 0,
+  timeout: process.env.CI ? 90_000 : 60_000,
+  // One retry on CI: the Vite dev server compiles each page on first request.
+  retries: process.env.CI ? 1 : 0,
   reporter: [['list']],
   use: { baseURL, channel: 'chrome', trace: 'retain-on-failure' },
   projects: [

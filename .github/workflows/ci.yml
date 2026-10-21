@@ -89,6 +89,13 @@ jobs:
           done
           echo "dev server did not start"; cat "$RUNNER_TEMP/astro-dev.log"; exit 1
 
+      # Vite compiles each page on its first request. Request the main routes once so the tests do not time out on cold compiles.
+      - name: Warm the dev server
+        run: |
+          for p in / /hi /properties /property/182 /compare /account /sign-in /register /post-property /circle-rates /stamp-duty /bank-auctions /rera /zone-checker /about-us /contact /blog /tools; do
+            curl -sS -o /dev/null --max-time 120 -w "%{http_code} $p\n" "http://127.0.0.1:4321$p" || true
+          done
+
       # Retries come from playwright.config.ts (not overridden). --output keeps results out of test-results/.
       - name: Playwright
         run: pnpm exec playwright test --output="$RUNNER_TEMP/pw-output" --workers=3

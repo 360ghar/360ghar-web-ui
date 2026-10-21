@@ -21700,7 +21700,7 @@
           "scenes"
         ],
         "summary": "Stitch scene frames",
-        "description": "Stitch captured frames into a panorama for a scene in the cloud.\n\nDownloads the frames, stitches them with OpenCV, pads the result to a\n2:1 equirect canvas, and replaces the scene image. Returns a job ID for\ntracking progress (also broadcast over the jobs WebSocket).",
+        "description": "Stitch captured frames into a panorama for a scene in the cloud.\n\nWith per-frame metadata (`frames` + `camera_profile`) the metadata-driven\nequirect blend runs and the scene image is replaced only when quality\nvalidation passes. Legacy requests (frame_urls only) use the OpenCV\npath. Returns a job ID for tracking progress (also broadcast over the\njobs WebSocket).",
         "operationId": "stitch_scene_api_v1_scenes__scene_id__stitch_post",
         "parameters": [
           {
@@ -34401,6 +34401,28 @@
           "recent_complaints"
         ],
         "title": "BuilderReputationResponse"
+      },
+      "CameraProfileIn": {
+        "properties": {
+          "horizontal_fov": {
+            "type": "number",
+            "exclusiveMaximum": 180.0,
+            "exclusiveMinimum": 1.0,
+            "title": "Horizontal Fov",
+            "default": 55.0
+          },
+          "vertical_fov": {
+            "type": "number",
+            "exclusiveMaximum": 180.0,
+            "exclusiveMinimum": 1.0,
+            "title": "Vertical Fov",
+            "default": 69.0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CameraProfileIn",
+        "description": "Camera geometry the capture was planned with (fallback 55x69 when\nabsent — matches the mobile documented fallback profile). FOVs must be\nstrictly below 180°: the pinhole projection is singular at 180°."
       },
       "CaptureCameraInfo": {
         "properties": {
@@ -57472,6 +57494,62 @@
         ],
         "title": "SceneDimensions"
       },
+      "SceneFrameMetadata": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "yaw": {
+            "type": "number",
+            "maximum": 360.0,
+            "minimum": -360.0,
+            "title": "Yaw",
+            "description": "Degrees, east-positive",
+            "default": 0.0
+          },
+          "pitch": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Pitch",
+            "default": 0.0
+          },
+          "roll": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Roll",
+            "default": 0.0
+          },
+          "target_index": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 63.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Index",
+            "description": "Client bookkeeping only (capture-plan slot); the blend worker does not consume it."
+          },
+          "low_quality": {
+            "type": "boolean",
+            "title": "Low Quality",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "SceneFrameMetadata",
+        "description": "Per-frame capture metadata for the metadata-driven cloud stitcher.\n\nWhen omitted (legacy requests), the frame is assumed to carry no\norientation and the legacy OpenCV path is used."
+      },
       "SceneGps": {
         "properties": {
           "latitude": {
@@ -57668,6 +57746,31 @@
             "maxItems": 32,
             "minItems": 2,
             "title": "Frame Urls"
+          },
+          "frames": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SceneFrameMetadata"
+                },
+                "type": "array",
+                "maxItems": 32
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frames"
+          },
+          "camera_profile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CameraProfileIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -57676,7 +57779,7 @@
           "frame_urls"
         ],
         "title": "SceneStitchRequest",
-        "description": "Request payload for cloud panorama stitching of captured frames."
+        "description": "Request payload for cloud panorama stitching of captured frames.\n\nBackward compatible: `frame_urls` alone (legacy) still works — the\nworker falls back to the OpenCV path. When `frames` (with orientation\nmetadata) is present, the metadata-driven equirect blend is used."
       },
       "SceneUpdate": {
         "properties": {
@@ -58494,6 +58597,18 @@
             "type": "integer",
             "minimum": 0.0,
             "title": "Height"
+          },
+          "quality": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quality"
           }
         },
         "type": "object",
