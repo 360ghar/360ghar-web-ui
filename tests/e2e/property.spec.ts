@@ -340,8 +340,11 @@ test('property: book a visit with the day buttons (POST mocked)', async ({ page 
   // One date control: no native date field.
   await expect(form.getByLabel('Date', { exact: true })).toHaveCount(0);
   // No day yet: the validation asks for one.
-  await form.getByRole('button', { name: 'Request this visit' }).click();
-  await expect(form.getByText('Pick a day.')).toBeVisible();
+  // Retry the click: on a slow runner it can land before the form has hydrated.
+  await expect(async () => {
+    await form.getByRole('button', { name: 'Request this visit' }).click();
+    await expect(form.getByText('Pick a day.')).toBeVisible({ timeout: 2_000 });
+  }).toPass({ timeout: 20_000 });
   const tomorrow = days.getByRole('button', { name: /^Tomorrow/ });
   await tomorrow.click();
   await expect(tomorrow).toHaveAttribute('aria-pressed', 'true');
