@@ -40,6 +40,7 @@ globalThis.fetch = async (input, init) => {
   const url = new URL(typeof input === 'string' ? input : (input.url ?? input));
   if (url.hostname !== 'api.360ghar.com') return realFetch(input, init);
   const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+  if (url.pathname === '/api/v1/pages/privacy-policy/public') return json(200, { unique_name: 'privacy-policy', title: 'Privacy Policy', format: 'html', content: '<h2>Policy heading</h2><p>Policy body text.</p>', updated_at: '2026-10-01T00:00:00Z' });
   if (url.pathname === '/api/v1/blog/posts/built-output-check') return json(200, post);
   if (url.pathname.startsWith('/api/v1/blog/posts/')) return json(404, { detail: 'not found' });
   if (url.pathname === '/api/v1/blog/posts') return json(200, { items: [post], next_cursor: null });
@@ -77,6 +78,10 @@ for (const prefix of ['', '/hi']) {
     `${prefix}/blog/<unknown>: expected the blog not-found state`,
   );
 }
+
+const policy = await get('/policies/privacy-policy');
+expect(policy.status === 200, `/policies/<slug>: expected 200, got ${policy.status}`);
+expect(policy.body.includes('Policy body text.'), '/policies/<slug>: policy text missing (catch-all 404 page?)');
 
 if (failures.length) {
   console.error(failures.join('\n'));
