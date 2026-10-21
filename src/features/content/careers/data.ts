@@ -81,6 +81,26 @@ export const OPENINGS: Opening[] = [
     postedDate: '2026-08-06',
   },
   {
+    slug: 'ai-generalist-intern',
+    title: 'AI Generalist Intern',
+    description:
+      'Work across product, content, operations, and growth with AI as your leverage. You will build AI workflows, automate research and drafting, prototype AI-assisted property search, and turn ambiguous problems into shipped systems. A builder role with startup-wide exposure.',
+    about:
+      'As an AI Generalist Intern at 360Ghar, you will use AI as leverage across the whole startup: product, content, operations, and growth. You will build AI workflows that automate research, drafting, and lead triage, prototype AI-assisted property search and internal dashboards, and turn ambiguous problems into shipped systems used by real buyers, sellers, and agents.',
+    requirements: [
+      'Deep fluency with modern AI tools (LLMs, agents, automation) for research, drafting, coding, and analysis',
+      'Prototypes fast: prompts, scripts, no-code or low-code workflows; basic JS or Python is a plus',
+      'Structured thinking: able to break an open-ended problem into a clear, defensible analysis',
+      'Excellent written and verbal communication in English',
+      'High ownership and follow-through with minimal supervision',
+      'Interest in real estate, prop-tech, or early-stage startups',
+    ],
+    location: 'Gurugram, Haryana',
+    type: 'internship',
+    duration: '2-6 months (extendable based on performance)',
+    postedDate: '2026-10-07',
+  },
+  {
     slug: 'software-developer-intern',
     title: 'Software Developer Intern',
     description:
@@ -108,7 +128,25 @@ export const isOpen = (o: Opening) => o.status !== 'closed';
 export const OPEN_ROLES = OPENINGS.filter(isOpen);
 export const openingBySlug = (slug: string) => OPENINGS.find((o) => o.slug === slug) ?? null;
 
-export const mailtoFor = (o: Opening) => `mailto:${CAREERS_EMAIL}?subject=${encodeURIComponent(`Application for ${o.title} - Career at 360Ghar`)}`;
+/** The subject names the role; the body asks the three questions the team screens on. */
+export const mailtoFor = (o: Opening) => {
+  const subject = `Application for ${o.title} - Career at 360Ghar`;
+  const body = [
+    'Hello 360Ghar team,',
+    '',
+    `I am applying for the ${o.title} internship.`,
+    '',
+    'Current city: [Your answer]',
+    'Availability for onsite work in Gurugram: [Yes / No / Please explain]',
+    'How do you use AI tools, and approximately how much do you use them each day? [Your answer]',
+    '',
+    'I have attached my resume or portfolio for your review.',
+    '',
+    'Regards,',
+    '[Your name]',
+  ].join('\n');
+  return `mailto:${CAREERS_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
 
 /**
  * JobPosting with real fields only. The old schema hard-coded a salary of

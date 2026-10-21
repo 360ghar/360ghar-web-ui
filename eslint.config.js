@@ -6,7 +6,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist/', '.astro/', '.netlify/', 'node_modules/', 'public/', 'src/pages/hi/', 'src/lib/api/schema.d.ts', 'src/lib/seo/legacy/'] },
+  { ignores: ['.agents/', '.claude/', 'dist/', '.astro/', '.netlify/', 'node_modules/', 'public/', 'src/pages/hi/', 'src/lib/api/schema.d.ts', 'src/lib/seo/legacy/'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,

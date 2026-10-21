@@ -60,7 +60,13 @@ export async function hydrated(page: Page) {
  * signed-in user without a real account. Supabase auth calls are blocked.
  */
 export async function signedIn(page: Page) {
-  const env = readFileSync(new URL('../../.env', import.meta.url), 'utf8');
+  // Local runs read .env; CI has no .env file and sets the variable instead.
+  let env = '';
+  try {
+    env = readFileSync(new URL('../../.env', import.meta.url), 'utf8');
+  } catch {
+    env = `PUBLIC_SUPABASE_URL=${process.env.PUBLIC_SUPABASE_URL ?? ''}`;
+  }
   const ref = /PUBLIC_SUPABASE_URL=https:\/\/([^.]+)\./.exec(env)?.[1] ?? 'test';
   const user = { id: '00000000-0000-4000-8000-000000000001', email: 'tester@example.com', user_metadata: { full_name: 'Test User' } };
   const session = { access_token: 'test-token', refresh_token: 'test-refresh', token_type: 'bearer', expires_in: 3600, expires_at: 4102444800, user };

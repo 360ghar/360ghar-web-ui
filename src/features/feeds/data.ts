@@ -33,7 +33,7 @@ const STATIC_PATHS = [
   '/capital-gains-tax-calculator', '/property-document-checklist', '/design-blueprint', '/vastu-checker', '/ai-design-studio', '/vs', '/vs/nobroker',
   '/vs/magicbricks', '/vs/99acres', '/vs/housing', '/vs/commonfloor', '/vs/proptiger', '/vs/squareyards', '/vs/nestaway', '/vs/zolo',
   '/vs/stanza-living', '/truth/nobroker-listings', '/truth/magicbricks-spam', '/truth/99acres-fake', '/truth/nestaway-collapse',
-  '/truth/zolo-issues', '/careers', '/careers/content-creator-internship', '/careers/real-estate-agent', '/careers/founders-office-intern',
+  '/truth/zolo-issues', '/careers', '/careers/content-creator-internship', '/careers/real-estate-agent', '/careers/founders-office-intern', '/careers/ai-generalist-intern',
   '/celebrity-homes', '/nri-property-guide', '/landlord-not-returning-security-deposit', '/list-property-free', '/glossary', '/links',
   '/check-fake-listing', '/rent-receipt', '/near/cyber-city', '/near/udyog-vihar', '/near/golf-course-road-corporate',
   '/near/millennium-city-centre', '/near/medanta', '/near/artemis', '/near/sector-55-56-metro', '/near/dlf-cyber-park', '/near/ambience-mall',
