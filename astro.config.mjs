@@ -40,7 +40,8 @@ export default defineConfig({
     plugins: [tailwindcss()],
     // sanitize-html is CommonJS and requires htmlparser2, which is ESM only. Netlify runs functions with
     // --no-experimental-require-module, so loading it from node_modules throws and /blog/<slug> fell through to the 404 route.
-    ssr: { noExternal: ['sanitize-html'] },
+    // Only for the build: in dev the bundled CommonJS copy fails to load, and dev runs on plain Node where require(esm) works.
+    ssr: { noExternal: process.argv.includes('build') ? ['sanitize-html'] : [] },
     // Dev only: pre-bundle modules that load lazily, so Vite does not re-optimise mid-session.
     optimizeDeps: {
       include: [

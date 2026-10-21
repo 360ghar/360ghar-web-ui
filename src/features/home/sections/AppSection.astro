@@ -1,15 +1,15 @@
 ---
 /**
- * The app. A mist sheet: text and the real Google Play link on the left, a
+ * The app. A mist sheet: text and the official store badges (src/lib/apps.ts) on the left, a
  * paper-cut phone on the right that rises above the sheet's top edge. On a
- * wide screen with a mouse there is a QR code of the same link. No download
+ * wide screen with a mouse there is a QR code of the Google Play link. No download
  * counts, ratings or version numbers: the old ones were not sourced. The one
  * motion is the phone easing up as it enters the screen (scroll-linked CSS;
  * it sits in its final place without support and with reduced motion).
  */
-import { PLAY_STORE } from '@/features/layout/nav';
 import type { Locale } from '@/lib/i18n/locale';
 import Icon from '@/ui/icons/Icon.astro';
+import StoreBadges from '@/ui/StoreBadges.astro';
 import { MORE } from '../more';
 import { PLAY_QR } from '../qr';
 import Vignette from '../vignettes/Vignette.astro';
@@ -36,10 +36,7 @@ const pad = 2;
         }
       </ul>
       <div class="app-actions">
-        <a class="btn btn-ink btn-lg" href={PLAY_STORE} rel="noopener">
-          <Icon name="download" size={20} />
-          {c.play}
-        </a>
+        <StoreBadges app="ghar360" />
         <figure class="app-qr">
           <svg
             viewBox={`${-pad} ${-pad} ${PLAY_QR.size + pad * 2} ${PLAY_QR.size + pad * 2}`}

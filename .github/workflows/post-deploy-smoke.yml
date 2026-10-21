@@ -80,6 +80,25 @@ jobs:
             echo "-- robots.txt and the IndexNow key file"
             curl -fsS --max-time 30 "$base/robots.txt" | grep -q '^Sitemap: ' || { echo "robots.txt lists no sitemap"; exit 1; }
             curl -fsS --max-time 30 "$base/ba96fa507cb7447aa74f5ddd2f516a6d.txt" | grep -q 'ba96fa507cb7447aa74f5ddd2f516a6d' || { echo "IndexNow key file is missing"; exit 1; }
+
+            echo "-- deep-link files answer 200 with JSON (proxied to the API)"
+            for f in assetlinks.json apple-app-site-association; do
+              code=$(curl -sS -o "$tmp/$f" -w '%{http_code}' --max-time 30 "$base/.well-known/$f")
+              test "$code" = "200" || { echo "/.well-known/$f answered $code"; exit 1; }
+              python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$tmp/$f" || { echo "/.well-known/$f is not JSON"; exit 1; }
+            done
+
+            echo "-- blog posts answer 200 (not the catch-all 404)"
+            slugs=$(curl -fsS --max-time 30 "https://api.360ghar.com/api/v1/blog/posts?limit=3" | python3 -c 'import json,sys; print(" ".join(p["slug"] for p in json.load(sys.stdin)["items"]))')
+            test -n "$slugs" || { echo "no blog posts from the API"; exit 1; }
+            for slug in $slugs; do
+              code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$base/blog/$slug")
+              test "$code" = "200" || { echo "/blog/$slug answered $code"; exit 1; }
+            done
+
+            echo "-- the /app page answers 200"
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$base/app")
+            test "$code" = "200" || { echo "/app answered $code"; exit 1; }
           )
 
           for try in $(seq 1 10); do

@@ -112,4 +112,4 @@ export const SOCIAL = (['instagram', 'facebook', 'x', 'linkedin', 'youtube'] as 
   return { brand, label: l.platform.replace(' (Twitter)', ''), href: l.url };
 });
 
-export const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360';
+export { PLAY_STORE } from '@/lib/apps';

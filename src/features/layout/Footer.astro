@@ -9,7 +9,8 @@ import { getT } from '@/i18n';
 import { COMPANY_EMAIL, COMPANY_PHONE, COMPANY_PHONE_DISPLAY } from '@/lib/company';
 import { localizer } from '@/lib/i18n/locale';
 import Icon from '@/ui/icons/Icon.astro';
-import { FOOTER, LEGAL, PLAY_STORE, SOCIAL } from './nav';
+import { FOOTER, LEGAL, SOCIAL } from './nav';
+import StoreBadges from '@/ui/StoreBadges.astro';
 
 const locale = Astro.locals.locale;
 const t = getT(locale);
@@ -39,10 +40,7 @@ const year = new Date().getFullYear();
           </li>
         </ul>
         <div class="footer-app-row">
-          <a class="btn btn-primary footer-app" href={PLAY_STORE} rel="noopener">
-            {t('site:footer.app')}
-            <Icon name="arrow-up-right" size={18} class="arrow" />
-          </a>
+          <StoreBadges app="ghar360" />
           <ul class="footer-social" aria-label={t('site:footer.follow')}>
             {
               SOCIAL.map((s) => (

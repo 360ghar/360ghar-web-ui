@@ -10,6 +10,7 @@
  * - The founder image (/assets/images/thumbs/team1.webp) is not in public/, so it is left out.
  * No relative imports without an extension: scripts/*.mjs load this file with Node's type stripping.
  */
+import { APPS } from '../apps.ts';
 import { authors } from './legacy/authors.js';
 import { realEstateStructuredData as old } from './legacy/structuredData.js';
 
@@ -17,9 +18,10 @@ const SITE = 'https://360ghar.com';
 export const ORGANIZATION_ID = `${SITE}/#organization`;
 export const FOUNDER_ID = `${SITE}/#founder`;
 export const APP_ID = `${SITE}/#android-app`;
+export const FLATMATES_APP_ID = `${SITE}/#flatmates-app`;
 
-/** The only store link the site has (src/features/layout/nav.ts PLAY_STORE). No App Store link exists yet. */
-export const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360';
+/** The Google Play page of 360Ghar (src/lib/apps.ts). */
+export const PLAY_STORE_URL = APPS.ghar360.play;
 
 type Block = Record<string, unknown>;
 
@@ -53,22 +55,36 @@ export function personBlock(): Block {
   };
 }
 
-export function mobileApplicationBlock(): Block {
-  const { name, applicationCategory, operatingSystem, inLanguage, offers, description, featureList } = old.mobileApplication;
+/** The store pages where an app is live (src/lib/apps.ts). A store with no URL yet is left out. */
+const liveUrls = (app: { play: string; ios: string | null }) => [app.play, app.ios].filter((u): u is string => Boolean(u));
+
+function appBlock(id: string, app: { play: string; ios: string | null }, fields: Block): Block {
+  const urls = liveUrls(app);
   return {
     '@type': 'MobileApplication',
-    '@id': APP_ID,
-    name,
-    applicationCategory,
-    operatingSystem,
-    inLanguage,
-    offers,
-    description,
-    featureList,
-    downloadUrl: PLAY_STORE_URL,
-    installUrl: PLAY_STORE_URL,
+    '@id': id,
+    ...fields,
+    operatingSystem: app.ios ? 'Android, iOS' : 'Android',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+    downloadUrl: urls.length === 1 ? urls[0] : urls,
+    installUrl: urls.length === 1 ? urls[0] : urls,
     publisher: { '@id': ORGANIZATION_ID },
   };
+}
+
+export function mobileApplicationBlock(): Block {
+  const { name, applicationCategory, inLanguage, description, featureList } = old.mobileApplication;
+  return appBlock(APP_ID, APPS.ghar360, { name, applicationCategory, inLanguage, description, featureList });
+}
+
+/** 360 FlatMates. Description from the store listing (360-flatmates/docs/app_store_metadata.md). */
+export function flatmatesApplicationBlock(): Block {
+  return appBlock(FLATMATES_APP_ID, APPS.flatmates, {
+    name: APPS.flatmates.name,
+    applicationCategory: 'LifestyleApplication',
+    inLanguage: ['en-IN', 'hi-IN'],
+    description: 'Find compatible flatmates and verified flats in India. Match on lifestyle, chat in the app and schedule visits.',
+  });
 }
 
 /** WebPage with a speakable part. Only pass selectors that exist in the page markup. */
@@ -78,7 +94,7 @@ export function speakableWebPage(url: string, cssSelectors: string[]): Block | n
   return { '@type': 'WebPage', '@id': `${url}#webpage`, url, speakable: { '@type': 'SpeakableSpecification', cssSelector: selectors } };
 }
 
-/** Every page: Organization, WebSite, LocalBusiness, Person, MobileApplication. */
+/** Every page: Organization, WebSite, LocalBusiness, Person and one MobileApplication per app. */
 export function siteBlocks(): Block[] {
-  return [organizationBlock(), old.website, old.localBusiness, personBlock(), mobileApplicationBlock()];
+  return [organizationBlock(), old.website, old.localBusiness, personBlock(), mobileApplicationBlock(), flatmatesApplicationBlock()];
 }

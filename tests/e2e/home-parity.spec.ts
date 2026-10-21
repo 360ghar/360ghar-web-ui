@@ -184,7 +184,7 @@ test('home parity: tool notes show real counts, the AI address copies, the app l
   for (const s of stats) expect(s).toMatch(/^[\d,]+ listed$/);
   expect(stats.length).toBeGreaterThan(0);
   await expect(m.getByRole('link', { name: /3D floor plan builder/ })).toHaveAttribute('href', '/design-blueprint');
-  await expect(m.getByRole('link', { name: /Get it on Google Play/ })).toHaveAttribute('href', /play\.google\.com\/store\/apps\/details\?id=com\.the360ghar\.ghar360/);
+  await expect(m.getByRole('link', { name: /Get 360Ghar on Google Play/ })).toHaveAttribute('href', /play\.google\.com\/store\/apps\/details\?id=com\.the360ghar\.ghar360/);
   await expect(m.getByRole('link', { name: /How to connect/ })).toHaveAttribute('href', '/ai-agent');
   await expect(m.locator('.ai-url')).toHaveText('https://api.360ghar.com/mcp');
   await m.getByRole('button', { name: 'Copy server address' }).click();

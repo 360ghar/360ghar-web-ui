@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { APPS } from '../apps';
 import { PLAY_STORE_URL, siteBlocks, speakableWebPage } from './siteSchemas';
 import { validateBlocks } from './validate';
 
@@ -8,12 +9,13 @@ describe('siteBlocks', () => {
   const blocks = siteBlocks();
   const types = blocks.map((b) => JSON.stringify(b['@type']));
 
-  it('holds Organization, WebSite, LocalBusiness, Person and MobileApplication', () => {
+  it('holds Organization, WebSite, LocalBusiness, Person and one MobileApplication per app', () => {
     expect(types).toEqual([
       JSON.stringify(['RealEstateAgent', 'Organization']),
       '"WebSite"',
       JSON.stringify(['LocalBusiness', 'RealEstateAgent']),
       '"Person"',
+      '"MobileApplication"',
       '"MobileApplication"',
     ]);
   });
@@ -41,6 +43,16 @@ describe('siteBlocks', () => {
     expect(blocks[3]).toMatchObject({ name: 'Saksham Mittal', jobTitle: 'Founder & CEO', worksFor: { '@id': 'https://360ghar.com/#organization' } });
     expect(blocks[3]).not.toHaveProperty('image');
     expect(blocks[4]).toMatchObject({ downloadUrl: PLAY_STORE_URL, operatingSystem: 'Android' });
+  });
+
+  it('lists only live store URLs for each app', () => {
+    const [ghar, flat] = [blocks[4]!, blocks[5]!];
+    // 360Ghar is not on the App Store yet: Play only, Android only.
+    expect(APPS.ghar360.ios).toBeNull();
+    expect(ghar).toMatchObject({ operatingSystem: 'Android', downloadUrl: APPS.ghar360.play, offers: { price: '0' } });
+    expect(JSON.stringify(ghar)).not.toContain('apps.apple.com');
+    expect(flat).toMatchObject({ operatingSystem: 'Android, iOS', downloadUrl: [APPS.flatmates.play, APPS.flatmates.ios], applicationCategory: 'LifestyleApplication' });
+    expect(new Set(blocks.map((b) => b['@id']).filter(Boolean)).size).toBe(blocks.filter((b) => b['@id']).length);
   });
 
   it('uses only absolute https URLs for the store link and the sameAs list', () => {

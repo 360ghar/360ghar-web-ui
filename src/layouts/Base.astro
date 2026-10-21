@@ -7,13 +7,18 @@
 import type { ComponentProps } from 'astro/types';
 import '@/styles/global.css';
 import Seo from '@/lib/seo/Seo.astro';
+import { APPS } from '@/lib/apps';
 import PaperDefs from '@/ui/paper/PaperDefs.astro';
 import OfflineNotice from '@/features/pwa/OfflineNotice.astro';
 import WebMcp from '@/features/webmcp/WebMcp.astro';
 
-type Props = ComponentProps<typeof Seo> & { bodyClass?: string };
+type Props = ComponentProps<typeof Seo> & {
+  bodyClass?: string;
+  /** iOS Smart App Banner. Only for pages about an app that is live on the App Store (FlatMates). */
+  smartBanner?: 'flatmates';
+};
 
-const { bodyClass, ...seo } = Astro.props;
+const { bodyClass, smartBanner, ...seo } = Astro.props;
 const locale = Astro.locals.locale;
 ---
 
@@ -33,6 +38,7 @@ const locale = Astro.locals.locale;
     <link rel="alternate" type="application/rss+xml" title="360Ghar" href="/rss.xml" />
     <link rel="alternate" type="application/rss+xml" title="360Ghar blog" href="/rss/blog.xml" />
     <Seo {...seo} />
+    {smartBanner && <meta name="apple-itunes-app" content={`app-id=${APPS[smartBanner].itunesId}`} />}
     <slot name="head" />
   </head>
   <body class={bodyClass}>

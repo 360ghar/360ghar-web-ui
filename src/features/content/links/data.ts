@@ -2,6 +2,7 @@
  * Verified 360Ghar profiles from the old socialLinksData.js (`verified: true`
  * only; the 10 "coming soon" entries are left out). Order and groups as before.
  */
+import { APPS } from '@/lib/apps';
 import type { BrandName } from '@/ui/icons/paths';
 
 /** Brand marks missing from ui/icons/paths.ts, from Simple Icons v15 (CC0). */
@@ -24,8 +25,8 @@ export const LINKS: SocialLink[] = [
   { platform: 'Pinterest', url: 'https://in.pinterest.com/360ghar/', handle: '@360ghar', icon: 'pinterest', group: 'follow' },
   { platform: 'Instagram (360 Flatmates)', url: 'https://www.instagram.com/360flatmates/', handle: '@360flatmates', icon: 'instagram', group: 'follow' },
   { platform: 'Google Business Profile', url: 'https://www.google.com/search?q=360Ghar+Reviews#lrd=0x390d172407f3e11f:0x1c1fef0917d13d5e,3,,,,', handle: 'Write a review', icon: 'google', group: 'review' },
-  { platform: 'Google Play Store', url: 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360', handle: 'Write a review', icon: 'googleplay', group: 'review' },
-  { platform: 'Google Play Store (360 Flatmates)', url: 'https://play.google.com/store/apps/details?id=com.the360ghar.flatmates360', handle: 'Write a review', icon: 'googleplay', group: 'review' },
-  { platform: 'Android app', url: 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360', handle: '360Ghar on Google Play', icon: 'googleplay', group: 'app' },
-  { platform: 'Android app (360 Flatmates)', url: 'https://play.google.com/store/apps/details?id=com.the360ghar.flatmates360', handle: '360 Flatmates on Google Play', icon: 'googleplay', group: 'app' },
+  { platform: 'Google Play Store', url: APPS.ghar360.play, handle: 'Write a review', icon: 'googleplay', group: 'review' },
+  { platform: 'Google Play Store (360 Flatmates)', url: APPS.flatmates.play, handle: 'Write a review', icon: 'googleplay', group: 'review' },
+  { platform: 'Android app', url: APPS.ghar360.play, handle: '360Ghar on Google Play', icon: 'googleplay', group: 'app' },
+  { platform: 'Android app (360 Flatmates)', url: APPS.flatmates.play, handle: '360 Flatmates on Google Play', icon: 'googleplay', group: 'app' },
 ];
