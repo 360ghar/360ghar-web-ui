@@ -4,7 +4,7 @@
  * All from `src/data/*.json`; read on the server only.
  */
 import index from '@/data/localities-index.json';
-import { isThinLocality } from '@/features/localities/data';
+import { citySlug, isThinLocality } from '@/features/localities/data';
 import landmarks from '@/data/locality-landmarks.json';
 import offices from '@/data/office-landmarks.json';
 
@@ -35,12 +35,22 @@ export function nearestHubs(lat: number | null | undefined, lng: number | null |
 
 const LANDMARKS = new Map((landmarks as { slug: string; landmarks: Landmark[] }[]).map((l) => [l.slug, l.landmarks]));
 
-/** Landmarks listed for the locality, when the data has them. */
-export const localityLandmarks = (locality: string | null | undefined): Landmark[] => (locality ? (LANDMARKS.get(slug(locality)) ?? []) : []);
+/** Landmarks listed for the locality, when the data has them. The file keys some places by "{slug}-{city}" (mg-road-gurgaon). */
+export function localityLandmarks(locality: string | null | undefined, city?: string | null): Landmark[] {
+  if (!locality) return [];
+  const s = slug(locality);
+  return LANDMARKS.get(s) ?? (city ? LANDMARKS.get(`${s}-${citySlug(city)}`) : undefined) ?? [];
+}
 
 type Entry = { slug: string; name: string; city: string; entityType: string };
 // Thin (scraped or invented) localities are noindex and delisted: never link them.
-const GURGAON = new Map((index as Entry[]).filter((e) => e.city === 'Gurgaon' && !isThinLocality(e)).map((e) => [e.name.toLowerCase(), e.slug]));
+// Names repeat across entity types (a locality and a road, a society and its project): keep the row whose slug is the plain name.
+const GURGAON = new Map<string, string>();
+for (const e of index as Entry[]) {
+  if (e.city !== 'Gurgaon' || isThinLocality(e)) continue;
+  const key = e.name.toLowerCase();
+  if (!GURGAON.has(key) || e.slug === slug(e.name)) GURGAON.set(key, e.slug);
+}
 
 /** Path of the locality page (`/locality/{slug}-gurgaon`), or null when there is none. */
 export function localityPath(locality: string | null | undefined, city: string | null | undefined): string | null {

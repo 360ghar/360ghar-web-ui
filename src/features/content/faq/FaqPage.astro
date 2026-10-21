@@ -21,8 +21,8 @@ const t = getT(locale);
 const { items, error } = await loadFaqs();
 
 const H = byLocale(locale, {
-  en: { ask: 'Did not find your answer?', askBody: 'Write to us. We reply by email.', error: 'We could not load the questions', errorBody: 'Send your question with the form instead.' },
-  hi: { ask: 'आपका जवाब नहीं मिला?', askBody: 'अपना सवाल लिखें। हम ईमेल पर जवाब देंगे।', error: 'अभी सवाल लोड नहीं हो सके', errorBody: 'नीचे दिए फ़ॉर्म से अपना सवाल भेजें।' },
+  en: { ask: 'Did not find your answer?', askBody: 'Write to us. We reply by email.', error: 'We could not load the questions', errorBody: 'Send your question with the form instead.', empty: 'No questions yet', emptyBody: 'Send us yours with the form.' },
+  hi: { ask: 'आपका जवाब नहीं मिला?', askBody: 'अपना सवाल लिखें। हम ईमेल पर जवाब देंगे।', error: 'अभी सवाल लोड नहीं हो सके', errorBody: 'नीचे दिए फ़ॉर्म से अपना सवाल भेजें।', empty: 'अभी कोई सवाल नहीं है', emptyBody: 'फ़ॉर्म से अपना सवाल भेजें।' },
 });
 
 const { crumbs, ld } = trail(locale, [{ name: 'FAQ', path: '/faq' }]);
@@ -46,7 +46,7 @@ const { crumbs, ld } = trail(locale, [{ name: 'FAQ', path: '/faq' }]);
         items.length ? (
           <Faq items={items} open={0} />
         ) : (
-          <StateBlock scene={error ? 'offline' : 'empty'} level={2} title={H.error} body={H.errorBody} action={{ href: localizePath('/contact', locale), label: t('common:nav.contact') }} />
+          <StateBlock scene={error ? 'offline' : 'empty'} level={2} title={error ? H.error : H.empty} body={error ? H.errorBody : H.emptyBody} action={{ href: localizePath('/contact', locale), label: t('common:nav.contact') }} />
         )
       }
     </div>

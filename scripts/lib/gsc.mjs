@@ -54,7 +54,7 @@ export function groupByPage(rows = []) {
 
 const sum = (p, key) => p.keywords.reduce((n, k) => n + k[key], 0);
 
-/** Pages with at most `maxImpressions` impressions. */
+/** Pages in the report with at most `maxImpressions` impressions. Pages with no row at all are not in the report. */
 export const pruneCandidates = (pages, maxImpressions = 0) => pages.filter((p) => sum(p, 'impressions') <= maxImpressions).map((p) => p.page);
 
 /** Pages with at least `minClicks` clicks. */

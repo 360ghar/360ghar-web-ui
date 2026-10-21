@@ -1,16 +1,18 @@
 import type { AstroGlobal } from 'astro';
 import type { Property } from '@/lib/api/types';
 import { cachePage, respond } from '@/lib/cache';
+import { citySlug } from '@/features/localities/data';
 import { liveHomes, newestFirst } from '@/features/localities/live';
 import { projectBySlug, PROJECTS, type Project } from './catalog';
 
 const norm = (s: string | null | undefined) => (s ?? '').trim().toLowerCase();
 
-/** Homes that match a project's filter. The locality must match exactly (the API filter is a substring match). */
+/** Gurugram homes that match a project's filter. The locality must match exactly (the API filter is a substring match). */
 function matchHomes(match: Project['match'], homes: Property[]): Property[] {
   return homes
     .filter(
       (p) =>
+        citySlug(p.city ?? '') === 'gurgaon' &&
         (!match.purpose || p.purpose === match.purpose) &&
         (!match.property_type?.length || match.property_type.includes(p.property_type)) &&
         (!match.locality || norm(p.locality) === norm(match.locality) || norm(p.sub_locality) === norm(match.locality)),

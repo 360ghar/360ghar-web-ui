@@ -17,7 +17,7 @@ await Promise.all(Array.from({ length: 6 }, async () => {
   while (i < urls.length) {
     const u = urls[i++];
     let s;
-    for (let t = 0; t < 3; t++) { try { s = (await fetch(base + u, { redirect: 'manual' })).status; if (s < 500) break; } catch { s = 0; } }
+    for (let t = 0; t < 3; t++) { try { s = (await fetch(base + u, { redirect: 'manual', signal: AbortSignal.timeout(30_000) })).status; if (s < 500) break; } catch { s = 0; } }
     tally[s] = (tally[s] ?? 0) + 1;
     if (s >= 500 || s === 0) bad.push(u + ' ' + s);
   }

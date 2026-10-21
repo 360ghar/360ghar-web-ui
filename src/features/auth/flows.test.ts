@@ -20,6 +20,7 @@ describe('auth flows', () => {
   it('only allows same-site next paths', () => {
     expect(safeNext('https://evil.com', 'en')).toBe('/');
     expect(safeNext('//evil.com', 'en')).toBe('/');
+    expect(safeNext('/profile-completion?next=/x', 'en')).toBe('/account');
     expect(safeNext('/property/12?x=1', 'en')).toBe('/property/12?x=1');
     expect(safeNext('/login', 'hi')).toBe('/hi/account');
     expect(safeNext(null, 'hi')).toBe('/hi');

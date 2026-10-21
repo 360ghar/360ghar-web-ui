@@ -107,3 +107,17 @@ describe('sendFailure', () => {
     expect(sendFailure(new Error('x'))).toBe('generic');
   });
 });
+
+describe('streamChat edge cases', () => {
+  it('reads CRLF-delimited frames', async () => {
+    const body = 'event: text_chunk\r\ndata: {"text":"Hi"}\r\n\r\nevent: done\r\ndata: {"response_text":"Hi"}\r\n\r\n';
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(body, { status: 200 })));
+    const events = await collect(streamChat('/api/v1/agent/chat', { message: 'hi' }, new AbortController().signal));
+    expect(events.map((e) => e.event)).toEqual(['text_chunk', 'done']);
+  });
+
+  it('fails when the stream ends without done or error', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('event: text_chunk\ndata: {"text":"Hi"}\n\n', { status: 200 })));
+    await expect(collect(streamChat('/api/v1/agent/chat', { message: 'hi' }, new AbortController().signal))).rejects.toMatchObject({ code: 'STREAM_TRUNCATED' });
+  });
+});

@@ -10,11 +10,12 @@ const OLD_NAMES = {
   PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'VITE_SUPABASE_PUBLISHABLE_KEY',
   PUBLIC_POSTHOG_KEY: 'VITE_PUBLIC_POSTHOG_KEY',
   PUBLIC_POSTHOG_HOST: 'VITE_PUBLIC_POSTHOG_HOST',
-  PUBLIC_GOOGLE_MAPS_API_KEY: 'VITE_GOOGLE_MAPS_API_KEY',
+  PUBLIC_GOOGLE_MAPS_API_KEY: ['VITE_GOOGLE_MAPS_API_KEY', 'VITE_GOOGLE_PLACES_API_KEY'],
   API_ORIGIN: 'VITE_API_SERVER',
 };
 for (const [name, old] of Object.entries(OLD_NAMES)) {
-  if (!process.env[name] && process.env[old]) process.env[name] = process.env[old];
+  const legacy = [old].flat().map((k) => process.env[k]).find(Boolean);
+  if (!process.env[name] && legacy) process.env[name] = legacy;
 }
 // Without these keys sign-in, the account and post property fail with no error on the page.
 if (process.env.NETLIFY === 'true' && (!process.env.PUBLIC_SUPABASE_URL || !process.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY)) {

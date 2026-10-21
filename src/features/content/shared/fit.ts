@@ -10,5 +10,6 @@ export function titleFit(text: string): number | null {
   if (n <= 40) return 8.4;
   if (n <= 50) return 6.9;
   if (n <= 60) return 6.3;
-  return Math.round(((6.3 * 60) / n) * 10) / 10;
+  // Floor: a very long title stays readable (it wraps to more lines instead of shrinking further).
+  return Math.max(4.2, Math.round(((6.3 * 60) / n) * 10) / 10);
 }

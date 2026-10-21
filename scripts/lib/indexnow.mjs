@@ -37,8 +37,8 @@ export function selectUrls(urls, { host, include, limit } = {}) {
     if (include && !include.test(u.pathname)) continue;
     if (seen.has(u.href)) continue;
     seen.add(u.href);
+    if (limit !== undefined && out.length >= limit) break;
     out.push(u.href);
-    if (limit && out.length >= limit) break;
   }
   return out;
 }

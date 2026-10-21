@@ -22,7 +22,10 @@ export function parseArgs(argv = process.argv.slice(2)) {
 
 /** Output directory. Default is a temp dir, never src/data. */
 export function outDir(args) {
+  if (args.out === true) throw new Error('Option --out needs a directory.');
   const dir = path.resolve(String(args.out || process.env.DATA_OUT || path.join(os.tmpdir(), '360ghar-data-out')));
+  const rel = path.relative(path.resolve(process.cwd(), 'src', 'data'), dir);
+  if (rel === '' || (!rel.startsWith('..') && !path.isAbsolute(rel))) throw new Error('--out cannot point into src/data. Use --write to copy there.');
   fs.mkdirSync(dir, { recursive: true });
   return dir;
 }

@@ -39,7 +39,7 @@ The public website of 360Ghar (https://360ghar.com), rebuilt with Astro and Reac
 | `PUBLIC_API_BASE` | Browser | Local dev: `/dev-api` (Vite proxy). Deploy previews: empty (Netlify `/api/v1` proxy, set in `netlify.toml`). Production: leave unset (`https://api.360ghar.com`) |
 | `API_ORIGIN` | Server | `https://api.360ghar.com` (set in `netlify.toml`) |
 
-The old site's names (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_PUBLIC_POSTHOG_KEY`, `VITE_PUBLIC_POSTHOG_HOST`, `VITE_GOOGLE_MAPS_API_KEY`, `VITE_API_SERVER`) also work: `astro.config.mjs` copies them to the new names.
+The old site's names (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_PUBLIC_POSTHOG_KEY`, `VITE_PUBLIC_POSTHOG_HOST`, `VITE_GOOGLE_MAPS_API_KEY` or `VITE_GOOGLE_PLACES_API_KEY`, `VITE_API_SERVER`) also work: `astro.config.mjs` copies them to the new names.
 
 `.env` is not in git. Values are read at build time, so change them in Netlify and deploy again.
 

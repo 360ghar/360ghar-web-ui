@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore } from '@/features/auth/store';
+import { initAuth, useAuthStore } from '@/features/auth/store';
 import { describeError } from '@/lib/api/errors';
 import { haptic } from '@/lib/haptics';
 import type { Locale } from '@/lib/i18n/locale';
@@ -28,7 +28,10 @@ function Button({ propertyId, locale = 'en', initial = false, variant = 'overlay
   }, [initial, propertyId]);
 
   const onClick = async () => {
-    if (status !== 'authed') {
+    if (pending) return;
+    // A click before initAuth() settles is not a signed-out click: wait, then read the store again.
+    if (status === 'unknown') await initAuth();
+    if (useAuthStore.getState().status !== 'authed') {
       window.location.assign(loginHref(locale));
       return;
     }
@@ -37,7 +40,7 @@ function Button({ propertyId, locale = 'en', initial = false, variant = 'overlay
     try {
       await toggleFavourite(propertyId, on);
       haptic('tap');
-      toast(on ? t.saved : t.removed, 'success', on ? undefined : { label: locale === 'hi' ? 'वापस लाएँ' : 'Undo', run: () => void toggleFavourite(propertyId, true) });
+      toast(on ? t.saved : t.removed, 'success', on ? undefined : { label: locale === 'hi' ? 'वापस लाएँ' : 'Undo', run: () => void toggleFavourite(propertyId, true).catch((e) => toast(describeError(e, locale).title, 'error')) });
     } catch (error) {
       toast(describeError(error, locale).title, 'error');
     } finally {

@@ -1,8 +1,7 @@
 ---
 /**
- * /policies (SSG). Titles come from GET /pages/{name}/public at build time; the
- * static titles and summaries are the fallback. The API's updated_at is not
- * shown: production changes it on every view (see docs/backend-gaps notes).
+ * /policies (SSG). Static titles and summaries: GET /pages/{name}/public adds 1 to
+ * view_count on every call, so a build must not call it for the index.
  */
 import { getT } from '@/i18n';
 import Content from '@/layouts/Content.astro';
@@ -11,18 +10,15 @@ import { canonicalFor } from '@/lib/seo/site';
 import Icon from '@/ui/icons/Icon.astro';
 import { trail, webPage } from '@/features/content/shared/schema';
 import { POLICIES } from './data';
-import { loadPage } from './load';
 import PageArt from '@/features/content/shared/PageArt.astro';
 
 const locale = Astro.locals.locale;
 const t = getT(locale);
 const hi = locale === 'hi';
 
-const pages = await Promise.all(POLICIES.map((p) => loadPage(p.slug)));
-const items = POLICIES.map((p, i) => ({
+const items = POLICIES.map((p) => ({
   slug: p.slug,
-  // The API title is English; Hindi pages use the Hindi name of the document.
-  title: hi ? p.hi.title : (pages[i]?.data?.title ?? p.en.title),
+  title: p[locale].title,
   description: p[locale].description,
 }));
 

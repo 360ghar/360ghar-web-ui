@@ -16,10 +16,28 @@ export const MAX = 20;
 
 type Store = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
+const str = (v: unknown, fallback = '') => (typeof v === 'string' ? v : fallback);
+
+/** Keeps only records that satisfy `Design`; the old site's shape (generationMode, roomType) is migrated. */
+function normalize(raw: unknown): Design | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const d = raw as Record<string, unknown>;
+  if (typeof d.imageUrl !== 'string' || typeof d.id !== 'number') return null;
+  const s = (d.settings && typeof d.settings === 'object' ? d.settings : {}) as Record<string, unknown>;
+  const mode = str(s.mode) || (s.generationMode === 'image-to-image' ? 'image' : 'text');
+  return {
+    id: d.id,
+    imageUrl: d.imageUrl,
+    prompt: str(d.prompt),
+    settings: { mode, designType: str(s.designType, 'interior'), room: str(s.room) || str(s.roomType), style: str(s.style) },
+    createdAt: str(d.createdAt),
+  };
+}
+
 export function loadGallery(store: Store): Design[] {
   try {
     const list = JSON.parse(store.getItem(KEY) ?? '[]') as unknown;
-    return Array.isArray(list) ? (list as Design[]).filter((d) => d && typeof d.imageUrl === 'string') : [];
+    return Array.isArray(list) ? list.map(normalize).filter((d): d is Design => d !== null) : [];
   } catch {
     return [];
   }

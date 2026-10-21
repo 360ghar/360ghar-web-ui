@@ -23,5 +23,6 @@ describe('visit slots', () => {
     expect(slotOpen(today, '10:30', now)).toBe(false);
     expect(slotOpen(today, '11:00', now)).toBe(true);
     expect(slotOpen('2026-09-30', '09:00', now)).toBe(true);
+    expect(slotOpen('2026-09-28', '09:00', now)).toBe(false);
   });
 });

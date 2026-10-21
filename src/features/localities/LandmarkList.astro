@@ -32,7 +32,7 @@ const fmt = (n: number) => `${formatNum(n, locale, { maximumFractionDigits: 1 })
             </svg>
             <span class="lm-name">
               {r.name}
-              {!r.name.toLowerCase().includes((LANDMARK_TYPE[r.type]?.[0] ?? r.type).toLowerCase()) && <span class="lm-type">{LANDMARK_TYPE[r.type]?.[hi ? 1 : 0] ?? r.type}</span>}
+              {(hi || !r.name.toLowerCase().includes((LANDMARK_TYPE[r.type]?.[0] ?? r.type).toLowerCase())) && <span class="lm-type">{LANDMARK_TYPE[r.type]?.[hi ? 1 : 0] ?? r.type}</span>}
             </span>
             <span class="lm-track" aria-hidden="true">
               <span class="lm-mark" style={`--at:${Math.min(100, (d / max) * 100).toFixed(1)}%`} />

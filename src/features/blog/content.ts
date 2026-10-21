@@ -23,7 +23,7 @@ const ATTRS: Record<string, string[]> = { a: ['href', 'title'], img: ['src', 'al
 const SAFE_HREF = /^(https?:|mailto:|tel:|\/(?!\/)|#)/i;
 
 const textOf = (n: HtmlNode): string => (n.type === TEXT_NODE ? n.value : 'children' in n ? n.children.map(textOf).join('') : '');
-const isHtml = (s: string) => /<(p|div|h[1-6]|ul|ol|li|br|strong|em|a|img|table|blockquote)[\s>/]/i.test(s);
+const isHtml = (s: string) => new RegExp(`<(${[...KEEP, 'div'].join('|')})[\\s>/]`, 'i').test(s);
 
 type Prepared = { html: string; toc: { id: string; text: string }[]; words: number };
 
@@ -31,7 +31,7 @@ type Prepared = { html: string; toc: { id: string; text: string }[]; words: numb
 export function prepareContent(raw: string | null | undefined, title?: string): Prepared {
   const source = (raw ?? '').trim();
   if (!source) return { html: '', toc: [], words: 0 };
-  const doc = sanitize({ unblockElements: KEEP, dropElements: DROP })(parse(isHtml(source) ? source : renderMarkdown(source)));
+  const doc = sanitize({ unblockElements: KEEP, dropElements: DROP })(parse(isHtml(source) ? source : renderMarkdown(source, true)));
   const norm = (x: string) => x.trim().toLowerCase().replace(/\s+/g, ' ');
   const first = (doc.children as HtmlNode[]).find((n) => n.type === ELEMENT_NODE || (n.type === TEXT_NODE && n.value.trim()));
   if (title && first?.type === ELEMENT_NODE && /^h[12]$/.test(first.name) && norm(decode(textOf(first))) === norm(title)) {

@@ -111,6 +111,7 @@ export const useLocationStore = create<State & Actions>()(
 /** Loads the saved fix after mount (the first render stays the same as the server's). */
 export function useLocationMemory() {
   useEffect(() => {
-    void useLocationStore.persist.rehydrate();
+    // Once is enough: a remount must not restore an old stored fix over a newer in-memory one.
+    if (!useLocationStore.persist.hasHydrated()) void useLocationStore.persist.rehydrate();
   }, []);
 }

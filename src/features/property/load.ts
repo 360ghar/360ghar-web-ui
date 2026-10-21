@@ -12,7 +12,8 @@ export async function loadProperty(id: number): Promise<PropertyData> {
   const property = res.data;
   if (!property) return { property: null, error: res.error, similar: [], peers: [] };
   // A stand-in price says nothing about the home, so similar homes are not matched on it.
-  const price = isPlaceholderPrice(property) ? null : property.base_price;
+  // base_price is the sale price: rent and short-stay homes are priced by monthly_rent / nightly_rate, so no range for them.
+  const price = property.purpose !== 'buy' || isPlaceholderPrice(property) ? null : property.base_price;
   const [sim, peers] = await Promise.all([
     attempt(
       api.GET('/api/v1/properties', {

@@ -70,7 +70,7 @@ const updated = fmtDate(z.updated_at ?? z.created_at, locale, 'long');
         {updated && (<><dt>{hi ? 'अपडेट' : 'Updated'}</dt><dd>{updated}</dd></>)}
       </dl>
       {
-        z.source_url && (
+        z.source_url && /^https?:\/\//i.test(z.source_url) && (
           <a class="link mt-3" href={z.source_url} target="_blank" rel="noopener noreferrer">
             {t.openSource}
             <Icon name="arrow-up-right" size={16} class="arrow" />

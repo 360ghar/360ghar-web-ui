@@ -29,5 +29,5 @@ export const POLICIES = [
 
 export const policyBySlug = (slug: string) => POLICIES.find((p) => p.slug === slug);
 
-/** Slugs the backend can hold: lowercase words and hyphens. Anything else is a 404 without an API call. */
-export const isPageSlug = (slug: string) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) && slug.length <= 80;
+/** Only the five policy pages exist on the site. Any other slug is a 404 without an API call. */
+export const isPageSlug = (slug: string) => policyBySlug(slug) !== undefined;

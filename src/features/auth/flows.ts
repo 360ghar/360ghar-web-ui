@@ -28,7 +28,7 @@ export function passwordProblems(pw: string): ('length' | 'upper' | 'digit')[] {
 export function safeNext(next: string | null | undefined, locale: Locale): string {
   if (!next || !next.startsWith('/') || next.startsWith('//') || next.startsWith('/\\')) return localizePath('/', locale);
   const bare = stripLocale(next.split(/[?#]/)[0] ?? '/');
-  if (['/login', '/register', '/auth/callback', '/forgot-password', '/reset-password'].includes(bare)) return localizePath('/account', locale);
+  if (['/login', '/register', '/auth/callback', '/forgot-password', '/reset-password', '/profile-completion'].includes(bare)) return localizePath('/account', locale);
   return next;
 }
 

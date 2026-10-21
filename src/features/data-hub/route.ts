@@ -5,9 +5,9 @@ import type { Loaded } from './api';
 
 export type PageState = 'ok' | 'missing' | 'down';
 
-/** No result (bad slug) or a 404 from the API is "missing"; any other error is "down". */
+/** No result (bad slug) or a 404 from the API is "missing"; any other error, a 422 included, is "down". */
 export const stateOf = (r: Loaded<unknown> | null): PageState =>
-  !r ? 'missing' : r.error === null ? 'ok' : r.error.kind === 'not_found' || r.error.kind === 'validation' ? 'missing' : 'down';
+  !r ? 'missing' : r.error === null ? 'ok' : r.error.kind === 'not_found' ? 'missing' : 'down';
 
 export function settle(astro: Pick<AstroGlobal, 'response'>, state: PageState, tier: CacheTier) {
   respond(astro, state === 'missing' ? 'short' : tier, { notFound: state === 'missing', error: state === 'down' });

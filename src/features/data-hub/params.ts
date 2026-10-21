@@ -45,7 +45,8 @@ export function readParams<S extends Spec>(sp: URLSearchParams, spec: S): Out<S>
       const n = Number(raw);
       if (Number.isFinite(n) && n >= 0) out[key] = n;
     } else if (kind === 'date') {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(raw) && !Number.isNaN(Date.parse(raw))) out[key] = raw;
+      // Date.parse rolls 2026-02-30 over to March, so compare the round trip.
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw) && new Date(`${raw}T00:00:00Z`).toISOString().slice(0, 10) === raw) out[key] = raw;
     } else if ((kind as readonly string[]).includes(raw)) out[key] = raw;
   }
   return out as Out<S>;

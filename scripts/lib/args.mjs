@@ -12,12 +12,17 @@ export function parseArgs(argv, spec) {
     const [rawKey, inline] = arg.slice(2).split(/=(.*)/s);
     const def = spec[rawKey];
     if (!def) throw new Error(`Unknown option --${rawKey}. Use --help.`);
-    if (def.type === 'boolean') out[rawKey] = true;
-    else {
+    if (def.type === 'boolean') {
+      if (inline !== undefined && inline !== 'true' && inline !== 'false') throw new Error(`Option --${rawKey} takes true or false.`);
+      out[rawKey] = inline !== 'false';
+    } else {
+      const next = argv[i + 1];
+      if (inline === undefined && (next === undefined || next.startsWith('--'))) throw new Error(`Option --${rawKey} needs a value.`);
       const value = inline ?? argv[++i];
-      if (value === undefined) throw new Error(`Option --${rawKey} needs a value.`);
-      out[rawKey] = def.type === 'number' ? Number(value) : value;
-      if (def.type === 'number' && Number.isNaN(out[rawKey])) throw new Error(`Option --${rawKey} needs a number.`);
+      if (def.type === 'number') {
+        out[rawKey] = value.trim() === '' ? Number.NaN : Number(value);
+        if (!Number.isFinite(out[rawKey])) throw new Error(`Option --${rawKey} needs a number.`);
+      } else out[rawKey] = value;
     }
   }
   return { ...out, _: rest };

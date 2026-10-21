@@ -62,6 +62,13 @@ describe('parseArgs', () => {
     expect(() => parseArgs(['--n'], spec)).toThrow(/needs a value/);
     expect(() => parseArgs(['--n', 'x'], spec)).toThrow(/needs a number/);
   });
+  it('handles inline booleans, option-like values and blank numbers', () => {
+    expect(parseArgs(['--go=false'], spec).go).toBe(false);
+    expect(() => parseArgs(['--go=maybe'], spec)).toThrow(/true or false/);
+    expect(() => parseArgs(['--name', '--go'], spec)).toThrow(/needs a value/);
+    expect(() => parseArgs(['--n='], spec)).toThrow(/needs a number/);
+    expect(() => parseArgs(['--n=Infinity'], spec)).toThrow(/needs a number/);
+  });
   it('prints help', () => {
     expect(helpText('x', 'does x', spec)).toMatch(/--go\s+g/);
   });

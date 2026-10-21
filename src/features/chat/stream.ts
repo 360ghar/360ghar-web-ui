@@ -71,18 +71,25 @@ export async function* streamChat(path: string, body: unknown, signal: AbortSign
   if (!res.ok || !res.body) throw await toApiError(res);
   const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
   let buffer = '';
+  let finished = false;
   for (;;) {
     const { value, done } = await reader.read();
     if (done) break;
-    buffer += value;
+    // CRLF-delimited streams are valid SSE: normalize before looking for the blank line.
+    buffer = (buffer + value).replace(/\r\n/g, '\n');
     let idx: number;
     while ((idx = buffer.indexOf('\n\n')) !== -1) {
       const block = buffer.slice(0, idx);
       buffer = buffer.slice(idx + 2);
       const ev = parseBlock(block);
-      if (ev) yield ev;
+      if (ev) {
+        if (ev.event === 'done' || ev.event === 'error') finished = true;
+        yield ev;
+      }
     }
   }
+  // A clean EOF without `done` or `error` is a cut-off reply, not a finished one.
+  if (!finished) throw new ApiError({ status: 0, code: 'STREAM_TRUNCATED', message: 'The reply ended before it was finished.' });
 }
 
 /** What went wrong with a send, as a key the panel turns into text. Anything else is `generic`. */

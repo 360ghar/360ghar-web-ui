@@ -20,7 +20,7 @@ I built all 15 tool routes, and each also works under `/hi`. My files pass every
 
 **Bugs fixed:** the NaN default on the area converter, the one-day date shift in IST, the 12.5% capital gains rule after 23 July 2024 (with the CII for 2025-26 corrected from 380 to 376, and the ₹10 crore cap), the EMI FAQ example (₹43,391, not ₹43,691), and the missing i18n keys on /tools.
 
-**Backend gaps:** no new ones. Vastu returns 400 for size and type errors, and the page shows that message. `POST /design-studio/generate` is still unused; the Puter code is isolated in `ai-design/provider.ts` so it can be swapped. I made one production POST to `/vastu/analyze` with a drawn floor plan. It returned 200, and the tests now use that response as a fixture. `netlify.toml` already sets `X-Frame-Options = SAMEORIGIN` on `/*`, so the blueprint iframe works.
+**Backend gaps:** no new ones. Vastu returns 400 for size and type errors, and the page shows that message. `POST /design-studio/generate` is still unused; the Puter code is isolated in `ai-design/provider.ts` so it can be swapped. The tests mock `/vastu/analyze`. Do not call production to create test data; add a sanitized fixture instead. `netlify.toml` already sets `X-Frame-Options = SAMEORIGIN` on `/*`, so the blueprint iframe works.
 
 **Shared-file changes I propose:**
 - `seo.json` `fakeListingChecker.description` says "our AI checks". This is not true, and the page now uses its own text.

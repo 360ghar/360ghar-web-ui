@@ -91,6 +91,8 @@ describe('URL filters', () => {
   it('parses numbers and dates', () => {
     const sp = new URLSearchParams('min_price=100000&max_price=-1&date_from=2026-02-30x&date_to=2026-06-01&type=court');
     expect(readParams(sp, AUCTION)).toEqual({ min_price: 100000, date_to: '2026-06-01', type: 'court' });
+    // A day that does not exist is dropped, not rolled into the next month.
+    expect(readParams(new URLSearchParams('date_from=2026-02-30'), AUCTION)).toEqual({});
   });
 
   it('writes a stable query string in spec order', () => {

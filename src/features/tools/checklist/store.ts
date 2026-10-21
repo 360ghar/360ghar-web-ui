@@ -30,9 +30,20 @@ export function write<T>(key: string, value: T) {
   listeners.forEach((l) => l());
 }
 
+// Another tab wrote the key: drop the cached copy so the next read sees it.
+function onStorage(e: StorageEvent) {
+  if (e.key === null) cache.clear();
+  else cache.delete(e.key);
+  listeners.forEach((l) => l());
+}
+
 const subscribe = (l: () => void) => {
+  if (!listeners.size) window.addEventListener('storage', onStorage);
   listeners.add(l);
-  return () => listeners.delete(l);
+  return () => {
+    listeners.delete(l);
+    if (!listeners.size) window.removeEventListener('storage', onStorage);
+  };
 };
 
 export function useStored<T extends object>(key: string): T {

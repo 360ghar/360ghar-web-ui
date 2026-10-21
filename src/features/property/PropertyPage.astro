@@ -84,7 +84,7 @@ const rooms = PHOTO_GROUPS.filter((g) => g !== 'others')
   .filter((r) => r.count > 0);
 const mapQ = p.latitude && p.longitude ? `${p.latitude},${p.longitude}` : encodeURIComponent(address);
 const hubs = nearestHubs(p.latitude, p.longitude, 5);
-const landmarks = localityLandmarks(p.locality);
+const landmarks = localityLandmarks(p.locality, p.city);
 const localityHref = localityPath(p.locality, p.city);
 const contact = listingContact(p);
 const wa = waLink(contact.phone, p.title, canonicalFor(`/property/${p.id}`, locale), locale);

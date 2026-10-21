@@ -18,3 +18,14 @@ describe('renderMarkdown', () => {
     expect(html).not.toContain('>bad</a>');
   });
 });
+
+describe('renderMarkdown links', () => {
+  it('rejects protocol-relative and slash-backslash links', () => {
+    expect(renderMarkdown('[x](//evil.com)')).not.toContain('<a');
+    expect(renderMarkdown('[x](/\\evil.com)')).not.toContain('<a');
+  });
+  it('emits real headings only when asked', () => {
+    expect(renderMarkdown('## Title', true)).toBe('<h2>Title</h2>');
+    expect(renderMarkdown('## Title')).toContain('chat-h');
+  });
+});

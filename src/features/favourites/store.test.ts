@@ -3,9 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const json = (body: unknown) => new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } });
 const page = (ids: number[], next: string | null) => ({ items: ids.map((id) => ({ id })), next_cursor: next, has_more: next !== null, limit: 2, total: null });
 
+type AuthListener = (s: { status: string; session: { user: { id: string } } | null }, prev: { session: { user: { id: string } } | null }) => void;
+let listener: AuthListener | undefined;
+
 async function load(status: 'authed' | 'anon' = 'authed') {
   vi.resetModules();
-  vi.doMock('@/features/auth/store', () => ({ initAuth: async () => undefined, useAuthStore: { getState: () => ({ status }) } }));
+  vi.doMock('@/features/auth/store', () => ({ initAuth: async () => undefined, useAuthStore: { getState: () => ({ status }), subscribe: (fn: AuthListener) => ((listener = fn), () => undefined) } }));
   return import('./store');
 }
 
@@ -49,5 +52,19 @@ describe('toggleFavourite', () => {
     const { toggleFavourite, useFavourites } = await load();
     await expect(toggleFavourite(9, true)).rejects.toBeTruthy();
     expect(useFavourites.getState().liked.has(9)).toBe(false);
+  });
+});
+
+describe('account change', () => {
+  it('drops the hearts of the last account when another one signs in or the session ends', async () => {
+    const { useFavourites } = await load('anon');
+    useFavourites.getState().set(7, true);
+    const a = { user: { id: 'a' } };
+    listener!({ status: 'anon', session: null }, { session: a });
+    expect(useFavourites.getState().liked.size).toBe(0);
+    // The first sign-in on a page keeps the hearts the server drew.
+    useFavourites.getState().set(8, true);
+    listener!({ status: 'anon', session: a }, { session: null });
+    expect(useFavourites.getState().liked.has(8)).toBe(true);
   });
 });

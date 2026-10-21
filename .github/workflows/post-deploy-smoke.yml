@@ -33,6 +33,7 @@ jobs:
       - name: Smoke checks (up to 10 tries, 30 s apart)
         run: |
           base="${BASE%/}"
+          export base
 
           checks() (
             set -euo pipefail
@@ -45,7 +46,7 @@ jobs:
 
             echo "-- no redirect loop (at most 5 redirects)"
             for path in / /properties /hi /gurugram/buy/apartments /property-sidebar; do
-              curl -sSIL --max-redirs 5 --max-time 30 -o /dev/null -w "$path -> %{http_code} after %{num_redirects} redirect(s), final %{url_effective}\n" "$base$path"
+              curl -fsSIL --max-redirs 5 --max-time 30 -o /dev/null -w "$path -> %{http_code} after %{num_redirects} redirect(s), final %{url_effective}\n" "$base$path"
             done
 
             echo "-- old duplicate URLs answer 301"
@@ -83,7 +84,8 @@ jobs:
 
           for try in $(seq 1 10); do
             echo "=== try $try of 10: $base"
-            if checks; then echo "All checks passed on try $try."; exit 0; fi
+            # A fresh bash keeps errexit on inside checks (it is off in a function used as an if condition).
+            if bash -c "$(declare -f checks); checks"; then echo "All checks passed on try $try."; exit 0; fi
             if [ "$try" -lt 10 ]; then echo "Failed. Waiting 30 s before the next try."; sleep 30; fi
           done
           echo "Smoke checks failed on all 10 tries."

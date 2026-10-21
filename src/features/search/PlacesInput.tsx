@@ -27,11 +27,20 @@ export function PlacesInput({ name, label, placeholder, defaultValue = '', onPla
   const [failed, setFailed] = useState(false);
   const timer = useRef<number>(0);
   const seq = useRef(0);
+  const pickSeq = useRef(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
+  // The parent reset its filters: show the new default, but never while the user is typing.
+  useEffect(() => {
+    if (document.activeElement !== inputRef.current) setValue(defaultValue);
+  }, [defaultValue]);
+
   const search = (text: string) => {
     window.clearTimeout(timer.current);
+    seq.current++; // Drop any suggestion request for the previous text.
+    setHits([]);
     if (failed || text.trim().length < 2) {
       setHits([]);
       setOpen(false);
@@ -54,11 +63,16 @@ export function PlacesInput({ name, label, placeholder, defaultValue = '', onPla
   const pick = async (hit: PlaceHit) => {
     setValue(hit.main);
     setOpen(false);
+    const n = ++pickSeq.current;
+    let place: Place | null = null;
     try {
-      onPlace(await resolvePlace(hit));
+      place = await resolvePlace(hit);
     } catch {
-      onPlace(null);
+      // Fall through to the plain-text search below.
     }
+    if (n !== pickSeq.current) return; // The user edited meanwhile: the old pick is stale.
+    onPlace(place);
+    if (!place) onText?.(hit.main);
   };
 
   return (
@@ -69,6 +83,7 @@ export function PlacesInput({ name, label, placeholder, defaultValue = '', onPla
       <Icon name="pin" size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-600" />
       <input
         id={id}
+        ref={inputRef}
         name={name}
         className={`input pl-10 ${inputClassName}`}
         type="search"
@@ -83,6 +98,7 @@ export function PlacesInput({ name, label, placeholder, defaultValue = '', onPla
         aria-activedescendant={open && active >= 0 ? `${id}-o${active}` : undefined}
         value={value}
         onChange={(e) => {
+          pickSeq.current++;
           setValue(e.target.value);
           onText?.(e.target.value);
           onPlace(null);

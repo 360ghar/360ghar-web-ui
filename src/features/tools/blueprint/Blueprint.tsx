@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/lib/i18n/locale';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { useIsClient } from '@/ui/react/useClient';
@@ -13,14 +13,24 @@ type Props = { locale: Locale; title: string; loadingText: string };
 
 /**
  * The vendored Blueprint3D app in a same-origin iframe. The iframe is added
- * after hydration, so its load event is never missed. If it has not loaded
- * after 15 s, an error with "Try again" replaces it.
+ * after hydration. The app posts a ready message when it has started. If that has not
+ * come after 15 s, an error with "Try again" replaces it.
  */
 function Planner({ locale, title, loadingText }: Props) {
   const t = BP_UI[locale];
   const isClient = useIsClient();
   const [attempt, setAttempt] = useState(0);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const frame = useRef<HTMLIFrameElement>(null);
+
+  // Ready means the app finished starting (it says so), not only that the page loaded.
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin === window.location.origin && e.source === frame.current?.contentWindow && e.data?.type === 'blueprint3d-ready') setStatus('ready');
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
 
   useEffect(() => {
     if (!isClient || status !== 'loading') return;
@@ -55,11 +65,11 @@ function Planner({ locale, title, loadingText }: Props) {
         {isClient ? (
           <iframe
             key={attempt}
+            ref={frame}
             className="bp-iframe"
             src={attempt ? `${SRC}?retry=${attempt}` : SRC}
             title={title}
             allow="fullscreen; clipboard-read; clipboard-write"
-            onLoad={() => setStatus('ready')}
           />
         ) : null}
         {status === 'loading' ? (

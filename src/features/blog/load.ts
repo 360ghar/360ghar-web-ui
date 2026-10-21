@@ -14,7 +14,7 @@ export type BlogQuery = { q?: string; category?: string; tag?: string };
 
 function parseBlogQuery(sp: URLSearchParams): BlogQuery & { cursor?: string } {
   const get = (k: string) => sp.get(k)?.trim().slice(0, 100) || undefined;
-  return { q: get('q'), category: get('category'), tag: get('tag'), cursor: get('cursor') };
+  return { q: get('q'), category: get('category'), tag: get('tag'), cursor: sp.get('cursor')?.trim() || undefined };
 }
 
 /** The backend takes lists: `categories`, `tags` (slugs or names). */

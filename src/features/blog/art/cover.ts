@@ -36,7 +36,7 @@ const CATEGORY: [RegExp, SceneName[]][] = [
   [/neighbou?rhood|lifestyle|living|locality/, ['mappin', 'gate']],
 ];
 
-type CoverPost = Pick<BlogPost, 'slug' | 'title'> & Partial<Pick<BlogPost, 'categories' | 'tags'>>;
+type CoverPost = Pick<BlogPost, 'slug' | 'title'> & Partial<Pick<BlogPost, 'categories' | 'tags' | 'cover_image_url'>>;
 
 /** Every scene that fits the post, best first: title words, then tags, then the category. */
 function coverCandidates(post: CoverPost): SceneName[] {
@@ -61,7 +61,8 @@ export function coverScenes(posts: CoverPost[]): SceneName[] {
   const out: SceneName[] = [];
   for (const p of posts) {
     const c = coverCandidates(p);
-    const recent = out.slice(-3);
+    // Posts with a real photo draw no scene, so they do not count as a neighbour.
+    const recent = out.filter((_, i) => !hasRealCover(posts[i]!.cover_image_url)).slice(-3);
     out.push(c.find((s) => !recent.includes(s)) ?? c[0]!);
   }
   return out;

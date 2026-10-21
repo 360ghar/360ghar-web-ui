@@ -10,13 +10,14 @@ function inline(s: string): string {
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>')
-    .replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/)[^\s)]*)\)/g, (_, text: string, href: string) => {
+    .replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/(?![/\\]))[^\s)]*)\)/g, (_, text: string, href: string) => {
       const external = href.startsWith('http') && !href.startsWith('https://360ghar.com');
       return `<a href="${href}"${external ? ' rel="noopener noreferrer" target="_blank"' : ''}>${text}</a>`;
     });
 }
 
-export function renderMarkdown(md: string): string {
+/** `headings`: emit real h1 to h4 elements (blog posts); chat replies keep a bold line. */
+export function renderMarkdown(md: string, headings = false): string {
   const lines = esc(md.replace(/\r\n/g, '\n')).split('\n');
   const out: string[] = [];
   let list: 'ul' | 'ol' | null = null;
@@ -40,7 +41,7 @@ export function renderMarkdown(md: string): string {
     } else if (h) {
       flushPara();
       closeList();
-      out.push(`<p class="chat-h"><strong>${inline(h[2]!)}</strong></p>`);
+      out.push(headings ? `<h${h[1]!.length}>${inline(h[2]!)}</h${h[1]!.length}>` : `<p class="chat-h"><strong>${inline(h[2]!)}</strong></p>`);
     } else if (ul || ol) {
       flushPara();
       const kind = ul ? 'ul' : 'ol';

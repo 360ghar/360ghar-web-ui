@@ -19,10 +19,11 @@ export function IncomeSplit({ income, expenses, emis, foir, maxEmi, locale }: Pr
   const now = Math.min(emis, income - spent);
   const free = Math.max(income - spent - now - maxEmi, 0);
   const parts = [
-    { key: 'exp', label: t.partExpenses, v: spent },
-    { key: 'emis', label: t.partEmis, v: now },
-    { key: 'new', label: t.partNew, v: maxEmi },
-    { key: 'free', label: t.partFree, v: free },
+    // `v` sizes the segment (capped to the income); `shown` is what the person entered.
+    { key: 'exp', label: t.partExpenses, v: spent, shown: expenses },
+    { key: 'emis', label: t.partEmis, v: now, shown: emis },
+    { key: 'new', label: t.partNew, v: maxEmi, shown: maxEmi },
+    { key: 'free', label: t.partFree, v: free, shown: free },
   ];
   const pct = (v: number) => (v / income) * 100;
   const x0 = pct(spent);
@@ -41,7 +42,7 @@ export function IncomeSplit({ income, expenses, emis, foir, maxEmi, locale }: Pr
         <div className="loan-cap" style={{ '--x0': `${x0}%`, '--x1': `${x1}%` } as CSSProperties} aria-hidden="true">
           <span className={x0 + (x1 - x0) / 2 > 70 ? 'is-end' : x0 + (x1 - x0) / 2 < 30 ? 'is-start' : undefined}>{t.cap(inr(cap, locale))}</span>
         </div>
-        <svg viewBox="0 0 1000 12" preserveAspectRatio="none" role="img" aria-label={parts.map((p) => `${p.label} ${inr(p.v, locale)}`).join(', ')}>
+        <svg viewBox="0 0 1000 12" preserveAspectRatio="none" role="img" aria-label={parts.map((p) => `${p.label} ${inr(p.shown, locale)}`).join(', ')}>
           {parts.map((p) => {
             const w = (p.v / income) * 1000;
             const el = w > 0 ? <rect key={p.key} className={`is-${p.key}`} x={x} y={0} width={w} height={12} /> : null;
@@ -52,11 +53,11 @@ export function IncomeSplit({ income, expenses, emis, foir, maxEmi, locale }: Pr
         <figcaption>
           <ul className="tool-legend loan-legend">
             {parts
-              .filter((p) => p.v > 0 || p.key === 'new')
+              .filter((p) => p.shown > 0 || p.key === 'new')
               .map((p) => (
                 <li key={p.key}>
                   <i className={`is-${p.key}`} aria-hidden="true" />
-                  {p.label} <b>{inr(p.v, locale)}</b>
+                  {p.label} <b>{inr(p.shown, locale)}</b>
                 </li>
               ))}
           </ul>

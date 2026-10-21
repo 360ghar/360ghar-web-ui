@@ -252,18 +252,19 @@ function Results(props: SearchResultsProps) {
             defaultValue={filters.place ?? filters.q ?? ''}
             className="results-where"
             onPlace={(p) => {
+              if (p) window.clearTimeout(textTimer.current);
               if (p) setFilters({ ...filters, q: undefined, lat: p.lat, lng: p.lng, radius: filters.radius ?? 10, place: p.name, sort_by: 'distance' });
             }}
             onText={(text) => {
               window.clearTimeout(textTimer.current);
               textTimer.current = window.setTimeout(() => {
+                // New text replaces the picked place: the old area must not keep constraining results.
                 const next = { ...filters, q: text.trim() || undefined };
-                if (!text.trim()) {
-                  delete next.lat;
-                  delete next.lng;
-                  delete next.radius;
-                  delete next.place;
-                }
+                delete next.lat;
+                delete next.lng;
+                delete next.radius;
+                delete next.place;
+                if (next.sort_by === 'distance') delete next.sort_by;
                 setFilters(next);
               }, 450);
             }}

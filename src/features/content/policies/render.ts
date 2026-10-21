@@ -58,13 +58,13 @@ function renderMarkdownPage(md: string, title: string): Rendered {
 function renderHtmlPage(html: string, title: string): Rendered {
   const slug = slugger();
   const toc: TocItem[] = [];
-  let dropped = false;
+  let first = true;
   const clean = sanitize(html).replace(/<(h[1-6])((?:\s[^>]*)?)>([\s\S]*?)<\/\1>/g, (m, tag: string, attrs: string, inner: string) => {
     const text = stripTags(inner);
-    if (!dropped && !toc.length && same(text, title)) {
-      dropped = true;
-      return '';
-    }
+    // Only the very first heading can be the page title.
+    const isFirst = first;
+    first = false;
+    if (isFirst && same(text, title)) return '';
     const existing = attrs.match(/\sid="([^"]*)"/)?.[1];
     const id = existing ?? slug(text);
     if (tag === 'h2') toc.push({ id, text });

@@ -20,5 +20,9 @@ export function slotLabel(slot: string, locale: Locale = 'en'): string {
 
 export const isoDay = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
-/** A slot is open when the day is after today, or the slot is at least 30 minutes away. */
-export const slotOpen = (day: string, slot: string, now: Date = new Date()) => day !== isoDay(now) || new Date(`${day}T${slot}`).getTime() > now.getTime() + 30 * 60_000;
+/** A slot is open when the day is after today, or it is today and the slot is at least 30 minutes away. Past days are closed. */
+export const slotOpen = (day: string, slot: string, now: Date = new Date()) => {
+  const today = isoDay(now);
+  if (day !== today) return day > today;
+  return new Date(`${day}T${slot}`).getTime() > now.getTime() + 30 * 60_000;
+};
