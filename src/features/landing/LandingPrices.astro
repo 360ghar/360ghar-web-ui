@@ -1,0 +1,326 @@
+---
+/**
+ * "What these homes cost": a strip chart on a price scale. One row per
+ * locality (the five biggest, then the rest), one dot per home listed today.
+ * Behind the rows, the usual market bands from landingTypeContext.json, cut
+ * from paper and marked as a guide. Static HTML and CSS: no JavaScript.
+ */
+import type { Locale } from '@/lib/i18n/locale';
+import { localizePath } from '@/lib/i18n/locale';
+import { compactPrice } from '@/lib/format';
+import { cutPolygon, rng } from '@/lib/paper/cut';
+import SectionOpener from '@/ui/SectionOpener.astro';
+import { parseBand, type landingStats } from './model';
+
+type Band = { label: string; range: string; localities: string };
+type Props = {
+  stats: ReturnType<typeof landingStats>;
+  bands: Band[];
+  /** Page path; locality rows link to it with ?locality=. */
+  path: string;
+  heading: string;
+  rent: boolean;
+  locale: Locale;
+};
+
+const { stats, bands, path, heading, rent, locale } = Astro.props;
+const hi = locale === 'hi';
+const per = rent ? (hi ? '/माह' : '/mo') : '';
+const money = (v: number) => `${compactPrice(v, locale)}${per}`;
+
+const TOP = 5;
+// Rows count the homes that are on the chart (a stand-in price is left out, see the note).
+const priced = stats.localities.filter((l) => l.prices.length > 0).sort((a, b) => b.prices.length - a.prices.length || a.name.localeCompare(b.name));
+const rows = priced.slice(0, TOP).map((l) => ({ name: l.name, count: l.prices.length, prices: l.prices, href: `${localizePath(path, locale)}?locality=${encodeURIComponent(l.name)}` }));
+const rest = priced.slice(TOP);
+if (rest.length) rows.push({ name: hi ? `बाकी ${rest.length} इलाके` : `${rest.length} other ${rest.length === 1 ? 'area' : 'areas'}`, count: rest.reduce((a, l) => a + l.prices.length, 0), prices: rest.flatMap((l) => l.prices), href: '' });
+
+const BAND_HI: Record<string, string> = { Budget: 'बजट', Mid: 'मध्यम', Premium: 'प्रीमियम', 'Ultra Luxury': 'अल्ट्रा लग्ज़री' };
+const parsed = bands.map((b) => ({ ...b, label: hi ? (BAND_HI[b.label] ?? b.label) : b.label, span: parseBand(b.range) })).filter((b): b is Band & { span: [number, number | null] } => Boolean(b.span));
+const all = rows.flatMap((r) => r.prices).filter((v) => v > 0);
+const ends = parsed.flatMap((b) => [b.span[0], b.span[1] ?? b.span[0] * 1.6]);
+// Log scale: prices from ₹50 L to ₹10 Cr stay readable on one line.
+const lo = Math.min(...all, ...ends) * 0.8;
+const hiV = Math.max(...all, ...ends) * 1.25;
+const x = (v: number) => Math.round(((Math.log(v) - Math.log(lo)) / (Math.log(hiV) - Math.log(lo))) * 1000) / 10;
+// Round prices in a 1, 1.5, 2, 3, 5 series; every other one when more than six fit.
+const TICKS = [1e4, 1e5, 1e6, 1e7, 1e8].flatMap((d) => [1, 1.5, 2, 3, 5].map((k) => k * d));
+const inRange = TICKS.filter((v) => x(v) >= 5 && x(v) <= 95);
+const ticks = inRange.length > 6 ? inRange.filter((_, i) => i % 2 === 0) : inRange;
+// Light to dark with price; mixed with white so the dots stay the loudest mark.
+const tones = ['color-mix(in srgb, var(--color-kesar-100) 55%, var(--color-paper))', 'var(--color-kesar-100)', 'color-mix(in srgb, var(--color-kesar-200) 75%, var(--color-paper))'];
+
+// Dots sit at seeded heights, so the chart looks the same on every render.
+const dotsOf = (name: string, prices: number[]) => {
+  const r = rng(`lp-${name}`);
+  return prices.filter((v) => v > 0).map((v) => ({ left: x(v), top: 22 + r() * 56 }));
+};
+---
+
+<section class="lp" aria-labelledby="lp-h">
+  <SectionOpener
+    id="lp-h"
+    title={heading}
+    lead={
+      hi
+        ? 'हर बिंदु आज 360Ghar पर लिस्ट एक घर है। पीछे की पट्टियाँ बाज़ार की आम कीमतें हैं (अंदाज़ा, लाइव डेटा नहीं)।'
+        : 'Each dot is one home listed on 360Ghar today. The bands behind are the usual market prices (a guide, not live data).'
+    }
+  />
+
+  <div class="lp-chart">
+    <div class="lp-plot">
+      {
+        parsed.map((b, i) => {
+          const a = x(b.span[0]);
+          const z = b.span[1] ? x(b.span[1]) : 100;
+          return (
+            <div class="lp-band" aria-hidden="true" style={`--a:${a};--w:${z - a};background:${tones[i % tones.length]};clip-path:${cutPolygon(`lp-band-${b.label}`, { amp: 1.5, across: 3, down: 7 })}`}>
+              <span class="lp-band-name">{b.label}</span>
+            </div>
+          );
+        })
+      }
+      {
+        rows.map((r) => (
+          <div class="lp-row">
+            <p class="lp-label">
+              {r.href ? <a href={r.href}>{r.name}</a> : <span>{r.name}</span>}
+              <span class="lp-n tabular">{r.count}</span>
+            </p>
+            <div class="lp-strip" aria-hidden="true">
+              {dotsOf(r.name, r.prices).map((d) => (
+                <span class="lp-dot" style={`left:${d.left}%;top:${d.top}%`} />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+      <div class="lp-axis" aria-hidden="true">
+        {
+          ticks.map((v) => (
+            <span class="lp-tick tabular" style={`--a:${x(v)}`}>
+              {money(v)}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  {
+    stats.unpriced > 0 && (
+      <p class="lp-note">
+        {hi
+          ? `${stats.unpriced} घर चार्ट में नहीं हैं: उनकी कीमत ₹10 करोड़ लिखी है, जो असली कीमत नहीं लगती।`
+          : `${stats.unpriced} ${stats.unpriced === 1 ? 'home is' : 'homes are'} left out: listed at ₹10 Cr, which looks like a stand-in price.`}
+      </p>
+    )
+  }
+
+  <p id="lp-sum" class="visually-hidden">
+    {
+      rows
+        .filter((r) => r.prices.some((v) => v > 0))
+        .map((r) => {
+          const ps = r.prices.filter((v) => v > 0);
+          return hi ? `${r.name}: ${r.count} घर, ${money(Math.min(...ps))} से ${money(Math.max(...ps))}` : `${r.name}: ${r.count} homes, ${money(Math.min(...ps))} to ${money(Math.max(...ps))}`;
+        })
+        .join('. ')
+    }
+  </p>
+
+  {
+    parsed.length > 0 && (
+      <dl class="lp-legend">
+        {parsed.map((b, i) => (
+          <div>
+            <dt>
+              <span class="lp-swatch" style={`background:${tones[i % tones.length]}`} aria-hidden="true" />
+              {b.label} <span class="tabular">{b.span[1] ? `${money(b.span[0])} – ${money(b.span[1])}` : `${money(b.span[0])}+`}</span>
+            </dt>
+            <dd>{b.localities}</dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+</section>
+
+<style>
+  .lp {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .lp-chart {
+    --lab: 0rem;
+    --gap: 0rem;
+    padding-top: 1.75rem;
+  }
+
+  @media (min-width: 40rem) {
+    .lp-chart {
+      --lab: 10rem;
+      --gap: 1rem;
+    }
+  }
+
+  .lp-plot {
+    position: relative;
+    display: grid;
+    padding-bottom: 2rem;
+  }
+
+  /* A band column spans every row; its x is a share of the strip width, after the label column. */
+  .lp-band {
+    position: absolute;
+    top: -1.75rem;
+    bottom: 2rem;
+    left: calc(var(--lab) + var(--gap) + (100% - var(--lab) - var(--gap)) * var(--a) / 100);
+    width: calc((100% - var(--lab) - var(--gap)) * var(--w) / 100);
+  }
+
+  .lp-band-name {
+    position: absolute;
+    top: 0.375rem;
+    left: 0.5rem;
+    right: 0.25rem;
+    overflow: hidden;
+    color: var(--color-kesar-900);
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .lp-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+  }
+
+  @media (min-width: 40rem) {
+    .lp-row {
+      grid-template-columns: var(--lab) minmax(0, 1fr);
+      column-gap: var(--gap);
+    }
+  }
+
+  .lp-row + .lp-row {
+    border-top: 1px solid rgb(138 51 0 / 0.14);
+  }
+
+  .lp-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding-top: 0.25rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-ink-950);
+  }
+
+  @media (max-width: 39.99rem) {
+    /* Phones: the label is a white line above its strip, so the bands show under the dots only. */
+    .lp-label {
+      position: relative;
+      z-index: 1;
+      justify-content: flex-start;
+      min-height: 44px;
+      background: var(--color-paper);
+    }
+  }
+
+  .lp-label a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-ink-950);
+    text-decoration: underline;
+    text-decoration-color: var(--color-kesar-300);
+    text-underline-offset: 3px;
+  }
+
+  .lp-label a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .lp-n {
+    color: var(--color-ink-600);
+    font-weight: 700;
+  }
+
+  .lp-strip {
+    position: relative;
+    height: 2.75rem;
+  }
+
+  /* One home: a punched dot of ink with a white rim, so neighbours stay apart. */
+  .lp-dot {
+    position: absolute;
+    width: 0.625rem;
+    height: 0.625rem;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--color-ink-950);
+    box-shadow: 0 0 0 1.5px var(--color-paper);
+  }
+
+  .lp-axis {
+    position: absolute;
+    left: calc(var(--lab) + var(--gap));
+    right: 0;
+    bottom: 0;
+    height: 1.5rem;
+  }
+
+  .lp-tick {
+    position: absolute;
+    left: calc(var(--a) * 1%);
+    translate: -50% 0;
+    color: var(--color-ink-600);
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .lp-note {
+    margin-top: -0.25rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .lp-legend {
+    display: grid;
+    gap: 0.75rem 2rem;
+  }
+
+  @media (min-width: 48rem) {
+    .lp-legend {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .lp-legend dt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 700;
+  }
+
+  .lp-legend dd {
+    color: var(--color-ink-800);
+  }
+
+  .lp-swatch {
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px rgb(138 51 0 / 0.25);
+  }
+</style>

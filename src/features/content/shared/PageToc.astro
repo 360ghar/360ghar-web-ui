@@ -1,0 +1,157 @@
+---
+/**
+ * Contents list for a long guide or policy, wrapped around the body (default slot).
+ * Phones: a closed <details> above the text. From 64rem: a sticky list in a
+ * left column beside the text. Fewer than 2 items: the body only.
+ *
+ *   <PageToc items={toc} title="On this page">...body with h2 ids...</PageToc>
+ */
+import Icon from '@/ui/icons/Icon.astro';
+
+type Props = { items: { id: string; text: string; lang?: string }[]; title: string };
+const { items, title } = Astro.props;
+---
+
+<div class="toc-layout">
+{items.length > 1 && (
+<div class="page-toc">
+  <details class="page-toc-small">
+    <summary>{title}<Icon name="chevron-down" size={20} class="page-toc-chev" /></summary>
+    <ol>{items.map((h) => <li><a href={`#${h.id}`} lang={h.lang}>{h.text}</a></li>)}</ol>
+  </details>
+  <nav class="page-toc-wide" aria-label={title}>
+    <p class="page-toc-title">{title}</p>
+    <ol>{items.map((h) => <li><a href={`#${h.id}`} lang={h.lang}>{h.text}</a></li>)}</ol>
+  </nav>
+</div>
+)}
+<div class="toc-body"><slot /></div>
+</div>
+
+<style>
+  .toc-layout {
+    display: grid;
+  }
+
+  .toc-body {
+    min-width: 0;
+  }
+
+  .toc-body :global(h2[id]) {
+    scroll-margin-top: 88px;
+  }
+
+  @media (min-width: 64rem) {
+    .toc-layout {
+      grid-template-columns: 14rem minmax(0, 48rem);
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .toc-body:only-child {
+      grid-column: 1 / -1;
+      max-width: 48rem;
+    }
+  }
+
+  .page-toc {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-toc-small {
+    padding: 0 1rem 0.5rem;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+  }
+
+  .page-toc-wide {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .page-toc {
+      position: sticky;
+      top: 88px;
+      max-height: calc(100dvh - 104px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      margin-bottom: 0;
+    }
+
+    .page-toc-small {
+      display: none;
+    }
+
+    .page-toc-wide {
+      display: block;
+    }
+  }
+
+  .page-toc summary,
+  .page-toc-title {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    margin: 0;
+    font-weight: 800;
+    color: var(--color-ink-950);
+  }
+
+  .page-toc summary {
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .page-toc summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .page-toc :global(.page-toc-chev) {
+    flex: none;
+    color: var(--color-kesar-700);
+    transition: rotate 160ms var(--ease-paper);
+  }
+
+  .page-toc-small[open] :global(.page-toc-chev) {
+    rotate: 180deg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-toc :global(.page-toc-chev) {
+      transition: none;
+    }
+  }
+
+  .page-toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .page-toc li {
+    margin: 0;
+    max-width: none;
+  }
+
+  .page-toc li + li {
+    margin-top: 0;
+  }
+
+  .page-toc a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.25rem 0;
+    color: var(--color-ink-800);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .page-toc a:hover {
+    color: var(--color-kesar-700);
+  }
+</style>

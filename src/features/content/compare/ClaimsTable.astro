@@ -1,0 +1,35 @@
+---
+/** Claims vs what users report, as a real two-column table. */
+import TableScroll from '@/features/content/shared/TableScroll.astro';
+
+type Props = { claims: { claim: string; reality: string }[]; claimLabel: string; realityLabel: string };
+const { claims, claimLabel, realityLabel } = Astro.props;
+---
+
+<TableScroll label={`${claimLabel}, ${realityLabel}`}>
+  <table class="claims">
+    <thead>
+      <tr>
+        <th scope="col">{claimLabel}</th>
+        <th scope="col">{realityLabel}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        claims.map((c) => (
+          <tr>
+            <th scope="row">{c.claim}</th>
+            <td>{c.reality}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</TableScroll>
+
+<style>
+  .claims th[scope='row'] {
+    width: 40%;
+    background: transparent;
+  }
+</style>

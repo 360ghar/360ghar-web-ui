@@ -1,0 +1,342 @@
+---
+/**
+ * /vs/:competitor (SSG, 10 slugs, one template). Data from ./competitors
+ * (English); headings from i18n `compare:*`. Breadcrumb: Home > Compare (/vs) > page.
+ */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { faqPage } from '@/lib/seo/site';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import TableScroll from '@/features/content/shared/TableScroll.astro';
+import { trail, webPage } from '@/features/content/shared/schema';
+import ClaimsTable from './ClaimsTable.astro';
+import type { Competitor } from './competitors';
+import { nextCompetitors } from './related';
+import { truthBySlug } from './truth';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+type Props = { locale: Locale; c: Competitor };
+const { locale, c } = Astro.props;
+const t = getT(locale);
+const k = (key: string) => t(`compare:${key}`);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const path = `/vs/${c.slug}`;
+const en = hi ? 'en' : undefined;
+
+const H = byLocale(locale, {
+  en: {
+    lead: `${c.name} (${c.tagline}) compared with 360Ghar: features, claims and what users report.`,
+    claims: `What ${c.name} claims, and what users report`,
+    reported: 'What users report',
+    strong: `Where ${c.name} does well`,
+    faq: `${k('faq.titlePrefix')} ${c.name}`,
+    yes: 'Yes',
+    no: 'No',
+    website: 'Website',
+    all: 'See all comparisons',
+  },
+  hi: {
+    lead: `${c.name} (${c.tagline}) और 360Ghar की तुलना: फीचर, दावे और उपयोगकर्ता क्या बताते हैं। तुलना की जानकारी अंग्रेज़ी में है।`,
+    claims: `${c.name} के दावे और उपयोगकर्ताओं के अनुभव`,
+    reported: 'उपयोगकर्ता क्या बताते हैं',
+    strong: `${c.name} कहाँ अच्छा है`,
+    faq: `${c.name} ${k('faq.titlePrefix')}`,
+    yes: 'हाँ',
+    no: 'नहीं',
+    website: 'वेबसाइट',
+    all: 'सभी तुलनाएँ देखें',
+  },
+});
+
+const advantages = ['virtualTours', 'verification', 'zeroSpam', 'dedicatedRM', 'transparent', 'aiSearch'].map((a) => ({ name: k(`advantages.${a}Title`), text: k(`advantages.${a}Desc`) }));
+const glance = [
+  [k('atAGlance.founded'), c.founded],
+  [k('atAGlance.valuation'), c.valuation],
+  [k('atAGlance.users'), c.users],
+  [k('atAGlance.cities'), c.cities],
+];
+const truth = c.truth ? truthBySlug(c.truth) : null;
+const others = nextCompetitors(c.slug);
+const title = k(`${c.key}.pageTitle`);
+const description = k(`${c.key}.pageDescription`);
+const heading = `360Ghar ${k('hero.vs')} ${c.name}`;
+
+const { crumbs, ld } = trail(locale, [
+  { name: k('breadcrumb.compare'), path: '/vs' },
+  { name: heading, path },
+]);
+const jsonLd = [ld, webPage({ name: title, description, path, locale }), faqPage(c.faqs)];
+---
+
+<Content title={title} description={description} keywords={c.keywords} path={path} heading={heading} lead={H.lead} crumbs={crumbs} jsonLd={jsonLd} newsletter>
+  <PageArt slot="head" scene="scale" seed={c.slug} />
+  <div class="vs-glance">
+    <Paper seed={`glance-${c.slug}`} tone="mist-50" depth={2} innerClass="vs-glance-inner" as="section">
+      <h2 class="vs-glance-title">{c.fullName}</h2>
+      <dl class="vs-glance-dl" lang={en}>
+        {
+          glance.map(([label, value]) => (
+            <div>
+              <dt lang={locale}>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <a class="link" href={c.website} rel="nofollow noopener">
+        {H.website}: {c.website.replace(/^https?:\/\/(www\.)?/, '')}
+        <Icon name="arrow-up-right" size={16} class="arrow" />
+      </a>
+    </Paper>
+  </div>
+
+  <h2>{k('featureComparison.title')}</h2>
+  <TableScroll label={k('featureComparison.title')}>
+    <table class="vs-features">
+      <thead>
+        <tr>
+          <th scope="col">{k('comparisonTable.feature')}</th>
+          <th scope="col">360Ghar</th>
+          <th scope="col">{c.name}</th>
+        </tr>
+      </thead>
+      <tbody lang={en}>
+        {
+          c.features.map((f) => (
+            <tr>
+              <th scope="row">{f.feature}</th>
+              <td class="vs-yes">
+                <Icon name="check" size={18} />
+                <span lang={locale}>{H.yes}</span>
+              </td>
+              <td class:list={[f.them ? 'vs-partial' : 'vs-no']}>
+                <span class="vs-cell">
+                  <Icon name={f.them ? 'check' : 'close'} size={18} />
+                  <span lang={locale}>{f.them ? H.yes : H.no}</span>
+                </span>
+                <span class="vs-note">{f.note}</span>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </TableScroll>
+
+  <h2>{H.claims}</h2>
+  <div lang={en}>
+    <ClaimsTable claims={c.claims} claimLabel={k('claimsVsReality.claimBadge')} realityLabel={H.reported} />
+  </div>
+
+  <h2>{H.strong}</h2>
+  <ul lang={en}>{c.strengths.map((s) => <li>{s}</li>)}</ul>
+
+  <h2>{k('whyChooseUs.title')}</h2>
+  <dl class="vs-why">
+    {
+      advantages.map((a) => (
+        <div>
+          <dt>{a.name}</dt>
+          <dd>{a.text}</dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <h2>{H.faq}</h2>
+  <div lang={en}><Faq items={c.faqs} /></div>
+
+  <h2>{k('seeAlso.title')}</h2>
+  <ul class="vs-see" role="list">
+    {
+      truth && (
+        <li>
+          <a href={L(`/truth/${truth.slug}`)}>
+            <span lang={en}>{truth.title}</span>
+            <Icon name="chevron-right" size={18} />
+          </a>
+        </li>
+      )
+    }
+    {
+      others.map((o) => (
+        <li>
+          <a href={L(`/vs/${o.slug}`)}>
+            <span>{k('seeAlso.comparePrefix')} {o.name}</span>
+            <Icon name="chevron-right" size={18} />
+          </a>
+        </li>
+      ))
+    }
+    <li>
+      <a href={L('/vs')}>
+        <span>{H.all}</span>
+        <Icon name="chevron-right" size={18} />
+      </a>
+    </li>
+  </ul>
+
+  <div class="vs-cta">
+    <p class="vs-cta-title">{k('cta.title')}</p>
+    <a class="btn btn-primary btn-lg" href={L('/properties')}>
+      {k('cta.findProperty')}
+      <Icon name="arrow-up-right" size={18} class="arrow" />
+    </a>
+  </div>
+</Content>
+
+<style>
+  .vs-glance :global(.vs-glance-inner) {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .vs-glance .vs-glance-title {
+    margin: 0;
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  }
+
+  .vs-glance-dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.5rem;
+    width: 100%;
+  }
+
+  @media (min-width: 48rem) {
+    .vs-glance-dl {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .vs-glance-dl dt {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-ink-600);
+  }
+
+  .vs-glance-dl dd {
+    margin-top: 0.125rem;
+    font-weight: 800;
+    color: var(--color-ink-950);
+  }
+
+  /* Three columns fit at 360 px, so the competitor column is never scrolled out of view. */
+  .vs-features th[scope='row'] {
+    width: 40%;
+    background: transparent;
+  }
+
+  .vs-features td {
+    width: 30%;
+  }
+
+  .vs-features th,
+  .vs-features td {
+    padding-inline: 0.5rem;
+    overflow-wrap: anywhere;
+  }
+
+  .vs-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 700;
+  }
+
+  .vs-yes {
+    font-weight: 700;
+    color: var(--color-leaf-700);
+  }
+
+  .vs-yes :global(svg) {
+    margin-right: 0.375rem;
+    vertical-align: -3px;
+  }
+
+  .vs-no .vs-cell {
+    color: var(--color-chili-700);
+  }
+
+  .vs-partial .vs-cell {
+    color: var(--color-haldi-700);
+  }
+
+  .vs-note {
+    display: block;
+    margin-top: 0.125rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .vs-why {
+    display: grid;
+    gap: 1.25rem 2rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .vs-why {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .vs-why dt {
+    font-weight: 800;
+  }
+
+  .vs-why dd {
+    margin-top: 0.25rem;
+    color: var(--color-ink-800);
+  }
+
+  ul.vs-see {
+    display: grid;
+    padding: 0;
+    list-style: none;
+  }
+
+  .vs-see > li {
+    margin: 0;
+    max-width: none;
+  }
+
+  .vs-see a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 52px;
+    border-bottom: 1px solid var(--color-ink-200);
+    color: var(--color-ink-950);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .vs-see a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .vs-cta {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    margin-top: 3rem;
+  }
+
+  .vs-cta .vs-cta-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+    line-height: 1.1;
+    color: var(--color-ink-950);
+    max-width: 24ch;
+  }
+</style>

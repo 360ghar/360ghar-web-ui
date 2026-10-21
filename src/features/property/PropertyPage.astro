@@ -1,0 +1,1088 @@
+---
+/**
+ * Property detail. Server-rendered facts, costs, floor plan, description,
+ * location and similar homes. Islands: gallery viewer, save/share/compare,
+ * contact and visit booking, local data.
+ */
+import './property.css';
+import type { Property, PropertyDetail } from '@/lib/api/types';
+import { formatDate, formatDateOnly, formatNum, homeKind, imageUrl, placeLine, rupees, srcSet } from '@/lib/format';
+import { PRICE_ON_REQUEST } from '@/features/search/prices';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import CutBand from '@/ui/CutBand.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import FavouriteButton from '@/features/favourites/FavouriteButton';
+import { PropertyCardView } from './PropertyCardView';
+import ContactPanel from './ContactPanel';
+import { listingContact, waLink } from './contact';
+import DataHubPanels from './DataHubPanels';
+import { detailRows } from './details';
+import { areaTypeLabel, costs, headlinePrice, keyFacts, mainFacts, perSqft, tidy } from './facts';
+import Gallery, { type Media } from './Gallery';
+import { priceContext } from './market';
+import { localityLandmarks, localityPath, nearestHubs } from './nearby';
+import PriceContextView from './PriceContext.astro';
+import { floorPlanUrl, galleryPhotos, PHOTO_GROUPS, type PhotoGroup } from './photos';
+import Amenities from './Amenities.astro';
+import HomeCard from './HomeCard.astro';
+import MoreDetails from './MoreDetails.astro';
+import { MAP_H, MAP_W } from './scenes';
+
+/** `property` is the detail response (it carries `agent`); the other homes are list rows. */
+type Props = { property: PropertyDetail; similar: Property[]; peers?: Property[]; locale: Locale };
+const { property: p, similar, peers = [], locale } = Astro.props;
+const hi = locale === 'hi';
+const L = localizer(locale);
+
+const price = headlinePrice(p, locale);
+const heading = homeKind(p, locale);
+const title = tidy(p.title);
+const photos = galleryPhotos(p);
+const planUrl = floorPlanUrl(p);
+const media: Media = {
+  photos,
+  tour: p.virtual_tour_url,
+  plan: planUrl,
+  video: p.video_tour_url ?? p.video_urls?.[0] ?? null,
+};
+
+const big = mainFacts(p, locale);
+const facts = keyFacts(p, locale);
+const sqft = perSqft(p);
+const cost = costs(p, locale);
+const market = priceContext(p, peers);
+const date = (iso?: string | null) =>
+  iso ? formatDate(iso, locale, { day: 'numeric', month: 'short', year: 'numeric' }) : null;
+
+const updated = date(p.updated_at ?? p.created_at);
+// `available_from` is a calendar date (YYYY-MM-DD), not a time: no time zone shift.
+const availableFrom = p.available_from ? formatDateOnly(p.available_from, locale, { day: 'numeric', month: 'short', year: 'numeric' }) : null;
+const details = detailRows(p, locale, { availableFrom, updated });
+
+// Long descriptions show two paragraphs first; the rest opens with "Read more" (with JS only).
+const paragraphs = (p.description ?? '').split(/\n{2,}/).map((s) => tidy(s.trim())).filter(Boolean);
+const clamp = paragraphs.length > 2 && paragraphs.join(' ').length > 600;
+
+const address = p.full_address ?? placeLine(p);
+const ROOM: Record<PhotoGroup, [string, string]> = {
+  hall: ['Living and dining', 'लिविंग और डाइनिंग'],
+  room: ['Bedrooms', 'बेडरूम'],
+  kitchen: ['Kitchen', 'रसोई'],
+  bathroom: ['Bathrooms', 'बाथरूम'],
+  balcony: ['Balcony', 'बालकनी'],
+  terrace: ['Terrace', 'छत'],
+  entrance: ['Entrance', 'प्रवेश'],
+  exterior: ['Outside', 'बाहर से'],
+  others: ['', ''],
+};
+// Photo groups with at least one photo: a link to the first one, for the floor plan section.
+const rooms = PHOTO_GROUPS.filter((g) => g !== 'others')
+  .map((g) => ({ label: ROOM[g][hi ? 1 : 0], first: photos.findIndex((x) => x.group === g), count: photos.filter((x) => x.group === g).length }))
+  .filter((r) => r.count > 0);
+const mapQ = p.latitude && p.longitude ? `${p.latitude},${p.longitude}` : encodeURIComponent(address);
+const hubs = nearestHubs(p.latitude, p.longitude, 5);
+const landmarks = localityLandmarks(p.locality, p.city);
+const localityHref = localityPath(p.locality, p.city);
+const contact = listingContact(p);
+const wa = waLink(contact.phone, p.title, canonicalFor(`/property/${p.id}`, locale), locale);
+
+const HUB: Record<string, [string, string]> = {
+  it_hub: ['Offices', 'ऑफ़िस'],
+  corporate: ['Offices', 'ऑफ़िस'],
+  industrial: ['Industry', 'उद्योग'],
+  transit: ['Transit', 'ट्रांज़िट'],
+  hospital: ['Hospital', 'अस्पताल'],
+  commercial: ['Mall', 'मॉल'],
+};
+const PLACE: Record<string, [string, string]> = {
+  metro: ['Metro', 'मेट्रो'],
+  road: ['Road', 'सड़क'],
+  market: ['Market', 'बाज़ार'],
+  hospital: ['Hospital', 'अस्पताल'],
+  mall: ['Mall', 'मॉल'],
+  commercial: ['Offices', 'ऑफ़िस'],
+};
+const km = (v: number) => `${formatNum(v, locale, { maximumFractionDigits: 1 })} ${hi ? 'कि.मी.' : 'km'}`;
+// The EMI link carries the price only when it is a real one in the calculator's range (₹1 L to ₹1 Cr).
+const emiHref = L(`/emi-calculator${p.purpose === 'buy' && !price.onRequest && p.base_price >= 100_000 && p.base_price <= 10_000_000 ? `?amount=${Math.round(p.base_price)}` : ''}`);
+---
+
+<div class="container-page prop">
+  <Breadcrumbs
+    items={[
+      { name: hi ? 'होम' : 'Home', path: '/' },
+      { name: hi ? 'प्रॉपर्टी' : 'Properties', path: '/properties' },
+      ...(p.locality ? [{ name: p.locality, path: `/properties?locality=${encodeURIComponent(p.locality)}` }] : []),
+      { name: heading },
+    ]}
+  />
+
+  <Gallery client:visible media={media} title={title} locale={locale} />
+
+  <div class:list={['prop-layout', photos.length > 0 && 'is-over']}>
+    <div class="prop-main">
+      <HomeCard p={p} locale={locale} price={price} heading={heading} address={address} title={title} big={big} facts={facts} wa={wa} phone={contact.phone} />
+
+      {
+        cost.rows.length > 0 && (
+          <section class="prop-section" aria-labelledby="prop-money">
+            <h2 id="prop-money" class="prop-h2">{hi ? 'कितना खर्च होगा' : 'What it costs'}</h2>
+            <div class="prop-cost">
+              <dl class="prop-cost-rows tabular">
+                {cost.rows.map((r) => (
+                  <div>
+                    <dt>
+                      {r.label}
+                      {r.note && <small>{r.note}</small>}
+                    </dt>
+                    <dd class:list={[r.amount === null && 'is-ask']}>{r.amount === null ? PRICE_ON_REQUEST[locale] : rupees(r.amount, locale)}</dd>
+                  </div>
+                ))}
+              </dl>
+              {cost.moveInTotal && (
+                <div class="prop-movein">
+                  <p class="prop-movein-total">
+                    <span>{hi ? 'घर में आने से पहले कुल' : 'To move in, you pay'}</span>
+                    <strong class="tabular">{rupees(cost.moveInTotal, locale)}</strong>
+                  </p>
+                  <div class="prop-movein-strip" aria-hidden="true">
+                    {cost.moveIn.map((m, i) => (
+                      <span class={`is-${m.key}`} style={`flex-grow:${m.amount};clip-path:polygon(${i ? '1.5px' : '0'} ${1 + (i % 2)}px, 100% 0, calc(100% - ${i === cost.moveIn.length - 1 ? 0 : 1.5}px) 100%, 0 calc(100% - ${2 - (i % 2)}px))`} />
+                    ))}
+                  </div>
+                  <ul class="prop-movein-legend tabular">
+                    {cost.moveIn.map((m) => (
+                      <li>
+                        <span class={`sw is-${m.key}`} aria-hidden="true" />
+                        {m.label}
+                        <strong>{rupees(m.amount, locale)}</strong>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {market && p.locality && <PriceContextView ctx={market} locality={p.locality} type={p.property_type} locale={locale} />}
+              {p.purpose === 'buy' && (
+                <p class="prop-cost-links">
+                  <a class="link" href={emiHref}>
+                    {hi ? 'EMI का हिसाब लगाएँ' : 'Work out the EMI'} <Icon name="arrow-up-right" size={14} class="arrow" />
+                  </a>
+                  <a class="link" href={L('/stamp-duty-calculator')}>
+                    {hi ? 'स्टांप ड्यूटी देखें' : 'Check the stamp duty'} <Icon name="arrow-up-right" size={14} class="arrow" />
+                  </a>
+                </p>
+              )}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        paragraphs.length > 0 && (
+          <section class="prop-section is-hung" aria-labelledby="prop-about">
+            <h2 id="prop-about" class="prop-h2">{hi ? 'इस घर के बारे में' : 'About this home'}</h2>
+            <div class="prop-hung-body">
+            <div class="prop-text" id="prop-about-text" data-clamp={clamp ? '' : undefined}>
+              {paragraphs.map((para) => <p>{para}</p>)}
+            </div>
+            {clamp && (
+              <button type="button" class="btn btn-quiet prop-more" data-more aria-controls="prop-about-text" aria-expanded="true" hidden data-less-label={hi ? 'कम दिखाएँ' : 'Show less'} data-more-label={hi ? 'पूरा पढ़ें' : 'Read more'}>
+                <span>{hi ? 'कम दिखाएँ' : 'Show less'}</span>
+                <Icon name="chevron-down" size={18} />
+              </button>
+            )}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        planUrl && (
+          <section class="prop-section" aria-labelledby="prop-plan">
+            <h2 id="prop-plan" class="prop-h2">{hi ? 'फ़्लोर प्लान' : 'Floor plan'}</h2>
+            <a class="prop-plan" href={imageUrl(planUrl, 1600)} target="_blank" rel="noopener" data-open-media="plan">
+              <img
+                src={imageUrl(planUrl, 1024)}
+                srcset={srcSet(planUrl, [640, 1024, 1440])}
+                sizes="(min-width: 64rem) 51rem, 92vw"
+                alt={`${hi ? 'फ़्लोर प्लान' : 'Floor plan'}: ${heading}${p.locality ? `, ${p.locality}` : ''}`}
+                width="1024"
+                height="682"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <p class="prop-plan-cap">
+              {p.area_sqft && <span>{`${areaTypeLabel(p.area_type, locale, true)}: `}<strong class="tabular">{formatNum(p.area_sqft, locale)} {hi ? 'वर्ग फ़ुट' : 'sq ft'}</strong></span>}
+              <a class="link" href={imageUrl(planUrl, 1600)} target="_blank" rel="noopener" data-open-media="plan">
+                {hi ? 'पूरी स्क्रीन पर देखें' : 'Open full screen'} <Icon name="arrow-up-right" size={14} class="arrow" />
+              </a>
+            </p>
+            {rooms.length > 1 && (
+              <p class="prop-rooms">
+                <span>{hi ? 'कमरे देखें' : 'See the rooms'}</span>
+                {rooms.map((r) => (
+                  <a class="link" href={imageUrl(photos[r.first]!.url, 1600)} target="_blank" rel="noopener" data-open-media="photos" data-open-index={r.first}>
+                    {r.label} <span class="tabular">{r.count}</span>
+                  </a>
+                ))}
+              </p>
+            )}
+          </section>
+        )
+      }
+
+      {
+        (p.amenities?.length ?? 0) > 0 && (
+          <section class="prop-section is-hung" aria-labelledby="prop-amen">
+            <h2 id="prop-amen" class="prop-h2">{hi ? 'सुविधाएँ' : 'Amenities'}</h2>
+            <div class="prop-hung-body"><Amenities amenities={p.amenities!} locale={locale} /></div>
+          </section>
+        )
+      }
+
+      <section class="prop-section" aria-labelledby="prop-loc">
+        <h2 id="prop-loc" class="prop-h2">{hi ? 'लोकेशन' : 'Location'}</h2>
+        <p class="prop-addr">{address}</p>
+        <div class:list={['prop-loc', (hubs.length > 0 || landmarks.length > 0) && 'has-near']}>
+          <div class="prop-loc-map">
+            <div class="prop-map" data-map-src={`https://maps.google.com/maps?q=${mapQ}&z=15&output=embed`} data-map-title={hi ? 'मैप' : 'Map'}>
+              {/* Below the first screen: the street plan is a cached file (src/pages/art/map), not inline SVG. */}
+              <img class="prop-map-art" src={`/art/map/${p.id}.svg`} alt="" width={MAP_W} height={MAP_H} loading="lazy" decoding="async" />
+              <button type="button" class="btn prop-map-btn" data-map-load>
+                <Icon name="map" size={18} />
+                {hi ? 'मैप दिखाएँ' : 'Show the map'}
+              </button>
+            </div>
+            <p class="prop-map-links">
+              <a class="link" href={`https://www.google.com/maps/search/?api=1&query=${mapQ}`} target="_blank" rel="noopener">
+                {hi ? 'Google Maps में खोलें' : 'Open in Google Maps'}
+                <Icon name="arrow-up-right" size={14} class="arrow" />
+              </a>
+              {
+                localityHref && (
+                  <a class="link" href={L(localityHref)}>
+                    {hi ? `${p.locality} के बारे में` : `About ${p.locality}`}
+                    <Icon name="arrow-up-right" size={14} class="arrow" />
+                  </a>
+                )
+              }
+            </p>
+          </div>
+
+          {
+            (hubs.length > 0 || landmarks.length > 0) && (
+              <div class:list={['prop-near', hubs.length > 0 && landmarks.length > 0 && 'is-two']}>
+                {landmarks.length > 0 && (
+                  <div>
+                    <h3 class="prop-h3">{hi ? `${p.locality} के आसपास` : `Around ${p.locality}`}</h3>
+                    <ul class="prop-dist">
+                      {landmarks.map((l) => (
+                        <li>
+                          <span>
+                            {l.name}
+                            <small>{PLACE[l.type]?.[hi ? 1 : 0] ?? l.type}</small>
+                          </span>
+                          <span class="tabular">{hi ? l.distance.replace('km', 'कि.मी.') : l.distance}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {hubs.length > 0 && (
+                  <div>
+                    <h3 class="prop-h3">{hi ? 'यहाँ से दूरी' : 'How far it is'}</h3>
+                    <ul class="prop-dist">
+                      {hubs.map((h) => (
+                        <li>
+                          <span>
+                            {h.name}
+                            <small>{HUB[h.type]?.[hi ? 1 : 0] ?? h.type}</small>
+                          </span>
+                          <span class="tabular">{km(h.km)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p class="prop-dist-note">{hi ? 'सीधी दूरी, मैप पिन से। सड़क से दूरी ज़्यादा होगी।' : 'Straight-line distance from the map pin. By road it is longer.'}</p>
+                  </div>
+                )}
+              </div>
+            )
+          }
+
+          <div class="prop-loc-data"><DataHubPanels client:visible id={p.id} sector={p.locality ?? null} locale={locale} /></div>
+        </div>
+      </section>
+
+      <section class="prop-section is-hung" aria-labelledby="prop-details">
+        <h2 id="prop-details" class="prop-h2">{hi ? 'और जानकारी' : 'More details'}</h2>
+        <div class="prop-hung-body"><MoreDetails id={p.id} title={title} rows={details} locale={locale} /></div>
+      </section>
+    </div>
+
+    <aside id="prop-book" class="prop-side" aria-label={hi ? 'संपर्क और विज़िट' : 'Contact and visits'}>
+      <div class="prop-side-sheet sheet">
+        <p class:list={['prop-side-price tabular', price.onRequest && 'is-ask']}>{price.amount}{price.period && <span>{price.period}</span>}</p>
+        <p class="prop-side-sub tabular">
+          {sqft ? `${rupees(sqft, locale)} ${hi ? 'प्रति वर्ग फ़ुट' : 'per sq ft'} · ` : ''}{hi ? 'लिस्टिंग' : 'Listing'} #{p.id}
+        </p>
+        <ContactPanel client:idle locale={locale} property={{ id: p.id, title: p.title }} contact={contact} available={p.is_available} />
+      </div>
+      {p.is_available && <p class="prop-side-note"><Icon name="check" size={16} /> {hi ? 'विज़िट से पहले फ़ोटो और फ़्लोर प्लान देखें।' : 'See the photos and floor plan before you visit.'}</p>}
+    </aside>
+  </div>
+</div>
+
+{
+  similar.length > 0 && (
+    <CutBand seed={`similar-${p.id}`} tone="var(--color-mist-50)" class="prop-similar" labelledby="prop-similar">
+      <div class="container-page">
+        <div class="prop-similar-head">
+          <h2 id="prop-similar" class="prop-h2">{hi ? 'ऐसे ही और घर' : 'Similar homes'}</h2>
+          {p.locality && (
+            <a class="link" href={L(`/properties?locality=${encodeURIComponent(p.locality)}`)}>
+              {hi ? `${p.locality} में सभी घर` : `All homes in ${p.locality}`}
+              <Icon name="arrow-up-right" size={14} class="arrow" />
+            </a>
+          )}
+        </div>
+        <ul class="prop-similar-grid">
+          {similar.map((s) => (
+            <li>
+              <PropertyCardView property={s} locale={locale}>
+                <FavouriteButton slot="favourite" client:visible propertyId={s.id} locale={locale} />
+              </PropertyCardView>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </CutBand>
+  )
+}
+
+{
+  p.is_available && (
+    <div class="prop-dock" data-dock>
+      <p class:list={['prop-dock-price tabular', price.onRequest && 'is-ask']}>{price.amount}<small>{price.period}</small></p>
+      <a class="btn btn-ink btn-icon" href={wa} target="_blank" rel="noopener" aria-label={hi ? 'WhatsApp पर बात करें' : 'Chat on WhatsApp'}>
+        <Icon name="brand:whatsapp" size={20} />
+      </a>
+      <a class="btn btn-primary" href="#prop-book" data-open-visit>{hi ? 'विज़िट बुक करें' : 'Book a visit'}</a>
+    </div>
+  )
+}
+
+<style>
+  .prop {
+    padding-top: 1rem;
+  }
+
+  .prop-layout {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: 1rem;
+  }
+
+  /* From 48rem the Home Card and the contact rail rise 3rem into the photos and share one top edge. */
+  @media (min-width: 48rem) {
+    .prop-layout.is-over {
+      position: relative;
+      z-index: 1;
+      margin-top: -3rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .prop-layout {
+      grid-template-columns: minmax(0, 1fr) 22rem;
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+
+  /* The main column measures itself, so the layouts below follow its width, not the screen's. */
+  .prop-main {
+    container-type: inline-size;
+  }
+
+  .prop-cost-rows dd.is-ask,
+  .prop-dock-price.is-ask {
+    font-size: 1rem;
+  }
+
+  /* ---------- Sections ---------- */
+
+  .prop-section {
+    margin-top: 2.75rem;
+  }
+
+  /* About, amenities and more details: the heading hangs in the left margin of the section. */
+  .prop-section.is-hung {
+    display: grid;
+    gap: 0.25rem 2.5rem;
+  }
+
+  .prop-section.is-hung > .prop-h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  @container (min-width: 40rem) {
+    .prop-section.is-hung {
+      grid-template-columns: 10rem minmax(0, 1fr);
+    }
+
+    .prop-section.is-hung > .prop-h2 {
+      margin-bottom: 0;
+    }
+  }
+
+  .prop-hung-body {
+    min-width: 0;
+  }
+
+  .prop-rooms {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 1.25rem;
+    margin-top: 0.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .prop-rooms > span:first-child {
+    font-weight: 700;
+  }
+
+  .prop-rooms .tabular {
+    color: var(--color-ink-600);
+  }
+
+  :global(.prop-h2) {
+    font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+    margin-bottom: 1rem;
+  }
+
+  .prop-h3 {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Costs */
+  .prop-cost {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 40rem;
+  }
+
+  /* Two columns once the main column is wide enough: cost rows on the left; the price card (sale) or the move-in total (rent) on the right, on one top edge. */
+  @container (min-width: 44rem) {
+    .prop-cost {
+      max-width: none;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto 1fr;
+      column-gap: 2.5rem;
+      align-items: start;
+    }
+
+    .prop-cost > * {
+      grid-column: 1;
+    }
+
+    .prop-cost > :global(.pc),
+    .prop-cost > .prop-movein {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+    }
+  }
+
+  .prop-cost-rows div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .prop-cost-rows div:first-child {
+    padding-top: 0;
+  }
+
+  .prop-cost-rows dt {
+    display: grid;
+    color: var(--color-ink-800);
+  }
+
+  .prop-cost-rows dt small {
+    font-size: 0.8125rem;
+    color: var(--color-ink-600);
+  }
+
+  .prop-cost-rows dd {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    white-space: nowrap;
+  }
+
+  .prop-movein {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.125rem 1.25rem 1.25rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
+  }
+
+  .prop-movein-total {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    color: var(--color-ink-800);
+  }
+
+  .prop-movein-total strong {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--color-ink-950);
+  }
+
+  /* One strip of card stock, cut in pieces sized by the amounts. */
+  .prop-movein-strip {
+    display: flex;
+    gap: 3px;
+    height: 20px;
+    filter: drop-shadow(1px 2px 1px rgb(181 70 0 / 0.25));
+  }
+
+  .prop-movein-strip span {
+    min-width: 10px;
+  }
+
+  /* Each piece of the strip settles into place as the strip scrolls into view; without support or with reduced motion it is simply there. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .prop-movein-strip span {
+        transform-origin: left center;
+        animation: prop-settle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
+
+      @keyframes prop-settle {
+        from {
+          scale: 0.6 1;
+        }
+        to {
+          scale: 1 1;
+        }
+      }
+    }
+  }
+
+  .is-rent {
+    background: var(--color-kesar-500);
+  }
+
+  .is-maintenance {
+    background: var(--color-kesar-700);
+  }
+
+  .is-deposit {
+    background: var(--color-kesar-300);
+  }
+
+  .is-setup {
+    background: var(--color-ink-800);
+  }
+
+  .prop-movein-legend {
+    display: grid;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .prop-movein-legend li {
+    display: grid;
+    grid-template-columns: 0.875rem 1fr auto;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .prop-movein-legend .sw {
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 3px;
+    clip-path: polygon(0 1px, 100% 0, calc(100% - 1px) 100%, 1px calc(100% - 1px));
+  }
+
+  .prop-movein-legend strong {
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  .prop-cost-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+  }
+
+  /* Floor plan */
+  .prop-plan {
+    display: block;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-ink-100);
+    cursor: zoom-in;
+  }
+
+  .prop-plan img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: contain;
+  }
+
+  /* The plan sits inside the browser's lazy-load distance, so a plain lazy image
+     loads with the main photo. With JS it waits for the page load (a lazy image
+     with no box does not load); the box keeps its size. Without JS: a lazy image. */
+  @media (scripting: enabled) {
+    .prop-plan:not([data-ready]) {
+      aspect-ratio: 3 / 2;
+    }
+    .prop-plan:not([data-ready]) img {
+      display: none;
+    }
+  }
+
+  .prop-plan-cap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 1.5rem;
+    margin-top: 0.25rem;
+    color: var(--color-ink-800);
+  }
+
+  /* Description */
+  .prop-text {
+    display: grid;
+    gap: 0.875rem;
+    max-width: 68ch;
+    color: var(--color-ink-800);
+  }
+
+  .prop-text.is-clamped > :global(p:nth-child(n + 3)) {
+    display: none;
+  }
+
+  .prop-more {
+    margin-top: 0.5rem;
+    margin-left: -1.125rem;
+  }
+
+  .prop-more[aria-expanded='true'] :global(svg) {
+    rotate: 180deg;
+  }
+
+  /* Location */
+  .prop-addr {
+    max-width: 60ch;
+    color: var(--color-ink-800);
+  }
+
+  .prop-map {
+    position: relative;
+    display: grid;
+    place-items: end center;
+    height: clamp(14rem, 36vw, 20rem);
+    padding-bottom: 1.25rem;
+    margin-top: 1rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-mist-50);
+  }
+
+  /* The street plan covers the box like a photo: it is 2.5 times as wide as it is tall. */
+  .prop-map .prop-map-art {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: max(100%, clamp(35rem, 90vw, 50rem));
+    max-width: none;
+    height: auto;
+    translate: -50% -50%;
+  }
+
+  .prop-map-btn {
+    position: relative;
+  }
+
+  .prop-map :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .prop-map-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .prop-near {
+    display: grid;
+    gap: 1.75rem;
+    margin-top: 1.5rem;
+  }
+
+  /* The map on the left and the distances on the right, once the column is wide enough. */
+  @container (min-width: 44rem) {
+    /* Map and circle rates on the left, the distances on the right, one top edge. */
+    .prop-loc.has-near {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-areas:
+        'map near'
+        'data near';
+      grid-template-rows: auto 1fr;
+      gap: 0 2.5rem;
+      align-items: start;
+    }
+
+    .prop-loc.has-near .prop-loc-map {
+      grid-area: map;
+    }
+
+    /* Tall enough to stand beside the distances even when there is no local data under it. */
+    .prop-loc.has-near .prop-map {
+      height: 26rem;
+    }
+
+    .prop-loc.has-near .prop-near {
+      grid-area: near;
+      margin-top: 1rem;
+    }
+
+    .prop-loc.has-near .prop-loc-data {
+      grid-area: data;
+    }
+
+    .prop-loc.has-near .prop-near.is-two {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.75rem;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .prop-near.is-two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem;
+    }
+  }
+
+  .prop-dist li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .prop-dist li:first-child {
+    border-top: 1px solid var(--color-ink-100);
+  }
+
+  .prop-dist li > span:first-child {
+    display: grid;
+  }
+
+  .prop-dist small {
+    font-size: 0.8125rem;
+    color: var(--color-ink-600);
+  }
+
+  .prop-dist li > span:last-child {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .prop-dist-note {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-ink-600);
+  }
+
+  /* ---------- Side panel ---------- */
+
+  .prop-side {
+    scroll-margin-top: 80px;
+  }
+
+  @media (min-width: 64rem) {
+    /* On a short screen the rail scrolls inside itself, so the submit button is always reachable. The padding keeps focus rings and the sheet's shadow from being clipped. */
+    .prop-side {
+      position: sticky;
+      top: 84px;
+      max-height: calc(100dvh - 84px - 1rem);
+      margin: -0.25rem;
+      padding: 0.25rem;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+
+  .prop-side-sheet {
+    padding: 1.25rem;
+  }
+
+  /* The big price is in the main column; the card repeats it small for when it is sticky further down. */
+  .prop-side-price {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  .prop-side-price span {
+    margin-left: 0.25rem;
+    font: 600 0.875rem var(--font-sans);
+    color: var(--color-ink-600);
+  }
+
+  .prop-side-sub {
+    margin: 0.25rem 0 1.25rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .prop-side-note {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-top: 1rem;
+    padding-inline: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .prop-side-note :global(svg) {
+    margin-top: 0.15rem;
+    color: var(--color-leaf-700);
+  }
+
+  /* ---------- Similar homes ---------- */
+
+  :global(.prop-similar) {
+    margin-top: 4rem;
+  }
+
+  :global(.prop-similar .cut-band-body) {
+    padding-block: 2rem 2.5rem;
+  }
+
+  .prop-similar-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prop-similar-head .prop-h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Phones: a swipe row, so four homes do not add four screens of scroll. */
+  .prop-similar-grid {
+    display: flex;
+    gap: 1rem;
+    margin-inline: -1rem;
+    padding: 0.5rem 1rem 0.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1rem;
+    scrollbar-width: none;
+  }
+
+  .prop-similar-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .prop-similar-grid > li {
+    flex: 0 0 80%;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 40rem) {
+    .prop-similar-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+      margin-inline: 0;
+      padding: 0;
+      overflow: visible;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .prop-similar-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* ---------- Phone dock: price and two actions in reach ---------- */
+
+  .prop-dock {
+    position: sticky;
+    bottom: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 64px;
+    margin-top: 1rem;
+    /* Cancels the footer's 4rem top margin (the margins collapse), so at the page end the dock rests on the footer. */
+    margin-bottom: -4rem;
+    padding: 0.625rem 1rem calc(0.625rem + env(safe-area-inset-bottom));
+    background: var(--color-paper);
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 2px 6px -2px rgb(var(--tint) / 0.14);
+    transition: translate 200ms var(--ease-paper), visibility 0s;
+  }
+
+  /* Away: off screen and out of the tab order (visibility waits for the slide; the script also sets inert). */
+  .prop-dock[data-away] {
+    translate: 0 110%;
+    visibility: hidden;
+    transition: translate 200ms var(--ease-paper), visibility 0s linear 200ms;
+  }
+
+  .prop-dock-price {
+    margin-right: auto;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.1875rem;
+    white-space: nowrap;
+  }
+
+  .prop-dock-price small {
+    margin-left: 0.2rem;
+    font: 600 0.8125rem var(--font-sans);
+    color: var(--color-ink-600);
+  }
+
+  .prop-dock .btn {
+    white-space: nowrap;
+  }
+
+  /* The chat launcher floats just above the dock, never over its buttons; back to its place when the dock steps aside. */
+  @media (max-width: 63.99rem) {
+    :global(body:has(.prop-dock:not([data-away])) .chat-launcher) {
+      bottom: calc(64px + 0.75rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .prop-dock {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .prop-dock,
+    .prop-dock[data-away] {
+      transition: none;
+    }
+  }
+
+  @media print {
+    .prop-dock,
+    .prop-side :global(form),
+    .prop-map,
+    .prop-map-links,
+    .prop-more,
+    :global(.prop-similar),
+    :global(.site-header),
+    :global(.site-footer),
+    :global(.chat-launcher) {
+      display: none !important;
+    }
+
+    .prop-text.is-clamped > :global(p) {
+      display: block !important;
+    }
+  }
+</style>
+
+<script>
+  import { afterLoad } from '@/ui/photoStrip';
+
+  // The floor plan loads after the page (see .prop-plan).
+  afterLoad(() => document.querySelector('.prop-plan')?.setAttribute('data-ready', ''));
+
+  // Click-to-load map: no third-party frame until the user asks for it.
+  for (const box of document.querySelectorAll<HTMLElement>('[data-map-src]')) {
+    box.querySelector('[data-map-load]')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = box.dataset.mapSrc ?? '';
+      f.title = box.dataset.mapTitle ?? 'Map';
+      f.loading = 'lazy';
+      f.referrerPolicy = 'no-referrer-when-downgrade';
+      box.append(f);
+      box.querySelector('[data-map-load]')?.remove();
+      f.focus();
+    });
+    box.dataset.ready = '';
+  }
+
+  // "Read more": the text is complete without JS; the script folds it to two paragraphs.
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-more]')) {
+    const text = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+    const label = btn.querySelector('span');
+    if (!text || !label) continue;
+    const set = (open: boolean) => {
+      text.classList.toggle('is-clamped', !open);
+      btn.setAttribute('aria-expanded', String(open));
+      label.textContent = (open ? btn.dataset.lessLabel : btn.dataset.moreLabel) ?? '';
+    };
+    set(false);
+    btn.hidden = false;
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+  }
+
+  // The phone dock steps aside while the card's own buttons or the contact panel are on screen. The card's buttons count as soon as they show; the rail once it fills the lower part of the screen.
+  const dock = document.querySelector<HTMLElement>('[data-dock]');
+  if (dock) {
+    const seen = new Set<Element>();
+    const watch = (el: Element | null, rootMargin: string) => {
+      if (!el) return;
+      new IntersectionObserver(
+        ([e]) => {
+          if (e?.isIntersecting) seen.add(el);
+          else seen.delete(el);
+          dock.toggleAttribute('data-away', seen.size > 0);
+          dock.toggleAttribute('inert', seen.size > 0);
+        },
+        { rootMargin },
+      ).observe(el);
+    };
+    watch(document.querySelector('[data-hc-cta]'), '0px');
+    watch(document.getElementById('prop-book'), '0px 0px -30% 0px');
+  }
+</script>

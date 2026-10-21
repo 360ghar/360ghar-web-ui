@@ -1,0 +1,161 @@
+---
+/**
+ * Landmarks with their distance (src/data/locality-landmarks.json), nearest
+ * first. Each row carries a marker on one shared scale, so the distances can
+ * be compared at a glance.
+ */
+import { formatNum } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { LANDMARK_GLYPH, LANDMARK_TYPE } from './glyphs';
+
+type Props = { items: { name: string; type: string; distance: string }[]; locale: Locale };
+const { items, locale } = Astro.props;
+const hi = locale === 'hi';
+const km = (s: string) => Number.parseFloat(s.replace(/[^0-9.]/g, '')) || 0;
+const rows = [...items].sort((a, b) => km(a.distance) - km(b.distance));
+const top = Math.max(...rows.map((r) => km(r.distance)), 1);
+const max = [1, 2, 3, 5, 8, 10, 15, 20, 30].find((s) => s >= top) ?? Math.ceil(top);
+const unit = hi ? 'किमी' : 'km';
+const fmt = (n: number) => `${formatNum(n, locale, { maximumFractionDigits: 1 })} ${unit}`;
+---
+
+<div class="lm">
+  <p class="lm-scale" aria-hidden="true"><span>0 {unit}</span><span>{fmt(max)}</span></p>
+  <ol class="lm-list">
+    {
+      rows.map((r) => {
+        const d = km(r.distance);
+        return (
+          <li class="lm-row">
+            <svg class="lm-glyph" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+              <path fill-rule="evenodd" d={LANDMARK_GLYPH[r.type] ?? LANDMARK_GLYPH.commercial} />
+            </svg>
+            <span class="lm-name">
+              {r.name}
+              {(hi || !r.name.toLowerCase().includes((LANDMARK_TYPE[r.type]?.[0] ?? r.type).toLowerCase())) && <span class="lm-type">{LANDMARK_TYPE[r.type]?.[hi ? 1 : 0] ?? r.type}</span>}
+            </span>
+            <span class="lm-track" aria-hidden="true">
+              <span class="lm-mark" style={`--at:${Math.min(100, (d / max) * 100).toFixed(1)}%`} />
+            </span>
+            <span class="lm-dist tabular">{d === 0 ? (hi ? 'यहीं' : 'Here') : fmt(d)}</span>
+          </li>
+        );
+      })
+    }
+  </ol>
+</div>
+
+<style>
+  .lm {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .lm-scale {
+    display: none;
+  }
+
+  .lm-list {
+    display: grid;
+  }
+
+  .lm-row {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+    grid-template-areas:
+      'glyph name dist'
+      'glyph track track';
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+    padding: 0.625rem 0;
+  }
+
+  .lm-row + .lm-row {
+    border-top: 1px solid rgb(var(--tint) / 0.14);
+  }
+
+  .lm-glyph {
+    grid-area: glyph;
+    align-self: start;
+    margin-top: 1px;
+    color: var(--color-kesar-700);
+  }
+
+  .lm-name {
+    grid-area: name;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.5rem;
+    font-weight: 600;
+    color: var(--color-ink-950);
+  }
+
+  .lm-type {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink-800);
+  }
+
+  .lm-dist {
+    grid-area: dist;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  /* The scale: a rounded rule with a paper marker at the distance. */
+  .lm-track {
+    grid-area: track;
+    position: relative;
+    height: 14px;
+  }
+
+  .lm-track::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 6px;
+    height: 3px;
+    border-radius: 9999px;
+    background: rgb(var(--tint) / 0.16);
+  }
+
+  .lm-mark {
+    position: absolute;
+    top: 0;
+    left: var(--at);
+    width: 12px;
+    height: 14px;
+    margin-left: -6px;
+    background: var(--color-kesar-700);
+    clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
+  }
+
+  @media (min-width: 40rem) {
+    .lm-scale {
+      display: flex;
+      justify-content: space-between;
+      margin-left: calc(1.5rem + 16rem + 2rem);
+      margin-right: calc(4.5rem + 1rem);
+      font-size: 0.8125rem;
+      color: var(--color-ink-800);
+    }
+
+    .lm-row {
+      grid-template-columns: 1.5rem 16rem minmax(6rem, 1fr) 4.5rem;
+      grid-template-areas: 'glyph name track dist';
+      gap: 0 1rem;
+    }
+
+    .lm-glyph {
+      align-self: center;
+      margin-top: 0;
+    }
+
+    .lm-dist {
+      text-align: right;
+    }
+  }
+</style>

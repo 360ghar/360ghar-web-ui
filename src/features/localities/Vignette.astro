@@ -1,0 +1,134 @@
+---
+/**
+ * A paper-cut vignette of a place (layers from vignette.ts, drawn by the
+ * shared PaperArt), in a hand-cut box. Static SVG: complete with no
+ * JavaScript. With motion allowed, the clouds drift and a crane jib sways in
+ * slow stop-motion steps.
+ *
+ * The box has a fixed height and the 1600 x 400 scene covers it, anchored to
+ * the bottom centre (as preserveAspectRatio "xMidYMax slice" would). Container
+ * units do the covering, so PaperArt needs no extra props.
+ */
+import type { Locale } from '@/lib/i18n/locale';
+import PaperArt from '@/ui/paper/PaperArt.astro';
+import { placeScene, VH, VW, type PlaceKind } from './vignette';
+
+type Props = { kind: PlaceKind; seed: string; locale: Locale; sign?: string; size?: 'hero' | 'strip'; class?: string };
+const { kind, seed, locale, sign, size = 'hero', class: className } = Astro.props;
+const scene = placeScene(kind, seed, sign);
+const LABEL: Record<PlaceKind, [string, string]> = {
+  sector: ['Paper-cut sector street: apartment blocks, shops and a sector signboard', 'कागज़ से कटा सेक्टर: अपार्टमेंट ब्लॉक, दुकानें और सेक्टर का बोर्ड'],
+  society: ['Paper-cut society: tall towers behind a boundary wall with a gate', 'कागज़ से कटी सोसाइटी: चारदीवारी और गेट के पीछे ऊँचे टावर'],
+  project: ['Paper-cut project site: towers, a building under construction and a tower crane', 'कागज़ से कटी प्रोजेक्ट साइट: टावर, बनती इमारत और क्रेन'],
+  township: ['Paper-cut township: towers, villas, a clock tower and trees', 'कागज़ से कटी टाउनशिप: टावर, विला, घंटाघर और पेड़'],
+  locality: ['Paper-cut colony: builder floors, a market, an auto-rickshaw and a gulmohar tree', 'कागज़ से कटी कॉलोनी: बिल्डर फ़्लोर, बाज़ार, ऑटो और गुलमोहर'],
+  road: ['Paper-cut road: a flyover with a bus and cars above shops', 'कागज़ से कटी सड़क: दुकानों के ऊपर फ़्लाईओवर पर बस और कारें'],
+  village: ['Paper-cut village: low houses, a peepal tree on a platform and a cow', 'कागज़ से कटा गाँव: छोटे घर, चबूतरे पर पीपल और गाय'],
+  city: ['Paper-cut city: glass towers and the Rapid Metro', 'कागज़ से कटा शहर: काँच के टावर और रैपिड मेट्रो'],
+  delhi: ['Paper-cut Delhi: India Gate, a domed hall and old trees', 'कागज़ से कटी दिल्ली: इंडिया गेट, गुंबद वाली इमारत और पुराने पेड़'],
+  noida: ['Paper-cut Noida: tall residential towers along an expressway', 'कागज़ से कटा नोएडा: एक्सप्रेसवे के साथ ऊँचे रिहायशी टावर'],
+  faridabad: ['Paper-cut Faridabad: factory sheds and chimneys below the Aravalli ridge', 'कागज़ से कटा फ़रीदाबाद: अरावली के नीचे फ़ैक्ट्री शेड और चिमनियाँ'],
+  ghaziabad: ['Paper-cut Ghaziabad: builder floors, houses and a tall water tank', 'कागज़ से कटा ग़ाज़ियाबाद: बिल्डर फ़्लोर, घर और ऊँची पानी की टंकी'],
+  office: ['Paper-cut office district: glass towers joined by a skywalk', 'कागज़ से कटा ऑफ़िस इलाका: स्काईवॉक से जुड़े काँच के टावर'],
+  industrial: ['Paper-cut industrial area: factory sheds, a chimney and a truck', 'कागज़ से कटा औद्योगिक इलाका: फ़ैक्ट्री शेड, चिमनी और ट्रक'],
+  metro: ['Paper-cut metro station: a train at the platform on the viaduct', 'कागज़ से कटा मेट्रो स्टेशन: प्लेटफ़ॉर्म पर खड़ी ट्रेन'],
+  hospital: ['Paper-cut hospital with a cross on its front and an ambulance', 'कागज़ से कटा अस्पताल: सामने क्रॉस का निशान और एंबुलेंस'],
+  mall: ['Paper-cut shopping mall with a glass front and parked cars', 'कागज़ से कटा मॉल: काँच का सामना और खड़ी कारें'],
+  directory: ['Paper-cut street of Gurugram places: a village, builder floors, a society gate and a project crane', 'गुरुग्राम की जगहों की कागज़ी गली: गाँव, बिल्डर फ़्लोर, सोसाइटी गेट और क्रेन'],
+};
+const label = LABEL[kind][locale === 'hi' ? 1 : 0];
+const vars = [
+  scene.pivot && `--pivot:${scene.pivot[0]}px ${scene.pivot[1]}px`,
+  scene.sign?.text && `--sx:${(scene.sign.cx / VW).toFixed(4)};--sy:${(scene.sign.cy / VH).toFixed(4)}`,
+]
+  .filter(Boolean)
+  .join(';');
+---
+
+<div class:list={['vig soft-lift is-clip', `vig-${size}`, className]} data-depth="2">
+  <div class="vig-box grain" style={vars}>
+    <PaperArt layers={scene.layers} width={VW} height={VH} bg={null} shadow={[3, 4, 1.4]} label={label} class="vig-art" />
+    {scene.sign?.text && <span class="vig-sign" aria-hidden="true">{scene.sign.text}</span>}
+  </div>
+</div>
+
+<style>
+  .vig {
+    --tint: 110 38 0;
+  }
+
+  .vig-box {
+    position: relative;
+    overflow: hidden;
+    container-type: size;
+    background-color: var(--color-mist-100);
+    height: clamp(11.5rem, 8rem + 16vw, 21rem);
+  }
+
+  .vig-strip .vig-box {
+    height: clamp(6.5rem, 4.5rem + 9vw, 11rem);
+  }
+
+  /* Cover the box with the 4:1 scene, bottom centre. */
+  .vig-box :global(.vig-art) {
+    --w: max(100cqw, 400cqh);
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: var(--w);
+    height: calc(var(--w) / 4);
+    translate: -50% 0;
+  }
+
+  /* The sector number, cut into the signboard: placed in scene units. */
+  .vig-sign {
+    --w: max(100cqw, 400cqh);
+    position: absolute;
+    left: calc(50% + (var(--sx) - 0.5) * var(--w));
+    top: calc(100% - var(--w) / 4 * (1 - var(--sy)));
+    /* Slightly below the line-box centre: caps sit above it. */
+    translate: -50% -44%;
+    color: var(--color-kesar-100);
+    font-family: var(--font-display);
+    font-size: calc(var(--w) / 4 * 0.075);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  /* PaperArt draws one group per layer in a fixed order: the clouds are the 2nd, the crane jib the 6th. */
+  .vig-box :global(.vig-art > g > g:nth-child(6)) {
+    transform-box: view-box;
+    transform-origin: var(--pivot, 0 0);
+  }
+
+  /* Stop-motion: a few steps per second, like a paper puppet moved by hand. */
+  @media (prefers-reduced-motion: no-preference) {
+    .vig-box :global(.vig-art > g > g:nth-child(2)) {
+      animation: vig-drift 36s steps(72) infinite alternate;
+    }
+
+    .vig-box :global(.vig-art > g > g:nth-child(6)) {
+      animation: vig-sway 9s steps(18) infinite alternate;
+    }
+  }
+
+  @keyframes vig-drift {
+    from {
+      transform: translateX(-36px);
+    }
+    to {
+      transform: translateX(36px);
+    }
+  }
+
+  @keyframes vig-sway {
+    from {
+      transform: rotate(-1.4deg);
+    }
+    to {
+      transform: rotate(1.4deg);
+    }
+  }
+</style>

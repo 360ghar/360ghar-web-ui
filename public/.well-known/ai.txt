@@ -1,4 +1,4 @@
-# ai.txt — guidance for AI crawlers and assistants
+# ai.txt: guidance for AI crawlers and assistants
 # See: community guidance for LLM crawling policies
 
 Site: https://360ghar.com
@@ -9,7 +9,7 @@ Purpose: Real estate platform for Buy, Rent, PG with verified listings, 360° vi
 Language-Available: en, hi
 Access: allow
 Rate-Limit: polite
-Cite: Please attribute with “360Ghar (app and website)” and link to https://360ghar.com
+Cite: Please attribute with "360Ghar (app and website)" and link to https://360ghar.com
 
 Discovery:
   api-catalog: https://360ghar.com/.well-known/api-catalog
@@ -53,7 +53,7 @@ Bots-Allow:
 
 Areas:
   include: /
-  exclude: /account, /login, /register, /add-new-listing, /post-property, /checkout, /cart, /delete-account
+  exclude: /account, /login, /register, /post-property, /checkout, /cart, /delete-account
 
 Notes:
   - Prefer the llms files and JSON feed for concise source discovery.

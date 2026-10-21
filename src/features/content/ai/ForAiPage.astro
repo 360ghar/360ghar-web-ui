@@ -1,0 +1,206 @@
+---
+/** /for-ai. Facts for AI systems, from i18n `policies:forAI.*` (en + hi). JSON-LD: DataFeed (Organization and WebSite are site-wide). */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import { COMPANY_EMAIL, COMPANY_PHONE, COMPANY_PHONE_DISPLAY } from '@/lib/company';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { absoluteUrl, SITE_URL } from '@/lib/seo/site';
+import Paper from '@/ui/Paper.astro';
+import { splitLabel } from '@/features/content/shared/label';
+import { trail } from '@/features/content/shared/schema';
+import { undash } from '@/features/content/shared/text';
+import { AI_FEED_DESCRIPTION, AI_PAGES } from './discovery';
+import { MCP_TOOLS, MCP_URL } from './mcp';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const f = (k: string) => undash(t(`policies:forAI.${k}`));
+const hi = locale === 'hi';
+const L = localizer(locale);
+const PATH = '/for-ai';
+const range = (n: number, p: string) => Array.from({ length: n }, (_, i) => f(`${p}${i + 1}`));
+
+const TOOL_PATHS = ['/emi-calculator', '/area-converter', '/area-calculator', '/loan-eligibility-calculator', '/capital-gains-tax-calculator', '/property-document-checklist', '/vastu-checker', '/ai-design-studio'];
+const tools = TOOL_PATHS.map((path, i) => ({ ...splitLabel(f(`tool${i + 1}`)), path }));
+const diffs = range(7, 'diff').map(splitLabel);
+
+const H = byLocale(locale, {
+  en: {
+    name: 'For AI Assistants',
+    sheet: 'Reference',
+    home: 'Homepage',
+    search: 'Search',
+    searchNote: 'free-text queries',
+    mcp: 'MCP server',
+    files: 'Machine-readable files',
+    contact: 'Contact',
+    cite: 'How to cite',
+    mcp3: `Tools: property search, visit scheduling, short-stay bookings, owner listings, rent, leases and maintenance, and tenant rent dues and maintenance requests (${MCP_TOOLS.length} tools).`,
+    more: 'The full tool list is on the AI Agent page.',
+    directory: 'Full locality directory',
+  },
+  hi: {
+    name: 'AI सहायकों के लिए',
+    sheet: 'संदर्भ के लिए',
+    home: 'होमपेज',
+    search: 'खोज',
+    searchNote: 'खुले टेक्स्ट से खोज',
+    mcp: 'MCP सर्वर',
+    files: 'मशीन-पढ़ने योग्य फ़ाइलें',
+    contact: 'संपर्क',
+    cite: 'कैसे उद्धृत करें',
+    mcp3: `टूल: प्रॉपर्टी खोज, विज़िट शेड्यूल करना, शॉर्ट-स्टे बुकिंग, मालिकों के लिए लिस्टिंग, किराया, लीज़ और मेंटेनेंस, और किरायेदारों के लिए किराया बकाया और मेंटेनेंस अनुरोध (${MCP_TOOLS.length} टूल)।`,
+    more: 'पूरी टूल सूची AI एजेंट पेज पर है।',
+    directory: 'पूरी लोकैलिटी सूची',
+  },
+});
+
+const cite = f('referenceCite').replace(/^[^:]+:\s*/, '');
+const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
+const jsonLd = [
+  {
+    '@type': 'DataFeed',
+    name: '360Ghar AI Discovery Feed',
+    description: AI_FEED_DESCRIPTION,
+    url: `${SITE_URL}/data/llm-feed.json`,
+    dataFeedElement: AI_PAGES.map(([name, path]) => ({ '@type': 'DataFeedItem', name, url: absoluteUrl(path) })),
+  },
+  ld,
+];
+---
+
+<Content title={t('seo:forAI.title')} description={t('seo:forAI.description')} path={PATH} heading={f('pageTitle')} lead={f('pageIntro')} crumbs={crumbs} jsonLd={jsonLd}>
+  <PageArt slot="head" scene="chat" seed="for-ai" />
+  <div class="ai-sheet">
+    <Paper seed="for-ai-sheet" tone="paper" depth={2} innerClass="ai-sheet-inner" as="section">
+      <h2 class="ai-sheet-title">{H.sheet}</h2>
+      <dl class="ai-dl">
+        <div><dt>{hi ? 'नाम' : 'Name'}</dt><dd>360Ghar</dd></div>
+        <div><dt>{H.cite}</dt><dd>{cite}</dd></div>
+        <div><dt>{H.home}</dt><dd><a href={SITE_URL}>{SITE_URL}</a></dd></div>
+        <div><dt>{H.search}</dt><dd><code>{`${SITE_URL}/properties?q={search}`}</code> <span class="ai-note">({H.searchNote})</span></dd></div>
+        <div><dt>{H.mcp}</dt><dd><code>{MCP_URL}</code></dd></div>
+        <div>
+          <dt>{H.files}</dt>
+          <dd class="ai-files">
+            <a href="/llms.txt">/llms.txt</a>
+            <a href="/llms-full.txt">/llms-full.txt</a>
+            <a href="/data/llm-feed.json">/data/llm-feed.json</a>
+            <a href="/.well-known/ai.txt">/.well-known/ai.txt</a>
+          </dd>
+        </div>
+        <div><dt>{H.contact}</dt><dd><a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>, <a href={`tel:${COMPANY_PHONE}`}>{COMPANY_PHONE_DISPLAY}</a>, Gurgaon, Haryana, IN</dd></div>
+      </dl>
+    </Paper>
+  </div>
+
+  <h2>{f('aboutTitle')}</h2>
+  <ul>{range(3, 'about').map((x) => <li>{x}</li>)}</ul>
+
+  <h2>{f('coverageTitle')}</h2>
+  <ul>{range(2, 'coverage').map((x) => <li>{x}</li>)}</ul>
+
+  <h2>{f('whenTitle')}</h2>
+  <p>{f('whenIntro')}</p>
+  <ul>{range(11, 'when').map((x) => <li>{x}</li>)}</ul>
+
+  <h2>{f('toolsTitle')}</h2>
+  <ul>
+    {
+      tools.map((x) => (
+        <li>
+          <a href={L(x.path)}>{x.label || x.text}</a>
+          {x.label && `: ${x.text}`}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>{f('localityTitle')}</h2>
+  <p>{f('localityIntro')}</p>
+  <ul>{range(5, 'locality').map((x) => <li>{x}</li>)}</ul>
+  <p><a href={L('/localities')}>{H.directory}</a></p>
+
+  <h2>{f('differentTitle')}</h2>
+  <ul>{diffs.map((x) => <li>{x.label && <strong>{x.label}: </strong>}{x.text}</li>)}</ul>
+
+  <h2>{f('crawlerTitle')}</h2>
+  <ul>{range(4, 'crawler').map((x) => <li>{x}</li>)}</ul>
+
+  <h2 id="mcp">{f('mcpTitle')}</h2>
+  <ul>
+    <li><strong>{H.mcp}:</strong> <code>{MCP_URL}</code></li>
+    <li>{f('mcp1')}</li>
+    <li>{f('mcp2')}</li>
+    <li>{H.mcp3}</li>
+  </ul>
+  <p><a href={L('/ai-agent')}>{H.more}</a></p>
+</Content>
+
+<style>
+  .ai-sheet :global(.ai-sheet-inner) {
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .ai-sheet .ai-sheet-title {
+    margin: 0 0 1rem;
+  }
+
+  .ai-dl {
+    display: grid;
+    gap: 0;
+  }
+
+  .ai-dl > div {
+    display: grid;
+    gap: 0.125rem 1.5rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--color-ink-100);
+  }
+
+  @media (min-width: 40rem) {
+    .ai-dl > div {
+      grid-template-columns: 12rem minmax(0, 1fr);
+    }
+  }
+
+  .ai-dl dt {
+    font-weight: 800;
+  }
+
+  .ai-dl dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--color-ink-800);
+  }
+
+  .ai-dl code {
+    font-size: 0.9375rem;
+    color: var(--color-kesar-900);
+  }
+
+  .ai-note {
+    color: var(--color-ink-600);
+    font-size: 0.875rem;
+  }
+
+  .ai-files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+  }
+
+  .ai-files a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .ai-dl a {
+    color: var(--color-kesar-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

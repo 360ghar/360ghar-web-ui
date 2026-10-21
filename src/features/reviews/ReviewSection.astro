@@ -1,0 +1,201 @@
+---
+/**
+ * Review capture on a flat mist panel: the question and the link to the real
+ * Google reviews on top, the form below. There is no list of reviews on
+ * purpose: the backend has no reviews route, and a review shown here must be real.
+ * Reuse: `<ReviewSection locale={locale} id="home-review" />`.
+ */
+import type { Locale } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import ReviewForm from './ReviewForm';
+import { GOOGLE_REVIEWS_URL, reviewStrings } from './strings';
+
+type Props = { locale: Locale; id?: string; class?: string; headingLevel?: 2 | 3; propertyId?: number | null; googleLink?: boolean };
+const { locale, id = 'review', class: className, headingLevel = 2, propertyId = null, googleLink = true } = Astro.props;
+const s = reviewStrings(locale);
+const Heading = `h${headingLevel}` as 'h2';
+---
+
+<section class:list={['rev', className]} aria-labelledby={`${id}-title`}>
+  <div class="container-page">
+    <div class="rev-panel">
+      <div class="rev-head">
+        <div class="rev-copy">
+          <Heading id={`${id}-title`} class="rev-title">{s.title}</Heading>
+          <p class="rev-lead">{s.lead}</p>
+          <p class="rev-note">{s.note}</p>
+        </div>
+        {
+          googleLink ? (
+            <a class="link rev-google" href={GOOGLE_REVIEWS_URL} rel="noopener">
+              <Icon name="brand:google" size={18} />
+              {s.google}
+              <Icon name="arrow-up-right" size={16} class="arrow" />
+            </a>
+          ) : null
+        }
+      </div>
+      <div class="rev-body">
+        <ReviewForm client:visible locale={locale} s={s} id={id} propertyId={propertyId} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rev-panel {
+    display: grid;
+    gap: 1.5rem;
+    padding: clamp(1.25rem, 3.5vw, 2.5rem);
+    background: var(--color-mist-50);
+    border-radius: var(--radius-xl);
+  }
+
+  .rev-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+  }
+
+  .rev-title {
+    max-width: 30ch;
+    font-size: clamp(1.375rem, 1.05rem + 1.5vw, 2.25rem);
+    line-height: 1.15;
+  }
+
+  .rev-lead {
+    margin-top: 0.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .rev-note {
+    margin-top: 0.25rem;
+    max-width: 60ch;
+    font-size: 0.9375rem;
+    color: var(--color-ink-600);
+  }
+
+  .rev-google {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 44px;
+  }
+
+  .rev-body {
+    container-type: inline-size;
+  }
+
+  .rev-body :global(.rev-form) {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .rev-body :global(.rev-rating) {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .rev-body :global(.rev-stars) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+  }
+
+  /*
+   * 44 px targets. A star you have not chosen is an outline in ink-600, a chosen
+   * one is filled kesar-700, so the state shows in shape and not only in colour.
+   * Contrast of the graphic (WCAG 1.4.11 needs 3:1): ink-600 6.6 to 8.5 and
+   * kesar-700 4.2 to 5.5 on white, mist-50, mist-100 and mist-200.
+   */
+  .rev-body :global(.rev-star) {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--color-ink-600);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  .rev-body :global(.rev-star svg) {
+    fill: transparent;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linejoin: round;
+  }
+
+  .rev-body :global(.rev-star.is-on) {
+    color: var(--color-kesar-700);
+  }
+
+  .rev-body :global(.rev-star.is-on svg) {
+    fill: currentColor;
+  }
+
+  .rev-body :global(.rev-star:has(input:focus-visible)) {
+    outline: 3px solid var(--color-kesar-700);
+    outline-offset: 1px;
+  }
+
+  .rev-body :global(.rev-rating-text) {
+    margin-left: 0.5rem;
+    font-weight: 700;
+    color: var(--color-ink-800);
+  }
+
+  .rev-body :global(.rev-trap) {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  @container (min-width: 46rem) {
+    .rev-body :global(.rev-form) {
+      grid-template-columns: minmax(0, 1.1fr) repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .rev-body :global(.rev-text) {
+      grid-column: 1 / span 2;
+    }
+
+    .rev-body :global(.rev-submit) {
+      align-self: end;
+      justify-self: start;
+    }
+
+    .rev-body :global(.rev-fail) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .rev-body :global(.rev-form > .btn) {
+    justify-self: start;
+  }
+
+  .rev-body :global(.rev-sent) {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+    color: var(--color-ink-800);
+  }
+
+  .rev-body :global(.rev-sent > svg) {
+    color: var(--color-leaf-700);
+  }
+
+  .rev-body :global(.rev-sent-title) {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+</style>

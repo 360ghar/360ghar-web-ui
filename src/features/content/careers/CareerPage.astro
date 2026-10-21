@@ -1,0 +1,273 @@
+---
+/**
+ * /careers/:slug (SSG, 4 slugs). A closed role keeps its URL with status 200,
+ * noindex and no JobPosting. Unknown slugs never reach this component: the
+ * route has no static path for them, so the catch-all returns a real 404.
+ */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import { longDate } from '@/features/content/shared/text';
+import { trail } from '@/features/content/shared/schema';
+import { CAREERS_EMAIL, isOpen, jobPosting, mailtoFor, OPEN_ROLES, type Opening } from './data';
+
+type Props = { locale: Locale; opening: Opening };
+const { locale, opening: o } = Astro.props;
+const t = getT(locale);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const open = isOpen(o);
+const path = `/careers/${o.slug}`;
+
+const H = byLocale(locale, {
+  en: {
+    careers: 'Careers',
+    closed: 'This position is no longer accepting applications.',
+    closedBody: 'The details below are kept for reference.',
+    seeOpen: 'See our open internships',
+    location: 'Location',
+    duration: 'Duration',
+    type: 'Type',
+    posted: 'Posted',
+    intern: 'Internship',
+    about: 'About this internship',
+    want: "What we're looking for",
+    learn: "What you'll learn",
+    ready: 'Ready to apply?',
+    readyBody: 'Send your resume, portfolio, or a quick note about yourself.',
+    apply: 'Apply by email',
+    orEmail: 'Or email us directly at',
+    isClosed: 'This role is closed',
+    future: 'To be considered for future openings, email',
+    others: 'Other open internships',
+  },
+  hi: {
+    careers: 'करियर',
+    closed: 'यह भूमिका अब आवेदन स्वीकार नहीं कर रही है।',
+    closedBody: 'नीचे की जानकारी संदर्भ के लिए रखी गई है।',
+    seeOpen: 'खुली इंटर्नशिप देखें',
+    location: 'जगह',
+    duration: 'अवधि',
+    type: 'प्रकार',
+    posted: 'पोस्ट की गई',
+    intern: 'इंटर्नशिप',
+    about: 'इस इंटर्नशिप के बारे में',
+    want: 'हम क्या चाहते हैं',
+    learn: 'आप क्या सीखेंगे',
+    ready: 'आवेदन के लिए तैयार?',
+    readyBody: 'अपना रिज़्यूमे, पोर्टफ़ोलियो या अपने बारे में एक छोटा नोट भेजें।',
+    apply: 'ईमेल से आवेदन करें',
+    orEmail: 'या सीधे ईमेल करें',
+    isClosed: 'यह भूमिका बंद है',
+    future: 'आगे की भूमिकाओं के लिए ईमेल करें',
+    others: 'दूसरी खुली इंटर्नशिप',
+  },
+});
+
+const others = OPEN_ROLES.filter((x) => x.slug !== o.slug);
+const title = open ? t('seo:careerDetails.titleTemplate', { title: o.title }) : `${o.title} (closed) | 360Ghar`;
+const description = t('seo:careerDetails.descriptionTemplate', { title: o.title, location: o.location });
+const { crumbs, ld } = trail(locale, [
+  { name: H.careers, path: '/careers' },
+  { name: o.title, path },
+]);
+const jsonLd = open ? [jobPosting(o, canonicalFor(path, locale)), ld] : [];
+---
+
+<Content title={title} description={description} path={path} noindex={!open} heading={o.title} lead={`${H.intern}, ${o.location}`} crumbs={crumbs} wide jsonLd={jsonLd} newsletter>
+  {
+    !open && (
+      <p class="job-closed" role="status">
+        <Icon name="alert" size={20} />
+        <span>
+          <strong>{H.closed}</strong> {H.closedBody} <a href={L('/careers')}>{H.seeOpen}</a>.
+        </span>
+      </p>
+    )
+  }
+
+  <div class="job-grid">
+    <div class="job-main">
+      <dl class="job-facts">
+        <div><dt>{H.location}</dt><dd>{o.location}</dd></div>
+        <div><dt>{H.duration}</dt><dd lang={hi ? 'en' : undefined}>{o.duration}</dd></div>
+        <div><dt>{H.type}</dt><dd>{H.intern}</dd></div>
+        <div><dt>{H.posted}</dt><dd>{longDate(o.postedDate, locale)}</dd></div>
+      </dl>
+
+      <div lang={hi ? 'en' : undefined}>
+        <h2>{H.about}</h2>
+        <p>{o.about}</p>
+        <h2>{H.want}</h2>
+        <ul>{o.requirements.map((r) => <li>{r}</li>)}</ul>
+        <h2>{H.learn}</h2>
+        <p>
+          At 360Ghar, interns work on real products with real impact. You will gain hands-on experience, receive direct mentorship from the founding team, and build a portfolio piece that users actually use. High-performing interns may receive extended opportunities or full-time offers.
+        </p>
+      </div>
+    </div>
+
+    <aside class="job-aside" aria-labelledby="job-apply">
+      <Paper seed={`apply-${o.slug}`} tone={open ? 'mist-100' : 'paper'} depth={2} innerClass="job-apply">
+        {
+          open ? (
+            <>
+              <h2 id="job-apply" class="job-apply-title">{H.ready}</h2>
+              <p>{H.readyBody}</p>
+              <a class="btn btn-primary btn-lg btn-block" href={mailtoFor(o)}>
+                <Icon name="upload" size={18} />
+                {H.apply}
+              </a>
+              <p class="job-apply-small">
+                {H.orEmail} <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 id="job-apply" class="job-apply-title">{H.isClosed}</h2>
+              <a class="btn btn-ink btn-block" href={L('/careers')}>
+                {H.seeOpen}
+              </a>
+              <p class="job-apply-small">
+                {H.future} <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>
+              </p>
+            </>
+          )
+        }
+      </Paper>
+    </aside>
+  </div>
+
+  {
+    others.length > 0 && (
+      <section class="job-others" aria-labelledby="job-others">
+        <h2 id="job-others">{H.others}</h2>
+        <ul class="job-other-list" role="list">
+          {others.map((x) => (
+            <li>
+              <a href={L(`/careers/${x.slug}`)}>
+                <span>{x.title}</span>
+                <Icon name="chevron-right" size={18} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Content>
+
+<style>
+  .job-closed {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+    max-width: 52rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.125rem;
+    border-radius: var(--radius-md);
+    background: var(--color-haldi-100);
+    color: var(--color-ink-950);
+  }
+
+  .job-closed :global(svg) {
+    flex: none;
+    margin-top: 0.125rem;
+    color: var(--color-haldi-700);
+  }
+
+  .job-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 64rem) {
+    .job-grid {
+      grid-template-columns: minmax(0, 46rem) minmax(0, 22rem);
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .job-aside {
+      position: sticky;
+      top: 88px;
+    }
+  }
+
+  .job-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .job-facts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .job-facts dt {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink-600);
+  }
+
+  .job-facts dd {
+    margin-top: 0.125rem;
+    font-weight: 700;
+  }
+
+  .job-aside :global(.job-apply) {
+    display: grid;
+    gap: 0.875rem;
+    padding: 1.5rem;
+  }
+
+  .job-aside .job-apply-title {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .job-aside p {
+    margin: 0;
+    color: var(--color-ink-950);
+  }
+
+  .job-aside .job-apply-small {
+    font-size: 0.875rem;
+  }
+
+  .job-others {
+    max-width: 46rem;
+  }
+
+  ul.job-other-list {
+    padding: 0;
+    list-style: none;
+  }
+
+  .job-other-list > li {
+    margin: 0;
+    max-width: none;
+  }
+
+  .job-other-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 52px;
+    border-bottom: 1px solid var(--color-ink-200);
+    color: var(--color-ink-950);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .job-other-list a:hover {
+    color: var(--color-kesar-700);
+  }
+</style>

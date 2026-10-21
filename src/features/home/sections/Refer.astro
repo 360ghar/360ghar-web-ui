@@ -1,0 +1,96 @@
+---
+/**
+ * Refer and earn, in one plain block: the question, the two real amounts as
+ * large figures, one link. The amounts are the terms on /refer-and-earn
+ * (features/content/refer/terms.ts): Rs 100 on listing, up to Rs 10,000 when the deal closes.
+ */
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import { MORE } from '../more';
+
+type Props = { locale: Locale; class?: string };
+const { locale, class: className } = Astro.props;
+const c = MORE[locale].refer;
+const L = localizer(locale);
+---
+
+<section class:list={['refer container-page', className]} aria-labelledby="home-refer">
+  <div class="refer-copy">
+    <h2 id="home-refer" class="refer-title">{c.title}</h2>
+    <a class="link refer-link" href={L('/refer-and-earn')}>
+      {c.cta}
+      <Icon name="arrow-up-right" size={16} class="arrow" />
+    </a>
+    <p class="refer-note">{c.note}</p>
+  </div>
+  <div class="refer-amounts">
+    {
+      [c.listed, c.deal].map((a) => (
+        <p>
+          <span class="refer-num tabular">{a.amount}</span>
+          <span class="refer-text">{a.text}</span>
+        </p>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .refer {
+    display: grid;
+    gap: 1.5rem 3rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  @media (min-width: 56rem) {
+    .refer {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      align-items: center;
+    }
+  }
+
+  .refer-title {
+    max-width: 22ch;
+    font-size: clamp(1.375rem, 1.1rem + 1.2vw, 2rem);
+    line-height: 1.15;
+  }
+
+  .refer-link {
+    margin-top: 0.5rem;
+  }
+
+  .refer-note {
+    color: var(--color-ink-600);
+  }
+
+  .refer-amounts {
+    display: grid;
+    gap: 1rem 2.5rem;
+  }
+
+  @media (min-width: 36rem) {
+    .refer-amounts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .refer-amounts p {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .refer-num {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 1.5rem + 3.4vw, 4rem);
+    white-space: nowrap;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: var(--color-kesar-700);
+  }
+
+  .refer-text {
+    color: var(--color-ink-800);
+  }
+</style>

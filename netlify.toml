@@ -1,115 +1,30 @@
 [build]
+  command = "pnpm build"
   publish = "dist"
-  # Fast preview/branch path. Full production build + deploy runs in GitHub Actions.
-  command = "npm run build:preview"
 
 [build.environment]
-  NODE_VERSION = "20"
-  VITE_API_SERVER = "https://api.360ghar.com"
-  VITE_API_BASE_URL = "https://api.360ghar.com/api/v1"
-  # Netlify edge already compresses responses; skip pre-brotli for faster builds.
-  SKIP_BROTLI = "1"
-  # Prerender tuning (used only when FULL_BUILD=1):
-  PUPPETEER_CACHE_DIR = "./node_modules/.cache/puppeteer"
-  PRERENDER_CONCURRENCY = "5"
-  PRERENDER_CACHE_DIR = "node_modules/.cache/prerender-html"
+  NODE_VERSION = "22"
+  API_ORIGIN = "https://api.360ghar.com"
+  # Public ids (the same as the old site's index.html).
+  PUBLIC_GA_ID = "G-0S1Q7466MM"
+  PUBLIC_POSTHOG_HOST = "https://us.i.posthog.com"
 
-# Production deploys are built in GitHub Actions and uploaded via Netlify CLI.
-# Netlify's own git-triggered production build is skipped.
-[context.production]
-  ignore = "echo 'Production built by GitHub Actions' && exit 0"
+# Deploy previews run on *.netlify.app, which the API CORS policy does not
+# allow, so the browser uses the same-origin proxy below.
+[context.deploy-preview.environment]
+  PUBLIC_API_BASE = ""
+[context.branch-deploy.environment]
+  PUBLIC_API_BASE = ""
 
-# ── Server-side redirects (processed top-to-bottom, BEFORE the SPA catch-all) ──
+# ---- Redirects and proxies. Legacy path rules live in src/lib/redirects.ts (middleware). ----
 
-# WWW → non-www (consolidate authority)
 [[redirects]]
   from = "https://www.360ghar.com/*"
   to = "https://360ghar.com/:splat"
   status = 301
   force = true
 
-# NOTE: Do NOT add a force trailing-slash strip rule (from = "/*/" → "/:splat").
-# Combined with Netlify Pretty URLs / SPA rewrites it has produced site-wide
-# HTTP 301 self-redirect loops (2026-07-14 outage). Prefer in-app canonicals.
-
-# Direct gurugram+apartments → gurgaon+flats (avoid redirect chain)
-[[redirects]]
-  from = "/gurugram/buy/apartments"
-  to = "/gurgaon/buy/flats"
-  status = 301
-
-[[redirects]]
-  from = "/gurugram/rent/apartments"
-  to = "/gurgaon/rent/flats"
-  status = 301
-
-[[redirects]]
-  from = "/gurugram/pg/apartments"
-  to = "/gurgaon/pg/flats"
-  status = 301
-
-[[redirects]]
-  from = "/hi/gurugram/buy/apartments"
-  to = "/hi/gurgaon/buy/flats"
-  status = 301
-
-[[redirects]]
-  from = "/hi/gurugram/rent/apartments"
-  to = "/hi/gurgaon/rent/flats"
-  status = 301
-
-[[redirects]]
-  from = "/hi/gurugram/pg/apartments"
-  to = "/hi/gurgaon/pg/flats"
-  status = 301
-
-# City slug normalization: gurugram → gurgaon
-[[redirects]]
-  from = "/gurugram/*"
-  to = "/gurgaon/:splat"
-  status = 301
-
-# City slug normalization for Hindi: /hi/gurugram/ → /hi/gurgaon/
-[[redirects]]
-  from = "/hi/gurugram/*"
-  to = "/hi/gurgaon/:splat"
-  status = 301
-
-# Hindi apartments → flats redirects
-[[redirects]]
-  from = "/hi/:city/buy/apartments"
-  to = "/hi/:city/buy/flats"
-  status = 301
-
-[[redirects]]
-  from = "/hi/:city/rent/apartments"
-  to = "/hi/:city/rent/flats"
-  status = 301
-
-[[redirects]]
-  from = "/hi/:city/pg/apartments"
-  to = "/hi/:city/pg/flats"
-  status = 301
-
-# Deduplicate flats/apartments: apartments → flats for all city/intent combos
-[[redirects]]
-  from = "/:city/buy/apartments"
-  to = "/:city/buy/flats"
-  status = 301
-
-[[redirects]]
-  from = "/:city/rent/apartments"
-  to = "/:city/rent/flats"
-  status = 301
-
-[[redirects]]
-  from = "/:city/pg/apartments"
-  to = "/:city/pg/flats"
-  status = 301
-
-# Deep-link verification files — served by the backend so a single source of
-# truth (APP_REGISTRY + DEEPLINK_*_ANDROID_SHA256 env) owns every app's
-# fingerprints. force=true keeps these above the SPA catch-all below.
+# Deep-link files are owned by the backend.
 [[redirects]]
   from = "/.well-known/assetlinks.json"
   to = "https://api.360ghar.com/.well-known/assetlinks.json"
@@ -122,179 +37,126 @@
   status = 200
   force = true
 
-# Legacy /data-hub/* paths -> canonical data-hub routes (fix soft-404s)
+# Same-origin API proxy (dev parity, deploy previews). The old site used /api/*.
 [[redirects]]
-  from = "/data-hub/circle-rates"
-  to = "/circle-rates"
-  status = 301
-
-[[redirects]]
-  from = "/data-hub/rera-projects"
-  to = "/rera-projects"
-  status = 301
-
-[[redirects]]
-  from = "/data-hub/bank-auctions"
-  to = "/bank-auctions"
-  status = 301
-
-# SPA fallback - serve index.html for all unmatched routes
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/v1/*"
+  to = "https://api.360ghar.com/api/v1/:splat"
   status = 200
+  force = true
 
-# Global security headers (applied to all responses). CSP intentionally omitted:
-# a tight CSP breaks Formspree, Places/Maps, Puter/AI Design Studio, and Vimeo.
+[[redirects]]
+  from = "/api/*"
+  to = "https://api.360ghar.com/api/v1/:splat"
+  status = 200
+  force = true
+
+# ---- Headers ----
+
 [[headers]]
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
+    X-Frame-Options = "SAMEORIGIN"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(self)"
 
-# Hashed JS chunks — content-addressed, safe to cache forever
+# Hashed build assets are content-addressed.
 [[headers]]
-  for = "/assets/*.js"
+  for = "/_astro/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Hashed CSS chunks — content-addressed, safe to cache forever
 [[headers]]
-  for = "/assets/*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Webfonts (Font Awesome woff2) — immutable
-[[headers]]
-  for = "/assets/webfonts/*"
+  for = "/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Access-Control-Allow-Origin = "*"
 
-# Static CSS from public/ (Bootstrap, Font Awesome CSS, local fonts)
-[[headers]]
-  for = "/assets/css/*"
-  [headers.values]
-    Cache-Control = "public, max-age=2592000, stale-while-revalidate=604800"
-
-# Images — 30 days with stale-while-revalidate
 [[headers]]
   for = "/assets/images/*"
   [headers.values]
     Cache-Control = "public, max-age=2592000, stale-while-revalidate=604800"
 
-# Service worker — never cache so updates propagate immediately
+# Paper-cut drawings served as files (src/pages/art/**). No content hash, so one day.
+[[headers]]
+  for = "/art/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+# Prerendered HTML: short browser cache, longer edge cache (purged on deploy).
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=60, stale-while-revalidate=604800"
+    Netlify-CDN-Cache-Control = "public, durable, max-age=3600, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Link = '''</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </for-ai>; rel="service-doc"; type="text/html", </data/llm-feed.json>; rel="service-meta"; type="application/json", </.well-known/mcp/server-card.json>; rel="mcp-server", </.well-known/agent-skills/index.json>; rel="agent-skills", </llms.txt>; rel="llms-txt", </.well-known/openid-configuration>; rel="openid-configuration"'''
+
+# The old PWA worker must never be cached, so its replacement can unregister it.
 [[headers]]
   for = "/sw.js"
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
 
+# Discovery files: open CORS and a one-hour cache. The blocks below add only the Content-Type.
 [[headers]]
-  for = "/registerSW.js"
+  for = "/.well-known/*"
   [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-
-[[headers]]
-  for = "/workbox-*.js"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-
-# HTML pages — short browser cache + longer CDN edge TTL.
-# Browser max-age=60 keeps clients fresh; CDN max-age=3600 cuts edge TTFB.
-# Netlify purges the edge on every deploy, so the longer CDN window is safe.
-# stale-while-revalidate serves stale while revalidating in the background.
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=60, stale-while-revalidate=604800"
-    CDN-Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "0"
-
-# Root index.html — with Link headers for agent discovery (RFC 8288)
-[[headers]]
-  for = "/"
-  [headers.values]
-    Cache-Control = "public, max-age=60, stale-while-revalidate=604800"
-    CDN-Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
-    Link = '''</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </for-ai>; rel="service-doc"; type="text/html", </data/llm-feed.json>; rel="service-meta"; type="application/json", </.well-known/mcp/server-card.json>; rel="mcp-server", </.well-known/agent-skills/index.json>; rel="agent-skills", </llms.txt>; rel="llms-txt", </.well-known/openid-configuration>; rel="openid-configuration"'''
-
-# ── .well-known agent discovery files ──────────────────────────────────────
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/api-catalog"
   [headers.values]
     Content-Type = "application/linkset+json"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/openid-configuration"
   [headers.values]
     Content-Type = "application/json"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/oauth-authorization-server"
   [headers.values]
     Content-Type = "application/json"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/oauth-protected-resource"
   [headers.values]
     Content-Type = "application/json"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/mcp/server-card.json"
   [headers.values]
     Content-Type = "application/json"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/agent-skills/index.json"
   [headers.values]
     Content-Type = "application/json"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/agent-skills/*/SKILL.md"
   [headers.values]
     Content-Type = "text/markdown"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/acp.json"
   [headers.values]
     Content-Type = "application/json"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/ucp"
   [headers.values]
     Content-Type = "application/json"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/.well-known/ai.txt"
   [headers.values]
     Content-Type = "text/plain"
-    Access-Control-Allow-Origin = "*"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/openapi.json"

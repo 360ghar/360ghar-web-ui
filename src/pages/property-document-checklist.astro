@@ -1,0 +1,37 @@
+---
+import { getT } from '@/i18n';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import Checklist from '@/features/tools/checklist/Checklist';
+import { CHECKLIST_FAQ, CHECKLIST_HOWTO, CHECKLIST_PAGE } from '@/features/tools/checklist/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = CHECKLIST_PAGE[locale];
+const doc = (id: number, key: string) => ({ id, text: t(`tools:propertyChecklist.doc${key}`), desc: t(`tools:propertyChecklist.doc${key}Desc`) });
+const groups = [
+  { title: t('tools:propertyChecklist.catLegalDocuments'), items: [doc(1, 'TitleDeed'), doc(2, 'Encumbrance'), doc(3, 'NAOrder'), doc(4, 'BuildingPlan'), doc(5, 'Completion')] },
+  { title: t('tools:propertyChecklist.catFinancialTax'), items: [doc(6, 'PropertyTax'), doc(7, 'Khata'), doc(8, 'NocBank'), doc(9, 'NocSociety')] },
+  { title: t('tools:propertyChecklist.catAgreementRegistration'), items: [doc(10, 'SaleAgreement'), doc(11, 'StampDuty'), doc(12, 'Registration'), doc(13, 'Possession')] },
+];
+---
+
+<ToolPage
+  tool="propertyChecklist"
+  title={t('tools:propertyChecklist.title')}
+  description={c.description}
+  keywords={t('tools:propertyChecklist.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={CHECKLIST_FAQ[locale]}
+  faqTitle={c.faqTitle}
+  howTo={CHECKLIST_HOWTO[locale]}
+  related={['fakeListing', 'verifyOwnership', 'stampDuty', 'emi', 'areaCalculator', 'vastu']}
+>
+  <Checklist client:load locale={locale} groups={groups} />
+  <Fragment slot="body">
+    <h2>{c.lawyerTitle}</h2>
+    <p>{t('tools:propertyChecklist.noteDesc')}</p>
+  </Fragment>
+</ToolPage>

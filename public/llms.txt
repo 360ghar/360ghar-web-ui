@@ -64,7 +64,7 @@
 - Sushant Lok 1, Gurgaon: https://360ghar.com/locality/sushant-lok-1-gurgaon
 - Sohna Road, Gurgaon: https://360ghar.com/locality/sohna-road-gurgaon
 - Sector 49, Gurgaon: https://360ghar.com/locality/sector-49-gurgaon
-- मुख्य पृष्ठ (Hindi): https://360ghar.com/hi/
+- मुख्य पृष्ठ (Hindi): https://360ghar.com/hi
 - प्रॉपर्टी (Hindi): https://360ghar.com/hi/properties
 - लोकैलिटी (Hindi): https://360ghar.com/hi/localities
 - ब्लॉग (Hindi): https://360ghar.com/hi/blog

@@ -1,0 +1,198 @@
+/* Area tools. Extends tools.css (loaded by ToolPage). */
+
+.area-units {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.area-swap {
+  justify-self: start;
+}
+
+.area-swap .icon-turn {
+  rotate: 90deg;
+}
+
+@media (min-width: 30rem) {
+  .area-units {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: end;
+  }
+
+  .area-swap .icon-turn {
+    rotate: 0deg;
+  }
+
+  .area-swap-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .area-swap.btn {
+    padding: 0;
+    width: 44px;
+  }
+}
+
+.area-figs {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 30rem) {
+  .area-figs:has(.area-sizes) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+  }
+}
+
+.area-plot,
+.area-sizes {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+/* The square on the left, what it means on the right. */
+.area-plot {
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+
+.area-plot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.area-plot-sq {
+  fill: var(--color-kesar-300);
+  filter: drop-shadow(1px 1.5px 0 rgb(0 0 0 / 0.35));
+}
+
+.area-plot-dim {
+  fill: none;
+  stroke: var(--color-kesar-100);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.area-sizes svg {
+  display: block;
+  width: 7.5rem;
+  height: auto;
+  overflow: visible;
+}
+
+.area-sizes rect {
+  filter: drop-shadow(1px 1.5px 0 rgb(0 0 0 / 0.35));
+}
+
+.tool-result .tool-bar-c {
+  background: var(--color-ink-400);
+}
+
+.tool-table .is-text {
+  text-align: left;
+  white-space: normal;
+}
+
+.area-dir {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.area-all {
+  display: grid;
+  gap: 0 2rem;
+  margin: 0;
+}
+
+@media (min-width: 40rem) {
+  .area-all {
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  }
+}
+
+.area-all > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-ink-100);
+}
+
+.area-all dt {
+  color: var(--color-ink-800);
+  font-weight: 600;
+}
+
+.area-all dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* Carpet calculator: the three areas as nested sheets, to scale. */
+.area-nest {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  align-items: end;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.area-nest svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.area-nest rect {
+  filter: drop-shadow(1px 1.5px 0 rgb(0 0 0 / 0.35));
+}
+
+.area-nest .tool-bar-a {
+  fill: var(--color-kesar-500);
+}
+
+.area-nest .tool-bar-b {
+  fill: var(--color-kesar-100);
+}
+
+.area-nest .tool-bar-c {
+  fill: var(--color-ink-400);
+}
+
+.area-nest-legend {
+  display: grid;
+  gap: 0.375rem;
+  margin: 0;
+}
+
+.area-nest-legend li {
+  align-items: flex-start;
+}
+
+.area-nest-legend i {
+  flex: none;
+  margin-top: 0.3em;
+}
+
+.area-sizes .tool-bar-a {
+  fill: var(--color-kesar-500);
+}
+
+.area-sizes .tool-bar-b {
+  fill: var(--color-kesar-100);
+}

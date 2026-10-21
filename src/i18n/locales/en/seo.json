@@ -31,8 +31,7 @@
     "description": "Browse verified flats, apartments & villas in Gurgaon. Physically inspected listings with 360° virtual tours. Buy, rent, or PG — zero fake listings."
   },
   "propertyDetails": {
-    "fallbackTitle": "Property Details | 360Ghar - Best Real Estate Platform",
-    "fallbackDescription": "Explore verified property details with 360° virtual tours on 360Ghar."
+    "fallbackTitle": "Property Details | 360Ghar - Best Real Estate Platform"
   },
   "propertySidebar": {
     "title": "Properties with Filter Sidebar | 360Ghar",
@@ -67,7 +66,6 @@
   },
   "careerDetails": {
     "notFoundTitle": "Career Not Found | 360Ghar",
-    "notFoundDescription": "The career opening you are looking for could not be found.",
     "titleTemplate": "{{title}} at 360Ghar | Internships",
     "descriptionTemplate": "{{title}} internship at 360Ghar in {{location}}. Hands-on mentorship, real product impact, and fast growth at India's first AI + VR real estate platform."
   },
@@ -99,7 +97,7 @@
     "description": "Calculate stamp duty and registration charges for property in Gurugram, Haryana. Free online calculator with 2026 rates."
   },
   "auctionSources": {
-    "title": "Government & Bank Auction Properties in Delhi NCR — Complete Guide | 360Ghar",
+    "title": "Government & Bank Auction Properties in Delhi NCR: Complete Guide | 360Ghar",
     "description": "Complete guide to government and bank property auction portals for Delhi NCR."
   },
   "priceIndex": {
@@ -173,8 +171,7 @@
     "descriptionTemplate": "Find verified flats, apartments, and offices near {{name}} in {{city}}. 360° virtual tours available."
   },
   "blog": {
-    "fallbackTitle": "Real Estate Blog 2026 | Vastu, Property Calculators & Buying Guide | 360Ghar",
-    "fallbackDescription": "Read 2026 insights on Vastu, area calculators, buying, renting, and real estate investment in Gurugram. Free guides from 360Ghar blog."
+    "fallbackTitle": "Real Estate Blog 2026 | Vastu, Property Calculators & Buying Guide | 360Ghar"
   },
   "truth": {
     "99acres": {

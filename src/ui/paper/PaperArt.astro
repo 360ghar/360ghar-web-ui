@@ -1,0 +1,101 @@
+---
+/**
+ * Renders paper layers (see `Layer` in lib/paper/shapes) as one static SVG.
+ * Each layer casts one short shadow to the bottom right. Used by PaperScene
+ * and PaperVignette; use those unless you draw your own layers.
+ *
+ * Shadows point at the page's shared filters (PaperDefs, `url(#pc-…)`) when
+ * the tint and size match the kit; any other shadow gets its own filter with
+ * an id unique to this instance. `ownFilters` forces own filters for all.
+ */
+import { sharedShadowId } from '@/lib/paper/defs';
+import { makeTools, type Layer } from '@/lib/paper/shapes';
+import { compactPath } from './compact';
+import { paperUid } from '@/lib/paper/uid';
+
+type Props = {
+  layers: Layer[];
+  width: number;
+  height: number;
+  /** Background fill. `null` leaves it transparent. */
+  bg?: string | null;
+  /** Cut the background sheet by hand (seeded) instead of a straight rectangle. */
+  cutEdge?: string;
+  /** Shadow offset and blur in SVG units. The kit sizes are [1.4, 2, 0.7], [2, 3, 1.1] and [3, 4, 1.4]. */
+  shadow?: [dx: number, dy: number, blur: number];
+  /** Draw this art's own filters instead of the shared ones (for a page without the base layout). */
+  ownFilters?: boolean;
+  /** "meet" (default): the whole scene shows, height follows the width. "slice": the scene fills its box like a cover photo, cropped at the sides or the sky and kept on the ground line; give the box a height. */
+  fit?: 'meet' | 'slice';
+  /** Accessible name. Without it the art is decorative. */
+  label?: string;
+  class?: string;
+};
+
+const { layers, width, height, bg = 'var(--color-kesar-100)', cutEdge, shadow = [2, 3, 1.1], ownFilters = false, fit = 'meet', label, class: className } = Astro.props;
+const uid = paperUid();
+const [dx, dy, blur] = shadow;
+const edge = cutEdge ? compactPath(makeTools(`edge-${cutEdge}`, 0.9).rect(1.2, 1.2, width - 2.4, height - 2.4)) : null;
+const filterOf = (l: Layer) => {
+  if (l.shadow === 'transparent') return null;
+  return (ownFilters ? null : sharedShadowId(l.shadow, shadow)) ?? `${uid}-${l.id}`;
+};
+const own = layers.filter((l) => filterOf(l) === `${uid}-${l.id}`);
+---
+
+<svg
+  class:list={['paper-art', fit === 'slice' && 'is-slice', className]}
+  viewBox={`0 0 ${width} ${height}`}
+  preserveAspectRatio={fit === 'slice' ? 'xMidYMax slice' : undefined}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  {
+    (own.length > 0 || edge) && (
+      <defs>
+        {own.map((l) => (
+          <filter id={`${uid}-${l.id}`} x="-5%" y="-10%" width="115%" height="130%">
+            <feDropShadow dx={dx} dy={dy} stdDeviation={blur} flood-color={l.shadow} />
+          </filter>
+        ))}
+        {edge && (
+          <clipPath id={`${uid}-edge`}>
+            <path d={edge} />
+          </clipPath>
+        )}
+      </defs>
+    )
+  }
+  <g clip-path={edge ? `url(#${uid}-edge)` : undefined}>
+    {bg && (edge ? <path d={edge} fill={bg} /> : <rect width={width} height={height} fill={bg} />)}
+    {
+      layers.map((l) => {
+        const f = filterOf(l);
+        return (
+          <g fill={l.fill} filter={f ? `url(#${f})` : undefined}>
+            {l.cut.map((d) => (
+              <path fill-rule="evenodd" d={compactPath(d)} />
+            ))}
+            {l.solid.map((d) => (
+              <path d={compactPath(d)} />
+            ))}
+          </g>
+        );
+      })
+    }
+  </g>
+</svg>
+
+<style is:global>
+  .paper-art {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .paper-art.is-slice {
+    height: 100%;
+  }
+</style>

@@ -1,0 +1,135 @@
+---
+/**
+ * /policies (SSG). Static titles and summaries: GET /pages/{name}/public adds 1 to
+ * view_count on every call, so a build must not call it for the index.
+ */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import { localizePath } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import Icon from '@/ui/icons/Icon.astro';
+import { trail, webPage } from '@/features/content/shared/schema';
+import { POLICIES } from './data';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const hi = locale === 'hi';
+
+const items = POLICIES.map((p) => ({
+  slug: p.slug,
+  title: p[locale].title,
+  description: p[locale].description,
+}));
+
+const heading = hi ? 'नीतियाँ' : 'Policies';
+const { crumbs, ld } = trail(locale, [{ name: heading, path: '/policies' }]);
+const jsonLd = [
+  {
+    ...webPage({ name: t('seo:policies.title'), description: t('seo:policies.description'), path: '/policies', locale, type: 'CollectionPage' }),
+    hasPart: items.map((p) => ({ '@type': 'CreativeWork', name: p.title, url: canonicalFor(`/policies/${p.slug}`, locale) })),
+  },
+  ld,
+];
+---
+
+<Content
+  title={t('seo:policies.title')}
+  description={t('seo:policies.description')}
+  path="/policies"
+  heading={heading}
+  lead={t('policies:policies.pageSubtitle')}
+  crumbs={crumbs}
+  jsonLd={jsonLd}
+  newsletter
+>
+  <PageArt slot="head" scene="seal" seed="policies" />
+  <ul class="policy-list" role="list">
+    {
+      items.map((p) => (
+        <li>
+          <a class="policy-doc" href={localizePath(`/policies/${p.slug}`, locale)}>
+            <h2 class="policy-doc-title">{p.title}</h2>
+            <p class="policy-doc-body">{p.description}</p>
+            <span class="policy-doc-read">
+              {t('policies:policies.readPolicy')}
+              <Icon name="arrow-up-right" size={16} class="arrow" />
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Content>
+
+<style>
+  ul.policy-list {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  /* A document sheet with its top-right corner folded down. */
+  a.policy-doc {
+    --fold: 22px;
+    position: relative;
+    display: grid;
+    gap: 0.375rem;
+    padding: 1.25rem calc(var(--fold) + 1.25rem) 1.25rem 1.5rem;
+    background: var(--color-paper);
+    color: inherit;
+    font-weight: 400;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - var(--fold)) 0, 100% var(--fold), 100% 100%, 0 100%);
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 2px 6px -2px rgb(var(--tint) / 0.14);
+    transition: background-color 140ms var(--ease-paper);
+  }
+
+  .policy-doc::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--fold);
+    height: var(--fold);
+    background: var(--color-mist-200);
+    clip-path: polygon(0 0, 100% 100%, 0 100%);
+  }
+
+  .policy-doc:hover {
+    background: var(--color-mist-50);
+  }
+
+  .policy-list > li {
+    max-width: none;
+    margin: 0;
+    filter: drop-shadow(1px 2px 1.5px rgb(var(--tint) / 0.12));
+  }
+
+  .policy-doc .policy-doc-title {
+    margin: 0;
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+  }
+
+  .policy-doc-body {
+    color: var(--color-ink-800);
+  }
+
+  .policy-doc-read {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    font-weight: 700;
+    color: var(--color-kesar-700);
+  }
+
+  .policy-doc:hover :global(.arrow) {
+    translate: 2px -2px;
+  }
+
+  .policy-doc :global(.arrow) {
+    transition: translate 160ms var(--ease-paper);
+  }
+</style>

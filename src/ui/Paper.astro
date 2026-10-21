@@ -1,0 +1,46 @@
+---
+/**
+ * A rounded sheet of card stock with a soft, tinted shadow. The outer element
+ * carries the radius and the shadow, the inner one the fill and the grain.
+ * `seed` and `amp` are kept so older callers still compile; they do nothing now.
+ */
+type Tone = 'paper' | 'mist-50' | 'mist-100' | 'mist-200' | 'kesar-500' | 'kesar-700' | 'ink';
+type Props = {
+  seed?: string;
+  tone?: Tone;
+  depth?: 1 | 2 | 3;
+  amp?: number;
+  as?: 'div' | 'section' | 'article' | 'aside' | 'li';
+  class?: string;
+  innerClass?: string;
+};
+
+const { tone = 'paper', depth = 2, as: Tag = 'div', class: className, innerClass } = Astro.props;
+const bg: Record<Tone, string> = {
+  paper: 'var(--color-paper)',
+  'mist-50': 'var(--color-mist-50)',
+  'mist-100': 'var(--color-mist-100)',
+  'mist-200': 'var(--color-mist-200)',
+  'kesar-500': 'var(--color-kesar-500)',
+  'kesar-700': 'var(--color-kesar-700)',
+  ink: 'var(--color-pine-800)',
+};
+const dark = tone === 'ink' || tone === 'kesar-700';
+const shadow = depth === 1 ? 'shadow-paper-sm' : depth === 3 ? 'shadow-paper-lg' : 'shadow-paper';
+---
+
+<Tag class:list={['paper-card', shadow, className]} data-depth={depth}>
+  <div class:list={['paper-card-fill', 'grain', dark && 'text-white', innerClass]} style={`background-color:${bg[tone]}`}>
+    <slot />
+  </div>
+</Tag>
+
+<style is:global>
+  .paper-card {
+    border-radius: var(--radius-lg);
+  }
+
+  .paper-card-fill {
+    border-radius: inherit;
+  }
+</style>

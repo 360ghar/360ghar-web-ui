@@ -1,0 +1,100 @@
+---
+/**
+ * /faq. Questions come from GET /faqs/public at build time (the old page used
+ * 5 hard-coded items). The old contact block submitted nowhere; this one is
+ * the Formspree contact form. The backend FAQs are English only.
+ */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import { localizePath, byLocale } from '@/lib/i18n/locale';
+import { faqPage } from '@/lib/seo/site';
+import Faq from '@/ui/Faq.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import ContactFormSheet from '@/features/content/contact/ContactFormSheet.astro';
+import { trail } from '@/features/content/shared/schema';
+import { shared } from '@/features/content/shared/text';
+import { loadFaqs } from './load';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const { items, error } = await loadFaqs();
+
+const H = byLocale(locale, {
+  en: { ask: 'Did not find your answer?', askBody: 'Write to us. We reply by email.', error: 'We could not load the questions', errorBody: 'Send your question with the form instead.', empty: 'No questions yet', emptyBody: 'Send us yours with the form.' },
+  hi: { ask: 'आपका जवाब नहीं मिला?', askBody: 'अपना सवाल लिखें। हम ईमेल पर जवाब देंगे।', error: 'अभी सवाल लोड नहीं हो सके', errorBody: 'नीचे दिए फ़ॉर्म से अपना सवाल भेजें।', empty: 'अभी कोई सवाल नहीं है', emptyBody: 'फ़ॉर्म से अपना सवाल भेजें।' },
+});
+
+const { crumbs, ld } = trail(locale, [{ name: 'FAQ', path: '/faq' }]);
+---
+
+<Content
+  title={t('seo:faq.title')}
+  description={t('seo:faq.description')}
+  path="/faq"
+  heading={shared(locale).faqTitle}
+  lead={t('seo:faq.description')}
+  crumbs={crumbs}
+  wide
+  jsonLd={[...(items.length ? [faqPage(items)] : []), ld]}
+  newsletter
+>
+  <PageArt slot="head" scene="question" />
+  <div class="faq-page">
+    <div class="faq-page-list">
+      {
+        items.length ? (
+          <Faq items={items} open={0} />
+        ) : (
+          <StateBlock scene={error ? 'offline' : 'empty'} level={2} title={error ? H.error : H.empty} body={error ? H.errorBody : H.emptyBody} action={{ href: localizePath('/contact', locale), label: t('common:nav.contact') }} />
+        )
+      }
+    </div>
+    <aside class="faq-page-ask" aria-labelledby="faq-ask">
+      <ContactFormSheet locale={locale} id="faq-contact">
+        <div class="faq-ask-head">
+          <h2 id="faq-ask" class="faq-ask-title">{H.ask}</h2>
+          <p class="faq-ask-body">{H.askBody}</p>
+        </div>
+      </ContactFormSheet>
+    </aside>
+  </div>
+</Content>
+
+<style>
+  .faq-page {
+    display: grid;
+    gap: 3rem;
+  }
+
+  @media (min-width: 64rem) {
+    .faq-page {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .faq-page-ask {
+      position: sticky;
+      top: 88px;
+    }
+  }
+
+  /* The list starts at its first rule; the page heading is above it. */
+  .faq-page-list :global(.faq-list) {
+    margin-top: 0;
+  }
+
+  .faq-ask-title {
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+  }
+
+  .faq-ask-head {
+    display: grid;
+    gap: 0.375rem;
+  }
+
+  .faq-ask-body {
+    color: var(--color-ink-800);
+  }
+</style>

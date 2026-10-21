@@ -1,0 +1,75 @@
+---
+/** The contact form (Formspree mwpqglyb) on a paper sheet. Used on /contact and /faq. */
+import type { Locale } from '@/lib/i18n/locale';
+import Paper from '@/ui/Paper.astro';
+import ContactForm from './ContactForm';
+import { contactStrings } from './strings';
+
+type Props = { locale: Locale; id: string; load?: boolean; class?: string };
+const { locale, id, load = false, class: className } = Astro.props;
+const s = contactStrings(locale);
+---
+
+<div class:list={['contact-sheet', className]}>
+  <Paper seed={`form-${id}`} tone="paper" depth={3} innerClass="contact-sheet-inner">
+    <slot />
+    {load ? <ContactForm client:load locale={locale} s={s} id={id} /> : <ContactForm client:visible locale={locale} s={s} id={id} />}
+  </Paper>
+</div>
+
+<style>
+  .contact-sheet {
+    --tint: 94 33 0;
+    container-type: inline-size;
+  }
+
+  /* Headings inside the sheet keep their own spacing, not the prose spacing of Content.astro. */
+  .contact-sheet :global(.contact-sheet-inner :is(h2, h3, p)) {
+    margin: 0;
+  }
+
+  .contact-sheet :global(.contact-sheet-inner) {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .contact-sheet :global(.contact-form) {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .contact-sheet :global(.contact-row) {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @container (min-width: 32rem) {
+    .contact-sheet :global(.contact-row) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+
+  .contact-sheet :global(.contact-form > .btn) {
+    justify-self: start;
+  }
+
+  .contact-sheet :global(.contact-sent) {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+    color: var(--color-ink-800);
+  }
+
+  .contact-sheet :global(.contact-sent > svg) {
+    color: var(--color-leaf-700);
+  }
+
+  .contact-sheet :global(.contact-sent-title) {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+</style>

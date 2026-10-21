@@ -1,0 +1,14 @@
+---
+/**
+ * Catch-all for paths no other route matches. Renders the paper 404 with a
+ * real 404 status. The legacy URL rules (301) run in middleware.
+ */
+import { respond } from '@/lib/cache';
+import NotFoundPage from '@/ui/states/NotFoundPage.astro';
+
+export const prerender = false;
+
+respond(Astro, 'hour', { notFound: true });
+---
+
+<NotFoundPage />

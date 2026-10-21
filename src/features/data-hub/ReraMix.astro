@@ -1,0 +1,130 @@
+---
+/**
+ * Status mix of the RERA register: one square per real project, grouped by
+ * status, with the counts in text. Rows come from the API (all projects).
+ */
+import type { Locale } from '@/lib/i18n/locale';
+import type { ReraProject } from './api';
+import { chartText } from './charts';
+import { fmtDate } from './format';
+import { label, text } from './text';
+
+type Props = { locale: Locale; projects: ReraProject[] };
+const { locale, projects } = Astro.props;
+const c = chartText(locale);
+const t = text(locale);
+const ORDER = ['registered', 'completed', 'lapsed', 'revoked'];
+const groups = ORDER.map((s) => ({ s, n: projects.filter((p) => p.status?.toLowerCase() === s).length })).filter((g) => g.n > 0);
+const rest = projects.length - groups.reduce((a, g) => a + g.n, 0);
+const cells = [...groups.flatMap((g) => Array.from({ length: g.n }, () => g.s)), ...Array.from({ length: rest }, () => 'other')];
+const perRow = Math.min(cells.length, 15);
+const rows = Math.ceil(cells.length / Math.max(perRow, 1));
+const updated = fmtDate(projects.reduce((d, p) => (p.updated_at && p.updated_at > d ? p.updated_at : d), ''), locale, 'long');
+const summary = groups.map((g) => `${label(t.statuses, g.s)} ${g.n}`).join(', ');
+---
+
+{
+  cells.length > 1 && (
+    <section class="dh-mix" aria-labelledby="rera-mix">
+      <h2 id="rera-mix" class="dh-panel-title mb-1">
+        {c.reraTitle}
+      </h2>
+      <p class="dh-meta">{c.reraLead(projects.length)}</p>
+      <svg viewBox={`0 0 ${perRow * 10} ${rows * 10}`} style={`max-width:${perRow * 1.5}rem`} role="img" aria-label={`${c.reraTitle}: ${summary}`}>
+        {cells.map((s, i) => (
+          <rect class={`is-${s}`} x={(i % perRow) * 10 + 1} y={Math.floor(i / perRow) * 10 + 1} width="8" height="8" rx="1" />
+        ))}
+      </svg>
+      <ul class="dh-mix-keys">
+        {groups.map((g) => (
+          <li>
+            <i class={`is-${g.s}`} aria-hidden="true" />
+            {label(t.statuses, g.s)} <b>{g.n}</b>
+          </li>
+        ))}
+        {
+          rest > 0 && (
+            <li>
+              <i class="is-other" aria-hidden="true" />
+              {locale === 'hi' ? 'अन्य' : 'Other'} <b>{rest}</b>
+            </li>
+          )
+        }
+      </ul>
+      <p class="dh-meta">{c.reraSource(updated)}</p>
+    </section>
+  )
+}
+
+<style>
+  .dh-mix {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    max-width: 44rem;
+  }
+
+  .dh-mix svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 0.5rem;
+  }
+
+  /* Tonal paper steps, not status colours: done is the deepest, lapsed is a hollow
+     square (the registration no longer holds). Revoked alone keeps the alarm red. */
+  .is-registered {
+    fill: var(--color-kesar-400);
+    background: var(--color-kesar-400);
+  }
+
+  .is-completed {
+    fill: var(--color-pine-700);
+    background: var(--color-pine-700);
+  }
+
+  .is-lapsed {
+    fill: var(--color-paper);
+    stroke: var(--color-kesar-700);
+    stroke-width: 1.5;
+    background: var(--color-paper);
+    box-shadow: inset 0 0 0 2px var(--color-kesar-700);
+  }
+
+  .is-revoked {
+    fill: var(--color-chili-700);
+    background: var(--color-chili-700);
+  }
+
+  .is-other {
+    fill: var(--color-ink-400);
+    background: var(--color-ink-400);
+  }
+
+  .dh-mix-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .dh-mix-keys li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .dh-mix-keys i {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+  }
+
+  .dh-mix-keys b {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    color: var(--color-ink-950);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

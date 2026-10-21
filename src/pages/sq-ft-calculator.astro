@@ -1,0 +1,56 @@
+---
+import { getT } from '@/i18n';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import UnitConverter from '@/features/tools/area/UnitConverter';
+import { jsonFaqs, jsonHowTo, noDash, PAGES, SHORT, unitLabels } from '@/features/tools/area/content';
+import { fmtArea, SQFT_PER, type Unit } from '@/features/tools/area/units';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = PAGES.sqFt[locale];
+const units: Unit[] = ['sq_ft', 'sq_mt', 'sq_yd', 'gaj', 'acre'];
+const labels = unitLabels(t, units);
+---
+
+<ToolPage
+  tool="sqFt"
+  title={t('tools:sqFtCalculator.title')}
+  description={t('tools:sqFtCalculator.description')}
+  keywords={t('tools:sqFtCalculator.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={jsonFaqs(t, 'sqFtCalculator', 6)}
+  faqTitle={t('tools:sqFtCalculator.faqTitle')}
+  howTo={jsonHowTo(t, 'sqFtCalculator', t('tools:sqFtCalculator.howToTitle'), c.howToDesc)}
+>
+  <UnitConverter client:load locale={locale} units={units} labels={labels} defaults={{ v: 100, from: 'sq_mt', to: 'sq_ft' }} />
+  <Fragment slot="body">
+    <h2>{t('tools:sqFtCalculator.explanationTitle')}</h2>
+    <p>{noDash(t('tools:sqFtCalculator.explanationDesc'))}</p>
+    <h2>{t('tools:sqFtCalculator.ratesTitle')}</h2>
+    <div class="tool-scroll" tabindex="0" role="region" aria-label={t('tools:sqFtCalculator.ratesTitle')}>
+      <table class="tool-table">
+        <thead>
+          <tr>
+            <th scope="col">{t('tools:sqFtCalculator.unitCol')}</th>
+            <th scope="col">{t('tools:sqFtCalculator.sqFtCol')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            units.map((u) => (
+              <tr>
+                <th scope="row">1 {labels[u]}</th>
+                <td>
+                  {fmtArea(SQFT_PER[u], locale)} {SHORT[locale].sq_ft}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </Fragment>
+</ToolPage>

@@ -1,0 +1,57 @@
+---
+/** /rera-projects: page 1 on the server, search and status filters, the RERA number check. */
+import { getT } from '@/i18n';
+import type { ReraProjectPage } from '@/features/data-hub/api';
+import type { ApiError } from '@/lib/api/errors';
+import type { Locale } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import { generateToolSchema, toolSchemas } from '@/lib/seo/legacy/toolSchemas.js';
+import type { ReraProject } from './api';
+import { FAQ, STEPS } from './content';
+import DataHubPage from './DataHubPage.astro';
+import { hubName } from './pages';
+import type { ReraFilters } from './params';
+import ReraMix from './ReraMix.astro';
+import ReraProjects, { ReraVerify } from './Rera';
+import { text } from './text';
+
+/** `all`: every project, for the status mix (empty when that call failed). */
+type Props = { locale: Locale; filters: ReraFilters; page: ReraProjectPage | null; error: ApiError | null; all: ReraProject[] };
+const { locale, filters, page, error, all } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+---
+
+<DataHubPage
+  art="rera"
+  title={tt('seo:reraProjectDirectory.title')}
+  description={tt('seo:reraProjectDirectory.description')}
+  keywords="RERA projects Gurugram, HRERA registered projects, builder RERA number, Haryana RERA, verified developers Gurgaon"
+  path="/rera-projects"
+  heading={t.reraH1}
+  lead={tt('data-hub:rera.description')}
+  crumbs={[{ name: hubName('rera', locale), path: '/rera-projects' }]}
+  faqs={FAQ.rera}
+  howTo={{ name: 'How to Verify RERA Projects in Haryana', description: 'Step-by-step guide to finding and verifying RERA registered projects in Haryana.', steps: STEPS.rera }}
+  jsonLd={[
+    generateToolSchema(toolSchemas.reraProjects),
+    {
+      '@type': 'ItemList',
+      name: 'RERA Projects Gurugram',
+      description: 'RERA-registered real estate projects in Gurugram.',
+      url: canonicalFor('/rera-projects', locale),
+      numberOfItems: page?.total ?? page?.items.length ?? 0,
+      itemListElement: (page?.items ?? []).map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.project_name })),
+    },
+  ]}
+  related={['builders', 'builderScore', 'zones', 'gazette']}
+>
+  <ReraMix locale={locale} projects={all} />
+
+  <div class="dh-split">
+    <ReraProjects client:load locale={locale} initialFilters={filters} initialPage={error ? null : page} />
+    <aside class="lg:sticky lg:top-[88px]">
+      <ReraVerify client:idle locale={locale} />
+    </aside>
+  </div>
+</DataHubPage>

@@ -1,0 +1,442 @@
+---
+/**
+ * /refer-and-earn. Copy from i18n `policies:referAndEarn.*` and `common:contentSeo.referral*`.
+ * The old "Track your referrals" block promised a Reference ID by email and SMS;
+ * Formspree sends none, so the block is not shown.
+ */
+import { getT } from '@/i18n';
+import Page from '@/layouts/Page.astro';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { faqPage } from '@/lib/seo/site';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import NewsletterBand from '@/features/content/shared/NewsletterBand.astro';
+import { trail, webPage } from '@/features/content/shared/schema';
+import ReferralForm from './ReferralForm';
+import { referralStrings } from './strings';
+import { TERMS } from './terms';
+import TableScroll from '@/features/content/shared/TableScroll.astro';
+import PageArt from '@/features/content/shared/PageArt.astro';
+import { titleFit } from '@/features/content/shared/fit';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const r = (k: string) => t(`policies:referAndEarn.${k}`);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const PATH = '/refer-and-earn';
+
+const H = byLocale(locale, {
+  en: {
+    name: 'Refer & Earn',
+    listed: 'when the property is verified and listed',
+    closed: 'at most, when the deal closes',
+    how: 'How it works',
+    rewards: 'What you earn',
+    reward: 'Reward',
+    amount: 'Amount',
+    when: 'When and how',
+    onboard: 'Onboarding bonus',
+    onboardWhen: 'The property passes on-ground verification and the listing is published. Paid within 7 days of listing.',
+    deal: 'Deal completion bonus',
+    dealAmount: 'Up to ₹10,000',
+    dealWhen: 'Rent deals: 10% of brokerage (max ₹5,000). Sale deals: 5% of brokerage (max ₹10,000). Paid within 15 days of deal closure.',
+    terms: 'Terms and conditions',
+    termsNote: 'Read these terms before you submit a referral.',
+  },
+  hi: {
+    name: 'रेफ़र करें और कमाएँ',
+    listed: 'प्रॉपर्टी वेरिफाई होकर लिस्ट होने पर',
+    closed: 'तक, डील पूरी होने पर',
+    how: 'यह कैसे काम करता है',
+    rewards: 'इनाम कितना मिलता है',
+    reward: 'इनाम',
+    amount: 'राशि',
+    when: 'कब और कैसे',
+    onboard: 'ऑनबोर्डिंग बोनस',
+    onboardWhen: 'प्रॉपर्टी ज़मीनी जाँच पास करे और लिस्टिंग पब्लिश हो। लिस्टिंग के 7 दिनों के अंदर भुगतान।',
+    deal: 'डील पूरी होने का बोनस',
+    dealAmount: '₹10,000 तक',
+    dealWhen: 'किराया: ब्रोकरेज का 10% (अधिकतम ₹5,000)। बिक्री: ब्रोकरेज का 5% (अधिकतम ₹10,000)। डील पूरी होने के 15 दिनों के अंदर भुगतान।',
+    terms: 'नियम और शर्तें',
+    termsNote: 'रेफ़रल भेजने से पहले ये शर्तें पढ़ें। शर्तें अंग्रेज़ी में हैं।',
+  },
+});
+
+const steps = [1, 2, 3, 4].map((n) => t(`common:contentSeo.referralStep${n}`));
+const faqs = [1, 2, 3, 4, 5, 6].map((n) => ({ q: r(`faq${n}Q`), a: r(`faq${n}A`) }));
+const privacy = L('/policies/privacy-policy');
+const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
+const jsonLd = [webPage({ name: t('seo:referAndEarn.title'), description: t('seo:referAndEarn.description'), path: PATH, locale }), ld, faqPage(faqs)];
+// Long Hindi title: cap its size so it stays on two lines.
+const fit = titleFit(r('heroTitle1'));
+---
+
+<Page title={t('seo:referAndEarn.title')} description={t('seo:referAndEarn.description')} path={PATH} jsonLd={jsonLd}>
+  <div class="container-page ref">
+    <Breadcrumbs items={crumbs} />
+    <header class="ref-head">
+      <h1 class="ref-h1" style={fit ? `--fit:${fit}cqi` : undefined}>{r('heroTitle1')}</h1>
+      <p class="ref-lead">{r('heroDesc')}</p>
+      <PageArt scene="tolet" seed="refer" />
+    </header>
+
+    <div class="ref-amounts">
+      <p><span class="ref-num tabular">₹100</span><span class="ref-num-label">{H.listed}</span></p>
+      <p><span class="ref-num tabular">₹10,000</span><span class="ref-num-label">{H.closed}</span></p>
+      <a class="btn btn-primary btn-lg ref-go" href="#referral-form">
+        {r('submitReferral')}
+        <Icon name="arrow-up-right" size={18} class="arrow" />
+      </a>
+    </div>
+
+    <section class="ref-block" aria-labelledby="ref-how">
+      <h2 id="ref-how" class="ref-h2">{H.how}</h2>
+      <ol class="ref-steps" role="list">
+        {
+          steps.map((s, i) => (
+            <li>
+              <span class="ref-step-n" aria-hidden="true">{i + 1}</span>
+              <p>{s}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="ref-block" aria-labelledby="ref-rewards">
+      <h2 id="ref-rewards" class="ref-h2">{H.rewards}</h2>
+      <TableScroll label={H.rewards} class="ref-table-wrap">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th scope="col">{H.reward}</th>
+              <th scope="col">{H.amount}</th>
+              <th scope="col">{H.when}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">{H.onboard}</th>
+              <td class="tabular ref-amt">₹100</td>
+              <td>{H.onboardWhen}</td>
+            </tr>
+            <tr>
+              <th scope="row">{H.deal}</th>
+              <td class="tabular ref-amt">{H.dealAmount}</td>
+              <td>{H.dealWhen}</td>
+            </tr>
+          </tbody>
+        </table>
+      </TableScroll>
+    </section>
+
+    <section id="referral-form" class="ref-block ref-form-block" aria-labelledby="ref-form-title">
+      <div class="ref-form-head">
+        <h2 id="ref-form-title" class="ref-h2">{r('formTitle')}</h2>
+        <p>{r('formDesc')}</p>
+      </div>
+      <Paper seed="referral-form" tone="paper" depth={3} innerClass="ref-sheet">
+        <ReferralForm client:visible locale={locale} s={referralStrings(locale)} />
+      </Paper>
+    </section>
+
+    <section id="terms" class="ref-block ref-terms" aria-labelledby="ref-terms">
+      <h2 id="ref-terms" class="ref-h2">{H.terms}</h2>
+      <p class="ref-terms-note">{H.termsNote}</p>
+      <div class="faq-list" lang={hi ? 'en' : undefined}>
+        {
+          TERMS.map((term) => (
+            <details class="faq-item">
+              <summary>
+                <span>{term.title}</span>
+                <Icon name="plus" size={18} class="faq-icon" />
+              </summary>
+              <ul class="ref-term-list">
+                {term.items.map((item) => (
+                  <li set:html={item.replace('{privacy}', privacy)} />
+                ))}
+              </ul>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="ref-block" aria-labelledby="ref-faq">
+      <h2 id="ref-faq" class="ref-h2">{r('faqTitle')}</h2>
+      <Faq items={faqs} />
+    </section>
+
+    <NewsletterBand locale={locale} />
+  </div>
+</Page>
+
+<style>
+  .ref {
+    padding-top: 0.5rem;
+  }
+
+  .ref-head {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    max-width: 52rem;
+    container-type: inline-size;
+  }
+
+  .ref-h1 {
+    font-size: min(clamp(2.25rem, 1.3rem + 4vw, 4.5rem), var(--fit, 100cqi));
+  }
+
+  .ref-lead {
+    max-width: 60ch;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    color: var(--color-ink-800);
+  }
+
+  /* The two real reward amounts are the page's display moment. */
+  .ref-amounts {
+    display: grid;
+    gap: 1.5rem 3rem;
+    align-items: end;
+    margin-top: 2.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .ref-amounts {
+      grid-template-columns: repeat(2, auto);
+      justify-content: start;
+    }
+
+    .ref-go {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .ref-amounts {
+      grid-template-columns: repeat(3, auto);
+    }
+
+    .ref-go {
+      grid-column: auto;
+    }
+  }
+
+  .ref-amounts p {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .ref-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(3.5rem, 2rem + 6vw, 6.5rem);
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    color: var(--color-kesar-600);
+  }
+
+  .ref-num-label {
+    max-width: 22ch;
+    font-weight: 700;
+  }
+
+  .ref-go {
+    justify-self: start;
+    align-self: end;
+  }
+
+  .ref-block {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .ref-h2 {
+    font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.5rem);
+    max-width: 24ch;
+  }
+
+  .ref-steps {
+    display: grid;
+    gap: 1.25rem 2rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .ref-steps {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .ref-steps li {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .ref-step-n {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2.75rem;
+    line-height: 1;
+    color: var(--color-kesar-600);
+  }
+
+  .ref-steps p {
+    color: var(--color-ink-800);
+  }
+
+  .ref-block :global(.ref-table-wrap) {
+    margin-top: 1.25rem;
+  }
+
+  .ref-table {
+    width: 100%;
+    max-width: 60rem;
+    border-collapse: collapse;
+  }
+
+  .ref-table th,
+  .ref-table td {
+    padding: 0.875rem 0.75rem;
+    border-bottom: 1px solid var(--color-ink-200);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .ref-table thead th {
+    background: var(--color-mist-50);
+    font-size: 0.875rem;
+  }
+
+  .ref-table th[scope='row'] {
+    min-width: 10rem;
+  }
+
+  .ref-amt {
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 800;
+    color: var(--color-kesar-700);
+  }
+
+  .ref-table td:last-child {
+    min-width: 16rem;
+    color: var(--color-ink-800);
+  }
+
+  .ref-form-block {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .ref-form-block {
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+
+  .ref-form-head p {
+    margin-top: 0.75rem;
+    color: var(--color-ink-800);
+    max-width: 40ch;
+  }
+
+  .ref-form-block :global(.ref-sheet) {
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .ref-form-block :global(.ref-form) {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .ref-form-block :global(.ref-form fieldset) {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ref-form-block :global(.ref-form legend) {
+    margin-bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+  }
+
+  .ref-form-block :global(.ref-grid) {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .ref-form-block :global(.ref-grid) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .ref-form-block :global(.ref-wide) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .ref-form-block :global(.ref-checks) {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .ref-form-block :global(.ref-checks a) {
+    color: var(--color-kesar-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ref-form-block :global(.ref-form > .btn) {
+    justify-self: start;
+  }
+
+  .ref-form-block :global(.contact-sent) {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+  }
+
+  .ref-form-block :global(.contact-sent > svg) {
+    color: var(--color-leaf-700);
+  }
+
+  .ref-form-block :global(.contact-sent-title) {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .ref-terms-note {
+    margin-top: 0.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .ref-terms .faq-list {
+    max-width: 52rem;
+  }
+
+  .ref-term-list {
+    display: grid;
+    gap: 0.5rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+
+  .ref-term-list :global(a) {
+    color: var(--color-kesar-700);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+</style>

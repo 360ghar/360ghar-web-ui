@@ -1,0 +1,48 @@
+---
+/**
+ * Document shell for every page: <html lang>, head basics, SEO tags,
+ * analytics start, and the shared paper shadow filters (PaperDefs). Page
+ * chrome (header, footer) is in Page.astro.
+ */
+import type { ComponentProps } from 'astro/types';
+import '@/styles/global.css';
+import Seo from '@/lib/seo/Seo.astro';
+import PaperDefs from '@/ui/paper/PaperDefs.astro';
+import OfflineNotice from '@/features/pwa/OfflineNotice.astro';
+import WebMcp from '@/features/webmcp/WebMcp.astro';
+
+type Props = ComponentProps<typeof Seo> & { bodyClass?: string };
+
+const { bodyClass, ...seo } = Astro.props;
+const locale = Astro.locals.locale;
+---
+
+<!doctype html>
+<html lang={locale === 'hi' ? 'hi-IN' : 'en-IN'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ff6b00" />
+    <link rel="preload" href="/fonts/sentient-var.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- No crossorigin: images are no-cors requests and cannot reuse a CORS connection. -->
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/assets/images/logo/favicon.webp" type="image/webp" />
+    <link rel="apple-touch-icon" href="/assets/images/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title="360Ghar" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="360Ghar blog" href="/rss/blog.xml" />
+    <Seo {...seo} />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <PaperDefs />
+    <slot />
+    <OfflineNotice />
+    <WebMcp />
+    <script>
+      import { startAnalytics } from '@/lib/analytics';
+      startAnalytics();
+    </script>
+  </body>
+</html>

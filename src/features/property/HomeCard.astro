@@ -1,0 +1,326 @@
+---
+/**
+ * The Home Card: one paper sheet that rises into the photos from 48rem. Above:
+ * price, title, place, save and share (and on phones the three ways to reach the
+ * agent). Below, on a tinted floor: bedrooms, baths, area, the fact list and the
+ * building drawing with this home's floor marked.
+ */
+import type { Property } from '@/lib/api/types';
+import Icon from '@/ui/icons/Icon.astro';
+import PaperArt from '@/ui/paper/PaperArt.astro';
+import type { Locale } from '@/lib/i18n/locale';
+import type { Fact } from './facts';
+import PropertyActions from './PropertyActions';
+import { BLD_H, BLD_W, buildingRise, buildingScene } from './scenes';
+
+type Props = {
+  p: Property;
+  locale: Locale;
+  price: { amount: string; period: string; onRequest: boolean };
+  heading: string;
+  address: string;
+  title: string;
+  big: { value: string; label: string }[];
+  facts: Fact[];
+  wa: string;
+  phone: string;
+};
+const { p, locale, price, heading, address, title, big, facts, wa, phone } = Astro.props;
+const hi = locale === 'hi';
+const showBuilding = p.floor_number != null && (p.total_floors ?? 0) > 0;
+---
+
+<div class="hc sheet">
+  <header class="hc-head">
+    <div class="hc-top">
+      <p class:list={['prop-price tabular', price.onRequest && 'is-ask']}>
+        {price.amount}
+        {price.period && <span>{price.period}</span>}
+      </p>
+      <PropertyActions client:idle id={p.id} title={title} locale={locale} part="top" />
+    </div>
+    <h1 class="prop-title">{heading}{p.locality ? `${hi ? ',' : ' in'} ${p.locality}` : ''}</h1>
+    <p class="prop-place"><Icon name="pin" size={16} /> {address}</p>
+    {
+      p.is_available ? (
+        <div class="hc-cta" data-hc-cta>
+          <a class="btn btn-ink" href={wa} target="_blank" rel="noopener">
+            <Icon name="brand:whatsapp" size={18} />
+            WhatsApp
+          </a>
+          <a class="btn" href={`tel:${phone}`}>
+            <Icon name="phone" size={18} />
+            {hi ? 'कॉल करें' : 'Call'}
+          </a>
+          <a class="btn btn-primary" href="#prop-book" data-open-visit>
+            <Icon name="calendar" size={18} />
+            {hi ? 'विज़िट बुक करें' : 'Book a visit'}
+          </a>
+        </div>
+      ) : (
+        <p class="hc-status">
+          <Icon name="alert" size={18} />
+          {hi ? 'यह घर अब उपलब्ध नहीं है।' : 'This home is no longer available.'}
+        </p>
+      )
+    }
+  </header>
+
+  {
+    (big.length > 0 || facts.length > 0) && (
+      <section class:list={['prop-keys', showBuilding && 'has-building']} aria-label={hi ? 'मुख्य बातें' : 'Key facts'}>
+        {big.length > 0 && (
+          <dl class="prop-big">
+            {big.map((f) => (
+              <div>
+                <dt>{f.label}</dt>
+                <dd class="tabular">{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        {facts.length > 0 && (
+          <dl class="prop-facts">
+            {facts.map((f) => (
+              <div>
+                <Icon name={f.icon} size={22} />
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        {showBuilding && (
+          <div class="prop-building" style={`--rise:${buildingRise(p.floor_number!, p.total_floors!).toFixed(1)}px`}>
+            <PaperArt layers={buildingScene(p.floor_number!, p.total_floors!)} width={BLD_W} height={BLD_H} bg="var(--color-mist-50)" />
+          </div>
+        )}
+      </section>
+    )
+  }
+</div>
+
+<style>
+  /* Phones: no box; the card is the page's first block under the photos. From 48rem it is a sheet that overlaps the photos (see .prop-layout). */
+  .hc {
+    display: grid;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  @media (min-width: 48rem) {
+    .hc {
+      padding: 1.5rem 1.5rem 0;
+      background: var(--color-paper);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 3px 8px -3px rgb(var(--tint) / 0.18);
+      overflow: hidden;
+    }
+  }
+
+  .hc-head {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .hc-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .prop-price {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+    line-height: 1;
+  }
+
+  /* "Price on request" is words, not a number: a size down so it stays on one line. */
+  .prop-price.is-ask {
+    font-size: clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);
+  }
+
+  .prop-price span {
+    margin-left: 0.25rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink-600);
+  }
+
+  .prop-title {
+    font-family: var(--font-sans);
+    font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.625rem);
+    font-weight: 800;
+  }
+
+  .prop-place {
+    display: flex;
+    gap: 0.375rem;
+    align-items: flex-start;
+    max-width: 60ch;
+    color: var(--color-ink-800);
+  }
+
+  .prop-place :global(svg) {
+    flex: none;
+    margin-top: 0.2rem;
+    color: var(--color-kesar-700);
+  }
+
+  .hc-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: var(--color-chili-700);
+  }
+
+  /* Phones and tablets: WhatsApp and Call side by side, "Book a visit" under them. The rail carries all three from 64rem. */
+  .hc-cta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .hc-cta .btn-primary {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 64rem) {
+    .hc-cta {
+      display: none;
+    }
+  }
+
+  /* ---------- Key facts: the tinted floor of the card ---------- */
+
+  .prop-keys {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+  }
+
+  @media (min-width: 48rem) {
+    .prop-keys {
+      margin: 1.5rem -1.5rem 0;
+      padding: 1.5rem;
+      border-radius: 0;
+    }
+  }
+
+  .prop-big {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .prop-big div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.25rem;
+  }
+
+  .prop-big dd {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+    line-height: 1;
+  }
+
+  .prop-big dt {
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .prop-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .prop-facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .prop-facts div {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    column-gap: 0.625rem;
+    align-items: center;
+  }
+
+  .prop-facts :global(svg) {
+    grid-row: span 2;
+    align-self: start;
+    margin-top: 0.125rem;
+    color: var(--color-kesar-700);
+  }
+
+  .prop-facts dt {
+    font-size: 0.8125rem;
+    color: var(--color-ink-600);
+  }
+
+  .prop-facts dd {
+    grid-column: 2;
+    font-weight: 700;
+  }
+
+  .prop-building {
+    display: none;
+  }
+
+  /*
+   * The marker of this home's floor (the third paper layer) rises from the ground to its floor as the drawing scrolls into view.
+   * Scroll-linked, so it needs no script; without support, or with reduced motion, it simply sits on its floor.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .prop-building :global(svg > g > g:nth-of-type(3)) {
+        animation: hc-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
+
+      @keyframes hc-rise {
+        from {
+          translate: 0 var(--rise);
+        }
+        to {
+          translate: 0 0;
+        }
+      }
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .prop-keys.has-building {
+      grid-template-columns: minmax(0, 1fr) 6.5rem;
+      column-gap: 2rem;
+    }
+
+    .prop-keys.has-building .prop-big,
+    .prop-keys.has-building .prop-facts {
+      grid-column: 1;
+    }
+
+    .prop-building {
+      display: block;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: end;
+      width: 6.5rem;
+      aspect-ratio: 120 / 168;
+    }
+  }
+</style>

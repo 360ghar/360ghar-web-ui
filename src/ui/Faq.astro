@@ -1,0 +1,37 @@
+---
+/**
+ * FAQ list on native <details> (no JS). Add `faqPage(items)` from
+ * lib/seo/site to the page JSON-LD with the same items.
+ */
+import Icon from '@/ui/icons/Icon.astro';
+
+type Props = { items: { q: string; a: string }[]; title?: string; id?: string; open?: number };
+const { items, title, id = 'faq', open = -1 } = Astro.props;
+---
+
+<section class="faq" aria-labelledby={title ? `${id}-title` : undefined}>
+  {title && <h2 id={`${id}-title`} class="faq-title">{title}</h2>}
+  <div class="faq-list">
+    {
+      items.map((f, i) => (
+        <details class="faq-item" open={i === open}>
+          <summary>
+            <span>{f.q}</span>
+            <Icon name="plus" size={18} class="faq-icon" />
+          </summary>
+          <p set:html={f.a.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n/g, '<br />')} />
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .faq-title {
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+  }
+
+  .faq .faq-list {
+    max-width: 52rem;
+  }
+</style>

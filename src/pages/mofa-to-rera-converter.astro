@@ -1,0 +1,63 @@
+---
+import { getT } from '@/i18n';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import MofaConverter from '@/features/tools/area/MofaConverter';
+import { jsonFaqs, jsonHowTo, noDash, PAGES, SHORT } from '@/features/tools/area/content';
+import { convertCarpet } from '@/features/tools/area/mofa';
+import { fmtArea } from '@/features/tools/area/units';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = PAGES.mofaToRera[locale];
+const sqft = SHORT[locale].sq_ft;
+---
+
+<ToolPage
+  tool="mofaToRera"
+  title={t('tools:mofaToRera.title')}
+  description={t('tools:mofaToRera.description')}
+  keywords={t('tools:mofaToRera.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={jsonFaqs(t, 'mofaToRera', 6)}
+  faqTitle={t('tools:mofaToRera.faqTitle')}
+  howTo={jsonHowTo(t, 'mofaToRera', t('tools:mofaToRera.howToTitle'), noDash(t('tools:mofaToRera.formulaDesc')))}
+  related={['areaCalculator', 'sqFt', 'areaConverter', 'acreInGaj']}
+>
+  <MofaConverter client:load locale={locale} />
+  <Fragment slot="body">
+    <h2>{t('tools:mofaToRera.explanationTitle')}</h2>
+    <p><strong>{t('tools:mofaToRera.explanationMofaLabel')}:</strong> {noDash(t('tools:mofaToRera.explanationMofa'))}</p>
+    <p><strong>{t('tools:mofaToRera.explanationReraLabel')}:</strong> {noDash(t('tools:mofaToRera.explanationRera'))}</p>
+    <p>{noDash(t('tools:mofaToRera.explanationWhy'))}</p>
+    <h2>{t('tools:mofaToRera.formulaTitle')}</h2>
+    <p>{noDash(t('tools:mofaToRera.formulaDesc'))}</p>
+    <div class="tool-scroll" tabindex="0" role="region" aria-label={t('tools:mofaToRera.tableTitle')}>
+      <table class="tool-table">
+        <caption>{t('tools:mofaToRera.tableTitle').replace('→', '-')}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{t('tools:mofaToRera.unitCol')}</th>
+            <th scope="col">{t('tools:mofaToRera.reraCol')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            [1000, 2000, 5000, 10000].map((v) => (
+              <tr>
+                <th scope="row">
+                  {fmtArea(v, locale)} {sqft}
+                </th>
+                <td>
+                  {fmtArea(convertCarpet(v, 'mofa_to_rera').result, locale)} {sqft}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </Fragment>
+</ToolPage>

@@ -1,0 +1,71 @@
+---
+/**
+ * A tool or data hub vignette as static SVG.
+ * - card (default): on its own paper, with the ground; the sides crop on narrow boxes.
+ * - bare: no paper and no ground, so the scene stands on the tool desk.
+ * - stage: no paper, with the ground, for a white page.
+ * Layer shadows point at the page's shared filters (PaperDefs, `pc-m…`); a
+ * layer whose tint has no shared match draws its own filter.
+ */
+import { SHADOW_SIZES, sharedShadowId } from '@/lib/paper/defs';
+import { GROUND, vignette, VH, VPAD, VW, type VignetteKey } from './vignettes';
+
+type Props = { tool: VignetteKey; mode?: 'card' | 'bare' | 'stage'; class?: string };
+const { tool, mode = 'card', class: className } = Astro.props;
+const bare = mode !== 'card';
+const withGround = mode !== 'bare';
+const { layers, ground } = vignette(tool);
+const all = [...layers, ...(ground && withGround ? [{ id: 'g', shadow: GROUND.shadow }] : [])].map((l) => ({
+  id: l.id,
+  shadow: l.shadow,
+  shared: sharedShadowId(l.shadow, SHADOW_SIZES.m),
+  own: `vg-${tool}-${mode}-${l.id}`,
+}));
+const own = all.filter((l) => !l.shared);
+const filterOf = (layerId: string) => {
+  const l = all.find((x) => x.id === layerId)!;
+  return `url(#${l.shared ?? l.own})`;
+};
+---
+
+<svg
+  class:list={['vignette', className]}
+  viewBox={bare ? `0 0 ${VW} ${VH}` : `${-VPAD} 0 ${VW + VPAD * 2} ${VH}`}
+  preserveAspectRatio={bare ? 'xMidYMax meet' : 'xMidYMax slice'}
+  aria-hidden="true"
+  focusable="false"
+>
+  {
+    own.length > 0 && (
+      <defs>
+        {own.map((l) => (
+          <filter id={l.own} x="-5%" y="-10%" width="115%" height="130%">
+            <feDropShadow dx="2" dy="3" stdDeviation="1.1" flood-color={l.shadow} />
+          </filter>
+        ))}
+      </defs>
+    )
+  }
+  {!bare && <rect x={-VPAD} width={VW + VPAD * 2} height={VH} fill="var(--color-kesar-50)" />}
+  {
+    layers.map((l, i) => (
+      <g class="vg-layer" style={`--i:${i + 1}`} fill={l.fill} filter={filterOf(l.id)}>
+        {l.cut.map((d) => (
+          <path fill-rule="evenodd" d={d} />
+        ))}
+        {l.solid.map((d) => (
+          <path d={d} />
+        ))}
+      </g>
+    ))
+  }
+  {ground && withGround && <path d={ground} fill={GROUND.fill} filter={filterOf('g')} />}
+</svg>
+
+<style>
+  .vignette {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

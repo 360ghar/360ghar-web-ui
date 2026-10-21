@@ -1,0 +1,83 @@
+---
+/**
+ * The whole "page not found" block: the Sector 404 scene, one line, a search
+ * action, and a row of the main places to go instead. English or Hindi from
+ * the URL. Use inside a Page layout; set the 404 status in the route.
+ *
+ *   <Page title=... noindex><NotFound /></Page>
+ */
+import { PRIMARY, TOOLS } from '@/features/layout/nav';
+import { getT } from '@/i18n';
+import { localizer } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import StateBlock from './StateBlock.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const places = [...PRIMARY, { key: TOOLS.key, href: '/tools', icon: 'grid' as const }];
+---
+
+<div class="container-page not-found">
+  <StateBlock
+    scene="notFound"
+    level={1}
+    title={hi ? 'यह पेज हमारे नक्शे पर नहीं है' : 'This page is not on our map'}
+    body={hi ? 'लिंक पुराना या गलत हो सकता है। घर खोजें, या नीचे की किसी जगह से शुरू करें।' : 'The link may be old or mistyped. Search for a home, or start from one of the places below.'}
+    action={{ href: L('/properties'), label: hi ? 'घर खोजें' : 'Search homes', icon: 'search' }}
+    secondary={{ href: L('/'), label: hi ? 'होम पेज पर जाएँ' : 'Go to the home page' }}
+  />
+  <nav class="not-found-places" aria-label={hi ? 'मुख्य जगहें' : 'Main places'}>
+    <ul>
+      {
+        places.map((p) => (
+          <li>
+            <a href={L(p.href)}>
+              {p.icon && <Icon name={p.icon} size={22} sprite />}
+              {t(p.key)}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</div>
+
+<style>
+  .not-found {
+    padding-block: 1.5rem 1rem;
+  }
+
+  .not-found-places ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.5rem;
+    max-width: 46rem;
+    margin: 0 auto;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-ink-100);
+  }
+
+  .not-found-places a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    border-radius: var(--radius-md);
+    color: var(--color-ink-950);
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 140ms var(--ease-paper);
+  }
+
+  .not-found-places a:hover {
+    background: var(--color-mist-50);
+  }
+
+  .not-found-places :global(svg) {
+    color: var(--color-kesar-700);
+  }
+</style>

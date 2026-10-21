@@ -1,0 +1,26 @@
+---
+/**
+ * Keeps a long H1 of the Content layout to two lines at every width. The layout
+ * renders it with the same text as `heading` (and `long` for `longHeading`). It adds an empty marker and a one-rule style:
+ * the H1 keeps the layout's size, capped by the width of its column (cqi).
+ * The clamp values are the layout's own (src/layouts/Content.astro).
+ */
+import { titleFit } from './fit';
+
+type Props = { title: string; long?: boolean };
+const { title, long = false } = Astro.props;
+const fit = titleFit(title);
+const base = long ? 'clamp(1.625rem, 1.1rem + 2.6vw, 3rem)' : 'clamp(2rem, 1.3rem + 3vw, 3.5rem)';
+const css = fit
+  ? `.content-head:has(> .title-fit[hidden]){container-type:inline-size}.content-head:has(> .title-fit[hidden]) > .content-h1{font-size:min(${base},${fit}cqi)}`
+  : '';
+---
+
+{
+  fit && (
+    <>
+      <span class="title-fit" hidden />
+      <style is:inline set:html={css} />
+    </>
+  )
+}

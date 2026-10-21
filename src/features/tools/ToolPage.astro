@@ -1,0 +1,64 @@
+---
+/**
+ * Shell for every tool page: breadcrumbs, H1 and lead, the tool island
+ * (default slot), explanatory text (slot "body"), FAQ, links to other tools
+ * and the JSON-LD (SoftwareApplication, BreadcrumbList, FAQPage, HowTo).
+ * The markup is in `@/ui/HubShell.astro`.
+ */
+import HubShell from '@/ui/HubShell.astro';
+import { TOOLS, toolByKey, type ToolKey } from './registry';
+import { homeCrumb, toolJsonLd, toolsCrumb, type Faq as FaqItem, type HowTo } from './seo';
+import './tools.css';
+
+type Props = {
+  tool: ToolKey;
+  title: string;
+  description: string;
+  keywords?: string;
+  heading: string;
+  lead: string;
+  faqs?: FaqItem[];
+  faqTitle?: string;
+  howTo?: HowTo;
+  /** Extra JSON-LD blocks. */
+  jsonLd?: unknown[];
+  /** Tools to link at the end. Default: the other tools in the same group. */
+  related?: ToolKey[];
+};
+
+const { tool: key, title, description, keywords, heading, lead, faqs = [], faqTitle, howTo, jsonLd = [], related } = Astro.props;
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const tool = toolByKey(key);
+const more = (related ? related.map(toolByKey) : TOOLS.filter((t) => t.group === tool.group && t.key !== key)).slice(0, 6);
+const shell = {
+  prefix: 'tool' as const,
+  title,
+  description,
+  keywords,
+  path: tool.route,
+  jsonLd: [...toolJsonLd(tool, locale, faqs, howTo), ...jsonLd],
+  crumbs: [homeCrumb(locale), toolsCrumb(locale), { name: tool.name[locale] }],
+  heading,
+  lead,
+  art: { key, mode: 'bare' as const },
+  faqs,
+  faqTitle: faqTitle ?? (hi ? 'अक्सर पूछे जाने वाले सवाल' : 'Questions people ask'),
+  links: more.map((t) => ({ route: t.route, name: t.name[locale], desc: t.desc[locale] })),
+  linksTitle: hi ? 'और टूल्स' : 'More tools',
+  all: { route: '/tools', label: hi ? `सभी ${TOOLS.length} टूल्स देखें` : `See all ${TOOLS.length} tools` },
+};
+---
+
+{
+  Astro.slots.has('body') ? (
+    <HubShell {...shell}>
+      <slot />
+      <slot name="body" slot="prose" />
+    </HubShell>
+  ) : (
+    <HubShell {...shell}>
+      <slot />
+    </HubShell>
+  )
+}

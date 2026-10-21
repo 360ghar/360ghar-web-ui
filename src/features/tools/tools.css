@@ -1,0 +1,965 @@
+/*
+ * Tool pages. Loaded only by ToolPage.astro. Unlayered, so keep selectors to
+ * one class and do not mix Tailwind utilities on the same properties.
+ * The calculator sits on a kesar desk; inputs are white sheets; the answer is
+ * a dark ink slip with the number set large in the display face.
+ */
+
+/* ---------- Page shell ---------- */
+
+.tool-page {
+  padding-top: 0.5rem;
+  padding-bottom: 3rem;
+}
+
+.tool-head {
+  margin: 0.5rem 0 1.5rem;
+}
+
+.tool-head-text {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 52rem;
+}
+
+/* The scene of the tool stands on the desk, at its right end. Phones skip it,
+   so the form comes first. */
+.tool-head-art {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .tool-head:has(.tool-head-art) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 2rem;
+    margin-bottom: 0;
+  }
+
+  .tool-head:has(.tool-head-art) .tool-head-text {
+    padding-bottom: 1.5rem;
+  }
+
+  .tool-head-art {
+    display: block;
+    width: clamp(10rem, 16vw, 14rem);
+    aspect-ratio: 240 / 150;
+    margin-right: 1.5rem;
+    /* Objects stand on y = 134 of 150: drop the empty strip below them behind the desk. */
+    margin-bottom: calc(clamp(10rem, 16vw, 14rem) * -0.0667);
+  }
+}
+
+.tool-h1 {
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem);
+}
+
+.tool-lead {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  color: var(--color-ink-800);
+  max-width: 60ch;
+}
+
+.tool-prose,
+.tool-faq,
+.tool-links {
+  margin-top: 3rem;
+  max-width: 52rem;
+}
+
+.tool-prose h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+}
+
+.tool-prose > :first-child {
+  margin-top: 0;
+}
+
+.tool-prose h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.tool-prose p,
+.tool-prose li {
+  color: var(--color-ink-800);
+  max-width: 68ch;
+}
+
+.tool-prose p + p,
+.tool-prose p + ul,
+.tool-prose ul + p,
+.tool-prose p + ol,
+.tool-prose p + .tool-scroll,
+.tool-prose .tool-scroll + p {
+  margin-top: 0.875rem;
+}
+
+.tool-prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.tool-prose ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+
+.tool-prose li + li {
+  margin-top: 0.375rem;
+}
+
+.tool-prose a:not(.btn) {
+  color: var(--color-kesar-700);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tool-prose code {
+  padding: 0.0625rem 0.3125rem;
+  border-radius: var(--radius-xs);
+  background: var(--color-ink-100);
+  font-size: 0.9375em;
+}
+
+.tool-links-title {
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+}
+
+.tool-links ul {
+  display: grid;
+  gap: 0.25rem 2rem;
+  margin: 1rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 48rem) {
+  .tool-links ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.tool-links li a {
+  display: grid;
+  gap: 0.125rem;
+  padding: 0.625rem 0;
+  text-decoration: none;
+}
+
+.tool-links-name {
+  display: block;
+  color: var(--color-kesar-700);
+  font-weight: 700;
+  transition: color 140ms var(--ease-paper);
+}
+
+.tool-links li a:hover .tool-links-name {
+  color: var(--color-kesar-800);
+}
+
+.tool-links-name .arrow {
+  margin-left: 0.25rem;
+  transition: translate 160ms var(--ease-paper);
+}
+
+.tool-links li a:hover .arrow {
+  translate: 2px -2px;
+}
+
+.tool-links-desc {
+  color: var(--color-ink-600);
+  font-size: 0.9375rem;
+}
+
+/* ---------- Desk and sheets ---------- */
+
+.tool-desk {
+  --tint: 110 38 0;
+  display: grid;
+  gap: 1rem;
+  margin-inline: -1rem;
+  padding: 1rem;
+  background-color: var(--color-mist-100);
+  background-image: var(--grain);
+}
+
+@media (min-width: 48rem) {
+  .tool-desk {
+    margin-inline: 0;
+    padding: 1.5rem;
+    gap: 1.25rem;
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (min-width: 64rem) {
+  .tool-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 1.5rem;
+  }
+}
+
+.tool-split {
+  display: grid;
+  gap: 1rem;
+}
+
+.tool-stack {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.tool-sheet {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.25rem;
+  background-color: var(--color-paper);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 1px rgb(var(--tint) / 0.06), 0 6px 14px -6px rgb(var(--tint) / 0.16);
+}
+
+@media (min-width: 48rem) {
+  .tool-sheet {
+    padding: 1.5rem;
+  }
+}
+
+.tool-sheet-title {
+  font-size: 1.375rem;
+}
+
+.tool-note {
+  color: var(--color-ink-600);
+  font-size: 0.875rem;
+}
+
+.tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+/* ---------- Result peek (phones and tablets, where the result sits below the form) ----------
+   The first line of the form sheet. It sticks under the 64 px site header while the
+   person works down the form, so the answer stays in view; it leaves with the sheet. */
+
+.tool-peek {
+  position: sticky;
+  top: 64px;
+  z-index: 5;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.125rem 1rem;
+  flex-wrap: wrap;
+  min-height: 44px;
+  margin: -1.25rem -1.25rem 0;
+  padding: 0.625rem 1.25rem 0.6875rem;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--color-mist-100);
+  color: var(--color-ink-950);
+  text-decoration: none;
+}
+
+.tool-peek-label {
+  color: var(--color-ink-600);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.tool-peek-value {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 48rem) {
+  .tool-peek {
+    margin: -1.5rem -1.5rem 0;
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .tool-peek {
+    display: none;
+  }
+}
+
+/* ---------- Range field: label and number box, then the slider ---------- */
+
+.tool-range {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.tool-range-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tool-num {
+  display: flex;
+  align-items: center;
+  width: 9.5rem;
+  min-height: 44px;
+  border: 1px solid var(--color-ink-400);
+  border-radius: var(--radius-sm);
+  background: var(--color-paper);
+  transition:
+    border-color 140ms var(--ease-paper),
+    box-shadow 140ms var(--ease-paper);
+}
+
+.tool-num.tool-num-full {
+  width: 100%;
+}
+
+.tool-num:hover {
+  border-color: var(--color-ink-600);
+}
+
+.tool-num:focus-within {
+  border-color: var(--color-kesar-700);
+  box-shadow: 0 0 0 3px rgb(181 70 0 / 0.22);
+}
+
+.tool-num input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0.625rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink-950);
+  font: 600 1rem/1.2 var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.tool-num input:focus-visible {
+  outline: none;
+}
+
+.tool-num-affix {
+  flex: none;
+  padding-inline: 0.625rem;
+  color: var(--color-ink-600);
+  font-weight: 600;
+}
+
+.tool-num-affix:first-child {
+  padding-right: 0;
+}
+
+.tool-num-affix:last-child {
+  padding-left: 0;
+}
+
+.tool-slider {
+  --pct: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+.tool-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--color-kesar-600) var(--pct), var(--color-ink-200) var(--pct));
+}
+
+.tool-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-ink-200);
+}
+
+.tool-slider::-moz-range-progress {
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-kesar-600);
+}
+
+/* The thumb is a small paper tab, not a round knob. */
+.tool-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 28px;
+  margin-top: -11px;
+  border: 2px solid var(--color-paper);
+  border-radius: 9px;
+  background: var(--color-pine-800);
+  box-shadow: 0 1px 1px rgb(var(--tint) / 0.12), 0 2px 5px -1px rgb(var(--tint) / 0.3);
+}
+
+.tool-slider::-moz-range-thumb {
+  width: 14px;
+  height: 24px;
+  border: 2px solid var(--color-paper);
+  border-radius: 9px;
+  background: var(--color-pine-800);
+  box-shadow: 0 1px 1px rgb(var(--tint) / 0.12), 0 2px 5px -1px rgb(var(--tint) / 0.3);
+}
+
+.tool-slider:focus-visible {
+  outline: none;
+}
+
+.tool-slider:focus-visible::-webkit-slider-thumb {
+  outline: 3px solid var(--color-kesar-700);
+  outline-offset: 2px;
+}
+
+.tool-slider:focus-visible::-moz-range-thumb {
+  outline: 3px solid var(--color-kesar-700);
+  outline-offset: 2px;
+}
+
+.tool-range-scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: -0.375rem;
+  color: var(--color-ink-600);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- The answer: a light mist slip ---------- */
+
+.tool-result {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  background: var(--color-mist-200);
+  color: var(--color-ink-950);
+  box-shadow: 0 1px 1px rgb(var(--tint) / 0.06), 0 6px 14px -6px rgb(var(--tint) / 0.16);
+}
+
+@media (min-width: 48rem) {
+  .tool-result {
+    padding: 1.5rem;
+  }
+}
+
+.tool-result-label {
+  color: var(--color-ink-600);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.tool-figure {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1.9rem + 3vw, 4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.tool-figure-unit {
+  margin-left: 0.375rem;
+  font-size: 0.45em;
+  letter-spacing: 0.02em;
+}
+
+.tool-result-sub {
+  margin-top: 0.375rem;
+  color: var(--color-ink-800);
+  font-size: 0.9375rem;
+}
+
+.tool-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1rem 1.5rem;
+  margin: 0;
+}
+
+.tool-stats dt {
+  color: var(--color-ink-600);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.tool-stats dd {
+  margin: 0.125rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.tool-result .btn-quiet {
+  --btn-fg: var(--color-kesar-800);
+  --btn-hover: var(--color-mist-200);
+}
+
+/* ---------- Honest bar: two paper strips in proportion ---------- */
+
+.tool-bar {
+  display: flex;
+  height: 14px;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--color-ink-100);
+}
+
+.tool-bar > span {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+}
+
+.tool-bar-a {
+  background: var(--color-kesar-500);
+}
+
+.tool-bar-b {
+  background: var(--color-ink-800);
+}
+
+.tool-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-ink-800);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tool-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.tool-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 4px;
+}
+
+/* ---------- Charts from the person's own numbers ----------
+   The SVG draws the marks; labels are HTML placed at --x (a % of the width). */
+
+.tool-chart {
+  --c-a: var(--color-kesar-400);
+  --c-b: var(--color-pine-700);
+  --c-saved: var(--color-ink-100);
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.tool-chart-plot {
+  position: relative;
+}
+
+.tool-chart-plot.has-flag {
+  padding-top: 1.75rem;
+}
+
+.tool-chart-plot svg {
+  display: block;
+  width: 100%;
+  height: 9rem;
+}
+
+@media (min-width: 48rem) {
+  .tool-chart-plot svg {
+    height: 11rem;
+  }
+}
+
+.tool-chart .is-a {
+  fill: var(--c-a);
+}
+
+.tool-chart .is-b {
+  fill: var(--c-b);
+}
+
+.tool-chart .is-saved {
+  fill: var(--c-saved);
+}
+
+.tool-chart-axis {
+  position: relative;
+  height: 1.5rem;
+  color: var(--color-ink-600);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tool-chart-axis > span,
+.tool-chart-flag {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  translate: -50% 0;
+  white-space: nowrap;
+}
+
+/* The first and last labels align to the plot edges, never past them. */
+.tool-chart-axis > .is-start,
+.tool-chart-flag.is-start {
+  left: 0;
+  translate: 0 0;
+}
+
+.tool-chart-axis > .is-end,
+.tool-chart-flag.is-end {
+  left: auto;
+  right: 0;
+  translate: 0 0;
+}
+
+.tool-chart-axis > .is-mark {
+  color: var(--color-ink-950);
+  font-weight: 700;
+}
+
+/* A small notch above the label points at the column. */
+.tool-chart-axis > .is-mark::before {
+  content: '';
+  position: absolute;
+  top: -0.375rem;
+  left: 50%;
+  width: 0;
+  height: 0;
+  translate: -50% 0;
+  border: 5px solid transparent;
+  border-top: 0;
+  border-bottom: 5px solid var(--color-ink-950);
+}
+
+.tool-chart-notch {
+  position: absolute;
+  top: 1.25rem;
+  left: var(--x);
+  translate: -50% 0;
+  border: 5px solid transparent;
+  border-bottom: 0;
+  border-top: 5px solid var(--color-kesar-800);
+}
+
+.tool-chart-flag {
+  color: var(--color-kesar-700);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.tool-key-a,
+.tool-key-b,
+.tool-key-saved,
+.tool-key-mark {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.tool-key-a {
+  background: var(--color-kesar-400);
+}
+
+.tool-key-b {
+  background: var(--color-pine-700);
+}
+
+.tool-key-saved {
+  background: var(--color-ink-100);
+  box-shadow: inset 0 0 0 1px var(--color-ink-200);
+}
+
+.tool-key-mark {
+  width: 0;
+  height: 0;
+  border-radius: 0;
+  border: 5px solid transparent;
+  border-top: 0;
+  border-bottom: 6px solid var(--color-ink-950);
+}
+
+/* Loan eligibility: the income strip and the EMI-limit bracket. */
+
+.loan-split svg {
+  display: block;
+  width: 100%;
+  height: 1.25rem;
+  border-radius: 6px;
+}
+
+.loan-split .is-exp {
+  fill: var(--color-ink-400);
+  background: var(--color-ink-400);
+}
+
+.loan-split .is-emis {
+  fill: var(--color-pine-700);
+  background: var(--color-pine-700);
+}
+
+.loan-split .is-new {
+  fill: var(--color-kesar-500);
+  background: var(--color-kesar-500);
+}
+
+.loan-split .is-free {
+  fill: var(--color-ink-100);
+  background: var(--color-ink-100);
+  box-shadow: inset 0 0 0 1px var(--color-ink-200);
+}
+
+.loan-cap {
+  position: relative;
+  height: 2.125rem;
+}
+
+/* The bracket: a rounded lip over the part of income banks allow for EMIs. */
+.loan-cap::after {
+  content: '';
+  position: absolute;
+  bottom: 0.25rem;
+  left: var(--x0);
+  width: calc(var(--x1) - var(--x0));
+  height: 0.5rem;
+  border: 2px solid var(--color-ink-950);
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+}
+
+.loan-cap > span {
+  position: absolute;
+  top: 0;
+  left: calc((var(--x0) + var(--x1)) / 2);
+  translate: -50% 0;
+  color: var(--color-ink-950);
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.loan-cap > .is-start {
+  left: var(--x0);
+  translate: 0 0;
+}
+
+.loan-cap > .is-end {
+  left: auto;
+  right: calc(100% - var(--x1));
+  translate: 0 0;
+}
+
+.loan-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 4px;
+}
+
+.loan-legend b {
+  margin-left: 0.25rem;
+  color: var(--color-ink-950);
+  font-weight: 700;
+}
+
+/* ---------- Tables ---------- */
+
+.tool-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.tool-scroll.is-tall {
+  max-height: 24rem;
+  overflow-y: auto;
+}
+
+.tool-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tool-table caption {
+  padding-bottom: 0.5rem;
+  color: var(--color-ink-800);
+  font-weight: 700;
+  text-align: left;
+}
+
+.tool-table th,
+.tool-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-ink-100);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tool-table th:first-child,
+.tool-table td:first-child {
+  padding-left: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+.tool-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-paper);
+  border-bottom-color: var(--color-ink-200);
+  color: var(--color-ink-800);
+  font-weight: 700;
+}
+
+.tool-table tbody th {
+  font-weight: 600;
+}
+
+.tool-prose .tool-table th:first-child,
+.tool-prose .tool-table td:first-child {
+  white-space: normal;
+}
+
+/* ---------- Print: only the part marked for print ---------- */
+
+@media print {
+  body:has(.tool-print-area) :is(header, footer, nav, .chat-launcher, .toaster, .tool-head, .tool-prose, .tool-faq, .tool-links, .tool-noprint) {
+    display: none !important;
+  }
+
+  .tool-desk,
+  .tool-sheet,
+  .tool-result {
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    color: #000;
+  }
+}
+
+.tool-result .tool-bar {
+  background: var(--color-paper);
+}
+
+.tool-result .tool-legend {
+  color: var(--color-ink-800);
+}
+
+/* ---------- Disclosure (native details) ---------- */
+
+.tool-details {
+  display: block;
+}
+
+.tool-details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+}
+
+.tool-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.tool-details > summary .tool-details-icon {
+  flex: none;
+  color: var(--color-kesar-700);
+  transition: rotate 180ms var(--ease-paper);
+}
+
+.tool-details[open] > summary .tool-details-icon {
+  rotate: 180deg;
+}
+
+.tool-details > summary:hover {
+  color: var(--color-kesar-700);
+}
+
+.tool-details[open] > summary {
+  margin-bottom: 0.75rem;
+}
+
+/* Key and value lines inside a white sheet. */
+.tool-lines {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.tool-lines > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.tool-lines dt {
+  color: var(--color-ink-800);
+}
+
+.tool-lines dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.tool-lines .is-total {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-ink-200);
+}
+
+.tool-lines .is-total dd {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}

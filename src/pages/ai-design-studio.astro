@@ -1,0 +1,45 @@
+---
+import { getT, pick } from '@/i18n';
+import { localizePath } from '@/lib/i18n/locale';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import AiDesignStudio from '@/features/tools/ai-design/AiDesignStudio';
+import { AID_FAQ, AID_HOWTO, AID_KEYS, AID_PAGE } from '@/features/tools/ai-design/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = AID_PAGE[locale];
+const all = pick(locale, 'tools:aiDesignStudio');
+const strings = Object.fromEntries(AID_KEYS.map((k) => [k, typeof all[k] === 'string' ? all[k] : '']));
+---
+
+<ToolPage
+  tool="aiDesignStudio"
+  title={t('tools:aiDesignStudio.title')}
+  description={t('tools:aiDesignStudio.description')}
+  keywords={t('tools:aiDesignStudio.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={AID_FAQ[locale]}
+  faqTitle={c.faqTitle}
+  howTo={AID_HOWTO[locale]}
+  related={['designBlueprint', 'vastu', 'areaCalculator', 'emi']}
+>
+  <AiDesignStudio client:load locale={locale} strings={strings} />
+  <Fragment slot="body">
+    <h2>{t('tools:aiDesignStudio.whyAiStudio')}</h2>
+    <p>{t('tools:aiDesignStudio.whyAiStudioDesc')}</p>
+    <ul>
+      <li>{t('tools:aiDesignStudio.featurePhotorealistic')}</li>
+      <li>{t('tools:aiDesignStudio.featureTransform')}</li>
+      <li>{t('tools:aiDesignStudio.featureStyles')}</li>
+      <li>{t('tools:aiDesignStudio.featureGallery')}</li>
+    </ul>
+    <p>
+      <a href={localizePath('/vastu-checker', locale)}>
+        {locale === 'hi' ? 'डिज़ाइन से पहले अपने फ़्लोर प्लान का वास्तु जाँचें' : 'Check the Vastu of your floor plan before you design'}
+      </a>
+    </p>
+  </Fragment>
+</ToolPage>

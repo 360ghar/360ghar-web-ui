@@ -1,0 +1,811 @@
+---
+/**
+ * Site header: a strip of paper with a hand-cut bottom edge. Desktop menus are
+ * native <details> that open as a paper sheet: each link has a knife-cut icon
+ * and one line of help, and a small paper vignette sits beside the list. The
+ * phone menu is a native <dialog> that slides in from the right.
+ *
+ * A small script closes open menus (outside click, Escape, focus leaving),
+ * plays the fold-away, marks the header once the page scrolls, and shows the
+ * signed-in user's name from the stored session without loading the auth SDK.
+ * Every menu works without the script; only the motion needs it.
+ */
+import ChatLauncher from '@/features/chat/ChatLauncher.astro';
+import { getT } from '@/i18n';
+import { cutBandPath } from '@/lib/paper/cut';
+import { localizePath, localizer, stripLocale } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import IconSprite from '@/ui/icons/IconSprite.astro';
+import type { IconName } from '@/ui/icons/paths';
+import { compactPath } from '@/ui/paper/compact';
+import PaperVignette from '@/ui/paper/PaperVignette.astro';
+import { DATA_HUB, PRIMARY, TOOLS, type NavGroup, type NavLink } from './nav';
+
+type Props = { overHero?: boolean };
+const { overHero = false } = Astro.props;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const here = stripLocale(Astro.url.pathname);
+const L = localizer(locale);
+const otherLocale = locale === 'en' ? 'hi' : 'en';
+const switchHref = localizePath(here, otherLocale) + Astro.url.search;
+const isCurrent = (href: string) => (href === '/' ? here === '/' : here === href || here.startsWith(`${href}/`));
+const groups = [DATA_HUB, TOOLS];
+const inGroup = (g: NavGroup) => g.links.some((l) => isCurrent(l.href));
+const menuLinks = (g: NavGroup): NavLink[] => g.links.filter((l) => l.href !== g.more?.href);
+const desc = (l: NavLink) => l.desc?.[locale];
+
+// Wide box, cut every ~40 units; `slice` keeps that spacing on every screen, so the edge never bunches into a zigzag on phones.
+const edge = compactPath(cutBandPath('header-edge', 2560, 10, 64));
+// Icons drawn more than once (desktop menus and phone menu) go in one sprite.
+const spriteIcons: IconName[] = ['chevron-down', ...[...PRIMARY, ...groups.flatMap((g) => g.links)].flatMap((l) => (l.icon ? [l.icon] : []))];
+---
+
+<a class="skip-link" href="#main">{t('site:nav.skip')}</a>
+<header class:list={['site-header', overHero && 'is-over-hero']} data-header>
+  <IconSprite names={spriteIcons} />
+  <div class="container-page header-bar">
+    <a class="brand" href={L('/')} aria-label="360Ghar home">
+      <img src="/assets/images/logo/logo-horizontal-272.webp" srcset="/assets/images/logo/logo-horizontal-272.webp 272w, /assets/images/logo/logo-horizontal.webp 424w" sizes="136px" alt="360Ghar" width="424" height="112" decoding="async" />
+    </a>
+
+    <nav class="primary-nav" aria-label={t('site:nav.mainNav')}>
+      <ul>
+        {
+          PRIMARY.map((l) => (
+            <li>
+              <a class="top-link" href={L(l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                {t(l.key)}
+              </a>
+            </li>
+          ))
+        }
+        {
+          groups.map((g) => (
+            <li>
+              <details class="menu" data-menu data-current={inGroup(g) ? '' : undefined}>
+                <summary>
+                  {t(g.key)}
+                  <Icon name="chevron-down" size={16} class="menu-chevron" sprite />
+                </summary>
+                <div class="menu-panel" data-menu-panel>
+                  <div class="menu-sheet">
+                    <ul class="menu-list">
+                      {menuLinks(g).map((l) => (
+                        <li>
+                          <a class="menu-item" href={L(l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                            {l.icon && <Icon name={l.icon} size={22} class="menu-icon" sprite />}
+                            <span class="menu-label">{t(l.key)}</span>
+                            {desc(l) && <span class="menu-desc">{desc(l)}</span>}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                    <div class="menu-aside">
+                      {g.theme && <PaperVignette theme={g.theme} seed="menu" class="menu-art" lazy />}
+                      {g.note && <p class="menu-note">{g.note[locale]}</p>}
+                      {g.more && (
+                        <a class="link" href={L(g.more.href)}>
+                          {t(g.more.key)}
+                          <Icon name="arrow-up-right" size={16} class="arrow" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a class="lang" href={switchHref} hreflang={otherLocale} lang={otherLocale === 'hi' ? 'hi' : 'en'} title={t('site:nav.languageLabel')}>
+        {t('site:nav.language')}
+      </a>
+      <a class="account" href={L('/account')} data-account>
+        <Icon name="user" size={18} />
+        <span data-account-label>{t('site:nav.signIn')}</span>
+      </a>
+      <a class="btn btn-primary post" href={L('/post-property')}>{t('site:nav.postProperty')}</a>
+      <!-- The chat button: in this bar below 1024 px, a tab at the bottom right from 1024 px (.chat-launcher in global.css). -->
+      <ChatLauncher part="button" />
+      <a class="btn btn-quiet btn-icon search-button" href={L('/properties')} aria-label={t('site:nav.search')}>
+        <Icon name="search" size={22} />
+      </a>
+      <button type="button" class="btn btn-quiet btn-icon menu-button" data-menu-open commandfor="site-menu" command="show-modal" aria-haspopup="dialog" aria-label={t('site:nav.menu')}>
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
+  </div>
+  <svg class="header-edge" viewBox="0 0 2560 10" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
+    <path d={edge} />
+  </svg>
+
+  <dialog id="site-menu" class="mobile-menu" data-mobile-menu aria-label={t('site:nav.menu')}>
+    <div class="mobile-menu-head">
+      <img src="/assets/images/logo/logo-horizontal-272.webp" srcset="/assets/images/logo/logo-horizontal-272.webp 272w, /assets/images/logo/logo-horizontal.webp 424w" sizes="136px" alt="" width="424" height="112" loading="lazy" />
+      <button type="button" class="btn btn-quiet btn-icon" data-menu-close commandfor="site-menu" command="close" aria-label={t('site:nav.closeMenu')}>
+        <Icon name="close" size={22} />
+      </button>
+    </div>
+    <nav class="mobile-menu-body" aria-label={t('site:nav.mainNav')}>
+      <a class="btn btn-ink btn-block" href={L('/properties')}>
+        <Icon name="search" size={18} />
+        {t('site:nav.search')}
+      </a>
+      <ul class="mobile-primary">
+        {
+          PRIMARY.map((l) => (
+            <li>
+              <a href={L(l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                {l.icon && <Icon name={l.icon} size={22} class="mobile-primary-icon" sprite />}
+                {t(l.key)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      {
+        groups.map((g) => (
+          <details class="mobile-group" open={inGroup(g) || undefined}>
+            <summary>
+              <span>{t(g.key)}</span>
+              <Icon name="chevron-down" size={20} class="menu-chevron" sprite />
+            </summary>
+            <ul class="mobile-list">
+              {g.links.map((l) => (
+                <li>
+                  <a href={L(l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                    {l.icon && <Icon name={l.icon} size={22} class="menu-icon" sprite />}
+                    <span class="menu-label">{t(l.key)}</span>
+                    {desc(l) && <span class="menu-desc">{desc(l)}</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+      <div class="mobile-foot">
+        <a class="btn btn-primary btn-block" href={L('/post-property')}>{t('site:nav.postProperty')}</a>
+        <div class="mobile-foot-row">
+          <a class="link" href={L('/account')}>{t('site:nav.account')}</a>
+          <a class="link" href={switchHref} hreflang={otherLocale}>{t('site:nav.language')}</a>
+        </div>
+      </div>
+    </nav>
+    <img class="mobile-art" src="/art/skyline/menu.svg" alt="" width="600" height="90" loading="lazy" decoding="async" />
+  </dialog>
+</header>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--color-pine-800);
+    color: #fff;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+  }
+
+  .skip-link:focus {
+    top: 0.75rem;
+  }
+
+  .site-header {
+    --header-bg: var(--color-paper);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--header-bg);
+    transition: background-color 200ms var(--ease-paper);
+  }
+
+  /* Over the home diorama the strip starts as sky paper and turns white on scroll. */
+  .site-header.is-over-hero:not([data-scrolled]) {
+    --header-bg: var(--color-dio-sky);
+  }
+
+  /* The strip's bottom edge is cut by hand; once the page scrolls it casts a
+     short shadow onto the content below. */
+  .header-edge {
+    position: absolute;
+    top: calc(100% - 1px);
+    left: 0;
+    width: 100%;
+    height: 8px;
+    transform: scaleY(-1);
+    fill: var(--header-bg);
+    pointer-events: none;
+    transition:
+      filter 200ms var(--ease-paper),
+      fill 200ms var(--ease-paper);
+  }
+
+  .site-header[data-scrolled] .header-edge {
+    filter: drop-shadow(1px -2px 1.5px rgb(var(--tint) / 0.16));
+  }
+
+  .header-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 64px;
+  }
+
+  .brand {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .brand img {
+    height: 36px;
+    width: auto;
+  }
+
+  .primary-nav {
+    display: none;
+    flex: 1;
+    position: relative;
+  }
+
+  .primary-nav > ul {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+  }
+
+  .top-link,
+  .menu summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-800);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      color 140ms var(--ease-paper),
+      background-color 140ms var(--ease-paper);
+  }
+
+  .top-link:hover,
+  .menu summary:hover,
+  .menu[open] summary {
+    color: var(--color-ink-950);
+    background: var(--color-mist-100);
+  }
+
+  /* Current page: heavier and darker ink. No dot, no underline. */
+  .top-link[aria-current='page'],
+  .menu[data-current] summary {
+    color: var(--color-ink-950);
+    font-weight: 800;
+  }
+
+  .menu summary {
+    list-style: none;
+  }
+
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  :global(.menu-chevron) {
+    transition: rotate 180ms var(--ease-paper);
+  }
+
+  .menu[open]:not([data-closing]) summary :global(.menu-chevron),
+  .mobile-group[open] summary :global(.menu-chevron) {
+    rotate: 180deg;
+  }
+
+  /* ---- Desktop menu sheet ---- */
+
+  .menu-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    z-index: 5;
+    width: min(48rem, calc(100vw - 18rem));
+  }
+
+  .menu-sheet {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 11.5rem;
+    gap: 1rem;
+    padding: 0.875rem;
+    background: var(--color-paper);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 2px rgb(var(--tint) / 0.06), 0 18px 32px -14px rgb(var(--tint) / 0.24);
+  }
+
+  .menu-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.125rem 0.25rem;
+    align-content: start;
+  }
+
+  /* Icon in the first column (over both lines), label and help line in the second. */
+  .menu-item,
+  .mobile-list a {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 0.125rem 0.75rem;
+    min-height: 44px;
+    padding: 0.625rem 0.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-950);
+    text-decoration: none;
+  }
+
+  /* Hover: a rounded mist slip slides under the item. */
+  .menu-item::before,
+  .mobile-list a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-mist-100);
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    translate: -3px 0;
+    transition:
+      opacity 140ms var(--ease-paper),
+      translate 180ms var(--ease-paper);
+  }
+
+  .menu-item:hover::before,
+  .menu-item:focus-visible::before,
+  .menu-item[aria-current='page']::before,
+  .mobile-list a[aria-current='page']::before {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* Centred on the first line of the label (22 px icon, 19.5 px line). */
+  :global(.menu-icon) {
+    grid-row: 1 / 3;
+    margin-top: -1px;
+    color: var(--color-kesar-700);
+    transition:
+      color 140ms var(--ease-paper),
+      translate 180ms var(--ease-paper);
+  }
+
+  .menu-item:hover :global(.menu-icon) {
+    color: var(--color-kesar-700);
+    translate: 1px 0;
+  }
+
+  .menu-label,
+  .menu-desc {
+    grid-column: 2;
+  }
+
+  .menu-label {
+    font-weight: 700;
+    font-size: 0.9375rem;
+    line-height: 1.3;
+  }
+
+  [aria-current='page'] .menu-label {
+    font-weight: 800;
+  }
+
+  .menu-desc {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: var(--color-ink-600);
+  }
+
+  .menu-aside {
+    display: grid;
+    align-content: start;
+    gap: 0.625rem;
+    padding: 0.25rem 0.25rem 0 0;
+  }
+
+  .menu-note {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-ink-800);
+  }
+
+  .menu-aside .link {
+    justify-self: start;
+    font-size: 0.9375rem;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: auto;
+  }
+
+  .lang,
+  .account {
+    display: none;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-800);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background-color 140ms var(--ease-paper);
+  }
+
+  .lang:hover,
+  .account:hover {
+    background: var(--color-mist-100);
+    color: var(--color-ink-950);
+  }
+
+  .account span {
+    max-width: 10ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .post {
+    display: none;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 40rem) {
+    .account,
+    .lang {
+      display: inline-flex;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .primary-nav {
+      display: block;
+    }
+
+    .post {
+      display: inline-flex;
+    }
+
+    .menu-button,
+    .search-button {
+      display: none;
+    }
+  }
+
+  /* Between 1024 and 1280 px the bar is tight: the account link keeps its icon
+     and its name stays for screen readers only. */
+  @media (min-width: 64rem) and (max-width: 79.99rem) {
+    .header-bar {
+      gap: 0.5rem;
+    }
+
+    .top-link,
+    .menu summary {
+      padding-inline: 0.5rem;
+    }
+
+    .account {
+      width: 44px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    .account span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+  }
+
+  /* ---- Phone menu ---- */
+
+  .mobile-menu {
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0 0 0 auto;
+    padding: 0;
+    border: 0;
+    background: var(--color-paper);
+    color: inherit;
+    overscroll-behavior: contain;
+  }
+
+  @media (min-width: 40rem) {
+    .mobile-menu {
+      width: 26rem;
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+      box-shadow: -18px 0 32px -14px rgb(var(--tint) / 0.24);
+    }
+
+    .mobile-menu-head {
+      border-top-left-radius: var(--radius-lg);
+    }
+  }
+
+  .mobile-menu::backdrop {
+    background: rgb(20 35 31 / 0.5);
+  }
+
+  .mobile-menu-head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 64px;
+    padding: 0 0.5rem 0 1rem;
+    background: var(--color-paper);
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .mobile-menu-head img {
+    height: 32px;
+    width: auto;
+  }
+
+  .mobile-menu-body {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem 1rem 0;
+  }
+
+  .mobile-primary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+  }
+
+  .mobile-primary a {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 56px;
+    border-bottom: 1px solid var(--color-ink-100);
+    font-family: var(--font-display);
+    font-size: 1.3125rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .mobile-primary a[aria-current='page'] {
+    font-weight: 800;
+    color: var(--color-kesar-700);
+  }
+
+  :global(.mobile-primary-icon) {
+    color: var(--color-kesar-700);
+  }
+
+  .mobile-group summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 52px;
+    border-bottom: 1px solid var(--color-ink-100);
+    font-family: var(--font-display);
+    font-size: 1.3125rem;
+    font-weight: 700;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .mobile-group summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-list {
+    display: grid;
+    padding: 0.375rem 0 0.5rem;
+  }
+
+  .mobile-list a {
+    margin-inline: -0.75rem;
+  }
+
+  .mobile-foot {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .mobile-foot-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* A strip of the paper street closes the menu, as it closes every page. */
+  .mobile-menu[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* The street is a cached file (src/pages/art, skyline/menu), cropped like the old inline art: the ground stays. */
+  .mobile-art {
+    flex: none;
+    display: block;
+    width: 100%;
+    height: 72px;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    box-sizing: content-box;
+    object-fit: cover;
+    object-position: 50% 100%;
+  }
+
+  /* ---- Motion: the menu sheet unfolds from under the strip, the phone menu
+     slides in from the right. Both are visible at rest; with reduced motion
+     nothing moves. ---- */
+  @media (prefers-reduced-motion: no-preference) {
+    .menu[open] .menu-panel {
+      animation: menu-unfold 200ms var(--ease-paper);
+    }
+
+    .menu[data-closing] .menu-panel {
+      animation: menu-fold 140ms ease-in forwards;
+    }
+
+    .mobile-menu {
+      transition:
+        translate 240ms var(--ease-paper),
+        display 240ms allow-discrete,
+        overlay 240ms allow-discrete;
+    }
+
+    .mobile-menu:not([open]) {
+      translate: 100% 0;
+    }
+
+    .mobile-menu::backdrop {
+      transition:
+        background-color 240ms var(--ease-paper),
+        display 240ms allow-discrete,
+        overlay 240ms allow-discrete;
+    }
+
+    .mobile-menu:not([open])::backdrop {
+      background-color: rgb(20 35 31 / 0);
+    }
+
+    @starting-style {
+      .mobile-menu[open] {
+        translate: 100% 0;
+      }
+
+      .mobile-menu[open]::backdrop {
+        background-color: rgb(20 35 31 / 0);
+      }
+    }
+  }
+
+  @keyframes menu-unfold {
+    from {
+      clip-path: inset(0 0 100% 0);
+      translate: 0 -6px;
+    }
+    to {
+      clip-path: inset(-12px);
+    }
+  }
+
+  @keyframes menu-fold {
+    from {
+      clip-path: inset(-12px);
+    }
+    to {
+      clip-path: inset(0 0 100% 0);
+      translate: 0 -6px;
+    }
+  }
+</style>
+
+<script>
+  import { peekStoredUser } from '@/features/auth/supabase';
+
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  if (header) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Shadow under the cut edge once the page scrolls.
+    const onScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Desktop menus: one open at a time. Closing plays a short fold-away.
+    const menus = [...header.querySelectorAll<HTMLDetailsElement>('[data-menu]')];
+    const close = (m: HTMLDetailsElement, focus = false) => {
+      if (!m.open || m.hasAttribute('data-closing')) return;
+      if (focus) m.querySelector('summary')?.focus();
+      if (reduce.matches) {
+        m.open = false;
+        return;
+      }
+      m.setAttribute('data-closing', '');
+      const done = () => {
+        m.removeAttribute('data-closing');
+        m.open = false;
+      };
+      const panel = m.querySelector('[data-menu-panel]');
+      panel?.addEventListener('animationend', done, { once: true });
+      // If the animation never runs (hidden tab), close anyway.
+      window.setTimeout(() => m.hasAttribute('data-closing') && done(), 260);
+    };
+
+    for (const m of menus) {
+      const summary = m.querySelector('summary');
+      summary?.addEventListener('click', (e) => {
+        if (m.open) {
+          e.preventDefault();
+          close(m);
+        }
+      });
+      m.addEventListener('toggle', () => {
+        if (m.open) for (const o of menus) if (o !== m) close(o);
+      });
+      // Like a menu bar: with one menu open, pointing at the other opens it.
+      summary?.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'mouse' && !m.open && menus.some((o) => o !== m && o.open)) m.open = true;
+      });
+      // Tabbing out of an open menu closes it.
+      m.addEventListener('focusout', (e) => {
+        const next = e.relatedTarget as Node | null;
+        if (next && !m.contains(next)) close(m);
+      });
+    }
+    document.addEventListener('click', (e) => {
+      for (const m of menus) if (m.open && !m.contains(e.target as Node)) close(m);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      for (const m of menus) if (m.open) close(m, true);
+    });
+
+    // Phone menu. The buttons also carry `command` attributes, so the menu opens
+    // before this script runs in browsers that support invoker commands.
+    const dialog = header.querySelector<HTMLDialogElement>('[data-mobile-menu]');
+    header.querySelector('[data-menu-open]')?.addEventListener('click', () => {
+      if (dialog && !dialog.open) dialog.showModal();
+    });
+    header.querySelector('[data-menu-close]')?.addEventListener('click', () => dialog?.close());
+    dialog?.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+
+    // Signed-in name, read from the stored session (no SDK download).
+    const user = peekStoredUser();
+    if (user) {
+      const first = (user.name ?? user.email ?? '').split(/[\s@]/)[0];
+      const label = header.querySelector('[data-account-label]');
+      if (label && first) label.textContent = first;
+    }
+  }
+</script>

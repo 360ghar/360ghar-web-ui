@@ -1,0 +1,9 @@
+---
+import LandingRoute from '@/features/landing/LandingRoute.astro';
+import { loadLanding } from '@/features/landing/load';
+
+export const prerender = false;
+const result = await loadLanding(Astro, { amenity: Astro.params.amenity ?? '' });
+---
+
+<LandingRoute result={result} />

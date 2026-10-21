@@ -1,0 +1,63 @@
+---
+import { getT } from '@/i18n';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import UnitConverter from '@/features/tools/area/UnitConverter';
+import { jsonFaqs, jsonHowTo, noDash, PAGES, SHORT, unitLabels } from '@/features/tools/area/content';
+import { convert, fmtArea, type Unit } from '@/features/tools/area/units';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = PAGES.acreInGaj[locale];
+const units: Unit[] = ['acre', 'gaj', 'sq_ft'];
+const labels = unitLabels(t, units);
+const short = SHORT[locale];
+---
+
+<ToolPage
+  tool="acreInGaj"
+  title={t('tools:acreInGaj.title')}
+  description={t('tools:acreInGaj.description')}
+  keywords={t('tools:acreInGaj.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={jsonFaqs(t, 'acreInGaj', 6)}
+  faqTitle={t('tools:acreInGaj.faqTitle')}
+  howTo={jsonHowTo(t, 'acreInGaj', t('tools:acreInGaj.howToTitle'), c.howToDesc)}
+>
+  <UnitConverter client:load locale={locale} units={units} labels={labels} defaults={{ v: 1, from: 'acre', to: 'gaj' }} />
+  <Fragment slot="body">
+    <h2>{t('tools:acreInGaj.tableTitle')}</h2>
+    <div class="tool-scroll" tabindex="0" role="region" aria-label={t('tools:acreInGaj.tableTitle')}>
+      <table class="tool-table">
+        <thead>
+          <tr>
+            <th scope="col">{t('tools:acreInGaj.acreCol')}</th>
+            <th scope="col">{t('tools:acreInGaj.gajCol')}</th>
+            <th scope="col">{t('tools:acreInGaj.sqFtCol')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            [0.25, 0.5, 1, 2, 5].map((a) => (
+              <tr>
+                <th scope="row">
+                  {fmtArea(a, locale)} {short.acre}
+                </th>
+                <td>
+                  {fmtArea(convert(a, 'acre', 'gaj'), locale)} {short.gaj}
+                </td>
+                <td>
+                  {fmtArea(convert(a, 'acre', 'sq_ft'), locale)} {short.sq_ft}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <h2>{t('tools:acreInGaj.explanationTitle')}</h2>
+    <p>{noDash(t('tools:acreInGaj.explanationDesc'))}</p>
+  </Fragment>
+</ToolPage>

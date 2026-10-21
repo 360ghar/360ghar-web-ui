@@ -1,12 +1,7 @@
 {
   "common": {
     "tryAgain": "पुनः प्रयास करें",
-    "loading": "लोड हो रहा है...",
-    "loadMore": "और लोड करें",
-    "fetchError": "डेटा लोड करने में विफल",
-    "frequentlyAskedQuestions": "अक्सर पूछे जाने वाले प्रश्न",
-    "linkCopied": "लिंक कॉपी हो गया!",
-    "copyFailed": "लिंक कॉपी करने में विफल"
+    "loading": "लोड हो रहा है..."
   },
   "fakeListingChecker": {
     "heroTitle": "जानें कि क्या प्रॉपर्टी लिस्टिंग नकली है",
@@ -48,41 +43,28 @@
     "home": "होम",
     "properties": "संपत्तियां",
     "localities": "लोकेलिटीज",
-    "allLocalities": "सभी लोकेलिटीज",
-    "dlfPhase1": "डीएलएफ फेज़ 1",
-    "dlfPhase2": "डीएलएफ फेज़ 2",
-    "dlfPhase5": "डीएलएफ फेज़ 5",
-    "golfCourseRoad": "गोल्फ कोर्स रोड",
-    "sushantLok1": "सुशांत लोक 1",
     "vastuChecker": "वास्तु चेकर",
     "designBlueprint": "डिज़ाइन ब्लूप्रिंट",
     "dataHub": "डेटा हब",
     "circleRates": "सर्कल रेट्स",
     "reraProjects": "रेरा प्रोजेक्ट्स",
     "bankAuctions": "बैंक नीलामी",
-    "auctionSources": "नीलामी स्रोत",
-    "stampDutyCalc": "स्टैंप ड्यूटी कैलकुलेटर",
     "verifyOwnership": "ओनरशिप वेरिफाई",
     "zoneChecker": "ज़ोन चेकर",
     "regulatoryUpdates": "नियामक अपडेट",
     "builderReputation": "बिल्डर रिप्यूटेशन",
-    "services": "सेवाएं",
     "postProperty": "प्रॉपर्टी पोस्ट करें",
-    "propertyValuation": "प्रॉपर्टी वैल्यूएशन",
     "virtualTours": "वर्चुअल टूर",
     "mapSearch": "मैप सर्च",
     "aiAssistant": "AI सहायक",
     "referAndEarn": "रेफर करें और कमाएं",
-    "resources": "संसाधन",
     "blog": "ब्लॉग",
     "aboutUs": "हमारे बारे में",
     "faq": "अक्सर पूछे जाने वाले सवाल",
     "emiCalculator": "EMI कैलकुलेटर",
     "loanEligibility": "लोन पात्रता",
     "areaConverter": "एरिया कनवर्टर",
-    "carpetAreaCalc": "कार्पेट एरिया कैलक",
     "propertyChecklist": "प्रॉपर्टी चेकलिस्ट",
-    "capitalGainsTax": "कैपिटल गेन्स टैक्स",
     "rentReceipt": "किराया रसीद",
     "policies": "नीतियां",
     "aiDesignStudio": "AI डिज़ाइन स्टूडियो",
@@ -90,16 +72,10 @@
     "more": "और"
   },
   "header": {
-    "skipToContent": "मुख्य सामग्री पर जाएं",
     "signIn": "साइन इन",
-    "myAccount": "मेरा अकाउंट",
     "favorites": "पसंदीदा",
-    "myVisits": "मेरी विज़िट",
     "logout": "लॉग आउट",
-    "loggedOutSuccess": "सफलतापूर्वक लॉग आउट हो गया!",
-    "postProperty": "प्रॉपर्टी पोस्ट करें",
-    "toggleMobileMenu": "मोबाइल मेन्यू टॉगल करें",
-    "openMenu": "मेन्यू खोलें"
+    "postProperty": "प्रॉपर्टी पोस्ट करें"
   },
   "breadcrumb": {
     "home": "होम"
@@ -107,69 +83,19 @@
   "offCanvas": {
     "location": "गुरुग्राम, हरियाणा भारत, 122001",
     "email": "info@360ghar.com",
-    "mapTitle": "360Ghar सेवा क्षेत्र मानचित्र",
     "panelAriaLabel": "360Ghar मेन्यू पैनल"
   },
   "footer": {
-    "connectWithUs": "हमसे जुड़ें",
-    "stayUpdatedDesc": "नवीनतम प्रॉपर्टी लिस्टिंग और रियल एस्टेट जानकारी से अपडेट रहें।",
-    "quickActions": "त्वरित कार्य",
-    "searchProperties": "प्रॉपर्टी खोजें",
     "listYourProperty": "अपनी प्रॉपर्टी लिस्ट करें",
-    "viewProjects": "प्रोजेक्ट देखें",
-    "myAccount": "मेरा अकाउंट",
-    "contactExperts": "विशेषज्ञों से संपर्क करें",
     "virtualTours": "360° वर्चुअल टूर",
-    "verifiedProperties": "वेरिफाइड प्रॉपर्टी",
-    "secureBooking": "सुरक्षित बुकिंग",
-    "expertSupport": "विशेषज्ञ सहायता",
-    "bestPriceGuarantee": "सर्वोत्तम मूल्य गारंटी",
-    "needHelp": "मदद चाहिए?",
-    "emailExperts": "हमारे प्रॉपर्टी विशेषज्ञों को ईमेल करें",
-    "allRightsReserved": "सर्वाधिकार सुरक्षित।",
-    "usefulLinks": "उपयोगी लिंक",
-    "services": "सेवाएं",
-    "logoDesc": "भारत में VR-फर्स्ट तरीके से घर खोजें। गुरुग्राम में स्टूडियो-क्वालिटी 360° गाइडेड वॉकथ्रू के साथ वेरिफाइड प्रॉपर्टी। खरीदें, बेचें, या किराए पर लें — कोई फर्जी लिस्टिंग नहीं, शून्य अग्रिम शुल्क।",
-    "stayUpdated": "अपडेट रहें",
-    "enterYourEmail": "अपना ईमेल दर्ज करें",
-    "subscribedSuccessfully": "सफलतापूर्वक सब्सक्राइब हो गया!",
-    "getInTouch": "संपर्क में रहें",
-    "contactSupport": "सपोर्ट से संपर्क करें",
-    "subscribeAndFollow": "सब्सक्राइब करें और फॉलो करें",
-    "subscribeDesc": "360Ghar से नवीनतम प्रॉपर्टी अपडेट और विशेष ऑफर प्राप्त करें।",
-    "yourMailAddress": "अपना ईमेल पता",
-    "thanksForJoining": "जुड़ने के लिए धन्यवाद!",
-    "propertySearch": "प्रॉपर्टी सर्च",
-    "propertyManagement": "प्रॉपर्टी मैनेजमेंट",
-    "investmentAdvisory": "निवेश सलाह",
-    "propertyListings": "प्रॉपर्टी लिस्टिंग",
-    "about360ghar": "360Ghar के बारे में",
-    "blogAndInsights": "ब्लॉग और इनसाइट्स",
-    "helpCenter": "हेल्प सेंटर",
-    "contactUs": "हमसे संपर्क करें",
-    "forAIAssistants": "AI सहायकों के लिए",
     "stampDutyCalculator": "स्टैंप ड्यूटी कैलकुलेटर",
-    "vsNoBroker": "360Ghar बनाम NoBroker",
-    "vsMagicBricks": "360Ghar बनाम MagicBricks",
-    "vs99acres": "360Ghar बनाम 99acres",
     "careers": "करियर",
     "termsOfService": "सेवा की शर्तें",
     "privacyPolicy": "गोपनीयता नीति"
   },
   "mobileMenu": {
-    "welcomeBack": "वापस स्वागत है!",
     "signIn": "लॉग इन",
-    "signUp": "साइन अप",
-    "searchPlaceholder": "प्रॉपर्टी, लोकैलिटी खोजें...",
-    "searchAriaLabel": "खोज",
-    "searchBtn": "खोजें",
     "closeMenu": "मेन्यू बंद करें"
-  },
-  "commonData": {
-    "addressLabel": "पता",
-    "addressValue": "गुरुग्राम, हरियाणा, भारत",
-    "emailLabel": "ईमेल",
-    "emailValue": "info@360ghar.com"
   },
   "chatbot": {
     "title": "360Ghar AI सहायक",
@@ -195,7 +121,7 @@
     "signInToUnlock": "अनलॉक करने के लिए साइन इन करें",
     "lockedManageProperties": "प्रॉपर्टी प्रबंधित करें",
     "lockedCheckRent": "किराया चेक करें",
-    "guestBannerText": "विजिट, किराया ट्रैकिंग और अधिक के लिए साइन इन करें",
+    "guestBannerText": "चैट मुफ़्त है, साइन-अप नहीं। चैट सहेजने, विज़िट बुक करने और किराया ट्रैक करने के लिए ही साइन इन करें।",
     "guestBannerCta": "साइन इन करें",
     "errorMessage": "क्षमा करें, कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
     "widgetError": "यह परिणाम प्रदर्शित नहीं किया जा सका।",
@@ -246,59 +172,26 @@
       "viewAll": "सभी {{count}} प्रॉपर्टी देखें →"
     }
   },
-  "scrollToTop": "ऊपर स्क्रॉल करें",
   "cta": {
     "title": "हमारे",
     "newsletter": "न्यूज़लेटर",
-    "description": "अपने इनबॉक्स में वेरिफाइड प्रॉपर्टी लिस्टिंग, मार्केट इनसाइट्स और गुरुग्राम में विशेष डील प्राप्त करें। घर खोजने के लिए आपका विश्वसनीय गाइड।",
-    "imageAlt": "न्यूज़लेटर CTA"
+    "description": "अपने इनबॉक्स में वेरिफाइड प्रॉपर्टी लिस्टिंग, मार्केट इनसाइट्स और गुरुग्राम में विशेष डील प्राप्त करें। घर खोजने के लिए आपका विश्वसनीय गाइड।"
   },
   "newsletter": {
     "title": "हमारे न्यूज़लेटर की सदस्यता लें",
     "description": "नवीनतम प्रॉपर्टी लिस्टिंग, विशेष ऑफर और रियल एस्टेट इनसाइट्स सीधे अपने इनबॉक्स में प्राप्त करें। गुरुग्राम के सर्वोत्तम स्थानों पर अपना सपनों का घर खोजने में हम आपकी मदद करें।",
-    "emailPlaceholder": "आपका ईमेल",
-    "subscribeBtn": "अभी सदस्यता लें",
     "subscribeSuccess": "जुड़ने के लिए धन्यवाद!"
   },
   "contentSeo": {
     "breadcrumbHome": "होम",
     "share": "शेयर करें",
-    "shareOn": "पर शेयर करें",
-    "copyLink": "लिंक कॉपी करें",
-    "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी हो गया!",
-    "searchPlaceholder": "खोजें...",
-    "searchJobs": "भूमिकाएं खोजें...",
-    "allCategories": "सभी श्रेणियां",
-    "filterByCategory": "श्रेणी से फ़िल्टर करें",
     "noResults": "कोई मिलान परिणाम नहीं मिला।",
-    "relatedPosts": "संबंधित लेख",
-    "relatedPostsDesc": "इन लोकप्रिय लेखों के साथ पढ़ना जारी रखें।",
-    "loadingPosts": "लेख लोड हो रहे हैं...",
     "glossaryAzNav": "अक्षर पर जाएं",
     "glossaryAll": "सभी",
-    "referralHowItWorks": "आपका रेफरल कैसे ट्रैक होता है",
-    "referralTrackingDesc": "एक बार जब आप रेफरल सबमिट करते हैं, तब यह होता है:",
     "referralStep1": "आप नीचे दिए गए फॉर्म से प्रॉपर्टी ओनर की जानकारी सबमिट करते हैं।",
     "referralStep2": "हमारी टीम प्रॉपर्टी वेरिफाई करती है और 48 घंटे के भीतर ओनर से संपर्क करती है।",
     "referralStep3": "जब प्रॉपर्टी 360Ghar पर लिस्ट हो जाती है, तो आप ₹100 कमाते हैं।",
-    "referralStep4": "जब डील क्लोज होती है (किराया या बिक्री), तो आप ₹10,000 तक कमाते हैं।",
-    "referralStatusTitle": "अपने रेफरल ट्रैक करें",
-    "referralStatusDesc": "सबमिशन के बाद, आपको ईमेल और SMS द्वारा एक रेफरेंस आईडी प्राप्त होगा। अपने रेफरल और रिवॉर्ड की स्थिति जानने के लिए info@360ghar.com पर हमारी टीम से संपर्क करें।",
-    "referralDashboardNote": "सेल्फ-सर्विस रेफरल डैशबोर्ड जल्द आ रहा है। तब तक, रियल-टाइम अपडेट के लिए अपने रेफरेंस आईडी के साथ हमसे संपर्क करें।",
-    "popularPages": "लोकप्रिय पेज",
-    "notFoundSearchPlaceholder": "प्रॉपर्टी, लोकैलिटी, टूल खोजें...",
-    "notFoundSearchBtn": "खोजें",
-    "notFoundSearchHint": "या अपनी ज़रूरत की चीज़ खोजें:",
-    "notFoundLocalities": "लोकैलिटी"
-  },
-  "pagination": {
-    "navAriaLabel": "पेज नेविगेशन",
-    "previousPage": "पिछला पेज",
-    "nextPage": "अगला पेज",
-    "pageAriaLabel": "पेज {{page}}",
-    "jumpToLabel": "पेज पर जाएं",
-    "jumpToAriaLabel": "पेज नंबर पर जाएं",
-    "jumpToBtn": "जाएं"
+    "referralStep4": "जब डील क्लोज होती है (किराया या बिक्री), तो आप ₹10,000 तक कमाते हैं।"
   },
   "offlineIndicator": {
     "message": "आप ऑफ़लाइन हैं। कुछ सुविधाएँ अनुपलब्ध हो सकती हैं।"
@@ -306,9 +199,6 @@
   "errorBoundary": {
     "title": "कुछ गलत हो गया",
     "description": "एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें या होम पेज पर वापस जाएं।",
-    "goHome": "होम पर जाएं",
     "tryAgain": "पुनः प्रयास करें"
-  },
-  "profileAlt": "प्रोफ़ाइल",
-  "userFallback": "उपयोगकर्ता"
+  }
 }

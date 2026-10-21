@@ -1,85 +1,12 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
+node_modules/
+dist/
+.astro/
+.netlify/
 .env
-
-# Temp/scratch files
-.tmp_*
-current-locality-page.png
-current-home-loader.png
-*.tmp.html
-*.tmp.xml
-
-# Local Playwright MCP verification output (screenshots/console dumps)
-.playwright-mcp/
-
-# Source maps in public
-public/assets/css/*.css.map
-
-# Build-generated files vendored by the scheduled precompute job.
-# Netlify preview builds reuse these instead of scraping the API.
-# (Do NOT ignore them; they are committed by .github/workflows/precompute-content.yml.)
-# public/sitemap.xml
-# public/sitemap-static.xml
-# public/sitemap-landing.xml
-# public/sitemap-localities.xml
-# public/.well-known/ai.txt
-# public/.well-known/api-catalog
-# public/llms.txt
-# public/llms-full.txt
-# public/data/llm-feed.json
-scripts/prerender-routes.json
-scripts/reports/
-
-# API-derived sitemaps + RSS are vendored (refreshed by npm run build:full)
-# so fast deploys keep last-known SEO files without re-crawling the API:
-#   public/sitemap-properties.xml
-#   public/sitemap-blog.xml
-#   public/sitemap-projects.xml
-#   public/sitemap-datahub.xml
-#   public/rss.xml
-#   public/rss/
-#
-# Localities data is vendored so fast deploys do not scrape competitors.
-# Refresh with: npm run build:entities (or npm run build:full)
-#   src/data/localities.json
-#   src/data/localities-index.json
-
-# Repomix output
-repomix-output.*
-gsc_report/
-
-# Build-time API fetch cache (local/persistent-CI only; ephemeral on Netlify)
-.build-cache/
-
-# Remotion video project dependencies (source is tracked, deps are not)
-.wiki/video/node_modules/
-.wiki/video/out/
-
-# Playwright MCP page dumps (local browser automation)
-.playwright-mcp/
-
-# Codename/scratch files
-codex.*
+.env.*
+!.env.example
+src/pages/hi/
+test-results/
+playwright-report/
+docs/screenshots/
+.DS_Store

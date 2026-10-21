@@ -1,0 +1,490 @@
+---
+/**
+ * Landing page for a city, intent and type, with an optional BHK, budget or
+ * amenity facet. Page 1 of live listings is rendered on the server; the
+ * results island adds filters and more pages. Facets from the path are locked.
+ *
+ * Around the list: live numbers from the homes themselves (count, price range,
+ * median price per sq ft), a price chart by locality against the usual market
+ * bands, notes from landingTypeContext.json, and links to nearby pages.
+ */
+import priceContext from '@/data/priceContext.json';
+import type { ListingPage } from '@/features/search/listingItem';
+import typeContext from '@/data/landingTypeContext.json';
+import type { Property } from '@/lib/api/types';
+import type { AmenityOption } from '@/features/search/listingItem';
+import type { ApiError } from '@/lib/api/errors';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import { compactPrice, formatNum, rupees } from '@/lib/format';
+import SearchResults from '@/features/search/SearchResults';
+import type { Filters } from '@/features/search/filters';
+import { BUDGETS } from '@/features/search/filters';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import LandingPrices from './LandingPrices.astro';
+import SectionOpener from '@/ui/SectionOpener.astro';
+import { VIGNETTE_THEMES, type VignetteTheme } from '@/lib/paper/vignettes';
+import PaperVignette from '@/ui/paper/PaperVignette.astro';
+import { askPrice } from '@/lib/format';
+import { budgetLabel, budgetsFor, CITIES, landingStats, segmentFor, type Facet, type Landing } from './model';
+import { landingCopy } from './copy';
+import type { Related } from './load';
+
+type Props = {
+  landing: Landing;
+  facet?: Facet;
+  filters: Filters;
+  page: ListingPage | null;
+  error: ApiError | null;
+  amenities: AmenityOption[];
+  locale: Locale;
+  homes: Property[] | null;
+  related: Related[];
+};
+
+const { landing: l, facet, filters, page, error, amenities, locale, homes, related } = Astro.props;
+const hi = locale === 'hi';
+const L = localizer(locale);
+const copy = landingCopy(l, facet, locale);
+const rent = l.intent !== 'buy';
+const cityName = hi ? (CITIES[l.city]?.hi ?? l.cityName) : l.cityName;
+// The price context file is in English; Hindi pages get Hindi units.
+const hiUnits = (v: string) => (hi ? v.replace(/lakhs?/g, 'लाख').replace(/crore/g, 'करोड़').replace(/\/month/g, '/माह') : v);
+
+type PriceMap = Record<string, Record<string, Record<string, string>>>;
+const prices = (priceContext as PriceMap)[l.city]?.[l.intent];
+const priceRange = prices?.[l.type] ?? prices?.default ?? null;
+type TypeCtx = { topSocieties?: string[]; typicalConfiguration?: string; priceBands?: { label: string; range: string; localities: string }[]; metroAccess?: string; officeHubAccess?: string; reraNote?: string };
+const ctx = (typeContext as unknown as Record<string, Record<string, Record<string, TypeCtx>>>)[l.city]?.[l.intent === 'pg' ? 'rent' : l.intent]?.[l.type] ?? null;
+
+// Live numbers. The count is the API total; the rest comes from up to 100 homes.
+const total = page?.total ?? null;
+const stats = homes?.length ? landingStats(homes) : null;
+const complete = Boolean(homes && total !== null && homes.length >= total);
+const per = rent ? (hi ? '/माह' : '/month') : '';
+const showChart = Boolean(stats && complete && stats.count - stats.unpriced >= 3);
+// Where most prices sit (25th to 75th percentile), rounded the way the cards show prices.
+const most = complete && stats?.range && total && total > 1 ? (stats.range.map((v) => compactPrice(v, locale)) as [string, string]) : null;
+const rate = complete && stats?.medianRate ? rupees(Math.round(stats.medianRate), locale) : null;
+
+const locked: Partial<Record<keyof Filters, true>> = { purpose: true, property_type: true, city: true };
+if (facet?.kind === 'bhk') {
+  locked.bedrooms_min = true;
+  locked.bedrooms_max = true;
+}
+if (facet?.kind === 'budget') locked.price_max = true;
+if (facet?.kind === 'amenity') locked.amenities = true;
+
+const base = l.path;
+const pagePath = facet?.kind === 'bhk' ? `${base}/${facet.bhk}-bhk` : facet?.kind === 'budget' ? `${base}/budget/${facet.key}` : facet?.kind === 'amenity' ? `${base}/amenity/${facet.slug}` : base;
+// Counts on facet links are exact only from the base page (all of its homes are loaded).
+const counted = !facet && complete && homes ? homes : null;
+const bhkCount = (n: number) => counted?.filter((p) => (n >= 4 ? (p.bedrooms ?? 0) >= 4 : p.bedrooms === n)).length ?? null;
+const budgetCount = (k: string) => counted?.filter((p) => askPrice(p) <= BUDGETS[k]!.price_max).length ?? null;
+const bhkLinks = l.intent === 'pg' ? [] : [1, 2, 3, 4].map((n) => ({ href: `${base}/${n}-bhk`, label: `${n} BHK ${copy.facetLower}`, on: facet?.kind === 'bhk' && facet.bhk === n, count: bhkCount(n) }));
+const budgetLinks = budgetsFor(l.intent).map((k) => ({ href: `${base}/budget/${k}`, label: `${copy.facetCap} ${budgetLabel(k, hi)}`, on: facet?.kind === 'budget' && facet.key === k, count: budgetCount(k) }));
+const otherTypes = (['apartment', 'builder_floor', 'house', 'villa', 'plot', 'office'] as const)
+  .filter((t) => t !== l.type && l.intent !== 'pg' && !(l.intent === 'rent' && t === 'plot'))
+  .map((t) => ({ href: `/${l.city}/${l.intent}/${segmentFor(t)}`, label: copy.typePlural(t), on: false, count: null }));
+const otherIntents = (['buy', 'rent', 'pg'] as const)
+  .filter((i) => i !== l.intent)
+  .map((i) => ({ href: i === 'pg' ? `/${l.city}/pg/flats` : `/${l.city}/${i}/${i === 'rent' && l.type === 'plot' ? 'flats' : l.typeSegment === 'flats' || l.intent === 'pg' ? 'flats' : l.typeSegment}`, label: copy.intentLink(i), on: false, count: null }));
+const groups = [
+  { title: hi ? 'BHK से' : 'By bedrooms', links: bhkLinks },
+  { title: hi ? 'बजट से' : 'By budget', links: budgetLinks },
+  { title: hi ? 'दूसरे प्रकार' : 'Other types', links: otherTypes },
+  { title: cityName, links: [...otherIntents, { href: `/${l.city}`, label: hi ? `${cityName} रियल एस्टेट गाइड` : `${cityName} real estate guide`, on: false, count: null }] },
+]
+  // A link to a page with no homes helps nobody (and that page is noindex).
+  .map((g) => ({ ...g, links: g.links.filter((x) => x.count !== 0 || x.on) }))
+  .filter((g) => g.links.length > 0);
+
+const lowerFirst = (s: string) => (/^[A-Z][a-z]/.test(s) ? s[0]!.toLowerCase() + s.slice(1) : s);
+const empty =
+  total === 0 && !error
+    ? {
+        title: hi ? `अभी ${copy.h1} नहीं हैं` : `No ${lowerFirst(copy.h1)} right now`,
+        body: related.length
+          ? hi
+            ? 'इन पेजों पर आज घर हैं:'
+            : 'These pages have homes today:'
+          : hi
+            ? 'सभी घर देखें, या अपना घर मुफ़्त लिस्ट करें।'
+            : 'See all homes, or list your own home free.',
+        links: related.map((r) => ({ ...r, href: L(r.href) })),
+      }
+    : undefined;
+
+// The kind of building, for the paper vignette at the start of the price section.
+// The kind of building, drawn as a paper vignette. Themes the kit does not have yet fall back.
+const THEME: Record<string, string[]> = { apartment: ['tower'], builder_floor: ['home'], house: ['home'], villa: ['villa', 'home'], pg: ['pg', 'society'], office: ['office'], shop: ['shop', 'office'], warehouse: ['warehouse', 'office'], plot: ['plot', 'map'] };
+const theme = ((THEME[l.type] ?? []).find((x) => (VIGNETTE_THEMES as readonly string[]).includes(x)) ?? 'society') as VignetteTheme;
+
+const notes = ctx
+  ? [
+      ctx.typicalConfiguration && { icon: 'area', title: hi ? 'आम कॉन्फ़िगरेशन' : 'Typical configuration', body: ctx.typicalConfiguration },
+      ctx.topSocieties?.length && { icon: 'building', title: hi ? 'जानी-मानी सोसाइटी और इलाके' : 'Well-known societies and areas', body: ctx.topSocieties.join(', ') },
+      ctx.metroAccess && { icon: 'map', title: hi ? 'मेट्रो' : 'Metro', body: ctx.metroAccess },
+      ctx.officeHubAccess && { icon: 'clock', title: hi ? 'ऑफ़िस तक' : 'To office hubs', body: ctx.officeHubAccess },
+      ctx.reraNote && { icon: 'key', title: 'RERA', body: ctx.reraNote },
+    ].filter((x): x is { icon: 'area' | 'building' | 'map' | 'clock' | 'key'; title: string; body: string } => Boolean(x))
+  : [];
+---
+
+<div class="container-page pt-2 landing-head">
+  <Breadcrumbs items={copy.crumbs} class="landing-crumbs" />
+  <h1 class="landing-h1">{copy.h1}</h1>
+  <PaperVignette theme={theme} seed={l.typeSegment} class="landing-art" />
+  {
+    stats && total ? (
+      <p class="landing-live">
+        {hi ? (
+          <>
+            अभी <strong class="landing-fig tabular">{formatNum(total, 'hi')} घर</strong> लिस्ट हैं।
+            {most && (
+              <>
+                {' '}
+                ज़्यादातर{' '}
+                {most[0] === most[1] ? (
+                  <strong class="landing-fig tabular">{most[0]}{per}</strong>
+                ) : (
+                  <>
+                    <strong class="landing-fig tabular">{most[0]}</strong> से <strong class="landing-fig tabular">{most[1]}{per}</strong>
+                  </>
+                )}{' '}
+                के हैं।
+              </>
+            )}
+            {rate && (
+              <>
+                {' '}
+                बीच की कीमत <strong class="landing-fig tabular">{rate}</strong> प्रति वर्ग फ़ुट।
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <strong class="landing-fig tabular">{formatNum(total, 'en')} {total === 1 ? 'home' : 'homes'}</strong> listed now.
+            {most && (
+              <>
+                {' '}
+                {most[0] === most[1] ? (
+                  <>
+                    Most are about <strong class="landing-fig tabular">{most[0]}{per}</strong>.
+                  </>
+                ) : (
+                  <>
+                    Most are <strong class="landing-fig tabular">{most[0]}</strong> to <strong class="landing-fig tabular">{most[1]}{per}</strong>.
+                  </>
+                )}
+              </>
+            )}
+            {rate && (
+              <>
+                {' '}
+                Median <strong class="landing-fig tabular">{rate}</strong> per sq ft.
+              </>
+            )}
+          </>
+        )}
+      </p>
+    ) : null
+  }
+  {
+    priceRange && (
+      <p class="landing-lead">
+        {hi ? `${cityName} में आम बाज़ार कीमत: ` : `Usual market price in ${cityName}: `}
+        <span class="tabular landing-range">₹{hiUnits(priceRange.replace(' - ', ' – '))}</span>
+        {hi ? '।' : '.'}
+      </p>
+    )
+  }
+</div>
+
+<div class="container-page mt-4">
+  <SearchResults
+    client:load
+    locale={locale}
+    initialFilters={filters}
+    initialPage={page}
+    initialError={error?.message ?? null}
+    amenities={amenities}
+    basePath={pagePath}
+    locked={locked}
+    empty={empty}
+  />
+</div>
+
+<div class="container-page landing-more">
+  {
+    showChart && stats && (
+      <LandingPrices
+        stats={stats}
+        bands={ctx?.priceBands ?? []}
+        path={pagePath}
+        rent={rent}
+        locale={locale}
+        heading={hi ? `${cityName} में ${copy.facetLower} की कीमतें` : `What ${lowerFirst(copy.facetCap)} cost in ${cityName}`}
+      />
+    )
+  }
+
+  {
+    notes.length > 0 && (
+      <section class="landing-ctx" aria-labelledby="landing-ctx">
+        <SectionOpener
+          id="landing-ctx"
+          title={hi ? `${cityName} में ${copy.facetLower}: ज़रूरी बातें` : `${copy.facetCap} in ${cityName}: what to know`}
+          lead={hi ? 'बाज़ार की आम जानकारी। फ़ैसले से पहले घर और कागज़ खुद जाँचें।' : 'General notes on the market. Check the home and its papers yourself before you decide.'}
+          class="landing-opener"
+        />
+        <dl class="landing-notes">
+          {notes.map((n) => (
+            <div>
+              <dt>
+                <Icon name={n.icon} size={20} />
+                {n.title}
+              </dt>
+              <dd>{n.body}</dd>
+            </div>
+          ))}
+          {!showChart && ctx?.priceBands && ctx.priceBands.length > 0 && (
+            <div>
+              <dt>
+                <Icon name="rupee" size={20} />
+                {hi ? 'कीमत के हिसाब से इलाके' : 'Areas by price'}
+              </dt>
+              <dd>
+                {ctx.priceBands.map((b) => (
+                  <span class="landing-band">
+                    <strong>
+                      {b.label} <span class="tabular">₹{b.range}</span>
+                    </strong>
+                    : {b.localities}
+                  </span>
+                ))}
+              </dd>
+            </div>
+          )}
+        </dl>
+      </section>
+    )
+  }
+
+  <nav class="landing-facets" aria-labelledby="landing-refine">
+    <h2 id="landing-refine" class="landing-h2">{hi ? 'और खोजें' : 'Look further'}</h2>
+    <div class="landing-facet-grid">
+      {
+        groups.map((g) => (
+          <div>
+            <h3 class="landing-h3">{g.title}</h3>
+            <ul>
+              {g.links.map((x) => (
+                <li>
+                  <a href={L(x.href)} aria-current={x.on ? 'page' : undefined}>
+                    <span>{x.label}</span>
+                    {x.count ? <span class="landing-count tabular">{x.count}</span> : null}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </nav>
+
+  <section class="landing-faq">
+    <Faq items={copy.faqs} title={hi ? 'अक्सर पूछे जाने वाले सवाल' : 'Questions'} id="landing-faq" />
+  </section>
+
+  <p class="landing-post">
+    <Icon name="home" size={18} />
+    {hi ? 'यहाँ घर है?' : 'Own a home here?'}
+    <a class="link" href={L('/post-property')}>{hi ? 'मुफ़्त लिस्ट करें' : 'List it free'}</a>
+  </p>
+</div>
+
+<style>
+  /* The heading on its own line; the live numbers and the vignette side by side,
+     the vignette right after the text and level with its last line. */
+  .landing-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(5rem, 24vw, 9rem);
+    grid-template-areas: 'crumbs crumbs' 'h1 h1' 'live art' 'lead lead';
+    column-gap: 1rem;
+    align-items: start;
+  }
+
+  /* Wider: the vignette spans the heading block, right after its longest line. */
+  @media (min-width: 48rem) {
+    .landing-head {
+      grid-template-columns: minmax(0, max-content) 9rem;
+      grid-template-areas: 'crumbs crumbs' 'h1 art' 'live art' 'lead art';
+      justify-content: start;
+      column-gap: 2.5rem;
+    }
+  }
+
+  .landing-head :global(.landing-crumbs) {
+    grid-area: crumbs;
+    min-width: 0;
+  }
+
+  .landing-head :global(.landing-art) {
+    grid-area: art;
+    align-self: end;
+    margin-top: 0.5rem;
+    filter: drop-shadow(1px 1px 0 rgb(var(--tint) / 0.1)) drop-shadow(2px 3px 1.5px rgb(var(--tint) / 0.12));
+  }
+
+  .landing-h1 {
+    grid-area: h1;
+    margin-top: 0.5rem;
+    font-size: clamp(1.875rem, 1.3rem + 2.4vw, 3rem);
+    max-width: 24ch;
+  }
+
+  .landing-live {
+    grid-area: live;
+    margin-top: 0.625rem;
+    max-width: 60ch;
+    font-size: 1.0625rem;
+    color: var(--color-ink-800);
+  }
+
+  .landing-fig {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  .landing-lead {
+    grid-area: lead;
+    margin-top: 0.25rem;
+    color: var(--color-ink-600);
+    font-size: 0.9375rem;
+    max-width: 62ch;
+  }
+
+  .landing-range {
+    white-space: nowrap;
+  }
+
+  .landing-more {
+    margin-top: 4rem;
+    display: grid;
+    gap: 3.5rem;
+  }
+
+  .landing-h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+    margin-bottom: 1rem;
+  }
+
+  .landing-h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+
+  .landing-ctx :global(.landing-opener) {
+    margin-bottom: 1.5rem;
+  }
+
+  .landing-notes {
+    display: grid;
+    gap: 1.5rem 2.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .landing-notes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .landing-notes dt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 800;
+  }
+
+  .landing-notes dt :global(svg) {
+    color: var(--color-kesar-700);
+  }
+
+  .landing-notes dd {
+    margin-top: 0.25rem;
+    padding-left: 1.75rem;
+    color: var(--color-ink-800);
+  }
+
+  .landing-band {
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  .landing-facet-grid {
+    display: grid;
+    gap: 1.5rem 2rem;
+  }
+
+  @media (min-width: 40rem) {
+    .landing-facet-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .landing-facet-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .landing-facets a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 44px;
+    color: var(--color-ink-800);
+    text-decoration: none;
+  }
+
+  .landing-facets a:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .landing-facets a:hover > span:first-child {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .landing-facets a[aria-current='page'] {
+    color: var(--color-ink-950);
+    font-weight: 800;
+  }
+
+  .landing-count {
+    flex: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  .landing-post {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .landing-post :global(svg) {
+    color: var(--color-kesar-700);
+  }
+</style>

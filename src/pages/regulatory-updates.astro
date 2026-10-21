@@ -1,0 +1,15 @@
+---
+import { settleList } from '@/features/data-hub/route';
+import { gazettePage, safe } from '@/features/data-hub/api';
+import GazettePage from '@/features/data-hub/GazettePage.astro';
+import { GAZETTE, readParams } from '@/features/data-hub/params';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const filters = readParams(Astro.url.searchParams, GAZETTE);
+const page = await safe(() => gazettePage(filters, null));
+settleList(Astro, 'hour', page);
+---
+
+<GazettePage locale={locale} filters={filters} page={page.data} error={page.error} />

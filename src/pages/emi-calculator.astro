@@ -1,0 +1,47 @@
+---
+import { getT } from '@/i18n';
+import { localizePath } from '@/lib/i18n/locale';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import EmiCalculator from '@/features/tools/emi/EmiCalculator';
+import { EMI_FAQ, EMI_HOWTO, EMI_PAGE } from '@/features/tools/emi/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = EMI_PAGE[locale];
+---
+
+<ToolPage
+  tool="emi"
+  title={t('tools:emi.title')}
+  description={t('tools:emi.description')}
+  keywords={t('tools:emi.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={EMI_FAQ[locale]}
+  faqTitle={c.faqTitle}
+  howTo={EMI_HOWTO[locale]}
+  related={['loanEligibility', 'stampDuty', 'capitalGains', 'rentReceipt', 'areaConverter', 'vastu']}
+>
+  <EmiCalculator client:load locale={locale} />
+  <Fragment slot="body">
+    <h2>{t('tools:emi.whatIsEmi')}</h2>
+    <p>{t('tools:emi.whatIsEmiDesc')}</p>
+    <h2>{c.formulaTitle}</h2>
+    <p>{c.formula}</p>
+    <p>{c.example}</p>
+    <h2>{t('tools:emi.tipsForHomeLoan')}</h2>
+    <ul>
+      <li>{t('tools:emi.tipCreditScore')}</li>
+      <li>{t('tools:emi.tipShorterTenure')}</li>
+      <li>{t('tools:emi.tipPrepayments')}</li>
+      <li>{t('tools:emi.tipCompareRates')}</li>
+    </ul>
+    <p>
+      <a href={localizePath('/loan-eligibility-calculator', locale)}>
+        {locale === 'hi' ? 'आपको कितना लोन मिल सकता है, देखें' : 'See how much loan you can get'}
+      </a>
+    </p>
+  </Fragment>
+</ToolPage>

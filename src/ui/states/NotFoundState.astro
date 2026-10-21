@@ -1,0 +1,15 @@
+---
+/**
+ * The 404 state for one missing thing (a project, a locality, a place) inside
+ * a page: the scene, one line and one action. Set the 404 status in the route.
+ * For a whole page, use NotFoundPage.
+ */
+import type { ComponentProps } from 'astro/types';
+import StateBlock from './StateBlock.astro';
+
+type Props = Omit<ComponentProps<typeof StateBlock>, 'scene' | 'level' | 'size' | 'class'>;
+---
+
+<div class="container-page py-10">
+  <StateBlock scene="notFound" level={1} {...Astro.props} />
+</div>

@@ -1,0 +1,48 @@
+---
+/** /builder-reputation: builders from HRERA data (empty in production today, so the empty state leads on). */
+import { getT } from '@/i18n';
+import type { BuilderPage } from '@/features/data-hub/api';
+import type { ApiError } from '@/lib/api/errors';
+import type { Locale } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import Builders from './Builders';
+import { FAQ } from './content';
+import DataHubPage from './DataHubPage.astro';
+import { hubName } from './pages';
+import type { BuilderFilters } from './params';
+import { text } from './text';
+
+type Props = { locale: Locale; filters: BuilderFilters; page: BuilderPage | null; error: ApiError | null };
+const { locale, filters, page, error } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+const items = page?.items ?? [];
+---
+
+<DataHubPage
+  art="builders"
+  title={tt('seo:builderReputation.title')}
+  description={tt('seo:builderReputation.description')}
+  keywords="builder reputation Gurugram, RERA score builder, Gurgaon developer complaints, HRERA builder check, builder score checker, reliable builders Gurgaon 360Ghar"
+  path="/builder-reputation"
+  heading={t.bdH1}
+  lead={tt('data-hub:builderReputation.description')}
+  crumbs={[{ name: hubName('builders', locale), path: '/builder-reputation' }]}
+  faqs={FAQ.builders}
+  jsonLd={[
+    {
+      '@type': 'ItemList',
+      name: 'Builder Reputation Directory, Gurugram',
+      description: 'Builder reputation scores based on HRERA registered projects and complaints.',
+      url: canonicalFor('/builder-reputation', locale),
+      numberOfItems: page?.total ?? items.length,
+      itemListElement: items.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b.builder_name, url: canonicalFor(`/builder-reputation/${b.slug}`, locale) })),
+    },
+  ]}
+  related={['builderScore', 'rera', 'gazette', 'zones']}
+>
+  <p slot="head" class="dh-meta">{t.bdHow}</p>
+  <div class="max-w-[56rem]">
+    <Builders client:load locale={locale} initialFilters={filters} initialPage={error ? null : page} />
+  </div>
+</DataHubPage>

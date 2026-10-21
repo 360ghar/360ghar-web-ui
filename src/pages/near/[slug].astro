@@ -1,0 +1,9 @@
+---
+import NearPage from '@/features/landing/NearPage.astro';
+import { loadNear } from '@/features/landing/loadNear';
+
+export const prerender = false;
+const data = await loadNear(Astro);
+---
+
+<NearPage {...data} />

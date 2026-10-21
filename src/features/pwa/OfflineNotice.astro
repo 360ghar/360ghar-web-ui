@@ -1,0 +1,48 @@
+---
+/**
+ * Offline notice, in every page through Base.astro. Hidden while online. When
+ * the browser goes offline it shows one line, fixed at the top so nothing
+ * moves, and a screen reader hears it through the status region. No script
+ * cost beyond a few lines; the same script registers the service worker in
+ * production (see register.ts).
+ */
+import { getT } from '@/i18n';
+
+const text = getT(Astro.locals.locale)('common:offlineIndicator.message');
+---
+
+<p class="visually-hidden" role="status" data-offline-live></p>
+<div class="offline-note" data-offline-note data-text={text} aria-hidden="true" hidden>{text}</div>
+
+<style>
+  .offline-note {
+    position: fixed;
+    z-index: 65;
+    top: calc(0.5rem + env(safe-area-inset-top));
+    left: 50%;
+    translate: -50% 0;
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-pine-800);
+    color: #fff;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    text-align: center;
+    box-shadow:
+      0 1px 1px rgb(10 30 25 / 0.1),
+      0 10px 20px -8px rgb(10 30 25 / 0.4);
+    /* Text only: clicks reach the page underneath. */
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  import { registerServiceWorker, watchOffline } from '@/features/pwa/register';
+
+  const note = document.querySelector<HTMLElement>('[data-offline-note]');
+  const live = document.querySelector<HTMLElement>('[data-offline-live]');
+  if (note && live) watchOffline(note, live, note.dataset.text ?? '');
+  registerServiceWorker();
+</script>

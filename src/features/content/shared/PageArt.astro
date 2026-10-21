@@ -1,0 +1,46 @@
+---
+/**
+ * The page's paper-cut strip: one wide scene on a hand-cut sheet, under the
+ * heading. Decorative (aria-hidden). The scene keeps its subject in the
+ * middle; wider screens show more street on the sides.
+ *
+ *   <PageArt slot="head" scene="question" />
+ */
+import { SceneArt } from '@/features/blog/art/SceneArt';
+import { paperArt, type SceneName } from '@/features/blog/art/scenes';
+import Paper from '@/ui/Paper.astro';
+
+type Props = { scene: SceneName; seed?: string; dusk?: boolean; class?: string };
+const { scene, seed, dusk, class: className } = Astro.props;
+const art = paperArt(scene, seed ?? scene, { wide: true, dusk });
+---
+
+<div class:list={['page-art', className]}>
+  <Paper seed={`strip-${seed ?? scene}`} tone="mist-100" depth={1} innerClass="page-art-inner">
+    <SceneArt art={art} fit="strip" />
+  </Paper>
+</div>
+
+<style>
+  .page-art {
+    width: 100%;
+    max-width: 52rem;
+    margin-top: 0.75rem;
+  }
+
+  .page-art :global(.page-art-inner) {
+    aspect-ratio: 2.1 / 1;
+  }
+
+  @media (min-width: 40rem) {
+    .page-art :global(.page-art-inner) {
+      aspect-ratio: 3 / 1;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .page-art :global(.page-art-inner) {
+      aspect-ratio: 3.6 / 1;
+    }
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+/**
+ * Numbered steps (the visible twin of a HowTo JSON-LD). Big display-face numbers,
+ * no rail. `cols={2}`: two columns from 48rem; `cols={3}`: three from 64rem.
+ */
+type Props = { items: { name: string; text: string }[]; cols?: 1 | 2 | 3; start?: number; class?: string };
+const { items, cols = 1, start = 1, class: className } = Astro.props;
+---
+
+<ol class:list={['steps', cols === 2 && 'is-two', cols === 3 && 'is-three', className]} role="list">
+  {
+    items.map((s, i) => (
+      <li class="step">
+        <span class="step-n tabular" aria-hidden="true">
+          {i + start}
+        </span>
+        <h3 class="step-name">
+          <span class="visually-hidden">{i + start}. </span>
+          {s.name}
+        </h3>
+        <p class="step-text">{s.text}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  ol.steps {
+    display: grid;
+    gap: 1.5rem 2.5rem;
+    margin-top: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 48rem) {
+    ol.steps.is-two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    ol.steps.is-three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .steps > .step {
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    column-gap: 0.75rem;
+    align-content: start;
+    margin: 0;
+    max-width: none;
+  }
+
+  .step-n {
+    grid-row: span 2;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2.75rem;
+    line-height: 0.95;
+    color: var(--color-kesar-600);
+  }
+
+  .steps .step-name {
+    margin: 0.125rem 0 0.25rem;
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .steps .step-text {
+    margin: 0;
+    color: var(--color-ink-800);
+  }
+</style>

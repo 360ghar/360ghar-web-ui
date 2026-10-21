@@ -1,0 +1,190 @@
+---
+/**
+ * Layered paper diorama of a Gurugram street, with scroll and pointer parallax.
+ * The scene is complete and visible with no JavaScript. The script only adds
+ * small offsets, and does nothing when the user prefers reduced motion.
+ * CSS moves three layers that are already on screen: the clouds drift, the
+ * kite bobs, and the metro leaves and comes back. All of it animates
+ * `translate` only (compositor), and stops for reduced motion.
+ */
+import { sharedShadowId, SHADOW_SIZES } from '@/lib/paper/defs';
+import { compactPath } from '@/ui/paper/compact';
+import { gurugramLayers, H, W } from './gurugram';
+
+type Props = { class?: string; label?: string };
+const { class: className, label = 'Paper-cut Gurugram street: Cyber City towers, a kite, apartment blocks, the Rapid Metro, a chai stall, an auto-rickshaw, a cow and a vegetable cart.' } = Astro.props;
+// Layers use the page's shared large paper shadows (PaperDefs); a tint outside the kit (the pale clouds) keeps its own filter.
+// Paths are written in short relative form. The towers and the blocks (most of the bytes) are rounded to whole
+// units, less than half a pixel at 1600 px, and each goes in one path: their buildings never overlap, so one
+// even-odd path cuts the same windows.
+const WHOLE = new Set(['towers', 'blocks']);
+const layers = gurugramLayers().map((l) => {
+  const shared = l.shadow === 'transparent' ? null : sharedShadowId(l.shadow, SHADOW_SIZES.l);
+  const cut = WHOLE.has(l.id) ? [compactPath(l.cut.join(''), 0)] : l.cut.map((d) => compactPath(d));
+  return { ...l, cut, solid: l.solid.map((d) => compactPath(d)), shared, filter: l.shadow === 'transparent' ? null : (shared ?? `dio-${l.id}`) };
+});
+---
+
+<div class:list={['diorama grain', className]} data-diorama role="img" aria-label={label}>
+  {
+    layers.map((layer, i) => (
+      <svg
+        class={`layer layer-${layer.id}`}
+        style={`--d:${layer.depth}; z-index:${i}`}
+        viewBox={`0 0 ${W} ${H}`}
+        preserveAspectRatio="xMidYMax slice"
+        aria-hidden="true"
+        focusable="false"
+      >
+        {layer.filter && !layer.shared && (
+          <defs>
+            <filter id={`dio-${layer.id}`} x="-5%" y="-10%" width="112%" height="125%">
+              <feDropShadow dx="3" dy="4" stdDeviation="1.6" flood-color={layer.shadow} />
+            </filter>
+          </defs>
+        )}
+        <g fill={layer.fill} filter={layer.filter ? `url(#${layer.filter})` : undefined}>
+          {layer.cut.map((d) => (
+            <path fill-rule="evenodd" d={d} />
+          ))}
+          {layer.solid.map((d) => (
+            <path d={d} />
+          ))}
+        </g>
+      </svg>
+    ))
+  }
+  <slot />
+</div>
+
+<style>
+  .diorama {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background-color: var(--color-dio-sky);
+    --px: 0;
+    --py: 0;
+    --sy: 0;
+  }
+
+  .layer {
+    position: absolute;
+    inset: -24px -36px -14px -36px;
+    width: calc(100% + 72px);
+    height: calc(100% + 38px);
+    pointer-events: none;
+    transform: translate3d(
+      calc(var(--px) * var(--d) * 1px),
+      calc((var(--py) * var(--d) + var(--sy) * (1 - var(--d))) * 1px),
+      0
+    );
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .diorama[data-live] .layer {
+      will-change: transform;
+    }
+
+    .layer-clouds {
+      animation: dio-drift 80s ease-in-out infinite alternate;
+    }
+
+    .layer-kite {
+      animation: dio-kite 6s ease-in-out infinite alternate;
+    }
+
+    /* Waits at the station, leaves to the right, comes back from the left. */
+    .layer-train {
+      animation: dio-train 30s infinite;
+    }
+  }
+
+  @keyframes dio-drift {
+    to {
+      translate: -4% 0;
+    }
+  }
+
+  @keyframes dio-kite {
+    0% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 7px -5px;
+    }
+    100% {
+      translate: 2px 4px;
+    }
+  }
+
+  @keyframes dio-train {
+    0%,
+    30% {
+      translate: 0 0;
+      animation-timing-function: cubic-bezier(0.55, 0, 0.85, 0.5);
+    }
+    52% {
+      translate: 115% 0;
+    }
+    52.01% {
+      translate: -115% 0;
+      animation-timing-function: cubic-bezier(0.15, 0.5, 0.4, 1);
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+</style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function attach(root: HTMLElement) {
+    if (reduce.matches) return;
+    let visible = true;
+    let frame = 0;
+    let px = 0;
+    let py = 0;
+    let tx = 0;
+    let ty = 0;
+
+    const render = () => {
+      frame = 0;
+      // Ease toward the pointer target so the layers settle, not snap.
+      px += (tx - px) * 0.12;
+      py += (ty - py) * 0.12;
+      const rect = root.getBoundingClientRect();
+      const sy = Math.max(0, -rect.top) * 0.22;
+      root.style.setProperty('--px', px.toFixed(2));
+      root.style.setProperty('--py', py.toFixed(2));
+      root.style.setProperty('--sy', sy.toFixed(2));
+      if (Math.abs(tx - px) > 0.05 || Math.abs(ty - py) > 0.05) schedule();
+    };
+    const schedule = () => {
+      if (!frame && visible) frame = requestAnimationFrame(render);
+    };
+
+    root.dataset.live = '';
+    if (window.matchMedia('(pointer: fine)').matches) {
+      root.addEventListener('pointermove', (e) => {
+        const r = root.getBoundingClientRect();
+        tx = ((e.clientX - r.left) / r.width - 0.5) * -14;
+        ty = ((e.clientY - r.top) / r.height - 0.5) * -6;
+        schedule();
+      });
+      root.addEventListener('pointerleave', () => {
+        tx = 0;
+        ty = 0;
+        schedule();
+      });
+    }
+    window.addEventListener('scroll', schedule, { passive: true });
+    new IntersectionObserver(([entry]) => {
+      visible = Boolean(entry?.isIntersecting);
+      if (visible) schedule();
+    }).observe(root);
+  }
+
+  for (const el of document.querySelectorAll<HTMLElement>('[data-diorama]')) attach(el);
+</script>

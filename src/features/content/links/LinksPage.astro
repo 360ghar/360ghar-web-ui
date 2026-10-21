@@ -1,0 +1,201 @@
+---
+/** /links. Only verified profiles. Brand marks via Icon "brand:..."; three marks not in paths.ts come from ./data. */
+import Page from '@/layouts/Page.astro';
+import { byLocale } from '@/lib/i18n/locale';
+import { canonicalFor, SITE_NAME, SITE_URL } from '@/lib/seo/site';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import type { BrandName } from '@/ui/icons/paths';
+import Paper from '@/ui/Paper.astro';
+import CopyButton from '@/features/content/shared/CopyButton';
+import { trail, webPage } from '@/features/content/shared/schema';
+import { EXTRA_BRANDS, LINKS, type LinkIcon } from './data';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+const locale = Astro.locals.locale;
+const PATH = '/links';
+
+const H = byLocale(locale, {
+  en: {
+    title: 'Find Us Everywhere - 360Ghar Social Links',
+    description: 'All official 360Ghar social media profiles, review pages, and app download links in one place. Follow, review, and stay connected with 360Ghar.',
+    name: 'Links',
+    h1: 'Find us everywhere',
+    lead: 'Follow, review, and stay connected with 360Ghar across all platforms.',
+    copy: 'Copy the link to this page',
+    copied: 'Link copied',
+    groups: { follow: 'Follow us', review: 'Review us', app: 'Our app' },
+    notes: { follow: '', review: 'Your reviews help others find us.', app: 'Get 360Ghar on your phone for the best experience.' },
+  },
+  hi: {
+    title: 'हर जगह 360Ghar | सोशल लिंक',
+    description: '360Ghar के सभी आधिकारिक सोशल प्रोफ़ाइल, रिव्यू पेज और ऐप डाउनलोड लिंक एक जगह।',
+    name: 'लिंक',
+    h1: 'हर जगह 360Ghar',
+    lead: 'फ़ॉलो करें, रिव्यू लिखें और हर प्लेटफ़ॉर्म पर 360Ghar से जुड़े रहें।',
+    copy: 'इस पेज का लिंक कॉपी करें',
+    copied: 'लिंक कॉपी हो गया',
+    groups: { follow: 'फ़ॉलो करें', review: 'रिव्यू लिखें', app: 'हमारा ऐप' },
+    notes: { follow: '', review: 'आपके रिव्यू दूसरों को हमें खोजने में मदद करते हैं।', app: 'बेहतर अनुभव के लिए 360Ghar अपने फ़ोन पर पाएँ।' },
+  },
+});
+
+const groups = (['follow', 'review', 'app'] as const).map((key) => ({ key, links: LINKS.filter((l) => l.group === key) }));
+const isExtra = (i: LinkIcon): i is keyof typeof EXTRA_BRANDS => i in EXTRA_BRANDS;
+const pageUrl = canonicalFor(PATH, locale);
+const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
+const jsonLd = [
+  webPage({ name: H.title, description: H.description, path: PATH, locale }),
+  { '@type': 'Organization', name: SITE_NAME, url: SITE_URL, sameAs: [...new Set(LINKS.map((l) => l.url))] },
+  ld,
+];
+---
+
+<Page title={H.title} description={H.description} path={PATH} jsonLd={jsonLd}>
+  <div class="container-page links">
+    <Breadcrumbs items={crumbs} />
+    <div class="links-grid">
+      <header class="links-head">
+        <h1 class="links-h1">{H.h1}</h1>
+        <p class="links-lead">{H.lead}</p>
+        <CopyButton client:load locale={locale} text={pageUrl} label={H.copy} done={H.copied} />
+        <PageArt scene="postbox" seed="links" />
+      </header>
+
+      <div class="links-card">
+        <Paper seed="links-card" tone="paper" depth={3} innerClass="links-card-inner">
+          {
+            groups.map((g) => (
+              <section class="links-group" aria-labelledby={`links-${g.key}`}>
+                <h2 id={`links-${g.key}`} class="links-h2">
+                  {H.groups[g.key]}
+                </h2>
+                {H.notes[g.key] && <p class="links-note">{H.notes[g.key]}</p>}
+                <ul role="list">
+                  {g.links.map((l) => (
+                    <li>
+                      <a href={l.url} rel="noopener me" class="links-row">
+                        {isExtra(l.icon) ? (
+                          <svg viewBox="0 0 24 24" width="24" height="24" class="links-mark" fill="currentColor" aria-hidden="true" focusable="false">
+                            <path d={EXTRA_BRANDS[l.icon]} />
+                          </svg>
+                        ) : (
+                          <Icon name={`brand:${l.icon as BrandName}`} size={24} class="links-mark" />
+                        )}
+                        <span class="links-text">
+                          <span class="links-platform">{l.platform}</span>
+                          <span class="links-handle">{l.handle}</span>
+                        </span>
+                        <Icon name="arrow-up-right" size={18} class="arrow links-arrow" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          }
+        </Paper>
+      </div>
+    </div>
+  </div>
+</Page>
+
+<style>
+  .links {
+    padding-top: 0.5rem;
+    padding-bottom: clamp(3rem, 7vw, 5rem);
+  }
+
+  .links-grid {
+    display: grid;
+    gap: 2rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .links-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 34rem);
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .links-head {
+      position: sticky;
+      top: 104px;
+    }
+  }
+
+  .links-head {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .links-h1 {
+    font-size: clamp(2.5rem, 1.3rem + 5vw, 5.5rem);
+    max-width: 10ch;
+  }
+
+  .links-lead {
+    max-width: 40ch;
+    font-size: 1.125rem;
+    color: var(--color-ink-800);
+  }
+
+  .links-card :global(.links-card-inner) {
+    display: grid;
+    gap: 1.75rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .links-h2 {
+    font-size: 1.375rem;
+  }
+
+  .links-note {
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
+    color: var(--color-ink-600);
+  }
+
+  .links-group ul {
+    margin-top: 0.5rem;
+  }
+
+  .links-row {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    min-height: 60px;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-ink-100);
+    text-decoration: none;
+    transition: color 140ms var(--ease-paper);
+  }
+
+  .links-row:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .links-row :global(.links-mark) {
+    color: var(--color-ink-950);
+  }
+
+  .links-text {
+    display: grid;
+  }
+
+  .links-platform {
+    font-weight: 700;
+  }
+
+  .links-handle {
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .links-row :global(.links-arrow) {
+    color: var(--color-kesar-700);
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+import { getT } from '@/i18n';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import RentReceipt from '@/features/tools/rent-receipt/RentReceipt';
+import { RR_FAQ, RR_HOWTO, RR_PAGE } from '@/features/tools/rent-receipt/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = RR_PAGE[locale];
+const tips = ['PAN', 'Stamp', 'Docs'].map((k) => ({ h: t(`tools:rentReceipt.tip${k}Title`), p: t(`tools:rentReceipt.tip${k}`) }));
+---
+
+<ToolPage
+  tool="rentReceipt"
+  title={t('tools:rentReceipt.title')}
+  description={t('tools:rentReceipt.description')}
+  keywords={t('tools:rentReceipt.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={RR_FAQ[locale]}
+  faqTitle={c.faqTitle}
+  howTo={RR_HOWTO[locale]}
+  related={['emi', 'capitalGains', 'loanEligibility', 'propertyChecklist', 'areaConverter', 'stampDuty']}
+>
+  <RentReceipt client:load locale={locale} />
+  <Fragment slot="body">
+    <h2>{c.validTitle}</h2>
+    <ul>{c.valid.map((v) => <li>{v}</li>)}</ul>
+    <h2>{c.hraTitle}</h2>
+    <p>{c.hra}</p>
+    {
+      tips.map((tip) => (
+        <>
+          <h3>{tip.h}</h3>
+          <p>{tip.p}</p>
+        </>
+      ))
+    }
+    <p>{t('tools:rentReceipt.stampStateNote')}</p>
+  </Fragment>
+</ToolPage>

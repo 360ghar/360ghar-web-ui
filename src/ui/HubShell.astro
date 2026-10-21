@@ -1,0 +1,105 @@
+---
+/**
+ * Shell for tool pages and data hub pages: breadcrumbs, H1 and lead with an
+ * optional paper scene, the page body (default slot), short text (slot
+ * "prose"), FAQ and links to related pages. `prefix` picks the CSS set
+ * (`tool-*` in tools.css, `dh-*` in data-hub.css). The wrappers `ToolPage` and
+ * `DataHubPage` load that CSS and build the SEO data.
+ */
+import type { ComponentProps } from 'astro/types';
+import Page from '@/layouts/Page.astro';
+import { localizePath } from '@/lib/i18n/locale';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import Vignette from '@/ui/paper/Vignette.astro';
+import type { VignetteKey } from '@/ui/paper/vignettes';
+
+type Props = Pick<ComponentProps<typeof Page>, 'title' | 'description' | 'keywords' | 'path' | 'noindex' | 'image' | 'type' | 'article' | 'jsonLd'> & {
+  prefix: 'tool' | 'dh';
+  crumbs: { name: string; path?: string }[];
+  heading: string;
+  lead?: string;
+  /** Smaller H1 for headings that come from data (auction descriptions, builder names). */
+  longHeading?: boolean;
+  /** The paper scene beside the heading (from 768 px). */
+  art?: { key: VignetteKey; mode: 'bare' | 'stage' };
+  faqs?: readonly { q: string; a: string }[];
+  faqTitle: string;
+  /** Related pages. `route` is the English path. */
+  links: { route: string; name: string; desc: string }[];
+  linksTitle: string;
+  /** Link after the list, for example "See all tools". */
+  all?: { route: string; label: string };
+};
+
+const { prefix: p, crumbs, heading, lead, longHeading = false, art, faqs = [], faqTitle, links, linksTitle, all, ...seo } = Astro.props;
+const locale = Astro.locals.locale;
+---
+
+<Page {...seo}>
+  <div class={`container-page ${p}-page`}>
+    <Breadcrumbs items={crumbs} />
+    <header class:list={[`${p}-head`, art && 'has-art']}>
+      <div class={`${p}-head-text`}>
+        <h1 class:list={[`${p}-h1`, longHeading && 'is-long']}>{heading}</h1>
+        {lead && <p class={`${p}-lead`}>{lead}</p>}
+        <slot name="head" />
+      </div>
+      {
+        art && (
+          <span class={`${p}-head-art`} aria-hidden="true">
+            <Vignette tool={art.key} mode={art.mode} />
+          </span>
+        )
+      }
+    </header>
+
+    <slot />
+
+    {
+      Astro.slots.has('prose') && (
+        <div class={`${p}-prose`}>
+          <slot name="prose" />
+        </div>
+      )
+    }
+
+    {
+      faqs.length > 0 && (
+        <div class={`${p}-faq`}>
+          <Faq items={[...faqs]} title={faqTitle} />
+        </div>
+      )
+    }
+
+    {
+      (links.length > 0 || all) && (
+        <nav class={`${p}-links`} aria-labelledby={`${p}-links-title`}>
+          <h2 id={`${p}-links-title`} class={`${p}-links-title`}>
+            {linksTitle}
+          </h2>
+          <ul>
+            {links.map((l) => (
+              <li>
+                <a href={localizePath(l.route, locale)}>
+                  <span class={`${p}-links-name`}>
+                    {l.name}
+                    <Icon name="arrow-up-right" size={16} class="arrow" />
+                  </span>
+                  <span class={`${p}-links-desc`}>{l.desc}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          {all && (
+            <a class="link" href={localizePath(all.route, locale)}>
+              {all.label}
+              <Icon name="arrow-up-right" size={16} class="arrow" />
+            </a>
+          )}
+        </nav>
+      )
+    }
+  </div>
+</Page>

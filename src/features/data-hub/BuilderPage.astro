@@ -1,0 +1,147 @@
+---
+/** /builder-reputation/:slug: score, the builder's HRERA projects and recent orders, all from GET /builders/{slug}. */
+import { getT } from '@/i18n';
+import { formatNum, rupees } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import type { Builder } from './api';
+import DataHubPage from './DataHubPage.astro';
+import { hubName } from './pages';
+import { fmtDate, scoreBand } from './format';
+import { Status } from './Status';
+import { ScoreRing } from './ScoreRing';
+import { label, text } from './text';
+
+type Props = { locale: Locale; b: Builder };
+const { locale, b } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+const score = Math.round(b.builder_score);
+const band = scoreBand(b.builder_score);
+---
+
+<DataHubPage
+  art="builders"
+  title={tt('seo:builderReputationDetail.titleTemplate', { builder: b.builder_name })}
+  description={tt('seo:builderReputationDetail.descriptionTemplate', { builder: b.builder_name })}
+  keywords={`${b.builder_name} RERA score, ${b.builder_name} complaints, builder reputation Gurugram, HRERA ${b.builder_name}`}
+  path={`/builder-reputation/${b.slug}`}
+  heading={b.builder_name}
+  longHeading
+  crumbs={[{ name: hubName('builders', locale), path: '/builder-reputation' }, { name: b.builder_name }]}
+  jsonLd={[
+    {
+      '@type': 'Organization',
+      name: b.builder_name,
+      // No AggregateRating: a 0-100 complaint score is not a review rating.
+      additionalProperty: [
+        { '@type': 'PropertyValue', name: 'RERA reputation score', value: score, maxValue: 100, unitText: 'points' },
+        { '@type': 'PropertyValue', name: 'Registered projects', value: b.total_projects },
+        { '@type': 'PropertyValue', name: 'Complaints', value: b.total_complaints },
+      ],
+      description: `${b.builder_name}, RERA reputation score: ${score}/100. ${b.total_projects} registered projects, ${b.total_complaints} complaints.`,
+    },
+  ]}
+  related={['builders', 'builderScore', 'rera', 'gazette']}
+>
+  <p slot="head" class="dh-meta">{t.bdHow}</p>
+
+  <Paper seed={`builder-${b.slug}`} tone="mist-100" class="dh-slip-wrap" innerClass="dh-slip">
+    <div class="flex items-center gap-5">
+      <ScoreRing score={b.builder_score} label={`${t.bdScore}: ${score} ${t.bdOutOf}`} />
+      <div class="dh-fig">
+        <span class="dh-fig-label">{t.bdScore}</span>
+        <span class="text-xl font-bold">{t.bands[band]}</span>
+      </div>
+    </div>
+    <div class="dh-fig">
+      <span class="dh-fig-label">{tt('data-hub:builderReputation.detail.totalProjects')}</span>
+      <span class="dh-fig-value">{formatNum(b.total_projects, locale)}</span>
+    </div>
+    <div class="dh-fig">
+      <span class="dh-fig-label">{tt('data-hub:builderReputation.detail.totalComplaints')}</span>
+      <span class="dh-fig-value">{formatNum(b.total_complaints, locale)}</span>
+    </div>
+  </Paper>
+
+  <div class="dh-split is-even dh-section">
+    <section aria-labelledby="bd-projects">
+      <h2 id="bd-projects" class="dh-h2">{t.bdProjectsTitle}</h2>
+      {
+        b.rera_projects.length ? (
+          <ul class="sheet dh-rows mt-4">
+            {b.rera_projects.map((p) => (
+              <li>
+                <div class="dh-row-head">
+                  <h3 class="dh-row-title">{p.project_name}</h3>
+                  <Status value={p.status} locale={locale} />
+                </div>
+                {p.location && <p class="dh-row-sub">{p.location}</p>}
+                <dl class="dh-facts">
+                  <div>
+                    <dt>{t.reraNumber}</dt>
+                    <dd>{p.rera_number}</dd>
+                  </div>
+                  {p.total_units != null && (
+                    <div>
+                      <dt>{t.reraUnits}</dt>
+                      <dd>{formatNum(p.total_units, locale)}</dd>
+                    </div>
+                  )}
+                  {p.possession_date && (
+                    <div>
+                      <dt>{t.reraPossession}</dt>
+                      <dd>{fmtDate(p.possession_date, locale)}</dd>
+                    </div>
+                  )}
+                </dl>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="dh-meta mt-4">{tt('data-hub:builderReputation.detail.noProjects')}</p>
+        )
+      }
+    </section>
+
+    <section aria-labelledby="bd-orders">
+      <h2 id="bd-orders" class="dh-h2">{t.bdComplaintsTitle}</h2>
+      {
+        b.recent_complaints.length ? (
+          <ul class="sheet dh-rows mt-4">
+            {b.recent_complaints.map((c) => (
+              <li>
+                <div class="dh-row-head">
+                  <h3 class="dh-row-title">
+                    {t.bdOrder} {c.order_number}
+                  </h3>
+                  {c.order_date && <span class="tabular text-ink-800">{fmtDate(c.order_date, locale)}</span>}
+                </div>
+                <p class="dh-row-sub">{[c.respondent_project, c.complaint_nature ? label(t.bdNature, c.complaint_nature) : null].filter(Boolean).join(' · ')}</p>
+                {c.order_summary && <p class="mt-2 text-ink-800">{c.order_summary}</p>}
+                <dl class="dh-facts">
+                  {c.penalty_amount ? (
+                    <div>
+                      <dt>{t.bdPenalty}</dt>
+                      <dd>{rupees(c.penalty_amount, locale)}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+                {c.pdf_url && (
+                  <a class="link" href={c.pdf_url} target="_blank" rel="noopener noreferrer">
+                    {t.bdOrderPdf}
+                    <Icon name="arrow-up-right" size={16} class="arrow" />
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="dh-meta mt-4">{t.bdNoComplaints}</p>
+        )
+      }
+    </section>
+  </div>
+  <p class="dh-meta mt-6">{tt('data-hub:builderReputation.detail.disclaimer')}</p>
+</DataHubPage>

@@ -1,0 +1,23 @@
+---
+import Page from '@/layouts/Page.astro';
+import { api, attempt } from '@/lib/api/client';
+import type { Property } from '@/lib/api/types';
+import { noStore } from '@/lib/cache';
+import HomesComparePage from '@/features/search/HomesComparePage.astro';
+import { COMPARE_MAX } from '@/features/search/compare';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const ids = [...new Set((Astro.url.searchParams.get('ids') ?? '').split(',').map(Number).filter((n) => Number.isInteger(n) && n > 0))].slice(0, COMPARE_MAX);
+const res = ids.length ? await attempt(api.GET('/api/v1/properties', { params: { query: { ids, limit: COMPARE_MAX } } })) : { data: null, error: null };
+const found = res.data?.items ?? [];
+// Keep the order the user picked.
+const homes = ids.map((id) => found.find((p) => p.id === id)).filter((p): p is Property => Boolean(p));
+noStore(Astro);
+if (res.error) Astro.response.status = 503;
+---
+
+<Page title={locale === 'hi' ? 'घरों की तुलना | 360Ghar' : 'Compare homes | 360Ghar'} description="Compare homes side by side." noindex>
+  <HomesComparePage ids={ids} homes={homes} failed={Boolean(res.error)} locale={locale} />
+</Page>

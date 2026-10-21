@@ -1,0 +1,58 @@
+---
+import Page from '@/layouts/Page.astro';
+import { respond } from '@/lib/cache';
+import { localizePath } from '@/lib/i18n/locale';
+import { loadProperty, withDevTour } from '@/features/property/load';
+import PropertyPage from '@/features/property/PropertyPage.astro';
+import { propertySchema } from '@/features/property/schema';
+import { propertyMeta } from '@/features/property/seo';
+import { galleryPhotos, galleryPreload } from '@/features/property/photos';
+import StateBlock from '@/ui/states/StateBlock.astro';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const raw = Astro.params.id ?? '';
+const id = /^\d{1,9}$/.test(raw) ? Number(raw) : null;
+const data = id ? await loadProperty(id) : { property: null, error: null, similar: [], peers: [] };
+const p = withDevTour(data.property, Astro.url);
+const notFound = !p && (!data.error || data.error.kind === 'not_found');
+
+if (p) respond(Astro, 'short');
+else if (notFound) respond(Astro, 'short', { notFound: true });
+else respond(Astro, 'minute', { error: true });
+
+const meta = p ? propertyMeta(p, locale) : null;
+const title = meta?.title ?? (hi ? 'प्रॉपर्टी नहीं मिली | 360Ghar' : 'Property not found | 360Ghar');
+const description = meta?.description ?? (hi ? 'यह प्रॉपर्टी अब उपलब्ध नहीं है।' : 'This property is no longer listed.');
+const photo = p ? (galleryPhotos(p)[0]?.url ?? null) : null;
+---
+
+<Page
+  title={title}
+  description={description}
+  path={id ? `/property/${id}` : Astro.url.pathname}
+  noindex={!p}
+  type="product"
+  image={photo}
+  preloadImages={photo ? [galleryPreload(photo)] : []}
+  video={p?.virtual_tour_url ?? null}
+  jsonLd={p ? propertySchema(p, locale) : []}
+>
+  {
+    p ? (
+      <PropertyPage property={p} similar={data.similar} peers={data.peers} locale={locale} />
+    ) : (
+      <div class="container-page py-10">
+        <StateBlock
+          scene={notFound ? 'notFound' : 'error'}
+          level={1}
+          title={notFound ? (hi ? 'यह प्रॉपर्टी अब लिस्ट नहीं है' : 'This home is no longer listed') : hi ? 'अभी यह पेज लोड नहीं हो सका' : 'We could not load this home'}
+          body={notFound ? (hi ? 'यह बिक गई, किराये पर चली गई या हटा दी गई। ऐसे ही और घर देखें।' : 'It may be sold, rented or removed. See similar homes instead.') : hi ? 'हमारे सर्वर ने जवाब नहीं दिया। एक मिनट बाद कोशिश करें।' : 'Our server did not answer. Try again in a minute.'}
+          action={notFound ? { href: localizePath('/properties', locale), label: hi ? 'घर खोजें' : 'Search homes', icon: 'search' } : { href: Astro.url.pathname, label: hi ? 'दोबारा कोशिश करें' : 'Try again', icon: 'retry' }}
+        />
+      </div>
+    )
+  }
+</Page>

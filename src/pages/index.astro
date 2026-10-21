@@ -1,0 +1,27 @@
+---
+import HomePage from '@/features/home/HomePage.astro';
+import { loadHome } from '@/features/home/load';
+import { getT } from '@/i18n';
+import Page from '@/layouts/Page.astro';
+import { cachePage } from '@/lib/cache';
+import { Toaster } from '@/ui/react/Toaster';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const data = await loadHome(locale);
+cachePage(Astro, 'medium', { error: data.failed });
+---
+
+<Page
+  title={t('seo:home.title')}
+  description={t('seo:home.description')}
+  path="/"
+  overHero
+  image="/og-image-home.jpg"
+  jsonLd={[data.faqSchema, data.facts.jsonLd]}
+>
+  <HomePage locale={locale} data={data} />
+  <Toaster client:idle />
+</Page>

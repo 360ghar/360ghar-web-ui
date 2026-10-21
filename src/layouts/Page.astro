@@ -1,0 +1,30 @@
+---
+/**
+ * Standard page: header, main, footer, the chat launcher and one toaster.
+ * Pass SEO props through; set `overHero` on pages that open with the diorama.
+ */
+import type { ComponentProps } from 'astro/types';
+import ChatLauncher from '@/features/chat/ChatLauncher.astro';
+import Footer from '@/features/layout/Footer.astro';
+import Header from '@/features/layout/Header.astro';
+import Base from './Base.astro';
+
+type Props = ComponentProps<typeof Base> & { overHero?: boolean; mainClass?: string; chrome?: boolean };
+
+const { overHero = false, mainClass, chrome = true, ...rest } = Astro.props;
+---
+
+<Base {...rest}>
+  <slot name="head" slot="head" />
+  {chrome && <Header overHero={overHero} />}
+  <main id="main" tabindex="-1" class={mainClass}>
+    <slot />
+  </main>
+  {chrome && <Footer />}
+  {chrome && <ChatLauncher part="host" />}
+  <script>
+    // Photo-strip buttons of the listing cards: one module per page, not a copy per card.
+    import { startPhotoStrips } from '@/ui/photoStrip';
+    startPhotoStrips();
+  </script>
+</Base>

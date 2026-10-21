@@ -1,0 +1,106 @@
+---
+/**
+ * Empty, error, not-found and offline states, rendered on the server.
+ * Every state names the problem in one line and gives one next action.
+ */
+import Icon from '@/ui/icons/Icon.astro';
+import PaperScene from './PaperScene.astro';
+import type { SceneName } from './scenes';
+
+type Action = { href: string; label: string; icon?: 'arrow-up-right' | 'retry' | 'search' | 'home' };
+type Props = {
+  scene: SceneName;
+  title: string;
+  body?: string;
+  action?: Action;
+  secondary?: Action;
+  /** Heading level for the title. Default h2. */
+  level?: 1 | 2 | 3;
+  /** "lg" for a whole page (404, 503): bigger art and title. Default: "lg" when level is 1. */
+  size?: 'md' | 'lg';
+  class?: string;
+};
+
+const { scene, title, body, action, secondary, level = 2, size = level === 1 ? 'lg' : 'md', class: className } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<section class:list={['state', size === 'lg' && 'is-lg', className]} role={scene === 'error' ? 'alert' : undefined}>
+  <div class="state-art"><PaperScene name={scene} /></div>
+  <div class="state-copy">
+    <Heading class="state-title">{title}</Heading>
+    {body && <p class="state-body">{body}</p>}
+    <slot />
+    {
+      (action || secondary) && (
+        <div class="state-actions">
+          {action && (
+            <a class="btn btn-primary" href={action.href}>
+              {action.label}
+              <Icon name={action.icon ?? 'arrow-up-right'} size={18} class={action.icon ? undefined : 'arrow'} />
+            </a>
+          )}
+          {secondary && (
+            <a class="link" href={secondary.href}>
+              {secondary.label}
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .state {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  .state-art {
+    width: min(100%, 18rem);
+  }
+
+  .state-title {
+    font-size: clamp(1.375rem, 1.1rem + 1.2vw, 1.75rem);
+  }
+
+  .state.is-lg {
+    max-width: 46rem;
+    gap: 1.75rem;
+    padding-block: 1.5rem 2rem;
+  }
+
+  .state.is-lg .state-art {
+    width: min(100%, 36rem);
+  }
+
+  .state.is-lg .state-title {
+    font-size: clamp(1.75rem, 1.2rem + 2.4vw, 2.75rem);
+  }
+
+  .state.is-lg .state-body {
+    font-size: 1.0625rem;
+    max-width: 44ch;
+    margin-inline: auto;
+  }
+
+  .state-body {
+    margin-top: 0.5rem;
+    color: var(--color-ink-600);
+  }
+
+  .state-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.25rem;
+  }
+</style>

@@ -1,0 +1,740 @@
+/*
+ * Property page styles used by the React islands (gallery, viewer, contact,
+ * local data). Page-only styles live in PropertyPage.astro.
+ * Plain (unlayered) CSS: it wins over the component layer in global.css.
+ */
+
+/* ---------- Photo track: swipe strip on phones, mosaic from 768 px ---------- */
+
+.pg-track {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem -1rem 0;
+  padding: 0 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1rem;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  list-style: none;
+}
+
+.pg-track::-webkit-scrollbar {
+  display: none;
+}
+
+.pg-slide {
+  flex: 0 0 86%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.pg-slide:only-child {
+  flex-basis: 100%;
+}
+
+/*
+ * Phones: only the first two photos are in the first screen. The rest wait for
+ * data-ready (first touch or focus, or after the page loads), so they do not
+ * take bandwidth from the main photo: a lazy photo with no box does not load.
+ * Without JS the strip shows the first two. The mosaic (768 px up) shows all five at once.
+ */
+@media (width < 48rem) {
+  .pg-track:not([data-ready]) .pg-slide:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+.pg-shot {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-mist-100);
+  cursor: zoom-in;
+}
+
+.pg-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 160ms var(--ease-paper);
+}
+
+.pg-shot:hover img {
+  filter: brightness(0.93);
+}
+
+.pg-shot:focus-visible {
+  outline-offset: -3px;
+}
+
+.pg-cap {
+  margin-top: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--color-ink-600);
+}
+
+/* The 360° tour poster: a paper tab on the photo, the tour loads on click. */
+.pg-shot.is-tour {
+  cursor: pointer;
+  background: var(--color-ink-800);
+}
+
+.pg-play {
+  --tint: 110 38 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0 1.125rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-kesar-500);
+  color: var(--color-ink-950);
+  font: 700 0.9375rem/1.2 var(--font-sans);
+  white-space: nowrap;
+  box-shadow: 0 1px 1px rgb(var(--tint) / 0.12), 0 4px 10px -3px rgb(var(--tint) / 0.32);
+  transition: background-color 140ms var(--ease-paper);
+}
+
+.pg-shot.is-tour:hover .pg-play {
+  background: var(--color-kesar-400);
+}
+
+.pg-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.pg {
+  position: relative;
+}
+
+.pg-long {
+  display: none;
+}
+
+.pg-empty {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  color: var(--color-ink-600);
+}
+
+@media (min-width: 48rem) {
+  .pg-track {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    aspect-ratio: 11 / 4;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+
+  .pg-slide {
+    min-height: 0;
+  }
+
+  .pg-slide:nth-child(n + 6) {
+    display: none;
+  }
+
+  .pg-slide:first-child {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+  }
+
+  .pg-shot {
+    height: 100%;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+
+  .pg-cap {
+    display: none;
+  }
+
+  .pg-track[data-n='1'] {
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    aspect-ratio: 16 / 7;
+  }
+
+  .pg-track[data-n='1'] .pg-slide:first-child {
+    grid-area: auto;
+  }
+
+  .pg-track[data-n='2'] .pg-slide:nth-child(2),
+  .pg-track[data-n='3'] .pg-slide:nth-child(n + 2),
+  .pg-track[data-n='4'] .pg-slide:nth-child(2) {
+    grid-column: 3 / 5;
+  }
+
+  .pg-track[data-n='2'] .pg-slide:nth-child(2) {
+    grid-row: 1 / 3;
+  }
+
+  .pg-long {
+    display: inline;
+  }
+
+  .pg-short {
+    display: none;
+  }
+
+  /* On the photos, top right: the Home Card covers the foot of the mosaic. */
+  .pg-tools {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    justify-content: flex-end;
+    max-width: calc(100% - 2rem);
+    margin: 0;
+  }
+}
+
+/* ---------- Full-screen viewer ---------- */
+
+.pv {
+  width: 100%;
+  max-width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #120804;
+  color: var(--color-kesar-50);
+}
+
+.pv::backdrop {
+  background: #120804;
+}
+
+/* Focus rings stay visible on the dark viewer. */
+.pv :focus-visible {
+  outline-color: var(--color-kesar-300);
+}
+
+.pv[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+}
+
+.pv-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+}
+
+.pv-modes {
+  display: flex;
+  gap: 0.25rem;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.pv-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex: none;
+  min-height: 44px;
+  padding: 0 0.875rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-kesar-200);
+  font: 600 0.9375rem/1 var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 140ms var(--ease-paper),
+    color 140ms var(--ease-paper);
+}
+
+.pv-mode:hover {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.pv-mode[aria-pressed='true'] {
+  background: var(--color-mist-50);
+  color: var(--color-ink-950);
+}
+
+.pv-title {
+  font-weight: 700;
+}
+
+.pv-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: none;
+  min-height: 44px;
+  color: var(--color-kesar-200);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pv-close {
+  --btn-bg: rgb(255 255 255 / 0.1);
+  --btn-fg: var(--color-kesar-50);
+  --btn-hover: rgb(255 255 255 / 0.2);
+  flex: none;
+  margin-left: auto;
+  box-shadow: none;
+}
+
+.pv-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  touch-action: pan-y pinch-zoom;
+}
+
+.pv-figure {
+  display: grid;
+  justify-items: center;
+  gap: 0.625rem;
+  max-height: 100%;
+  padding: 0 0.5rem 0.5rem;
+}
+
+/* Owner photos are small (512 px wide), so they grow to fit the stage but no further than 56rem. */
+.pv-figure img {
+  width: min(100vw - 1rem, 56rem);
+  height: auto;
+  max-height: calc(100dvh - 14rem);
+  object-fit: contain;
+  border-radius: var(--radius-md);
+}
+
+.pv-figure.is-plan img {
+  width: min(100vw - 1rem, 64rem);
+  max-height: calc(100dvh - 5.5rem);
+}
+
+.pv-figure figcaption {
+  display: flex;
+  gap: 0.75rem;
+  color: var(--color-kesar-200);
+  font-size: 0.9375rem;
+}
+
+.pv-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.pv-prev,
+.pv-next {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  --btn-bg: rgb(255 255 255 / 0.92);
+  --btn-hover: #fff;
+}
+
+.pv-prev {
+  left: 0.75rem;
+}
+
+.pv-next {
+  right: 0.75rem;
+}
+
+.pv-groups {
+  display: flex;
+  justify-content: safe center;
+  gap: 0.25rem;
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.pv-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex: none;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-kesar-200);
+  font: 600 0.875rem/1 var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 140ms var(--ease-paper),
+    color 140ms var(--ease-paper);
+}
+
+.pv-group span {
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.pv-group:hover {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.pv-group[aria-pressed='true'] {
+  background: rgb(255 255 255 / 0.14);
+  color: var(--color-kesar-50);
+}
+
+.pv-rail {
+  display: flex;
+  justify-content: safe center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+  overflow-x: auto;
+  scrollbar-width: none;
+  list-style: none;
+}
+
+.pv-rail button {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  opacity: 0.55;
+  cursor: pointer;
+  transition: opacity 140ms var(--ease-paper);
+}
+
+.pv-rail button:hover,
+.pv-rail button[aria-current='true'] {
+  opacity: 1;
+}
+
+.pv-rail button[aria-current='true'] {
+  box-shadow: 0 0 0 2px var(--color-kesar-300);
+}
+
+.pv-rail img {
+  display: block;
+  width: 76px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Save and share (Home Card), compare and print (More details) ---------- */
+
+.prop-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0;
+}
+
+/* Phones: two 44 px icon buttons beside the price. The labels stay in the accessible names (aria-label). */
+@media (max-width: 39.99rem) {
+  .prop-actions.is-top {
+    flex-wrap: nowrap;
+  }
+
+  .prop-actions.is-top > .btn {
+    width: 2.75rem;
+    padding: 0;
+  }
+
+  .prop-actions.is-top > .btn > span {
+    display: none;
+  }
+}
+
+/* Quiet buttons carry side padding; pull them back so their text lines up with the list above. */
+.prop-actions.is-more {
+  margin-left: -1.125rem;
+}
+
+/* ---------- Contact panel ---------- */
+
+.contact-owner {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.contact-owner > svg {
+  color: var(--color-kesar-700);
+}
+
+.contact-owner > span {
+  display: grid;
+  line-height: 1.3;
+}
+
+.contact-owner-label {
+  font-size: 0.8125rem;
+  color: var(--color-ink-600);
+}
+
+.contact-visit {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 1.5rem;
+}
+
+.contact-lead {
+  font-size: 0.875rem;
+  color: var(--color-ink-600);
+}
+
+.contact-more > summary {
+  display: list-item;
+  list-style-position: inside;
+  padding-block: 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-ink-800);
+}
+
+.contact-more[open] > summary {
+  margin-bottom: 0.25rem;
+}
+
+/* Honeypot input for the callback form: out of sight, out of the tab order. */
+.contact-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/*
+ * Day buttons for a visit. Narrow panels (phones): one row that scrolls
+ * sideways, sized so three whole buttons and a clear part of the fourth show.
+ * From 19rem (the desktop card): a 4 + 3 grid. From 36rem: all seven in a row.
+ */
+.contact {
+  container-type: inline-size;
+}
+
+/* The form measures itself, so in the phone sheet the day buttons follow the sheet's width, not the rail's. */
+.contact-form {
+  container-type: inline-size;
+}
+
+.contact-days {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.contact-days legend {
+  margin-bottom: 0.375rem;
+  padding: 0;
+}
+
+.contact-day-row {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0 -0.25rem;
+  padding: 0.125rem 0.25rem 0.375rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+  scrollbar-width: none;
+}
+
+.contact-day-row::-webkit-scrollbar {
+  display: none;
+}
+
+.contact-day {
+  flex: 0 0 calc((100% - 1.5rem) / 3.45);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.125rem;
+  min-width: 0;
+  min-height: 3.25rem;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.1;
+  scroll-snap-align: start;
+}
+
+.contact-day small {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: inherit;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+span.contact-day {
+  border-radius: var(--radius-sm);
+}
+
+@container (min-width: 19rem) {
+  .contact-day-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .contact-day {
+    font-size: 0.8125rem;
+  }
+}
+
+@container (min-width: 36rem) {
+  .contact-day-row {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Local data (circle rates, zoning, score) ---------- */
+
+.prop-dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1.5rem;
+}
+
+.prop-dl dt {
+  color: var(--color-ink-600);
+}
+
+.prop-dl dd {
+  font-weight: 600;
+}
+
+.prop-rates {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 40rem;
+  margin-top: 1.75rem;
+}
+
+.prop-rates h3 {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.prop-rate-rows {
+  display: grid;
+  gap: 0;
+}
+
+.prop-rate-rows li {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 1fr) auto;
+  gap: 0.125rem 1rem;
+  align-items: baseline;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid var(--color-ink-100);
+}
+
+.prop-rate-rows li:first-child {
+  border-top: 1px solid var(--color-ink-100);
+}
+
+.prop-rate-rows .v {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  text-align: right;
+}
+
+.prop-rate-rows .s {
+  grid-column: 2;
+  font-size: 0.8125rem;
+  color: var(--color-ink-600);
+  text-align: right;
+}
+
+.prop-rates-note {
+  font-size: 0.875rem;
+  color: var(--color-ink-600);
+}
+
+.prop-data-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* The same two columns as the nearby lists above, even with one panel. */
+@media (min-width: 48rem) {
+  .prop-data-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.5rem;
+  }
+}
+
+.prop-scores li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr 2rem;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 28px;
+}
+
+.prop-bar {
+  height: 6px;
+  background: var(--color-ink-100);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.prop-bar span {
+  display: block;
+  height: 100%;
+  background: var(--color-kesar-600);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pg-shot img,
+  .pg-play,
+  .pv-mode,
+  .pv-group,
+  .pv-rail button {
+    transition: none;
+  }
+}
+
+@media print {
+  .pg-tools,
+  .pv,
+  .prop-actions,
+  .prop-rates.skeleton {
+    display: none !important;
+  }
+
+  .pg-track {
+    overflow: visible;
+  }
+}

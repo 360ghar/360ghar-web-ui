@@ -1,0 +1,225 @@
+---
+/**
+ * Lab hero 3, "Say it in a sentence". The sentence is the search
+ * (SentenceSearch). It stands on a street: two layers of paper skyline at the
+ * foot of the first screen, the same street that ends the page in the footer.
+ * One window lights for each home that matches the sentence (the island sends
+ * the count in a `lab:count` event); with no count, all windows stay dark.
+ */
+import { skylineLayers } from '@/features/layout/skyline';
+import { makeTools } from '@/lib/paper/shapes';
+import type { Locale } from '@/lib/i18n/locale';
+import SentenceSearch from './SentenceSearch';
+
+type Props = { locale: Locale; places: string[] };
+const { locale, places } = Astro.props;
+const title = locale === 'hi' ? 'जैसा घर चाहिए, एक वाक्य में लिखें' : 'Say the home you want in one sentence';
+const W = 1600;
+const H = 190;
+const near = skylineLayers('sentence', W, H, false).near;
+// Far towers with each window as its own path, so a window can light up. Same shapes as skyline.ts.
+const t = makeTools('sentence-street', 0.7);
+let far = '';
+const windows: string[] = [];
+for (let x = -10; x < W + 10; ) {
+  const w = 34 + t.rand() * 40;
+  const h = 44 + t.rand() * (H - 50);
+  far += t.rect(x, H - h, w, h + 2);
+  const cols = Math.max(1, Math.floor((w - 12) / 10));
+  const rows = Math.floor((h - 50) / 13);
+  for (let r = 0; r < rows; r += 1) for (let c = 0; c < cols; c += 1) if (t.rand() > 0.45) windows.push(t.rect(x + 7 + c * 10, H - h + 16 + r * 13, 4, 7));
+  x += w + 8 + t.rand() * 30;
+}
+/** The order windows light in: shuffled once (seeded), so lit windows spread along the street. */
+const order = windows.map((_, i) => i).sort(() => t.rand() - 0.5);
+const rank = new Map(order.map((w, i) => [w, i]));
+---
+
+<section class="sh grain" aria-labelledby="sh-title">
+  <div class="container-page sh-inner">
+    <h1 id="sh-title" class="visually-hidden">{title}</h1>
+    <SentenceSearch client:load locale={locale} places={places} />
+  </div>
+  <svg class="sh-street" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <path class="sh-far" d={far} />
+    <g class="sh-windows">{windows.map((d, i) => <path d={d} data-rank={rank.get(i)} style={`--d:${Math.min(rank.get(i)! * 14, 900)}ms`} />)}</g>
+    <path class="sh-near" d={near} />
+  </svg>
+</section>
+
+<script>
+  // Light one window per matching home.
+  const paths = [...document.querySelectorAll<SVGPathElement>('.sh-windows path')];
+  window.addEventListener('lab:count', (e) => {
+    const n = (e as CustomEvent<number | null>).detail ?? 0;
+    for (const p of paths) p.toggleAttribute('data-lit', Number(p.dataset.rank) < n);
+  });
+</script>
+
+<style>
+  .sh {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: max(34rem, calc(100svh - 64px));
+    padding-bottom: clamp(8.5rem, 16vw, 13rem);
+    background-color: var(--color-mist-50);
+    overflow: clip;
+  }
+
+  .sh-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .sh-street {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: clamp(8rem, 15vw, 13rem);
+  }
+
+  .sh-far {
+    fill: var(--color-mist-200);
+  }
+
+  .sh-near {
+    fill: var(--color-mist-300);
+  }
+
+  .sh-windows path {
+    fill: var(--color-mist-50);
+    transition: fill 420ms var(--ease-paper) var(--d, 0ms);
+  }
+
+  .sh-windows path[data-lit] {
+    fill: var(--color-kesar-300);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-windows path {
+      transition: none;
+    }
+  }
+
+  /* ---------- The sentence (island markup) ---------- */
+
+  .sh :global(.sen-line) {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 0.9rem + 4.2vw, 4.75rem);
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--color-ink-950);
+  }
+
+  /* A blank: the control sits on a tonal band, like a word marked with a highlighter. */
+  .sh :global(.sen-blank) {
+    position: relative;
+    display: inline-block;
+  }
+
+  .sh :global(.sen-blank select),
+  .sh :global(.sen-blank input) {
+    appearance: none;
+    margin: 0;
+    padding: 0 0.12em;
+    border: 0;
+    border-radius: 0.12em;
+    font: inherit;
+    color: var(--color-kesar-800);
+    background: linear-gradient(to bottom, transparent 58%, var(--color-kesar-100) 58%, var(--color-kesar-100) 92%, transparent 92%);
+    field-sizing: content;
+    cursor: pointer;
+    transition: background-color 140ms;
+  }
+
+  /* The select's own chevron, small and tonal, inside the band. */
+  .sh :global(.sen-blank select) {
+    padding-right: 0.62em;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1.5 1.5 6 6l4.5-4.5' fill='none' stroke='%23b54600' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 0.12em bottom 0.22em / 0.34em auto,
+      linear-gradient(to bottom, transparent 58%, var(--color-kesar-100) 58%, var(--color-kesar-100) 92%, transparent 92%);
+  }
+
+  .sh :global(.sen-blank input) {
+    cursor: text;
+    min-width: 4ch;
+  }
+
+  .sh :global(.sen-blank input::placeholder) {
+    color: var(--color-kesar-700);
+    opacity: 0.75;
+  }
+
+  .sh :global(.sen-blank :is(select, input):hover) {
+    background-color: var(--color-kesar-50);
+  }
+
+  .sh :global(.sen-blank :is(select, input):focus-visible) {
+    outline: 3px solid var(--color-kesar-700);
+    outline-offset: 2px;
+  }
+
+  .sh :global(.sen-answer) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+    margin-top: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .sh :global(.sen-count) {
+    flex-basis: 100%;
+    min-height: 2.5rem;
+    color: var(--color-ink-600);
+  }
+
+  @media (min-width: 48rem) {
+    .sh :global(.sen-count) {
+      flex-basis: auto;
+      min-width: 13rem;
+    }
+  }
+
+  /* A new count is on its way: the old one dims. */
+  .sh :global(.sen-count[aria-busy] .sen-count-num) {
+    opacity: 0.45;
+    transition: opacity 160ms;
+  }
+
+  .sh :global(.sen-count-num) {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-ink-950);
+  }
+
+  .sh :global(.sen-count-unit) {
+    font-weight: 500;
+  }
+
+  .sh :global(.sen-count-note) {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+  }
+
+  .sh :global(.sen-ask) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>

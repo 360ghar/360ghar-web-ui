@@ -1,0 +1,20 @@
+---
+import PolicyPage from '@/features/content/policies/PolicyPage.astro';
+import { isPageSlug } from '@/features/content/policies/data';
+import { loadPage } from '@/features/content/policies/load';
+import { respond } from '@/lib/cache';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const slug = Astro.params.slug ?? '';
+const res = isPageSlug(slug) ? await loadPage(slug) : null;
+const page = res?.data ?? null;
+const state = page ? 'ok' : !res || res.error?.kind === 'not_found' ? 'notFound' : 'error';
+
+if (state === 'ok') respond(Astro, 'day');
+else if (state === 'notFound') respond(Astro, 'hour', { notFound: true });
+else respond(Astro, 'minute', { error: true });
+---
+
+<PolicyPage locale={locale} slug={slug} page={page} state={state} />

@@ -1,0 +1,140 @@
+---
+/**
+ * Owner enquiry (Formspree mwpqglyb, `source=home-enquiry`). A white paper
+ * sheet with the pitch on one side and the form on the other. On the home page
+ * the caller pulls it up over the bottom of the Owners band with `class`.
+ */
+import type { Locale } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import HomeEnquiryForm from './HomeEnquiryForm';
+import { enquiryStrings } from './strings';
+
+type Props = { locale: Locale; class?: string; headingLevel?: 2 | 3 };
+const { locale, class: className, headingLevel = 2 } = Astro.props;
+const s = enquiryStrings(locale);
+const Heading = `h${headingLevel}` as 'h2';
+---
+
+<section class:list={['enq', className]} aria-labelledby="enq-title">
+  <div class="container-page">
+    <Paper tone="paper" depth={3} innerClass="enq-inner">
+      <div class="enq-copy">
+        <Heading id="enq-title" class="enq-title">{s.title}</Heading>
+        <p class="enq-lead">{s.lead}</p>
+        <p class="enq-help">
+          <Icon name="mail" size={20} />
+          <span>{s.help}</span>
+          <a class="link" href={`mailto:${s.helpEmail}`}>{s.helpEmail}</a>
+        </p>
+      </div>
+      <div class="enq-formwrap">
+        <HomeEnquiryForm client:visible locale={locale} s={s} />
+      </div>
+    </Paper>
+  </div>
+</section>
+
+<style>
+  .enq {
+    position: relative;
+    z-index: 2;
+  }
+
+  .enq :global(.enq-inner) {
+    display: grid;
+    gap: 1.75rem 3rem;
+    padding: clamp(1.25rem, 3.5vw, 2.5rem);
+  }
+
+  @media (min-width: 56rem) {
+    .enq :global(.enq-inner) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: start;
+    }
+  }
+
+  .enq-title {
+    max-width: 22ch;
+    font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+    line-height: 1.1;
+  }
+
+  .enq-lead {
+    margin-top: 0.75rem;
+    max-width: 40ch;
+    color: var(--color-ink-800);
+  }
+
+  .enq-help {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    margin-top: 1.25rem;
+    color: var(--color-ink-800);
+  }
+
+  .enq-help :global(svg) {
+    color: var(--color-kesar-700);
+  }
+
+  .enq-help .link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 700;
+  }
+
+  .enq-formwrap {
+    container-type: inline-size;
+  }
+
+  .enq :global(.enq-form) {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .enq :global(.enq-row) {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @container (min-width: 30rem) {
+    .enq :global(.enq-row) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+
+  .enq :global(.enq-form > .btn) {
+    justify-self: start;
+  }
+
+  /* The honeypot sits off screen. It is not display: none, so bots still fill it. */
+  .enq :global(.enq-trap) {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .enq :global(.enq-sent) {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+    color: var(--color-ink-800);
+  }
+
+  .enq :global(.enq-sent > svg) {
+    color: var(--color-leaf-700);
+  }
+
+  .enq :global(.enq-sent-title) {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+</style>

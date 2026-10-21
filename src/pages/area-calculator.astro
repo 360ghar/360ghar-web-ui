@@ -1,0 +1,47 @@
+---
+import { getT } from '@/i18n';
+import { localizePath } from '@/lib/i18n/locale';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import CarpetCalculator from '@/features/tools/area/CarpetCalculator';
+import { jsonFaqs, jsonHowTo, noDash, PAGES } from '@/features/tools/area/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = PAGES.areaCalculator[locale];
+const terms = ['carpetArea', 'builtUpArea', 'superBuiltUpArea'];
+---
+
+<ToolPage
+  tool="areaCalculator"
+  title={t('tools:areaCalculator.title')}
+  description={t('tools:areaCalculator.description')}
+  keywords={t('tools:areaCalculator.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={jsonFaqs(t, 'areaCalculator', 9)}
+  faqTitle={t('tools:areaCalculator.faqTitle')}
+  howTo={jsonHowTo(t, 'areaCalculator', c.howTo, c.howToDesc)}
+  related={['mofaToRera', 'sqFt', 'areaConverter', 'emi']}
+>
+  <CarpetCalculator client:load locale={locale} />
+  <Fragment slot="body">
+    <h2>{t('tools:areaCalculator.understandingTerms')}</h2>
+    {
+      terms.map((k) => (
+        <>
+          <h3>{t(`tools:areaCalculator.${k}Title`)}</h3>
+          <p>{noDash(t(`tools:areaCalculator.${k}Desc`))}</p>
+        </>
+      ))
+    }
+    <h2>{t('tools:areaCalculator.carpetToBuiltUpTitle')}</h2>
+    <p>{noDash(t('tools:areaCalculator.carpetToBuiltUpDesc'))}</p>
+    <h2>{t('tools:areaCalculator.reraVsMofaTitle')}</h2>
+    <p>{noDash(t('tools:areaCalculator.reraVsMofaDesc'))}</p>
+    <p>
+      <a href={localizePath('/mofa-to-rera-converter', locale)}>{locale === 'hi' ? 'MOFA से RERA कन्वर्टर खोलें' : 'Open the MOFA to RERA converter'}</a>
+    </p>
+  </Fragment>
+</ToolPage>

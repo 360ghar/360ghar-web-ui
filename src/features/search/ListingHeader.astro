@@ -1,0 +1,87 @@
+---
+/**
+ * The slim header of /properties and /map-location: the heading, how many
+ * homes are listed in all, and a paper vignette. The live count of the
+ * current search stays in the results row, which updates as filters change.
+ */
+import { formatNum } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import type { VignetteTheme } from '@/lib/paper/vignettes';
+import PaperVignette from '@/ui/paper/PaperVignette.astro';
+
+type Props = { heading: string; total: number | null; locale: Locale; theme: VignetteTheme };
+const { heading, total, locale, theme } = Astro.props;
+const hi = locale === 'hi';
+---
+
+<div class="container-page lh">
+  <h1 class="lh-h1">{heading}</h1>
+  {
+    total ? (
+      <p class="lh-lead">
+        {hi ? (
+          <>
+            गुरुग्राम में अभी <strong class="tabular">{formatNum(total, 'hi')} घर</strong> लिस्ट हैं। इलाका, बजट और साइज़ से छाँटें।
+          </>
+        ) : (
+          <>
+            <strong class="tabular">{formatNum(total, 'en')} homes</strong> listed in Gurugram right now. Sort them by area, budget and size.
+          </>
+        )}
+      </p>
+    ) : null
+  }
+  <PaperVignette theme={theme} seed="listing" class="lh-art" />
+</div>
+
+<style>
+  /* The heading on its own line, then the count and the vignette side by side,
+     the vignette right after the text (not flung to the far edge). */
+  .lh {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(5rem, 22vw, 9rem);
+    grid-template-areas: 'h1 h1' 'lead art';
+    align-items: end;
+    column-gap: 1rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1rem;
+  }
+
+  /* Wider: the vignette spans the heading and the lead, right after the longer of the two. */
+  @media (min-width: 48rem) {
+    .lh {
+      grid-template-columns: minmax(0, max-content) 9rem;
+      grid-template-areas: 'h1 art' 'lead art';
+      justify-content: start;
+      column-gap: 2.5rem;
+    }
+  }
+
+  .lh-h1 {
+    grid-area: h1;
+  }
+
+  .lh-lead {
+    grid-area: lead;
+  }
+
+  .lh-h1 {
+    font-size: clamp(1.875rem, 1.4rem + 2vw, 2.75rem);
+  }
+
+  .lh-lead {
+    margin-top: 0.375rem;
+    max-width: 52ch;
+    color: var(--color-ink-800);
+  }
+
+  .lh-lead strong {
+    font-family: var(--font-display);
+    color: var(--color-ink-950);
+  }
+
+  .lh :global(.lh-art) {
+    grid-area: art;
+    filter: drop-shadow(1px 1px 0 rgb(var(--tint) / 0.1)) drop-shadow(2px 3px 1.5px rgb(var(--tint) / 0.12));
+  }
+</style>

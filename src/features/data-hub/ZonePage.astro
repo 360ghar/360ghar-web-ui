@@ -1,0 +1,90 @@
+---
+/** /zone-checker/:slug: only the fields the API returns (backend-gaps R4 lists the missing ones). */
+import { getT } from '@/i18n';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizePath } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import type { Zone } from './api';
+import DataHubPage from './DataHubPage.astro';
+import { hubName } from './pages';
+import { fmtDate } from './format';
+import { label, text } from './text';
+
+type Props = { locale: Locale; z: Zone };
+const { locale, z } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+const hi = locale === 'hi';
+const use = label(t.types, z.land_use);
+// Only the facts the API returned (no "N/A" in the search snippet).
+const facts = [z.land_use ? `Land use: ${z.land_use}` : null, z.far_limit != null ? `FAR: ${z.far_limit}` : null, z.max_height_m != null ? `Max height: ${z.max_height_m}m` : null].filter(Boolean).join(', ');
+const summary = `Zoning details for ${z.sector}.${facts ? ` ${facts}.` : ''}`;
+const figs = [
+  [t.znFar, z.far_limit != null ? String(z.far_limit) : null],
+  [t.znCoverage, z.max_coverage_pct != null ? `${z.max_coverage_pct}%` : null],
+  [t.znHeight, z.max_height_m != null ? `${z.max_height_m} m` : null],
+].filter(([, v]) => v) as [string, string][];
+const updated = fmtDate(z.updated_at ?? z.created_at, locale, 'long');
+---
+
+<DataHubPage
+  art="zones"
+  title={tt('seo:zoneCheckerDetail.titleTemplate', { sector: z.sector })}
+  description={`Zoning details for ${z.sector}, Gurugram.${facts ? ` ${facts}.` : ''}`}
+  keywords={`${z.sector} zoning Gurugram, ${z.sector} FAR, land use ${z.sector}, Master Plan Gurugram`}
+  path={`/zone-checker/${z.slug}`}
+  heading={hi ? `${z.sector} की ज़ोनिंग` : `${z.sector} zoning`}
+  lead={use ? `${t.znLandUse}: ${use}.` : undefined}
+  crumbs={[{ name: hubName('zones', locale), path: '/zone-checker' }, { name: z.sector }]}
+  jsonLd={[
+    {
+      '@type': 'Place',
+      name: `${z.sector}, Gurugram`,
+      description: summary,
+      address: { '@type': 'PostalAddress', addressLocality: z.sector, addressRegion: 'Haryana', addressCountry: 'IN' },
+    },
+  ]}
+  related={['zones', 'circleRates', 'gazette', 'rera']}
+>
+  {
+    figs.length > 0 && (
+      <Paper seed={`zone-${z.slug}`} tone="mist-100" class="dh-slip-wrap" innerClass="dh-slip">
+        {figs.map(([k, v]) => (
+          <div class="dh-fig">
+            <span class="dh-fig-label">{k}</span>
+            <span class="dh-fig-value">{v}</span>
+          </div>
+        ))}
+      </Paper>
+    )
+  }
+
+  <div class="dh-split dh-section">
+    <section class="sheet dh-panel" aria-labelledby="zd-rules">
+      <h2 id="zd-rules" class="dh-panel-title">{hi ? 'ज़ोनिंग की जानकारी' : 'Zoning details'}</h2>
+      <dl class="dh-dl">
+        {use && (<><dt>{t.znLandUse}</dt><dd>{use}</dd></>)}
+        {z.permitted_uses?.length ? (<><dt>{t.zdPermitted}</dt><dd>{z.permitted_uses.join(', ')}</dd></>) : null}
+        {z.prohibited_uses?.length ? (<><dt>{t.zdProhibited}</dt><dd>{z.prohibited_uses.join(', ')}</dd></>) : null}
+        {updated && (<><dt>{hi ? 'अपडेट' : 'Updated'}</dt><dd>{updated}</dd></>)}
+      </dl>
+      {
+        z.source_url && /^https?:\/\//i.test(z.source_url) && (
+          <a class="link mt-3" href={z.source_url} target="_blank" rel="noopener noreferrer">
+            {t.openSource}
+            <Icon name="arrow-up-right" size={16} class="arrow" />
+          </a>
+        )
+      }
+      <p class="dh-meta mt-3">{t.zdVerify}</p>
+    </section>
+    <section class="dh-prose mt-0" aria-labelledby="zd-far">
+      <h2 id="zd-far">{t.zdWhatFar}</h2>
+      {z.far_limit != null && <p>{t.zdFarText(z.far_limit)}</p>}
+      <p>
+        <a href={localizePath(`/circle-rates?sector=${encodeURIComponent(z.sector)}`, locale)}>{hi ? `${z.sector} के सर्कल रेट` : `Circle rates in ${z.sector}`}</a>
+      </p>
+    </section>
+  </div>
+</DataHubPage>

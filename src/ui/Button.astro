@@ -1,0 +1,29 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from '@/ui/icons/Icon.astro';
+import type { IconName } from '@/ui/icons/paths';
+
+type Props = {
+  href?: string;
+  variant?: 'primary' | 'ink' | 'paper' | 'quiet';
+  size?: 'md' | 'lg';
+  icon?: IconName;
+  /** Shows the up-right arrow after the label. It slides on hover. */
+  arrow?: boolean;
+  block?: boolean;
+  type?: 'button' | 'submit';
+  class?: string;
+} & Omit<HTMLAttributes<'a'>, 'class'>;
+
+const { href, variant = 'paper', size = 'md', icon, arrow, block, type = 'button', class: className, ...rest } = Astro.props;
+const classes = ['btn', variant !== 'paper' && `btn-${variant}`, size === 'lg' && 'btn-lg', block && 'btn-block', className];
+const Tag = href ? 'a' : 'button';
+// Link: href plus the anchor attributes. Button: type plus the button attributes (disabled).
+const attrs = href ? { href, ...rest } : { type, ...(rest as HTMLAttributes<'button'>) };
+---
+
+<Tag class:list={classes} {...attrs}>
+  {icon && <Icon name={icon} size={18} />}
+  <slot />
+  {arrow && <Icon name="arrow-up-right" size={18} class="arrow" />}
+</Tag>

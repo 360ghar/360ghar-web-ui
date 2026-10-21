@@ -1,0 +1,56 @@
+/* 3D floor planner frame. Full bleed on phones, on the kesar desk from 768 px. */
+
+.bp-desk {
+  padding: 0;
+}
+
+@media (min-width: 48rem) {
+  .bp-desk {
+    padding: 0.75rem;
+  }
+}
+
+.bp-frame {
+  position: relative;
+  height: min(80vh, 760px);
+  min-height: 480px;
+  overflow: hidden;
+  background: var(--color-paper);
+  box-shadow: 0 1px 1px rgb(var(--tint) / 0.06), 0 6px 14px -6px rgb(var(--tint) / 0.16);
+}
+
+@media (min-width: 48rem) {
+  .bp-frame {
+    border-radius: var(--radius-lg);
+  }
+}
+
+.bp-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.bp-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: var(--color-paper);
+  color: var(--color-ink-800);
+  font-weight: 600;
+  text-align: center;
+}
+
+.bp-fail {
+  display: block;
+}
+
+.bp-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin-top: 0.75rem;
+}

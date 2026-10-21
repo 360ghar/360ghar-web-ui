@@ -1,0 +1,9 @@
+---
+import VirtualTourPage from '@/features/property/VirtualTourPage.astro';
+import { loadTour } from '@/features/property/loadTour';
+
+export const prerender = false;
+const data = await loadTour(Astro);
+---
+
+<VirtualTourPage {...data} />

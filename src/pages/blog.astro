@@ -1,0 +1,9 @@
+---
+import BlogIndexPage from '@/features/blog/BlogIndexPage.astro';
+import { loadBlogIndex } from '@/features/blog/load';
+
+export const prerender = false;
+const data = await loadBlogIndex(Astro);
+---
+
+<BlogIndexPage {...data} />

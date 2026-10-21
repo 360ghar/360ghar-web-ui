@@ -1,0 +1,70 @@
+---
+/**
+ * Amenities grouped by the backend's `category`. A group heading shows only
+ * when there is more than one group. An icon shows only where the amenity has a
+ * real one; the slot stays, so the names line up.
+ */
+import type { Property } from '@/lib/api/types';
+import type { Locale } from '@/lib/i18n/locale';
+import { amenityIcon, hasAmenityIcon } from '@/ui/icons/amenities';
+import { amenityGroups } from './amenityGroups';
+import Icon from '@/ui/icons/Icon.astro';
+
+type Props = { amenities: NonNullable<Property['amenities']>; locale: Locale };
+const { amenities, locale } = Astro.props;
+const list = amenityGroups(amenities, locale);
+---
+
+<div class="am">
+  {
+    list.map((g) => (
+      <div>
+        {list.length > 1 && <h3 class="am-h">{g.name}</h3>}
+        <ul class="am-list">
+          {g.items.map((a) => (
+            <li>
+              <span class="am-slot" aria-hidden="true">{hasAmenityIcon(a.icon) && <Icon name={amenityIcon(a.icon)} size={20} />}</span>
+              {a.title}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .am {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .am-h {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .am-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.625rem 1.5rem;
+  }
+
+  .am-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-ink-800);
+  }
+
+  .am-slot {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-kesar-700);
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+/** /locality/:slug/buy and /locality/:slug/rent: live listings for one locality. */
+import Page from '@/layouts/Page.astro';
+import { localizePath } from '@/lib/i18n/locale';
+import { breadcrumbs, faqPage } from '@/lib/seo/site';
+import { displayName, isNoindexLocality, localitySlug } from './data';
+import type { loadLocalityIntent } from './loadIntent';
+import { listingItemList } from '@/features/search/itemList';
+import SearchResults from '@/features/search/SearchResults';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Faq from '@/ui/Faq.astro';
+import NotFoundState from '@/ui/states/NotFoundState.astro';
+import Vignette from './Vignette.astro';
+import { kindForEntity } from './vignette';
+
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+type Props = Exclude<Awaited<ReturnType<typeof loadLocalityIntent>>, Response>;
+const { l, intent, first, filters } = Astro.props;
+const name = l ? displayName(l.name) : '';
+const slug = l ? localitySlug(l) : '';
+const verb = intent === 'rent' ? (hi ? 'किराये पर' : 'for rent') : hi ? 'बिक्री के लिए' : 'for sale';
+const heading = hi ? `${name} में घर ${verb}` : `Homes ${verb} in ${name}`;
+const faqs = l
+  ? [
+      {
+        q: hi ? `${name} में घर कैसे खोजें?` : `How do I find a home ${verb} in ${name}?`,
+        a: hi ? 'बजट, BHK और सुविधा के फ़िल्टर लगाएँ, 360° टूर देखें, फिर विज़िट बुक करें।' : 'Set your budget, BHK and amenities, walk through the 360° tours, then book a visit for the homes you like.',
+      },
+      {
+        q: hi ? 'क्या लिस्टिंग वेरिफाइड हैं?' : 'Are these listings verified?',
+        a: hi ? '360Ghar की टीम हर घर की जगह और जानकारी जाँचती है।' : 'The 360Ghar team checks the location and details of every home before it goes live.',
+      },
+      {
+        q: hi ? 'क्या कोई ब्रोकरेज लगता है?' : 'Is there a brokerage fee?',
+        a: hi ? 'घर खोजने वालों के लिए 360Ghar पर कोई अग्रिम शुल्क नहीं है।' : 'There is no upfront fee for home seekers on 360Ghar.',
+      },
+    ]
+  : [];
+const locked = { purpose: true, locality: true, q: true } as const;
+---
+
+<Page
+  title={l ? `${hi ? `${name} में फ़्लैट ${verb}` : `Flats ${verb} in ${name}`} | 360Ghar` : 'Not found | 360Ghar'}
+  description={l ? (hi ? `${name} में वेरिफाइड घर ${verb}, 360° टूर के साथ।` : `Verified homes ${verb} in ${name}, Gurugram, with 360° tours. Filter by budget and BHK.`) : ''}
+  path={l ? `/locality/${slug}/${intent}` : Astro.url.pathname}
+  noindex={isNoindexLocality(l)}
+  jsonLd={l && first
+    ? [
+        breadcrumbs(
+          [
+            { name: 'Home', path: '/' },
+            { name: 'Localities', path: '/localities' },
+            { name, path: `/locality/${slug}` },
+            { name: heading, path: `/locality/${slug}/${intent}` },
+          ],
+          locale,
+        ),
+        { '@type': 'CollectionPage', name: heading, about: { '@type': 'Place', name } },
+        listingItemList(heading, first.page?.items ?? [], locale),
+        faqPage(faqs),
+      ]
+    : []}
+>
+  {
+    l && first && filters ? (
+      <>
+        <div class="container-page pt-2">
+          <Breadcrumbs items={[{ name: hi ? 'होम' : 'Home', path: '/' }, { name: hi ? 'लोकेलिटीज़' : 'Localities', path: '/localities' }, { name, path: `/locality/${slug}` }, { name: heading }]} />
+          <Vignette kind={kindForEntity(l.entityType)} seed={slug} locale={locale} size="strip" sign={l.entityType === 'sector' ? name : undefined} class="mt-2" />
+          <h1 class="mt-5 text-3xl md:text-4xl">{heading}</h1>
+          <p class="mt-2 text-ink-800">
+            <a class="link" href={localizePath(`/locality/${slug}/${intent === 'buy' ? 'rent' : 'buy'}`, locale)}>
+              {intent === 'buy' ? (hi ? `${name} में किराये पर घर` : `Rent in ${name} instead`) : hi ? `${name} में घर खरीदें` : `Buy in ${name} instead`}
+            </a>
+          </p>
+        </div>
+        <div class="container-page mt-4">
+          <SearchResults
+            client:load
+            locale={locale}
+            initialFilters={filters}
+            initialPage={first.page}
+            initialError={first.error?.message ?? null}
+            amenities={first.amenities}
+            basePath={`/locality/${slug}/${intent}`}
+            locked={locked}
+          />
+        </div>
+        <div class="container-page mt-16">
+          <Faq items={faqs} title={hi ? 'सवाल' : 'Questions'} id="intent-faq" />
+        </div>
+      </>
+    ) : (
+      <NotFoundState
+        title={hi ? 'यह लोकेलिटी हमारे नक्शे पर नहीं है' : 'This locality is not on our map'}
+        action={{ href: localizePath('/localities', locale), label: hi ? 'सभी लोकेलिटीज़' : 'All localities' }}
+      />
+    )
+  }
+</Page>

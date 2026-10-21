@@ -1,0 +1,10 @@
+---
+import LocalityIntentPage from '@/features/localities/LocalityIntentPage.astro';
+import { loadLocalityIntent } from '@/features/localities/loadIntent';
+
+export const prerender = false;
+const data = await loadLocalityIntent(Astro);
+if (data instanceof Response) return data;
+---
+
+<LocalityIntentPage {...data} />

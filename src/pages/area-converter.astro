@@ -1,0 +1,87 @@
+---
+import { getT } from '@/i18n';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import UnitConverter from '@/features/tools/area/UnitConverter';
+import { jsonFaqs, jsonHowTo, noDash, PAGES, REGIONS, SHORT, unitLabels } from '@/features/tools/area/content';
+import { convert, fmtArea, SQFT_PER, UNITS, type Unit } from '@/features/tools/area/units';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = PAGES.areaConverter[locale];
+const labels = unitLabels(t, UNITS);
+const short = SHORT[locale];
+const common: Unit[] = ['sq_mt', 'sq_yd', 'ground', 'acre', 'hectare', 'guntha'];
+const regional: Unit[] = ['bigha', 'guntha', 'ground', 'cent', 'kanal', 'marla', 'acre', 'hectare'];
+---
+
+<ToolPage
+  tool="areaConverter"
+  title={t('tools:areaConverter.title')}
+  description={t('tools:areaConverter.description')}
+  keywords={t('tools:areaConverter.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={jsonFaqs(t, 'areaConverter', 9)}
+  faqTitle={t('tools:areaConverter.faqTitle')}
+  howTo={jsonHowTo(t, 'areaConverter', c.howTo, c.howToDesc)}
+>
+  <UnitConverter client:load locale={locale} units={UNITS} labels={labels} defaults={{ v: 1000, from: 'sq_ft', to: 'sq_yd' }} compare />
+  <Fragment slot="body">
+    <h2>{t('tools:areaConverter.commonConversions')}</h2>
+    <div class="tool-scroll" tabindex="0" role="region" aria-label={t('tools:areaConverter.commonConversions')}>
+      <table class="tool-table">
+        <thead>
+          <tr>
+            <th scope="col">{t('tools:areaConverter.unitCol')}</th>
+            <th scope="col">{short.sq_ft}</th>
+            <th scope="col">{short.sq_yd}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            common.map((u) => (
+              <tr>
+                <th scope="row">1 {labels[u]}</th>
+                <td>{fmtArea(SQFT_PER[u], locale)}</td>
+                <td>{fmtArea(convert(1, u, 'sq_yd'), locale)}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2>{c.regional}</h2>
+    <div class="tool-scroll" tabindex="0" role="region" aria-label={c.regional}>
+      <table class="tool-table">
+        <thead>
+          <tr>
+            <th scope="col">{t('tools:areaConverter.unitCol')}</th>
+            <th scope="col" class="is-text">{c.where}</th>
+            <th scope="col">{short.sq_ft}</th>
+            <th scope="col">{c.sqm}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            regional.map((u) => (
+              <tr>
+                <th scope="row">1 {labels[u]}</th>
+                <td class="is-text">{REGIONS[locale][u] ?? c.varies}</td>
+                <td>{fmtArea(SQFT_PER[u], locale)}</td>
+                <td>{fmtArea(convert(1, u, 'sq_mt'), locale)}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2>{t('tools:areaConverter.gajToAcreTitle')}</h2>
+    <p>{noDash(t('tools:areaConverter.gajToAcreDesc'))}</p>
+    <h2>{t('tools:areaConverter.sqFtToGajTitle')}</h2>
+    <p>{noDash(t('tools:areaConverter.sqFtToGajDesc'))}</p>
+  </Fragment>
+</ToolPage>

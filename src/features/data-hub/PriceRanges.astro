@@ -1,0 +1,213 @@
+---
+/**
+ * Price ranges of one city as floating bars on a log scale, from
+ * src/data/priceContext.json (buy, rent and PG). Each row keeps its range as
+ * text, so the chart also works as the table.
+ */
+import { formatNum } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { chartText, logPos, parseRange } from './charts';
+
+type Row = { name: string; raw: string };
+type Props = { locale: Locale; title: string; rows: Row[]; prefix?: string; id: string };
+const { locale, title, rows, prefix = '₹', id } = Astro.props;
+const parsed = rows.map((r) => ({ ...r, range: parseRange(r.raw) }));
+const ok = parsed.filter((r): r is Row & { range: [number, number] } => r.range !== null);
+
+// Axis bounds on a 1-2-5 grid around the data, so the bars fill the width.
+const steps = (lo: number, hi: number) => {
+  const out: number[] = [];
+  for (let k = Math.floor(Math.log10(lo)) - 1; k <= Math.ceil(Math.log10(hi)) + 1; k += 1) for (const m of [1, 2, 5]) out.push(m * 10 ** k);
+  return out;
+};
+const minLo = Math.min(...ok.map((r) => r.range[0]));
+const maxHi = Math.max(...ok.map((r) => r.range[1]));
+const grid = ok.length ? steps(minLo, maxHi) : [];
+const lo = grid.filter((v) => v <= minLo).at(-1) ?? minLo;
+const hi = grid.find((v) => v >= maxHi) ?? maxHi;
+const ticks = grid.filter((v) => v >= lo && v <= hi);
+const x = (v: number) => logPos(v, lo, hi) * 1000;
+const hiLocale = locale === 'hi';
+const money = (v: number) => {
+  if (v >= 1e7) return `₹${formatNum(v / 1e7, 'en')} ${hiLocale ? 'करोड़' : 'Cr'}`;
+  if (v >= 1e5) return `₹${formatNum(v / 1e5, 'en')} ${hiLocale ? 'लाख' : 'L'}`;
+  return hiLocale ? `₹${formatNum(v / 1e3, 'en')} हज़ार` : `₹${formatNum(v / 1e3, 'en')}k`;
+};
+const c = chartText(locale);
+---
+
+{
+  ok.length > 0 && (
+    <section class="pr" aria-labelledby={id}>
+      <h3 id={id} class="pr-title">
+        {title}
+      </h3>
+      <ul class="pr-rows">
+        {parsed.map((r) => (
+          <li class="pr-row">
+            <span class="pr-name">{r.name}</span>
+            <span class="pr-text tabular">
+              {prefix}
+              {r.raw}
+            </span>
+            <svg class="pr-bar" viewBox="0 0 1000 20" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              {ticks.map((v) => (
+                <line class:list={['pr-guide', String(v).startsWith('1') && 'is-major']} x1={x(v)} x2={x(v)} y1="0" y2="20" vector-effect="non-scaling-stroke" />
+              ))}
+              {r.range && (
+                <g>
+                  <rect class="pr-span" x={x(r.range[0])} y="4" width={Math.max(x(r.range[1]) - x(r.range[0]), 4)} height="12" rx="2" />
+                  <rect class="pr-cap" x={x(r.range[0])} y="2" width="4" height="16" />
+                  <rect class="pr-cap" x={Math.max(x(r.range[1]) - 4, x(r.range[0]))} y="2" width="4" height="16" />
+                </g>
+              )}
+            </svg>
+          </li>
+        ))}
+      </ul>
+      <div class="pr-axis" aria-hidden="true">
+        {ticks.map((v, i) => (
+          <span
+            class:list={[
+              String(v).startsWith('1') ? 'is-major' : 'is-minor',
+              i === 0 && 'is-start',
+              i === ticks.length - 1 && 'is-end',
+              i > 0 && i < ticks.length - 1 && (logPos(v, lo, hi) < 0.16 || logPos(v, lo, hi) > 0.84) && 'is-crowd',
+            ]}
+            style={`--x:${logPos(v, lo, hi) * 100}%`}
+          >
+            {money(v)}
+          </span>
+        ))}
+      </div>
+      <p class="visually-hidden">{c.piScale}</p>
+    </section>
+  )
+}
+
+<style>
+  .pr {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .pr-title {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .pr-rows {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Phones and tablets: name and range on one line, the bar under them. From 1024 px: name | bar | range. */
+  .pr-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'name text' 'bar bar';
+    align-items: baseline;
+    gap: 0 1rem;
+    padding: 0.375rem 0 0;
+  }
+
+  @media (min-width: 64rem) {
+    .pr-row,
+    .pr-axis {
+      --name: 9.5rem;
+      --text: 12.5rem;
+    }
+
+    .pr-row {
+      grid-template-columns: var(--name) minmax(0, 1fr) var(--text);
+      grid-template-areas: 'name bar text';
+      align-items: center;
+      padding: 0;
+    }
+  }
+
+  .pr-name {
+    grid-area: name;
+    color: var(--color-ink-950);
+    font-weight: 600;
+  }
+
+  .pr-text {
+    grid-area: text;
+    color: var(--color-ink-800);
+    font-size: 0.9375rem;
+    white-space: nowrap;
+  }
+
+  .pr-bar {
+    grid-area: bar;
+    display: block;
+    width: 100%;
+    height: 1.75rem;
+  }
+
+  @media (min-width: 64rem) {
+    .pr-bar {
+      height: 2.5rem;
+    }
+  }
+
+  .pr-guide {
+    stroke: var(--color-ink-100);
+    stroke-width: 1;
+  }
+
+  .pr-guide.is-major {
+    stroke: var(--color-ink-200);
+  }
+
+  .pr-span {
+    fill: var(--color-kesar-300);
+  }
+
+  .pr-cap {
+    fill: var(--color-kesar-800);
+  }
+
+  .pr-axis {
+    position: relative;
+    height: 1.25rem;
+    color: var(--color-ink-600);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 64rem) {
+    .pr-axis {
+      margin-left: calc(var(--name) + 1rem);
+      margin-right: calc(var(--text) + 1rem);
+    }
+  }
+
+  .pr-axis > span {
+    position: absolute;
+    top: 0;
+    left: var(--x);
+    translate: -50% 0;
+    white-space: nowrap;
+  }
+
+  .pr-axis > .is-start {
+    translate: 0 0;
+  }
+
+  .pr-axis > .is-end {
+    translate: -100% 0;
+  }
+
+  /* Below 1024 px: the ends, and the powers of ten that are clear of them. */
+  @media (max-width: 63.99rem) {
+    .pr-axis > .is-minor:not(.is-start, .is-end),
+    .pr-axis > .is-crowd {
+      display: none;
+    }
+  }
+</style>

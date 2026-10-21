@@ -1,0 +1,89 @@
+---
+/**
+ * Newsletter sign-up (Formspree mkgzdjyj, field `email`), kept on the pages
+ * where the old site had its <Cta> block. A quiet sheet, not a CTA slab.
+ */
+import { getT } from '@/i18n';
+import type { Locale } from '@/lib/i18n/locale';
+import Paper from '@/ui/Paper.astro';
+import NewsletterForm from './NewsletterForm';
+import { shared } from './text';
+
+type Props = { locale: Locale; class?: string };
+const { locale, class: className } = Astro.props;
+const s = shared(locale);
+const t = getT(locale);
+---
+
+<section class:list={['news', className]} aria-labelledby="news-title">
+  <Paper seed="newsletter" tone="mist-50" depth={1} innerClass="news-inner">
+    <div class="news-copy">
+      <h2 id="news-title" class="news-title">{s.newsletterTitle}</h2>
+      <p class="news-body">{s.newsletterBody}</p>
+    </div>
+    <NewsletterForm client:visible locale={locale} done={t('common:newsletter.subscribeSuccess')} />
+  </Paper>
+</section>
+
+<style>
+  .news {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .news :global(.news-inner) {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  @media (min-width: 56rem) {
+    .news :global(.news-inner) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+      align-items: end;
+      gap: 2.5rem;
+    }
+  }
+
+  .news .news-title {
+    margin: 0;
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+    max-width: 24ch;
+  }
+
+  .news .news-body {
+    margin-top: 0.5rem;
+    color: var(--color-ink-800);
+    max-width: 48ch;
+  }
+
+  .news :global(.news-form) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 30rem) {
+    .news :global(.news-form) {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+    }
+
+    /* The button lines up with the input, not the label above it. */
+    .news :global(.news-form > .btn) {
+      margin-top: calc(0.875rem * 1.55 + 0.375rem);
+    }
+  }
+
+  .news :global(.news-fail) {
+    grid-column: 1 / -1;
+  }
+
+  .news :global(.news-done) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    font-weight: 700;
+    color: var(--color-leaf-700);
+  }
+</style>

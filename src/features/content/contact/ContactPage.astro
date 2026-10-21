@@ -1,0 +1,241 @@
+---
+/**
+ * /contact. The form posts to Formspree mwpqglyb (user_name, user_email,
+ * user_subject, message); ?subject= prefills the subject. The office details
+ * are the organisation data from lib/seo/legacy/siteMetadata.js.
+ */
+import { getT } from '@/i18n';
+import Page from '@/layouts/Page.astro';
+import { COMPANY_PHONE, COMPANY_PHONE_DISPLAY } from '@/lib/company';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { siteMetadata } from '@/lib/seo/legacy/siteMetadata.js';
+import { canonicalFor, SITE_URL } from '@/lib/seo/site';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import CutBand from '@/ui/CutBand.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import NewsletterBand from '@/features/content/shared/NewsletterBand.astro';
+import { trail } from '@/features/content/shared/schema';
+import ContactFormSheet from './ContactFormSheet.astro';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const L = localizer(locale);
+const org = siteMetadata.organization;
+const MAP = 'https://maps.google.com/?q=360Ghar+Gurgaon';
+
+const H = byLocale(locale, {
+  en: {
+    title: 'Contact 360Ghar',
+    seoTitle: 'Contact 360Ghar | Property help in Gurugram',
+    email: 'Email',
+    phone: 'Phone',
+    office: 'Office',
+    hours: 'Hours',
+    weekdays: 'Mon to Fri, 9 am to 9 pm',
+    weekend: 'Sat and Sun, 10 am to 8 pm',
+    map: 'Open in Google Maps',
+    faq: 'Answers to common questions are on the FAQ page.',
+    faqLink: 'Read the FAQ',
+    grievance: 'For a complaint, see the',
+    grievanceLink: 'grievance redressal mechanism',
+  },
+  hi: {
+    title: '360Ghar से संपर्क करें',
+    seoTitle: '360Ghar से संपर्क करें | गुरुग्राम में प्रॉपर्टी सहायता',
+    email: 'ईमेल',
+    phone: 'फ़ोन',
+    office: 'ऑफ़िस',
+    hours: 'समय',
+    weekdays: 'सोम से शुक्र, सुबह 9 से रात 9',
+    weekend: 'शनि और रवि, सुबह 10 से रात 8',
+    map: 'Google Maps पर देखें',
+    faq: 'आम सवालों के जवाब FAQ पेज पर हैं।',
+    faqLink: 'FAQ पढ़ें',
+    grievance: 'शिकायत के लिए',
+    grievanceLink: 'शिकायत निवारण प्रक्रिया',
+  },
+});
+
+const { crumbs, ld } = trail(locale, [{ name: H.title, path: '/contact' }]);
+const description = t('seo:contact.description');
+const jsonLd = [
+  {
+    '@type': 'RealEstateAgent',
+    name: org.name,
+    url: canonicalFor('/contact', locale),
+    image: `${SITE_URL}/assets/images/logo/logo.png`,
+    email: org.email,
+    telephone: org.telephone,
+    geo: { '@type': 'GeoCoordinates', latitude: 28.4595, longitude: 77.0266 },
+    address: { '@type': 'PostalAddress', ...org.address },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      telephone: org.telephone,
+      email: org.email,
+      areaServed: 'IN',
+      availableLanguage: ['en', 'hi'],
+    },
+  },
+  ld,
+];
+---
+
+<Page title={H.seoTitle} description={description} path="/contact" jsonLd={jsonLd}>
+  <CutBand seed="contact-top" class="contact-band" as="div">
+    <div class="container-page contact-grid">
+      <div class="contact-info">
+        <Breadcrumbs items={crumbs} />
+        <h1 class="contact-h1">{H.title}</h1>
+        <p class="contact-lead">{t('policies:contact.formDesc')}</p>
+        <dl class="contact-dl">
+          <div>
+            <dt>{H.email}</dt>
+            <dd><a href={`mailto:${org.email}`}>{org.email}</a></dd>
+          </div>
+          <div>
+            <dt>{H.phone}</dt>
+            <dd><a href={`tel:${COMPANY_PHONE}`}>{COMPANY_PHONE_DISPLAY}</a></dd>
+          </div>
+          <div>
+            <dt>{H.office}</dt>
+            <dd>
+              {t('site:footer.address')}
+              <a class="link" href={MAP} rel="noopener">
+                {H.map}
+                <Icon name="arrow-up-right" size={16} class="arrow" />
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>{H.hours}</dt>
+            <dd>{H.weekdays}<br />{H.weekend}</dd>
+          </div>
+        </dl>
+        <PageArt scene="postbox" seed="contact" />
+      </div>
+      <ContactFormSheet locale={locale} id="contact" load class="contact-lift">
+        <h2 class="contact-h2">{t('policies:contact.formTitle')}</h2>
+      </ContactFormSheet>
+    </div>
+  </CutBand>
+
+  <div class="container-page">
+    <p class="contact-more">
+      {H.faq}{' '}
+      <a class="link" href={L('/faq')}>{H.faqLink}<Icon name="arrow-up-right" size={16} class="arrow" /></a>
+    </p>
+    <p class="contact-more">
+      {H.grievance}{' '}<a class="link" href={L('/policies/grievance-redressal-mechanism')}>{H.grievanceLink}</a>.
+    </p>
+    <NewsletterBand locale={locale} />
+  </div>
+</Page>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: 2rem;
+    padding-block: 0.5rem 0;
+  }
+
+  @media (min-width: 64rem) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 32rem);
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+
+  .contact-info {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding-bottom: 1rem;
+  }
+
+  .contact-h1 {
+    font-size: clamp(2.25rem, 1.3rem + 4vw, 4.5rem);
+    color: var(--color-ink-950);
+  }
+
+  .contact-lead {
+    max-width: 50ch;
+    font-size: 1.0625rem;
+    color: var(--color-ink-950);
+  }
+
+  .contact-dl {
+    display: grid;
+    gap: 1rem 2rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .contact-dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .contact-dl dt {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink-800);
+  }
+
+  .contact-dl dd {
+    display: grid;
+    justify-items: start;
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  .contact-dl dd > a:not(.link) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 1.125rem;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .contact-dl .link {
+    color: var(--color-kesar-900);
+    font-size: 0.9375rem;
+  }
+
+  /* The form sheet crosses the band's cut edge onto the page. */
+  .contact-grid :global(.contact-lift) {
+    position: relative;
+    z-index: 2;
+    margin-bottom: -4.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .contact-grid :global(.contact-lift) {
+      margin-top: 2.5rem;
+      margin-bottom: -8rem;
+    }
+  }
+
+  .contact-h2 {
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  }
+
+  .contact-more {
+    color: var(--color-ink-800);
+  }
+
+  .contact-more:first-child {
+    margin-top: 6.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .contact-more:first-child {
+      margin-top: 3rem;
+      max-width: calc(100% - 36rem);
+    }
+  }
+</style>

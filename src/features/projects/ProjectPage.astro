@@ -1,0 +1,264 @@
+---
+/** One project: its photo, what it lists, the live homes that match, and the other projects. */
+import Page from '@/layouts/Page.astro';
+import { typeLabel } from '@/lib/format';
+import { localizer } from '@/lib/i18n/locale';
+import { breadcrumbs } from '@/lib/seo/site';
+import FavouriteButton from '@/features/favourites/FavouriteButton';
+import { LISTED_LOCALITIES, localitySlug } from '@/features/localities/data';
+import PlaceFacts from '@/features/localities/PlaceFacts.astro';
+import PlaceHero from '@/features/localities/PlaceHero.astro';
+import type { PlaceKind } from '@/features/localities/vignette';
+import { PropertyCardView } from '@/features/property/PropertyCardView';
+import { toSearchParams, emptyFilters } from '@/features/search/filters';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import NotFoundState from '@/ui/states/NotFoundState.astro';
+import StateBlock from '@/ui/states/StateBlock.astro';
+import { PROJECTS } from './catalog';
+import type { loadProject } from './load';
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const L = localizer(locale);
+type Props = Awaited<ReturnType<typeof loadProject>>;
+const { project, homes, total, wider, failed } = Astro.props;
+const title = project ? (hi ? project.titleHi : project.title) : '';
+const m = project?.match ?? {};
+const types = (m.property_type ?? []).map((t) => (hi ? typeLabel(t, locale) : `${typeLabel(t, locale)}s`));
+const typeText = types.length ? types.join(hi ? ' और ' : ' and ') : hi ? 'हर तरह के घर' : 'All kinds of homes';
+const typeLower = typeText.charAt(0).toLowerCase() + typeText.slice(1);
+const purposeText = m.purpose === 'buy' ? (hi ? 'बिक्री' : 'Sale') : m.purpose === 'rent' ? (hi ? 'किराया' : 'Rent') : hi ? 'बिक्री, किराया, कम समय' : 'Sale, rent, short stay';
+const place = m.locality ? LISTED_LOCALITIES.find((l) => l.name.toLowerCase() === m.locality!.toLowerCase() && l.city.toLowerCase() === 'gurgaon') : undefined;
+const searchHref = project ? `${L('/properties')}?${toSearchParams({ ...emptyFilters(), ...(wider ? { ...m, locality: undefined } : m), property_type: m.property_type ?? [] })}` : L('/properties');
+const others = project ? PROJECTS.filter((p) => p.slug !== project.slug && p.image !== project.image).slice(0, 3) : [];
+// The scene follows the kind of home the project lists.
+const t0 = m.property_type?.[0];
+const kind: PlaceKind = t0 === 'apartment' ? 'society' : t0 === 'office' || t0 === 'shop' ? 'office' : t0 === 'house' ? 'locality' : t0 === 'villa' ? 'township' : 'project';
+const homesWord = (n: number) => (hi ? `${n} घर` : `${n} ${n === 1 ? 'home' : 'homes'}`);
+const heroGroups = [
+  {
+    title: hi ? 'यह पेज क्या दिखाता है' : 'What this page lists',
+    rows: [
+      { text: hi ? 'जगह' : 'Place', value: m.locality ?? (hi ? 'पूरा गुरुग्राम' : 'All of Gurugram'), ...(place ? { href: L(`/locality/${localitySlug(place)}`), linkValue: true } : {}) },
+      { text: hi ? 'घर' : 'Homes', value: typeText },
+      { text: hi ? 'किसके लिए' : 'For', value: purposeText },
+      ...(failed ? [] : [{ text: hi ? 'अभी लाइव' : 'Live now', value: wider ? (hi ? 'यहाँ अभी कोई नहीं' : 'None here yet') : homesWord(total) }]),
+    ],
+  },
+];
+---
+
+{
+  project ? (
+    <Page
+      title={`${project.title} in Gurugram | 360Ghar`}
+      description={project.desc.slice(0, 155)}
+      path={`/project/${project.slug}`}
+      image={project.image}
+      jsonLd={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Projects', path: '/project' }, { name: project.title, path: `/project/${project.slug}` }], locale)]}
+    >
+      <div class="container-page pj">
+        <Breadcrumbs items={[{ name: hi ? 'होम' : 'Home', path: '/' }, { name: hi ? 'प्रोजेक्ट' : 'Projects', path: '/project' }, { name: title }]} />
+        <PlaceHero kind={kind} seed={project.slug} locale={locale} titleLength={title.length}>
+          <h1>{title}</h1>
+          <p class="pj-lead">{hi ? project.descHi : project.desc}</p>
+          <PlaceFacts groups={heroGroups} />
+          <div slot="aside" class="pj-print soft-lift is-clip" data-depth="2">
+            <div>
+              <img src={project.image} alt="" width="630" height="521" fetchpriority="high" decoding="async" />
+            </div>
+          </div>
+        </PlaceHero>
+
+        <section class="pj-block" aria-labelledby="pj-homes">
+          <div class="pj-row">
+            <h2 id="pj-homes" class="pj-h2">{wider ? (hi ? 'गुरुग्राम में ऐसे ही घर' : 'Homes like this elsewhere in Gurugram') : hi ? 'इससे मेल खाते घर' : 'Homes that match'}</h2>
+            {homes.length > 0 && (
+              <a class="link" href={searchHref}>
+                {hi ? `सभी ${total} देखें` : `See all ${total}`} <Icon name="arrow-up-right" size={16} class="arrow" />
+              </a>
+            )}
+          </div>
+          {wider && (
+            <p class="pj-note">
+              {hi ? `${m.locality} में अभी ${typeText} लिस्ट नहीं हैं। ये गुरुग्राम में कहीं और के सबसे नए ${typeText} हैं।` : `No ${typeLower} are listed in ${m.locality} yet. These are the newest ones elsewhere in Gurugram.`}
+            </p>
+          )}
+          {homes.length ? (
+            <ul class="pj-grid">
+              {homes.map((p) => (
+                <li>
+                  <PropertyCardView property={p} locale={locale}>
+                    <FavouriteButton slot="favourite" client:visible propertyId={p.id} locale={locale} />
+                  </PropertyCardView>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div class="sheet">
+              <StateBlock
+                scene={failed ? 'offline' : 'empty'}
+                level={3}
+                title={failed ? (hi ? 'अभी घर लोड नहीं हो सके' : 'We could not load homes right now') : hi ? 'अभी कोई घर लिस्ट नहीं है' : 'No homes listed here yet'}
+                body={hi ? 'पूरे गुरुग्राम में खोजें।' : 'Search all of Gurugram instead.'}
+                action={{ href: L('/properties'), label: hi ? 'घर खोजें' : 'Search homes', icon: 'search' }}
+              />
+            </div>
+          )}
+        </section>
+
+        {others.length > 0 && (
+          <section class="pj-block" aria-labelledby="pj-others">
+            <h2 id="pj-others" class="pj-h2">{hi ? 'दूसरे प्रोजेक्ट' : 'Other projects'}</h2>
+            <ul class="pj-others">
+              {others.map((o) => (
+                <li class="pj-other">
+                  <div class="pj-other-img soft-lift is-clip" data-depth="1">
+                    <div>
+                      <img src={o.image} alt="" width="630" height="521" loading="lazy" decoding="async" />
+                    </div>
+                  </div>
+                  <h3 class="pj-other-title">
+                    <a href={L(`/project/${o.slug}`)}>{hi ? o.titleHi : o.title}</a>
+                  </h3>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </Page>
+  ) : (
+    <Page title="Project not found | 360Ghar" description="This project is not on our map." noindex>
+      <NotFoundState
+        title={hi ? 'यह प्रोजेक्ट हमारे नक्शे पर नहीं है' : 'This project is not on our map'}
+        action={{ href: L('/project'), label: hi ? 'सभी प्रोजेक्ट' : 'All projects' }}
+      />
+    </Page>
+  )
+}
+
+<style>
+  .pj {
+    padding-top: 0.5rem;
+  }
+
+  .pj-lead {
+    font-size: 1.0625rem;
+    color: var(--color-ink-800);
+    max-width: 58ch;
+  }
+
+  .pj-print {
+    --tint: 94 33 0;
+    max-width: 30rem;
+  }
+
+  .pj-print > div {
+    aspect-ratio: 16 / 10;
+    background: var(--color-mist-100);
+  }
+
+  .pj-print img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pj-block {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .pj-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0.25rem 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .pj-h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+  }
+
+  .pj-block > .pj-h2 {
+    margin-bottom: 1rem;
+  }
+
+  .pj-note {
+    margin: -0.25rem 0 1.5rem;
+    color: var(--color-ink-800);
+    max-width: 62ch;
+  }
+
+  .pj-grid {
+    display: grid;
+    gap: 2rem 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .pj-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .pj-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .pj-others {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .pj-others {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .pj-other {
+    position: relative;
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+
+  .pj-other-img {
+    --tint: 94 33 0;
+  }
+
+  .pj-other-img > div {
+    aspect-ratio: 16 / 10;
+    background: var(--color-mist-100);
+  }
+
+  .pj-other-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pj-other-title {
+    font-size: 1.125rem;
+    line-height: 1.25;
+  }
+
+  .pj-other-title a {
+    text-decoration: none;
+  }
+
+  .pj-other-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .pj-other-title a:hover {
+    color: var(--color-kesar-700);
+  }
+</style>

@@ -1,0 +1,90 @@
+---
+/** /zone-checker: zoning list island, FAR calculator, colony approvals (server table). */
+import { getT } from '@/i18n';
+import type { ZonePage } from '@/features/data-hub/api';
+import type { ApiError } from '@/lib/api/errors';
+import type { Locale } from '@/lib/i18n/locale';
+import type { Colony } from './api';
+import { FAQ } from './content';
+import DataHubPage from './DataHubPage.astro';
+import { hubName } from './pages';
+import type { ZoneFilters } from './params';
+import { Status } from './Status';
+import { text } from './text';
+import Zones, { FarCalculator } from './Zones';
+
+type Props = { locale: Locale; filters: ZoneFilters; page: ZonePage | null; error: ApiError | null; colonies: Colony[] | null };
+const { locale, filters, page, error, colonies } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+const farZones = (page?.items ?? []).map((z) => ({ slug: z.slug, sector: z.sector, far_limit: z.far_limit ?? null }));
+---
+
+<DataHubPage
+  art="zones"
+  title={tt('seo:zoneChecker.title')}
+  description={tt('seo:zoneChecker.description')}
+  keywords="zone checker Gurugram, land use Gurugram, FAR Gurgaon, Master Plan Haryana, sector zoning Gurugram, residential commercial zone"
+  path="/zone-checker"
+  heading={t.znH1}
+  lead={tt('data-hub:zoneChecker.description')}
+  crumbs={[{ name: hubName('zones', locale), path: '/zone-checker' }]}
+  faqs={FAQ.zones}
+  jsonLd={[
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Zone Checker Gurugram',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web Browser',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Check zoning regulations for Gurugram sectors. View land use classification, FAR, maximum height, and ground coverage from the Haryana Master Plan.',
+      keywords: 'zone checker Gurugram, land use Gurugram, FAR Gurgaon, Master Plan Haryana',
+      author: { '@type': 'Organization', name: '360Ghar' },
+    },
+  ]}
+  related={['circleRates', 'ownership', 'rera', 'gazette', 'stampDuty']}
+>
+  <div class="dh-split">
+    <Zones client:load locale={locale} initialFilters={filters} initialPage={error ? null : page} />
+    <FarCalculator client:idle locale={locale} zones={farZones} />
+  </div>
+
+  <section class="dh-section" aria-labelledby="colonies">
+    <h2 id="colonies" class="dh-h2">{t.colTitle}</h2>
+    <p class="dh-meta mt-1">{tt('data-hub:zoneChecker.colonyApprovalsDesc')}</p>
+    {
+      colonies === null ? (
+        <p class="field-error mt-4" role="alert">{tt('data-hub:zoneChecker.colonyError')}</p>
+      ) : colonies.length === 0 ? (
+        <p class="dh-meta mt-4">{t.colEmpty}</p>
+      ) : (
+        <div class="sheet dh-sheet mt-4">
+          <table class="dh-table">
+            <thead>
+              <tr>
+                <th scope="col">{t.colName}</th>
+                <th scope="col">{t.colLicence}</th>
+                <th scope="col" class="wide">{t.colDeveloper}</th>
+                <th scope="col">{t.colStatus}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {colonies.map((c) => (
+                <tr>
+                  <th scope="row" class="font-semibold">
+                    {c.colony_name}
+                  </th>
+                  <td class="tabular">{c.licence_number ?? '–'}</td>
+                  <td class="wide">{c.developer_name ?? '–'}</td>
+                  <td>
+                    <Status value={c.approval_status} locale={locale} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+  </section>
+</DataHubPage>

@@ -1,0 +1,39 @@
+---
+/**
+ * The A to Z list of the directory. No styles of its own (DirectoryPage styles
+ * it), so its 2,000+ rows carry no scoped-style attributes.
+ */
+import { formatNum } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { displayName, TYPE_LABEL } from './data';
+
+type Item = { name: string; href: string; type: string; city: string; live: number };
+type Props = { groups: Map<string, Item[]>; letters: string[]; locale: Locale };
+const { groups, letters, locale } = Astro.props;
+const hi = locale === 'hi';
+const fmt = (n: number) => formatNum(n, 'en');
+const homes = (n: number) => (hi ? `${n} घर` : `${n} ${n === 1 ? 'home' : 'homes'}`);
+const idOf = (ch: string) => (ch === '#' ? 'num' : ch);
+---
+
+<div class="dir-groups" data-dir-root>
+  {
+    letters.map((ch) => (
+      <section class="dir-group" id={`dir-${idOf(ch)}`} data-group aria-labelledby={`dir-h-${idOf(ch)}`}>
+        <h3 class="dir-letter" id={`dir-h-${idOf(ch)}`}>
+          {ch} <span class="dir-gn" data-gn>{fmt(groups.get(ch)!.length)}</span>
+        </h3>
+        <ul class="dir-list">
+          {groups.get(ch)!.map((it) => (
+            <li data-n={it.name.toLowerCase()} data-t={it.type}>
+              <a href={it.href}>{it.name}</a>
+              <span class="dir-t">{TYPE_LABEL[it.type]?.[hi ? 1 : 0]}</span>
+              {it.city.toLowerCase() !== 'gurgaon' && <span>{displayName(it.city)}</span>}
+              {it.live > 0 && <span class="dir-live">{homes(it.live)}</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>

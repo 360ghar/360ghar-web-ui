@@ -1,0 +1,398 @@
+---
+/**
+ * /compare?ids=1,2,3: homes side by side. Every row is one fact, so values
+ * line up across columns whatever their length. Remove links work without
+ * JavaScript; a small script keeps the saved compare list in step.
+ */
+import type { Property } from '@/lib/api/types';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import { areaSqft, formatDateOnly, homeKind, imageUrl, purposePrice, rupees } from '@/lib/format';
+import Icon from '@/ui/icons/Icon.astro';
+import { headlinePrice, perSqft as factsPerSqft } from '@/features/property/facts';
+import { cardPlace } from '@/features/property/PropertyCardView';
+import { COMPARE_STORE_VERSION, compareHref } from '@/features/search/compare';
+import { isPlaceholderPrice } from '@/features/search/prices';
+import StateBlock from '@/ui/states/StateBlock.astro';
+
+type Props = { ids: number[]; homes: Property[]; failed: boolean; locale: Locale };
+const { ids, homes, failed, locale } = Astro.props;
+const hi = locale === 'hi';
+const L = localizer(locale);
+const without = (id: number) => {
+  const rest = ids.filter((x) => x !== id);
+  return compareHref(rest, locale);
+};
+const dash = '–';
+const num = (v: number | null | undefined) => (v === null || v === undefined ? dash : String(v));
+const money = (v: number | null | undefined) => (v ? rupees(v, locale) : dash);
+const furnish = (v: string | null | undefined) =>
+  v ? ({ furnished: hi ? 'फ़र्निश्ड' : 'Furnished', semi_furnished: hi ? 'सेमी-फ़र्निश्ड' : 'Semi-furnished', unfurnished: hi ? 'अनफ़र्निश्ड' : 'Unfurnished' }[v] ?? v) : dash;
+// `available_from` is a calendar date (YYYY-MM-DD): shown as that day, with no time zone shift.
+const date = (v: string | null | undefined) => (v ? formatDateOnly(v, locale, { day: 'numeric', month: 'short', year: 'numeric' }) : dash);
+
+type Row = { label: string; value: (p: Property) => string; num?: (p: Property) => number | null | undefined; best?: 'min' | 'max'; bestText?: [string, string] };
+const samePurpose = new Set(homes.map((p) => p.purpose)).size === 1;
+const rate = (p: Property) => factsPerSqft(p);
+const perSqft = (p: Property) => {
+  const r = rate(p);
+  return r === null ? dash : `${rupees(r, locale)}${hi ? '/वर्ग फ़ुट' : '/sq ft'}`;
+};
+const LOW: [string, string] = ['Lowest', 'सबसे कम'];
+const MOST: [string, string] = ['Most', 'सबसे ज़्यादा'];
+
+const heads = homes.map((p) => headlinePrice(p, locale));
+
+const rows: Row[] = [
+  { label: hi ? 'कीमत' : 'Price', value: (p) => { const x = headlinePrice(p, locale); return `${x.amount}${x.period ?? ''}`; }, num: (p) => (samePurpose && !isPlaceholderPrice(p) ? purposePrice(p) : null), best: 'min', bestText: LOW },
+  { label: hi ? 'प्रकार' : 'Type', value: (p) => homeKind(p, locale) },
+  { label: hi ? 'जगह' : 'Location', value: (p) => cardPlace(p) || dash },
+  { label: hi ? 'एरिया' : 'Area', value: (p) => areaSqft(p.area_sqft, locale) ?? dash, num: (p) => p.area_sqft, best: 'max', bestText: ['Largest', 'सबसे बड़ा'] },
+  { label: hi ? 'प्रति वर्ग फ़ुट' : 'Price per sq ft', value: perSqft, num: rate, best: 'min', bestText: LOW },
+  { label: hi ? 'बेडरूम' : 'Bedrooms', value: (p) => num(p.bedrooms), num: (p) => p.bedrooms, best: 'max', bestText: MOST },
+  { label: hi ? 'बाथरूम' : 'Bathrooms', value: (p) => num(p.bathrooms), num: (p) => p.bathrooms, best: 'max', bestText: MOST },
+  { label: hi ? 'बालकनी' : 'Balconies', value: (p) => num(p.balconies), num: (p) => p.balconies, best: 'max', bestText: MOST },
+  { label: hi ? 'पार्किंग' : 'Parking', value: (p) => num(p.parking_spaces), num: (p) => p.parking_spaces, best: 'max', bestText: MOST },
+  { label: hi ? 'फ़्लोर' : 'Floor', value: (p) => (p.floor_number !== null && p.floor_number !== undefined ? `${p.floor_number}${p.total_floors ? ` / ${p.total_floors}` : ''}` : dash) },
+  { label: hi ? 'फ़र्निशिंग' : 'Furnishing', value: (p) => furnish(p.furnishing_level) },
+  { label: hi ? 'उम्र' : 'Age', value: (p) => (p.age_of_property !== null && p.age_of_property !== undefined ? (hi ? `${p.age_of_property} साल` : `${p.age_of_property} years`) : dash), num: (p) => p.age_of_property, best: 'min', bestText: ['Newest', 'सबसे नया'] },
+  { label: hi ? 'डिपॉज़िट' : 'Deposit', value: (p) => money(p.security_deposit), num: (p) => p.security_deposit, best: 'min', bestText: LOW },
+  { label: hi ? 'मेंटेनेंस' : 'Maintenance', value: (p) => money(p.maintenance_charges), num: (p) => p.maintenance_charges, best: 'min', bestText: LOW },
+  { label: hi ? 'कब से' : 'Available from', value: (p) => date(p.available_from) },
+];
+
+// A row whose values are all the same tells the homes nothing apart; it can be hidden.
+const same = (values: string[]) => values.every((v) => v === values[0]);
+// The best value in a row: only when at least two homes have a number and the numbers differ.
+function bestOf(r: Row): Set<number> {
+  if (!r.num || !r.best) return new Set();
+  const vals = homes.map((p) => r.num!(p)).map((v) => (typeof v === 'number' && v > 0 ? v : null));
+  const known = vals.filter((v): v is number => v !== null);
+  if (known.length < 2 || same(known.map(String))) return new Set();
+  const target = r.best === 'min' ? Math.min(...known) : Math.max(...known);
+  return new Set(vals.flatMap((v, i) => (v === target ? [i] : [])));
+}
+const table = rows.map((r) => {
+  const values = homes.map((p) => r.value(p));
+  return { label: r.label, values, same: same(values), best: bestOf(r), bestText: r.bestText?.[hi ? 1 : 0] ?? '' };
+});
+
+// Amenities that at least one home has, as yes/no rows.
+const amenityNames = [...new Set(homes.flatMap((p) => (p.amenities ?? []).map((a) => a.title)))].sort();
+const has = (p: Property, name: string) => (p.amenities ?? []).some((a) => a.title === name);
+const amenityRows = amenityNames.map((name) => ({ name, marks: homes.map((p) => has(p, name)) })).map((r) => ({ ...r, same: r.marks.every((m) => m === r.marks[0]) }));
+const differ = table.filter((r) => !r.same).length + amenityRows.filter((r) => !r.same).length;
+const rowCount = table.length + amenityRows.length;
+---
+
+<div class="container-page cmp">
+  <h1 class="cmp-h1">{hi ? 'घरों की तुलना' : 'Compare homes'}</h1>
+
+  {
+    failed ? (
+      <StateBlock
+        scene="offline"
+        title={hi ? 'अभी घर लोड नहीं हो सके' : 'We could not load these homes'}
+        body={hi ? 'हमारे सर्वर ने जवाब नहीं दिया। एक मिनट बाद कोशिश करें।' : 'Our server did not answer. Try again in a minute.'}
+        action={{ href: Astro.url.pathname + Astro.url.search, label: hi ? 'फिर कोशिश करें' : 'Try again', icon: 'retry' }}
+      />
+    ) : homes.length < 2 ? (
+      <StateBlock
+        scene="empty"
+        title={homes.length ? (hi ? 'एक और घर चुनें' : 'Pick one more home') : hi ? 'तुलना के लिए घर चुनें' : 'Pick homes to compare'}
+        body={hi ? 'खोज के नतीजों में किसी भी घर पर "तुलना" दबाएँ। 4 घरों तक चुन सकते हैं।' : 'Press Compare on any home in the search results. You can pick up to 4 homes.'}
+        action={{ href: L('/properties'), label: hi ? 'घर देखें' : 'Browse homes', icon: 'search' }}
+      />
+    ) : (
+      <div class="cmp-bar">
+        <p class="cmp-sum">
+          {hi ? (
+            <>
+              <strong class="tabular">{rowCount}</strong> में से <strong class="tabular">{differ}</strong> बातें अलग हैं।
+            </>
+          ) : (
+            <>
+              <strong class="tabular">{differ}</strong> of <strong class="tabular">{rowCount}</strong> facts differ.
+            </>
+          )}
+        </p>
+        <label class="cmp-diff">
+          <input id="cmp-diff" type="checkbox" class="check" />
+          {hi ? 'सिर्फ़ अलग बातें दिखाएँ' : 'Show only differences'}
+        </label>
+      </div>
+      <div class="cmp-scroll" role="region" aria-labelledby="cmp-caption" tabindex="0">
+        <table class="cmp-table" style={`--cols: ${homes.length}`}>
+          <caption id="cmp-caption" class="visually-hidden">
+            {hi ? `${homes.length} घरों की तुलना` : `${homes.length} homes side by side`}
+          </caption>
+          <colgroup>
+            <col class="cmp-label-col" />
+            {homes.map(() => <col />)}
+          </colgroup>
+          <thead>
+            <tr>
+              <td />
+              {homes.map((p, i) => (
+                <th scope="col">
+                  <a class="cmp-home" href={L(`/property/${p.id}`)}>
+                    {p.main_image_url ? <img src={imageUrl(p.main_image_url, 480)} alt="" width="480" height="360" loading="lazy" decoding="async" /> : <span class="cmp-ph" />}
+                    <span class="cmp-price tabular">
+                      {heads[i]!.amount}
+                      {!heads[i]!.onRequest && <span>{heads[i]!.period}</span>}
+                    </span>
+                    <span class="cmp-title">{p.title}</span>
+                  </a>
+                  <a class="cmp-remove" href={without(p.id)} data-remove={p.id}>
+                    <Icon name="close" size={16} />
+                    {hi ? 'हटाएँ' : 'Remove'}
+                    <span class="visually-hidden">{p.title}</span>
+                  </a>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {table.map((r) => (
+              <tr data-same={r.same || undefined}>
+                <th scope="row">{r.label}</th>
+                {r.values.map((v, i) => (
+                  <td class="tabular" data-best={r.best.has(i) || undefined}>
+                    {v}
+                    {r.best.has(i) && <span class="cmp-best">{r.bestText}</span>}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            {amenityRows.map((r) => (
+              <tr data-same={r.same || undefined}>
+                <th scope="row">{r.name}</th>
+                {r.marks.map((m) => (
+                  <td>
+                    {m ? <Icon name="check" size={18} class="cmp-yes" /> : <span class="cmp-no">{dash}</span>}
+                    <span class="visually-hidden">{m ? (hi ? 'हाँ' : 'Yes') : hi ? 'नहीं' : 'No'}</span>
+                  </td>
+                ))}
+              </tr>
+            ))}
+            <tr>
+              <td />
+              {homes.map((p) => (
+                <td>
+                  <a class="btn btn-block" href={L(`/property/${p.id}`)}>
+                    {hi ? 'घर देखें' : 'View home'}
+                    <Icon name="arrow-up-right" size={18} class="arrow" />
+                  </a>
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+  {
+    ids.length > homes.length && !failed && homes.length > 0 && (
+      <p class="cmp-note">{hi ? 'कुछ घर अब लिस्ट नहीं हैं, इसलिए हटा दिए गए।' : 'Some homes are no longer listed, so they are left out.'}</p>
+    )
+  }
+</div>
+
+<script define:vars={{ shown: homes.map((p) => p.id), failed, version: COMPARE_STORE_VERSION }}>
+  // Keep the saved compare list (search tray) equal to what this page shows.
+  try {
+    if (!failed) localStorage.setItem('360ghar:compare', JSON.stringify({ state: { ids: shown }, version }));
+  } catch {
+    // Storage blocked: the tray keeps its old list.
+  }
+</script>
+
+<style>
+  .cmp {
+    padding-block: 1.5rem 4rem;
+  }
+
+  .cmp-h1 {
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Relative, so hidden labels inside the table are clipped by this box. */
+  .cmp-scroll {
+    position: relative;
+    overflow-x: auto;
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+    overscroll-behavior-x: contain;
+  }
+
+  .cmp-scroll:focus-visible {
+    outline: 2px solid var(--color-kesar-600);
+    outline-offset: 2px;
+  }
+
+  .cmp-table {
+    width: 100%;
+    min-width: calc(8.5rem + var(--cols) * 11rem);
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .cmp-table :is(th, td) {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-ink-100);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .cmp-label-col {
+    width: 8.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .cmp-label-col {
+      width: 11rem;
+    }
+  }
+
+  .cmp-table tbody th {
+    color: var(--color-ink-600);
+    font-weight: 600;
+  }
+
+  /* The label column stays in view while the homes scroll sideways. */
+  .cmp-table :is(tbody th, thead td, tbody tr:last-child td:first-child) {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--color-paper);
+  }
+
+  .cmp-table thead th {
+    font-weight: 700;
+  }
+
+  .cmp-home {
+    display: grid;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-ink-950);
+  }
+
+  .cmp-home img,
+  .cmp-ph {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+
+  .cmp-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cmp-sum {
+    color: var(--color-ink-800);
+  }
+
+  .cmp-sum strong {
+    font-family: var(--font-display);
+    color: var(--color-ink-950);
+  }
+
+  .cmp-diff {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 44px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Works without JavaScript: the checkbox hides the rows where every home is the same. */
+  .cmp:has(#cmp-diff:checked) tr[data-same] {
+    display: none;
+  }
+
+  .cmp-table tr[data-same] td {
+    color: var(--color-ink-600);
+  }
+
+  .cmp-table td[data-best] {
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  .cmp-best {
+    display: block;
+    margin-top: 0.125rem;
+    color: var(--color-leaf-700);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  .cmp-price {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .cmp-price span {
+    margin-left: 0.125rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink-600);
+  }
+
+  .cmp-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.6em;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--color-ink-800);
+  }
+
+  .cmp-home:hover .cmp-title {
+    color: var(--color-kesar-700);
+  }
+
+  .cmp-remove {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 44px;
+    color: var(--color-ink-600);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .cmp-remove:hover {
+    color: var(--color-chili-700);
+  }
+
+  .cmp-table :global(.cmp-yes) {
+    color: var(--color-leaf-700);
+  }
+
+  .cmp-no {
+    color: var(--color-ink-400);
+  }
+
+  .cmp-note {
+    margin-top: 1rem;
+    color: var(--color-ink-600);
+  }
+</style>

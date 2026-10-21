@@ -1,0 +1,222 @@
+---
+/** /nri-property-guide. The old body was English only; it stays English on /hi, with Hindi page chrome. */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import { localizer } from '@/lib/i18n/locale';
+import { faqPage } from '@/lib/seo/site';
+import Faq from '@/ui/Faq.astro';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import { howTo, trail } from '@/features/content/shared/schema';
+import Steps from '@/features/content/shared/Steps.astro';
+import { shared } from '@/features/content/shared/text';
+import TableScroll from '@/features/content/shared/TableScroll.astro';
+import PageArt from '@/features/content/shared/PageArt.astro';
+import PageToc from '@/features/content/shared/PageToc.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const hi = locale === 'hi';
+const L = localizer(locale);
+const PATH = '/nri-property-guide';
+
+const faqs = [
+  { q: 'Can an NRI buy agricultural land in India?', a: 'No. Under FEMA regulations, NRIs and OCIs cannot purchase agricultural land, plantation property, or farmhouses in India. They can only buy residential and commercial properties. However, if an NRI inherits agricultural land, they can hold it but cannot purchase it afresh.' },
+  { q: 'Is Power of Attorney mandatory for NRI property purchase?', a: 'Power of Attorney (PoA) is not legally mandatory if the NRI can travel to India for registration. However, it is strongly recommended and practically essential for most NRIs, as property registration, agreement execution, and possession handover often require in-person presence. A specific PoA (not general) registered with the Indian consulate allows a trusted representative to execute documents on your behalf.' },
+  { q: 'What is the TDS rate on NRI property sale?', a: "The buyer must deduct TDS at 20% (plus applicable surcharge and cess) on the capital gains when purchasing property from an NRI seller. For long-term capital gains (property held over 24 months), the rate is 20% with indexation benefits. For short-term gains, the rate is as per the NRI's income tax slab. The buyer must obtain a TDS certificate and the NRI can claim credit while filing returns." },
+  { q: 'How can an NRI get a home loan in India?', a: 'NRIs can avail home loans from most major Indian banks and NBFCs including SBI, HDFC, ICICI, and Axis Bank. The NRI must have an NRO or NRE account, a valid Indian PAN card, and income proof (salary slips, bank statements from the foreign bank). The loan is disbursed only to an NRO account. Most banks fund up to 80% of the property value. The loan must be repaid in INR through the NRO account.' },
+  { q: 'Which banks offer NRI home loans in India?', a: 'Major banks offering NRI home loans include State Bank of India (SBI), HDFC Ltd, ICICI Bank, Axis Bank, Kotak Mahindra Bank, Bank of Baroda, and Punjab National Bank. Each bank has specific eligibility criteria regarding minimum income abroad, country of residence, and employment type. SBI and HDFC typically offer the most NRI-friendly terms with competitive interest rates.' },
+  { q: 'What documents does an NRI need to buy property in India?', a: 'Key documents include: Valid Indian Passport or OCI card, PAN card (mandatory for property transactions), Power of Attorney (if not registering in person), NRO/NRE bank account statements, address proof (both Indian and overseas), income proof (salary slips, tax returns of the foreign country), and passport-size photographs. For registration: sale deed, encumbrance certificate, property tax receipts, and society NOC.' },
+  { q: 'Can an NRI sell inherited property in India?', a: 'Yes. An NRI can sell inherited residential or commercial property in India. The sale proceeds can be repatriated up to USD 1 million per financial year under the Liberalised Remittance Scheme, subject to RBI guidelines. If the inherited property is agricultural land or a farmhouse (which NRIs cannot buy but can inherit), the NRI can sell it only to a resident Indian. TDS at 20% + surcharge applies on sale.' },
+  { q: 'What are FEMA rules for NRI property transactions?', a: 'Under FEMA (Foreign Exchange Management Act, 1999), NRIs and OCIs can purchase any residential or commercial property in India without prior RBI permission. They cannot buy agricultural land, plantations, or farmhouses. Sale proceeds can be repatriated up to the amount originally brought in through banking channels (for purchased properties) or up to USD 1 million per year (for inherited properties). All transactions must be routed through NRO/NRE accounts and comply with FEMA declaration requirements.' },
+];
+
+const steps = [
+  { name: 'Research localities online', text: "Browse 360Ghar's verified listings to compare Gurgaon localities, property types, and price ranges from abroad. Shortlist properties that match your budget and preferences before you plan a trip to India." },
+  { name: 'Appoint Power of Attorney', text: 'Execute a Special Power of Attorney at the Indian Consulate in your country of residence. This authorises a trusted relative or lawyer in India to sign sale agreements, complete documentation, and register the property on your behalf.' },
+  { name: 'Shortlist properties from abroad', text: 'Check photos, layouts, and amenities on 360Ghar. Where a listing has a 360° walkthrough, use it to see every room. Your Relationship Manager can arrange video calls with sellers and answer your questions.' },
+  { name: 'Execute sale agreement via PoA', text: 'Your PoA holder executes the sale agreement, pays the token amount from your NRO account, and coordinates with the seller. Ensure the agreement includes payment schedule, possession date, penalty clauses, and specification commitments.' },
+  { name: 'Register property and complete TDS formalities', text: 'Register the sale deed at the Sub-Registrar office within 4 months of execution. Pay stamp duty (5-7% in Haryana). Ensure the buyer (or seller, if you are selling) deducts TDS at 20% + surcharge and files Form 27Q. File your Indian ITR to claim TDS credit or refunds.' },
+];
+
+const checklist = [
+  { name: 'Power of Attorney', text: 'Execute a Special PoA at the Indian Consulate to authorise a trusted representative in India for agreement execution, registration, and possession handover.' },
+  { name: 'RBI guidelines (FEMA)', text: 'NRIs can buy residential and commercial properties without prior RBI approval under FEMA. Agricultural land, plantations, and farmhouses are not permitted.' },
+  { name: 'PAN card requirement', text: 'A valid Indian PAN card is mandatory for all property transactions. It is required for TDS deduction, registration, and filing income tax returns in India.' },
+  { name: 'TDS on NRI property sales', text: 'When an NRI sells property, the buyer must deduct TDS at 20% plus applicable surcharge and cess. File Form 27Q and obtain a TDS certificate for claiming credit.' },
+  { name: 'NRO account', text: 'Non-Resident Ordinary account is used for all India-based income, rent collection, and property-related payments. Sale proceeds are credited to the NRO account first.' },
+  { name: 'NRE account', text: 'Non-Resident External account holds foreign earnings repatriated to India. Funds from NRE accounts can be used to purchase property. Fully repatriable (principal + interest).' },
+];
+
+const tax = [
+  ['TDS on sale', 'Buyer deducts 20% plus surcharge (15% if income exceeds ₹50L, 25% above ₹1Cr) and 4% health and education cess on NRI property sales. File Form 27Q.'],
+  ['Indexation benefits', 'For long-term capital gains (held more than 24 months), the cost of acquisition is indexed using the Cost Inflation Index (CII) published by CBDT, significantly reducing taxable gains.'],
+  ['DTAA (Double Taxation Avoidance Agreement)', 'India has DTAA with over 90 countries including the USA, UK, Canada, Australia, UAE, and Singapore. NRIs can claim foreign tax credit in their country of residence to avoid being taxed twice on the same income.'],
+  ['Capital gains exemptions', 'Under Sections 54 and 54EC, NRIs can claim exemption by reinvesting capital gains in another residential property (Section 54) or in specified bonds like NHAI/REC (Section 54EC, up to ₹50L).'],
+  ['Repatriation limits', 'Sale proceeds of up to USD 1 million per financial year can be repatriated from NRO account, subject to CA certificate and undertaking to RBI. No limit for NRE-sourced purchases.'],
+];
+
+// Short labels for the contents list (the body is English on both locales).
+const toc = [
+  { id: 'nri-legal', text: 'Legal checklist' },
+  { id: 'nri-virtual', text: 'Shortlist from abroad' },
+  { id: 'nri-steps', text: 'Buying, step by step' },
+  { id: 'nri-tax', text: 'Tax rules' },
+  { id: 'nri-faq', text: shared(locale).faqs },
+];
+
+const name = hi ? 'NRI प्रॉपर्टी गाइड' : 'NRI Property Guide';
+const { crumbs, ld } = trail(locale, [{ name, path: PATH }]);
+const jsonLd = [
+  ld,
+  faqPage(faqs),
+  howTo('How to Buy Property in Gurgaon as an NRI', 'Step-by-step guide for Non-Resident Indians to purchase property in Gurgaon, India, from online research to registration and TDS compliance.', steps),
+];
+const heading = hi ? 'NRI गाइड: विदेश से गुड़गाँव में प्रॉपर्टी खरीदें' : 'NRI Property Guide: Buy Property in Gurgaon from Abroad';
+---
+
+<Content
+  title={t('seo:nriPropertyGuide.title')}
+  description={t('seo:nriPropertyGuide.description')}
+  path={PATH}
+  heading={heading}
+  lead={hi ? 'कानूनी ज़रूरतें, FEMA नियम, टैक्स और विदेश से शॉर्टलिस्ट करने का तरीका। नीचे की जानकारी अंग्रेज़ी में है।' : 'Legal requirements, FEMA compliance, tax rules and how to shortlist from abroad, for buying property in Gurgaon as a Non-Resident Indian.'}
+  crumbs={crumbs}
+  jsonLd={jsonLd}
+  wide
+  newsletter
+>
+  <PageArt slot="head" scene="plane" />
+  <PageToc items={toc.map((x) => ({ ...x, lang: hi && x.id !== 'nri-faq' ? 'en' : undefined }))} title={shared(locale).onThisPage}>
+  <div lang={hi ? 'en' : undefined}>
+    <h2 id="nri-legal">Legal checklist for NRI property purchase</h2>
+    <p>Before buying property in Gurgaon, NRIs must comply with specific legal and regulatory requirements under FEMA and Indian tax law.</p>
+    <ul class="nri-check" role="list">
+      {
+        checklist.map((c) => (
+          <li>
+            <h3>
+              <Icon name="check" size={20} />
+              {c.name}
+            </h3>
+            <p>{c.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="nri-vr">
+      <Paper seed="nri-vr" tone="mist-100" depth={2} innerClass="nri-vr-inner" as="aside">
+        <Icon name="tour" size={32} class="nri-vr-icon" />
+        <div>
+          <h2 id="nri-virtual" class="nri-vr-title">Shortlist properties from abroad</h2>
+          <p>
+            Check photos, layouts, and amenities from anywhere in the world. Where a listing has a 360° walkthrough, you can go through every room without a trip to India. Your Relationship Manager can arrange video calls with the owner for the homes you shortlist.
+          </p>
+        </div>
+      </Paper>
+    </div>
+
+    <h2 id="nri-steps">Step-by-step NRI property buying process</h2>
+    <Steps items={steps} />
+
+    <h2 id="nri-tax">Tax implications for NRI property transactions</h2>
+    <TableScroll label="Tax implications for NRIs">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Tax aspect</th>
+            <th scope="col">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            tax.map(([k, v]) => (
+              <tr>
+                <th scope="row" class="nri-tax-k">{k}</th>
+                <td>{v}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </TableScroll>
+
+    <h2 id="nri-faq">{shared(locale).faqs}</h2>
+    <Faq items={faqs} open={0} />
+  </div>
+
+  <div class="page-actions">
+    <a class="btn btn-primary btn-lg" href={L('/properties')}>
+      {t('policies:gurugramGuide.browseProperties')}
+      <Icon name="arrow-up-right" size={18} class="arrow" />
+    </a>
+    <a class="link" href={L('/contact?subject=NRI%20property%20purchase')}>{t('common:nav.contact')}</a>
+  </div>
+  </PageToc>
+</Content>
+
+<style>
+  ul.nri-check {
+    display: grid;
+    gap: 1.25rem 2rem;
+    margin-top: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 48rem) {
+    ul.nri-check {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .nri-check > li {
+    margin: 0;
+    max-width: none;
+  }
+
+  .nri-check h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .nri-check h3 :global(svg) {
+    color: var(--color-leaf-700);
+  }
+
+  .nri-vr {
+    margin-top: 2.5rem;
+  }
+
+  .nri-vr :global(.nri-vr-inner) {
+    display: grid;
+    gap: 0.75rem 1.25rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  @media (min-width: 40rem) {
+    .nri-vr :global(.nri-vr-inner) {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+  }
+
+  .nri-vr :global(.nri-vr-icon) {
+    color: var(--color-kesar-700);
+  }
+
+  .nri-vr .nri-vr-title {
+    margin: 0 0 0.5rem;
+  }
+
+  .nri-vr p {
+    color: var(--color-ink-950);
+  }
+
+  .nri-tax-k {
+    min-width: 11rem;
+    background: transparent;
+  }
+</style>

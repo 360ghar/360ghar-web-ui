@@ -1,0 +1,162 @@
+---
+/**
+ * /bank-auctions/:id. The countdown is computed on the server and a small
+ * script refreshes it in the browser (the page is CDN-cached for an hour).
+ * Only fields the API returns are shown (backend-gaps X12, R3).
+ */
+import { compactPrice, rupees } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizePath } from '@/lib/i18n/locale';
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/site';
+import Icon from '@/ui/icons/Icon.astro';
+import Paper from '@/ui/Paper.astro';
+import { isCourt, type Auction } from './api';
+import AuctionAlertIsland from './AuctionAlert';
+import DataHubPage from './DataHubPage.astro';
+import { hubName } from './pages';
+import { countdownText, daysUntil, fmtDate } from './format';
+import { label, text } from './text';
+
+type Props = { locale: Locale; a: Auction; banks: string[] };
+const { locale, a, banks } = Astro.props;
+const t = text(locale);
+const hi = locale === 'hi';
+const court = isCourt(a);
+// Court and bank rows have separate id spaces, so a court auction has its own path.
+const path = court ? `/bank-auctions/court/${a.id}` : `/bank-auctions/${a.id}`;
+const who = court ? (a.court_name ?? null) : a.bank_name;
+const desc = a.property_description || label(t.types, a.property_type) || (hi ? 'प्रॉपर्टी नीलामी' : 'Property auction');
+const address = court ? a.locality : a.full_address;
+const days = daysUntil(a.auction_date);
+const date = fmtDate(a.auction_date, locale, 'long');
+const kind = court ? t.auTypes.court : t.auTypes.bank;
+const reserve = a.reserve_price ? compactPrice(a.reserve_price, 'en') : 'TBD';
+
+const facts: [string, string | null | undefined][] = [
+  [court ? t.adCourt : t.adBank, who],
+  [t.auType, kind],
+  [t.adType, a.property_type ? label(t.types, a.property_type) : null],
+  [t.auReserve, a.reserve_price ? rupees(a.reserve_price, locale) : null],
+  [t.auEmd, !court && a.emd_amount ? rupees(a.emd_amount, locale) : null],
+  // `auction_end_date` is the day the auction closes, not an EMD deadline.
+  [t.adEnds, !court ? fmtDate(a.auction_end_date, locale, 'long') : null],
+  [t.adAddress, address],
+  [t.adCase, court ? a.case_number : null],
+  [t.adBorrower, court ? a.borrower_name : null],
+  [t.adContact, !court ? [a.contact_person, a.contact_phone, a.contact_email].filter(Boolean).join(', ') || null : null],
+];
+
+const event = a.auction_date
+  ? {
+      '@type': 'Event',
+      name: desc,
+      description: `${kind} auction${who ? ` by ${who}` : ''}. Reserve price: ${reserve}.`,
+      startDate: a.auction_date,
+      endDate: a.auction_date,
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      image: DEFAULT_OG_IMAGE,
+      location: address
+        ? { '@type': 'Place', name: address, address: { '@type': 'PostalAddress', streetAddress: address, addressCountry: 'IN' } }
+        : { '@type': 'Place', name: desc, address: { '@type': 'PostalAddress', addressCountry: 'IN' } },
+      ...(who ? { organizer: { '@type': 'Organization', name: who } } : {}),
+      ...(a.reserve_price ? { offers: { '@type': 'Offer', price: a.reserve_price, priceCurrency: 'INR', availability: 'https://schema.org/LimitedAvailability', url: `https://360ghar.com${path}` } } : {}),
+    }
+  : null;
+---
+
+<DataHubPage
+  art="auctions"
+  title={`${desc}: Auction | 360Ghar`}
+  description={`${kind} auction${who ? ` by ${who}` : ''}. Reserve price: ${reserve}. Auction date: ${a.auction_date ? fmtDate(a.auction_date, 'en') : 'TBD'}.`}
+  keywords="bank auction property, SARFAESI auction Gurugram, court ordered sale, property auction detail"
+  path={path}
+  heading={desc}
+  longHeading
+  crumbs={[{ name: hubName('auctions', locale), path: '/bank-auctions' }, { name: t.auctionCrumb(a.id) }]}
+  jsonLd={event ? [event] : []}
+  related={['sources', 'auctions', 'circleRates', 'stampDuty']}
+>
+  <p slot="head" class="dh-meta">{[who, kind].filter(Boolean).join(' · ')}</p>
+
+  <Paper seed={`auction-${a.id}`} tone="mist-100" class="dh-slip-wrap" innerClass="dh-slip">
+    <div class="dh-fig">
+      <span class="dh-fig-label">{t.auReserve}</span>
+      <span class="dh-fig-value">{a.reserve_price ? compactPrice(a.reserve_price, locale) : '–'}</span>
+      {a.reserve_price && <span class="dh-fig-note tabular">{rupees(a.reserve_price, locale)}</span>}
+    </div>
+    <div class="dh-fig">
+      <span class="dh-fig-label">{t.auDate}</span>
+      <span class="dh-fig-value">{date ?? t.auNoDate}</span>
+      {
+        days !== null && (
+          <span class="dh-fig-note font-semibold" data-countdown={a.auction_date} data-locale={locale}>
+            {countdownText(days, locale)}
+          </span>
+        )
+      }
+    </div>
+  </Paper>
+
+  <div class="dh-split dh-section">
+    <section class="sheet dh-panel" aria-labelledby="ad-facts">
+      <h2 id="ad-facts" class="dh-panel-title">{hi ? 'नीलामी की जानकारी' : 'Auction details'}</h2>
+      <dl class="dh-dl">
+        {
+          facts
+            .filter(([, v]) => v)
+            .map(([k, v]) => (
+              <>
+                <dt>{k}</dt>
+                <dd>{v}</dd>
+              </>
+            ))
+        }
+      </dl>
+      {
+        a.source_url ? (
+          <a class="link mt-3" href={a.source_url} target="_blank" rel="noopener noreferrer">
+            {t.adNotice}
+            <Icon name="arrow-up-right" size={16} class="arrow" />
+          </a>
+        ) : (
+          <p class="dh-meta mt-3">{t.adNoNotice}</p>
+        )
+      }
+    </section>
+
+    <aside class="sheet dh-panel grid gap-4 content-start">
+      <h2 class="dh-panel-title mb-0">{t.alertTitle}</h2>
+      <p class="text-ink-800">{t.adAlertLead}</p>
+      <div>
+        <AuctionAlertIsland
+          client:idle
+          locale={locale}
+          banks={banks}
+          className="btn btn-primary"
+          defaults={{ bank_name: court ? null : a.bank_name, property_type: a.property_type ?? null }}
+        />
+      </div>
+      <h3 class="font-sans text-base font-bold mt-2">{t.adCheck}</h3>
+      <ul class="grid gap-2 text-ink-800 list-disc pl-5">
+        <li>{hi ? 'बैंक या कोर्ट की साइट पर बिक्री नोटिस पढ़ें।' : 'Read the sale notice on the bank or court site.'}</li>
+        <li>{hi ? 'टाइटल, बकाया और कब्ज़े की स्थिति जाँचें।' : 'Check the title, the unpaid dues and who lives there now.'}</li>
+        <li>{hi ? 'आखिरी तारीख से पहले EMD जमा करें।' : 'Pay the EMD before the deadline.'}</li>
+      </ul>
+      <a class="link" href={localizePath('/auction-sources', locale)}>
+        {t.adSources}
+        <Icon name="arrow-up-right" size={16} class="arrow" />
+      </a>
+    </aside>
+  </div>
+</DataHubPage>
+
+<script>
+  import { countdownText, daysUntil } from './format';
+
+  // The CDN keeps the page for an hour, so the day count can be stale after midnight.
+  for (const el of document.querySelectorAll<HTMLElement>('[data-countdown]')) {
+    const text = countdownText(daysUntil(el.dataset.countdown), el.dataset.locale === 'hi' ? 'hi' : 'en');
+    if (text) el.textContent = text;
+  }
+</script>

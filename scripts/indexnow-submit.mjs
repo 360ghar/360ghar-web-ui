@@ -1,183 +1,82 @@
 #!/usr/bin/env node
-import fs from 'node:fs';
-import path from 'node:path';
+/**
+ * IndexNow: tell Bing and other engines which URLs changed.
+ *
+ * URL sources (pick one; default is --base https://360ghar.com):
+ *   --base <url>   read <url>/sitemap.xml and every sitemap it lists (GET requests only)
+ *   --file <path>  one URL per line
+ *   --url <url>    one URL (repeat the flag with a comma list)
+ * The sitemap builders in src/features/feeds need Astro's aliases and the API, so the live sitemap index is the source instead. It is the same output.
+ *
+ * DRY RUN by default: nothing is POSTed. Add --submit to send.
+ * The key is public. Its file is public/ba96fa507cb7447aa74f5ddd2f516a6d.txt (checked before a submit).
+ */
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { helpText, parseArgs } from './lib/args.mjs';
+import { chunk, selectUrls, submitBatches, urlsFromSitemapIndex } from './lib/indexnow.mjs';
 
-const cwd = process.cwd();
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const KEY = process.env.INDEXNOW_API_KEY || 'ba96fa507cb7447aa74f5ddd2f516a6d';
+const SPEC = {
+  base: { type: 'string', default: 'https://360ghar.com', help: 'Site to read the sitemap index from. Also the host of the submitted URLs.' },
+  file: { type: 'string', help: 'Read URLs from a text file (one per line) instead of the sitemap.' },
+  url: { type: 'string', help: 'Submit this URL (comma list allowed) instead of the sitemap.' },
+  include: { type: 'string', help: 'Keep only URL paths that match this regular expression, for example "^/blog".' },
+  limit: { type: 'number', help: 'Submit at most this many URLs.' },
+  'batch-size': { type: 'number', default: 1000, help: 'URLs per POST (IndexNow allows up to 10,000).' },
+  endpoint: { type: 'string', default: process.env.INDEXNOW_ENDPOINT || 'https://api.indexnow.org/IndexNow', help: 'IndexNow endpoint.' },
+  submit: { type: 'boolean', default: false, help: 'Send the POST requests. Without it, only a summary is printed.' },
+  strict: { type: 'boolean', default: false, help: 'Exit with code 1 if any batch fails.' },
+  help: { type: 'boolean', default: false, help: 'Show this text.' },
+};
 
-const DEFAULT_SITE_URL = 'https://360ghar.com';
-const SITE_URL = (process.env.SITE_URL || process.env.VITE_SITE_URL || DEFAULT_SITE_URL).replace(/\/$/, '');
-const HOST = (() => {
-  try {
-    return new URL(SITE_URL).hostname;
-  } catch {
-    return new URL(DEFAULT_SITE_URL).hostname;
-  }
-})();
-
-const INDEXNOW_KEY =
-  process.env.INDEXNOW_API_KEY ||
-  'ba96fa507cb7447aa74f5ddd2f516a6d';
-const INDEXNOW_ENDPOINT =
-  process.env.INDEXNOW_ENDPOINT ||
-  'https://api.indexnow.org/IndexNow';
-const KEY_LOCATION =
-  process.env.INDEXNOW_KEY_LOCATION ||
-  `${SITE_URL}/${INDEXNOW_KEY}.txt`;
-const SOURCE_DIR =
-  process.env.INDEXNOW_SOURCE_DIR ||
-  (fs.existsSync(path.join(cwd, 'dist')) ? path.join(cwd, 'dist') : path.join(cwd, 'public'));
-const DRY_RUN = process.env.INDEXNOW_DRY_RUN === '1';
-const ENFORCE = process.env.INDEXNOW_ENFORCE_SUCCESS === '1';
-const BATCH_SIZE = Math.max(1, Number.parseInt(process.env.INDEXNOW_BATCH_SIZE || '1000', 10));
-
-function readSitemapFiles(directory) {
-  const sitemapDir = path.resolve(directory);
-  if (!fs.existsSync(sitemapDir)) {
-    console.warn(`[indexnow] Source directory not found: ${sitemapDir}`);
-    return [];
-  }
-
-  const files = fs
-    .readdirSync(sitemapDir, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && /^sitemap.*\.xml$/i.test(entry.name))
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((entry) => path.join(sitemapDir, entry.name));
-
-  if (files.length === 0) {
-    console.warn(`[indexnow] No sitemap*.xml files found in ${sitemapDir}`);
-  }
-
-  return files;
+let args;
+try {
+  args = parseArgs(process.argv.slice(2), SPEC);
+} catch (e) {
+  console.error(e.message);
+  process.exit(2);
+}
+if (args.help) {
+  console.log(helpText('indexnow-submit', 'submit changed URLs to IndexNow (dry run unless --submit).', SPEC, ['Env: INDEXNOW_API_KEY (default: the key in public/), INDEXNOW_ENDPOINT.']));
+  process.exit(0);
 }
 
-function extractUrlsFromXml(xmlContent) {
-  const locRegex = /<loc>(.*?)<\/loc>/gis;
-  const urls = [];
-
-  for (const match of xmlContent.matchAll(locRegex)) {
-    const raw = match?.[1]?.trim();
-    if (!raw) continue;
-
-    const url = raw.replace(/&amp;/g, '&');
-    try {
-      new URL(url);
-    } catch {
-      continue;
-    }
-
-    if (url.toLowerCase().endsWith('.xml')) continue;
-    urls.push(url);
-  }
-
-  return urls;
+const base = args.base.replace(/\/+$/, '');
+const host = new URL(base).hostname;
+let raw;
+try {
+  if (args.file) raw = readFileSync(args.file, 'utf8').split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+  else if (args.url) raw = args.url.split(',').map((u) => u.trim());
+  else raw = await urlsFromSitemapIndex(base);
+} catch (e) {
+  console.error(`indexnow: could not read URLs: ${e.message}`);
+  process.exit(1);
 }
 
-function collectIndexNowUrls(sitemapFiles) {
-  const seen = new Set();
-  const urls = [];
+const urls = selectUrls(raw, { host, include: args.include ? new RegExp(args.include) : undefined, limit: args.limit });
+const size = Math.min(Math.max(1, args['batch-size']), 10_000);
+const batches = chunk(urls, size);
+console.log(`indexnow: ${urls.length} URL(s) for ${host} in ${batches.length} batch(es). Endpoint: ${args.endpoint}`);
+if (urls.length) console.log(`  first: ${urls[0]}\n  last:  ${urls.at(-1)}`);
 
-  for (const file of sitemapFiles) {
-    let content = '';
-    try {
-      content = fs.readFileSync(file, 'utf8');
-    } catch (error) {
-      console.warn(`[indexnow] Failed to read ${path.basename(file)}: ${error.message}`);
-      continue;
-    }
-
-    const locs = extractUrlsFromXml(content);
-    for (const url of locs) {
-      if (!seen.has(url)) {
-        seen.add(url);
-        urls.push(url);
-      }
-    }
-  }
-
-  return urls;
+const keyFile = join(root, 'public', `${KEY}.txt`);
+if (!existsSync(keyFile) || readFileSync(keyFile, 'utf8').trim() !== KEY) {
+  console.error(`indexnow: key file public/${KEY}.txt is missing or does not hold the key.`);
+  if (args.submit) process.exit(1);
 }
 
-async function submitBatch(urlList) {
-  const payload = {
-    host: HOST,
-    key: INDEXNOW_KEY,
-    keyLocation: KEY_LOCATION,
-    urlList,
-  };
-
-  if (DRY_RUN) {
-    const first = urlList[0];
-    const last = urlList[urlList.length - 1];
-    console.log('[indexnow] DRY RUN: skipping network call.');
-    console.log(`[indexnow] Batch size ${urlList.length}; first=${first}; last=${last}`);
-    return true;
-  }
-
-  const response = await fetch(INDEXNOW_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const responseText = await response.text().catch(() => '<unreadable>');
-    throw new Error(`IndexNow ${response.status} ${response.statusText}: ${responseText}`);
-  }
-
-  return true;
+if (!args.submit) {
+  console.log('Dry run. Nothing was sent. Add --submit to POST.');
+  process.exit(0);
+}
+if (!urls.length) {
+  console.log('Nothing to submit.');
+  process.exit(0);
 }
 
-async function main() {
-  console.log('[indexnow] Starting URL submission...');
-
-  const sitemapFiles = readSitemapFiles(SOURCE_DIR);
-  if (sitemapFiles.length === 0) {
-    console.log('[indexnow] No sitemap files found. Nothing to submit.');
-    return;
-  }
-
-  const urls = collectIndexNowUrls(sitemapFiles);
-  const sameHostUrls = urls.filter((url) => {
-    try {
-      return new URL(url).hostname === HOST;
-    } catch {
-      return false;
-    }
-  });
-
-  if (sameHostUrls.length === 0) {
-    console.log('[indexnow] No valid same-host URLs found for submission.');
-    return;
-  }
-
-  console.log(`[indexnow] Found ${sameHostUrls.length} URLs across ${sitemapFiles.length} sitemap file(s).`);
-
-  let failed = 0;
-  let success = 0;
-
-  for (let i = 0; i < sameHostUrls.length; i += BATCH_SIZE) {
-    const batch = sameHostUrls.slice(i, i + BATCH_SIZE);
-    const batchIndex = Math.floor(i / BATCH_SIZE) + 1;
-    try {
-      await submitBatch(batch);
-      success += 1;
-      console.log(`[indexnow] Submitted batch #${batchIndex} (${batch.length} URLs).`);
-    } catch (error) {
-      failed += 1;
-      console.warn(`[indexnow] Batch #${batchIndex} failed: ${error.message}`);
-    }
-  }
-
-  if (failed > 0) {
-    console.warn(`[indexnow] Submission finished with ${failed} failed batch(es) and ${success} successful batch(es).`);
-    if (ENFORCE) process.exitCode = 1;
-    return;
-  }
-
-  console.log('[indexnow] Submission complete.');
-}
-
-main().catch((error) => {
-  console.error('[indexnow] Error:', error.message);
-  process.exitCode = 1;
-});
+const { ok, failed } = await submitBatches(batches, { host, key: KEY, keyLocation: `${base}/${KEY}.txt` }, { endpoint: args.endpoint, log: (m) => console.log(`indexnow: ${m}`) });
+console.log(`indexnow: done. ${ok} batch(es) accepted, ${failed} failed.`);
+if (failed && args.strict) process.exit(1);

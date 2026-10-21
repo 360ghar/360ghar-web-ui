@@ -1,0 +1,732 @@
+---
+/**
+ * Lab hero 1, "Walk in". A doorway cut in the wall; through it, the real room
+ * photos of one listing, one room at a time. The room buttons are radios, so
+ * they switch rooms without JavaScript; the script only adds drag to look
+ * around (and arrow keys on the doorway). A paper tag on a string carries the
+ * price and links to the home. The search sheet is the doorstep.
+ */
+import HeroSearch from '@/features/search/HeroSearch';
+import type { Property } from '@/lib/api/types';
+import { homeKind, imageUrl, listingPrice, placeLine, srcSet } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
+import type { Room } from './load';
+import { ROOM_NAMES } from './rooms';
+
+type Props = { locale: Locale; home: Property; rooms: Room[] };
+const { locale, home, rooms } = Astro.props;
+const L = localizer(locale);
+const price = listingPrice(home, locale);
+const kind = homeKind(home, locale);
+const hi = locale === 'hi';
+/** Four rooms: two doors left of the main one, two right. */
+const minis = rooms.slice(0, 4);
+const c = hi
+  ? { title: 'गुरुग्राम के एक असली घर में चलिए', rooms: 'कमरा चुनें', drag: 'घूमकर देखने के लिए खींचें', open: 'यह घर खोलें', door: (k: string) => `${k} के कमरे` }
+  : { title: 'Walk into a real Gurugram home', rooms: 'Pick a room', drag: 'Drag to look around', open: 'Open this home', door: (k: string) => `Rooms of the ${k}` };
+---
+
+<section class="walk" aria-labelledby="walk-title" data-walk>
+  <div class="walk-wall">
+    <h1 id="walk-title" class="visually-hidden">{c.title}</h1>
+    <fieldset class="walk-hall">
+      <legend class="visually-hidden">{c.rooms}</legend>
+      {
+        minis.map((r, i) => (
+          <label class:list={['walk-mini', i < 2 ? 'is-left' : 'is-right', (i === 0 || i === 3) && 'is-far']}>
+            <input type="radio" name="walk-room" value={i} checked={i === 0} />
+            <span class="walk-mini-frame">
+              <img src={imageUrl(r.url, 320)} alt="" width={320} height={240} loading="lazy" decoding="async" />
+            </span>
+            <span class="walk-mini-name">{ROOM_NAMES[locale][r.group]}</span>
+          </label>
+        ))
+      }
+      <div class="walk-stage">
+        <svg class="walk-arch-text" viewBox="0 0 600 300" aria-hidden="true">
+          <path id="walk-arc" d="M 44 300 A 256 256 0 0 1 556 300" fill="none" />
+          <text><textPath href="#walk-arc" startOffset="50%" text-anchor="middle">{c.title}</textPath></text>
+        </svg>
+        <div class="walk-frame">
+          <div class="walk-door" tabindex="0" role="group" aria-label={`${c.door(kind)}. ${c.drag}`} data-walk-door>
+            {
+              minis.map((r, i) => (
+                <img
+                  class="walk-photo"
+                  data-i={i}
+                  src={imageUrl(r.url, 960)}
+                  srcset={srcSet(r.url, [480, 768, 960, 1280])}
+                  sizes="(min-width: 48rem) 26rem, 70vw"
+                  alt={`${ROOM_NAMES[locale][r.group]}, ${kind}, ${home.locality ?? ''}`}
+                  width={960}
+                  height={720}
+                  loading={i ? 'lazy' : 'eager'}
+                  fetchpriority={i ? 'auto' : 'high'}
+                  decoding="async"
+                  draggable="false"
+                />
+              ))
+            }
+          </div>
+        </div>
+        <a class="walk-tag" href={L(`/property/${home.id}`)}>
+          <svg class="walk-string" viewBox="0 0 20 64" aria-hidden="true"><circle class="walk-nail" cx="10" cy="4" r="3.5" /><path d="M 10 4 L 10 62" /></svg>
+          <span class="walk-tag-card">
+            <span class="walk-tag-price tabular">
+              {price.amount}{price.period ? <small>{price.period}</small> : null}
+            </span>
+            <span class="walk-tag-kind">{kind}</span>
+            <span class="walk-tag-place">{placeLine(home)}</span>
+            <span class="walk-tag-open">
+              {c.open}
+              <Icon name="arrow-up-right" size={14} />
+            </span>
+          </span>
+        </a>
+      </div>
+    </fieldset>
+    <div class="walk-floor">
+      <span class="walk-light" aria-hidden="true"></span>
+      <span class="walk-hint" aria-hidden="true">
+        <Icon name="arrow-left" size={14} />
+        {c.drag}
+        <Icon name="arrow-right" size={14} />
+      </span>
+    </div>
+  </div>
+  <div class="container-page walk-step">
+    <div class="walk-step-sheet">
+      <HeroSearch client:load locale={locale} />
+    </div>
+  </div>
+</section>
+
+<script>
+  // Drag (or arrow keys) moves the photo inside the doorway. The first touch stops the opening look-around.
+  for (const root of document.querySelectorAll<HTMLElement>('[data-walk]')) {
+    const door = root.querySelector<HTMLElement>('[data-walk-door]');
+    if (!door) continue;
+    let pan = 50;
+    const set = (v: number) => {
+      pan = Math.min(100, Math.max(0, v));
+      root.dataset.touched = '';
+      root.style.setProperty('--pan', `${pan}%`);
+    };
+    let from: { x: number; pan: number } | null = null;
+    door.addEventListener('pointerdown', (e) => {
+      from = { x: e.clientX, pan };
+      door.setPointerCapture(e.pointerId);
+    });
+    door.addEventListener('pointermove', (e) => {
+      if (!from) return;
+      // A drag across the whole doorway moves the photo about one and a half times its hidden width.
+      set(from.pan - ((e.clientX - from.x) / door.clientWidth) * 150);
+    });
+    const end = () => (from = null);
+    door.addEventListener('pointerup', end);
+    door.addEventListener('pointercancel', end);
+    door.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        set(pan + (e.key === 'ArrowLeft' ? -10 : 10));
+      }
+    });
+    // A new room starts from the middle.
+    root.addEventListener('change', (e) => {
+      if ((e.target as HTMLInputElement).name !== 'walk-room') return;
+      set(50);
+      root.dataset.swing = root.dataset.swing === '1' ? '0' : '1';
+    });
+  }
+</script>
+
+<style>
+  @property --pan {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 50%;
+  }
+
+  .walk {
+    --pan: 50%;
+    --wall-h: max(32rem, calc(100svh - 64px - 4.5rem));
+    position: relative;
+  }
+
+  /* The wall: sage card stock with grain. The doorway stands on a deeper floor. */
+  .walk-wall {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    min-height: var(--wall-h);
+    padding-top: 4.5rem;
+    background: var(--grain), var(--color-mist-100);
+    overflow: clip;
+  }
+
+  .walk-floor {
+    align-self: stretch;
+    display: flex;
+    justify-content: center;
+    margin-top: 1.25rem;
+    padding: 0 1rem 5.25rem;
+    background: var(--grain), var(--color-mist-200);
+  }
+
+  @media (min-width: 48rem) {
+    .walk-floor {
+      padding-bottom: 6rem;
+    }
+  }
+
+  /* Wide screens: the doors stand on the floor itself. */
+  @media (min-width: 80rem) {
+    .walk-floor {
+      margin-top: 0;
+    }
+  }
+
+  .walk-floor {
+    position: relative;
+  }
+
+  .walk-floor > :not(.walk-light) {
+    position: relative;
+  }
+
+  /* Light from the room falls through the doorway onto the floor: as wide as the opening, spreading as it comes forward. */
+  .walk-light {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 26rem;
+    height: 100%;
+    translate: -50% 0;
+    background: linear-gradient(to bottom, rgb(255 244 236 / 0.7), rgb(255 244 236 / 0.25) 45%, rgb(255 244 236 / 0) 85%);
+    clip-path: polygon(6% 0, 94% 0, 130% 100%, -30% 100%);
+    mask: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+    pointer-events: none;
+  }
+
+  @media (min-width: 80rem) {
+    .walk-light {
+      display: block;
+      width: min(26rem, calc((var(--wall-h) - 12rem) * 0.66));
+    }
+  }
+
+  .walk-stage {
+    position: relative;
+    /* Door width: fits the wall height (minus title room and rooms row), never wider than the screen allows. */
+    width: min(60vw, 26rem, calc((var(--wall-h) - 19rem) * 0.66));
+    min-width: 12rem;
+  }
+
+  @media (min-width: 80rem) {
+    .walk-stage {
+      width: min(26rem, calc((var(--wall-h) - 12rem) * 0.66));
+    }
+  }
+
+  /* The title runs along the arch, one radius out from the frame. */
+  .walk-arch-text {
+    position: absolute;
+    left: -18.18%;
+    top: 0;
+    width: 136.36%;
+    margin-top: -18.18%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .walk-arch-text text {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    fill: var(--color-ink-950);
+  }
+
+  /* The frame: white card with thickness on the inside edge (the reveal). */
+  .walk-frame {
+    --tint: 20 45 38;
+    position: relative;
+    aspect-ratio: 0.66;
+    padding: 4.5%;
+    background: var(--color-paper);
+    border-radius: 999px 999px 4px 4px;
+    box-shadow: 0 1px 1px rgb(var(--tint) / 0.08), 0 10px 18px -10px rgb(var(--tint) / 0.28);
+  }
+
+  .walk-door {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 999px 999px 2px 2px;
+    background: var(--color-mist-300);
+    box-shadow: inset 6px 8px 10px -6px rgb(var(--tint) / 0.45);
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .walk-door:active {
+    cursor: grabbing;
+  }
+
+  .walk-door:focus-visible {
+    outline: 3px solid var(--color-kesar-700);
+    outline-offset: 4px;
+  }
+
+  .walk-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--pan) 50%;
+    opacity: 0;
+    transition: opacity 260ms var(--ease-paper);
+  }
+
+  /* The inner shadow of the reveal sits over the photo. */
+  .walk-door::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 7px 9px 12px -8px rgb(var(--tint) / 0.5);
+    pointer-events: none;
+  }
+
+  /* The checked room shows. With no radio checked (never), the first one does. */
+  .walk-photo[data-i='0'],
+  .walk:has(input[value='1']:checked) .walk-photo[data-i='1'],
+  .walk:has(input[value='2']:checked) .walk-photo[data-i='2'],
+  .walk:has(input[value='3']:checked) .walk-photo[data-i='3'],
+  .walk:has(input[value='4']:checked) .walk-photo[data-i='4'],
+  .walk:has(input[value='5']:checked) .walk-photo[data-i='5'] {
+    opacity: 1;
+  }
+
+  .walk:has(input[name='walk-room']:not([value='0']):checked) .walk-photo[data-i='0'] {
+    opacity: 0;
+  }
+
+  /* On arrival the photo looks left, right, and back once. Off once touched, and for reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    .walk:not([data-touched]) .walk-photo[data-i='0'] {
+      animation: walk-look 7s var(--ease-paper) 1.2s 1 both;
+    }
+
+    @keyframes walk-look {
+      0%,
+      100% {
+        object-position: 50% 50%;
+      }
+      35% {
+        object-position: 15% 50%;
+      }
+      70% {
+        object-position: 85% 50%;
+      }
+    }
+  }
+
+  /* ---------- The tag on its string ---------- */
+
+  /* The tag hangs from a nail on the wall, right of the frame; on phones it overlaps the frame's lower edge. */
+  .walk-tag {
+    --tint: 20 45 38;
+    position: absolute;
+    top: 48%;
+    left: calc(100% - 6.5rem);
+    display: block;
+    width: 9rem;
+    color: var(--color-ink-950);
+    text-decoration: none;
+    transform-origin: 50% -3.6rem;
+  }
+
+  @media (min-width: 48rem) {
+    .walk-tag {
+      left: calc(100% - 4rem);
+      width: 11rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .walk-tag {
+      top: 30%;
+      left: calc(100% + 2rem);
+    }
+  }
+
+  .walk-string {
+    position: absolute;
+    left: calc(50% - 0.625rem);
+    top: -3.6rem;
+    width: 1.25rem;
+    height: 4rem;
+    overflow: visible;
+  }
+
+  .walk-string path {
+    fill: none;
+    stroke: var(--color-ink-600);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .walk-nail {
+    fill: var(--color-ink-800);
+  }
+
+  /* Luggage-tag silhouette: the top corners are cut, a hole is punched where the string ties. */
+  .walk-tag-card {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1.7rem 0.9rem 0.9rem;
+    background: var(--color-kesar-50);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    clip-path: polygon(1.4rem 0, calc(100% - 1.4rem) 0, 100% 1.4rem, 100% 100%, 0 100%, 0 1.4rem);
+    mask: radial-gradient(circle 0.34rem at 50% 0.85rem, transparent 96%, #000 100%);
+    text-align: center;
+    filter: drop-shadow(1px 3px 2px rgb(var(--tint) / 0.22));
+  }
+
+  .walk-tag:hover .walk-tag-card {
+    background: var(--color-kesar-100);
+  }
+
+  .walk-tag:focus-visible {
+    outline: none;
+  }
+
+  .walk-tag:focus-visible .walk-tag-card {
+    background: var(--color-kesar-100);
+    box-shadow: inset 0 0 0 3px var(--color-kesar-700);
+  }
+
+  .walk-tag-price {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 1rem + 0.8vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .walk-tag-price small {
+    margin-left: 0.15rem;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-ink-600);
+  }
+
+  .walk-tag-kind {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .walk-tag-place {
+    font-size: 0.85rem;
+    color: var(--color-ink-600);
+  }
+
+  /* Phones: a small tag, price and kind only. The whole tag is still the link. */
+  @media (max-width: 47.99rem) {
+    .walk-tag {
+      width: 7.5rem;
+      left: calc(100% - 5.5rem);
+      top: 56%;
+    }
+
+    .walk-tag-card {
+      padding: 1.5rem 0.6rem 0.7rem;
+    }
+
+    .walk-tag-place,
+    .walk-tag-open {
+      display: none !important;
+    }
+
+    .walk-tag-kind {
+      font-size: 0.8rem;
+      line-height: 1.25;
+    }
+  }
+
+  .walk-tag-open {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-kesar-700);
+  }
+
+  .walk-tag:hover .walk-tag-open :global(svg) {
+    transform: translate(2px, -2px);
+  }
+
+  .walk-tag-open :global(svg) {
+    transition: transform 160ms var(--ease-paper);
+  }
+
+  /* The tag swings when the page opens and when you change rooms (the door moved), then hangs still. */
+  @media (prefers-reduced-motion: no-preference) {
+    .walk-tag {
+      animation: walk-swing 2.4s var(--ease-paper) 0.4s 1 both;
+    }
+
+    .walk[data-swing='1'] .walk-tag {
+      animation-name: walk-swing-b;
+    }
+
+    @keyframes walk-swing {
+      0% {
+        rotate: 0deg;
+      }
+      18% {
+        rotate: -5deg;
+      }
+      42% {
+        rotate: 3deg;
+      }
+      66% {
+        rotate: -1.4deg;
+      }
+      84% {
+        rotate: 0.5deg;
+      }
+      100% {
+        rotate: 0deg;
+      }
+    }
+
+    /* Same swing under a second name, so the animation restarts on each room change. */
+    @keyframes walk-swing-b {
+      0% {
+        rotate: 0deg;
+      }
+      18% {
+        rotate: -5deg;
+      }
+      42% {
+        rotate: 3deg;
+      }
+      66% {
+        rotate: -1.4deg;
+      }
+      84% {
+        rotate: 0.5deg;
+      }
+      100% {
+        rotate: 0deg;
+      }
+    }
+  }
+
+  /* ---------- The hall: small doors for the other rooms ---------- */
+
+  /* Phones and tablets: the main door, then the four rooms in a row under it. */
+  .walk-hall {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    justify-content: center;
+    width: min(100%, 24rem);
+    align-items: end;
+    gap: 1.75rem 0.9rem;
+    padding: 0 1rem;
+  }
+
+  .walk-stage {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+  }
+
+  /* Wide screens: a corridor. The main door in the middle, two doors each side, all standing on the floor. */
+  @media (min-width: 80rem) {
+    .walk-hall {
+      grid-template-columns: 1fr 1fr auto 1fr 1fr;
+      gap: 0;
+      width: min(100%, 84rem);
+      padding: 0 2rem;
+    }
+
+    .walk-stage {
+      grid-column: 3;
+    }
+
+    .walk-mini.is-left {
+      grid-row: 1;
+      grid-column: span 1;
+    }
+
+    .walk-mini:nth-of-type(1) {
+      grid-column: 1;
+    }
+
+    .walk-mini:nth-of-type(2) {
+      grid-column: 2;
+    }
+
+    .walk-mini:nth-of-type(3) {
+      grid-column: 4;
+    }
+
+    .walk-mini:nth-of-type(4) {
+      grid-column: 5;
+    }
+
+    .walk-mini {
+      grid-row: 1;
+      justify-self: center;
+    }
+
+    /* Room for the tag between the main door and the right-hand doors. */
+    .walk-mini.is-right:not(.is-far) {
+      margin-left: 11rem;
+    }
+
+    .walk-mini.is-left:not(.is-far) {
+      margin-right: 2rem;
+    }
+  }
+
+  .walk-mini {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    width: 100%;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  @media (min-width: 80rem) {
+    .walk-mini {
+      width: 8.5rem;
+    }
+
+    .walk-mini.is-far {
+      width: 7rem;
+    }
+  }
+
+  .walk-mini input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  .walk-mini-frame {
+    width: 100%;
+    aspect-ratio: 0.66;
+    padding: 6%;
+    background: var(--color-paper);
+    border-radius: 999px 999px 3px 3px;
+    box-shadow: 0 1px 1px rgb(20 45 38 / 0.08), 0 5px 10px -6px rgb(20 45 38 / 0.26);
+  }
+
+  .walk-mini-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 999px 999px 2px 2px;
+    background: var(--color-mist-300);
+    transition: filter 160ms;
+  }
+
+  /* The room you are in: its small door is dimmed (you are standing in it), the name is bold. */
+  .walk-mini input:checked ~ .walk-mini-frame img {
+    filter: saturate(0.25) brightness(0.92);
+  }
+
+  .walk-mini:hover .walk-mini-frame {
+    background: var(--color-kesar-50);
+  }
+
+  .walk-mini-name {
+    margin-top: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--color-ink-600);
+  }
+
+  /* Wide screens: the names lie on the floor, under the doors. */
+  @media (min-width: 80rem) {
+    .walk-mini-name {
+      position: absolute;
+      top: calc(100% + 0.9rem);
+      font-size: 0.95rem;
+    }
+  }
+
+  .walk-mini input:checked ~ .walk-mini-name {
+    font-weight: 750;
+    color: var(--color-ink-950);
+  }
+
+  .walk-mini input:focus-visible ~ .walk-mini-frame {
+    outline: 3px solid var(--color-kesar-700);
+    outline-offset: 3px;
+  }
+
+  .walk-hint {
+    display: none;
+  }
+
+  @media (min-width: 80rem) {
+    .walk-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 2.75rem;
+      font-size: 0.8rem;
+      color: var(--color-ink-600);
+    }
+  }
+
+  /* ---------- The doorstep: the search sheet crosses the floor edge ---------- */
+
+  .walk-step {
+    position: relative;
+    z-index: 5;
+    margin-top: -4.5rem;
+  }
+
+  .walk-step-sheet {
+    --tint: 20 45 38;
+    max-width: 46rem;
+    margin-inline: auto;
+    padding: 1rem;
+    background: var(--color-paper);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 2px 2px rgb(var(--tint) / 0.06), 0 18px 32px -14px rgb(var(--tint) / 0.24);
+  }
+
+  @media (min-width: 48rem) {
+    .walk-step {
+      margin-top: -5rem;
+    }
+
+    .walk-step-sheet {
+      padding: 1.25rem 1.5rem;
+    }
+  }
+</style>

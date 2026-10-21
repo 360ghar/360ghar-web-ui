@@ -1,0 +1,132 @@
+---
+/** /circle-rate/:slug: the rate as a figure slip, the other types in the sector, the calculator. */
+import { getT } from '@/i18n';
+import { formatNum, rupees } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { localizePath } from '@/lib/i18n/locale';
+import Paper from '@/ui/Paper.astro';
+import type { CircleRate } from './api';
+import DataHubPage from './DataHubPage.astro';
+import RateSkyline from './RateSkyline.astro';
+import { hubName } from './pages';
+import { fmtDate } from './format';
+import StampDuty from './StampDuty';
+import Vignette from '@/ui/paper/Vignette.astro';
+import { label, text } from './text';
+
+/** `ofType`: every sector's rate of this property type, for the skyline. */
+type Props = { locale: Locale; rate: CircleRate; siblings: CircleRate[]; ofType: CircleRate[] };
+const { locale, rate: r, siblings, ofType } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+const hi = locale === 'hi';
+const type = label(t.types, r.property_type);
+const typeEn = label(text('en').types, r.property_type);
+const sqyd = r.rate_per_sqyd ? rupees(r.rate_per_sqyd, locale) : t.crNoRate;
+const effective = fmtDate(r.effective_date, locale, 'long');
+const faqs = [
+  {
+    q: `What is the circle rate for ${r.sector}?`,
+    a: `The current circle rate for ${r.property_type} properties in ${r.sector} is ₹${r.rate_per_sqyd ? formatNum(r.rate_per_sqyd, 'en') : 'N/A'} per square yard as per the ${r.revision_year} revision by IGRS Haryana.`,
+  },
+  {
+    q: `How is stamp duty calculated in ${r.sector}?`,
+    a: 'Stamp duty in Haryana is 7% for male buyers, 5% for female buyers, and 6% for joint ownership. Registration fees are an additional 1% of the property value.',
+  },
+  {
+    q: 'What is the difference between circle rate and market rate?',
+    a: 'Circle rate (DLC rate) is the minimum value set by the government for property registration. The actual market rate (transaction price) is usually higher. Stamp duty is calculated on whichever is higher.',
+  },
+];
+---
+
+<DataHubPage
+  art="circleRates"
+  title={tt('seo:circleRateDetail.titleTemplate', { sector: r.sector, year: r.revision_year, propertyType: typeEn })}
+  description={tt('seo:circleRateDetail.descriptionTemplate', { sector: r.sector, propertyType: r.property_type, rate: r.rate_per_sqyd ? formatNum(r.rate_per_sqyd, 'en') : 'N/A', year: r.revision_year })}
+  keywords={`${r.sector} circle rate, DLC rate ${r.sector}, stamp duty ${r.sector} Gurugram`}
+  path={`/circle-rate/${r.slug}`}
+  heading={t.crDetailH1(r.sector)}
+  crumbs={[
+    { name: hubName('circleRates', locale), path: '/circle-rates' },
+    { name: `${r.sector}, ${type}` },
+  ]}
+  faqs={faqs}
+  related={['circleRates', 'stampDuty', 'zones', 'priceIndex']}
+>
+  <p slot="head" class="dh-meta">{t.crEffective(r.revision_year, effective)}</p>
+
+  <Paper seed={`rate-${r.slug}`} tone="mist-100" class="dh-slip-wrap" innerClass="dh-slip">
+    <div class="dh-fig">
+      <span class="dh-fig-label">{type}, {t.crPerSqyd}</span>
+      <span class="dh-fig-value">{sqyd}</span>
+    </div>
+    <div class="dh-fig">
+      <span class="dh-fig-label">{type}, {t.crPerSqft}</span>
+      <span class="dh-fig-value">{r.rate_per_sqft ? rupees(r.rate_per_sqft, locale) : t.crNoRate}</span>
+    </div>
+    {
+      r.colony && (
+        <div class="dh-fig">
+          <span class="dh-fig-label">{hi ? 'कॉलोनी' : 'Colony'}</span>
+          <span class="dh-fig-note text-lg font-semibold">{r.colony}</span>
+        </div>
+      )
+    }
+  </Paper>
+
+  {
+    siblings.length > 1 && (
+      <section class="dh-section" aria-labelledby="cr-other">
+        <h2 id="cr-other" class="dh-h2">
+          {t.crOther}
+        </h2>
+        <div class="sheet dh-sheet max-w-2xl">
+          <table class="dh-table">
+            <thead>
+              <tr>
+                <th scope="col">{t.crType}</th>
+                <th scope="col" class="num">
+                  ₹ {t.crPerSqyd}
+                </th>
+                <th scope="col" class="num">
+                  ₹ {t.crPerSqft}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {siblings.map((s) => (
+                <tr>
+                  <th scope="row" class="font-normal">
+                    {s.slug === r.slug ? (
+                      <span class="font-bold" aria-current="page">
+                        {label(t.types, s.property_type)}
+                      </span>
+                    ) : (
+                      <a href={localizePath(`/circle-rate/${s.slug}`, locale)}>{label(t.types, s.property_type)}</a>
+                    )}
+                  </th>
+                  <td class="num">{s.rate_per_sqyd ? rupees(s.rate_per_sqyd, locale) : t.crNoRate}</td>
+                  <td class="num">{s.rate_per_sqft ? rupees(s.rate_per_sqft, locale) : t.crNoRate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )
+  }
+
+  <RateSkyline locale={locale} rows={ofType} type={r.property_type} highlight={r.sector} headingId="cr-sky" />
+
+  <section class="dh-section" aria-label={t.sdTitle}>
+    <StampDuty
+      client:idle
+      locale={locale}
+      fixed={{ sector: r.sector, property_type: r.property_type, rate_per_sqyd: r.rate_per_sqyd ?? null }}
+      title={t.crDuty(r.sector)}
+    >
+      <Vignette tool="stampDuty" />
+    </StampDuty>
+  </section>
+</DataHubPage>

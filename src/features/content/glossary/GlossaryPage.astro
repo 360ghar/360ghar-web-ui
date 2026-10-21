@@ -1,0 +1,157 @@
+---
+/** /glossary (SSG). The island renders all terms on the server; search and the A-Z filter need JavaScript. */
+import { getT } from '@/i18n';
+import Content from '@/layouts/Content.astro';
+import { localizer, byLocale } from '@/lib/i18n/locale';
+import { faqPage } from '@/lib/seo/site';
+import Icon from '@/ui/icons/Icon.astro';
+import { trail } from '@/features/content/shared/schema';
+import { GLOSSARY } from './data';
+import Glossary from './Glossary';
+import PageArt from '@/features/content/shared/PageArt.astro';
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const L = localizer(locale);
+const PATH = '/glossary';
+
+const H = byLocale(locale, {
+  en: {
+    name: 'Glossary',
+    h1: 'Real Estate Glossary',
+    lead: 'Direct answers to common real estate questions for Gurgaon property buyers, sellers and NRIs.',
+    search: 'Search terms',
+    placeholder: 'RERA, stamp duty, carpet area',
+    showing: '{shown} of {total} terms',
+    clear: 'Clear filters',
+    next: 'Ready to explore verified properties?',
+    browse: 'Browse listings',
+    emi: 'EMI calculator',
+  },
+  hi: {
+    name: 'शब्दावली',
+    h1: 'रियल एस्टेट शब्दावली',
+    lead: 'गुड़गाँव के खरीदारों, विक्रेताओं और NRI के आम सवालों के सीधे जवाब। जवाब अंग्रेज़ी में हैं।',
+    search: 'शब्द खोजें',
+    placeholder: 'RERA, stamp duty, carpet area',
+    showing: '{total} में से {shown} शब्द',
+    clear: 'फ़िल्टर हटाएँ',
+    next: 'वेरिफाइड प्रॉपर्टी देखने के लिए तैयार?',
+    browse: 'लिस्टिंग देखें',
+    emi: 'EMI कैलकुलेटर',
+  },
+});
+
+const s = {
+  search: H.search,
+  placeholder: H.placeholder,
+  letters: t('common:contentSeo.glossaryAzNav'),
+  all: t('common:contentSeo.glossaryAll'),
+  none: t('common:contentSeo.noResults'),
+  showing: H.showing,
+  clear: H.clear,
+};
+const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
+const jsonLd = [ld, faqPage(GLOSSARY.map((e) => ({ q: e.question, a: e.answer })))];
+---
+
+<Content title={t('seo:glossary.title')} description={t('seo:glossary.description')} path={PATH} heading={H.h1} lead={H.lead} crumbs={crumbs} jsonLd={jsonLd} newsletter>
+  <PageArt slot="head" scene="book" />
+  <Glossary client:load locale={locale} entries={GLOSSARY} s={s} />
+
+  <div class="gl-next">
+    <p>{H.next}</p>
+    <a class="btn btn-primary" href={L('/properties?city=Gurgaon')}>
+      {H.browse}
+      <Icon name="arrow-up-right" size={18} class="arrow" />
+    </a>
+    <a class="link" href={L('/emi-calculator')}>{H.emi}</a>
+  </div>
+</Content>
+
+<style>
+  .gl-next {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .gl-next p {
+    flex-basis: 100%;
+    font-weight: 700;
+  }
+
+  /* Island markup (rendered inside the React root). */
+  :global(.gl-tools) {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.gl-search-box) {
+    position: relative;
+  }
+
+  :global(.gl-search-box .input) {
+    padding-left: 2.75rem;
+    min-height: 52px;
+    font-size: 1.0625rem;
+  }
+
+  :global(.gl-search-icon) {
+    position: absolute;
+    left: 0.875rem;
+    top: 50%;
+    translate: 0 -50%;
+    color: var(--color-ink-600);
+    pointer-events: none;
+  }
+
+  :global(.gl-letters) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  :global(.gl-letters .toggle) {
+    min-width: 44px;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+  }
+
+  :global(.gl-count) {
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  :global(.gl-list.faq-list) {
+    margin-top: 0;
+  }
+
+  :global(.gl-q) {
+    display: grid;
+    gap: 0.125rem;
+  }
+
+  :global(.gl-term) {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--color-kesar-700);
+  }
+
+  :global(.gl-question) {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-ink-800);
+  }
+
+  :global(.gl-empty) {
+    display: grid;
+    justify-items: start;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+    color: var(--color-ink-800);
+  }
+</style>

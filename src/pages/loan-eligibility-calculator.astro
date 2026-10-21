@@ -1,0 +1,49 @@
+---
+import { getT } from '@/i18n';
+import { localizePath } from '@/lib/i18n/locale';
+import ToolPage from '@/features/tools/ToolPage.astro';
+import LoanEligibility from '@/features/tools/loan/LoanEligibility';
+import { LOAN_FAQ, LOAN_PAGE } from '@/features/tools/loan/content';
+
+export const prerender = true;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const c = LOAN_PAGE[locale];
+const faqs = [
+  ...LOAN_FAQ[locale],
+  ...['q3', 'q4'].map((k) => ({ q: t(`tools:loanEligibility.faqs.${k}.question`), a: t(`tools:loanEligibility.faqs.${k}.answer`) })),
+];
+const howTo = {
+  name: c.howToName,
+  description: c.howToDesc,
+  steps: [1, 2, 3, 4].map((i) => ({ name: t(`tools:loanEligibility.howToSteps.step${i}.name`), text: t(`tools:loanEligibility.howToSteps.step${i}.text`) })),
+};
+---
+
+<ToolPage
+  tool="loanEligibility"
+  title={t('tools:loanEligibility.title')}
+  description={t('tools:loanEligibility.description')}
+  keywords={t('tools:loanEligibility.keywords')}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={faqs}
+  faqTitle={c.faqTitle}
+  howTo={howTo}
+  related={['emi', 'stampDuty', 'capitalGains', 'rentReceipt', 'propertyChecklist', 'areaCalculator']}
+>
+  <LoanEligibility client:load locale={locale} />
+  <Fragment slot="body">
+    <h2>{c.howTitle}</h2>
+    <p>{c.how}</p>
+    <p><strong>{c.formula1}</strong></p>
+    <p><strong>{c.formula2}</strong></p>
+    <p>{c.formulaNote}</p>
+    <h2>{c.tipsTitle}</h2>
+    <ul>{c.tips.map((tip) => <li>{tip}</li>)}</ul>
+    <h2>{c.docsTitle}</h2>
+    <ul>{c.docs.map((d) => <li>{d}</li>)}</ul>
+    <p><a href={localizePath('/emi-calculator', locale)}>{c.emiLink}</a></p>
+  </Fragment>
+</ToolPage>
