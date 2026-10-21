@@ -1,0 +1,223 @@
+---
+/**
+ * /app. Both apps and their official store badges (src/lib/apps.ts; a badge shows only where the app is live).
+ * The island (AppDownload) shows a QR code on a desktop and a one-line store notice on a phone.
+ * Everything else is plain server HTML, so it reads without JavaScript.
+ */
+import Page from '@/layouts/Page.astro';
+import { APPS } from '@/lib/apps';
+import { byLocale } from '@/lib/i18n/locale';
+import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import StoreBadges from '@/ui/StoreBadges.astro';
+import { trail, webPage } from '@/features/content/shared/schema';
+import Vignette from '@/features/home/vignettes/Vignette.astro';
+import { APP_PAGE_QR, APP_PAGE_QR_HI } from '@/features/home/qr';
+import { flatmatesApplicationBlock } from '@/lib/seo/siteSchemas';
+import AppDownload from './AppDownload';
+
+const locale = Astro.locals.locale;
+const PATH = '/app';
+const gharIos = Boolean(APPS.ghar360.ios);
+
+const H = byLocale(locale, {
+  en: {
+    title: 'Get the 360Ghar and 360 FlatMates apps',
+    description: '360Ghar on Google Play, and 360 FlatMates on Google Play and the App Store. Search verified homes, book visits and find flatmates.',
+    name: 'Apps',
+    h1: 'Get the 360 apps',
+    lead: 'Two apps: one to find a home, one to find a flatmate.',
+    ghar: 'Search verified homes, book visits and message your relationship manager.',
+    gharSoon: 'The iPhone app is not out yet. On an iPhone, use 360ghar.com in your browser for now.',
+    flatmates: 'Find flatmates who match your routine, and flats to share. Chat and schedule visits in the app.',
+    qr: 'Scan with your phone to open this page there',
+    android: 'You are on Android. Both apps are on Google Play, below.',
+    ios: gharIos ? 'You are on an iPhone or iPad. Both apps are on the App Store, below.' : 'You are on an iPhone or iPad. 360 FlatMates is on the App Store, below. 360Ghar for iPhone is not out yet, so use 360ghar.com in your browser for now.',
+  },
+  hi: {
+    title: '360Ghar और 360 FlatMates ऐप पाएँ',
+    description: 'Google Play पर 360Ghar, और Google Play व App Store पर 360 FlatMates। वेरिफाइड घर खोजें, विज़िट बुक करें और फ़्लैटमेट ढूँढें।',
+    name: 'ऐप',
+    h1: '360 ऐप पाएँ',
+    lead: 'दो ऐप: एक घर खोजने के लिए, एक फ़्लैटमेट खोजने के लिए।',
+    ghar: 'वेरिफाइड घर खोजें, विज़िट बुक करें और अपने रिलेशनशिप मैनेजर को मैसेज करें।',
+    gharSoon: 'iPhone ऐप अभी उपलब्ध नहीं है। iPhone पर अभी ब्राउज़र में 360ghar.com इस्तेमाल करें।',
+    flatmates: 'अपनी दिनचर्या से मेल खाते फ़्लैटमेट और शेयर करने लायक फ़्लैट खोजें। ऐप में चैट करें और विज़िट तय करें।',
+    qr: 'अपने फ़ोन से स्कैन करके यह पेज वहाँ खोलें',
+    android: 'आप Android पर हैं। दोनों ऐप नीचे Google Play पर उपलब्ध हैं।',
+    ios: gharIos ? 'आप iPhone या iPad पर हैं। दोनों ऐप नीचे App Store पर उपलब्ध हैं।' : 'आप iPhone या iPad पर हैं। 360 FlatMates नीचे App Store पर उपलब्ध है। iPhone के लिए 360Ghar अभी उपलब्ध नहीं है, तब तक ब्राउज़र में 360ghar.com इस्तेमाल करें।',
+  },
+});
+
+const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
+const jsonLd = [webPage({ name: H.title, description: H.description, path: PATH, locale }), ld, flatmatesApplicationBlock()];
+---
+
+<Page title={H.title} description={H.description} path={PATH} jsonLd={jsonLd} smartBanner="flatmates">
+  <div class="container-page app-page">
+    <Breadcrumbs items={crumbs} />
+    <div class="app-grid">
+      <header class="app-head">
+        <h1 class="app-h1">{H.h1}</h1>
+        <p class="app-lead">{H.lead}</p>
+      </header>
+
+      <div class="app-list">
+        <section class="app-item" aria-labelledby="app-ghar360">
+          <h2 id="app-ghar360">{APPS.ghar360.name}</h2>
+          <p>{H.ghar}</p>
+          <div class="app-store">
+            <StoreBadges app="ghar360" />
+          </div>
+          {!gharIos && <p class="app-soon">{H.gharSoon}</p>}
+        </section>
+        <section class="app-item" aria-labelledby="app-flatmates">
+          <h2 id="app-flatmates">{APPS.flatmates.name}</h2>
+          <p>{H.flatmates}</p>
+          <div class="app-store">
+            <StoreBadges app="flatmates" />
+          </div>
+        </section>
+      </div>
+
+      <aside class="app-side">
+        <Vignette name="app" bare class="app-phone" />
+        <AppDownload client:load notice={{ android: H.android, ios: H.ios }} qr={locale === 'hi' ? APP_PAGE_QR_HI : APP_PAGE_QR} qrLabel={H.qr} />
+      </aside>
+    </div>
+  </div>
+</Page>
+
+<style>
+  .app-page {
+    padding-top: 0.5rem;
+    padding-bottom: clamp(3rem, 7vw, 5rem);
+  }
+
+  .app-grid {
+    display: grid;
+    gap: 2rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 56rem) {
+    .app-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+      grid-template-areas:
+        'head side'
+        'list side';
+      column-gap: 4rem;
+      align-items: start;
+    }
+
+    .app-head {
+      grid-area: head;
+    }
+
+    .app-list {
+      grid-area: list;
+    }
+
+    .app-side {
+      grid-area: side;
+    }
+  }
+
+  .app-h1 {
+    font-size: clamp(2.5rem, 1.3rem + 5vw, 5rem);
+    max-width: 12ch;
+  }
+
+  .app-lead {
+    margin-top: 1rem;
+    max-width: 40ch;
+    font-size: 1.125rem;
+    color: var(--color-ink-800);
+  }
+
+  /* The two apps share one grid: title, text and badges sit on the same lines in both columns. */
+  .app-list {
+    display: grid;
+    gap: 2.5rem 3rem;
+  }
+
+  @media (min-width: 40rem) {
+    .app-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto auto 1fr;
+    }
+
+    .app-item {
+      display: grid;
+      grid-row: span 4;
+      grid-template-rows: subgrid;
+      align-content: start;
+      gap: 0.5rem;
+    }
+  }
+
+  .app-item h2 {
+    font-size: 1.75rem;
+  }
+
+  .app-item p {
+    max-width: 36ch;
+    color: var(--color-ink-800);
+  }
+
+  .app-store {
+    margin-top: 0.5rem;
+  }
+
+  .app-item .app-soon {
+    max-width: 36ch;
+    font-size: 0.9375rem;
+    color: var(--color-ink-600);
+  }
+
+  .app-side {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+
+  .app-side :global(.app-phone) {
+    width: min(100%, 14rem);
+  }
+
+  @media (min-width: 56rem) {
+    .app-side :global(.app-phone) {
+      width: min(100%, 18rem);
+    }
+  }
+
+  /* The island's two states. A QR code helps only when the phone is not the screen: wide, with a mouse. */
+  .app-side :global(.app-os) {
+    max-width: 30ch;
+    color: var(--color-ink-800);
+  }
+
+  .app-side :global(.app-qr) {
+    display: none;
+    margin: 0;
+    width: 7.5rem;
+  }
+
+  @media (min-width: 64rem) and (hover: hover) {
+    .app-side :global(.app-qr) {
+      display: block;
+    }
+  }
+
+  .app-side :global(.app-qr svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  .app-side :global(.app-qr figcaption) {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+/**
+ * Official Google Play and App Store badges for one app, only for the stores where it is live
+ * (src/lib/apps.ts). The artwork is Google's and Apple's own files in /public/badges, unaltered,
+ * both 44 px tall, with no box behind them. Clear space is the gap (12 px, over a quarter of the height).
+ * Google has a Hindi badge; Apple has none, so both locales use the English App Store badge.
+ */
+import { APPS, type AppKey } from '@/lib/apps';
+import { byLocale } from '@/lib/i18n/locale';
+
+type Props = { app: AppKey; class?: string };
+const { app, class: className } = Astro.props;
+const locale = Astro.locals.locale;
+const a = APPS[app];
+const t = byLocale(locale, {
+  en: { play: `Get ${a.name} on Google Play`, ios: `Download ${a.name} on the App Store` },
+  hi: { play: `${a.name} Google Play पर पाएँ`, ios: `${a.name} App Store पर डाउनलोड करें` },
+});
+const stores = [
+  a.play && { key: 'play', href: a.play, label: t.play, src: `/badges/google-play-${locale === 'hi' ? 'hi' : 'en'}.png`, w: locale === 'hi' ? 444 : 443, h: 132 },
+  a.ios && { key: 'ios', href: a.ios, label: t.ios, src: '/badges/app-store.svg', w: 119.66, h: 40 },
+].filter((s): s is { key: string; href: string; label: string; src: string; w: number; h: number } => Boolean(s));
+---
+
+<ul class:list={['store-badges', className]} role="list">
+  {
+    stores.map((s) => (
+      <li>
+        <a href={s.href} rel="noopener" aria-label={s.label} data-store={s.key} data-app={app}>
+          <img src={s.src} width={s.w} height={s.h} alt="" decoding="async" />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .store-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .store-badges a {
+    display: block;
+    border-radius: 8px;
+    transition: opacity 140ms var(--ease-paper);
+  }
+
+  .store-badges a:hover {
+    opacity: 0.86;
+  }
+
+  .store-badges img {
+    display: block;
+    width: auto;
+    height: 44px;
+  }
+</style>

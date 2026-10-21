@@ -11,6 +11,9 @@ import CopyButton from '@/features/content/shared/CopyButton';
 import { trail, webPage } from '@/features/content/shared/schema';
 import { EXTRA_BRANDS, LINKS, type LinkIcon } from './data';
 import PageArt from '@/features/content/shared/PageArt.astro';
+import StoreBadges from '@/ui/StoreBadges.astro';
+import { APPS, APP_KEYS } from '@/lib/apps';
+import { flatmatesApplicationBlock } from '@/lib/seo/siteSchemas';
 
 const locale = Astro.locals.locale;
 const PATH = '/links';
@@ -48,10 +51,11 @@ const jsonLd = [
   webPage({ name: H.title, description: H.description, path: PATH, locale }),
   { '@type': 'Organization', name: SITE_NAME, url: SITE_URL, sameAs: [...new Set(LINKS.map((l) => l.url))] },
   ld,
+  flatmatesApplicationBlock(),
 ];
 ---
 
-<Page title={H.title} description={H.description} path={PATH} jsonLd={jsonLd}>
+<Page title={H.title} description={H.description} path={PATH} jsonLd={jsonLd} smartBanner="flatmates">
   <div class="container-page links">
     <Breadcrumbs items={crumbs} />
     <div class="links-grid">
@@ -71,26 +75,37 @@ const jsonLd = [
                   {H.groups[g.key]}
                 </h2>
                 {H.notes[g.key] && <p class="links-note">{H.notes[g.key]}</p>}
-                <ul role="list">
-                  {g.links.map((l) => (
-                    <li>
-                      <a href={l.url} rel="noopener me" class="links-row">
-                        {isExtra(l.icon) ? (
-                          <svg viewBox="0 0 24 24" width="24" height="24" class="links-mark" fill="currentColor" aria-hidden="true" focusable="false">
-                            <path d={EXTRA_BRANDS[l.icon]} />
-                          </svg>
-                        ) : (
-                          <Icon name={`brand:${l.icon as BrandName}`} size={24} class="links-mark" />
-                        )}
-                        <span class="links-text">
-                          <span class="links-platform">{l.platform}</span>
-                          <span class="links-handle">{l.handle}</span>
-                        </span>
-                        <Icon name="arrow-up-right" size={18} class="arrow links-arrow" />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                {g.key === 'app' ? (
+                  <ul role="list" class="links-apps">
+                    {APP_KEYS.map((k) => (
+                      <li class="links-app">
+                        <span class="links-platform">{APPS[k].name}</span>
+                        <StoreBadges app={k} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul role="list">
+                    {g.links.map((l) => (
+                      <li>
+                        <a href={l.url} rel="noopener me" class="links-row">
+                          {isExtra(l.icon) ? (
+                            <svg viewBox="0 0 24 24" width="24" height="24" class="links-mark" fill="currentColor" aria-hidden="true" focusable="false">
+                              <path d={EXTRA_BRANDS[l.icon]} />
+                            </svg>
+                          ) : (
+                            <Icon name={`brand:${l.icon as BrandName}`} size={24} class="links-mark" />
+                          )}
+                          <span class="links-text">
+                            <span class="links-platform">{l.platform}</span>
+                            <span class="links-handle">{l.handle}</span>
+                          </span>
+                          <Icon name="arrow-up-right" size={18} class="arrow links-arrow" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </section>
             ))
           }
@@ -160,6 +175,18 @@ const jsonLd = [
 
   .links-group ul {
     margin-top: 0.5rem;
+  }
+
+  .links-apps {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .links-app {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.5rem 0 1rem;
+    border-bottom: 1px solid var(--color-ink-100);
   }
 
   .links-row {

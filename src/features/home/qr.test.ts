@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { PLAY_QR } from './qr';
+import { APPS } from '@/lib/apps';
+import { APP_PAGE_QR, APP_PAGE_QR_HI, PLAY_QR } from './qr';
 
 /** Rebuilds the module grid from the path runs. */
-function grid() {
-  const { size, path } = PLAY_QR;
+function grid({ size, path }: { size: number; path: string } = PLAY_QR) {
   const dark = Array.from({ length: size }, () => Array<boolean>(size).fill(false));
   for (const m of path.matchAll(/M(\d+) (\d+)h(\d+)v1h-\d+z/g)) {
     const [x, y, w] = [Number(m[1]), Number(m[2]), Number(m[3])];
@@ -27,6 +27,39 @@ describe('PLAY_QR', () => {
   it('has the three finder squares: a dark 7 by 7 ring, a light ring inside it and a dark 3 by 3 centre', () => {
     const g = grid();
     const n = PLAY_QR.size;
+    for (const [ox, oy] of [
+      [0, 0],
+      [n - 7, 0],
+      [0, n - 7],
+    ] as const) {
+      for (let y = 0; y < 7; y += 1) {
+        for (let x = 0; x < 7; x += 1) {
+          const ring = x === 0 || y === 0 || x === 6 || y === 6;
+          const centre = x >= 2 && x <= 4 && y >= 2 && y <= 4;
+          expect(g[oy + y]![ox + x], `${ox},${oy} at ${x},${y}`).toBe(ring || centre);
+        }
+      }
+    }
+  });
+});
+
+describe('page QR codes', () => {
+  it('encode the apps page and the store URL they claim', () => {
+    expect(PLAY_QR.url).toBe(APPS.ghar360.play);
+    expect(APP_PAGE_QR.url).toBe('https://360ghar.com/app');
+    expect(APP_PAGE_QR_HI.url).toBe('https://360ghar.com/hi/app');
+  });
+
+  it.each([APP_PAGE_QR, APP_PAGE_QR_HI])('$url: 25 modules, runs inside the grid, three finder squares', (qr) => {
+    expect(qr.size).toBe(25);
+    const runs = [...qr.path.matchAll(/M(\d+) (\d+)h(\d+)v1h-(\d+)z/g)];
+    expect(runs.map((m) => m[0]).join('')).toHaveLength(qr.path.length);
+    for (const m of runs) {
+      expect(Number(m[1]) + Number(m[3])).toBeLessThanOrEqual(qr.size);
+      expect(Number(m[2])).toBeLessThan(qr.size);
+    }
+    const g = grid(qr);
+    const n = qr.size;
     for (const [ox, oy] of [
       [0, 0],
       [n - 7, 0],

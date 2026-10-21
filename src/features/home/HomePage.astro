@@ -21,7 +21,6 @@ import CutBand from '@/ui/CutBand.astro';
 import Paper from '@/ui/Paper.astro';
 import Icon from '@/ui/icons/Icon.astro';
 import StateBlock from '@/ui/states/StateBlock.astro';
-import { PLAY_STORE } from '@/features/layout/nav';
 import { galleryPhotos } from '@/features/property/photos';
 import { areaSqft, formatNum, homeKind, imageUrl, listingPrice, srcSet } from '@/lib/format';
 import Vignette from './vignettes/Vignette.astro';
@@ -294,7 +293,7 @@ const pmFeatures = c.owner;
           {t('site:home.ownersCta')}
           <Icon name="arrow-up-right" size={18} class="arrow" />
         </a>
-        <a class="home-owners-app" href={PLAY_STORE} rel="noopener">
+        <a class="home-owners-app" href={L('/app')}>
           <Icon name="download" size={18} />
           {t('site:home.ownersApp')}
         </a>
