@@ -15,7 +15,7 @@ import { useAuth } from '@/features/auth/useAuth';
 import { api, call } from '@/lib/api/client';
 import { ApiError, applyFieldErrors, describeError } from '@/lib/api/errors';
 import type { Property } from '@/lib/api/types';
-import { formatDate } from '@/lib/format';
+import { formatDate, formatDateOnly } from '@/lib/format';
 import { haptic } from '@/lib/haptics';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
@@ -118,7 +118,9 @@ function nextDays(n: number, locale: Locale) {
   return Array.from({ length: n }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() + i);
-    return { iso: isoDay(d), top: i === 0 ? T[locale].today : i === 1 ? T[locale].tomorrow : formatDate(d, locale, { weekday: 'short' }), bottom: formatDate(d, locale, { day: 'numeric', month: 'short' }) };
+    // Labels come from the same calendar day that is submitted, so a button never shows one date and sends another.
+    const iso = isoDay(d);
+    return { iso, top: i === 0 ? T[locale].today : i === 1 ? T[locale].tomorrow : formatDateOnly(iso, locale, { weekday: 'short' }), bottom: formatDateOnly(iso, locale, { day: 'numeric', month: 'short' }) };
   });
 }
 

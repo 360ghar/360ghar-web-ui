@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// Node builds some fixtures (visit dates); give it the same zone as the browser.
+process.env.TZ = 'Asia/Kolkata';
+
 const baseURL = process.env.BASE_URL ?? 'http://localhost:4321';
 
 export default defineConfig({

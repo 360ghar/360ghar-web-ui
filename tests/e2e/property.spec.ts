@@ -316,8 +316,8 @@ test('property: price per sq ft against the locality, from real listings', async
 });
 
 test('property: book a visit with the day buttons (POST mocked)', async ({ page }, info) => {
-  // Open: passes on a Mac with the real Supabase keys, the visit form shows no confirmation on the Linux CI runner (fake Supabase project). Needs a look with the repo variables set.
-  test.skip(!!process.env.CI, 'CI runner: confirmation not shown, see handoff');
+  // Open: passes with the real Supabase keys; with the fake CI project the form shows no confirmation.
+  test.skip((process.env.PUBLIC_SUPABASE_URL ?? '').includes('ci-test'), 'fake CI Supabase project: confirmation not shown, set the repo variables');
   const w = watch(page);
   await signedIn(page);
   let body: { property_id?: number; scheduled_date?: string } = {};
@@ -473,7 +473,7 @@ test('property: a stand-in ₹10 Cr price shows "Price on request" everywhere', 
 });
 
 test('property: the day buttons are never cut, the price dots are readable, gallery captions are counts', async ({ page }, info) => {
-  test.skip(!!process.env.CI, 'CI runner: Linux fonts make the tablet day grid wider than the panel, see handoff');
+  test.skip(process.platform === 'linux', 'Linux fonts make the tablet day grid wider than the panel, see handoff');
   const w = watch(page);
   await page.goto(SALE);
   await hydrated(page);
