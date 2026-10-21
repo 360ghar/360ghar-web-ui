@@ -357,7 +357,8 @@ test('property: book a visit with the day buttons (POST mocked)', async ({ page 
   await form.getByRole('button', { name: 'Request this visit' }).click();
   await expect(form.getByRole('status')).toContainText('Visit requested for');
   expect(body.property_id).toBe(182);
-  expect(new Date(body.scheduled_date!).getTime()).toBe(new Date(`${iso}T17:30`).getTime());
+  // Parsed in the page, so the zone is the browser's (Asia/Kolkata), not Node's.
+  expect(new Date(body.scheduled_date!).getTime()).toBe(await page.evaluate((d) => new Date(`${d}T17:30`).getTime(), iso));
   await w.check();
 });
 
