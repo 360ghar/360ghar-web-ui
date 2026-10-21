@@ -71,3 +71,27 @@ Another session changed about 680 files on 2026-09-29 (a second display font, Se
 | Broken images, page errors, sideways scroll | None on 24 page types at 360 and 1440 px |
 
 Lighthouse (mobile, median of 3): `/` 97, `/properties` 85, `/property/182` 86. The list and the detail page are now below 90 (90 and 90 on 2026-09-28). Before LCP (the Cloudinary photo), the detail page now loads about 130 KB more at high priority than on 2026-09-28: the Sentient font (51 KB, preloaded), the form code (react-hook-form and zod, 36 KB gzip, for the contact panel at load) and service-worker traffic. One list run also had a slow server response (TTFB 1.4 s), which is the environment, not the code. Options: do not preload the second display font on pages whose LCP is a photo (or subset it), hydrate the contact panel on idle or visible, and keep the analytics recorder and surveys off until the person interacts.
+
+## Replacement PR #18 (2026-10-21)
+
+Checks on `feat/replace-with-web-ui-2` after the review round.
+
+| Check | Result |
+|---|---|
+| `pnpm install --frozen-lockfile` | ok |
+| `pnpm typecheck` | 0 errors |
+| `pnpm lint` | 0 problems |
+| `pnpm test` | 817 pass, 1 skipped, 112 files |
+| `pnpm check:api` | ok (openapi synced from `integration/contract-2026-10`) |
+| `pnpm check:pseo` | 0 errors, 91 warnings |
+| `pnpm build` | ok |
+| `playwright test` (3 workers, 1 retry, warm dev server) | 797 pass, 3 flaky, 0 failed, 85 skipped (61 by design, 24 need the contract backend, which the live API does not serve yet) |
+| Old URLs (3,574) | 1,904 return 200, 150 return 301, 1,520 return 404 (deleted listings) |
+
+Deploy preview, Lighthouse mobile (single run, simulated slow 4G). SEO reads 69 only because Netlify sends `X-Robots-Tag: noindex` on previews.
+
+| Page | Performance | Accessibility | Best practices | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|
+| `/` | 88 | 100 | 96 | 2.3 s | 0 | 20 ms |
+| `/properties` | 89 | 99 | 96 | 2.6 s | 0 | 20 ms |
+| `/property/182` | 86 | 100 | 96 | 2.8 s | 0 | 10 ms |
