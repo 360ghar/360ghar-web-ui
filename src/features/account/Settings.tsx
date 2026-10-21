@@ -159,11 +159,15 @@ function Gate({ error, locale, retry }: { error: unknown; locale: Locale; retry:
 function FormSkeleton() {
   return (
     <Delayed>
-      <div className="skeleton-gate grid max-w-lg gap-4" aria-hidden="true">
-        <Skeleton className="h-6 w-48" />
-        <Skeleton className="h-12 w-full" />
-        <Skeleton className="h-12 w-full" />
-        <Skeleton className="h-12 w-2/3" />
+      <div className="skeleton-gate acct-card sheet max-w-2xl" aria-hidden="true">
+        <div className="grid gap-2">
+          <Skeleton className="h-7 w-48" />
+          <Skeleton className="h-5 w-full max-w-sm" />
+        </div>
+        <Skeleton className="h-11 w-full" />
+        <Skeleton className="h-11 w-full" />
+        <Skeleton className="h-11 w-2/3" />
+        <Skeleton className="h-11 w-24" />
       </div>
     </Delayed>
   );
@@ -171,8 +175,10 @@ function FormSkeleton() {
 
 function Head({ id, title, lead }: { id: string; title: string; lead: string }) {
   return (
-    <div className="acct-card-head">
-      <h2 id={id}>{title}</h2>
+    <div className="grid gap-1">
+      <h2 id={id} className="text-xl">
+        {title}
+      </h2>
       <p className="text-sm text-ink-600">{lead}</p>
     </div>
   );
@@ -223,7 +229,7 @@ export function Notifications({ locale }: { locale: Locale }) {
           {NOTIFICATION_KEYS.map((k) => (
             <div key={k} className="grid gap-1">
               <Check label={<span className="font-bold">{t.nKeys[k]![0]}</span>} aria-describedby={`n-${k}-hint`} {...form.register(k)} />
-              <p id={`n-${k}-hint`} className="field-hint ps-9">
+              <p id={`n-${k}-hint`} className="field-hint -mt-2 ps-9">
                 {t.nKeys[k]![1]}
               </p>
               {form.formState.errors[k] ? (
@@ -426,7 +432,7 @@ function AlertRow({ a, locale, confirming, setConfirming, onDelete }: { a: Alert
       </div>
       {confirming ? (
         <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t.aConfirm}>
-          <span className="font-bold">{t.aConfirm}</span>
+          <span className="basis-full font-bold">{t.aConfirm}</span>
           <button ref={yes} type="button" className="btn btn-primary" onClick={onDelete}>
             {t.aConfirmYes}
           </button>
