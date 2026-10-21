@@ -5,8 +5,10 @@ import { axe, backendDown, hydrated, liveHas, signedIn, watch } from './helpers'
 // rent (deposit), 181 is a short stay. No live listing has a 360° tour, so the
 // tour tests add one with the dev-only `?_tour=` parameter.
 const SALE = '/property/182';
-const RENT = '/property/165';
-const STAY = '/property/181';
+const RENT_ID = 165;
+const STAY_ID = 181;
+const RENT = `/property/${RENT_ID}`;
+const STAY = `/property/${STAY_ID}`;
 const TOUR = 'https://kuula.co/share/collection/test-tour';
 
 /** Waits until the islands inside `root` have hydrated (client:visible islands wait for the scroll). */
@@ -207,7 +209,7 @@ test('property: contact panel, callback dialog, actions and the phone dock', asy
 });
 
 test('property: rent shows the move-in cost; a short stay shows nights and guests', async ({ page }) => {
-  test.skip(!(await liveHas('/api/v1/properties/165')), 'listing 165 is not on the live API');
+  test.skip(!(await Promise.all([RENT_ID, STAY_ID].map((id) => liveHas(`/api/v1/properties/${id}`)))).every(Boolean), 'listing 165 or 181 is not on the live API');
   const w = watch(page);
   await page.goto(RENT);
   const costs = page.getByRole('region', { name: 'What it costs' });

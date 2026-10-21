@@ -80,17 +80,20 @@ const API = process.env.API_ORIGIN ?? 'https://api.360ghar.com';
 const probes = new Map<string, Promise<boolean>>();
 
 /**
- * True when the live API answers 200 for `path`. Tests that need the
- * contract-2026-10 backend (or one specific listing) skip when it does not,
- * so CI does not depend on what production serves today.
+ * True when the live API answers 200 for `path` and `ok(json)` holds. Tests
+ * that need the contract-2026-10 backend (or one specific listing) skip when
+ * it does not, so CI does not depend on what production serves today.
  */
-export function liveHas(path: string): Promise<boolean> {
+export function liveHas(path: string, ok: (json: unknown) => boolean = () => true): Promise<boolean> {
   let p = probes.get(path);
   if (!p) {
-    p = fetch(`${API}${path}`).then((r) => r.ok, () => false);
+    p = fetch(`${API}${path}`)
+      .then(async (r) => r.ok && ok(await r.json().catch(() => null)))
+      .catch(() => false);
     probes.set(path, p);
   }
   return p;
 }
 
-export const CONTRACT_PROBE = '/api/v1/data-hub/bank-auctions';
+/** The contract backend returns circle-rate sectors as `{ items }`; the old API returned a bare array. */
+export const contractReady = () => liveHas('/api/v1/data-hub/circle-rates/sectors', (j) => !Array.isArray(j) && j != null);

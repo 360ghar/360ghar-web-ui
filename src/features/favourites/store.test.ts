@@ -66,5 +66,8 @@ describe('account change', () => {
     useFavourites.getState().set(8, true);
     listener!({ status: 'anon', session: a }, { session: null });
     expect(useFavourites.getState().liked.has(8)).toBe(true);
+    // Another account replaces the first one: its hearts go.
+    listener!({ status: 'authed', session: { user: { id: 'b' } } }, { session: a });
+    expect(useFavourites.getState().liked.size).toBe(0);
   });
 });

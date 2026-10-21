@@ -85,7 +85,7 @@ Checks on `feat/replace-with-web-ui-2` after the review round.
 | `pnpm check:api` | ok (openapi synced from `integration/contract-2026-10`) |
 | `pnpm check:pseo` | 0 errors, 91 warnings |
 | `pnpm build` | ok |
-| `playwright test` (3 workers, 1 retry, warm dev server) | 797 pass, 3 flaky, 0 failed, 85 skipped (61 by design, 24 need the contract backend, which the live API does not serve yet) |
+| `playwright test` (3 workers, 1 retry, warm dev server) | 797 pass, 3 flaky, 0 failed, 85 skipped (61 by design; 21 need the contract backend and 3 need listings 165 and 181, which the live API does not have) |
 | Old URLs (3,574) | 1,904 return 200, 150 return 301, 1,520 return 404 (deleted listings) |
 
 Deploy preview, Lighthouse mobile (single run, simulated slow 4G). SEO reads 69 only because Netlify sends `X-Robots-Tag: noindex` on previews.
