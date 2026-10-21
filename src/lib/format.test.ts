@@ -29,7 +29,8 @@ describe('format', () => {
     const was = process.env.TZ;
     process.env.TZ = 'America/Los_Angeles';
     try {
-      expect(formatDate('2026-11-01', 'en', opts)).toBe('31 Oct 2026'); // a timestamp: shown in the viewer's zone
+      expect(formatDate('2026-10-31T20:00:00Z', 'en', opts)).toBe('1 Nov 2026'); // a timestamp: shown in IST, not the runtime zone
+      expect(formatDate('2026-06-21T21:37:47.286723', 'en', opts)).toBe('22 Jun 2026'); // no zone means UTC
       expect(formatDateOnly('2026-11-01', 'en', opts)).toBe('1 Nov 2026'); // a calendar date: the same day everywhere
     } finally {
       if (was === undefined) delete process.env.TZ;

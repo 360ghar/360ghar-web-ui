@@ -19,12 +19,18 @@ export function formatNum(n: number, locale: Locale = 'en', opts?: Intl.NumberFo
   return f.format(n);
 }
 
-/** A date from a Date, an ISO string or a timestamp. Formatters are cached per locale and options. */
+/**
+ * A date from a Date, an ISO string or a timestamp. Formatters are cached per locale and options.
+ * The zone is Asia/Kolkata unless `opts.timeZone` says otherwise, so the server (UTC) and the browser
+ * print the same day and hydration does not mismatch. A timestamp without a zone is UTC (the API sends it so).
+ */
 export function formatDate(d: Date | string | number, locale: Locale = 'en', opts?: Intl.DateTimeFormatOptions): string {
-  const key = `${locale}${opts ? JSON.stringify(opts) : ''}`;
+  const o = { timeZone: 'Asia/Kolkata', ...opts };
+  const key = `${locale}${JSON.stringify(o)}`;
   let f = dfCache.get(key);
-  if (!f) dfCache.set(key, (f = new Intl.DateTimeFormat(intlLocale(locale), opts)));
-  return f.format(typeof d === 'object' ? d : new Date(d));
+  if (!f) dfCache.set(key, (f = new Intl.DateTimeFormat(intlLocale(locale), o)));
+  const v = typeof d === 'string' && /T\d\d:\d\d(:\d\d(\.\d+)?)?$/.test(d) ? `${d}Z` : d;
+  return f.format(typeof v === 'object' ? v : new Date(v));
 }
 
 /**
