@@ -15706,7 +15706,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful Response",
             "content": {
               "application/json": {
@@ -27584,7 +27584,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful Response",
             "content": {
               "application/json": {
@@ -29652,7 +29652,8 @@
           "city": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -29674,7 +29675,8 @@
           "bank_name": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 200
               },
               {
                 "type": "null"
@@ -41049,6 +41051,7 @@
           "amount": {
             "type": "number",
             "title": "Amount",
+            "maximum": 9999999999.99,
             "exclusiveMinimum": 0
           },
           "expense_date": {
@@ -41182,6 +41185,7 @@
               }
             ],
             "title": "Amount",
+            "maximum": 9999999999.99,
             "exclusiveMinimum": 0
           },
           "expense_date": {

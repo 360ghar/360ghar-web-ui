@@ -32,7 +32,7 @@ const money = z
 
 const buildSchema = (t: ReturnType<typeof text>) =>
   z
-    .object({ bank_name: z.string(), city: z.string(), keyword: z.string().trim().max(100), property_type: z.union([z.literal(''), z.enum(AUCTION_PROPERTY_TYPES)]), min_price: money, max_price: money })
+    .object({ bank_name: z.string().max(200), city: z.string().max(100), keyword: z.string().trim().max(100), property_type: z.union([z.literal(''), z.enum(AUCTION_PROPERTY_TYPES)]), min_price: money, max_price: money })
     .refine((v) => !v.min_price || !v.max_price || (parseNumber(v.max_price) ?? 0) > (parseNumber(v.min_price) ?? 0), { path: ['max_price'], message: t.alertRange });
 type Values = z.infer<ReturnType<typeof buildSchema>>;
 
