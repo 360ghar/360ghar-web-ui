@@ -57,11 +57,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      # Same names as .env.example. The two Supabase values are public, so they are variables, not secrets.
+      # Same names as .env.example. The two Supabase values are public, so they are variables, not secrets. Without them the tests use a fake project: they mock every Supabase call.
       PUBLIC_API_BASE: /dev-api
       API_ORIGIN: https://api.360ghar.com
-      PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
-      PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL || 'https://ci-test.supabase.co' }}
+      PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_ci_test' }}
       BASE_URL: http://127.0.0.1:4321
     steps:
       - uses: actions/checkout@v4
