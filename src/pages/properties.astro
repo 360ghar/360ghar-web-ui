@@ -48,7 +48,7 @@ const items = first.page?.items ?? [];
   <ListingHeader heading={heading} total={inventory} locale={locale} theme="society" />
   <div class="container-page">
     <SearchResults
-      client:idle
+      client:idle={{ timeout: 500 }}
       locale={locale}
       initialFilters={filters}
       initialPage={first.page}
