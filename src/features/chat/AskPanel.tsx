@@ -1,0 +1,166 @@
+/**
+ * "Ask about this page": three ready questions and a box, answered in place by the same assistant as the chat
+ * (same store, same stream). Used on property and locality pages (the server loads that page's facts from
+ * `context`) and on /compare (no context: the homes are named in the message).
+ *
+ * A backend that does not know `context` answers 422. The first time that happens the question is sent again
+ * with the subject in the text instead, and the panel remembers it for the rest of the visit.
+ */
+import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
+import { useAuth } from '@/features/auth/useAuth';
+import { currentToken } from '@/lib/api/client';
+import { ApiError } from '@/lib/api/errors';
+import { tFrom } from '@/i18n';
+import type { Locale } from '@/lib/i18n/locale';
+import { IslandBoundary } from '@/ui/react/IslandBoundary';
+import { Bubble } from './Bubble';
+import { chatCopy } from './copy';
+import { contextUnsupported, markContextUnsupported } from './ask';
+import { applyEvent, chatRequest, updateMessage, useChat, type AskContext } from './store';
+import { sendFailure, streamChat } from './stream';
+import './chat.css';
+
+type Props = {
+  locale: Locale;
+  /** `common:chatbot` strings (for the typing and error texts). */
+  strings: Record<string, unknown>;
+  heading: string;
+  note: string;
+  questions: string[];
+  /** The page the questions are about. Null: nothing is sent as context. */
+  context: AskContext | null;
+  /** Names the page in the message when `context` is null or the backend lacks it, e.g. "This home: 3 BHK in Palam Vihar". */
+  subject: string;
+};
+
+const T = {
+  en: { ask: 'Ask', label: 'Your question', placeholder: 'Ask your own question', busy: 'Answering', limit: 'AI can make mistakes. Check details with the agent.' },
+  hi: { ask: 'पूछें', label: 'आपका सवाल', placeholder: 'अपना सवाल लिखें', busy: 'जवाब आ रहा है', limit: 'AI से गलती हो सकती है। जानकारी एजेंट से पक्की करें।' },
+};
+
+const MAX = 500;
+const uid = () => Math.random().toString(36).slice(2);
+
+function Ask({ locale, strings, heading, note, questions, context, subject }: Props) {
+  const t = tFrom(strings as never);
+  const c = chatCopy(locale);
+  const x = T[locale];
+  const [text, setText] = useState('');
+  // The messages this panel added, by id: the chat's earlier or later messages stay out, even after a reset.
+  const [mine, setMine] = useState<string[]>([]);
+  const status = useAuth((s) => s.status);
+  const authed = status === 'authed';
+  const sending = useChat((s) => s.sending);
+  const all = useChat((s) => s.messages);
+  const shown = all.filter((m) => mine.includes(m.id));
+  // Until the session is known a signed-in visitor would be sent as a guest.
+  const busy = sending || status === 'unknown';
+  const id = useId();
+  // Leaving the page (or the island unmounting) ends the stream.
+  const abort = useRef<AbortController | null>(null);
+  useEffect(() => () => abort.current?.abort(), []);
+
+  const send = async (raw: string, fromInput = false) => {
+    const question = raw.trim().slice(0, MAX);
+    if (!question || busy || useChat.getState().sending) return;
+    // A ready question leaves what the person is typing alone.
+    if (fromInput) setText('');
+    // A saved conversation whose messages are not loaded (the chat panel was never opened) is not continued: its earlier
+    // rows would be missing from the chat panel afterwards. The question starts a new conversation.
+    const conversationId = useChat.getState().messages.length === 0 ? null : useChat.getState().conversationId;
+    useChat.setState({ sending: true });
+    const botId = uid();
+    const userId = uid();
+    setMine((ids) => [...ids, userId, botId]);
+    useChat.setState((s) => ({
+      messages: [...s.messages, { id: userId, role: 'user', text: question, tools: [], widgets: [] }, { id: botId, role: 'bot', text: '', tools: [], widgets: [] }],
+    }));
+    const controller = new AbortController();
+    abort.current = controller;
+    const run = async (withContext: boolean) => {
+      const token = authed ? await currentToken() : null;
+      const message = withContext ? question : `${subject}. ${question}`.slice(0, 4000);
+      const req = chatRequest(token, message, conversationId, withContext ? context : null);
+      for await (const ev of streamChat(req.path, req.body, controller.signal)) applyEvent(botId, ev, t('errorMessage'));
+    };
+    try {
+      const withContext = context !== null && !contextUnsupported();
+      try {
+        await run(withContext);
+      } catch (error) {
+        if (!(withContext && error instanceof ApiError && error.status === 422)) throw error;
+        markContextUnsupported();
+        await run(false);
+      }
+    } catch (error) {
+      const why = sendFailure(error);
+      if (why === 'gone') useChat.setState({ conversationId: null });
+      const msg = why === 'rate' ? c.tooManyMessages : why === 'gone' ? c.conversationGone : why === 'inactive' ? c.accountInactive : t('errorMessage');
+      updateMessage(botId, (m) => ({ ...m, error: msg }));
+    } finally {
+      updateMessage(botId, (m) => ({ ...m, tools: m.tools.map((y) => ({ ...y, done: true })) }));
+      useChat.setState({ sending: false });
+    }
+  };
+
+  const onSubmit = (e: SubmitEvent) => {
+    e.preventDefault();
+    void send(text, true);
+  };
+
+  return (
+    <section className="ask" aria-labelledby={id}>
+      <h2 id={id} className="ask-h">{heading}</h2>
+      <p className="ask-note">{note}</p>
+      <ul className="ask-q">
+        {questions.map((q) => (
+          <li key={q}>
+            <button type="button" className="link" onClick={() => void send(q)} disabled={busy}>
+              {q}
+            </button>
+          </li>
+        ))}
+      </ul>
+      {shown.length > 0 ? (
+        <ol className="ask-list" aria-live="polite" aria-busy={busy || undefined}>
+          {shown.map((m) => (
+            <li key={m.id} className={m.role === 'user' ? 'is-user' : 'is-bot'}>
+              <Bubble m={m} locale={locale} t={t} />
+            </li>
+          ))}
+        </ol>
+      ) : null}
+      <form className="ask-form" onSubmit={onSubmit}>
+        <label className="visually-hidden" htmlFor={`${id}-q`}>{x.label}</label>
+        <textarea
+          id={`${id}-q`}
+          className="textarea ask-input"
+          rows={1}
+          maxLength={MAX}
+          placeholder={x.placeholder}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+              e.preventDefault();
+              void send(text, true);
+            }
+          }}
+        />
+        <button type="submit" className="btn btn-primary ask-send" disabled={busy || !text.trim()}>
+          {sending ? x.busy : x.ask}
+        </button>
+      </form>
+      <p className="ask-note">{x.limit}</p>
+    </section>
+  );
+}
+
+/** A crash leaves nothing: the page reads the same without the panel. */
+export default function AskPanel(props: Props) {
+  return (
+    <IslandBoundary locale={props.locale} fallback={null}>
+      <Ask {...props} />
+    </IslandBoundary>
+  );
+}

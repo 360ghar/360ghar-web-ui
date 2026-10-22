@@ -217,3 +217,12 @@ describe('earlier messages of an opened conversation', () => {
     expect(useChat.getState().messages.map((m) => m.text)).toEqual(['q']);
   });
 });
+
+describe('chatRequest context', () => {
+  it('adds context only when given', async () => {
+    const { chatRequest } = await load();
+    expect(chatRequest(null, 'hi', null).body).toEqual({ message: 'hi' });
+    expect(chatRequest(null, 'hi', null, { type: 'property', id: 7 }).body).toEqual({ message: 'hi', context: { type: 'property', id: 7 } });
+    expect(chatRequest('t', 'hi', 3, { type: 'locality', slug: 'sector-56' }).body).toEqual({ message: 'hi', conversation_id: 3, context: { type: 'locality', slug: 'sector-56' } });
+  });
+});

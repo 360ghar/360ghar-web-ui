@@ -1,0 +1,54 @@
+---
+/**
+ * Mounts the ask panel with the ready questions for a property, a locality or the compare page.
+ * It hydrates when scrolled into view, so the page loads no chat code up front.
+ */
+import { pick } from '@/i18n';
+import type { Locale } from '@/lib/i18n/locale';
+import AskPanel from './AskPanel';
+
+type Props =
+  | { kind: 'property'; id: number; name: string; locale: Locale }
+  | { kind: 'locality'; slug: string; name: string; locale: Locale }
+  | { kind: 'compare'; ids: number[]; locale: Locale };
+
+const props = Astro.props;
+const hi = props.locale === 'hi';
+const chat = pick(props.locale, 'common:chatbot');
+// Only the texts the panel shows.
+const strings = Object.fromEntries(['errorMessage', 'typingAriaLabel', 'thinking'].map((k) => [k, chat[k]]));
+const note =
+  props.kind === 'locality'
+    ? hi ? 'जवाब इस इलाके के 360Ghar डेटा से आते हैं।' : 'Answers come from 360Ghar data for this place.'
+    : hi ? 'जवाब लिस्टिंग और 360Ghar के डेटा से आते हैं।' : 'Answers come from the listing and 360Ghar data.';
+
+const copy =
+  props.kind === 'property'
+    ? {
+        heading: hi ? 'इस घर के बारे में पूछें' : 'Ask about this home',
+        questions: hi
+          ? ['घर में आने से पहले कुल कितना खर्च होगा?', 'सबसे पास मेट्रो और अस्पताल कितनी दूर हैं?', 'विज़िट से पहले क्या जाँचना चाहिए?']
+          : ['What will it cost to move in?', 'How far are the nearest metro and hospital?', 'What should I check before a visit?'],
+        context: { type: 'property' as const, id: props.id },
+        subject: hi ? `यह घर (लिस्टिंग #${props.id}): ${props.name}` : `This home (listing #${props.id}): ${props.name}`,
+      }
+    : props.kind === 'locality'
+      ? {
+          heading: hi ? `${props.name} के बारे में पूछें` : `Ask about ${props.name}`,
+          questions: hi
+            ? ['यहाँ घरों की कीमतें कितनी हैं?', 'सबसे पास मेट्रो कितनी दूर है?', 'यहाँ खरीदने से पहले क्या जाँचें?']
+            : ['What do homes cost here?', 'How far is the nearest metro?', 'What should I check before buying here?'],
+          context: { type: 'locality' as const, slug: props.slug },
+          subject: hi ? `इलाका: ${props.name}` : `Locality: ${props.name}`,
+        }
+      : {
+          heading: hi ? 'AI से तुलना करवाएँ' : 'Ask AI to compare',
+          questions: hi
+            ? ['इनमें प्रति वर्ग फ़ुट सबसे सस्ता कौन-सा है?', 'परिवार के लिए कौन-सा बेहतर है?', 'हर घर में क्या समझौता करना पड़ेगा?']
+            : ['Which one costs least per sq ft?', 'Which suits a family best?', 'What is the trade-off in each home?'],
+          context: null,
+          subject: hi ? `360Ghar के ये घर (लिस्टिंग ${props.ids.map((i) => `#${i}`).join(', ')}) की तुलना करें` : `Compare these 360Ghar homes (listings ${props.ids.map((i) => `#${i}`).join(', ')})`,
+        };
+---
+
+<AskPanel client:visible locale={props.locale} strings={strings} heading={copy.heading} note={note} questions={copy.questions} context={copy.context} subject={copy.subject} />
