@@ -226,6 +226,512 @@
         ]
       }
     },
+    "/api/v1/content/manifest": {
+      "get": {
+        "tags": [
+          "content"
+        ],
+        "summary": "List served content",
+        "description": "Every served (entity, locale) with its indexable flag and last update. For sitemaps and builds.\n\nReturns at most ``limit`` rows (default 5,000). ``truncated`` is true when there are more.",
+        "operationId": "content_manifest_api_v1_content_manifest_get",
+        "parameters": [
+          {
+            "name": "entity_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "locality",
+                    "property"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entity Type"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 20000,
+              "minimum": 1,
+              "default": 5000,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentManifest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/content/{entity_type}/{slug}": {
+      "get": {
+        "tags": [
+          "content"
+        ],
+        "summary": "Get generated content",
+        "operationId": "get_content_api_v1_content__entity_type___slug__get",
+        "parameters": [
+          {
+            "name": "entity_type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "locality",
+                "property"
+              ],
+              "type": "string",
+              "title": "Entity Type"
+            }
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "title": "Slug"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "en",
+                "hi"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Locale"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentBlockOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/content/run": {
+      "post": {
+        "tags": [
+          "content-admin"
+        ],
+        "summary": "Generate content for changed entities (cron)",
+        "description": "One bounded batch. Entities whose facts are unchanged are skipped, so repeating a call\nis cheap and safe. Call again with ``next_after`` until ``done`` is true. Overlapping calls\nonly waste quota: each result is an upsert on (entity, slug, locale).",
+        "operationId": "run_content_api_v1_admin_content_run_post",
+        "parameters": [
+          {
+            "name": "x-cron-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cron-Secret"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentRunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentRunResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/content/market-digest": {
+      "post": {
+        "tags": [
+          "content-admin"
+        ],
+        "summary": "Write the weekly market digest (cron)",
+        "description": "Build the digest from data-hub changes in the last 7 days. Skips with fewer than 3 changes.\nSaves a blog post: published when it validates, otherwise a draft tagged needs-review.\nCalling twice in one week saves one post.",
+        "operationId": "run_market_digest_api_v1_admin_content_market_digest_post",
+        "parameters": [
+          {
+            "name": "x-cron-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cron-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketDigestResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/content/review": {
+      "get": {
+        "tags": [
+          "content-admin"
+        ],
+        "summary": "List content for review (admin)",
+        "description": "Newest first. Filter by review status, entity type or locale.",
+        "operationId": "review_list_api_v1_admin_content_review_get",
+        "parameters": [
+          {
+            "name": "review_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(auto|needs_review|approved|rejected|failed)$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Review Status"
+            }
+          },
+          {
+            "name": "entity_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "locality",
+                    "property"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entity Type"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "en",
+                    "hi"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Locale"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Opaque pagination cursor from a prior response's next_cursor.",
+              "title": "Cursor"
+            },
+            "description": "Opaque pagination cursor from a prior response's next_cursor."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max items to return (1-100).",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Max items to return (1-100)."
+          },
+          {
+            "name": "include_total",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "If true, include a total count (extra COUNT query).",
+              "default": false,
+              "title": "Include Total"
+            },
+            "description": "If true, include a total count (extra COUNT query)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CursorPage_ContentReviewItem_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/content/{block_id}/status": {
+      "patch": {
+        "tags": [
+          "content-admin"
+        ],
+        "summary": "Approve or reject a content block (admin)",
+        "description": "Approve serves the block. It is indexable only with enough verified facts. A block whose\ntext failed validation cannot be approved: run it again instead.",
+        "operationId": "update_status_api_v1_admin_content__block_id__status_patch",
+        "parameters": [
+          {
+            "name": "block_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "maximum": 9223372036854775807,
+              "minimum": 1,
+              "title": "Block Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentStatusUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentReviewItem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/users/me": {
       "get": {
         "tags": [
@@ -36011,6 +36517,520 @@
         ],
         "title": "ComplaintNature"
       },
+      "ContentBlockOut": {
+        "properties": {
+          "entity_type": {
+            "type": "string",
+            "enum": [
+              "locality",
+              "property"
+            ],
+            "title": "Entity Type"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "en",
+              "hi"
+            ],
+            "title": "Locale"
+          },
+          "body": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Body"
+          },
+          "sources": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "data_as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data As Of"
+          },
+          "indexable": {
+            "type": "boolean",
+            "title": "Indexable"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "entity_type",
+          "slug",
+          "locale",
+          "body",
+          "sources",
+          "data_as_of",
+          "indexable",
+          "generated_at",
+          "updated_at"
+        ],
+        "title": "ContentBlockOut",
+        "description": "Public content for one entity and locale. Only served (auto or approved) rows appear."
+      },
+      "ContentManifest": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ContentManifestItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "truncated": {
+            "type": "boolean",
+            "title": "Truncated",
+            "description": "True when more served rows exist than `limit` returned"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "truncated"
+        ],
+        "title": "ContentManifest"
+      },
+      "ContentManifestItem": {
+        "properties": {
+          "entity_type": {
+            "type": "string",
+            "enum": [
+              "locality",
+              "property"
+            ],
+            "title": "Entity Type"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "en",
+              "hi"
+            ],
+            "title": "Locale"
+          },
+          "indexable": {
+            "type": "boolean",
+            "title": "Indexable"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "entity_type",
+          "slug",
+          "locale",
+          "indexable",
+          "updated_at"
+        ],
+        "title": "ContentManifestItem"
+      },
+      "ContentReviewItem": {
+        "properties": {
+          "entity_type": {
+            "type": "string",
+            "enum": [
+              "locality",
+              "property"
+            ],
+            "title": "Entity Type"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "en",
+              "hi"
+            ],
+            "title": "Locale"
+          },
+          "body": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Body"
+          },
+          "sources": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "data_as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data As Of"
+          },
+          "indexable": {
+            "type": "boolean",
+            "title": "Indexable"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "review_status": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "needs_review",
+              "approved",
+              "rejected",
+              "failed"
+            ],
+            "title": "Review Status"
+          },
+          "dup_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dup Score"
+          },
+          "fact_count": {
+            "type": "integer",
+            "title": "Fact Count"
+          },
+          "key_fact": {
+            "type": "boolean",
+            "title": "Key Fact"
+          },
+          "prompt_version": {
+            "type": "string",
+            "title": "Prompt Version"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "errors": {
+            "items": {},
+            "type": "array",
+            "title": "Errors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "entity_type",
+          "slug",
+          "locale",
+          "body",
+          "sources",
+          "data_as_of",
+          "indexable",
+          "generated_at",
+          "updated_at",
+          "id",
+          "review_status",
+          "dup_score",
+          "fact_count",
+          "key_fact",
+          "prompt_version",
+          "model",
+          "errors"
+        ],
+        "title": "ContentReviewItem"
+      },
+      "ContentRunItem": {
+        "properties": {
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "locale": {
+            "type": "string",
+            "title": "Locale"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "indexable": {
+            "type": "boolean",
+            "title": "Indexable"
+          },
+          "dup_score": {
+            "type": "number",
+            "title": "Dup Score"
+          },
+          "calls": {
+            "type": "integer",
+            "title": "Calls"
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug",
+          "locale",
+          "status",
+          "indexable",
+          "dup_score",
+          "calls"
+        ],
+        "title": "ContentRunItem"
+      },
+      "ContentRunRequest": {
+        "properties": {
+          "entity_type": {
+            "type": "string",
+            "enum": [
+              "locality",
+              "property"
+            ],
+            "title": "Entity Type",
+            "default": "locality"
+          },
+          "locales": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "en",
+                "hi"
+              ]
+            },
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Locales"
+          },
+          "max_entities": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Max Entities",
+            "default": 10
+          },
+          "max_seconds": {
+            "type": "integer",
+            "maximum": 280.0,
+            "minimum": 10.0,
+            "title": "Max Seconds",
+            "default": 240
+          },
+          "after": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After",
+            "description": "Cursor from the previous run"
+          },
+          "slugs": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slugs"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "force": {
+            "type": "boolean",
+            "title": "Force",
+            "default": false
+          },
+          "retry_failed": {
+            "type": "boolean",
+            "title": "Retry Failed",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ContentRunRequest"
+      },
+      "ContentRunResult": {
+        "properties": {
+          "generated": {
+            "type": "integer",
+            "title": "Generated"
+          },
+          "skipped": {
+            "type": "integer",
+            "title": "Skipped"
+          },
+          "thin": {
+            "type": "integer",
+            "title": "Thin"
+          },
+          "failed": {
+            "type": "integer",
+            "title": "Failed"
+          },
+          "needs_review": {
+            "type": "integer",
+            "title": "Needs Review"
+          },
+          "rejected": {
+            "type": "integer",
+            "title": "Rejected"
+          },
+          "calls": {
+            "type": "integer",
+            "title": "Calls"
+          },
+          "provider_errors": {
+            "type": "integer",
+            "title": "Provider Errors"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          },
+          "next_after": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next After"
+          },
+          "stopped_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stopped Reason"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ContentRunItem"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "generated",
+          "skipped",
+          "thin",
+          "failed",
+          "needs_review",
+          "rejected",
+          "calls",
+          "provider_errors",
+          "done",
+          "next_after",
+          "stopped_reason",
+          "items"
+        ],
+        "title": "ContentRunResult"
+      },
+      "ContentStatusUpdate": {
+        "properties": {
+          "review_status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "rejected",
+              "needs_review"
+            ],
+            "title": "Review Status"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "review_status"
+        ],
+        "title": "ContentStatusUpdate"
+      },
       "ConversationCreate": {
         "properties": {
           "peer_user_id": {
@@ -37780,6 +38800,58 @@
           "total"
         ],
         "title": "CursorPage[ColonyApprovalResponse]"
+      },
+      "CursorPage_ContentReviewItem_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ContentReviewItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "default": false
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total",
+            "description": "Set only when the request sets include_total=true; otherwise null."
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor",
+          "has_more",
+          "limit",
+          "total"
+        ],
+        "title": "CursorPage[ContentReviewItem]"
       },
       "CursorPage_ConversationMessageOut_": {
         "properties": {
@@ -48548,6 +49620,65 @@
         "type": "object",
         "title": "ManagedPropertyUpdate",
         "description": "PATCH body: every editable core listing field, plus the PM fields.\n\nOnly keys the client sends are applied. An explicit null clears a nullable\nfield. A null on a NOT NULL field gives 422."
+      },
+      "MarketDigestResult": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "draft",
+              "skipped",
+              "exists",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "changes": {
+            "type": "integer",
+            "title": "Changes"
+          },
+          "post_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Post Slug"
+          },
+          "errors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Errors"
+          },
+          "calls": {
+            "type": "integer",
+            "title": "Calls",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "changes"
+        ],
+        "title": "MarketDigestResult"
       },
       "MarketingNotification": {
         "properties": {
