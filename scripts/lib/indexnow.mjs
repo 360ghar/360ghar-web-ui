@@ -9,7 +9,10 @@ export function extractLocs(xml) {
 }
 
 /** Every page URL of a site, read from `<base>/sitemap.xml` and the sitemaps it lists. GET only. */
-export async function urlsFromSitemapIndex(base, fetchImpl = fetch) {
+/**
+ * With `sinceMs`, only URLs whose <lastmod> is at or after that time are returned (a URL with no lastmod is left out).
+ */
+export async function urlsFromSitemapIndex(base, fetchImpl = fetch, { sinceMs } = {}) {
   const root = base.replace(/\/+$/, '');
   const get = async (url) => {
     const res = await fetchImpl(url, { signal: AbortSignal.timeout(30_000), headers: { 'User-Agent': '360ghar-indexnow-script' } });
@@ -18,7 +21,21 @@ export async function urlsFromSitemapIndex(base, fetchImpl = fetch) {
   };
   const children = extractLocs(await get(`${root}/sitemap.xml`)).filter((u) => /\.xml$/i.test(u));
   const urls = [];
-  for (const child of children) urls.push(...extractLocs(await get(child)).filter((u) => !/\.xml$/i.test(u)));
+  for (const child of children) {
+    const xml = await get(child);
+    if (sinceMs === undefined) {
+      urls.push(...extractLocs(xml).filter((u) => !/\.xml$/i.test(u)));
+      continue;
+    }
+    for (const [, block] of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
+      const loc = extractLocs(block)[0];
+      const raw = /<lastmod>([^<]+)<\/lastmod>/.exec(block)?.[1] ?? '';
+      const mod = Date.parse(raw);
+      // A date-only lastmod means midnight UTC: compare with the start of that day, or a change from earlier the same day is lost.
+      const floor = /^\d{4}-\d\d-\d\d$/.test(raw.trim()) ? Math.floor(sinceMs / 86_400_000) * 86_400_000 : sinceMs;
+      if (loc && Number.isFinite(mod) && mod >= floor) urls.push(loc);
+    }
+  }
   return urls;
 }
 

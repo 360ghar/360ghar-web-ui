@@ -1,6 +1,6 @@
 # 360Ghar - llms.txt
 
-> 360Ghar is India's first AI + VR-first real estate platform. We provide verified property listings, locality intelligence, and studio-quality 360-degree virtual walkthroughs across Gurgaon (Gurugram), Haryana, India.
+> 360Ghar is India's first AI + VR real estate platform. We provide verified property listings, locality intelligence, and studio-quality 360-degree virtual walkthroughs across Gurgaon (Gurugram), Haryana, India.
 
 ## About
 

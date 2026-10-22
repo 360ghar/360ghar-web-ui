@@ -66,4 +66,4 @@ export const AI_PAGES: [title: string, path: string][] = [
 ];
 
 export const AI_FEED_DESCRIPTION =
-  'Real estate platform for Buy, Rent and PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.';
+  'India\'s first AI + VR real estate platform for Buy, Rent and PG with verified listings, 360° virtual tours, AI assistance, and locality intelligence across Gurugram and Delhi NCR.';

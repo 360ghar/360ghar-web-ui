@@ -25,7 +25,7 @@ export const allPosts = () =>
  * The old site's curated list of indexable fixed pages (src/seo/indexationPolicy.js),
  * without the data hub pages: sitemap-datahub.xml lists those.
  */
-const STATIC_PATHS = [
+export const STATIC_PATHS = [
   '/', '/properties', '/about-us', '/contact', '/faq', '/project', '/blog', '/policies', '/policies/terms-of-service', '/policies/privacy-policy',
   '/policies/content-guidelines', '/policies/content-takedown-policy', '/policies/grievance-redressal-mechanism', '/refer-and-earn',
   '/gurugram-real-estate-guide', '/property-investment-gurugram', '/for-ai', '/ai-agent', '/localities', '/emi-calculator', '/area-converter',
@@ -34,7 +34,7 @@ const STATIC_PATHS = [
   '/vs/magicbricks', '/vs/99acres', '/vs/housing', '/vs/commonfloor', '/vs/proptiger', '/vs/squareyards', '/vs/nestaway', '/vs/zolo',
   '/vs/stanza-living', '/truth/nobroker-listings', '/truth/magicbricks-spam', '/truth/99acres-fake', '/truth/nestaway-collapse',
   '/truth/zolo-issues', '/careers', '/careers/content-creator-internship', '/careers/real-estate-agent', '/careers/founders-office-intern', '/careers/ai-generalist-intern',
-  '/celebrity-homes', '/nri-property-guide', '/landlord-not-returning-security-deposit', '/list-property-free', '/glossary', '/links', '/app',
+  '/celebrity-homes', '/nri-property-guide', '/landlord-not-returning-security-deposit', '/list-property-free', '/glossary', '/links', '/app', '/price-index', '/authors', '/editorial-policy', '/methodology',
   '/check-fake-listing', '/rent-receipt', '/near/cyber-city', '/near/udyog-vihar', '/near/golf-course-road-corporate',
   '/near/millennium-city-centre', '/near/medanta', '/near/artemis', '/near/sector-55-56-metro', '/near/dlf-cyber-park', '/near/ambience-mall',
   '/near/hero-honda-chowk',

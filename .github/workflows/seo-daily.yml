@@ -1,0 +1,105 @@
+# Daily SEO jobs. No repository secrets: it uses the built-in GITHUB_TOKEN.
+#  1. ai-discovery: regenerate llms.txt, llms-full.txt, llm-feed.json, ai.txt and the api-catalog. When a file
+#     changes, open (or update) one pull request. The main-branch ruleset blocks direct pushes, so a person merges it.
+#     If the repository does not allow Actions to create pull requests, the job prints a notice and the branch stays pushed.
+#  2. indexnow: send URLs whose sitemap lastmod is within the last 26 hours.
+#  3. schemas: validate the site-wide JSON-LD (pnpm seo:schemas).
+#  4. sitemap: every sitemap URL of the live site answers 200 and is not noindex (a sample of 300 per sitemap).
+
+name: SEO daily
+
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Site to check (no trailing slash)
+        required: true
+        default: https://360ghar.com
+
+concurrency:
+  group: seo-daily
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  ai-discovery:
+    name: Refresh the AI discovery files
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Write the files
+        run: pnpm ai:discovery --write
+      - name: Open a pull request when a file changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- public; then echo "No change."; exit 0; fi
+          # Only the date in llm-feed.json changed: not worth a pull request.
+          if [ "$(git diff --numstat -- public | awk '{a+=$1; d+=$2} END {print a+d}')" = "2" ] && git diff -U0 -- public/data/llm-feed.json | grep -q last_updated; then echo "Only last_updated changed."; exit 0; fi
+          branch="bot/ai-discovery"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add public
+          git commit -m "chore: refresh the AI discovery files"
+          git push --force origin "$branch"
+          if gh pr view "$branch" --json state --jq .state 2>/dev/null | grep -q OPEN; then echo "Pull request already open; branch updated."; exit 0; fi
+          gh pr create --base main --head "$branch" --title "chore: refresh the AI discovery files" --body "Daily run of \`pnpm ai:discovery --write\`. Review the diff and merge." \
+            || echo "::notice::Could not open a pull request (Actions may not be allowed to create them). Branch $branch is pushed."
+
+  indexnow:
+    name: IndexNow for changed URLs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Submit URLs changed in the last 26 hours
+        env:
+          BASE: ${{ inputs.base_url || 'https://360ghar.com' }}
+        run: node scripts/indexnow-submit.mjs --base "$BASE" --changed-within-hours 26 --submit --strict
+
+  schemas:
+    name: Structured data
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm seo:schemas
+
+  sitemap:
+    name: Sitemap URLs answer 200 and are indexable
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check
+        env:
+          BASE: ${{ inputs.base_url || 'https://360ghar.com' }}
+        run: node scripts/check-sitemap.mjs --base "$BASE" --limit 300

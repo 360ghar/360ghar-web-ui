@@ -4,6 +4,7 @@ import { isPlaceholderPrice } from '@/features/search/prices';
 import { askPrice, homeKind } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/locale';
 import { canonicalFor } from '@/lib/seo/site';
+import { ORGANIZATION_ID } from '@/lib/seo/siteSchemas';
 
 const accommodationType = (t: Property['property_type']) =>
   t === 'house' || t === 'villa' ? 'SingleFamilyResidence' : ['apartment', 'builder_floor', 'condo', 'penthouse', 'studio', 'loft'].includes(t) ? 'Apartment' : 'Accommodation';
@@ -41,6 +42,7 @@ export function propertySchema(p: Property, locale: Locale) {
       url,
       description: p.description?.slice(0, 500) ?? undefined,
       datePosted: p.created_at,
+      ...(p.updated_at ? { dateModified: p.updated_at } : {}),
       ...(images.length ? { image: images } : {}),
       about: place,
       // A stand-in ₹10 Cr price is not a real price: the offer stays, without one.
@@ -49,6 +51,8 @@ export function propertySchema(p: Property, locale: Locale) {
             offers: {
               '@type': 'Offer',
               ...(isPlaceholderPrice(p) ? {} : { price, priceCurrency: 'INR' }),
+              // 360Ghar lists and verifies the home; the Organization node is on every page.
+              seller: { '@id': ORGANIZATION_ID },
               availability: p.is_available ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
               businessFunction: rent ? 'http://purl.org/goodrelations/v1#LeaseOut' : 'http://purl.org/goodrelations/v1#Sell',
               url,

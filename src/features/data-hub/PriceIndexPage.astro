@@ -9,8 +9,11 @@ import { isThinLocality } from '@/features/localities/data';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
 import { absoluteUrl } from '@/lib/seo/site';
+import { DATA_UPDATED } from '@/lib/dataDates';
 import Icon from '@/ui/icons/Icon.astro';
+import Provenance from '@/ui/Provenance.astro';
 import { chartText } from './charts';
+import { PRICE_CITY_NAMES } from './cities';
 import DataHubPage from './DataHubPage.astro';
 import PriceRanges from './PriceRanges.astro';
 import { text } from './text';
@@ -23,14 +26,7 @@ const t = text(locale);
 const c = chartText(locale);
 const hi = locale === 'hi';
 const city = prices[slug] as City;
-const NAMES: Record<string, [string, string, string]> = {
-  gurgaon: ['Gurgaon', 'गुड़गाँव', 'Haryana'],
-  delhi: ['Delhi', 'दिल्ली', 'Delhi'],
-  noida: ['Noida', 'नोएडा', 'Uttar Pradesh'],
-  faridabad: ['Faridabad', 'फ़रीदाबाद', 'Haryana'],
-  ghaziabad: ['Ghaziabad', 'गाज़ियाबाद', 'Uttar Pradesh'],
-};
-const [nameEn, nameHi, region] = NAMES[slug] ?? [slug, slug, 'Haryana'];
+const [nameEn, nameHi, region] = PRICE_CITY_NAMES[slug] ?? [slug, slug, 'Haryana'];
 const name = hi ? nameHi : nameEn;
 const types = [...new Set([...Object.keys(city.buy ?? {}), ...Object.keys(city.rent ?? {})])].filter((k) => k !== 'default');
 const rows = types.map((k) => ({ type: k, buy: city.buy?.[k] ?? city.buy?.default ?? '–', rent: city.rent?.[k] ?? city.rent?.default ?? '–' }));
@@ -70,6 +66,7 @@ const faqs = [
       description: `Property price ranges for ${nameEn} across apartments, villas, builder floors, plots, and more. Includes buy and rent segments.`,
       url: absoluteUrl(`/price-index/${slug}`),
       temporalCoverage: '2026-05',
+      dateModified: DATA_UPDATED.priceContext,
       spatialCoverage: { '@type': 'City', name: nameEn, address: { '@type': 'PostalAddress', addressRegion: region, addressCountry: 'IN' } },
       creator: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
       license: 'https://creativecommons.org/licenses/by/4.0/',
@@ -93,6 +90,7 @@ const faqs = [
       />
     </div>
     <p class="dh-meta mt-4">{c.piSource(name)}</p>
+    <Provenance date={DATA_UPDATED.priceContext} class="mt-1" />
   </section>
   <p class="dh-meta mt-3 max-w-[68ch]">{t.piNote}</p>
 

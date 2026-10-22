@@ -23,6 +23,7 @@ const SPEC = {
   base: { type: 'string', default: 'https://360ghar.com', help: 'Site to read the sitemap index from. Also the host of the submitted URLs.' },
   file: { type: 'string', help: 'Read URLs from a text file (one per line) instead of the sitemap.' },
   url: { type: 'string', help: 'Submit this URL (comma list allowed) instead of the sitemap.' },
+  'changed-within-hours': { type: 'number', help: 'Only sitemap URLs whose lastmod is this recent.' },
   include: { type: 'string', help: 'Keep only URL paths that match this regular expression, for example "^/blog".' },
   limit: { type: 'number', help: 'Submit at most this many URLs.' },
   'batch-size': { type: 'number', default: 1000, help: 'URLs per POST (IndexNow allows up to 10,000).' },
@@ -50,7 +51,7 @@ let raw;
 try {
   if (args.file) raw = readFileSync(args.file, 'utf8').split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
   else if (args.url) raw = args.url.split(',').map((u) => u.trim());
-  else raw = await urlsFromSitemapIndex(base);
+  else raw = await urlsFromSitemapIndex(base, fetch, args['changed-within-hours'] === undefined ? {} : { sinceMs: Date.now() - args['changed-within-hours'] * 3_600_000 });
 } catch (e) {
   console.error(`indexnow: could not read URLs: ${e.message}`);
   process.exit(1);
