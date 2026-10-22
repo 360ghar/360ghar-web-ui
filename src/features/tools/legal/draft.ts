@@ -1,8 +1,8 @@
 /**
  * The form model and the backend call for the legal drafters.
- * Backend: POST /api/v1/ai/legal-draft { kind, fields } -> the clauses of a fixed template, filled with the fields.
- * The reply is read loosely (a title, then clauses as {heading?, text} or one text), so a small change of its shape
- * does not break the page. A reply with no text is a failure.
+ * Backend: POST /api/v1/ai/legal-draft { kind, fields } -> { kind, title, sections: [{ heading, body }], disclaimer,
+ * original_text?, narrative_source }. The clauses are a fixed template filled with `fields`; the model only rewords the
+ * free text, and `original_text` then holds the person's own words. Limits: 5 per hour per IP, model latency up to 80 s.
  */
 import { z } from 'zod';
 import { postJson } from '@/lib/api/client';
@@ -15,7 +15,7 @@ export function schemaFor(kind: Kind) {
   const shape: Record<string, z.ZodType<string>> = {};
   for (const f of SECTIONS[kind].flatMap((s) => s.fields)) {
     let one: z.ZodType<string>;
-    if (isText(f)) one = z.string().trim().max(f.max ?? 300);
+    if (isText(f)) one = z.string().trim().max(f.max ?? 300).refine((v) => v === '' || v.length >= (f.min ?? 0), 'min');
     else if (f.type === 'num') {
       one = z.string().trim().refine((v) => v === '' || ((f.int ? /^\d+$/ : /^\d+(\.\d{1,2})?$/).test(v) && Number(v) >= (f.min ?? 0) && Number(v) <= (f.max ?? Infinity)), 'number');
     } else if (f.type === 'date') one = z.string().refine((v) => v === '' || /^\d{4}-\d{2}-\d{2}$/.test(v), 'date');
@@ -30,48 +30,54 @@ export const defaults = (kind: Kind): Record<string, string> =>
   Object.fromEntries(SECTIONS[kind].flatMap((s) => s.fields).map((f) => [f.name, f.def ?? '']));
 
 /** The request `fields`: numbers as numbers, empty optional values left out. */
-export function toFields(kind: Kind, values: Record<string, string>): Record<string, string | number> {
-  const out: Record<string, string | number> = {};
+export function toFields(kind: Kind, values: Record<string, string>): Record<string, string | number | boolean> {
+  const out: Record<string, string | number | boolean> = {};
   for (const f of SECTIONS[kind].flatMap((s) => s.fields)) {
     const v = (values[f.name] ?? '').trim();
     if (v === '') continue;
-    out[f.name] = f.type === 'num' ? Number(v) : v;
+    out[f.name] = f.type === 'num' ? Number(v) : f.bool ? v === 'true' : v;
   }
   return out;
 }
 
-export type Draft = { title: string; clauses: { heading?: string; text: string }[] };
+/** The backend needs an amount for these two notices (422 without it). */
+export const amountRequired = (kind: Kind, values: Record<string, string>) =>
+  kind === 'legal_notice' && ['rent_arrears', 'security_deposit_refund'].includes(values.notice_type ?? '') && !(values.amount ?? '').trim();
+
+export type Draft = {
+  title: string;
+  /** Rendered as clauses: a heading and its text. */
+  clauses: { heading?: string; text: string }[];
+  /** The backend's fixed disclaimer (English). Shown with the draft. */
+  disclaimer?: string;
+  /** The person's own free text, when the model reworded it. Shown next to the draft. */
+  original?: string;
+};
 
 const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null);
 
-/** Reads the reply. Null when it has no text to show. */
+/** Reads the reply. Null when it has no sections to show. */
 export function parseDraft(json: unknown): Draft | null {
   if (!json || typeof json !== 'object') return null;
   const o = json as Record<string, unknown>;
-  const list = [o.clauses, o.sections].find((x) => Array.isArray(x) && x.length > 0) as unknown[] | undefined;
-  const clauses = list
-    ? list.flatMap((c) => {
-        if (typeof c === 'string') return str(c) ? [{ text: c.trim() }] : [];
-        const x = c as Record<string, unknown> | null;
-        const text = str(x?.text) ?? str(x?.body) ?? str(x?.content);
-        const heading = str(x?.heading) ?? str(x?.title);
-        return text ? [{ ...(heading ? { heading } : {}), text }] : [];
-      })
-    : (str(o.text) ?? str(o.body) ?? str(o.document) ?? '')
-        .split(/\n{2,}/)
-        .map((t) => t.trim())
-        .filter(Boolean)
-        .map((text) => ({ text }));
+  const clauses = (Array.isArray(o.sections) ? o.sections : []).flatMap((c) => {
+    const x = c as Record<string, unknown> | null;
+    const text = str(x?.body);
+    const heading = str(x?.heading);
+    return text ? [{ ...(heading ? { heading } : {}), text }] : [];
+  });
   if (!clauses.length) return null;
-  return { title: str(o.title) ?? '', clauses };
+  const original = o.narrative_source === 'model' ? str(o.original_text) : null;
+  return { title: str(o.title) ?? '', clauses, ...(str(o.disclaimer) ? { disclaimer: str(o.disclaimer)! } : {}), ...(original ? { original } : {}) };
 }
 
 export type DraftFailure = 'rate' | 'unavailable' | 'failed';
 
-export async function requestDraft(kind: Kind, fields: Record<string, string | number>): Promise<{ draft: Draft } | { failure: DraftFailure }> {
-  const { status, json } = await postJson('/api/v1/ai/legal-draft', { kind, fields });
+export async function requestDraft(kind: Kind, fields: Record<string, string | number | boolean>): Promise<{ draft: Draft } | { failure: DraftFailure }> {
+  // The model can take up to 80 s to reword the free text.
+  const { status, json } = await postJson('/api/v1/ai/legal-draft', { kind, fields }, 120_000);
   if (status === 429) return { failure: 'rate' };
-  if (status === 404 || status === 405 || status === 501) return { failure: 'unavailable' };
+  if (status === 404 || status === 405 || status === 501 || status === 503) return { failure: 'unavailable' };
   const draft = status >= 200 && status < 300 ? parseDraft(json) : null;
   return draft ? { draft } : { failure: 'failed' };
 }

@@ -8,7 +8,7 @@ import { SelectField, TextAreaField, TextField } from '@/ui/react/Field';
 import { useIsClient } from '@/ui/react/useClient';
 import { ToolShell } from '../ui';
 import { SECTIONS, UI, type Field, type Kind } from './content';
-import { defaults, requestDraft, schemaFor, toFields, type Draft, type DraftFailure } from './draft';
+import { amountRequired, defaults, requestDraft, schemaFor, toFields, type Draft, type DraftFailure } from './draft';
 import './legal.css';
 
 type Values = Record<string, string>;
@@ -24,8 +24,14 @@ function Paper({ draft, locale, kind }: { draft: Draft; locale: Locale; kind: Ki
           {c.text.split('\n').map((line, j) => (line.trim() ? <p key={j}>{line}</p> : null))}
         </section>
       ))}
+      {draft.original ? (
+        <aside className="ld-original">
+          <strong>{t.original}</strong>
+          <p>{draft.original}</p>
+        </aside>
+      ) : null}
       <aside className="ld-disclaimer" data-kind={kind}>
-        <strong>{t.disclaimerTitle}.</strong> {t.disclaimer}
+        <strong>{t.disclaimerTitle}.</strong> {locale === 'en' && draft.disclaimer ? draft.disclaimer : t.disclaimer}
       </aside>
     </article>
   );
@@ -41,9 +47,16 @@ function Drafter({ kind, locale }: { kind: Kind; locale: Locale }) {
   const [draft, setDraft] = useState<Draft | null>(null);
   const [failure, setFailure] = useState<DraftFailure | null>(null);
 
-  const message = (f: Field, code: string | undefined) => (!code ? undefined : code === 'required' ? t.required : f.type === 'num' ? t.number : f.type === 'date' ? t.date : t.required);
+  const message = (f: Field, code: string | undefined) =>
+    !code ? undefined : code === 'required' ? t.required : code === 'min' ? t.tooShort(f.min ?? 0) : f.type === 'num' ? t.number : f.type === 'date' ? t.date : t.required;
 
   const submit = form.handleSubmit(async (values) => {
+    // The backend answers 422 without an amount for these two notices; say so here.
+    if (amountRequired(kind, values)) {
+      form.setError('amount', { message: 'required' });
+      form.setFocus('amount');
+      return;
+    }
     setBusy(true);
     setFailure(null);
     // A failed second try must not leave the first draft to print.

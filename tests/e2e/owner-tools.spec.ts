@@ -8,8 +8,9 @@ import { axe, hydrated, signedIn, watch } from './helpers';
 
 const ON = process.env.PUBLIC_AI_OWNER_TOOLS === 'true';
 
-const photo = (k: number) => `http://localhost:4321/og-image-home.jpg?p=${k}`;
 const png = { mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64') };
+const photo = (k: number) => `https://res.cloudinary.com/demo/image/upload/p${k}.jpg`;
+const jpegUrl = `data:image/jpeg;base64,${png.buffer.toString('base64')}`;
 
 test.describe('without the flag', () => {
   test.skip(ON, 'the flag is on');
@@ -23,7 +24,7 @@ test.describe('with the flag', () => {
 
   const rent = {
     landlord_name: 'Sunita Gupta', landlord_address: 'A-1, DLF Phase 1, Gurugram', tenant_name: 'Rahul Sharma', tenant_address: 'B-2, Sector 57, Gurugram',
-    property_address: 'Flat 402, Tower B, DLF Phase 1, Gurugram', monthly_rent: '25000', security_deposit: '75000', start_date: '2026-11-01',
+    property_address: 'Flat 402, Tower B, DLF Phase 1, Gurugram', city: 'Gurugram', state: 'Haryana', monthly_rent: '25000', security_deposit: '75000', start_date: '2026-11-01',
   };
 
   test('rent agreement: validates, sends the fields, shows the draft with the disclaimer', async ({ page }) => {
@@ -31,7 +32,7 @@ test.describe('with the flag', () => {
     let body: { kind: string; fields: Record<string, unknown> } | null = null;
     await page.route(/\/api\/v1\/ai\/legal-draft/, (route) => {
       body = route.request().postDataJSON();
-      return route.fulfill({ json: { title: 'Leave and licence agreement', clauses: [{ heading: '1. Term', text: 'Eleven months.' }] } });
+      return route.fulfill({ json: { kind: 'rent_agreement', title: 'Leave and licence agreement', sections: [{ heading: '1. Term', body: 'Eleven months.' }], disclaimer: 'This is a draft for general information. It is not legal advice. Have a lawyer review it before you sign it or send it.', narrative_source: 'template', original_text: null } });
     });
     await page.goto('/rent-agreement-drafter');
     await hydrated(page);
@@ -44,8 +45,8 @@ test.describe('with the flag', () => {
     for (const [k, v] of Object.entries(rent)) await page.locator(`[name=${k}]`).fill(v);
     await page.getByRole('button', { name: 'Draft the document' }).click();
     await expect(page.locator('.ld-paper').first().getByText('Eleven months.')).toBeVisible();
-    await expect(page.locator('.ld-paper').first().getByText('This is a draft, not legal advice.')).toBeVisible();
-    expect(body).toMatchObject({ kind: 'rent_agreement', fields: { monthly_rent: 25000, term_months: 11, maintenance_paid_by: 'tenant', tenant_name: 'Rahul Sharma' } });
+    await expect(page.locator('.ld-paper').first().getByText('This is a draft for general information.')).toBeVisible();
+    expect(body).toMatchObject({ kind: 'rent_agreement', fields: { monthly_rent: 25000, duration_months: 11, maintenance_by: 'tenant', furnished: false, city: 'Gurugram', tenant_name: 'Rahul Sharma' } });
     await axe(page);
     await w.check();
   });
@@ -54,10 +55,33 @@ test.describe('with the flag', () => {
     await page.route(/\/api\/v1\/ai\/legal-draft/, (route) => route.fulfill({ status: 429, json: { detail: 'Too many' } }));
     await page.goto('/legal-notice-drafter');
     await hydrated(page);
-    const f = { property_address: 'Flat 1, Gurugram', facts: 'The deposit was not returned after I left.', sender_name: 'A Tenant', sender_address: 'Sector 1', recipient_name: 'A Landlord', recipient_address: 'Sector 2' };
+    const f = { property_address: 'Flat 1, Gurugram', amount: '50000', facts: 'The deposit was not returned after I left.', sender_name: 'A Tenant', sender_address: 'Sector 1', recipient_name: 'A Landlord', recipient_address: 'Sector 2' };
     for (const [k, v] of Object.entries(f)) await page.locator(`[name=${k}]`).fill(v);
     await page.getByRole('button', { name: 'Draft the document' }).click();
     await expect(page.getByRole('alert').filter({ hasText: 'You have made 5 drafts in the last hour' })).toBeVisible();
+  });
+
+  test('legal notice: an amount is asked for first, and reworded text shows the original', async ({ page }) => {
+    let body: { kind: string; fields: Record<string, unknown> } | null = null;
+    await page.route(/\/api\/v1\/ai\/legal-draft/, (route) => {
+      body = route.request().postDataJSON();
+      return route.fulfill({
+        json: { kind: 'legal_notice', title: 'Legal notice', sections: [{ heading: 'Facts', body: 'The deposit was not returned.' }], disclaimer: 'Fixed text.', narrative_source: 'model', original_text: 'deposit not given back lol' },
+      });
+    });
+    await page.goto('/legal-notice-drafter');
+    await hydrated(page);
+    const f = { property_address: 'Flat 1, Gurugram', facts: 'deposit not given back lol', sender_name: 'A Tenant', sender_address: 'Sector 1', recipient_name: 'A Landlord', recipient_address: 'Sector 2' };
+    for (const [k, v] of Object.entries(f)) await page.locator(`[name=${k}]`).fill(v);
+    await page.getByRole('button', { name: 'Draft the document' }).click();
+    await expect(page.getByText('Fill in this field.')).toBeVisible();
+    expect(body).toBeNull();
+    await page.locator('[name=amount]').fill('50000');
+    await page.getByRole('button', { name: 'Draft the document' }).click();
+    const paper = page.locator('.ld-paper').first();
+    await expect(paper.getByText('The deposit was not returned.')).toBeVisible();
+    await expect(paper.getByText('deposit not given back lol')).toBeVisible();
+    expect(body).toMatchObject({ kind: 'legal_notice', fields: { notice_type: 'security_deposit_refund', amount: 50000, compliance_days: 15 } });
   });
 
   test('the Hindi drafter renders in Hindi', async ({ page }) => {
@@ -88,6 +112,8 @@ test.describe('with the flag', () => {
 
   async function withPhotos(page: Page) {
     await signedIn(page);
+    // Cloudinary answers with CORS headers, which the staging code needs to read a photo.
+    await page.route(/res\.cloudinary\.com/, (route) => route.fulfill({ ...png, headers: { 'access-control-allow-origin': '*' } }));
     let n = 0;
     await page.route(/\/api\/v1\/upload\/batch/, async (route) => {
       const files = (route.request().postData() ?? '').split('filename=').length - 1;
@@ -105,26 +131,43 @@ test.describe('with the flag', () => {
     let sent = null as Record<string, unknown> | null;
     await page.route(/\/api\/v1\/design-studio\/stage/, (route) => {
       sent = route.request().postDataJSON();
-      return route.fulfill({ json: { image_url: 'https://res.cloudinary.com/demo/image/upload/staged-1.jpg' } });
+      return route.fulfill({ json: { image: jpegUrl, staged: true, watermark: 'Virtually staged' } });
     });
     await withPhotos(page);
     const first = page.locator('.post-photos li').first();
     await first.getByRole('button', { name: 'Virtually stage' }).click();
+    await first.getByLabel('Room').selectOption('bedroom');
+    await first.getByRole('button', { name: 'Stage this photo' }).click();
     await expect(first.getByText('Virtually staged')).toBeVisible();
-    await expect(first.locator('img')).toHaveAttribute('src', /staged-1\.jpg/);
-    expect(sent).toEqual({ image_url: photo(1) });
+    // The staged image was stored like any upload and is now the listing photo.
+    await expect(first.locator('img')).toHaveAttribute('src', new RegExp('p3\\.jpg'));
+    expect(sent).toMatchObject({ room_type: 'bedroom', style: 'modern' });
+    expect(typeof sent!.image).toBe('string');
+    expect(String(sent!.image)).not.toMatch(/^data:|^http/);
     await expect(page.getByText('The staged copy is marked')).toBeVisible();
     await first.getByRole('button', { name: 'Show original' }).click();
     await expect(first.getByText('Virtually staged')).toHaveCount(0);
-    await expect(first.locator('img')).toHaveAttribute('src', photo(1));
+    await expect(first.locator('img')).toHaveAttribute('src', new RegExp('p1\\.jpg'));
     await w.check();
   });
 
+  test('virtual staging: a rate limit keeps the photo and says so', async ({ page }) => {
+    await page.route(/\/api\/v1\/design-studio\/stage/, (route) => route.fulfill({ status: 429, json: { detail: 'Too many' } }));
+    await withPhotos(page);
+    const first = page.locator('.post-photos li').first();
+    await first.getByRole('button', { name: 'Virtually stage' }).click();
+    await first.getByRole('button', { name: 'Stage this photo' }).click();
+    await expect(first.getByRole('alert')).toContainText('Staging is limited per minute');
+    await expect(first.locator('img')).toHaveAttribute('src', new RegExp('p1\\.jpg'));
+  });
+
   test('listing writer: the draft is editable and fills the form only when used', async ({ page }) => {
-    let sent = null as { image_urls: string[]; details: Record<string, unknown> } | null;
+    let sent = null as { photos: { url: string }[]; hints: Record<string, unknown> } | null;
     await page.route(/\/api\/v1\/ai\/listing-draft/, (route) => {
       sent = route.request().postDataJSON();
-      return route.fulfill({ json: { title: 'Bright 3 BHK floor in Palam Vihar', description: 'A second-floor home with parking.' } });
+      return route.fulfill({
+        json: { title: 'Bright 3 BHK floor in Palam Vihar', description: 'A second-floor home with parking.', rooms: [{ photo: 0, room_type: 'living_room', label: 'Living room' }], flags: [{ code: 'blurry', photo: 1, note: 'Too blurred to show the room.' }, { code: 'few_photos', photo: null, note: 'Add more photos.' }] },
+      });
     });
     await withPhotos(page);
     await page.getByRole('button', { name: 'Continue' }).click();
@@ -132,8 +175,10 @@ test.describe('with the flag', () => {
     await page.getByRole('button', { name: 'Write it with AI' }).click();
     const title = page.getByLabel('Suggested title');
     await expect(title).toHaveValue('Bright 3 BHK floor in Palam Vihar');
-    expect(sent!.image_urls).toEqual([photo(1), photo(2)]);
-    expect(sent!.details).toMatchObject({ city: 'Gurugram', locality: 'Palam Vihar', property_type: 'builder_floor' });
+    expect(sent!.photos).toEqual([{ url: photo(1) }, { url: photo(2) }]);
+    expect(sent!.hints).toMatchObject({ city: 'Gurugram', locality: 'Palam Vihar', property_type: 'builder_floor' });
+    await expect(page.getByText('Photo 2: Too blurred to show the room.')).toBeVisible();
+    await expect(page.getByText('Add more photos.')).toBeVisible();
     // Nothing is in the form yet.
     await expect(page.getByLabel('Listing title')).toHaveValue('');
     await title.fill('Bright 3 BHK floor, Palam Vihar');

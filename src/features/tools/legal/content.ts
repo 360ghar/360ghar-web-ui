@@ -15,8 +15,10 @@ export type Field = {
   optional?: boolean;
   /** `num`: whole numbers only. */
   int?: boolean;
+  /** `select` with the values 'true' and 'false': sent as a boolean. */
+  bool?: boolean;
   hint?: Pair;
-  /** `num`: the allowed range. `text` and `area`: `max` is the length. */
+  /** `num`: the allowed range. `text` and `area`: `min` and `max` are the length. */
   min?: number;
   max?: number;
   def?: string;
@@ -28,11 +30,12 @@ export type Section = { title: Pair; fields: Field[] };
 const party = (who: 'landlord' | 'tenant' | 'sender' | 'recipient', title: Pair): Section => ({
   title,
   fields: [
-    { name: `${who}_name`, label: [`${title[0]} name`, `${title[1]} का नाम`], type: 'text', max: 120 },
-    { name: `${who}_address`, label: [`${title[0]} address`, `${title[1]} का पता`], type: 'area', max: 300 },
+    { name: `${who}_name`, label: [`${title[0]} name`, `${title[1]} का नाम`], type: 'text', min: 2, max: 100 },
+    { name: `${who}_address`, label: [`${title[0]} address`, `${title[1]} का पता`], type: 'area', min: 5, max: 300 },
   ],
 });
 
+// Names, limits and defaults are those of the backend's RentAgreementFields and LegalNoticeFields (POST /api/v1/ai/legal-draft).
 export const SECTIONS: Record<Kind, Section[]> = {
   rent_agreement: [
     party('landlord', ['Landlord', 'मकान मालिक']),
@@ -40,16 +43,30 @@ export const SECTIONS: Record<Kind, Section[]> = {
     {
       title: ['Home and terms', 'घर और शर्तें'],
       fields: [
-        { name: 'property_address', label: ['Address of the home', 'घर का पता'], type: 'area', max: 300 },
-        { name: 'monthly_rent', label: ['Monthly rent (₹)', 'मासिक किराया (₹)'], type: 'num', min: 1, max: 10_000_000 },
-        { name: 'security_deposit', label: ['Security deposit (₹)', 'सिक्योरिटी डिपॉज़िट (₹)'], type: 'num', min: 0, max: 100_000_000 },
+        { name: 'property_address', label: ['Address of the home', 'घर का पता'], type: 'area', min: 5, max: 300 },
+        { name: 'city', label: ['City', 'शहर'], type: 'text', min: 2, max: 100 },
+        { name: 'state', label: ['State', 'राज्य'], type: 'text', min: 2, max: 100 },
+        { name: 'monthly_rent', label: ['Monthly rent (₹)', 'मासिक किराया (₹)'], type: 'num', int: true, min: 1, max: 10_000_000 },
+        { name: 'security_deposit', label: ['Security deposit (₹)', 'सिक्योरिटी डिपॉज़िट (₹)'], type: 'num', int: true, min: 0, max: 100_000_000 },
         { name: 'start_date', label: ['Start date', 'शुरू होने की तारीख'], type: 'date' },
-        { name: 'term_months', label: ['Term (months)', 'अवधि (महीने)'], type: 'num', int: true, min: 1, max: 60, def: '11', hint: ['11 months is common, to avoid registration.', 'आम तौर पर 11 महीने, ताकि रजिस्ट्रेशन न करना पड़े।'] },
-        { name: 'lock_in_months', label: ['Lock-in (months)', 'लॉक-इन (महीने)'], type: 'num', int: true, min: 0, max: 24, def: '3' },
-        { name: 'notice_months', label: ['Notice period (months)', 'नोटिस अवधि (महीने)'], type: 'num', int: true, min: 0, max: 6, def: '1' },
-        { name: 'annual_increase_percent', label: ['Yearly rent increase (%)', 'सालाना किराया बढ़ोतरी (%)'], type: 'num', min: 0, max: 25, def: '5' },
+        { name: 'duration_months', label: ['Term (months)', 'अवधि (महीने)'], type: 'num', int: true, min: 1, max: 60, def: '11', hint: ['11 months is common, to avoid registration.', 'आम तौर पर 11 महीने, ताकि रजिस्ट्रेशन न करना पड़े।'] },
+        { name: 'rent_due_day', label: ['Rent due on day', 'किराया देने का दिन'], type: 'num', int: true, min: 1, max: 28, def: '5', hint: ['Day of the month, 1 to 28.', 'महीने की तारीख, 1 से 28।'] },
+        { name: 'lock_in_months', label: ['Lock-in (months)', 'लॉक-इन (महीने)'], type: 'num', int: true, min: 0, max: 24, def: '0' },
+        { name: 'notice_period_days', label: ['Notice period (days)', 'नोटिस अवधि (दिन)'], type: 'num', int: true, min: 7, max: 180, def: '30' },
+        { name: 'annual_increase_percent', label: ['Yearly rent increase (%)', 'सालाना किराया बढ़ोतरी (%)'], type: 'num', int: true, min: 0, max: 25, def: '5' },
         {
-          name: 'maintenance_paid_by',
+          name: 'furnished',
+          label: ['Furnishing', 'फ़र्निशिंग'],
+          type: 'select',
+          bool: true,
+          def: 'false',
+          options: [
+            ['false', ['Not furnished', 'फ़र्निश्ड नहीं']],
+            ['true', ['Furnished', 'फ़र्निश्ड']],
+          ],
+        },
+        {
+          name: 'maintenance_by',
           label: ['Society maintenance paid by', 'सोसाइटी मेंटेनेंस कौन देगा'],
           type: 'select',
           def: 'tenant',
@@ -58,6 +75,7 @@ export const SECTIONS: Record<Kind, Section[]> = {
             ['landlord', ['Landlord', 'मकान मालिक']],
           ],
         },
+        { name: 'additional_terms', label: ['Other terms', 'अन्य शर्तें'], type: 'area', optional: true, max: 500, hint: ['Optional. The draft may reword it, and then shows your own words too.', 'वैकल्पिक। ड्राफ़्ट इसे दोबारा लिख सकता है, तब आपके अपने शब्द भी दिखते हैं।'] },
       ],
     },
   ],
@@ -66,22 +84,22 @@ export const SECTIONS: Record<Kind, Section[]> = {
       title: ['Reason', 'कारण'],
       fields: [
         {
-          name: 'reason',
+          name: 'notice_type',
           label: ['What is the notice about', 'नोटिस किस बारे में है'],
           type: 'select',
-          def: 'deposit_refund',
+          def: 'security_deposit_refund',
           options: [
-            ['deposit_refund', ['Security deposit not returned', 'सिक्योरिटी डिपॉज़िट वापस नहीं मिला']],
-            ['unpaid_rent', ['Unpaid rent', 'बकाया किराया']],
-            ['vacate_property', ['Vacate the home', 'घर खाली करना']],
-            ['other', ['Another dispute', 'कोई और विवाद']],
+            ['security_deposit_refund', ['Security deposit not returned', 'सिक्योरिटी डिपॉज़िट वापस नहीं मिला']],
+            ['rent_arrears', ['Unpaid rent', 'बकाया किराया']],
+            ['vacate_premises', ['Vacate the home', 'घर खाली करना']],
+            ['breach_of_agreement', ['Breach of the agreement', 'समझौते का उल्लंघन']],
           ],
         },
-        { name: 'property_address', label: ['Address of the home', 'घर का पता'], type: 'area', max: 300 },
-        { name: 'amount', label: ['Amount claimed (₹)', 'दावे की राशि (₹)'], type: 'num', min: 1, max: 100_000_000, optional: true },
-        { name: 'lease_date', label: ['Date of the agreement', 'समझौते की तारीख'], type: 'date', optional: true },
-        { name: 'facts', label: ['What happened', 'क्या हुआ'], type: 'area', max: 1500, hint: ['Dates, amounts and what you asked for. Plain facts only.', 'तारीख़ें, राशि और आपने क्या माँगा। सिर्फ़ सीधे तथ्य।'] },
-        { name: 'days_to_comply', label: ['Days to respond', 'जवाब के लिए दिन'], type: 'num', int: true, min: 7, max: 60, def: '15' },
+        { name: 'property_address', label: ['Address of the home', 'घर का पता'], type: 'area', min: 5, max: 300 },
+        { name: 'amount', label: ['Amount claimed (₹)', 'दावे की राशि (₹)'], type: 'num', int: true, min: 1, max: 100_000_000, optional: true, hint: ['Needed for unpaid rent and a deposit refund.', 'बकाया किराए और डिपॉज़िट वापसी के लिए ज़रूरी।'] },
+        { name: 'agreement_date', label: ['Date of the agreement', 'समझौते की तारीख'], type: 'date', optional: true },
+        { name: 'facts', label: ['What happened', 'क्या हुआ'], type: 'area', optional: true, max: 600, hint: ['Dates, amounts and what you asked for. Plain facts only. The draft may reword it, and then shows your own words too.', 'तारीख़ें, राशि और आपने क्या माँगा। सिर्फ़ सीधे तथ्य। ड्राफ़्ट इसे दोबारा लिख सकता है, तब आपके अपने शब्द भी दिखते हैं।'] },
+        { name: 'compliance_days', label: ['Days to respond', 'जवाब के लिए दिन'], type: 'num', int: true, min: 7, max: 90, def: '15' },
       ],
     },
     party('sender', ['Sender (you)', 'भेजने वाला (आप)']),
@@ -97,6 +115,8 @@ export const UI = {
     print: 'Print or save as PDF',
     optional: '(optional)',
     required: 'Fill in this field.',
+    tooShort: (n: number) => `Enter at least ${n} characters.`,
+    original: 'Your own words, as you wrote them',
     number: 'Enter a number in the allowed range.',
     date: 'Choose a date.',
     preview: 'Your draft',
@@ -117,6 +137,8 @@ export const UI = {
     print: 'प्रिंट करें या PDF सेव करें',
     optional: '(वैकल्पिक)',
     required: 'यह फ़ील्ड भरें।',
+    tooShort: (n: number) => `कम से कम ${n} अक्षर लिखें।`,
+    original: 'आपके अपने शब्द, जैसे आपने लिखे',
     number: 'सही सीमा में संख्या डालें।',
     date: 'तारीख चुनें।',
     preview: 'आपका ड्राफ़्ट',
@@ -187,12 +209,12 @@ export const FAQ: Record<Kind, Record<'en' | 'hi', Faq[]>> = {
   legal_notice: {
     en: [
       { q: 'Is the draft a legal notice I can send?', a: 'It is a draft. A lawyer should read it, and it is usually sent by registered post or speed post with proof of delivery.' },
-      { q: 'How many days should I give?', a: 'Fifteen days is common. The form lets you set 7 to 60 days.' },
+      { q: 'How many days should I give?', a: 'Fifteen days is common. The form lets you set 7 to 90 days.' },
       { q: 'Where does what I type go?', a: 'The details are sent to our server once, to fill the clauses. Nothing is kept in your browser.' },
     ],
     hi: [
       { q: 'क्या यह ड्राफ़्ट सीधे भेजने लायक लीगल नोटिस है?', a: 'यह ड्राफ़्ट है। इसे वकील को पढ़ना चाहिए, और आम तौर पर यह रजिस्टर्ड या स्पीड पोस्ट से, डिलीवरी के सबूत के साथ भेजा जाता है।' },
-      { q: 'कितने दिन देने चाहिए?', a: 'आम तौर पर पंद्रह दिन। फ़ॉर्म में 7 से 60 दिन चुन सकते हैं।' },
+      { q: 'कितने दिन देने चाहिए?', a: 'आम तौर पर पंद्रह दिन। फ़ॉर्म में 7 से 90 दिन चुन सकते हैं।' },
       { q: 'मेरी डाली जानकारी कहाँ जाती है?', a: 'धाराएँ भरने के लिए जानकारी एक बार हमारे सर्वर पर भेजी जाती है। आपके ब्राउज़र में कुछ नहीं रखा जाता।' },
     ],
   },
@@ -226,7 +248,7 @@ export const HOWTO: Record<Kind, Record<'en' | 'hi', HowTo>> = {
       name: 'How to draft a legal notice',
       description: 'Draft a legal notice for a rental dispute and print it.',
       steps: [
-        { name: 'Choose the reason', text: 'Pick deposit refund, unpaid rent, vacate the home or another dispute.' },
+        { name: 'Choose the reason', text: 'Pick deposit refund, unpaid rent, vacate the home or breach of the agreement.' },
         { name: 'Enter the facts', text: 'Add the address, the amount, the dates and what happened.' },
         { name: 'Enter both parties', text: 'Add your details and the details of the person you write to.' },
         { name: 'Draft and check', text: 'Press the button, read the draft and have a lawyer check it before you send it.' },
@@ -236,7 +258,7 @@ export const HOWTO: Record<Kind, Record<'en' | 'hi', HowTo>> = {
       name: 'लीगल नोटिस का ड्राफ़्ट कैसे बनाएँ',
       description: 'किराये के विवाद के लिए लीगल नोटिस का ड्राफ़्ट बनाएँ और प्रिंट करें।',
       steps: [
-        { name: 'कारण चुनें', text: 'डिपॉज़िट वापसी, बकाया किराया, घर खाली करना या कोई और विवाद चुनें।' },
+        { name: 'कारण चुनें', text: 'डिपॉज़िट वापसी, बकाया किराया, घर खाली करना या समझौते का उल्लंघन चुनें।' },
         { name: 'तथ्य भरें', text: 'पता, राशि, तारीख़ें और क्या हुआ, यह डालें।' },
         { name: 'दोनों पक्ष भरें', text: 'अपनी जानकारी और जिसे लिख रहे हैं उसकी जानकारी डालें।' },
         { name: 'ड्राफ़्ट बनाएँ और जाँचें', text: 'बटन दबाएँ, ड्राफ़्ट पढ़ें और भेजने से पहले वकील से जँचवाएँ।' },

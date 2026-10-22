@@ -41,6 +41,21 @@
   font-size: 0.9375rem;
 }
 
+.ld-original {
+  margin-top: 1.25rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-paper);
+  border: 1px solid var(--color-ink-200);
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+
+.ld-original p {
+  margin: 0.25rem 0 0;
+  white-space: pre-line;
+}
+
 .ld-print {
   display: none;
 }
