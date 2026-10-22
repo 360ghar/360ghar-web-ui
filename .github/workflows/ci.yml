@@ -57,6 +57,10 @@ jobs:
       # Builds the Netlify function and runs it without require(esm), as Netlify does (scripts/check-built-routes.mjs).
       - name: Build and check built routes
         run: pnpm build && pnpm check:built
+        env:
+          # Same as netlify.toml: the production build has the owner tools and API OG cards on.
+          PUBLIC_AI_OWNER_TOOLS: 'true'
+          OG_FROM_API: 'true'
 
   e2e:
     name: Playwright (one dev server)
@@ -73,7 +77,7 @@ jobs:
       # A fake key: the map tests replace window.google with a stub, but the page only loads Maps when a key is set.
       PUBLIC_GOOGLE_MAPS_API_KEY: ci-test-key
       BASE_URL: http://127.0.0.1:4321
-      # Shows the owner AI tools (drafters, listing writer, staging) so their specs run. Production sets it after the backend deploy.
+      # Shows the owner AI tools (drafters, listing writer, staging) so their specs run. Production sets it in netlify.toml.
       PUBLIC_AI_OWNER_TOOLS: 'true'
     steps:
       - uses: actions/checkout@v4

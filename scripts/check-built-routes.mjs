@@ -102,10 +102,13 @@ expect(/s-maxage=[1-9]/.test(policy.cdn ?? ''), '/policies/<slug>: no Netlify-CD
 expect(policy.status === 200, `/policies/<slug>: expected 200, got ${policy.status}`);
 expect(policy.body.includes('Policy body text.'), '/policies/<slug>: policy text missing (catch-all 404 page?)');
 
-// The owner AI tools are off in this build (no PUBLIC_AI_OWNER_TOOLS): the drafter routes are real 404s, not in the tools list.
+// The owner AI tools follow the build flags (netlify.toml and CI set PUBLIC_AI_OWNER_TOOLS=true): the drafter routes render when on, are real 404s when off.
+// Astro reads .env at build time, so read it here too when the variable is not in the environment.
+const envFlag = process.env.PUBLIC_AI_OWNER_TOOLS ?? /^PUBLIC_AI_OWNER_TOOLS=(.*)$/m.exec(existsSync('.env') ? readFileSync('.env', 'utf8') : '')?.[1]?.trim();
+const ownerTools = envFlag === 'true';
 for (const path of ['/rent-agreement-drafter', '/legal-notice-drafter']) {
-  const off = await get(path);
-  expect(off.status === 404, `${path}: expected 404 with the flag off, got ${off.status}`);
+  const res = await get(path);
+  expect(res.status === (ownerTools ? 200 : 404), `${path}: expected ${ownerTools ? 200 : 404} with the flag ${ownerTools ? 'on' : 'off'}, got ${res.status}`);
 }
 
 // Generated content: shown, with FAQPage JSON-LD from the same data; a place without a block keeps the fixed FAQs.

@@ -220,6 +220,51 @@ export interface paths {
         patch: operations["update_status_api_v1_admin_content__block_id__status_patch"];
         trace?: never;
     };
+    "/api/v1/og/{kind}/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Share card image for a property, locality, blog post or city
+         * @description 302 to a 1200x630 card: generated art with the exact title, price and locality as text.
+         *
+         *     This never calls the image model. A subject with no art yet gets the neutral brand card, with a
+         *     short cache time. An unknown subject is 404.
+         */
+        get: operations["og_card_api_v1_og__kind___slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/imagery/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generate house-style art for subjects that have none (cron)
+         * @description One bounded batch, four images at a time. Images already made are skipped, so repeating a
+         *     call is safe. A provider 429 stops the batch: when nothing was made the answer is 429 with
+         *     ``Retry-After``, otherwise 200 with ``retry_after`` set. Call again with a later nightly run.
+         */
+        post: operations["run_imagery_api_v1_admin_imagery_run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users/me": {
         parameters: {
             query?: never;
@@ -594,6 +639,30 @@ export interface paths {
          * @description Assign an agent to a user (admin only). Returns the updated user.
          */
         post: operations["assign_agent_to_specific_user_api_v1_users__user_id__assign_agent_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/properties/nl-search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Turn a plain-language search into property filters
+         * @description Public. 20 requests per minute per IP. Answers are cached for 24 hours by normalised query.
+         *
+         *     ``filters`` uses the query parameter names of ``GET /properties``. Send them to that endpoint
+         *     as they are. Unknown keys and invalid values are dropped. When the model is not available the
+         *     answer is 503 ``AI_UNAVAILABLE``: fall back to a keyword search with ``q``.
+         */
+        post: operations["nl_property_search_api_v1_properties_nl_search_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4134,6 +4203,34 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/design-studio/stage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Virtually stage a room photo
+         * @description Add furniture to an empty-room photo. Free, no login required. Powered by Agnes AI.
+         *
+         *     **Rate limit:** 5 requests per minute per IP address.
+         *
+         *     The room's walls, floor, windows and layout are kept. The returned image always carries a
+         *     visible "Virtually staged" band and the response has ``staged: true``. Show both wherever the
+         *     image is used: a staged photo must not be presented as the real room.
+         *
+         *     ``room_type`` and ``style`` are fixed choices. The image is a JPEG, PNG or WebP of up to 5 MB.
+         */
+        post: operations["stage_room_api_v1_design_studio_stage_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/vastu/analyze": {
         parameters: {
             query?: never;
@@ -5087,6 +5184,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/ai/listing-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Draft a listing title and description from photos
+         * @description Sign-in required. Limited to 3 per minute and 20 per hour per IP.
+         *
+         *     Send 1 to 8 photos, each as a Cloudinary URL of this account or as base64 (JPEG, PNG or WebP,
+         *     up to 3 MB decoded). Every photo is checked (size, magic bytes against ``mime_type``, full
+         *     decode) before the model sees any. Returns an editable ``title`` and ``description``, one
+         *     ``rooms`` tag per photo, and ``flags`` for photo problems. Treat the text as a draft: the
+         *     owner reviews it before saving the listing.
+         */
+        post: operations["listing_draft_api_v1_ai_listing_draft_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ai/legal-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Draft a rent agreement or a legal notice
+         * @description Public. Limited to 5 per hour per IP.
+         *
+         *     The clauses are fixed text filled from ``fields``. The model only rewords the free text
+         *     (``additional_terms`` or ``facts``); ``narrative_source`` says whether it did. Every response
+         *     carries the fixed ``disclaimer`` and ends with a Disclaimer section: show both. The fields
+         *     are never written to the logs.
+         */
+        post: operations["legal_draft_api_v1_ai_legal_draft_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/custom-domains": {
         parameters: {
             query?: never;
@@ -5173,7 +5321,10 @@ export interface paths {
          * Send public agent chat message
          * @description Stream an AI agent response for unauthenticated guests via SSE.
          *
-         *     Only property discovery tools are available. No conversation persistence.
+         *     Only property discovery tools are available (all read-only). No conversation persistence.
+         *
+         *     With ``context`` the server loads the page facts itself (404 when the page does not exist),
+         *     the message is at most 500 characters and the call also counts against 40 per day per IP.
          *
          *     The main-pool DB session is released before streaming begins and a
          *     background-pool session is used for tool calls, matching the pattern
@@ -6457,6 +6608,8 @@ export interface components {
              * @description Existing conversation to continue. Omit to start one.
              */
             conversation_id?: number | null;
+            /** @description Optional page to ground the answer in. With it the message is at most 500 characters. */
+            context?: components["schemas"]["ChatContext"] | null;
         };
         /** AgentCreate */
         AgentCreate: {
@@ -8881,6 +9034,30 @@ export interface components {
             sent?: number | null;
             /** Error */
             error?: string | null;
+        };
+        /**
+         * ChatContext
+         * @description The page the visitor asks about. A closed set: the server loads the facts itself.
+         *
+         *     A property is named by ``id``, a locality by ``slug``. Nothing else is accepted, so a client
+         *     cannot put its own text into the model's context through this field.
+         */
+        ChatContext: {
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "property" | "locality";
+            /**
+             * Id
+             * @description Property id (type property)
+             */
+            id?: number | null;
+            /**
+             * Slug
+             * @description Locality slug (type locality)
+             */
+            slug?: string | null;
         };
         /** CircleRateResponse */
         CircleRateResponse: {
@@ -11904,6 +12081,8 @@ export interface components {
         GuestChatRequest: {
             /** Message */
             message: string;
+            /** @description Optional page to ground the answer in. With it the message is at most 500 characters and the call is limited to 10 per minute and 40 per day per IP. */
+            context?: components["schemas"]["ChatContext"] | null;
         };
         /**
          * GuestsPolicy
@@ -12143,6 +12322,62 @@ export interface components {
              * @default 1:1
              */
             ratio?: string;
+        };
+        /** ImageryRunItem */
+        ImageryRunItem: {
+            /** Kind */
+            kind: string;
+            /** Slug */
+            slug: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ready" | "skipped" | "failed" | "rate_limited";
+        };
+        /** ImageryRunRequest */
+        ImageryRunRequest: {
+            /** Kinds */
+            kinds?: ("city" | "locality" | "property" | "blog")[];
+            /**
+             * Max Items
+             * @default 8
+             */
+            max_items?: number;
+            /**
+             * Max Seconds
+             * @default 240
+             */
+            max_seconds?: number;
+            /**
+             * Variant
+             * @description og is 16:9 at 1K, hero is 16:9 at 2K
+             * @default og
+             * @enum {string}
+             */
+            variant?: "og" | "hero";
+        };
+        /** ImageryRunResult */
+        ImageryRunResult: {
+            /** Generated */
+            generated: number;
+            /** Skipped */
+            skipped: number;
+            /** Failed */
+            failed: number;
+            /** Rate Limited */
+            rate_limited: number;
+            /** Done */
+            done: boolean;
+            /**
+             * Retry After
+             * @description Seconds to wait before the next call after a provider 429
+             */
+            retry_after?: number | null;
+            /** Stopped Reason */
+            stopped_reason: string | null;
+            /** Items */
+            items: components["schemas"]["ImageryRunItem"][];
         };
         /**
          * IncomeReport
@@ -12585,6 +12820,83 @@ export interface components {
              */
             signed_by_tenant?: boolean;
         };
+        /** LegalDraftResponse */
+        LegalDraftResponse: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "rent_agreement" | "legal_notice";
+            /** Title */
+            title: string;
+            /** Sections */
+            sections: components["schemas"]["LegalSection"][];
+            /**
+             * Disclaimer
+             * @description Fixed text. Show it with the draft.
+             * @default This is a draft for general information. It is not legal advice. Have a lawyer review it before you sign it or send it.
+             */
+            disclaimer?: string;
+            /**
+             * Original Text
+             * @description Your own wording, returned when the model reworded it. Show it next to the draft.
+             */
+            original_text?: string | null;
+            /**
+             * Narrative Source
+             * @description model when the model reworded your free text, template when your text is used as written
+             * @enum {string}
+             */
+            narrative_source: "model" | "template";
+        };
+        /** LegalNoticeDraft */
+        LegalNoticeDraft: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "legal_notice";
+            fields: components["schemas"]["LegalNoticeFields"];
+        };
+        /** LegalNoticeFields */
+        LegalNoticeFields: {
+            /**
+             * Notice Type
+             * @enum {string}
+             */
+            notice_type: "rent_arrears" | "vacate_premises" | "security_deposit_refund" | "breach_of_agreement";
+            /** Sender Name */
+            sender_name: string;
+            /** Sender Address */
+            sender_address: string;
+            /** Recipient Name */
+            recipient_name: string;
+            /** Recipient Address */
+            recipient_address: string;
+            /** Property Address */
+            property_address: string;
+            /** Agreement Date */
+            agreement_date?: string | null;
+            /**
+             * Amount
+             * @description Rupees. Needed for rent_arrears and security_deposit_refund
+             */
+            amount?: number | null;
+            /**
+             * Compliance Days
+             * @default 15
+             */
+            compliance_days?: number;
+            /** Facts */
+            facts?: string | null;
+        };
+        /** LegalSection */
+        LegalSection: {
+            /** Heading */
+            heading: string;
+            /** Body */
+            body: string;
+        };
         /** LinkContent */
         LinkContent: {
             /** Url */
@@ -12598,11 +12910,64 @@ export interface components {
             /** Label */
             label?: string | null;
         };
+        /** ListingDraftRequest */
+        ListingDraftRequest: {
+            /** Photos */
+            photos: components["schemas"]["PhotoIn"][];
+            hints?: components["schemas"]["ListingHints"] | null;
+        };
+        /** ListingDraftResponse */
+        ListingDraftResponse: {
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            /** Rooms */
+            rooms: components["schemas"]["RoomTag"][];
+            /** Flags */
+            flags: components["schemas"]["ListingFlag"][];
+        };
+        /** ListingFlag */
+        ListingFlag: {
+            /**
+             * Code
+             * @enum {string}
+             */
+            code: "blurry" | "dark" | "people_visible" | "text_or_watermark" | "not_a_property" | "duplicate_photo" | "low_resolution" | "few_photos" | "no_exterior_or_entrance";
+            /**
+             * Photo
+             * @description 0-based photo index, or null for the whole set
+             */
+            photo?: number | null;
+            /** Note */
+            note: string;
+        };
         /**
          * ListingGenderPreference
          * @enum {string}
          */
         ListingGenderPreference: "any" | "male" | "female";
+        /**
+         * ListingHints
+         * @description What the owner already knows. Each value is data for the writer, never an instruction.
+         */
+        ListingHints: {
+            property_type?: components["schemas"]["PropertyType"] | null;
+            purpose?: components["schemas"]["PropertyPurpose"] | null;
+            /** City */
+            city?: string | null;
+            /** Locality */
+            locality?: string | null;
+            /** Bedrooms */
+            bedrooms?: number | null;
+            /** Bathrooms */
+            bathrooms?: number | null;
+            /** Area Sqft */
+            area_sqft?: number | null;
+            furnishing?: components["schemas"]["FurnishingLevel"] | null;
+            /** Notes */
+            notes?: string | null;
+        };
         /**
          * ListingModerationAction
          * @description Payload for moderating a flatmates listing (approve, reject, or request edit).
@@ -13438,6 +13803,32 @@ export interface components {
          */
         MoveInTimeline: "immediate" | "within_1_week" | "within_2_weeks" | "this_month" | "next_month" | "within_1_month" | "within_2_months" | "within_3_months" | "flexible";
         /**
+         * NLSearchRequest
+         * @description Body of POST /properties/nl-search.
+         */
+        NLSearchRequest: {
+            /**
+             * Q
+             * @description The search, in the visitor's own words
+             */
+            q: string;
+        };
+        /**
+         * NLSearchResponse
+         * @description Filters for GET /properties and one sentence saying what was searched.
+         */
+        NLSearchResponse: {
+            /**
+             * Filters
+             * @description Query parameters of GET /properties, as sent
+             */
+            filters: {
+                [key: string]: unknown;
+            };
+            /** Explanation */
+            explanation: string;
+        };
+        /**
          * NavigationContent
          * @description Navigation hotspots store no content. The target is target_scene_id.
          */
@@ -14010,6 +14401,21 @@ export interface components {
         PhoneUpdate: {
             /** Phone */
             phone: string;
+        };
+        /**
+         * PhotoIn
+         * @description One photo: a Cloudinary URL of this account, or base64 with its MIME type.
+         */
+        PhotoIn: {
+            /** Url */
+            url?: string | null;
+            /**
+             * Base64
+             * @description Standard base64, up to 3 MB decoded
+             */
+            base64?: string | null;
+            /** Mime Type */
+            mime_type?: ("image/jpeg" | "image/png" | "image/webp") | null;
         };
         /** PnLReport */
         PnLReport: {
@@ -15245,6 +15651,79 @@ export interface components {
          * @enum {string}
          */
         RemedyType: "placement" | "color" | "element" | "structural";
+        /** RentAgreementDraft */
+        RentAgreementDraft: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "rent_agreement";
+            fields: components["schemas"]["RentAgreementFields"];
+        };
+        /** RentAgreementFields */
+        RentAgreementFields: {
+            /** Landlord Name */
+            landlord_name: string;
+            /** Landlord Address */
+            landlord_address: string;
+            /** Tenant Name */
+            tenant_name: string;
+            /** Tenant Address */
+            tenant_address: string;
+            /** Property Address */
+            property_address: string;
+            /** City */
+            city: string;
+            /** State */
+            state: string;
+            /** Monthly Rent */
+            monthly_rent: number;
+            /** Security Deposit */
+            security_deposit: number;
+            /**
+             * Start Date
+             * Format: date
+             */
+            start_date: string;
+            /**
+             * Duration Months
+             * @default 11
+             */
+            duration_months?: number;
+            /**
+             * Rent Due Day
+             * @default 5
+             */
+            rent_due_day?: number;
+            /**
+             * Notice Period Days
+             * @default 30
+             */
+            notice_period_days?: number;
+            /**
+             * Lock In Months
+             * @default 0
+             */
+            lock_in_months?: number;
+            /**
+             * Annual Increase Percent
+             * @default 5
+             */
+            annual_increase_percent?: number;
+            /**
+             * Furnished
+             * @default false
+             */
+            furnished?: boolean;
+            /**
+             * Maintenance By
+             * @default tenant
+             * @enum {string}
+             */
+            maintenance_by?: "tenant" | "landlord";
+            /** Additional Terms */
+            additional_terms?: string | null;
+        };
         /** RentCharge */
         RentCharge: {
             /** Id */
@@ -15789,6 +16268,21 @@ export interface components {
             /** Notes */
             notes?: string | null;
         };
+        /** RoomTag */
+        RoomTag: {
+            /**
+             * Photo
+             * @description 0-based index into the request's photos
+             */
+            photo: number;
+            /**
+             * Room Type
+             * @enum {string}
+             */
+            room_type: "living_room" | "bedroom" | "kitchen" | "bathroom" | "dining_room" | "balcony" | "exterior" | "entrance" | "study" | "parking" | "garden" | "amenity" | "floor_plan" | "other";
+            /** Label */
+            label: string;
+        };
         /**
          * RoomVastuAnalysis
          * @description Vastu analysis for a specific room.
@@ -16253,6 +16747,47 @@ export interface components {
             }[];
             /** Warnings */
             warnings?: string[];
+        };
+        /** StageRequest */
+        StageRequest: {
+            /**
+             * Image
+             * @description Base64 of an empty-room photo, up to 5 MB decoded
+             */
+            image: string;
+            /** Mime Type */
+            mime_type?: ("image/jpeg" | "image/png" | "image/webp") | null;
+            /**
+             * Room Type
+             * @default living_room
+             * @enum {string}
+             */
+            room_type?: "living_room" | "bedroom" | "dining_room" | "kitchen" | "study" | "balcony";
+            /**
+             * Style
+             * @default modern
+             * @enum {string}
+             */
+            style?: "modern" | "minimalist" | "scandinavian" | "traditional_indian" | "contemporary";
+        };
+        /** StageResponse */
+        StageResponse: {
+            /**
+             * Image
+             * @description A JPEG data URL with the visible watermark
+             */
+            image: string;
+            /**
+             * Staged
+             * @default true
+             * @constant
+             */
+            staged?: true;
+            /**
+             * Watermark
+             * @default Virtually staged
+             */
+            watermark?: string;
         };
         /**
          * StaircaseInfo
@@ -18032,6 +18567,98 @@ export interface operations {
             };
         };
     };
+    og_card_api_v1_og__kind___slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Redirect to the share card image */
+            302: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    run_imagery_api_v1_admin_imagery_run_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-cron-secret"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImageryRunRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageryRunResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description The image provider is rate limited. See Retry-After. */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageryRunResult"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
     get_user_me_api_v1_users_me_get: {
         parameters: {
             query?: never;
@@ -18925,6 +19552,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminUser"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    nl_property_search_api_v1_properties_nl_search_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NLSearchRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NLSearchResponse"];
                 };
             };
             /** @description Validation Error */
@@ -28293,6 +28962,48 @@ export interface operations {
             };
         };
     };
+    stage_room_api_v1_design_studio_stage_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StageRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StageResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
     analyze_floor_plan_api_v1_vastu_analyze_post: {
         parameters: {
             query?: never;
@@ -30477,6 +31188,90 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    listing_draft_api_v1_ai_listing_draft_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListingDraftRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingDraftResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    legal_draft_api_v1_ai_legal_draft_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RentAgreementDraft"] | components["schemas"]["LegalNoticeDraft"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegalDraftResponse"];
                 };
             };
             /** @description Validation Error */

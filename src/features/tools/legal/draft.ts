@@ -1,11 +1,11 @@
 /**
  * The form model and the backend call for the legal drafters.
- * Backend: POST /api/v1/ai/legal-draft { kind, fields } -> { kind, title, sections: [{ heading, body }], disclaimer,
+ * Typed call (openapi/openapi.json): POST /api/v1/ai/legal-draft { kind, fields } -> { kind, title, sections: [{ heading, body }], disclaimer,
  * original_text?, narrative_source }. The clauses are a fixed template filled with `fields`; the model only rewords the
  * free text, and `original_text` then holds the person's own words. Limits: 5 per hour per IP, model latency up to 80 s.
  */
 import { z } from 'zod';
-import { postJson } from '@/lib/api/client';
+import { api, timeoutMs } from '@/lib/api/client';
 import { SECTIONS, type Field, type Kind } from './content';
 
 const isText = (f: Field) => f.type === 'text' || f.type === 'area';
@@ -75,7 +75,16 @@ export type DraftFailure = 'rate' | 'unavailable' | 'failed';
 
 export async function requestDraft(kind: Kind, fields: Record<string, string | number | boolean>): Promise<{ draft: Draft } | { failure: DraftFailure }> {
   // The model can take up to 80 s to reword the free text.
-  const { status, json } = await postJson('/api/v1/ai/legal-draft', { kind, fields }, 120_000);
+  let status = 0;
+  let json: unknown = null;
+  try {
+    // The body is a union of per-kind field sets; the form model already builds the right one for `kind`.
+    const res = await api.POST('/api/v1/ai/legal-draft', { body: { kind, fields } as never, ...timeoutMs(120_000) });
+    status = res.response.status;
+    json = res.data ?? null;
+  } catch {
+    // network failure or timeout: status stays 0, shown as a failure
+  }
   if (status === 429) return { failure: 'rate' };
   if (status === 404 || status === 405 || status === 501 || status === 503) return { failure: 'unavailable' };
   const draft = status >= 200 && status < 300 ? parseDraft(json) : null;

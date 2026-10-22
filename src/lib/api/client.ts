@@ -129,19 +129,6 @@ export function apiUrl(path: string): string {
   return `${isServer ? SERVER_ORIGIN : BROWSER_BASE}${path}`;
 }
 
-/**
- * POST JSON to a route the generated client does not know yet (the flagged AI routes). Never throws:
- * a network failure is status 0, and `json` is null when the body is not JSON.
- */
-export async function postJson(path: string, body: unknown, timeout = 60_000): Promise<{ status: number; json: unknown }> {
-  try {
-    const res = await authedFetch(new Request(apiUrl(path), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }), timeout);
-    return { status: res.status, json: await res.json().catch(() => null) };
-  } catch {
-    return { status: 0, json: null };
-  }
-}
-
 /** The current bearer token, if signed in (for raw fetches). */
 export async function currentToken(): Promise<string | null> {
   return auth ? auth.token() : null;

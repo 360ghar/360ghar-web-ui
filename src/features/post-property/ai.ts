@@ -1,21 +1,32 @@
 /**
- * Owner AI helpers (flagged, see lib/flags): the listing writer and virtual staging. Shapes are those of the backend
- * (360ghar-backend docs/openapi.json, branch feat/ai-owner-tools), written by hand because the synced contract does not have
- * these routes yet:
+ * Owner AI helpers (flagged, see lib/flags): the listing writer and virtual staging. Typed calls on the synced contract
+ * (openapi/openapi.json); the shapes are:
  *  - POST /api/v1/ai/listing-draft { photos: [{ url }] (1 to 8), hints } -> { title, description, rooms, flags }.
  *    Sign-in required, 3 per minute, model latency about 70 s.
  *  - POST /api/v1/design-studio/stage { image (base64), mime_type, room_type, style } -> { image (a JPEG data URL with the
  *    visible "Virtually staged" band), staged: true, watermark }. 5 per minute per IP.
  * Replies are read defensively; a reply without the text or the image is a failure.
  */
-import { api, call, multipart, postJson, timeoutMs, UPLOAD_TIMEOUT_MS } from '@/lib/api/client';
+import { api, call, multipart, timeoutMs, UPLOAD_TIMEOUT_MS } from '@/lib/api/client';
 import { FURNISHING_LEVELS, PROPERTY_TYPES } from '@/lib/api/enums';
+import type { components } from '@/lib/api/schema';
 import { formNum } from './schema';
+
+type ListingDraftBody = components['schemas']['ListingDraftRequest'];
 
 export type Failure = 'rate' | 'unavailable' | 'failed';
 const reason = (status: number): Failure => (status === 429 ? 'rate' : status === 404 || status === 405 || status === 501 || status === 503 ? 'unavailable' : 'failed');
 const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null);
 const ok = (status: number) => status >= 200 && status < 300;
+/** Status of a typed call; a network failure or timeout is 0, never a throw. */
+const outcome = async (p: Promise<{ data?: unknown; response: Response }>): Promise<{ status: number; json: unknown }> => {
+  try {
+    const { data, response } = await p;
+    return { status: response.status, json: data ?? null };
+  } catch {
+    return { status: 0, json: null };
+  }
+};
 const obj = (json: unknown) => (json && typeof json === 'object' ? json : {}) as Record<string, unknown>;
 
 export const MAX_DRAFT_PHOTOS = 8;
@@ -39,16 +50,18 @@ export function parseListing(json: unknown): ListingDraft | null {
   return { title: title.slice(0, 200), description: description.slice(0, 5000), flags };
 }
 
-export async function listingDraft(imageUrls: string[], hints: Record<string, unknown>): Promise<ListingDraft | { failure: Failure }> {
+export async function listingDraft(imageUrls: string[], hints: NonNullable<ListingDraftBody['hints']>): Promise<ListingDraft | { failure: Failure }> {
   const photos = imageUrls.slice(0, MAX_DRAFT_PHOTOS).map((url) => ({ url }));
   // The model reads up to 8 photos: about 70 s for 3.
-  const { status, json } = await postJson('/api/v1/ai/listing-draft', { photos, ...(Object.keys(hints).length ? { hints } : {}) }, 150_000);
+  const { status, json } = await outcome(
+    api.POST('/api/v1/ai/listing-draft', { body: { photos, ...(Object.keys(hints).length ? { hints } : {}) }, ...timeoutMs(150_000) }),
+  );
   const draft = ok(status) ? parseListing(json) : null;
   return draft ?? { failure: ok(status) ? 'failed' : reason(status) };
 }
 
 /** What the writer is told about the home (backend ListingHints): only filled fields that the backend accepts, so the text never rests on a guess. */
-export function listingDetails(v: Record<string, unknown>): Record<string, unknown> {
+export function listingDetails(v: Record<string, unknown>): NonNullable<ListingDraftBody['hints']> {
   const text = (k: string) => (typeof v[k] === 'string' && (v[k] as string).trim() ? (v[k] as string).trim().slice(0, 100) : undefined);
   // The form holds numbers as typed, so "3" is read as 3.
   const count = (k: string) => {
@@ -68,7 +81,7 @@ export function listingDetails(v: Record<string, unknown>): Record<string, unkno
     area_sqft: area,
     furnishing: one(FURNISHING_LEVELS, v.furnishing_level),
   };
-  return Object.fromEntries(Object.entries(hints).filter(([, x]) => x !== undefined));
+  return Object.fromEntries(Object.entries(hints).filter(([, x]) => x !== undefined)) as NonNullable<ListingDraftBody['hints']>;
 }
 
 export const STAGE_ROOMS = ['living_room', 'bedroom', 'dining_room', 'kitchen', 'study', 'balcony'] as const;
@@ -130,7 +143,12 @@ export async function stagePhoto(imageUrl: string, room: StageRoom, style: Stage
   } catch {
     return { failure: 'failed' };
   }
-  const { status, json } = await postJson('/api/v1/design-studio/stage', { image, ...(mime ? { mime_type: mime } : {}), room_type: room, style }, 150_000);
+  const { status, json } = await outcome(
+    api.POST('/api/v1/design-studio/stage', {
+      body: { image, ...(mime ? { mime_type: mime as 'image/jpeg' | 'image/png' | 'image/webp' } : {}), room_type: room, style },
+      ...timeoutMs(150_000),
+    }),
+  );
   if (!ok(status)) return { failure: reason(status) };
   const staged = parseStaged(json);
   if (!staged) return { failure: 'failed' };
