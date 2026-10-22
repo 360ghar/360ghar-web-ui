@@ -41,6 +41,13 @@ globalThis.fetch = async (input, init) => {
   if (url.hostname !== 'api.360ghar.com') return realFetch(input, init);
   const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
   if (url.pathname === '/api/v1/pages/privacy-policy/public') return json(200, { unique_name: 'privacy-policy', title: 'Privacy Policy', format: 'html', content: '<h2>Policy heading</h2><p>Policy body text.</p>', updated_at: '2026-10-01T00:00:00Z' });
+  if (url.pathname === '/api/v1/content/locality/sector-56' && url.searchParams.get('locale') === 'en')
+    return json(200, {
+      entity_type: 'locality', slug: 'sector-56', locale: 'en', indexable: true, generated_at: '2026-10-20T00:00:00Z', updated_at: '2026-10-20T00:00:00Z', data_as_of: '2026-10-18',
+      body: { summary: 'Generated summary for the built check.', highlights: ['Generated highlight one'], faqs: [{ question: 'Generated question one?', answer: 'Generated answer one.' }], meta_description: 'Generated meta description.' },
+      sources: [{ name: 'Check source', url: 'https://example.org/source', as_of: '2026-10-18' }],
+    });
+  if (url.pathname.startsWith('/api/v1/content/')) return json(404, { detail: 'not found' });
   if (url.pathname === '/api/v1/blog/posts/built-output-check') return json(200, post);
   if (url.pathname.startsWith('/api/v1/blog/posts/')) return json(404, { detail: 'not found' });
   if (url.pathname === '/api/v1/blog/posts') return json(200, { items: [post], next_cursor: null });
@@ -88,6 +95,17 @@ const policy = await get('/policies/privacy-policy');
 expect(/s-maxage=[1-9]/.test(policy.cdn ?? ''), '/policies/<slug>: no Netlify-CDN-Cache-Control with s-maxage');
 expect(policy.status === 200, `/policies/<slug>: expected 200, got ${policy.status}`);
 expect(policy.body.includes('Policy body text.'), '/policies/<slug>: policy text missing (catch-all 404 page?)');
+
+// Generated content: shown, with FAQPage JSON-LD from the same data; a place without a block keeps the fixed FAQs.
+const gen = await get('/locality/sector-56-gurgaon');
+expect(gen.status === 200, `/locality/<slug>: expected 200, got ${gen.status}`);
+expect(gen.body.includes('Generated summary for the built check.'), '/locality/<slug>: generated summary missing');
+expect(gen.body.includes('Generated highlight one'), '/locality/<slug>: generated highlight missing');
+expect(/"@type":"FAQPage".*Generated question one\?/s.test(gen.body), '/locality/<slug>: FAQPage JSON-LD does not carry the generated FAQ');
+expect(gen.body.includes('Check source') && gen.body.includes('Updated'), '/locality/<slug>: provenance line missing');
+expect(gen.body.includes('Generated meta description.'), '/locality/<slug>: meta description not from generated content');
+const plain = await get('/locality/sector-57-gurgaon');
+expect(plain.status === 200 && !plain.body.includes('Generated summary'), '/locality/<other>: should render without generated content');
 
 if (failures.length) {
   console.error(failures.join('\n'));

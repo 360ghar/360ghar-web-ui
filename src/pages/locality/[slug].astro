@@ -8,6 +8,8 @@ import { localityTitle } from '@/features/localities/live';
 import { localityFaqs } from '@/features/localities/faq';
 import LocalityPage from '@/features/localities/LocalityPage.astro';
 import { loadLocality } from '@/features/localities/load';
+import { loadGenerated } from '@/features/content/generated/load';
+import { apiOgImage } from '@/lib/seo/og';
 import NotFoundState from '@/ui/states/NotFoundState.astro';
 
 export const prerender = false;
@@ -18,12 +20,13 @@ const found = resolveLocality(Astro.params.slug ?? '');
 if (found?.redirect) return Astro.redirect(localizePath(`/locality/${found.redirect}`, locale) + Astro.url.search, 301);
 
 const l = found?.locality ?? null;
-const data = l ? await loadLocality(l) : null;
+const [data, generated] = l ? await Promise.all([loadLocality(l), loadGenerated('locality', l.slug, locale)]) : [null, null];
 if (!l) Astro.response.status = 404;
 cachePage(Astro, 'day', { error: Boolean(data?.failed) });
 
 const name = l ? displayName(l.name) : '';
-const faqs = l ? localityFaqs(name, l.entityType, locale).map((f) => ({ q: f.question, a: f.answer })) : [];
+// Generated FAQs (fact-checked by the backend) replace the fixed ones when the block has them.
+const faqs = l ? (generated?.faqs.length ? generated.faqs : localityFaqs(name, l.entityType, locale).map((f) => ({ q: f.question, a: f.answer }))) : [];
 const slug = l ? localitySlug(l) : '';
 const cityName = l && l.city.toLowerCase() !== 'gurgaon' ? displayName(l.city) : 'Gurugram';
 const month = new Date().toLocaleDateString('en-IN', { month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
@@ -32,10 +35,11 @@ const dataTitle = l && data && !data.failed ? localityTitle(name, cityName, data
 
 <Page
   title={l ? (dataTitle ?? l.seo?.title ?? `${name} ${cityName} - Property Prices, Reviews & Locality Guide | 360Ghar`) : 'Locality not found | 360Ghar'}
-  description={l ? (l.seo?.description ?? l.description ?? '') : 'This locality is not on our map.'}
+  description={l ? (generated?.metaDescription ?? l.seo?.description ?? l.description ?? '') : 'This locality is not on our map.'}
   keywords={l?.seo?.keywords}
   path={l ? `/locality/${slug}` : Astro.url.pathname}
   noindex={isNoindexLocality(l)}
+  image={l ? apiOgImage('locality', l.slug) : null}
   jsonLd={l
     ? [
         breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Localities', path: '/localities' }, { name, path: `/locality/${slug}` }], locale),
@@ -45,14 +49,14 @@ const dataTitle = l && data && !data.failed ? localityTitle(name, cityName, data
           address: { '@type': 'PostalAddress', addressLocality: cityName, addressRegion: 'Haryana', addressCountry: 'IN' },
           ...(l.geo ? { geo: { '@type': 'GeoCoordinates', latitude: l.geo.lat, longitude: l.geo.lng } } : {}),
         },
-        { '@type': 'WebPage', name: dataTitle ?? l.seo?.title ?? name, url: canonicalFor(`/locality/${slug}`, locale), ...(l.lastVerifiedAt ? { dateModified: l.lastVerifiedAt } : {}) },
+        { '@type': 'WebPage', name: dataTitle ?? l.seo?.title ?? name, url: canonicalFor(`/locality/${slug}`, locale), ...(generated || l.lastVerifiedAt ? { dateModified: generated?.date ?? l.lastVerifiedAt } : {}) },
         faqPage(faqs),
       ]
     : []}
 >
   {
     l && data ? (
-      <LocalityPage locality={l} data={data} faqs={faqs} locale={locale} />
+      <LocalityPage locality={l} data={data} faqs={faqs} generated={generated} locale={locale} />
     ) : (
       <NotFoundState
         title={hi ? 'यह लोकेलिटी हमारे नक्शे पर नहीं है' : 'This locality is not on our map'}

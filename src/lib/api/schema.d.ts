@@ -96,6 +96,130 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/content/manifest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List served content
+         * @description Every served (entity, locale) with its indexable flag and last update. For sitemaps and builds.
+         *
+         *     Returns at most ``limit`` rows (default 5,000). ``truncated`` is true when there are more.
+         */
+        get: operations["content_manifest_api_v1_content_manifest_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/content/{entity_type}/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get generated content */
+        get: operations["get_content_api_v1_content__entity_type___slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/content/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generate content for changed entities (cron)
+         * @description One bounded batch. Entities whose facts are unchanged are skipped, so repeating a call
+         *     is cheap and safe. Call again with ``next_after`` until ``done`` is true. Overlapping calls
+         *     only waste quota: each result is an upsert on (entity, slug, locale).
+         */
+        post: operations["run_content_api_v1_admin_content_run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/content/market-digest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Write the weekly market digest (cron)
+         * @description Build the digest from data-hub changes in the last 7 days. Skips with fewer than 3 changes.
+         *     Saves a blog post: published when it validates, otherwise a draft tagged needs-review.
+         *     Calling twice in one week saves one post.
+         */
+        post: operations["run_market_digest_api_v1_admin_content_market_digest_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/content/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List content for review (admin)
+         * @description Newest first. Filter by review status, entity type or locale.
+         */
+        get: operations["review_list_api_v1_admin_content_review_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/content/{block_id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Approve or reject a content block (admin)
+         * @description Approve serves the block. It is indexable only with enough verified facts. A block whose
+         *     text failed validation cannot be approved: run it again instead.
+         */
+        patch: operations["update_status_api_v1_admin_content__block_id__status_patch"];
+        trace?: never;
+    };
     "/api/v1/users/me": {
         parameters: {
             query?: never;
@@ -8922,6 +9046,224 @@ export interface components {
          */
         ComplaintNature: "delay" | "quality" | "refund" | "compensation" | "other";
         /**
+         * ContentBlockOut
+         * @description Public content for one entity and locale. Only served (auto or approved) rows appear.
+         */
+        ContentBlockOut: {
+            /**
+             * Entity Type
+             * @enum {string}
+             */
+            entity_type: "locality" | "property";
+            /** Slug */
+            slug: string;
+            /**
+             * Locale
+             * @enum {string}
+             */
+            locale: "en" | "hi";
+            /** Body */
+            body: {
+                [key: string]: unknown;
+            };
+            /** Sources */
+            sources: {
+                [key: string]: unknown;
+            }[];
+            /** Data As Of */
+            data_as_of: string | null;
+            /** Indexable */
+            indexable: boolean;
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** ContentManifest */
+        ContentManifest: {
+            /** Items */
+            items: components["schemas"]["ContentManifestItem"][];
+            /**
+             * Truncated
+             * @description True when more served rows exist than `limit` returned
+             */
+            truncated: boolean;
+        };
+        /** ContentManifestItem */
+        ContentManifestItem: {
+            /**
+             * Entity Type
+             * @enum {string}
+             */
+            entity_type: "locality" | "property";
+            /** Slug */
+            slug: string;
+            /**
+             * Locale
+             * @enum {string}
+             */
+            locale: "en" | "hi";
+            /** Indexable */
+            indexable: boolean;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** ContentReviewItem */
+        ContentReviewItem: {
+            /**
+             * Entity Type
+             * @enum {string}
+             */
+            entity_type: "locality" | "property";
+            /** Slug */
+            slug: string;
+            /**
+             * Locale
+             * @enum {string}
+             */
+            locale: "en" | "hi";
+            /** Body */
+            body: {
+                [key: string]: unknown;
+            };
+            /** Sources */
+            sources: {
+                [key: string]: unknown;
+            }[];
+            /** Data As Of */
+            data_as_of: string | null;
+            /** Indexable */
+            indexable: boolean;
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Id */
+            id: number;
+            /**
+             * Review Status
+             * @enum {string}
+             */
+            review_status: "auto" | "needs_review" | "approved" | "rejected" | "failed";
+            /** Dup Score */
+            dup_score: number | null;
+            /** Fact Count */
+            fact_count: number;
+            /** Key Fact */
+            key_fact: boolean;
+            /** Prompt Version */
+            prompt_version: string;
+            /** Model */
+            model: string | null;
+            /** Errors */
+            errors: unknown[];
+        };
+        /** ContentRunItem */
+        ContentRunItem: {
+            /** Slug */
+            slug: string;
+            /** Locale */
+            locale: string;
+            /** Status */
+            status: string;
+            /** Indexable */
+            indexable: boolean;
+            /** Dup Score */
+            dup_score: number;
+            /** Calls */
+            calls: number;
+        };
+        /** ContentRunRequest */
+        ContentRunRequest: {
+            /**
+             * Entity Type
+             * @default locality
+             * @enum {string}
+             */
+            entity_type?: "locality" | "property";
+            /** Locales */
+            locales?: ("en" | "hi")[];
+            /**
+             * Max Entities
+             * @default 10
+             */
+            max_entities?: number;
+            /**
+             * Max Seconds
+             * @default 240
+             */
+            max_seconds?: number;
+            /**
+             * After
+             * @description Cursor from the previous run
+             */
+            after?: string | null;
+            /** Slugs */
+            slugs?: string[] | null;
+            /** City */
+            city?: string | null;
+            /**
+             * Force
+             * @default false
+             */
+            force?: boolean;
+            /**
+             * Retry Failed
+             * @default false
+             */
+            retry_failed?: boolean;
+        };
+        /** ContentRunResult */
+        ContentRunResult: {
+            /** Generated */
+            generated: number;
+            /** Skipped */
+            skipped: number;
+            /** Thin */
+            thin: number;
+            /** Failed */
+            failed: number;
+            /** Needs Review */
+            needs_review: number;
+            /** Rejected */
+            rejected: number;
+            /** Calls */
+            calls: number;
+            /** Provider Errors */
+            provider_errors: number;
+            /** Done */
+            done: boolean;
+            /** Next After */
+            next_after: string | null;
+            /** Stopped Reason */
+            stopped_reason: string | null;
+            /** Items */
+            items: components["schemas"]["ContentRunItem"][];
+        };
+        /** ContentStatusUpdate */
+        ContentStatusUpdate: {
+            /**
+             * Review Status
+             * @enum {string}
+             */
+            review_status: "approved" | "rejected" | "needs_review";
+        };
+        /**
          * ConversationCreate
          * @description Payload for creating (or retrieving) a conversation with a peer.
          */
@@ -9510,6 +9852,25 @@ export interface components {
         CursorPage_ColonyApprovalResponse_: {
             /** Items */
             items: components["schemas"]["ColonyApprovalResponse"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
+            /** Limit */
+            limit: number;
+            /**
+             * Total
+             * @description Set only when the request sets include_total=true; otherwise null.
+             */
+            total: number | null;
+        };
+        /** CursorPage[ContentReviewItem] */
+        CursorPage_ContentReviewItem_: {
+            /** Items */
+            items: components["schemas"]["ContentReviewItem"][];
             /** Next Cursor */
             next_cursor: string | null;
             /**
@@ -12851,6 +13212,27 @@ export interface components {
             images?: string[] | null;
             /** Floor Plans */
             floor_plans?: string[] | null;
+        };
+        /** MarketDigestResult */
+        MarketDigestResult: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "published" | "draft" | "skipped" | "exists" | "failed";
+            /** Reason */
+            reason?: string | null;
+            /** Changes */
+            changes: number;
+            /** Post Slug */
+            post_slug?: string | null;
+            /** Errors */
+            errors?: string[];
+            /**
+             * Calls
+             * @default 0
+             */
+            calls?: number;
         };
         /** MarketingNotification */
         MarketingNotification: {
@@ -17369,6 +17751,266 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    content_manifest_api_v1_content_manifest_get: {
+        parameters: {
+            query?: {
+                entity_type?: ("locality" | "property") | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentManifest"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    get_content_api_v1_content__entity_type___slug__get: {
+        parameters: {
+            query?: {
+                locale?: "en" | "hi";
+            };
+            header?: never;
+            path: {
+                entity_type: "locality" | "property";
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentBlockOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    run_content_api_v1_admin_content_run_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-cron-secret"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContentRunRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentRunResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    run_market_digest_api_v1_admin_content_market_digest_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-cron-secret"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketDigestResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    review_list_api_v1_admin_content_review_get: {
+        parameters: {
+            query?: {
+                review_status?: string | null;
+                entity_type?: ("locality" | "property") | null;
+                locale?: ("en" | "hi") | null;
+                /** @description Opaque pagination cursor from a prior response's next_cursor. */
+                cursor?: string | null;
+                /** @description Max items to return (1-100). */
+                limit?: number;
+                /** @description If true, include a total count (extra COUNT query). */
+                include_total?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CursorPage_ContentReviewItem_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    update_status_api_v1_admin_content__block_id__status_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                block_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContentStatusUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentReviewItem"];
+                };
             };
             /** @description Validation Error */
             422: {
