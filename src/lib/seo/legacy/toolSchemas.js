@@ -160,6 +160,20 @@ export const toolSchemas = {
         category: 'FinanceApplication',
         route: '/rent-receipt'
     },
+    rentAgreementDrafter: {
+        name: 'Rent Agreement Drafter',
+        description: 'Draft a rent (leave and licence) agreement for a home in India from standard clauses. Fill in the parties, rent, deposit and term, then print. A draft, not legal advice.',
+        keywords: 'rent agreement format, rent agreement draft, leave and licence agreement, rental agreement India, rent agreement Gurugram, kiraya samjhauta',
+        category: 'BusinessApplication',
+        route: '/rent-agreement-drafter'
+    },
+    legalNoticeDrafter: {
+        name: 'Legal Notice Drafter',
+        description: 'Draft a legal notice for a security deposit refund, unpaid rent or a vacated property in India. Fill in the facts and print. A draft, not legal advice.',
+        keywords: 'legal notice format, legal notice for deposit refund, legal notice unpaid rent, tenant legal notice, landlord legal notice India',
+        category: 'BusinessApplication',
+        route: '/legal-notice-drafter'
+    },
     fakeListingChecker: {
         name: 'Fake Listing Checker',
         description: 'Check if a property listing from 99acres, MagicBricks, or other portals is fake. Paste the URL to get instant verification against 360Ghar\'s physically verified database.',

@@ -28,9 +28,13 @@ import { Check, SelectField, TextAreaField, TextField } from '@/ui/react/Field';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { StateBlock } from '@/ui/states/StateBlock';
 import { KITCHEN_TYPES, SHARING_TYPES, VENTILATION_TYPES } from '@/lib/api/enums';
+import { AI_OWNER_TOOLS } from '@/lib/flags';
+import { listingDetails } from './ai';
+import { ListingWriter, StageControl, stageNote } from './OwnerAi';
 import { NO_ROOMS, RENT_ONLY, STEPS, TYPES, crossIssues, formSchema, makeFormSchema, formNum, suggestTitle, toCard, toPayload, toUpdatePayload, type FormIn, type FormOut } from './schema';
 
 const DRAFT = '360ghar:post-draft';
+const STAGED = '360ghar:post-staged';
 
 const T = {
   en: {
@@ -512,6 +516,22 @@ function Wizard({ locale }: { locale: Locale }) {
   const [pending, setPending] = useState<string[]>([]);
   const [dropping, setDropping] = useState(false);
   const [dragFrom, setDragFrom] = useState<number | null>(null);
+  // Photos that are a "Virtually staged" copy, with the original each one came from (kept for this tab's draft).
+  const [staged, setStagedState] = useState<Record<string, string>>(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem(STAGED) ?? '{}') as Record<string, string>;
+    } catch {
+      return {};
+    }
+  });
+  const setStaged = (next: Record<string, string>) => {
+    setStagedState(next);
+    try {
+      sessionStorage.setItem(STAGED, JSON.stringify(next));
+    } catch {
+      // Storage full: the original can no longer be put back after a reload.
+    }
+  };
   const top = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLDivElement>(null);
 
@@ -1105,6 +1125,9 @@ function Wizard({ locale }: { locale: Locale }) {
                           <Icon name="trash" size={16} />
                         </button>
                       </div>
+                      {AI_OWNER_TOOLS && status === 'authed' ? (
+                        <StageControl locale={locale} url={url} staged={staged} setStaged={setStaged} replace={(from, to) => setImages(images.map((x) => (x === from ? to : x)))} />
+                      ) : null}
                     </li>
                   ))}
                   {pending.map((url) => (
@@ -1116,12 +1139,24 @@ function Wizard({ locale }: { locale: Locale }) {
                 </ul>
               ) : null}
               {images.length > 1 ? <p className="field-hint">{t.reorderHint}</p> : null}
+              {AI_OWNER_TOOLS && status === 'authed' && images.length > 0 ? <p className="field-hint">{stageNote(locale)}</p> : null}
             </fieldset>
           ) : null}
 
           {step === 5 ? (
             <fieldset className="post-step">
               <legend className="visually-hidden">{t.steps[5]}</legend>
+              {AI_OWNER_TOOLS && status === 'authed' ? (
+                <ListingWriter
+                  locale={locale}
+                  images={images}
+                  details={listingDetails(v as Record<string, unknown>)}
+                  onUse={(text) => {
+                    form.setValue('title', text.title, { shouldValidate: true, shouldDirty: true });
+                    form.setValue('description', text.description, { shouldValidate: true, shouldDirty: true });
+                  }}
+                />
+              ) : null}
               <div className="grid gap-2">
                 <TextField label={t.title} maxLength={200} error={errors.title?.message} {...form.register('title')} />
                 <button

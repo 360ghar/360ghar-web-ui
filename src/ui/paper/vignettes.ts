@@ -848,6 +848,9 @@ const BUILDERS: Record<VignetteKey, () => Vignette> = {
   capitalGains,
   stampDuty,
   rentReceipt,
+  // The drafters share the paper-and-pen drawing of the receipt.
+  rentAgreement: rentReceipt,
+  legalNotice: rentReceipt,
   areaConverter,
   areaCalculator: carpet,
   sqFt,

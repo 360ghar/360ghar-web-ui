@@ -134,11 +134,14 @@ test('emi: Hindi page renders the calculator', async ({ page }) => {
   await w.check();
 });
 
-test('tools index: all 16 tools, filter, no results, links', async ({ page }) => {
+// The two legal drafters join the list when PUBLIC_AI_OWNER_TOOLS=true (src/lib/flags.ts).
+const COUNT = process.env.PUBLIC_AI_OWNER_TOOLS === 'true' ? 18 : 16;
+
+test('tools index: all tools, filter, no results, links', async ({ page }) => {
   const w = await open(page, '/tools');
   const items = page.locator('[data-tool]');
-  await expect(items).toHaveCount(16);
-  await expect(page.getByText('16 tools')).toBeVisible();
+  await expect(items).toHaveCount(COUNT);
+  await expect(page.getByText(`${COUNT} tools`)).toBeVisible();
   const box = page.getByRole('searchbox', { name: 'Find a tool' });
   await box.fill('gaj');
   await expect(page.locator('[data-tool]:visible')).toHaveCount(3);
@@ -147,7 +150,7 @@ test('tools index: all 16 tools, filter, no results, links', async ({ page }) =>
   await box.fill('zzzz');
   await expect(page.getByText('No tool matches')).toBeVisible();
   await box.fill('');
-  await expect(page.locator('[data-tool]:visible')).toHaveCount(16);
+  await expect(page.locator('[data-tool]:visible')).toHaveCount(COUNT);
   await page.getByRole('link', { name: /EMI calculator/ }).first().click();
   await expect(page).toHaveURL(/\/emi-calculator$/);
   await w.check();

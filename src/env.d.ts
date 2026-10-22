@@ -15,4 +15,5 @@ interface ImportMetaEnv {
   readonly PUBLIC_POSTHOG_HOST?: string;
   readonly PUBLIC_GOOGLE_MAPS_API_KEY?: string;
   readonly PUBLIC_GA_ID?: string;
+  readonly PUBLIC_AI_OWNER_TOOLS?: string;
 }

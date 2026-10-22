@@ -1,0 +1,31 @@
+---
+import ToolPage from '@/features/tools/ToolPage.astro';
+import LegalDrafter from '@/features/tools/legal/LegalDrafter';
+import { FAQ, HOWTO, PAGE } from '@/features/tools/legal/content';
+import { cachePage } from '@/lib/cache';
+import { AI_OWNER_TOOLS } from '@/lib/flags';
+
+// On demand, so the page is a real 404 until the backend drafting route is live (PUBLIC_AI_OWNER_TOOLS).
+export const prerender = false;
+
+if (!AI_OWNER_TOOLS) return Astro.rewrite('/404');
+cachePage(Astro, 'day');
+
+const locale = Astro.locals.locale;
+const c = PAGE.legal_notice[locale];
+---
+
+<ToolPage
+  tool="legalNotice"
+  title={c.title}
+  description={c.description}
+  keywords={c.keywords}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={FAQ.legal_notice[locale]}
+  faqTitle={c.faqTitle}
+  howTo={HOWTO.legal_notice[locale]}
+  related={['rentReceipt', 'propertyChecklist', 'stampDuty', 'verifyOwnership', 'fakeListing']}
+>
+  <LegalDrafter client:load kind="legal_notice" locale={locale} />
+</ToolPage>

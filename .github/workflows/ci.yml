@@ -73,6 +73,8 @@ jobs:
       # A fake key: the map tests replace window.google with a stub, but the page only loads Maps when a key is set.
       PUBLIC_GOOGLE_MAPS_API_KEY: ci-test-key
       BASE_URL: http://127.0.0.1:4321
+      # Shows the owner AI tools (drafters, listing writer, staging) so their specs run. Production sets it after the backend deploy.
+      PUBLIC_AI_OWNER_TOOLS: 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

@@ -1,0 +1,79 @@
+/* Legal drafters: the draft as a page, and print. The form shares the rent receipt's field styles. */
+
+.ld-paper {
+  padding: 1.25rem;
+  border: 1px solid var(--color-ink-200);
+  border-radius: var(--radius-md);
+  background: var(--color-paper);
+  color: var(--color-ink-950);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.ld-title {
+  padding-bottom: 0.625rem;
+  border-bottom: 2px solid var(--color-ink-950);
+  font-size: 1.375rem;
+  text-align: center;
+}
+
+.ld-clause {
+  margin-top: 1rem;
+}
+
+.ld-clause h4 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.ld-clause p + p {
+  margin-top: 0.5rem;
+}
+
+.ld-disclaimer {
+  margin-top: 1.25rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-haldi-100);
+  color: var(--color-haldi-700);
+  font-size: 0.9375rem;
+}
+
+.ld-print {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm;
+  }
+
+  body > :not(.ld-print) {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .ld-print {
+    display: block;
+  }
+
+  .ld-print .ld-paper {
+    border: 0;
+    padding: 0;
+    font-size: 11.5pt;
+    color: #000;
+  }
+
+  .ld-print .ld-disclaimer {
+    border: 1px solid #000;
+    background: none;
+    color: #000;
+    break-inside: avoid;
+  }
+}

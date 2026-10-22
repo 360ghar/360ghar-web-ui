@@ -2,6 +2,7 @@
  * URL sets for sitemaps and feeds. Every list keeps only pages that render
  * with index, follow, so the sitemaps agree with the pages' own robots tags.
  */
+import { AI_OWNER_TOOLS } from '@/lib/flags';
 import { api, call } from '@/lib/api/client';
 import { collectPages } from '@/lib/api/pages';
 import type { Property } from '@/lib/api/types';
@@ -38,6 +39,7 @@ export const STATIC_PATHS = [
   '/check-fake-listing', '/rent-receipt', '/near/cyber-city', '/near/udyog-vihar', '/near/golf-course-road-corporate',
   '/near/millennium-city-centre', '/near/medanta', '/near/artemis', '/near/sector-55-56-metro', '/near/dlf-cyber-park', '/near/ambience-mall',
   '/near/hero-honda-chowk',
+  ...(AI_OWNER_TOOLS ? ['/rent-agreement-drafter', '/legal-notice-drafter'] : []),
 ];
 
 export const staticEntries = (): SitemapEntry[] =>
