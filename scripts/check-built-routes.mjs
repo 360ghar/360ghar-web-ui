@@ -103,7 +103,9 @@ expect(policy.status === 200, `/policies/<slug>: expected 200, got ${policy.stat
 expect(policy.body.includes('Policy body text.'), '/policies/<slug>: policy text missing (catch-all 404 page?)');
 
 // The owner AI tools follow the build flags (netlify.toml and CI set PUBLIC_AI_OWNER_TOOLS=true): the drafter routes render when on, are real 404s when off.
-const ownerTools = process.env.PUBLIC_AI_OWNER_TOOLS === 'true';
+// Astro reads .env at build time, so read it here too when the variable is not in the environment.
+const envFlag = process.env.PUBLIC_AI_OWNER_TOOLS ?? /^PUBLIC_AI_OWNER_TOOLS=(.*)$/m.exec(existsSync('.env') ? readFileSync('.env', 'utf8') : '')?.[1]?.trim();
+const ownerTools = envFlag === 'true';
 for (const path of ['/rent-agreement-drafter', '/legal-notice-drafter']) {
   const res = await get(path);
   expect(res.status === (ownerTools ? 200 : 404), `${path}: expected ${ownerTools ? 200 : 404} with the flag ${ownerTools ? 'on' : 'off'}, got ${res.status}`);
