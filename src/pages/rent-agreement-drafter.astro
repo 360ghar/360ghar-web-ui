@@ -8,7 +8,7 @@ import { AI_OWNER_TOOLS } from '@/lib/flags';
 // On demand, so the page is a real 404 until the backend drafting route is live (PUBLIC_AI_OWNER_TOOLS).
 export const prerender = false;
 
-if (!AI_OWNER_TOOLS) return Astro.rewrite('/404');
+if (!AI_OWNER_TOOLS) return new Response(null, { status: 404 });
 cachePage(Astro, 'day');
 
 const locale = Astro.locals.locale;

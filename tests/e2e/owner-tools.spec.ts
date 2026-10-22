@@ -113,7 +113,7 @@ test.describe('with the flag', () => {
     await expect(first.getByText('Virtually staged')).toBeVisible();
     await expect(first.locator('img')).toHaveAttribute('src', /staged-1\.jpg/);
     expect(sent).toEqual({ image_url: photo(1) });
-    await expect(page.getByText('Staged photos are marked')).toBeVisible();
+    await expect(page.getByText('The staged copy is marked')).toBeVisible();
     await first.getByRole('button', { name: 'Show original' }).click();
     await expect(first.getByText('Virtually staged')).toHaveCount(0);
     await expect(first.locator('img')).toHaveAttribute('src', photo(1));

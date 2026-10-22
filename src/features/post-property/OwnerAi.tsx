@@ -28,8 +28,10 @@ const T = {
     staging: 'Staging',
     original: 'Show original',
     label: 'Virtually staged',
-    stageNote: 'Staged photos are marked "Virtually staged", so buyers know the furniture is not there.',
-    stageRate: 'Staging is limited to 5 photos a minute. Try again shortly.',
+    stageNote: 'The staged copy is marked "Virtually staged" on the image itself, so buyers know the furniture is not there.',
+    stageUnavailable: 'Virtual staging is not available right now.',
+    stageFailed: 'We could not stage this photo now. Try again in a minute.',
+    stageRate: 'Staging is limited per minute. Try again shortly.',
   },
   hi: {
     write: 'AI से लिखवाएँ',
@@ -47,12 +49,15 @@ const T = {
     staging: 'स्टेज हो रहा है',
     original: 'असली फ़ोटो दिखाएँ',
     label: 'वर्चुअली स्टेज्ड',
-    stageNote: 'स्टेज की गई फ़ोटो पर "Virtually staged" लिखा होता है, ताकि खरीदार जानें कि फ़र्नीचर असल में नहीं है।',
-    stageRate: 'स्टेजिंग एक मिनट में 5 फ़ोटो तक सीमित है। थोड़ी देर बाद कोशिश करें।',
+    stageNote: 'स्टेज की गई कॉपी की इमेज पर ही "Virtually staged" लिखा होता है, ताकि खरीदार जानें कि फ़र्नीचर असल में नहीं है।',
+    stageUnavailable: 'अभी वर्चुअल स्टेजिंग उपलब्ध नहीं है।',
+    stageFailed: 'अभी यह फ़ोटो स्टेज नहीं हो सकी। एक मिनट बाद कोशिश करें।',
+    stageRate: 'स्टेजिंग प्रति मिनट सीमित है। थोड़ी देर बाद कोशिश करें।',
   },
 };
 
-const failText = (t: (typeof T)['en'], f: Failure, stage = false) => (f === 'rate' ? (stage ? t.stageRate : t.rate) : f === 'unavailable' ? t.unavailable : t.failed);
+const failText = (t: (typeof T)['en'], f: Failure, stage = false) =>
+  f === 'rate' ? (stage ? t.stageRate : t.rate) : f === 'unavailable' ? (stage ? t.stageUnavailable : t.unavailable) : stage ? t.stageFailed : t.failed;
 
 type WriterProps = {
   locale: Locale;
@@ -80,10 +85,13 @@ export function ListingWriter({ locale, images, details, onUse }: WriterProps) {
   return (
     <div className="oai-writer">
       <p className="field-hint">{images.length ? t.lead : t.needPhotos}</p>
-      <button type="button" className="btn btn-quiet justify-self-start -ml-3" onClick={() => void run()} disabled={busy || images.length === 0}>
-        <Icon name="edit" size={18} />
-        {busy ? t.writing : t.write}
-      </button>
+      {/* While a draft is open the button is hidden, so a new one never replaces text the owner edited. */}
+      {draft ? null : (
+        <button type="button" className="btn btn-quiet justify-self-start -ml-3" onClick={() => void run()} disabled={busy || images.length === 0}>
+          <Icon name="edit" size={18} />
+          {busy ? t.writing : t.write}
+        </button>
+      )}
       {error ? (
         <p className="field-error" role="alert">
           <Icon name="alert" size={16} />
@@ -149,7 +157,7 @@ export function StageControl({ locale, url, staged, setStaged, replace }: StageP
   return (
     <div className="oai-stage">
       {original ? <span className="oai-staged">{t.label}</span> : null}
-      <button type="button" className="btn btn-quiet" aria-pressed={Boolean(original)} onClick={() => void toggle()} disabled={busy}>
+      <button type="button" className="btn btn-quiet" onClick={() => void toggle()} disabled={busy}>
         {busy ? t.staging : original ? t.original : t.stage}
       </button>
       {error ? (

@@ -17,7 +17,7 @@ export function schemaFor(kind: Kind) {
     let one: z.ZodType<string>;
     if (isText(f)) one = z.string().trim().max(f.max ?? 300);
     else if (f.type === 'num') {
-      one = z.string().trim().refine((v) => v === '' || (/^\d+(\.\d{1,2})?$/.test(v) && Number(v) >= (f.min ?? 0) && Number(v) <= (f.max ?? Infinity)), 'number');
+      one = z.string().trim().refine((v) => v === '' || ((f.int ? /^\d+$/ : /^\d+(\.\d{1,2})?$/).test(v) && Number(v) >= (f.min ?? 0) && Number(v) <= (f.max ?? Infinity)), 'number');
     } else if (f.type === 'date') one = z.string().refine((v) => v === '' || /^\d{4}-\d{2}-\d{2}$/.test(v), 'date');
     else one = z.enum((f.options ?? []).map(([v]) => v) as [string, ...string[]]);
     // A required field must not be empty.
@@ -48,7 +48,7 @@ const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null
 export function parseDraft(json: unknown): Draft | null {
   if (!json || typeof json !== 'object') return null;
   const o = json as Record<string, unknown>;
-  const list = [o.clauses, o.sections].find(Array.isArray) as unknown[] | undefined;
+  const list = [o.clauses, o.sections].find((x) => Array.isArray(x) && x.length > 0) as unknown[] | undefined;
   const clauses = list
     ? list.flatMap((c) => {
         if (typeof c === 'string') return str(c) ? [{ text: c.trim() }] : [];

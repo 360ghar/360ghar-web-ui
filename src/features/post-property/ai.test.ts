@@ -10,6 +10,7 @@ describe('owner AI replies', () => {
   it('takes the staged image from image_url or url, https only', () => {
     expect(parseStaged({ image_url: 'https://res.cloudinary.com/a.jpg' })).toBe('https://res.cloudinary.com/a.jpg');
     expect(parseStaged({ url: 'https://x/y.jpg' })).toBe('https://x/y.jpg');
+    expect(parseStaged({ staged_url: 'https://x/z.jpg' })).toBe('https://x/z.jpg');
     expect(parseStaged({ url: 'http://x/y.jpg' })).toBeNull();
     expect(parseStaged({})).toBeNull();
   });

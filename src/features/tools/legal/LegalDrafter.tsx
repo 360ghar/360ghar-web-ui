@@ -9,7 +9,6 @@ import { useIsClient } from '@/ui/react/useClient';
 import { ToolShell } from '../ui';
 import { SECTIONS, UI, type Field, type Kind } from './content';
 import { defaults, requestDraft, schemaFor, toFields, type Draft, type DraftFailure } from './draft';
-import '../rent-receipt/rent-receipt.css';
 import './legal.css';
 
 type Values = Record<string, string>;
@@ -42,11 +41,13 @@ function Drafter({ kind, locale }: { kind: Kind; locale: Locale }) {
   const [draft, setDraft] = useState<Draft | null>(null);
   const [failure, setFailure] = useState<DraftFailure | null>(null);
 
-  const message = (f: Field, code: string | undefined) => (!code ? undefined : f.type === 'num' ? t.number : f.type === 'date' ? t.date : t.required);
+  const message = (f: Field, code: string | undefined) => (!code ? undefined : code === 'required' ? t.required : f.type === 'num' ? t.number : f.type === 'date' ? t.date : t.required);
 
   const submit = form.handleSubmit(async (values) => {
     setBusy(true);
     setFailure(null);
+    // A failed second try must not leave the first draft to print.
+    setDraft(null);
     const r = await requestDraft(kind, toFields(kind, values));
     setBusy(false);
     if ('draft' in r) {
@@ -73,7 +74,7 @@ function Drafter({ kind, locale }: { kind: Kind; locale: Locale }) {
         key={f.name}
         {...common}
         type={f.type === 'date' ? 'date' : 'text'}
-        inputMode={f.type === 'num' ? 'numeric' : undefined}
+        inputMode={f.type === 'num' ? (f.int ? 'numeric' : 'decimal') : undefined}
         maxLength={f.type === 'text' ? f.max : undefined}
         autoComplete="off"
         {...form.register(f.name)}
@@ -88,8 +89,8 @@ function Drafter({ kind, locale }: { kind: Kind; locale: Locale }) {
       <div className="tool-split">
         <form className="tool-sheet" onSubmit={submit} noValidate aria-label={t.generate}>
           {SECTIONS[kind].map((s) => (
-            <fieldset key={s.title[0]} className="rr-fieldset">
-              <legend className="rr-legend">{s.title[i]}</legend>
+            <fieldset key={s.title[0]} className="ld-fieldset">
+              <legend className="ld-legend">{s.title[i]}</legend>
               {s.fields.map(field)}
             </fieldset>
           ))}
@@ -107,7 +108,7 @@ function Drafter({ kind, locale }: { kind: Kind; locale: Locale }) {
           ) : null}
         </form>
 
-        <div className="tool-stack rr-side">
+        <div className="tool-stack ld-side">
           <section className="tool-sheet" aria-labelledby="ld-preview">
             <h2 id="ld-preview" className="tool-sheet-title">
               {t.preview}

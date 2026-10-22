@@ -13,6 +13,8 @@ export type Field = {
   label: Pair;
   type: 'text' | 'area' | 'num' | 'date' | 'select';
   optional?: boolean;
+  /** `num`: whole numbers only. */
+  int?: boolean;
   hint?: Pair;
   /** `num`: the allowed range. `text` and `area`: `max` is the length. */
   min?: number;
@@ -42,9 +44,9 @@ export const SECTIONS: Record<Kind, Section[]> = {
         { name: 'monthly_rent', label: ['Monthly rent (₹)', 'मासिक किराया (₹)'], type: 'num', min: 1, max: 10_000_000 },
         { name: 'security_deposit', label: ['Security deposit (₹)', 'सिक्योरिटी डिपॉज़िट (₹)'], type: 'num', min: 0, max: 100_000_000 },
         { name: 'start_date', label: ['Start date', 'शुरू होने की तारीख'], type: 'date' },
-        { name: 'term_months', label: ['Term (months)', 'अवधि (महीने)'], type: 'num', min: 1, max: 60, def: '11', hint: ['11 months is common, to avoid registration.', 'आम तौर पर 11 महीने, ताकि रजिस्ट्रेशन न करना पड़े।'] },
-        { name: 'lock_in_months', label: ['Lock-in (months)', 'लॉक-इन (महीने)'], type: 'num', min: 0, max: 24, def: '3' },
-        { name: 'notice_months', label: ['Notice period (months)', 'नोटिस अवधि (महीने)'], type: 'num', min: 0, max: 6, def: '1' },
+        { name: 'term_months', label: ['Term (months)', 'अवधि (महीने)'], type: 'num', int: true, min: 1, max: 60, def: '11', hint: ['11 months is common, to avoid registration.', 'आम तौर पर 11 महीने, ताकि रजिस्ट्रेशन न करना पड़े।'] },
+        { name: 'lock_in_months', label: ['Lock-in (months)', 'लॉक-इन (महीने)'], type: 'num', int: true, min: 0, max: 24, def: '3' },
+        { name: 'notice_months', label: ['Notice period (months)', 'नोटिस अवधि (महीने)'], type: 'num', int: true, min: 0, max: 6, def: '1' },
         { name: 'annual_increase_percent', label: ['Yearly rent increase (%)', 'सालाना किराया बढ़ोतरी (%)'], type: 'num', min: 0, max: 25, def: '5' },
         {
           name: 'maintenance_paid_by',
@@ -79,7 +81,7 @@ export const SECTIONS: Record<Kind, Section[]> = {
         { name: 'amount', label: ['Amount claimed (₹)', 'दावे की राशि (₹)'], type: 'num', min: 1, max: 100_000_000, optional: true },
         { name: 'lease_date', label: ['Date of the agreement', 'समझौते की तारीख'], type: 'date', optional: true },
         { name: 'facts', label: ['What happened', 'क्या हुआ'], type: 'area', max: 1500, hint: ['Dates, amounts and what you asked for. Plain facts only.', 'तारीख़ें, राशि और आपने क्या माँगा। सिर्फ़ सीधे तथ्य।'] },
-        { name: 'days_to_comply', label: ['Days to respond', 'जवाब के लिए दिन'], type: 'num', min: 7, max: 60, def: '15' },
+        { name: 'days_to_comply', label: ['Days to respond', 'जवाब के लिए दिन'], type: 'num', int: true, min: 7, max: 60, def: '15' },
       ],
     },
     party('sender', ['Sender (you)', 'भेजने वाला (आप)']),
@@ -99,7 +101,7 @@ export const UI = {
     date: 'Choose a date.',
     preview: 'Your draft',
     empty: 'Fill in the form and press the button. The draft shows here.',
-    private: 'We send what you type to our server to fill the clauses. We do not keep it.',
+    private: 'What you type is sent to our server once, to fill the clauses.',
     fix: 'Fill in the fields marked in red first.',
     rate: 'You have made 5 drafts in the last hour. Try again later.',
     signIn: 'Drafting is not available right now. Try again in a few minutes.',
@@ -119,7 +121,7 @@ export const UI = {
     date: 'तारीख चुनें।',
     preview: 'आपका ड्राफ़्ट',
     empty: 'फ़ॉर्म भरकर बटन दबाएँ। ड्राफ़्ट यहाँ दिखेगा।',
-    private: 'धाराएँ भरने के लिए आपकी जानकारी हमारे सर्वर पर भेजी जाती है। हम उसे रखते नहीं।',
+    private: 'आप जो लिखते हैं वह धाराएँ भरने के लिए एक बार हमारे सर्वर पर भेजा जाता है।',
     fix: 'पहले लाल निशान वाले फ़ील्ड भरें।',
     rate: 'पिछले एक घंटे में आप 5 ड्राफ़्ट बना चुके हैं। बाद में कोशिश करें।',
     signIn: 'अभी ड्राफ़्ट नहीं बन सकता। कुछ मिनट बाद कोशिश करें।',
@@ -174,24 +176,24 @@ export const FAQ: Record<Kind, Record<'en' | 'hi', Faq[]>> = {
     en: [
       { q: 'Is the draft a valid rent agreement?', a: 'It is a draft from standard clauses. It becomes an agreement when both sides sign it on stamp paper of the right value for your state. Have a lawyer check it first.' },
       { q: 'Why is the term 11 months?', a: 'Many leave and licence agreements run for 11 months because, in many states, a lease of 12 months or more has to be registered. Check the rule for your state.' },
-      { q: 'Do you keep what I type?', a: 'No. The details are sent to our server once to fill the clauses and are not stored.' },
+      { q: 'Where does what I type go?', a: 'The details are sent to our server once, to fill the clauses. Nothing is kept in your browser.' },
     ],
     hi: [
       { q: 'क्या यह ड्राफ़्ट वैध किराया समझौता है?', a: 'यह मानक धाराओं का ड्राफ़्ट है। यह तब समझौता बनता है जब दोनों पक्ष अपने राज्य के सही मूल्य के स्टैंप पेपर पर हस्ताक्षर करें। पहले वकील से जँचवाएँ।' },
       { q: 'अवधि 11 महीने क्यों है?', a: 'कई लीव एंड लाइसेंस समझौते 11 महीने के होते हैं, क्योंकि कई राज्यों में 12 महीने या ज़्यादा के पट्टे का रजिस्ट्रेशन करना पड़ता है। अपने राज्य का नियम देखें।' },
-      { q: 'क्या आप मेरी डाली जानकारी रखते हैं?', a: 'नहीं। धाराएँ भरने के लिए जानकारी एक बार हमारे सर्वर पर जाती है और रखी नहीं जाती।' },
+      { q: 'मेरी डाली जानकारी कहाँ जाती है?', a: 'धाराएँ भरने के लिए जानकारी एक बार हमारे सर्वर पर भेजी जाती है। आपके ब्राउज़र में कुछ नहीं रखा जाता।' },
     ],
   },
   legal_notice: {
     en: [
       { q: 'Is the draft a legal notice I can send?', a: 'It is a draft. A lawyer should read it, and it is usually sent by registered post or speed post with proof of delivery.' },
       { q: 'How many days should I give?', a: 'Fifteen days is common. The form lets you set 7 to 60 days.' },
-      { q: 'Do you keep what I type?', a: 'No. The details are sent to our server once to fill the clauses and are not stored.' },
+      { q: 'Where does what I type go?', a: 'The details are sent to our server once, to fill the clauses. Nothing is kept in your browser.' },
     ],
     hi: [
       { q: 'क्या यह ड्राफ़्ट सीधे भेजने लायक लीगल नोटिस है?', a: 'यह ड्राफ़्ट है। इसे वकील को पढ़ना चाहिए, और आम तौर पर यह रजिस्टर्ड या स्पीड पोस्ट से, डिलीवरी के सबूत के साथ भेजा जाता है।' },
       { q: 'कितने दिन देने चाहिए?', a: 'आम तौर पर पंद्रह दिन। फ़ॉर्म में 7 से 60 दिन चुन सकते हैं।' },
-      { q: 'क्या आप मेरी डाली जानकारी रखते हैं?', a: 'नहीं। धाराएँ भरने के लिए जानकारी एक बार हमारे सर्वर पर जाती है और रखी नहीं जाती।' },
+      { q: 'मेरी डाली जानकारी कहाँ जाती है?', a: 'धाराएँ भरने के लिए जानकारी एक बार हमारे सर्वर पर भेजी जाती है। आपके ब्राउज़र में कुछ नहीं रखा जाता।' },
     ],
   },
 };

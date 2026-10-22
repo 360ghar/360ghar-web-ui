@@ -34,7 +34,9 @@ export function parseStaged(json: unknown): string | null {
 
 export async function stagePhoto(imageUrl: string): Promise<{ url: string } | { failure: Failure }> {
   const { status, json } = await postJson('/api/v1/design-studio/stage', { image_url: imageUrl }, 120_000);
-  const url = ok(status) ? parseStaged(json) : null;
+  const parsed = ok(status) ? parseStaged(json) : null;
+  // A reply that hands back the same photo staged nothing.
+  const url = parsed && parsed !== imageUrl ? parsed : null;
   return url ? { url } : { failure: ok(status) ? 'failed' : reason(status) };
 }
 

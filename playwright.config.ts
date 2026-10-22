@@ -1,7 +1,18 @@
+import { readFileSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
 
 // Node builds some fixtures (visit dates); give it the same zone as the browser.
 process.env.TZ = 'Asia/Kolkata';
+
+// The dev server reads .env; the specs must see the same flag (the owner AI tools change the tools list).
+if (process.env.PUBLIC_AI_OWNER_TOOLS === undefined) {
+  try {
+    const m = /^PUBLIC_AI_OWNER_TOOLS=(.*)$/m.exec(readFileSync(new URL('./.env', import.meta.url), 'utf8'));
+    if (m) process.env.PUBLIC_AI_OWNER_TOOLS = m[1]!.trim();
+  } catch {
+    // No .env: the flag is off, as for the dev server.
+  }
+}
 
 const baseURL = process.env.BASE_URL ?? 'http://localhost:4321';
 

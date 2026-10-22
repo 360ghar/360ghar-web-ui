@@ -621,6 +621,14 @@ function Wizard({ locale }: { locale: Locale }) {
 
   const images = v.images ?? [];
   const setImages = (next: string[]) => form.setValue('images', next, { shouldDirty: true });
+  // Forget staged copies that are no longer photos of the listing, and all of them once it is posted.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a derived clean-up of state that is also stored for reloads
+    setStaged((prev) => {
+      const keep = Object.fromEntries(Object.entries(prev).filter(([url]) => !done && (v.images ?? []).includes(url)));
+      return Object.keys(keep).length === Object.keys(prev).length ? prev : keep;
+    });
+  }, [v.images, done]);
   const shift = (from: number, to: number) => {
     if (to < 0 || to >= images.length || from === to) return;
     const next = [...images];

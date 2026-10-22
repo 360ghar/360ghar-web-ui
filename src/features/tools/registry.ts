@@ -1,5 +1,5 @@
 /**
- * The 16 tools: route, group, names and one-line descriptions in English and
+ * The 16 tools (18 with the legal drafters when PUBLIC_AI_OWNER_TOOLS is on): route, group, names and one-line descriptions in English and
  * Hindi. Used by /tools, the "More tools" links and the breadcrumbs.
  * `schema` is the key in lib/seo/legacy/toolSchemas.js (SoftwareApplication).
  */
