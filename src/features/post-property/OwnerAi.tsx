@@ -14,7 +14,7 @@ import './owner-ai.css';
 const T = {
   en: {
     write: 'Write it with AI',
-    writing: 'Writing. This can take up to a minute.',
+    writing: 'Writing. This can take a minute or two.',
     lead: 'Drafts a title and description from your details and photos. Check every fact, then use it or write your own.',
     draftTitle: 'Suggested title',
     draftBody: 'Suggested description',
@@ -25,7 +25,7 @@ const T = {
     unavailable: 'The writer is not available right now.',
     failed: 'We could not write this now. Try again in a minute.',
     stage: 'Virtually stage',
-    staging: 'Staging. This can take up to a minute.',
+    staging: 'Staging. This can take a minute or two.',
     stageRun: 'Stage this photo',
     stageCancel: 'Cancel',
     room: 'Room',
@@ -53,7 +53,7 @@ const T = {
   },
   hi: {
     write: 'AI से लिखवाएँ',
-    writing: 'लिख रहा है। इसमें एक मिनट तक लग सकता है।',
+    writing: 'लिख रहा है। इसमें एक-दो मिनट लग सकते हैं।',
     lead: 'आपकी जानकारी और फ़ोटो से शीर्षक और विवरण का ड्राफ़्ट बनाता है। हर बात जाँचें, फिर इस्तेमाल करें या अपना लिखें।',
     draftTitle: 'सुझाया गया शीर्षक',
     draftBody: 'सुझाया गया विवरण',
@@ -64,7 +64,7 @@ const T = {
     unavailable: 'अभी लिखने की सुविधा उपलब्ध नहीं है।',
     failed: 'अभी नहीं लिख सके। एक मिनट बाद कोशिश करें।',
     stage: 'वर्चुअल स्टेज करें',
-    staging: 'स्टेज हो रहा है। इसमें एक मिनट तक लग सकता है।',
+    staging: 'स्टेज हो रहा है। इसमें एक-दो मिनट लग सकते हैं।',
     stageRun: 'यह फ़ोटो स्टेज करें',
     stageCancel: 'रद्द करें',
     room: 'कमरा',
@@ -99,14 +99,16 @@ type WriterProps = {
   locale: Locale;
   images: string[];
   details: Record<string, unknown>;
+  /** The open draft lives in the wizard, so going back to fix a photo does not lose the owner's edits. */
+  draft: ListingDraft | null;
+  setDraft: (draft: ListingDraft | null) => void;
   /** Puts the accepted text in the form. */
   onUse: (text: { title: string; description: string }) => void;
 };
 
-export function ListingWriter({ locale, images, details, onUse }: WriterProps) {
+export function ListingWriter({ locale, images, details, draft, setDraft, onUse }: WriterProps) {
   const t = T[locale];
   const [busy, setBusy] = useState(false);
-  const [draft, setDraft] = useState<ListingDraft | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const run = async () => {

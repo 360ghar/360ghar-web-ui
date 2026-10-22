@@ -91,8 +91,22 @@ const toBase64 = (blob: Blob) =>
     r.readAsDataURL(blob);
   });
 
-/** Cloudinary serves a smaller JPEG on request: the backend takes at most 5 MB. Other hosts are fetched as they are. */
-const smallJpeg = (url: string) => (url.includes('res.cloudinary.com') && url.includes('/upload/') ? url.replace('/upload/', '/upload/f_jpg,q_auto:good,w_1600/') : url);
+/** The backend takes at most 5 MB: every photo is re-encoded as a JPEG of at most 1600 px on its long side. */
+async function boundedJpeg(blob: Blob): Promise<Blob> {
+  try {
+    const bitmap = await createImageBitmap(blob);
+    const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.getContext('2d')!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    const out = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+    return out ?? blob;
+  } catch {
+    return blob;
+  }
+}
 
 /**
  * Stages one photo and stores the result as a new photo of the listing (the backend returns the image itself, not a URL;
@@ -102,9 +116,11 @@ export async function stagePhoto(imageUrl: string, room: StageRoom, style: Stage
   let image: string;
   let mime: string | undefined;
   try {
-    const res = await fetch(smallJpeg(imageUrl));
+    const res = await fetch(imageUrl);
     if (!res.ok) return { failure: 'failed' };
-    const blob = await res.blob();
+    const blob = await boundedJpeg(await res.blob());
+    // A photo that could not be re-encoded and is still too large is not sent.
+    if (blob.size > 5_000_000) return { failure: 'failed' };
     mime = ['image/jpeg', 'image/png', 'image/webp'].includes(blob.type) ? blob.type : undefined;
     image = await toBase64(blob);
   } catch {

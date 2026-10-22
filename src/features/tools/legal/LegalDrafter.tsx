@@ -31,7 +31,7 @@ function Paper({ draft, locale, kind }: { draft: Draft; locale: Locale; kind: Ki
         </aside>
       ) : null}
       <aside className="ld-disclaimer" data-kind={kind}>
-        <strong>{t.disclaimerTitle}.</strong> {locale === 'en' && draft.disclaimer ? draft.disclaimer : t.disclaimer}
+        <strong>{t.disclaimerTitle}.</strong> {locale === 'en' && draft.disclaimer ? `${draft.disclaimer} ` : ''}{t.disclaimer}
       </aside>
     </article>
   );
@@ -70,7 +70,7 @@ function Drafter({ kind, locale }: { kind: Kind; locale: Locale }) {
   });
 
   const field = (f: Field) => {
-    const common = { label: f.label[i], optional: f.optional ? t.optional : undefined, hint: f.hint?.[i], error: message(f, errors[f.name]?.message) };
+    const common = { label: f.label[i], optional: f.optional && !f.conditional ? t.optional : undefined, hint: f.hint?.[i], error: message(f, errors[f.name]?.message) };
     if (f.type === 'select')
       return (
         <SelectField key={f.name} {...common} {...form.register(f.name)}>

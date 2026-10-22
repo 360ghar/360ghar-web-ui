@@ -13,6 +13,8 @@ export type Field = {
   label: Pair;
   type: 'text' | 'area' | 'num' | 'date' | 'select';
   optional?: boolean;
+  /** Optional for the schema, but not marked "(optional)": the form asks for it in some cases. */
+  conditional?: boolean;
   /** `num`: whole numbers only. */
   int?: boolean;
   /** `select` with the values 'true' and 'false': sent as a boolean. */
@@ -96,7 +98,7 @@ export const SECTIONS: Record<Kind, Section[]> = {
           ],
         },
         { name: 'property_address', label: ['Address of the home', 'घर का पता'], type: 'area', min: 5, max: 300 },
-        { name: 'amount', label: ['Amount claimed (₹)', 'दावे की राशि (₹)'], type: 'num', int: true, min: 1, max: 100_000_000, optional: true, hint: ['Needed for unpaid rent and a deposit refund.', 'बकाया किराए और डिपॉज़िट वापसी के लिए ज़रूरी।'] },
+        { name: 'amount', label: ['Amount claimed (₹)', 'दावे की राशि (₹)'], type: 'num', int: true, min: 1, max: 100_000_000, optional: true, conditional: true, hint: ['Needed for unpaid rent and a deposit refund.', 'बकाया किराए और डिपॉज़िट वापसी के लिए ज़रूरी।'] },
         { name: 'agreement_date', label: ['Date of the agreement', 'समझौते की तारीख'], type: 'date', optional: true },
         { name: 'facts', label: ['What happened', 'क्या हुआ'], type: 'area', optional: true, max: 600, hint: ['Dates, amounts and what you asked for. Plain facts only. The draft may reword it, and then shows your own words too.', 'तारीख़ें, राशि और आपने क्या माँगा। सिर्फ़ सीधे तथ्य। ड्राफ़्ट इसे दोबारा लिख सकता है, तब आपके अपने शब्द भी दिखते हैं।'] },
         { name: 'compliance_days', label: ['Days to respond', 'जवाब के लिए दिन'], type: 'num', int: true, min: 7, max: 90, def: '15' },

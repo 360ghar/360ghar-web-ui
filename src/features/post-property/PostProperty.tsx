@@ -29,7 +29,7 @@ import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { StateBlock } from '@/ui/states/StateBlock';
 import { KITCHEN_TYPES, SHARING_TYPES, VENTILATION_TYPES } from '@/lib/api/enums';
 import { AI_OWNER_TOOLS } from '@/lib/flags';
-import { listingDetails } from './ai';
+import { listingDetails, type ListingDraft } from './ai';
 import { ListingWriter, StageControl, stageNote } from './OwnerAi';
 import { NO_ROOMS, RENT_ONLY, STEPS, TYPES, crossIssues, formSchema, makeFormSchema, formNum, suggestTitle, toCard, toPayload, toUpdatePayload, type FormIn, type FormOut } from './schema';
 
@@ -513,6 +513,7 @@ function Wizard({ locale }: { locale: Locale }) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadNote, setUploadNote] = useState<string | null>(null);
+  const [writerDraft, setWriterDraft] = useState<ListingDraft | null>(null);
   const [pending, setPending] = useState<string[]>([]);
   const [dropping, setDropping] = useState(false);
   const [dragFrom, setDragFrom] = useState<number | null>(null);
@@ -1162,6 +1163,8 @@ function Wizard({ locale }: { locale: Locale }) {
                   locale={locale}
                   images={images}
                   details={listingDetails(v as Record<string, unknown>)}
+                  draft={writerDraft}
+                  setDraft={setWriterDraft}
                   onUse={(text) => {
                     form.setValue('title', text.title, { shouldValidate: true, shouldDirty: true });
                     form.setValue('description', text.description, { shouldValidate: true, shouldDirty: true });
