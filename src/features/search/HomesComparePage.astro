@@ -8,6 +8,7 @@ import type { Property } from '@/lib/api/types';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizer } from '@/lib/i18n/locale';
 import { areaSqft, formatDateOnly, homeKind, imageUrl, purposePrice, rupees } from '@/lib/format';
+import AskAbout from '@/features/chat/AskAbout.astro';
 import Icon from '@/ui/icons/Icon.astro';
 import { headlinePrice, perSqft as factsPerSqft } from '@/features/property/facts';
 import { cardPlace } from '@/features/property/PropertyCardView';
@@ -192,6 +193,13 @@ const rowCount = table.length + amenityRows.length;
     )
   }
   {
+    !failed && homes.length >= 2 && (
+      <div class="cmp-ask">
+        <AskAbout kind="compare" ids={homes.map((p) => p.id)} locale={locale} />
+      </div>
+    )
+  }
+  {
     ids.length > homes.length && !failed && homes.length > 0 && (
       <p class="cmp-note">{hi ? 'कुछ घर अब लिस्ट नहीं हैं, इसलिए हटा दिए गए।' : 'Some homes are no longer listed, so they are left out.'}</p>
     )
@@ -210,6 +218,10 @@ const rowCount = table.length + amenityRows.length;
 <style>
   .cmp {
     padding-block: 1.5rem 4rem;
+  }
+
+  .cmp-ask {
+    margin-top: 2.5rem;
   }
 
   .cmp-h1 {

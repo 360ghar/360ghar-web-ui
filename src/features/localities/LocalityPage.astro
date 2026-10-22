@@ -12,6 +12,7 @@ import FavouriteButton from '@/features/favourites/FavouriteButton';
 import { CITY_META } from '@/features/landing/cities';
 import { PropertyCardView } from '@/features/property/PropertyCardView';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
+import AskAbout from '@/features/chat/AskAbout.astro';
 import CutBand from '@/ui/CutBand.astro';
 import Faq from '@/ui/Faq.astro';
 import Icon from '@/ui/icons/Icon.astro';
@@ -330,6 +331,10 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
         )
       }
     </div>
+  </section>
+
+  <section class="loc-block">
+    <AskAbout kind="locality" slug={l.slug} name={name} locale={locale} />
   </section>
 
   <section class="loc-block">

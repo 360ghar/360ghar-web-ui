@@ -4,6 +4,7 @@ import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
 import { Icon } from '@/ui/icons/Icon';
 import { PlacesInput } from './PlacesInput';
+import { isSentence, sentenceHref } from './nl';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { ForgetLocation, LocationNotice } from '@/features/location/LocationNotice';
 import { locationCopy } from '@/features/location/copy';
@@ -70,8 +71,15 @@ function Search({ locale = 'en' }: { locale?: Locale }) {
 
   const go = (p: Place | null) => window.location.assign(searchHref(locale, purpose, text, p));
 
-  const onSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  const [thinking, setThinking] = useState(false);
+  const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // A typed sentence ("2 BHK for rent in Sector 57 under 50k") is read by the backend; any failure searches the words.
+    if (!place && isSentence(text)) {
+      setThinking(true);
+      window.location.assign((await sentenceHref(text, locale)).href);
+      return;
+    }
     go(place);
   };
 
@@ -105,7 +113,7 @@ function Search({ locale = 'en' }: { locale?: Locale }) {
           className="grow"
           inputClassName="hero-search-input"
         />
-        <button type="submit" className="btn btn-ink btn-lg hero-search-go" aria-label={t.search}>
+        <button type="submit" className="btn btn-ink btn-lg hero-search-go" aria-label={t.search} disabled={thinking}>
           <Icon name="search" size={20} />
           <span>{t.search}</span>
         </button>

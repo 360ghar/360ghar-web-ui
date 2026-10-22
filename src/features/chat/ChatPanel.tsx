@@ -6,11 +6,10 @@ import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
 import { tFrom } from '@/i18n';
 import { Icon } from '@/ui/icons/Icon';
-import { renderMarkdown } from './markdown';
 import { sendFailure, streamChat } from './stream';
-import { chatRequest, updateMessage, useChat, type Message } from './store';
+import { applyEvent, chatRequest, updateMessage, useChat, type Message } from './store';
 import { fetchConversationMessages, mapMessages } from './history';
-import { WidgetView } from './WidgetViews';
+import { Bubble } from './Bubble';
 import { chatCopy } from './copy';
 import './chat.css';
 
@@ -22,40 +21,6 @@ type Props = { locale: Locale; strings: Record<string, unknown>; onClose: () => 
 const NONE: Message[] = [];
 
 const uid = () => Math.random().toString(36).slice(2);
-
-function Bubble({ m, locale, t }: { m: Message; locale: Locale; t: (k: string) => string }) {
-  if (m.role === 'user') return <p className="chat-user">{m.text}</p>;
-  const busy = m.tools.some((x) => !x.done);
-  return (
-    <div className="chat-bot">
-      {m.tools.length ? (
-        <ul className="chat-tools">
-          {m.tools.map((x) => (
-            <li key={x.id} data-done={x.done || undefined}>
-              <Icon name={x.done ? (x.ok === false ? 'alert' : 'check') : 'clock'} size={14} />
-              {x.tool.replace(/_/g, ' ')}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {m.text ? (
-        // Escaped by renderMarkdown before any tag is added.
-        <div className="chat-md" dangerouslySetInnerHTML={{ __html: renderMarkdown(m.text) }} />
-      ) : !m.error ? (
-        <p className="chat-typing" aria-label={t('typingAriaLabel')}>
-          <span />
-          <span />
-          <span />
-        </p>
-      ) : null}
-      {m.widgets.map((w, i) => (
-        <WidgetView key={i} widget={w} locale={locale} />
-      ))}
-      {m.error ? <p className="chat-error">{m.error}</p> : null}
-      {busy ? <span className="visually-hidden">{t('thinking')}</span> : null}
-    </div>
-  );
-}
 
 export default function ChatPanel({ locale, strings, onClose }: Props) {
   const t = tFrom(strings as never);
@@ -177,20 +142,7 @@ export default function ChatPanel({ locale, strings, onClose }: Props) {
       const token = authed ? await currentToken() : null;
       const req = chatRequest(token, message, conversationId);
       for await (const ev of streamChat(req.path, req.body, abort.current.signal)) {
-        if (ev.event === 'conversation_info') useChat.setState({ conversationId: ev.data.conversation_id });
-        else if (ev.event === 'text_chunk') updateMessage(botId, (m) => ({ ...m, text: m.text + ev.data.text }));
-        else if (ev.event === 'tool_call_start')
-          updateMessage(botId, (m) => ({ ...m, tools: [...m.tools, { id: ev.data.call_id, tool: ev.data.tool, done: false }] }));
-        else if (ev.event === 'tool_call_end')
-          updateMessage(botId, (m) => ({
-            ...m,
-            tools: m.tools.map((x) => (x.id === ev.data.call_id ? { ...x, done: true, ok: ev.data.success } : x)),
-          }));
-        else if (ev.event === 'widget')
-          updateMessage(botId, (m) => ({ ...m, widgets: [...m.widgets, { name: ev.data.widget_name, data: ev.data.structured_content }] }));
-        else if (ev.event === 'done' && ev.data.response_text)
-          updateMessage(botId, (m) => (m.text ? m : { ...m, text: ev.data.response_text ?? '' }));
-        else if (ev.event === 'error') updateMessage(botId, (m) => ({ ...m, error: t('errorMessage') }));
+        applyEvent(botId, ev, t('errorMessage'));
       }
     } catch (error) {
       if ((error as Error).name !== 'AbortError') {

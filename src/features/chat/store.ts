@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { z } from 'zod';
 import { useAuthStore } from '@/features/auth/store';
 import { mapMessages, type ConversationMessageRow } from './history';
+import type { ChatEvent } from './stream';
 
 type ToolState = { id: string; tool: string; done: boolean; ok?: boolean };
 export type Widget = { name: string; data: unknown };
@@ -121,15 +122,32 @@ export const useChat = create<ChatState>()(
 export const updateMessage = (id: string, fn: (m: Message) => Message) =>
   useChat.setState((s) => ({ messages: s.messages.map((m) => (m.id === id ? fn(m) : m)) }));
 
+/** The page a question is about. The server loads the facts itself (closed set: a property or a locality). */
+export type AskContext = { type: 'property'; id: number } | { type: 'locality'; slug: string };
+
 /**
  * The endpoint and body of one chat message. A signed-in user (a token) sends to
  * `/agent/chat` with the conversation to continue; a guest sends to
  * `/agent/chat-public`, which stores nothing, so it never carries an id.
+ * `context` is sent only when given (the ask panels): a backend without it answers 422, see AskPanel.
  */
-export function chatRequest(token: string | null, message: string, conversationId: number | null) {
+export function chatRequest(token: string | null, message: string, conversationId: number | null, context?: AskContext | null) {
+  const extra = context ? { context } : {};
   return token
-    ? { path: '/api/v1/agent/chat', body: { message, conversation_id: conversationId } }
-    : { path: '/api/v1/agent/chat-public', body: { message } };
+    ? { path: '/api/v1/agent/chat', body: { message, conversation_id: conversationId, ...extra } }
+    : { path: '/api/v1/agent/chat-public', body: { message, ...extra } };
+}
+
+/** Puts one stream event into the bot message `botId`. `errorText` is shown for an `error` frame. */
+export function applyEvent(botId: string, ev: ChatEvent, errorText: string) {
+  if (ev.event === 'conversation_info') useChat.setState({ conversationId: ev.data.conversation_id });
+  else if (ev.event === 'text_chunk') updateMessage(botId, (m) => ({ ...m, text: m.text + ev.data.text }));
+  else if (ev.event === 'tool_call_start') updateMessage(botId, (m) => ({ ...m, tools: [...m.tools, { id: ev.data.call_id, tool: ev.data.tool, done: false }] }));
+  else if (ev.event === 'tool_call_end')
+    updateMessage(botId, (m) => ({ ...m, tools: m.tools.map((x) => (x.id === ev.data.call_id ? { ...x, done: true, ok: ev.data.success } : x)) }));
+  else if (ev.event === 'widget') updateMessage(botId, (m) => ({ ...m, widgets: [...m.widgets, { name: ev.data.widget_name, data: ev.data.structured_content }] }));
+  else if (ev.event === 'done' && ev.data.response_text) updateMessage(botId, (m) => (m.text ? m : { ...m, text: ev.data.response_text }));
+  else if (ev.event === 'error') updateMessage(botId, (m) => ({ ...m, error: errorText }));
 }
 
 /** Ties the stored messages to the current user. Runs when the auth state is known and on every change. */

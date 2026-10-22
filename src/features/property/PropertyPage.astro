@@ -11,6 +11,7 @@ import { PRICE_ON_REQUEST } from '@/features/search/prices';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizer } from '@/lib/i18n/locale';
 import { canonicalFor } from '@/lib/seo/site';
+import AskAbout from '@/features/chat/AskAbout.astro';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import CutBand from '@/ui/CutBand.astro';
 import Icon from '@/ui/icons/Icon.astro';
@@ -243,6 +244,10 @@ const emiHref = L(`/emi-calculator${p.purpose === 'buy' && !price.onRequest && p
           </section>
         )
       }
+
+      <div class="prop-section">
+        <AskAbout kind="property" id={p.id} name={heading} locale={locale} />
+      </div>
 
       <section class="prop-section" aria-labelledby="prop-loc">
         <h2 id="prop-loc" class="prop-h2">{hi ? 'लोकेशन' : 'Location'}</h2>
