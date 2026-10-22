@@ -4,7 +4,7 @@
  *    goes into the form only when the owner presses "Use this text".
  *  - StageControl: makes a "Virtually staged" copy of one photo, and puts the original back on request.
  */
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/lib/i18n/locale';
 import { Icon } from '@/ui/icons/Icon';
 import { SelectField, TextAreaField, TextField } from '@/ui/react/Field';
@@ -111,10 +111,20 @@ export function ListingWriter({ locale, images, details, draft, setDraft, onUse 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // The reply can take minutes. If the owner left the step meanwhile, it is dropped: its photo flags may point at moved photos.
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+    };
+  }, []);
+
   const run = async () => {
     setBusy(true);
     setError(null);
     const r = await listingDraft(images.slice(0, MAX_DRAFT_PHOTOS), details);
+    if (!alive.current) return;
     setBusy(false);
     if ('failure' in r) setError(failText(t, r.failure));
     else setDraft(r);
