@@ -120,7 +120,7 @@ type StageProps = {
   url: string;
   /** Staged photo url -> its original url. */
   staged: Record<string, string>;
-  setStaged: (next: Record<string, string>) => void;
+  setStaged: (update: (prev: Record<string, string>) => Record<string, string>) => void;
   /** Swaps one photo for another in the listing. */
   replace: (from: string, to: string) => void;
 };
@@ -135,8 +135,7 @@ export function StageControl({ locale, url, staged, setStaged, replace }: StageP
     setError(null);
     if (original) {
       replace(url, original);
-      const { [url]: _gone, ...rest } = staged;
-      setStaged(rest);
+      setStaged(({ [url]: _gone, ...rest }) => rest);
       return;
     }
     setBusy(true);
@@ -144,7 +143,7 @@ export function StageControl({ locale, url, staged, setStaged, replace }: StageP
     setBusy(false);
     if ('failure' in r) return setError(failText(t, r.failure, true));
     replace(url, r.url);
-    setStaged({ ...staged, [r.url]: url });
+    setStaged((prev) => ({ ...prev, [r.url]: url }));
   };
 
   return (

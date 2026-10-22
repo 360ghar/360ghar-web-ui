@@ -102,7 +102,7 @@ test.describe('with the flag', () => {
 
   test('virtual staging: a labelled copy replaces the photo, and the original comes back', async ({ page }) => {
     const w = watch(page);
-    let sent: Record<string, unknown> | null = null;
+    let sent = null as Record<string, unknown> | null;
     await page.route(/\/api\/v1\/design-studio\/stage/, (route) => {
       sent = route.request().postDataJSON();
       return route.fulfill({ json: { image_url: 'https://res.cloudinary.com/demo/image/upload/staged-1.jpg' } });
@@ -121,7 +121,7 @@ test.describe('with the flag', () => {
   });
 
   test('listing writer: the draft is editable and fills the form only when used', async ({ page }) => {
-    let sent: { image_urls: string[]; details: Record<string, unknown> } | null = null;
+    let sent = null as { image_urls: string[]; details: Record<string, unknown> } | null;
     await page.route(/\/api\/v1\/ai\/listing-draft/, (route) => {
       sent = route.request().postDataJSON();
       return route.fulfill({ json: { title: 'Bright 3 BHK floor in Palam Vihar', description: 'A second-floor home with parking.' } });

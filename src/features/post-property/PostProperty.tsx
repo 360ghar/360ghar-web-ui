@@ -524,14 +524,17 @@ function Wizard({ locale }: { locale: Locale }) {
       return {};
     }
   });
-  const setStaged = (next: Record<string, string>) => {
-    setStagedState(next);
-    try {
-      sessionStorage.setItem(STAGED, JSON.stringify(next));
-    } catch {
-      // Storage full: the original can no longer be put back after a reload.
-    }
-  };
+  // Functional, so two photos staged at once do not overwrite each other.
+  const setStaged = (update: (prev: Record<string, string>) => Record<string, string>) =>
+    setStagedState((prev) => {
+      const next = update(prev);
+      try {
+        sessionStorage.setItem(STAGED, JSON.stringify(next));
+      } catch {
+        // Storage full: the original can no longer be put back after a reload.
+      }
+      return next;
+    });
   const top = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLDivElement>(null);
 
@@ -1126,7 +1129,7 @@ function Wizard({ locale }: { locale: Locale }) {
                         </button>
                       </div>
                       {AI_OWNER_TOOLS && status === 'authed' ? (
-                        <StageControl locale={locale} url={url} staged={staged} setStaged={setStaged} replace={(from, to) => setImages(images.map((x) => (x === from ? to : x)))} />
+                        <StageControl locale={locale} url={url} staged={staged} setStaged={setStaged} replace={(from, to) => setImages((form.getValues('images') ?? []).map((x) => (x === from ? to : x)))} />
                       ) : null}
                     </li>
                   ))}
