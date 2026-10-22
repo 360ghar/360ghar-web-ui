@@ -27,6 +27,7 @@ export default function ChatPanel({ locale, strings, onClose }: Props) {
   const c = chatCopy(locale);
   const stored = useChat((s) => s.messages);
   const conversationId = useChat((s) => s.conversationId);
+  const sending = useChat((s) => s.sending);
   const hasEarlier = useChat((s) => Boolean(s.earlier?.cursor));
   const reset = useChat((s) => s.reset);
   const authStatus = useAuth((s) => s.status);
@@ -190,7 +191,7 @@ export default function ChatPanel({ locale, strings, onClose }: Props) {
               <Icon name="clock" />
             </button>
           ) : null}
-          <button type="button" className="btn btn-quiet btn-icon" onClick={() => { reset(); showChat(); }} aria-label={t('newConversation')} disabled={busy || (!messages.length && !restoring)}>
+          <button type="button" className="btn btn-quiet btn-icon" onClick={() => { reset(); showChat(); }} aria-label={t('newConversation')} disabled={busy || sending || (!messages.length && !restoring)}>
             <Icon name="retry" />
           </button>
           <button type="button" className="btn btn-quiet btn-icon" onClick={onClose} aria-label={t('closeChat')}>
