@@ -163,11 +163,12 @@ test('bank auctions: filters, load more, alert asks for login, detail', async ({
 
 test('bank auction: court row opens, unknown id is a 404', async ({ page }) => {
   test.skip(!(await contractReady()), 'needs the contract-2026-10 backend (not on the live API yet)');
-  await open(page, '/bank-auctions/31');
+  // Court rows have their own id space and route; /bank-auctions/<id> is for bank rows.
+  await open(page, '/bank-auctions/court/31');
   await expect(page.getByText('DRT/480/2023')).toBeVisible();
-  const res = await page.goto('/bank-auctions/999999');
+  const res = await page.goto('/bank-auctions/court/999999');
   expect(res?.status()).toBe(404);
-  expect((await page.goto('/bank-auctions/abc'))?.status()).toBe(404);
+  expect((await page.goto('/bank-auctions/court/abc'))?.status()).toBe(404);
 });
 
 test('auction sources: portal groups with live counts', async ({ page }) => {
