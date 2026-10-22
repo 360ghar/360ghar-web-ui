@@ -25,10 +25,15 @@ export function filtersToParams(filters: unknown): URLSearchParams {
 const TIMEOUT_MS = 6000;
 
 /** The /properties URL for a sentence. Never throws. `ai` is true when the backend understood it. */
-export async function sentenceHref(sentence: string, locale: Locale): Promise<{ href: string; ai: boolean }> {
+export async function sentenceHref(sentence: string, locale: Locale, base: Record<string, string> = {}): Promise<{ href: string; ai: boolean }> {
   const q = sentence.trim().slice(0, 300);
-  const base = localizePath('/properties', locale);
-  const keyword = { href: `${base}?${new URLSearchParams({ q })}`, ai: false };
+  const path = localizePath('/properties', locale);
+  // What the person already chose (rent, buy, PG) holds unless the sentence says otherwise.
+  const withBase = (params: URLSearchParams) => {
+    for (const [k, v] of Object.entries(base)) if (!params.has(k)) params.set(k, v);
+    return params;
+  };
+  const keyword = { href: `${path}?${withBase(new URLSearchParams({ q }))}`, ai: false };
   try {
     const res = await authedFetch(
       new Request(apiUrl('/api/v1/properties/nl-search'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q }) }),
@@ -40,7 +45,7 @@ export async function sentenceHref(sentence: string, locale: Locale): Promise<{ 
     const params = toSearchParams(filters);
     // Nothing understood: keep the words, so the search is not blank.
     if (!params.toString()) return keyword;
-    return { href: `${base}?${params}`, ai: true };
+    return { href: `${path}?${withBase(params)}`, ai: true };
   } catch {
     return keyword;
   }

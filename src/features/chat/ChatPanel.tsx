@@ -126,9 +126,10 @@ export default function ChatPanel({ locale, strings, onClose }: Props) {
 
   const send = async (raw: string) => {
     const message = raw.trim().slice(0, 4000);
-    if (!message || busy) return;
+    if (!message || busy || useChat.getState().sending) return;
     setText('');
     const botId = uid();
+    useChat.setState({ sending: true });
     useChat.setState((s) => ({
       messages: [
         ...s.messages,
@@ -155,6 +156,7 @@ export default function ChatPanel({ locale, strings, onClose }: Props) {
     } finally {
       updateMessage(botId, (m) => ({ ...m, tools: m.tools.map((x) => ({ ...x, done: true })) }));
       setBusy(false);
+      useChat.setState({ sending: false });
       abort.current = null;
     }
   };

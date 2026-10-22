@@ -30,6 +30,17 @@ describe('sentenceHref', () => {
     expect(url.searchParams.get('locality')).toBe('Sector 57');
     expect(url.searchParams.has('evil')).toBe(false);
   });
+  it('clamps out-of-range values and keeps what the person chose', async () => {
+    reply(200, { filters: { bedrooms_min: 999, price_max: -5 } });
+    const r = await sentenceHref('big home with lots of rooms please', 'en', { purpose: 'buy' });
+    const url = new URL(r.href, 'https://x');
+    expect(Number(url.searchParams.get('bedrooms_min'))).toBeLessThanOrEqual(20);
+    expect(url.searchParams.get('purpose')).toBe('buy');
+    reply(200, { filters: { purpose: 'rent' } });
+    expect(new URL((await sentenceHref('flat for rent in sector 57', 'en', { purpose: 'buy' })).href, 'https://x').searchParams.get('purpose')).toBe('rent');
+    reply(404, {});
+    expect(new URL((await sentenceHref('flat near the metro please', 'en', { purpose: 'rent', property_type: 'pg' })).href, 'https://x').searchParams.get('property_type')).toBe('pg');
+  });
   it('falls back to a keyword search when the route is missing, fails or says nothing', async () => {
     for (const make of [() => reply(404, { detail: 'nf' }), () => reply(200, { filters: {} }), () => vi.mocked(authedFetch).mockRejectedValueOnce(new Error('down'))]) {
       make();

@@ -31,6 +31,8 @@ type ChatState = {
   owner: string | null;
   /** Text another part of the page puts in the input (not sent). Not stored. */
   draft: string | null;
+  /** True while any panel (the chat or an ask panel) waits for a reply, so two sends never overlap. Not stored. */
+  sending: boolean;
   /** Older rows of an opened conversation that are not loaded yet (`cursor` null: all loaded). Not stored. */
   earlier: Earlier | null;
   setOpen: (v: boolean) => void;
@@ -84,6 +86,7 @@ export const useChat = create<ChatState>()(
       conversationId: null,
       owner: null,
       draft: null,
+      sending: false,
       earlier: null,
       setOpen: (open) => set({ open }),
       reset: () => set({ messages: [], conversationId: null, earlier: null }),

@@ -1,4 +1,4 @@
-import { useState, type SyntheticEvent } from 'react';
+import { useEffect, useState, type SyntheticEvent } from 'react';
 import type { Place } from '@/lib/maps';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
@@ -72,12 +72,18 @@ function Search({ locale = 'en' }: { locale?: Locale }) {
   const go = (p: Place | null) => window.location.assign(searchHref(locale, purpose, text, p));
 
   const [thinking, setThinking] = useState(false);
+  // Back from the results (the page comes from the back-forward cache): search again.
+  useEffect(() => {
+    const reset = () => setThinking(false);
+    window.addEventListener('pageshow', reset);
+    return () => window.removeEventListener('pageshow', reset);
+  }, []);
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     // A typed sentence ("2 BHK for rent in Sector 57 under 50k") is read by the backend; any failure searches the words.
     if (!place && isSentence(text)) {
       setThinking(true);
-      window.location.assign((await sentenceHref(text, locale)).href);
+      window.location.assign((await sentenceHref(text, locale, purpose === 'pg' ? { purpose: 'rent', property_type: 'pg' } : { purpose })).href);
       return;
     }
     go(place);

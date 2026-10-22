@@ -56,4 +56,10 @@ test('a backend without context gets the question again with the place in the te
   await panel.getByRole('button', { name: 'Ask', exact: true }).click();
   await expect(panel.locator('.chat-md')).toHaveCount(2);
   expect(bodies).toHaveLength(3);
+  expect(bodies[2]).toEqual({ message: 'Locality: Sector 56. And the metro?' });
+  // A ready question leaves a half-typed question alone.
+  await panel.getByLabel('Your question').fill('Draft in progress');
+  await panel.getByRole('button', { name: 'How far is the nearest metro?' }).click();
+  await expect(panel.locator('.chat-md')).toHaveCount(3);
+  await expect(panel.getByLabel('Your question')).toHaveValue('Draft in progress');
 });

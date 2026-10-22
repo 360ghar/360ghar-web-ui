@@ -46,23 +46,28 @@ function Ask({ locale, strings, heading, note, questions, context, subject }: Pr
   const c = chatCopy(locale);
   const x = T[locale];
   const [text, setText] = useState('');
-  const [busy, setBusy] = useState(false);
-  // Index of the first message this panel added, so earlier chat messages stay out of it.
-  const [start, setStart] = useState<number | null>(null);
-  const authed = useAuth((s) => s.status === 'authed');
+  // The messages this panel added, by id: the chat's earlier or later messages stay out, even after a reset.
+  const [mine, setMine] = useState<string[]>([]);
+  const status = useAuth((s) => s.status);
+  const authed = status === 'authed';
+  const sending = useChat((s) => s.sending);
   const all = useChat((s) => s.messages);
-  const shown = start === null ? [] : all.slice(start);
+  const shown = all.filter((m) => mine.includes(m.id));
+  // Until the session is known a signed-in visitor would be sent as a guest.
+  const busy = sending || status === 'unknown';
   const id = useId();
 
-  const send = async (raw: string) => {
+  const send = async (raw: string, fromInput = false) => {
     const question = raw.trim().slice(0, MAX);
-    if (!question || busy) return;
-    setText('');
-    setBusy(true);
+    if (!question || busy || useChat.getState().sending) return;
+    // A ready question leaves what the person is typing alone.
+    if (fromInput) setText('');
+    useChat.setState({ sending: true });
     const botId = uid();
-    if (start === null) setStart(useChat.getState().messages.length);
+    const userId = uid();
+    setMine((ids) => [...ids, userId, botId]);
     useChat.setState((s) => ({
-      messages: [...s.messages, { id: uid(), role: 'user', text: question, tools: [], widgets: [] }, { id: botId, role: 'bot', text: '', tools: [], widgets: [] }],
+      messages: [...s.messages, { id: userId, role: 'user', text: question, tools: [], widgets: [] }, { id: botId, role: 'bot', text: '', tools: [], widgets: [] }],
     }));
     const run = async (withContext: boolean) => {
       const token = authed ? await currentToken() : null;
@@ -86,13 +91,13 @@ function Ask({ locale, strings, heading, note, questions, context, subject }: Pr
       updateMessage(botId, (m) => ({ ...m, error: msg }));
     } finally {
       updateMessage(botId, (m) => ({ ...m, tools: m.tools.map((y) => ({ ...y, done: true })) }));
-      setBusy(false);
+      useChat.setState({ sending: false });
     }
   };
 
   const onSubmit = (e: SubmitEvent) => {
     e.preventDefault();
-    void send(text);
+    void send(text, true);
   };
 
   return (
@@ -121,7 +126,7 @@ function Ask({ locale, strings, heading, note, questions, context, subject }: Pr
         <label className="visually-hidden" htmlFor={`${id}-q`}>{x.label}</label>
         <textarea
           id={`${id}-q`}
-          className="textarea"
+          className="textarea ask-input"
           rows={1}
           maxLength={MAX}
           placeholder={x.placeholder}
@@ -130,12 +135,12 @@ function Ask({ locale, strings, heading, note, questions, context, subject }: Pr
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              void send(text);
+              void send(text, true);
             }
           }}
         />
-        <button type="submit" className="btn btn-primary" disabled={busy || !text.trim()}>
-          {busy ? x.busy : x.ask}
+        <button type="submit" className="btn btn-primary ask-send" disabled={busy || !text.trim()}>
+          {sending ? x.busy : x.ask}
         </button>
       </form>
       <p className="ask-note">{x.limit}</p>
