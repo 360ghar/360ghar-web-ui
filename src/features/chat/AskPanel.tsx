@@ -6,7 +6,7 @@
  * A backend that does not know `context` answers 422. The first time that happens the question is sent again
  * with the subject in the text instead, and the panel remembers it for the rest of the visit.
  */
-import { useId, useState, type SubmitEvent } from 'react';
+import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
 import { useAuth } from '@/features/auth/useAuth';
 import { currentToken } from '@/lib/api/client';
 import { ApiError } from '@/lib/api/errors';
@@ -56,12 +56,18 @@ function Ask({ locale, strings, heading, note, questions, context, subject }: Pr
   // Until the session is known a signed-in visitor would be sent as a guest.
   const busy = sending || status === 'unknown';
   const id = useId();
+  // Leaving the page (or the island unmounting) ends the stream.
+  const abort = useRef<AbortController | null>(null);
+  useEffect(() => () => abort.current?.abort(), []);
 
   const send = async (raw: string, fromInput = false) => {
     const question = raw.trim().slice(0, MAX);
     if (!question || busy || useChat.getState().sending) return;
     // A ready question leaves what the person is typing alone.
     if (fromInput) setText('');
+    // A saved conversation whose messages are not loaded (the chat panel was never opened) is not continued: its earlier
+    // rows would be missing from the chat panel afterwards. The question starts a new conversation.
+    const conversationId = useChat.getState().messages.length === 0 ? null : useChat.getState().conversationId;
     useChat.setState({ sending: true });
     const botId = uid();
     const userId = uid();
@@ -69,11 +75,13 @@ function Ask({ locale, strings, heading, note, questions, context, subject }: Pr
     useChat.setState((s) => ({
       messages: [...s.messages, { id: userId, role: 'user', text: question, tools: [], widgets: [] }, { id: botId, role: 'bot', text: '', tools: [], widgets: [] }],
     }));
+    const controller = new AbortController();
+    abort.current = controller;
     const run = async (withContext: boolean) => {
       const token = authed ? await currentToken() : null;
       const message = withContext ? question : `${subject}. ${question}`.slice(0, 4000);
-      const req = chatRequest(token, message, useChat.getState().conversationId, withContext ? context : null);
-      for await (const ev of streamChat(req.path, req.body, new AbortController().signal)) applyEvent(botId, ev, t('errorMessage'));
+      const req = chatRequest(token, message, conversationId, withContext ? context : null);
+      for await (const ev of streamChat(req.path, req.body, controller.signal)) applyEvent(botId, ev, t('errorMessage'));
     };
     try {
       const withContext = context !== null && !contextUnsupported();

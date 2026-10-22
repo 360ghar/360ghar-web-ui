@@ -187,7 +187,7 @@ export default function ChatPanel({ locale, strings, onClose }: Props) {
         )}
         <div className="flex">
           {authed && !inHistory ? (
-            <button type="button" className="btn btn-quiet btn-icon" onClick={() => setView('history')} aria-label={c.history} disabled={busy}>
+            <button type="button" className="btn btn-quiet btn-icon" onClick={() => setView('history')} aria-label={c.history} disabled={busy || sending}>
               <Icon name="clock" />
             </button>
           ) : null}

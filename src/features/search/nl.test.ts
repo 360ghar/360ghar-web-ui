@@ -20,6 +20,12 @@ describe('filtersToParams', () => {
 });
 
 describe('sentenceHref', () => {
+  it('drops the inherited PG type when the sentence changes the purpose', async () => {
+    reply(200, { filters: { purpose: 'buy', bedrooms_min: 2 } });
+    const url = new URL((await sentenceHref('2 bhk to buy in sector 57', 'en', { purpose: 'rent', property_type: 'pg' })).href, 'https://x');
+    expect(url.searchParams.get('purpose')).toBe('buy');
+    expect(url.searchParams.has('property_type')).toBe(false);
+  });
   it('uses the filters the backend returns, canonical and clamped', async () => {
     reply(200, { filters: { purpose: 'rent', bedrooms_min: 2, locality: 'Sector 57', evil: 'x' }, explanation: 'ok' });
     const r = await sentenceHref('2 bhk for rent in sector 57', 'en');

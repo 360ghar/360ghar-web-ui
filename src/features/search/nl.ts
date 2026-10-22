@@ -31,7 +31,11 @@ export async function sentenceHref(sentence: string, locale: Locale, base: Recor
   const path = localizePath('/properties', locale);
   // What the person already chose (rent, buy, PG) holds unless the sentence says otherwise.
   const withBase = (params: URLSearchParams) => {
-    for (const [k, v] of Object.entries(base)) if (!params.has(k)) params.set(k, v);
+    for (const [k, v] of Object.entries(base)) {
+      // PG is a rent listing: a sentence that moves to buy or short stay drops the inherited PG type.
+      if (k === 'property_type' && v === 'pg' && (params.get('purpose') ?? 'rent') !== 'rent') continue;
+      if (!params.has(k)) params.set(k, v);
+    }
     return params;
   };
   const keyword = { href: `${path}?${withBase(new URLSearchParams({ q }))}`, ai: false };
