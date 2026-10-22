@@ -22,7 +22,8 @@ export function filtersToParams(filters: unknown): URLSearchParams {
   return params;
 }
 
-const TIMEOUT_MS = 6000;
+// The backend model needs 15 to 25 s for a new sentence (answers are cached for 24 h). After this the words are searched.
+const TIMEOUT_MS = 30_000;
 
 /** The /properties URL for a sentence. Never throws. `ai` is true when the backend understood it. */
 export async function sentenceHref(sentence: string, locale: Locale, base: Record<string, string> = {}): Promise<{ href: string; ai: boolean }> {
