@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from './errors';
-import { api, attempt, call, multipart, postJson, timeoutMs } from './client';
+import { api, attempt, call, multipart, timeoutMs } from './client';
 
 const ok = (body: unknown) => new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } });
 /** A list response: every list route sends the five CursorPage keys. */
@@ -139,22 +139,5 @@ describe('api client', () => {
     await client.call(client.api.GET('/api/v1/amenities'));
     vi.unstubAllEnvs();
     expect(client.sawNoStore()).toBe(true);
-  });
-});
-
-describe('postJson', () => {
-  it('sends the body as JSON and returns the status and the parsed reply', async () => {
-    const fetchMock = vi.fn(async (req: Request) => ok({ got: await req.clone().json() }));
-    vi.stubGlobal('fetch', fetchMock);
-    expect(await postJson('/api/v1/x', { a: 1 })).toEqual({ status: 200, json: { got: { a: 1 } } });
-    expect(fetchMock.mock.calls[0]![0].headers.get('content-type')).toBe('application/json');
-  });
-  it('gives the status and null json for an error that is not JSON', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => new Response('nope', { status: 404 })));
-    expect(await postJson('/api/v1/x', {})).toEqual({ status: 404, json: null });
-  });
-  it('never throws: a network failure is status 0', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => { throw new TypeError('offline'); }));
-    expect(await postJson('/api/v1/x', {})).toEqual({ status: 0, json: null });
   });
 });

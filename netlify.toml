@@ -8,6 +8,9 @@
   # Public ids (the same as the old site's index.html).
   PUBLIC_GA_ID = "G-0S1Q7466MM"
   PUBLIC_POSTHOG_HOST = "https://us.i.posthog.com"
+  # Backend PRs #51-#53 are deployed: OG cards from the API, and the owner AI tools (drafters, listing writer, staging).
+  OG_FROM_API = "true"
+  PUBLIC_AI_OWNER_TOOLS = "true"
 
 # Deploy previews run on *.netlify.app, which the API CORS policy does not
 # allow, so the browser uses the same-origin proxy below.

@@ -732,6 +732,143 @@
         ]
       }
     },
+    "/api/v1/og/{kind}/{slug}": {
+      "get": {
+        "tags": [
+          "imagery"
+        ],
+        "summary": "Share card image for a property, locality, blog post or city",
+        "description": "302 to a 1200x630 card: generated art with the exact title, price and locality as text.\n\nThis never calls the image model. A subject with no art yet gets the neutral brand card, with a\nshort cache time. An unknown subject is 404.",
+        "operationId": "og_card_api_v1_og__kind___slug__get",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(property|locality|blog|post|city)$",
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to the share card image"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/imagery/run": {
+      "post": {
+        "tags": [
+          "imagery-admin"
+        ],
+        "summary": "Generate house-style art for subjects that have none (cron)",
+        "description": "One bounded batch, four images at a time. Images already made are skipped, so repeating a\ncall is safe. A provider 429 stops the batch: when nothing was made the answer is 429 with\n``Retry-After``, otherwise 200 with ``retry_after`` set. Call again with a later nightly run.",
+        "operationId": "run_imagery_api_v1_admin_imagery_run_post",
+        "parameters": [
+          {
+            "name": "x-cron-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cron-Secret"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageryRunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageryRunResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "The image provider is rate limited. See Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageryRunResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/users/me": {
       "get": {
         "tags": [
@@ -2069,6 +2206,58 @@
             "HTTPBearer": []
           }
         ]
+      }
+    },
+    "/api/v1/properties/nl-search": {
+      "post": {
+        "tags": [
+          "properties"
+        ],
+        "summary": "Turn a plain-language search into property filters",
+        "description": "Public. 20 requests per minute per IP. Answers are cached for 24 hours by normalised query.\n\n``filters`` uses the query parameter names of ``GET /properties``. Send them to that endpoint\nas they are. Unknown keys and invalid values are dropped. When the model is not available the\nanswer is 503 ``AI_UNAVAILABLE``: fall back to a keyword search with ``q``.",
+        "operationId": "nl_property_search_api_v1_properties_nl_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NLSearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NLSearchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/properties": {
@@ -20934,6 +21123,58 @@
         }
       }
     },
+    "/api/v1/design-studio/stage": {
+      "post": {
+        "tags": [
+          "design-studio"
+        ],
+        "summary": "Virtually stage a room photo",
+        "description": "Add furniture to an empty-room photo. Free, no login required. Powered by Agnes AI.\n\n**Rate limit:** 5 requests per minute per IP address.\n\nThe room's walls, floor, windows and layout are kept. The returned image always carries a\nvisible \"Virtually staged\" band and the response has ``staged: true``. Show both wherever the\nimage is used: a staged photo must not be presented as the real room.\n\n``room_type`` and ``style`` are fixed choices. The image is a JPEG, PNG or WebP of up to 5 MB.",
+        "operationId": "stage_room_api_v1_design_studio_stage_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StageResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/vastu/analyze": {
       "post": {
         "tags": [
@@ -24448,6 +24689,130 @@
         ]
       }
     },
+    "/api/v1/ai/listing-draft": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Draft a listing title and description from photos",
+        "description": "Sign-in required. Limited to 3 per minute and 20 per hour per IP.\n\nSend 1 to 8 photos, each as a Cloudinary URL of this account or as base64 (JPEG, PNG or WebP,\nup to 3 MB decoded). Every photo is checked (size, magic bytes against ``mime_type``, full\ndecode) before the model sees any. Returns an editable ``title`` and ``description``, one\n``rooms`` tag per photo, and ``flags`` for photo problems. Treat the text as a draft: the\nowner reviews it before saving the listing.",
+        "operationId": "listing_draft_api_v1_ai_listing_draft_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListingDraftRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListingDraftResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ai/legal-draft": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Draft a rent agreement or a legal notice",
+        "description": "Public. Limited to 5 per hour per IP.\n\nThe clauses are fixed text filled from ``fields``. The model only rewords the free text\n(``additional_terms`` or ``facts``); ``narrative_source`` says whether it did. Every response\ncarries the fixed ``disclaimer`` and ends with a Disclaimer section: show both. The fields\nare never written to the logs.",
+        "operationId": "legal_draft_api_v1_ai_legal_draft_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/RentAgreementDraft"
+                  },
+                  {
+                    "$ref": "#/components/schemas/LegalNoticeDraft"
+                  }
+                ],
+                "title": "Body",
+                "discriminator": {
+                  "propertyName": "kind",
+                  "mapping": {
+                    "rent_agreement": "#/components/schemas/RentAgreementDraft",
+                    "legal_notice": "#/components/schemas/LegalNoticeDraft"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegalDraftResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/custom-domains": {
       "post": {
         "tags": [
@@ -24767,7 +25132,7 @@
           "ai-agent"
         ],
         "summary": "Send public agent chat message",
-        "description": "Stream an AI agent response for unauthenticated guests via SSE.\n\nOnly property discovery tools are available. No conversation persistence.\n\nThe main-pool DB session is released before streaming begins and a\nbackground-pool session is used for tool calls, matching the pattern\nin the authenticated ``/chat`` endpoint.",
+        "description": "Stream an AI agent response for unauthenticated guests via SSE.\n\nOnly property discovery tools are available (all read-only). No conversation persistence.\n\nWith ``context`` the server loads the page facts itself (404 when the page does not exist),\nthe message is at most 500 characters and the call also counts against 40 per day per IP.\n\nThe main-pool DB session is released before streaming begins and a\nbackground-pool session is used for tool calls, matching the pattern\nin the authenticated ``/chat`` endpoint.",
         "operationId": "agent_chat_public_api_v1_agent_chat_public_post",
         "requestBody": {
           "content": {
@@ -29014,6 +29379,17 @@
             ],
             "title": "Conversation Id",
             "description": "Existing conversation to continue. Omit to start one."
+          },
+          "context": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatContext"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional page to ground the answer in. With it the message is at most 500 characters."
           }
         },
         "additionalProperties": false,
@@ -35969,6 +36345,54 @@
           "ok"
         ],
         "title": "ChannelOutcome"
+      },
+      "ChatContext": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "property",
+              "locality"
+            ],
+            "title": "Type"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000000000000.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "Property id (type property)"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1,
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug",
+            "description": "Locality slug (type locality)"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "title": "ChatContext",
+        "description": "The page the visitor asks about. A closed set: the server loads the facts itself.\n\nA property is named by ``id``, a locality by ``slug``. Nothing else is accepted, so a client\ncannot put its own text into the model's context through this field."
       },
       "CircleRateResponse": {
         "properties": {
@@ -44856,6 +45280,17 @@
             "maxLength": 4000,
             "minLength": 1,
             "title": "Message"
+          },
+          "context": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatContext"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional page to ground the answer in. With it the message is at most 500 characters and the call is limited to 10 per minute and 40 per day per IP."
           }
         },
         "additionalProperties": false,
@@ -45581,6 +46016,146 @@
           "prompt"
         ],
         "title": "ImageGenRequest"
+      },
+      "ImageryRunItem": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "skipped",
+              "failed",
+              "rate_limited"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "slug",
+          "status"
+        ],
+        "title": "ImageryRunItem"
+      },
+      "ImageryRunRequest": {
+        "properties": {
+          "kinds": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "city",
+                "locality",
+                "property",
+                "blog"
+              ]
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 1,
+            "title": "Kinds"
+          },
+          "max_items": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 1.0,
+            "title": "Max Items",
+            "default": 8
+          },
+          "max_seconds": {
+            "type": "integer",
+            "maximum": 280.0,
+            "minimum": 10.0,
+            "title": "Max Seconds",
+            "default": 240
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "og",
+              "hero"
+            ],
+            "title": "Variant",
+            "description": "og is 16:9 at 1K, hero is 16:9 at 2K",
+            "default": "og"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ImageryRunRequest"
+      },
+      "ImageryRunResult": {
+        "properties": {
+          "generated": {
+            "type": "integer",
+            "title": "Generated"
+          },
+          "skipped": {
+            "type": "integer",
+            "title": "Skipped"
+          },
+          "failed": {
+            "type": "integer",
+            "title": "Failed"
+          },
+          "rate_limited": {
+            "type": "integer",
+            "title": "Rate Limited"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          },
+          "retry_after": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry After",
+            "description": "Seconds to wait before the next call after a provider 429"
+          },
+          "stopped_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stopped Reason"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ImageryRunItem"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "generated",
+          "skipped",
+          "failed",
+          "rate_limited",
+          "done",
+          "stopped_reason",
+          "items"
+        ],
+        "title": "ImageryRunResult"
       },
       "IncomeReport": {
         "properties": {
@@ -46983,6 +47558,201 @@
         ],
         "title": "LeaseUploadSigned"
       },
+      "LegalDraftResponse": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "rent_agreement",
+              "legal_notice"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/LegalSection"
+            },
+            "type": "array",
+            "title": "Sections"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "description": "Fixed text. Show it with the draft.",
+            "default": "This is a draft for general information. It is not legal advice. Have a lawyer review it before you sign it or send it."
+          },
+          "original_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Text",
+            "description": "Your own wording, returned when the model reworded it. Show it next to the draft."
+          },
+          "narrative_source": {
+            "type": "string",
+            "enum": [
+              "model",
+              "template"
+            ],
+            "title": "Narrative Source",
+            "description": "model when the model reworded your free text, template when your text is used as written"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "title",
+          "sections",
+          "narrative_source"
+        ],
+        "title": "LegalDraftResponse"
+      },
+      "LegalNoticeDraft": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "legal_notice",
+            "title": "Kind"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/LegalNoticeFields"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "fields"
+        ],
+        "title": "LegalNoticeDraft"
+      },
+      "LegalNoticeFields": {
+        "properties": {
+          "notice_type": {
+            "type": "string",
+            "enum": [
+              "rent_arrears",
+              "vacate_premises",
+              "security_deposit_refund",
+              "breach_of_agreement"
+            ],
+            "title": "Notice Type"
+          },
+          "sender_name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Sender Name"
+          },
+          "sender_address": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 5,
+            "title": "Sender Address"
+          },
+          "recipient_name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Recipient Name"
+          },
+          "recipient_address": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 5,
+            "title": "Recipient Address"
+          },
+          "property_address": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 5,
+            "title": "Property Address"
+          },
+          "agreement_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agreement Date"
+          },
+          "amount": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100000000.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount",
+            "description": "Rupees. Needed for rent_arrears and security_deposit_refund"
+          },
+          "compliance_days": {
+            "type": "integer",
+            "maximum": 90.0,
+            "minimum": 7.0,
+            "title": "Compliance Days",
+            "default": 15
+          },
+          "facts": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Facts"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "notice_type",
+          "sender_name",
+          "sender_address",
+          "recipient_name",
+          "recipient_address",
+          "property_address"
+        ],
+        "title": "LegalNoticeFields"
+      },
+      "LegalSection": {
+        "properties": {
+          "heading": {
+            "type": "string",
+            "title": "Heading"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          }
+        },
+        "type": "object",
+        "required": [
+          "heading",
+          "body"
+        ],
+        "title": "LegalSection"
+      },
       "LinkContent": {
         "properties": {
           "url": {
@@ -47019,6 +47789,111 @@
         ],
         "title": "LinkContent"
       },
+      "ListingDraftRequest": {
+        "properties": {
+          "photos": {
+            "items": {
+              "$ref": "#/components/schemas/PhotoIn"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Photos"
+          },
+          "hints": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ListingHints"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "photos"
+        ],
+        "title": "ListingDraftRequest"
+      },
+      "ListingDraftResponse": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "rooms": {
+            "items": {
+              "$ref": "#/components/schemas/RoomTag"
+            },
+            "type": "array",
+            "title": "Rooms"
+          },
+          "flags": {
+            "items": {
+              "$ref": "#/components/schemas/ListingFlag"
+            },
+            "type": "array",
+            "title": "Flags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "rooms",
+          "flags"
+        ],
+        "title": "ListingDraftResponse"
+      },
+      "ListingFlag": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "blurry",
+              "dark",
+              "people_visible",
+              "text_or_watermark",
+              "not_a_property",
+              "duplicate_photo",
+              "low_resolution",
+              "few_photos",
+              "no_exterior_or_entrance"
+            ],
+            "title": "Code"
+          },
+          "photo": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photo",
+            "description": "0-based photo index, or null for the whole set"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 160,
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "note"
+        ],
+        "title": "ListingFlag"
+      },
       "ListingGenderPreference": {
         "type": "string",
         "enum": [
@@ -47027,6 +47902,119 @@
           "female"
         ],
         "title": "ListingGenderPreference"
+      },
+      "ListingHints": {
+        "properties": {
+          "property_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PropertyType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "purpose": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PropertyPurpose"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "locality": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locality"
+          },
+          "bedrooms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 50.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bedrooms"
+          },
+          "bathrooms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 50.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bathrooms"
+          },
+          "area_sqft": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1000000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area Sqft"
+          },
+          "furnishing": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FurnishingLevel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ListingHints",
+        "description": "What the owner already knows. Each value is data for the writer, never an instruction."
       },
       "ListingModerationAction": {
         "properties": {
@@ -50299,6 +51287,46 @@
         "title": "MoveInTimeline",
         "description": "Query value for GET /properties move_in. ``flexible`` applies no filter."
       },
+      "NLSearchRequest": {
+        "properties": {
+          "q": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Q",
+            "description": "The search, in the visitor's own words"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "q"
+        ],
+        "title": "NLSearchRequest",
+        "description": "Body of POST /properties/nl-search."
+      },
+      "NLSearchResponse": {
+        "properties": {
+          "filters": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Filters",
+            "description": "Query parameters of GET /properties, as sent"
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Explanation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "filters",
+          "explanation"
+        ],
+        "title": "NLSearchResponse",
+        "description": "Filters for GET /properties and one sentence saying what was searched."
+      },
       "NavigationContent": {
         "properties": {},
         "additionalProperties": false,
@@ -51813,6 +52841,55 @@
           "phone"
         ],
         "title": "PhoneUpdate"
+      },
+      "PhotoIn": {
+        "properties": {
+          "url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "base64": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4200000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base64",
+            "description": "Standard base64, up to 3 MB decoded"
+          },
+          "mime_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "image/jpeg",
+                  "image/png",
+                  "image/webp"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mime Type"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PhotoIn",
+        "description": "One photo: a Cloudinary URL of this account, or base64 with its MIME type."
       },
       "PnLReport": {
         "properties": {
@@ -56559,6 +57636,164 @@
         "title": "RemedyType",
         "description": "Type of Vastu remedy."
       },
+      "RentAgreementDraft": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "rent_agreement",
+            "title": "Kind"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/RentAgreementFields"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "fields"
+        ],
+        "title": "RentAgreementDraft"
+      },
+      "RentAgreementFields": {
+        "properties": {
+          "landlord_name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Landlord Name"
+          },
+          "landlord_address": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 5,
+            "title": "Landlord Address"
+          },
+          "tenant_name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Tenant Name"
+          },
+          "tenant_address": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 5,
+            "title": "Tenant Address"
+          },
+          "property_address": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 5,
+            "title": "Property Address"
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "City"
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "State"
+          },
+          "monthly_rent": {
+            "type": "integer",
+            "maximum": 10000000.0,
+            "minimum": 1.0,
+            "title": "Monthly Rent"
+          },
+          "security_deposit": {
+            "type": "integer",
+            "maximum": 100000000.0,
+            "minimum": 0.0,
+            "title": "Security Deposit"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "duration_months": {
+            "type": "integer",
+            "maximum": 60.0,
+            "minimum": 1.0,
+            "title": "Duration Months",
+            "default": 11
+          },
+          "rent_due_day": {
+            "type": "integer",
+            "maximum": 28.0,
+            "minimum": 1.0,
+            "title": "Rent Due Day",
+            "default": 5
+          },
+          "notice_period_days": {
+            "type": "integer",
+            "maximum": 180.0,
+            "minimum": 7.0,
+            "title": "Notice Period Days",
+            "default": 30
+          },
+          "lock_in_months": {
+            "type": "integer",
+            "maximum": 24.0,
+            "minimum": 0.0,
+            "title": "Lock In Months",
+            "default": 0
+          },
+          "annual_increase_percent": {
+            "type": "integer",
+            "maximum": 25.0,
+            "minimum": 0.0,
+            "title": "Annual Increase Percent",
+            "default": 5
+          },
+          "furnished": {
+            "type": "boolean",
+            "title": "Furnished",
+            "default": false
+          },
+          "maintenance_by": {
+            "type": "string",
+            "enum": [
+              "tenant",
+              "landlord"
+            ],
+            "title": "Maintenance By",
+            "default": "tenant"
+          },
+          "additional_terms": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Additional Terms"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "landlord_name",
+          "landlord_address",
+          "tenant_name",
+          "tenant_address",
+          "property_address",
+          "city",
+          "state",
+          "monthly_rent",
+          "security_deposit",
+          "start_date"
+        ],
+        "title": "RentAgreementFields"
+      },
       "RentCharge": {
         "properties": {
           "id": {
@@ -58335,6 +59570,47 @@
         "title": "RoomInfo",
         "description": "Information about a room in the floor plan."
       },
+      "RoomTag": {
+        "properties": {
+          "photo": {
+            "type": "integer",
+            "title": "Photo",
+            "description": "0-based index into the request's photos"
+          },
+          "room_type": {
+            "type": "string",
+            "enum": [
+              "living_room",
+              "bedroom",
+              "kitchen",
+              "bathroom",
+              "dining_room",
+              "balcony",
+              "exterior",
+              "entrance",
+              "study",
+              "parking",
+              "garden",
+              "amenity",
+              "floor_plan",
+              "other"
+            ],
+            "title": "Room Type"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 60,
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "photo",
+          "room_type",
+          "label"
+        ],
+        "title": "RoomTag"
+      },
       "RoomVastuAnalysis": {
         "properties": {
           "room": {
@@ -59589,6 +60865,88 @@
         "type": "object",
         "title": "SpatialGraphSummary",
         "description": "Linking-quality report of a spatial job (see `tour_ai.spatial.graph_summary`).\n\nEvery field is declared: an undeclared key would be dropped on the way into\n`ai_jobs.result`, and the review UI would silently show nothing."
+      },
+      "StageRequest": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "maxLength": 7000000,
+            "title": "Image",
+            "description": "Base64 of an empty-room photo, up to 5 MB decoded"
+          },
+          "mime_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "image/jpeg",
+                  "image/png",
+                  "image/webp"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mime Type"
+          },
+          "room_type": {
+            "type": "string",
+            "enum": [
+              "living_room",
+              "bedroom",
+              "dining_room",
+              "kitchen",
+              "study",
+              "balcony"
+            ],
+            "title": "Room Type",
+            "default": "living_room"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "modern",
+              "minimalist",
+              "scandinavian",
+              "traditional_indian",
+              "contemporary"
+            ],
+            "title": "Style",
+            "default": "modern"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "StageRequest"
+      },
+      "StageResponse": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "title": "Image",
+            "description": "A JPEG data URL with the visible watermark"
+          },
+          "staged": {
+            "type": "boolean",
+            "const": true,
+            "title": "Staged",
+            "default": true
+          },
+          "watermark": {
+            "type": "string",
+            "title": "Watermark",
+            "default": "Virtually staged"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "StageResponse"
       },
       "StaircaseInfo": {
         "properties": {
