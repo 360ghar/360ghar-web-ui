@@ -28,9 +28,13 @@ import { Check, SelectField, TextAreaField, TextField } from '@/ui/react/Field';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { StateBlock } from '@/ui/states/StateBlock';
 import { KITCHEN_TYPES, SHARING_TYPES, VENTILATION_TYPES } from '@/lib/api/enums';
+import { AI_OWNER_TOOLS } from '@/lib/flags';
+import { listingDetails, type ListingDraft } from './ai';
+import { ListingWriter, StageControl, stageNote } from './OwnerAi';
 import { NO_ROOMS, RENT_ONLY, STEPS, TYPES, crossIssues, formSchema, makeFormSchema, formNum, suggestTitle, toCard, toPayload, toUpdatePayload, type FormIn, type FormOut } from './schema';
 
 const DRAFT = '360ghar:post-draft';
+const STAGED = '360ghar:post-staged';
 
 const T = {
   en: {
@@ -509,9 +513,29 @@ function Wizard({ locale }: { locale: Locale }) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadNote, setUploadNote] = useState<string | null>(null);
+  const [writerDraft, setWriterDraft] = useState<ListingDraft | null>(null);
   const [pending, setPending] = useState<string[]>([]);
   const [dropping, setDropping] = useState(false);
   const [dragFrom, setDragFrom] = useState<number | null>(null);
+  // Photos that are a "Virtually staged" copy, with the original each one came from (kept for this tab's draft).
+  const [staged, setStagedState] = useState<Record<string, string>>(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem(STAGED) ?? '{}') as Record<string, string>;
+    } catch {
+      return {};
+    }
+  });
+  // Functional, so two photos staged at once do not overwrite each other.
+  const setStaged = (update: (prev: Record<string, string>) => Record<string, string>) =>
+    setStagedState((prev) => {
+      const next = update(prev);
+      try {
+        sessionStorage.setItem(STAGED, JSON.stringify(next));
+      } catch {
+        // Storage full: the original can no longer be put back after a reload.
+      }
+      return next;
+    });
   const top = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLDivElement>(null);
 
@@ -597,7 +621,21 @@ function Wizard({ locale }: { locale: Locale }) {
   const jump = (to: number) => (to < step ? move(to) : void go(to));
 
   const images = v.images ?? [];
+  // The writer's photo flags point at photos by position: a changed set of photos makes them stale.
+  const photoKey = images.join('|');
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- drops a draft that no longer matches the photos
+    setWriterDraft(null);
+  }, [photoKey]);
   const setImages = (next: string[]) => form.setValue('images', next, { shouldDirty: true });
+  // Forget staged copies that are no longer photos of the listing, and all of them once it is posted.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a derived clean-up of state that is also stored for reloads
+    setStaged((prev) => {
+      const keep = Object.fromEntries(Object.entries(prev).filter(([url]) => !done && (v.images ?? []).includes(url)));
+      return Object.keys(keep).length === Object.keys(prev).length ? prev : keep;
+    });
+  }, [v.images, done]);
   const shift = (from: number, to: number) => {
     if (to < 0 || to >= images.length || from === to) return;
     const next = [...images];
@@ -754,6 +792,7 @@ function Wizard({ locale }: { locale: Locale }) {
                 className="link cursor-pointer border-0 bg-transparent p-0"
                 onClick={() => {
                   form.reset(EMPTY);
+                  setWriterDraft(null);
                   setStep(0);
                   setReach(0);
                   setDone(null);
@@ -825,6 +864,7 @@ function Wizard({ locale }: { locale: Locale }) {
                   className="underline"
                   onClick={() => {
                     form.reset(EMPTY);
+                    setWriterDraft(null);
                     setStep(0);
                     setReach(0);
                     setRestored(false);
@@ -1105,6 +1145,9 @@ function Wizard({ locale }: { locale: Locale }) {
                           <Icon name="trash" size={16} />
                         </button>
                       </div>
+                      {AI_OWNER_TOOLS && status === 'authed' ? (
+                        <StageControl locale={locale} url={url} staged={staged} setStaged={setStaged} replace={(from, to) => setImages((form.getValues('images') ?? []).map((x) => (x === from ? to : x)))} />
+                      ) : null}
                     </li>
                   ))}
                   {pending.map((url) => (
@@ -1116,12 +1159,26 @@ function Wizard({ locale }: { locale: Locale }) {
                 </ul>
               ) : null}
               {images.length > 1 ? <p className="field-hint">{t.reorderHint}</p> : null}
+              {AI_OWNER_TOOLS && status === 'authed' && images.length > 0 ? <p className="field-hint">{stageNote(locale)}</p> : null}
             </fieldset>
           ) : null}
 
           {step === 5 ? (
             <fieldset className="post-step">
               <legend className="visually-hidden">{t.steps[5]}</legend>
+              {AI_OWNER_TOOLS && status === 'authed' ? (
+                <ListingWriter
+                  locale={locale}
+                  images={images}
+                  details={listingDetails(v as Record<string, unknown>)}
+                  draft={writerDraft}
+                  setDraft={setWriterDraft}
+                  onUse={(text) => {
+                    form.setValue('title', text.title, { shouldValidate: true, shouldDirty: true });
+                    form.setValue('description', text.description, { shouldValidate: true, shouldDirty: true });
+                  }}
+                />
+              ) : null}
               <div className="grid gap-2">
                 <TextField label={t.title} maxLength={200} error={errors.title?.message} {...form.register('title')} />
                 <button

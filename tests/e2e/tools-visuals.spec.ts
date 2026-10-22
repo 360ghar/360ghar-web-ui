@@ -12,7 +12,7 @@ test('tools index: a paper scene on every card', async ({ page }) => {
   const w = watch(page);
   await page.goto('/tools');
   const art = page.locator('.tools-card .tools-card-art svg.vignette');
-  await expect(art).toHaveCount(16);
+  await expect(art).toHaveCount(process.env.PUBLIC_AI_OWNER_TOOLS === 'true' ? 18 : 16);
   for (const el of await art.all()) {
     const box = await el.boundingBox();
     expect(box && box.width > 60 && box.height > 40, 'vignette has a size').toBeTruthy();

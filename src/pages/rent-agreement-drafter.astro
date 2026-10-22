@@ -1,0 +1,31 @@
+---
+import ToolPage from '@/features/tools/ToolPage.astro';
+import LegalDrafter from '@/features/tools/legal/LegalDrafter';
+import { FAQ, HOWTO, PAGE } from '@/features/tools/legal/content';
+import { cachePage } from '@/lib/cache';
+import { AI_OWNER_TOOLS } from '@/lib/flags';
+
+// On demand, so the page is a real 404 until the backend drafting route is live (PUBLIC_AI_OWNER_TOOLS).
+export const prerender = false;
+
+if (!AI_OWNER_TOOLS) return new Response(null, { status: 404 });
+cachePage(Astro, 'day');
+
+const locale = Astro.locals.locale;
+const c = PAGE.rent_agreement[locale];
+---
+
+<ToolPage
+  tool="rentAgreement"
+  title={c.title}
+  description={c.description}
+  keywords={c.keywords}
+  heading={c.heading}
+  lead={c.lead}
+  faqs={FAQ.rent_agreement[locale]}
+  faqTitle={c.faqTitle}
+  howTo={HOWTO.rent_agreement[locale]}
+  related={['rentReceipt', 'propertyChecklist', 'stampDuty', 'verifyOwnership', 'fakeListing']}
+>
+  <LegalDrafter client:load kind="rent_agreement" locale={locale} />
+</ToolPage>

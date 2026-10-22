@@ -1,8 +1,9 @@
 /**
- * The 16 tools: route, group, names and one-line descriptions in English and
+ * The 16 tools (18 with the legal drafters when PUBLIC_AI_OWNER_TOOLS is on): route, group, names and one-line descriptions in English and
  * Hindi. Used by /tools, the "More tools" links and the breadcrumbs.
  * `schema` is the key in lib/seo/legacy/toolSchemas.js (SoftwareApplication).
  */
+import { AI_OWNER_TOOLS } from '@/lib/flags';
 import type { IconName } from '@/ui/icons/paths';
 
 export type ToolKey =
@@ -21,7 +22,9 @@ export type ToolKey =
   | 'verifyOwnership'
   | 'aiDesignStudio'
   | 'designBlueprint'
-  | 'vastu';
+  | 'vastu'
+  | 'rentAgreement'
+  | 'legalNotice';
 
 type GroupKey = 'money' | 'area' | 'checks' | 'design';
 
@@ -42,7 +45,7 @@ export const GROUPS: { key: GroupKey; name: { en: string; hi: string } }[] = [
   { key: 'design', name: { en: 'Plan and design', hi: 'प्लान और डिज़ाइन' } },
 ];
 
-export const TOOLS: Tool[] = [
+const BASE_TOOLS: Tool[] = [
   {
     key: 'emi',
     route: '/emi-calculator',
@@ -236,5 +239,35 @@ export const TOOLS: Tool[] = [
     },
   },
 ];
+
+/** The rent agreement and legal notice drafters (backend /ai/legal-draft), listed only when the flag is on. */
+const DRAFTERS: Tool[] = [
+  {
+    key: 'rentAgreement',
+    route: '/rent-agreement-drafter',
+    group: 'checks',
+    schema: 'rentAgreementDrafter',
+    icon: 'document',
+    name: { en: 'Rent agreement drafter', hi: 'किराया समझौता ड्राफ़्टर' },
+    desc: {
+      en: 'A draft leave and licence agreement from standard clauses, ready to print. A draft, not legal advice.',
+      hi: 'मानक धाराओं से लीव एंड लाइसेंस समझौते का ड्राफ़्ट, प्रिंट के लिए तैयार। यह ड्राफ़्ट है, क़ानूनी सलाह नहीं।',
+    },
+  },
+  {
+    key: 'legalNotice',
+    route: '/legal-notice-drafter',
+    group: 'checks',
+    schema: 'legalNoticeDrafter',
+    icon: 'document',
+    name: { en: 'Legal notice drafter', hi: 'लीगल नोटिस ड्राफ़्टर' },
+    desc: {
+      en: 'A draft notice for a deposit refund, unpaid rent or a vacated home. A draft, not legal advice.',
+      hi: 'डिपॉज़िट वापसी, बकाया किराये या घर खाली करने के लिए नोटिस का ड्राफ़्ट। यह ड्राफ़्ट है, क़ानूनी सलाह नहीं।',
+    },
+  },
+];
+
+export const TOOLS: Tool[] = AI_OWNER_TOOLS ? [...BASE_TOOLS, ...DRAFTERS] : BASE_TOOLS;
 
 export const toolByKey = (key: ToolKey): Tool => TOOLS.find((t) => t.key === key)!;
