@@ -621,6 +621,12 @@ function Wizard({ locale }: { locale: Locale }) {
   const jump = (to: number) => (to < step ? move(to) : void go(to));
 
   const images = v.images ?? [];
+  // The writer's photo flags point at photos by position: a changed set of photos makes them stale.
+  const photoKey = images.join('|');
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- drops a draft that no longer matches the photos
+    setWriterDraft(null);
+  }, [photoKey]);
   const setImages = (next: string[]) => form.setValue('images', next, { shouldDirty: true });
   // Forget staged copies that are no longer photos of the listing, and all of them once it is posted.
   useEffect(() => {
@@ -786,6 +792,7 @@ function Wizard({ locale }: { locale: Locale }) {
                 className="link cursor-pointer border-0 bg-transparent p-0"
                 onClick={() => {
                   form.reset(EMPTY);
+                  setWriterDraft(null);
                   setStep(0);
                   setReach(0);
                   setDone(null);
@@ -857,6 +864,7 @@ function Wizard({ locale }: { locale: Locale }) {
                   className="underline"
                   onClick={() => {
                     form.reset(EMPTY);
+                    setWriterDraft(null);
                     setStep(0);
                     setReach(0);
                     setRestored(false);
