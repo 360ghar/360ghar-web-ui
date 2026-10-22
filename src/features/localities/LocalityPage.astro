@@ -263,7 +263,8 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
     <h2 id="loc-about" class="loc-h2">{hi ? `${name} के बारे में` : `About ${name}`}</h2>
     <div class="loc-about-grid">
       <div class="loc-summary">
-        <p>{summary}</p>
+        {/* The generated summary is in the header; the fact-built one stays only without it. */}
+        {!generated && <p>{summary}</p>}
         {
           generated && generated.highlights.length > 0 && (
             <ul class="loc-highlights">

@@ -3,7 +3,7 @@
  * The live API may not have the route yet, or the entity may have no block: every failure gives null and the
  * page keeps its fixed content. The body is free-form JSON on the wire, so it is checked here.
  */
-import { api, attempt, timeoutMs } from '@/lib/api/client';
+import { api, attempt } from '@/lib/api/client';
 import type { Locale } from '@/lib/i18n/locale';
 
 export type Generated = {
@@ -65,7 +65,8 @@ export async function loadGenerated(entity: 'locality' | 'property', slug: strin
   const { data } = await attempt(
     api.GET('/api/v1/content/{entity_type}/{slug}', {
       params: { path: { entity_type: entity, slug }, query: { locale } },
-      ...timeoutMs(2500),
+      // One bounded attempt: an abort is not retried by the client, so a stalled optional call cannot hold the page.
+      signal: AbortSignal.timeout(1500),
     }),
   );
   return parseGenerated(data as Wire | null);

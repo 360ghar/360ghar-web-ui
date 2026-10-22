@@ -47,6 +47,12 @@ globalThis.fetch = async (input, init) => {
       body: { summary: 'Generated summary for the built check.', highlights: ['Generated highlight one'], faqs: [{ question: 'Generated question one?', answer: 'Generated answer one.' }], meta_description: 'Generated meta description.' },
       sources: [{ name: 'Check source', url: 'https://example.org/source', as_of: '2026-10-18' }],
     });
+  if (url.pathname === '/api/v1/content/locality/sector-56' && url.searchParams.get('locale') === 'hi')
+    return json(200, {
+      entity_type: 'locality', slug: 'sector-56', locale: 'hi', indexable: true, generated_at: '2026-10-20T00:00:00Z', updated_at: '2026-10-20T00:00:00Z', data_as_of: '2026-10-18',
+      body: { summary: 'सेक्टर 56 का बना हुआ सार।', highlights: ['पहली खास बात'], faqs: [{ question: 'पहला सवाल?', answer: 'पहला जवाब।' }], meta_description: 'बना हुआ विवरण।' },
+      sources: [{ name: 'जाँच स्रोत', url: 'https://example.org/source', as_of: '2026-10-18' }],
+    });
   if (url.pathname.startsWith('/api/v1/content/')) return json(404, { detail: 'not found' });
   if (url.pathname === '/api/v1/blog/posts/built-output-check') return json(200, post);
   if (url.pathname.startsWith('/api/v1/blog/posts/')) return json(404, { detail: 'not found' });
@@ -104,8 +110,11 @@ expect(gen.body.includes('Generated highlight one'), '/locality/<slug>: generate
 expect(/"@type":"FAQPage".*Generated question one\?/s.test(gen.body), '/locality/<slug>: FAQPage JSON-LD does not carry the generated FAQ');
 expect(gen.body.includes('Check source') && gen.body.includes('Updated'), '/locality/<slug>: provenance line missing');
 expect(gen.body.includes('Generated meta description.'), '/locality/<slug>: meta description not from generated content');
+const genHi = await get('/hi/locality/sector-56-gurgaon');
+expect(genHi.status === 200 && genHi.body.includes('सेक्टर 56 का बना हुआ सार।') && /"@type":"FAQPage".*पहला सवाल\?/s.test(genHi.body), '/hi/locality/<slug>: Hindi generated summary or FAQPage missing');
 const plain = await get('/locality/sector-57-gurgaon');
 expect(plain.status === 200 && !plain.body.includes('Generated summary'), '/locality/<other>: should render without generated content');
+expect(plain.body.includes('What are the circle rates in Sector 57?'), '/locality/<other>: the fixed FAQs are missing');
 
 if (failures.length) {
   console.error(failures.join('\n'));
