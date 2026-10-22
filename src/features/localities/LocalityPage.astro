@@ -13,6 +13,8 @@ import { CITY_META } from '@/features/landing/cities';
 import { PropertyCardView } from '@/features/property/PropertyCardView';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import AskAbout from '@/features/chat/AskAbout.astro';
+import type { Generated } from '@/features/content/generated/load';
+import Provenance from '@/ui/Provenance.astro';
 import CutBand from '@/ui/CutBand.astro';
 import Faq from '@/ui/Faq.astro';
 import Icon from '@/ui/icons/Icon.astro';
@@ -27,9 +29,9 @@ import type { LocalityData } from './load';
 import PlaceHero from './PlaceHero.astro';
 import { kindForEntity } from './vignette';
 
-type Props = { locality: Locality; data: LocalityData; faqs: { q: string; a: string }[]; locale: Locale };
+type Props = { locality: Locality; data: LocalityData; faqs: { q: string; a: string }[]; generated?: Generated | null; locale: Locale };
 
-const { locality: l, data, faqs, locale } = Astro.props;
+const { locality: l, data, faqs, generated = null, locale } = Astro.props;
 const { homes, listed, nearbyCounts, circle, failed } = data;
 const hi = locale === 'hi';
 const L = localizer(locale);
@@ -184,6 +186,7 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
   <PlaceHero kind={kindForEntity(l.entityType)} seed={slug} locale={locale} sign={l.entityType === 'sector' ? name : undefined} titleLength={name.length}>
     <h1>{name}</h1>
     <p class="loc-type">{type} · {cityName}</p>
+    {generated && <p class="loc-lede">{generated.summary}</p>}
     {
       hasIntent && (
         <div class="loc-actions">
@@ -261,7 +264,15 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
     <h2 id="loc-about" class="loc-h2">{hi ? `${name} के बारे में` : `About ${name}`}</h2>
     <div class="loc-about-grid">
       <div class="loc-summary">
-        <p>{summary}</p>
+        {/* The generated summary is in the header; the fact-built one stays only without it. */}
+        {!generated && <p>{summary}</p>}
+        {
+          generated && generated.highlights.length > 0 && (
+            <ul class="loc-highlights">
+              {generated.highlights.map((h) => <li>{h}</li>)}
+            </ul>
+          )
+        }
         {
           circle.length > 0 && (
             <div class="loc-circle">
@@ -279,7 +290,7 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
             </div>
           )
         }
-        {verified && <p class="loc-verified">{hi ? `जानकारी जाँची गई: ${verified}` : `Details checked on ${verified}`}</p>}
+        {generated ? <div class="loc-verified"><Provenance date={generated.date} sources={generated.sources} /></div> : verified && <p class="loc-verified">{hi ? `जानकारी जाँची गई: ${verified}` : `Details checked on ${verified}`}</p>}
       </div>
       {
         landmarks.length > 0 && (
@@ -369,6 +380,22 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
   .loc-type {
     font-weight: 600;
     color: var(--color-ink-600);
+  }
+
+  .loc-lede {
+    max-width: 62ch;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--color-ink-800);
+  }
+
+  .loc-highlights {
+    margin-top: 0.75rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+    display: grid;
+    gap: 0.35rem;
+    max-width: 62ch;
   }
 
   .loc-actions {

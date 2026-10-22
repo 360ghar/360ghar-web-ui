@@ -8,6 +8,7 @@ declare namespace App {
 
 interface ImportMetaEnv {
   readonly API_ORIGIN?: string;
+  readonly OG_FROM_API?: string;
   readonly PUBLIC_API_BASE?: string;
   readonly PUBLIC_SUPABASE_URL?: string;
   readonly PUBLIC_SUPABASE_PUBLISHABLE_KEY?: string;
