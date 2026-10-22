@@ -11,6 +11,8 @@ import { PRICE_ON_REQUEST } from '@/features/search/prices';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizer } from '@/lib/i18n/locale';
 import { canonicalFor } from '@/lib/seo/site';
+import type { Generated } from '@/features/content/generated/load';
+import Provenance from '@/ui/Provenance.astro';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import CutBand from '@/ui/CutBand.astro';
 import Icon from '@/ui/icons/Icon.astro';
@@ -32,8 +34,8 @@ import MoreDetails from './MoreDetails.astro';
 import { MAP_H, MAP_W } from './scenes';
 
 /** `property` is the detail response (it carries `agent`); the other homes are list rows. */
-type Props = { property: PropertyDetail; similar: Property[]; peers?: Property[]; locale: Locale };
-const { property: p, similar, peers = [], locale } = Astro.props;
+type Props = { property: PropertyDetail; similar: Property[]; peers?: Property[]; generated?: Generated | null; locale: Locale };
+const { property: p, similar, peers = [], generated = null, locale } = Astro.props;
 const hi = locale === 'hi';
 const L = localizer(locale);
 
@@ -125,6 +127,36 @@ const emiHref = L(`/emi-calculator${p.purpose === 'buy' && !price.onRequest && p
   <div class:list={['prop-layout', photos.length > 0 && 'is-over']}>
     <div class="prop-main">
       <HomeCard p={p} locale={locale} price={price} heading={heading} address={address} title={title} big={big} facts={facts} wa={wa} phone={contact.phone} />
+
+      {
+        generated && (
+          <section class="prop-section is-hung prop-gen" aria-labelledby="prop-summary">
+            <h2 id="prop-summary" class="prop-h2">{hi ? 'एक नज़र में' : 'At a glance'}</h2>
+            <div class="prop-hung-body">
+              <p class="prop-gen-lede">{generated.summary}</p>
+              {generated.whoItSuits && <p class="prop-gen-suits"><strong>{hi ? 'किसके लिए' : 'Who it suits'}:</strong> {generated.whoItSuits}</p>}
+              {(generated.pros.length > 0 || generated.cons.length > 0) && (
+                <div class="prop-gen-lists">
+                  {generated.pros.length > 0 && (
+                    <div>
+                      <h3 class="prop-h3">{hi ? 'अच्छी बातें' : 'In its favour'}</h3>
+                      <ul>{generated.pros.map((t) => <li>{t}</li>)}</ul>
+                    </div>
+                  )}
+                  {generated.cons.length > 0 && (
+                    <div>
+                      <h3 class="prop-h3">{hi ? 'ध्यान दें' : 'To weigh'}</h3>
+                      <ul>{generated.cons.map((t) => <li>{t}</li>)}</ul>
+                    </div>
+                  )}
+                </div>
+              )}
+              <p class="prop-gen-note">{hi ? 'लिस्टिंग की जानकारी से लिखा गया सार, 360Ghar की जाँच के साथ।' : 'Summary written from the listing details and checked against them by 360Ghar.'}</p>
+              <Provenance date={generated.date} sources={generated.sources} />
+            </div>
+          </section>
+        )
+      }
 
       {
         cost.rows.length > 0 && (
@@ -417,6 +449,42 @@ const emiHref = L(`/emi-calculator${p.purpose === 'buy' && !price.onRequest && p
 
   .prop-section {
     margin-top: 2.75rem;
+  }
+
+  .prop-gen-lede {
+    max-width: 62ch;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  .prop-gen-suits {
+    max-width: 62ch;
+    margin-top: 0.75rem;
+  }
+
+  .prop-gen-lists {
+    display: grid;
+    gap: 1rem 2.5rem;
+    margin-top: 1rem;
+  }
+
+  @container (min-width: 40rem) {
+    .prop-gen-lists {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .prop-gen-lists ul {
+    padding-left: 1.1rem;
+    list-style: disc;
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .prop-gen-note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
   }
 
   /* About, amenities and more details: the heading hangs in the left margin of the section. */

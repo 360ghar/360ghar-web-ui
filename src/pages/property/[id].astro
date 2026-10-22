@@ -7,6 +7,8 @@ import PropertyPage from '@/features/property/PropertyPage.astro';
 import { propertySchema } from '@/features/property/schema';
 import { propertyMeta } from '@/features/property/seo';
 import { galleryPhotos, galleryPreload } from '@/features/property/photos';
+import { loadGenerated } from '@/features/content/generated/load';
+import { apiOgImage } from '@/lib/seo/og';
 import StateBlock from '@/ui/states/StateBlock.astro';
 
 export const prerender = false;
@@ -15,7 +17,7 @@ const locale = Astro.locals.locale;
 const hi = locale === 'hi';
 const raw = Astro.params.id ?? '';
 const id = /^\d{1,9}$/.test(raw) ? Number(raw) : null;
-const data = id ? await loadProperty(id) : { property: null, error: null, similar: [], peers: [] };
+const [data, generated] = id ? await Promise.all([loadProperty(id), loadGenerated('property', String(id), locale)]) : [{ property: null, error: null, similar: [], peers: [] }, null];
 const p = withDevTour(data.property, Astro.url);
 const notFound = !p && (!data.error || data.error.kind === 'not_found');
 
@@ -25,7 +27,7 @@ else respond(Astro, 'minute', { error: true });
 
 const meta = p ? propertyMeta(p, locale) : null;
 const title = meta?.title ?? (hi ? 'प्रॉपर्टी नहीं मिली | 360Ghar' : 'Property not found | 360Ghar');
-const description = meta?.description ?? (hi ? 'यह प्रॉपर्टी अब उपलब्ध नहीं है।' : 'This property is no longer listed.');
+const description = (p ? generated?.metaDescription : null) ?? meta?.description ?? (hi ? 'यह प्रॉपर्टी अब उपलब्ध नहीं है।' : 'This property is no longer listed.');
 const photo = p ? (galleryPhotos(p)[0]?.url ?? null) : null;
 ---
 
@@ -35,14 +37,14 @@ const photo = p ? (galleryPhotos(p)[0]?.url ?? null) : null;
   path={id ? `/property/${id}` : Astro.url.pathname}
   noindex={!p}
   type="product"
-  image={photo}
+  image={(p && apiOgImage('property', String(id))) || photo}
   preloadImages={photo ? [galleryPreload(photo)] : []}
   video={p?.virtual_tour_url ?? null}
   jsonLd={p ? propertySchema(p, locale) : []}
 >
   {
     p ? (
-      <PropertyPage property={p} similar={data.similar} peers={data.peers} locale={locale} />
+      <PropertyPage property={p} similar={data.similar} peers={data.peers} generated={generated} locale={locale} />
     ) : (
       <div class="container-page py-10">
         <StateBlock
