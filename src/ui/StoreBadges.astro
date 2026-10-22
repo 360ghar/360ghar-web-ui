@@ -27,7 +27,7 @@ const stores = [
     stores.map((s) => (
       <li>
         <a href={s.href} rel="noopener" aria-label={s.label} data-store={s.key} data-app={app}>
-          <img src={s.src} width={s.w} height={s.h} alt="" decoding="async" />
+          <img src={s.src} width={s.w} height={s.h} alt="" loading="lazy" decoding="async" />
         </a>
       </li>
     ))
