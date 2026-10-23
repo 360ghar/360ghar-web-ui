@@ -21077,7 +21077,7 @@
           "design-studio"
         ],
         "summary": "Generate design image",
-        "description": "Generate an AI design image. Free, no login required. Powered by Agnes AI.\n\n**Rate limit:** 10 requests per minute per IP address.\n\n**Modes:**\n- `text-to-image`: Generate from a text prompt\n- `image-to-image`: Transform an uploaded image with a prompt\n\n**Request body:**\n- `mode`: Generation mode\n- `prompt`: Text description (3-4000 chars)\n- `image`: Base64-encoded source image (required for image-to-image)\n- `mime_type`: MIME type of source image (e.g., image/jpeg)\n- `ratio`: Output aspect ratio (`1:1`, `3:4`, `4:3`, `16:9`, `9:16`, `2:3`, `3:2`, `21:9`). Default `1:1`\n\n**Response:** `image`, a base64 data URL. A failed generation returns an error\nenvelope with a `code` (`QUOTA_EXCEEDED`, `SERVICE_UNAVAILABLE`, `CONTENT_BLOCKED`,\nand others).",
+        "description": "Generate an AI design image. Free, no login required. Powered by 360Ghar AI.\n\n**Rate limit:** 10 requests per minute per IP address.\n\n**Modes:**\n- `text-to-image`: Generate from a text prompt\n- `image-to-image`: Transform an uploaded image with a prompt\n\n**Request body:**\n- `mode`: Generation mode\n- `prompt`: Text description (3-4000 chars)\n- `image`: Base64-encoded source image (required for image-to-image)\n- `mime_type`: MIME type of source image (e.g., image/jpeg)\n- `ratio`: Output aspect ratio (`1:1`, `3:4`, `4:3`, `16:9`, `9:16`, `2:3`, `3:2`, `21:9`). Default `1:1`\n\n**Response:** `image`, a base64 data URL. A failed generation returns an error\nenvelope with a `code` (`QUOTA_EXCEEDED`, `SERVICE_UNAVAILABLE`, `CONTENT_BLOCKED`,\nand others).",
         "operationId": "generate_design_image_api_v1_design_studio_generate_post",
         "requestBody": {
           "content": {
@@ -21129,7 +21129,7 @@
           "design-studio"
         ],
         "summary": "Virtually stage a room photo",
-        "description": "Add furniture to an empty-room photo. Free, no login required. Powered by Agnes AI.\n\n**Rate limit:** 5 requests per minute per IP address.\n\nThe room's walls, floor, windows and layout are kept. The returned image always carries a\nvisible \"Virtually staged\" band and the response has ``staged: true``. Show both wherever the\nimage is used: a staged photo must not be presented as the real room.\n\n``room_type`` and ``style`` are fixed choices. The image is a JPEG, PNG or WebP of up to 5 MB.",
+        "description": "Add furniture to an empty-room photo. Free, no login required. Powered by 360Ghar AI.\n\n**Rate limit:** 5 requests per minute per IP address.\n\nThe room's walls, floor, windows and layout are kept. The returned image always carries a\nvisible \"Virtually staged\" band and the response has ``staged: true``. Show both wherever the\nimage is used: a staged photo must not be presented as the real room.\n\n``room_type`` and ``style`` are fixed choices. The image is a JPEG, PNG or WebP of up to 5 MB.",
         "operationId": "stage_room_api_v1_design_studio_stage_post",
         "requestBody": {
           "content": {
@@ -21181,7 +21181,7 @@
           "vastu"
         ],
         "summary": "Analyze floor plan vastu",
-        "description": "Analyze a floor plan image for Vastu Shastra compliance.\n\nThis is a **public endpoint** - no authentication required.\n\nUpload a floor plan image and receive a comprehensive Vastu analysis including:\n- Overall Vastu score (1-10)\n- Room-by-room analysis with status ratings\n- Major defects identified with severity levels\n- Practical remedies and improvement suggestions\n- Full markdown report for display/download\n\n**Supported image formats:** JPEG, PNG, WebP (max 5MB)\n\n**North Direction Options:**\n- `up`: North is at the top of the image\n- `down`: North is at the bottom\n- `left`: North is to the left\n- `right`: North is to the right\n- `unknown`: Not sure (AI will attempt to detect)\n\n**AI Provider:** Agnes AI (`agnes-3.0-flash`).\n\n**Rate limit:** 5 requests per minute per IP address.",
+        "description": "Analyze a floor plan image for Vastu Shastra compliance.\n\nThis is a **public endpoint** - no authentication required.\n\nUpload a floor plan image and receive a comprehensive Vastu analysis including:\n- Overall Vastu score (1-10)\n- Room-by-room analysis with status ratings\n- Major defects identified with severity levels\n- Practical remedies and improvement suggestions\n- Full markdown report for display/download\n\n**Supported image formats:** JPEG, PNG, WebP (max 5MB)\n\n**North Direction Options:**\n- `up`: North is at the top of the image\n- `down`: North is at the bottom\n- `left`: North is to the left\n- `right`: North is to the right\n- `unknown`: Not sure (AI will attempt to detect)\n\n**AI Provider:** 360Ghar AI.\n\n**Rate limit:** 5 requests per minute per IP address.",
         "operationId": "analyze_floor_plan_api_v1_vastu_analyze_post",
         "requestBody": {
           "content": {

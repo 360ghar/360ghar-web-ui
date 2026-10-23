@@ -4177,7 +4177,7 @@ export interface paths {
         put?: never;
         /**
          * Generate design image
-         * @description Generate an AI design image. Free, no login required. Powered by Agnes AI.
+         * @description Generate an AI design image. Free, no login required. Powered by 360Ghar AI.
          *
          *     **Rate limit:** 10 requests per minute per IP address.
          *
@@ -4214,7 +4214,7 @@ export interface paths {
         put?: never;
         /**
          * Virtually stage a room photo
-         * @description Add furniture to an empty-room photo. Free, no login required. Powered by Agnes AI.
+         * @description Add furniture to an empty-room photo. Free, no login required. Powered by 360Ghar AI.
          *
          *     **Rate limit:** 5 requests per minute per IP address.
          *
@@ -4262,7 +4262,7 @@ export interface paths {
          *     - `right`: North is to the right
          *     - `unknown`: Not sure (AI will attempt to detect)
          *
-         *     **AI Provider:** Agnes AI (`agnes-3.0-flash`).
+         *     **AI Provider:** 360Ghar AI.
          *
          *     **Rate limit:** 5 requests per minute per IP address.
          */

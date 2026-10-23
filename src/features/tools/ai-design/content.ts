@@ -85,7 +85,7 @@ export const AID_KEYS = [
 
 export const AID_UI = {
   en: {
-    free: 'Free. No sign-up. Made by Agnes AI image models on 360Ghar servers, so nothing is charged to you.',
+    free: 'Free. No sign-up. Made by 360Ghar AI image models on 360Ghar servers, so nothing is charged to you.',
     elapsed: (t: string) => `Time so far: ${t}`,
     photo: 'Room photo',
     choose: 'Choose a photo',
@@ -100,7 +100,7 @@ export const AID_UI = {
     chars: (n: number, max: number) => `${n}/${max} characters`,
   },
   hi: {
-    free: 'मुफ़्त। साइन-अप नहीं। डिज़ाइन 360Ghar के सर्वर पर Agnes AI इमेज मॉडल बनाते हैं, आपसे कोई शुल्क नहीं।',
+    free: 'मुफ़्त। साइन-अप नहीं। डिज़ाइन 360Ghar के सर्वर पर 360Ghar AI इमेज मॉडल बनाते हैं, आपसे कोई शुल्क नहीं।',
     elapsed: (t: string) => `अब तक का समय: ${t}`,
     photo: 'कमरे की फ़ोटो',
     choose: 'फ़ोटो चुनें',
@@ -141,7 +141,7 @@ export const AID_FAQ: Record<'en' | 'hi', Faq[]> = {
     },
     {
       q: 'Is AI Design Studio free to use?',
-      a: 'Yes. It is free and needs no sign-up or account. 360Ghar runs the Agnes AI image models on its own servers and pays for them. To keep it fast for everyone, one device can make about 10 designs a minute.',
+      a: 'Yes. It is free and needs no sign-up or account. 360Ghar runs the 360Ghar AI image models on its own servers and pays for them. To keep it fast for everyone, one device can make about 10 designs a minute.',
     },
     {
       q: 'Can I upload my own room photo?',
@@ -163,7 +163,7 @@ export const AID_FAQ: Record<'en' | 'hi', Faq[]> = {
     },
     {
       q: 'क्या AI डिज़ाइन स्टूडियो मुफ़्त है?',
-      a: 'हाँ। यह मुफ़्त है और इसके लिए साइन-अप या खाते की ज़रूरत नहीं। 360Ghar अपने सर्वर पर Agnes AI इमेज मॉडल चलाता है और उनका खर्च खुद उठाता है। सबके लिए तेज़ रखने के लिए एक डिवाइस से एक मिनट में लगभग 10 डिज़ाइन बन सकते हैं।',
+      a: 'हाँ। यह मुफ़्त है और इसके लिए साइन-अप या खाते की ज़रूरत नहीं। 360Ghar अपने सर्वर पर 360Ghar AI इमेज मॉडल चलाता है और उनका खर्च खुद उठाता है। सबके लिए तेज़ रखने के लिए एक डिवाइस से एक मिनट में लगभग 10 डिज़ाइन बन सकते हैं।',
     },
     {
       q: 'क्या मैं अपने कमरे की फ़ोटो डाल सकता हूँ?',

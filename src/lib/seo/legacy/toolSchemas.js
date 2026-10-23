@@ -148,7 +148,7 @@ export const toolSchemas = {
     },
     aiDesignStudio: {
         name: 'AI Design Studio',
-        description: 'Free AI interior and exterior design with no sign-up. Upload a room photo or describe a room and get a photorealistic redesign in about 30 seconds. Powered by Agnes AI. Free online tool by 360Ghar.',
+        description: 'Free AI interior and exterior design with no sign-up. Upload a room photo or describe a room and get a photorealistic redesign in about 30 seconds. Powered by 360Ghar AI. Free online tool by 360Ghar.',
         keywords: 'AI interior design, AI room designer, AI exterior design, room design generator, home design AI, reimagine room, free AI design tool, 360ghar',
         category: 'DesignApplication',
         route: '/ai-design-studio'
