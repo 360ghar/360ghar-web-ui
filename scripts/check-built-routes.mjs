@@ -118,12 +118,13 @@ expect(gen.body.includes('Generated summary for the built check.'), '/locality/<
 expect(gen.body.includes('Generated highlight one'), '/locality/<slug>: generated highlight missing');
 expect(/"@type":"FAQPage".*Generated question one\?/s.test(gen.body), '/locality/<slug>: FAQPage JSON-LD does not carry the generated FAQ');
 expect(gen.body.includes('Check source') && gen.body.includes('Updated'), '/locality/<slug>: provenance line missing');
-expect(gen.body.includes('Generated meta description.'), '/locality/<slug>: meta description not from generated content');
+// The meta description stays the fixed, neutral one (see localities/evidence.test.ts), not the generated text.
+expect(gen.body.includes('Property listings for Sector 56') && !gen.body.includes('Generated meta description.'), '/locality/<slug>: meta description is not the fixed one');
 const genHi = await get('/hi/locality/sector-56-gurgaon');
 expect(genHi.status === 200 && genHi.body.includes('सेक्टर 56 का बना हुआ सार।') && /"@type":"FAQPage".*पहला सवाल\?/s.test(genHi.body), '/hi/locality/<slug>: Hindi generated summary or FAQPage missing');
 const plain = await get('/locality/sector-57-gurgaon');
 expect(plain.status === 200 && !plain.body.includes('Generated summary'), '/locality/<other>: should render without generated content');
-expect(plain.body.includes('What are the circle rates in Sector 57?'), '/locality/<other>: the fixed FAQs are missing');
+expect(plain.body.includes('How can I see current listings in Sector 57?'), '/locality/<other>: the fixed FAQs are missing');
 
 if (failures.length) {
   console.error(failures.join('\n'));
