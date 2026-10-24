@@ -49,7 +49,8 @@ const { crumbs, ld } = trail(locale, [{ name: H.name, path }]);
 
   <h2>{f('discoveryTitle')}</h2>
   <ul lang={hi ? 'en' : undefined}>
-    {AI_PAGES.map(([name, target]) => <li><a href={L(target)}>{name}</a></li>)}
+    {/* The /hi entries are for llms.txt; each one is a page this list already links in the visitor's locale. */}
+    {AI_PAGES.filter(([, target]) => target !== '/hi' && !target.startsWith('/hi/')).map(([name, target]) => <li><a href={L(target)}>{name}</a></li>)}
   </ul>
 
   <h2>{f('filesTitle')}</h2>

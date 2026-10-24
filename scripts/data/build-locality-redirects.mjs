@@ -15,7 +15,7 @@ import { parseArgs, readJson, srcData, writeJson } from './lib/cli.mjs';
 import { buildRedirects, checkRedirects } from './lib/locality-redirects.mjs';
 
 const args = parseArgs();
-const { isScrapedName, isThinLocalityName } = await import('../../src/lib/seo/aiDiscovery.ts');
+const { isScrapedName, isThinLocalityName } = await import('../../src/features/localities/thin.ts');
 const rows = readJson(srcData('localities.json'));
 const scraped = (r) => isScrapedName(r.name);
 const thin = (r) => isThinLocalityName(r.name);

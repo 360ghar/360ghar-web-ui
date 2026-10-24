@@ -1,36 +1,26 @@
 ---
+/** A held data page: the shared hold shell, with the notice once in the body. */
 import type { Locale } from '@/lib/i18n/locale';
-import DataHubPage from './DataHubPage.astro';
+import DataHubHold from './DataHubHold.astro';
 
 type Props = { locale: Locale; slug: string };
 const { locale, slug } = Astro.props;
-const hi = locale === 'hi';
-const path = `/price-index/${slug}`;
-const copy = hi
-  ? {
-      title: 'शहर का प्रॉपर्टी कीमत डेटा समीक्षा के अधीन | 360Ghar',
-      description: 'शहर का प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
-      heading: 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन',
-      crumb: 'प्रॉपर्टी कीमत डेटा',
-      notice: 'शहर-वार कीमत रेंज स्रोत नमूनों और दोहराए जा सकने वाले तरीकों की समीक्षा तक प्रकाशित नहीं हैं।',
-    }
-  : {
-      title: 'City property price data under review | 360Ghar',
-      description: 'City property price data is held while its sources are reviewed.',
-      heading: 'Property price data under review',
-      crumb: 'Property price data',
-      notice: 'City price ranges are withheld while source samples and reproducible methods are reviewed.',
-    };
+const en = {
+  title: 'City property price data under review | 360Ghar',
+  description: 'City property price data is held while its sources are reviewed.',
+  heading: 'Property price data under review',
+  crumb: 'Property price data',
+  lead: 'City property price data is held while its sources are reviewed.',
+  notice: 'City price ranges are withheld while source samples and reproducible methods are reviewed.',
+};
+const hi = {
+  title: 'शहर का प्रॉपर्टी कीमत डेटा समीक्षा के अधीन | 360Ghar',
+  description: 'शहर का प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
+  heading: 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन',
+  crumb: 'प्रॉपर्टी कीमत डेटा',
+  lead: 'शहर का प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
+  notice: 'शहर-वार कीमत रेंज स्रोत नमूनों और दोहराए जा सकने वाले तरीकों की समीक्षा तक प्रकाशित नहीं हैं।',
+};
 ---
 
-<DataHubPage
-  title={copy.title}
-  description={copy.description}
-  path={path}
-  noindex
-  heading={copy.heading}
-  lead={copy.notice}
-  crumbs={[{ name: copy.crumb, path }]}
->
-  <p>{copy.notice}</p>
-</DataHubPage>
+<DataHubHold locale={locale} path={`/price-index/${slug}`} en={en} hi={hi} />

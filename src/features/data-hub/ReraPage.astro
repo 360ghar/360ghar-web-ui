@@ -38,7 +38,7 @@ const tt = getT(locale);
     {
       '@type': 'ItemList',
       name: 'RERA projects on 360Ghar',
-      description: 'Projects on the Delhi RERA and Haryana RERA registers, as held by 360Ghar. Sources are not yet verified.',
+      description: tt('seo:reraProjectDirectory.description'),
       url: canonicalFor('/rera-projects', locale),
       numberOfItems: page?.total ?? page?.items.length ?? 0,
       itemListElement: (page?.items ?? []).map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.project_name })),

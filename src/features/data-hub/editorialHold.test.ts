@@ -14,7 +14,8 @@ describe('data hub editorial holds', () => {
   it('marks every affected page noindex and uses a localized review notice', () => {
     for (const path of heldPages) {
       const source = read(path);
-      expect(source, path).toMatch(/\bnoindex\b/);
+      // noindex directly, or through the shared DataHubHold shell (checked below to carry noindex).
+      expect(source, path).toMatch(/\bnoindex\b|<DataHubHold\b/);
       expect(source, path).toMatch(/review/i);
       expect(source, path).toMatch(/समीक्षा/);
       expect(source, path).not.toMatch(/\bjsonLd\b|Dataset|temporalCoverage|faqPage/i);

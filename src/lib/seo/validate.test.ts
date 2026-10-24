@@ -40,10 +40,10 @@ describe('validateSchema', () => {
     expect(product.errors.map((e) => e.path)).toContain('schema.offers[0].priceCurrency');
   });
 
-  it('warns when dateCreated is a date with no timezone, and rejects a date it cannot parse', () => {
+  it('rejects a dateCreated with no timezone, and a date it cannot parse', () => {
     const answer = (dateCreated: string) => validateSchema({ '@type': 'Answer', text: 'a', dateCreated });
-    expect(answer('2026-08-12').warnings.map((w) => w.path)).toEqual(['schema.dateCreated']);
-    expect(answer('2026-08-12T00:00:00+05:30').warnings).toEqual([]);
+    expect(answer('2026-08-12').errors.map((e) => e.path)).toEqual(['schema.dateCreated']);
+    expect(answer('2026-08-12T00:00:00+05:30').errors).toEqual([]);
     expect(answer('not a date').errors.map((e) => e.path)).toEqual(['schema.dateCreated']);
   });
 

@@ -1,32 +1,22 @@
 ---
-import DataHubPage from './DataHubPage.astro';
-
-const hi = Astro.locals.locale === 'hi';
-const copy = hi
-  ? {
-      title: 'गुरुग्राम निवेश रिसर्च समीक्षा के अधीन | 360Ghar',
-      description: 'निवेश रिसर्च स्रोतों और तरीकों की समीक्षा तक रोकी गई है।',
-      heading: 'निवेश रिसर्च समीक्षा के अधीन',
-      crumb: 'निवेश रिसर्च',
-      notice: 'स्रोत नमूनों और दोहराए जा सकने वाले तरीकों की समीक्षा तक अनुमान, कीमतें और रैंकिंग प्रकाशित नहीं हैं।',
-    }
-  : {
-      title: 'Gurugram investment research under review | 360Ghar',
-      description: 'Investment research is held while its sources and methods are reviewed.',
-      heading: 'Investment research under review',
-      crumb: 'Investment research',
-      notice: 'Forecasts, prices and rankings are withheld while source samples and reproducible methods are reviewed.',
-    };
+/** A held data page: the shared hold shell, with the notice once in the body. */
+import DataHubHold from './DataHubHold.astro';
+const en = {
+  title: 'Gurugram investment research under review | 360Ghar',
+  description: 'Investment research is held while its sources and methods are reviewed.',
+  heading: 'Investment research under review',
+  crumb: 'Investment research',
+  lead: 'Investment research is held while its sources and methods are reviewed.',
+  notice: 'Forecasts, prices and rankings are withheld while source samples and reproducible methods are reviewed.',
+};
+const hi = {
+  title: 'गुरुग्राम निवेश रिसर्च समीक्षा के अधीन | 360Ghar',
+  description: 'निवेश रिसर्च स्रोतों और तरीकों की समीक्षा तक रोकी गई है।',
+  heading: 'निवेश रिसर्च समीक्षा के अधीन',
+  crumb: 'निवेश रिसर्च',
+  lead: 'निवेश रिसर्च स्रोतों और तरीकों की समीक्षा तक रोकी गई है।',
+  notice: 'स्रोत नमूनों और दोहराए जा सकने वाले तरीकों की समीक्षा तक अनुमान, कीमतें और रैंकिंग प्रकाशित नहीं हैं।',
+};
 ---
 
-<DataHubPage
-  title={copy.title}
-  description={copy.description}
-  path="/best-sectors-investment-2026"
-  noindex
-  heading={copy.heading}
-  lead={copy.notice}
-  crumbs={[{ name: copy.crumb, path: '/best-sectors-investment-2026' }]}
->
-  <p>{copy.notice}</p>
-</DataHubPage>
+<DataHubHold locale={Astro.locals.locale} path={'/best-sectors-investment-2026'} en={en} hi={hi} />

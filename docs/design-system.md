@@ -147,7 +147,7 @@ Changes:
 - Rows are placed with `grid-template-areas`, so DOM order equals visual order and the tab order stays tabs, field, Search, Near me, Forget. The purpose options are 44 px tall (was 40) with 1rem side padding (was 1.25rem), which is what lets all three share the row at 640 px.
 - On one line the foot group caps at 12rem and wraps inside it, and the Forget button shows its icon only. Its accessible name is an explicit `aria-label`, because the visible label is hidden. The cap keeps the "Saved location removed." status from pushing the field narrower.
 - Near me is a `.btn` (white paper with the standard control shadow), not a `.btn-quiet` link, so it reads as the second action of the search rather than as a text link.
-- The owner link (`PostLink.tsx`) sits in the foot on the lab pages and below the card on the home page, where the search is one line.
+- The owner link (`PostLink.tsx`) sits in the foot on the lab pages and inside the card on the home page, where the search is one line.
 - Checked with a real pointer at 360, 640, 768, 960 and 1440 px: purpose, keyword search, PG's `property_type`, Near me, Forget, tab order, 44 px targets and axe. The suggestion list is unverified here because the local `PUBLIC_GOOGLE_MAPS_API_KEY` is expired; a stand-in list confirms it clears the foot group, paints on top and aligns to the field.
 
 ## Home hero art (2026-10-23)

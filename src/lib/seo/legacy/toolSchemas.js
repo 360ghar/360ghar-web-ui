@@ -195,6 +195,7 @@ export const toolSchemas = {
         description: 'Browse real-estate projects on the Delhi RERA and Haryana RERA registers, with registration number, promoter, location and status. Sources are not yet verified.',
         keywords: 'RERA projects, Delhi RERA projects, HRERA registered projects, Haryana RERA project list',
         category: 'RealEstateTool',
+        featureList: 'RERA project list, Registration number lookup, Promoter and location, Registration status',
         route: '/rera-projects'
     }
 };

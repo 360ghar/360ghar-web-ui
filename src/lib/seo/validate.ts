@@ -146,7 +146,7 @@ export function validateSchema(schema: unknown, name = 'schema', top = false, ne
   for (const prop of DATE_TIME_PROPS) {
     // A date-only value parses fine but carries no timezone, so Google rejects it as a DateTime.
     if (typeof schema[prop] === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(schema[prop])) {
-      warn(`"${prop}" is a date with no timezone: use ISO 8601 with an offset (${schema[prop]}T00:00:00+05:30)`, `${name}.${prop}`);
+      err(`"${prop}" is a date with no timezone: use ISO 8601 with an offset (${schema[prop]}T00:00:00+05:30)`, `${name}.${prop}`);
     }
   }
   if (schema.price != null && (Number.isNaN(Number(schema.price)) || Number(schema.price) < 0)) err(`Invalid price value: ${String(schema.price)}`, `${name}.price`);

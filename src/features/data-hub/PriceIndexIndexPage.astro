@@ -1,32 +1,22 @@
 ---
-import DataHubPage from './DataHubPage.astro';
-
-const hi = Astro.locals.locale === 'hi';
-const copy = hi
-  ? {
-      title: 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन | 360Ghar',
-      description: 'प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
-      heading: 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन',
-      crumb: 'प्रॉपर्टी कीमत डेटा',
-      notice: 'कीमत रेंज स्रोत नमूनों और दोहराए जा सकने वाले तरीकों की समीक्षा तक प्रकाशित नहीं हैं।',
-    }
-  : {
-      title: 'Property price data under review | 360Ghar',
-      description: 'Property price data is held while its sources are reviewed.',
-      heading: 'Property price data under review',
-      crumb: 'Property price data',
-      notice: 'Price ranges are withheld while source samples and reproducible methods are reviewed.',
-    };
+/** A held data page: the shared hold shell, with the notice once in the body. */
+import DataHubHold from './DataHubHold.astro';
+const en = {
+  title: 'Property price data under review | 360Ghar',
+  description: 'Property price data is held while its sources are reviewed.',
+  heading: 'Property price data under review',
+  crumb: 'Property price data',
+  lead: 'Property price data is held while its sources are reviewed.',
+  notice: 'Price ranges are withheld while source samples and reproducible methods are reviewed.',
+};
+const hi = {
+  title: 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन | 360Ghar',
+  description: 'प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
+  heading: 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन',
+  crumb: 'प्रॉपर्टी कीमत डेटा',
+  lead: 'प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
+  notice: 'कीमत रेंज स्रोत नमूनों और दोहराए जा सकने वाले तरीकों की समीक्षा तक प्रकाशित नहीं हैं।',
+};
 ---
 
-<DataHubPage
-  title={copy.title}
-  description={copy.description}
-  path="/price-index"
-  noindex
-  heading={copy.heading}
-  lead={copy.notice}
-  crumbs={[{ name: copy.crumb, path: '/price-index' }]}
->
-  <p>{copy.notice}</p>
-</DataHubPage>
+<DataHubHold locale={Astro.locals.locale} path={'/price-index'} en={en} hi={hi} />

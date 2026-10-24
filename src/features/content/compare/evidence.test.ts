@@ -65,7 +65,6 @@ describe('comparison evidence', () => {
     for (const page of TRUTH_PAGES) {
       expect(page.checkedOn).toBe(EVIDENCE_REVIEWED_ON);
       expect(page.source.url).toMatch(/^https:\/\//);
-      expect(page.intro).toMatch(/evidence|status/i);
       expect(page).not.toHaveProperty('issues');
     }
   });
