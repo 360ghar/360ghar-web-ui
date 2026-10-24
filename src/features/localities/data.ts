@@ -14,7 +14,6 @@ export type Locality = {
   type: string;
   parentLocality?: string;
   geo?: { lat: number; lng: number } | null;
-  lastVerifiedAt?: string;
   seo?: { title?: string; description?: string; keywords?: string };
   description?: string;
   contentBlocks?: { overview?: string; connectivity?: string; marketSignals?: string; nearby?: string[] };

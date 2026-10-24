@@ -14,7 +14,7 @@ export type Generated = {
   pros: string[];
   cons: string[];
   metaDescription: string | null;
-  /** ISO date the facts are from (falls back to the update time). */
+  /** ISO date the facts are from, derived from the source fact sheet. */
   date: string;
   sources: { label: string; href?: string }[];
 };
@@ -23,7 +23,6 @@ type Wire = {
   body: Record<string, unknown>;
   sources: Record<string, unknown>[];
   data_as_of: string | null;
-  updated_at: string;
   indexable: boolean;
 };
 
@@ -32,7 +31,7 @@ const strings = (v: unknown) => (Array.isArray(v) ? v.map(text).filter((s): s is
 
 /** Turns one API block into what the pages show. Null when it is thin (not indexable) or has no summary. */
 export function parseGenerated(w: Wire | null | undefined): Generated | null {
-  if (!w || !w.indexable || !w.body) return null;
+  if (!w || !w.indexable || !w.body || !w.data_as_of) return null;
   const summary = text(w.body.summary);
   if (!summary) return null;
   const faqs = Array.isArray(w.body.faqs)
@@ -56,7 +55,7 @@ export function parseGenerated(w: Wire | null | undefined): Generated | null {
     pros: strings(w.body.pros),
     cons: strings(w.body.cons),
     metaDescription: text(w.body.meta_description),
-    date: w.data_as_of ?? w.updated_at,
+    date: w.data_as_of,
     sources,
   };
 }

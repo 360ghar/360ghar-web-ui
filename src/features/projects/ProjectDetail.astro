@@ -1,0 +1,87 @@
+---
+/**
+ * /project/[slug]: the body of a RERA project page. It renders inside the data
+ * hub shell, so the breadcrumbs, the related links and the JSON-LD behave the
+ * way they do on every other data page. The FAQ comes from the API rather than
+ * the shell, so its markup and its FAQPage JSON-LD are built from the same list.
+ */
+import { getT } from '@/i18n';
+import type { Locale } from '@/lib/i18n/locale';
+import { canonicalFor, faqPage } from '@/lib/seo/site';
+import DataHubPage from '@/features/data-hub/DataHubPage.astro';
+import type { ProjectDetail as ProjectDetailData } from './api';
+import PriceHistoryChart from './PriceHistoryChart';
+import ProjectFaq from './ProjectFaq';
+import ProjectHero from './ProjectHero';
+import ProjectSections from './ProjectSections';
+import WatchlistButton from './WatchlistButton';
+import { text } from './text';
+import './projects.css';
+
+type Props = { locale: Locale; project: ProjectDetailData };
+const { locale, project: p } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+const path = `/project/${p.slug}`;
+const faq = p.faq ?? [];
+const byDeveloper = p.developer_name ? tt('projects:page.project.byDeveloper', { developer: p.developer_name }) : '';
+const profile = p.profile;
+const geo =
+  profile && typeof profile.latitude === 'number' && typeof profile.longitude === 'number'
+    ? { '@type': 'GeoCoordinates', latitude: profile.latitude, longitude: profile.longitude }
+    : null;
+const address = p.location || p.district ? { '@type': 'PostalAddress', addressLocality: p.location ?? undefined, addressRegion: p.district ?? 'Haryana', addressCountry: 'IN' } : null;
+const facts = [
+  p.rera_number ? { '@type': 'PropertyValue', name: 'RERA number', value: p.rera_number } : null,
+  p.stage ? { '@type': 'PropertyValue', name: 'Stage', value: p.stage } : null,
+  p.total_units !== null ? { '@type': 'PropertyValue', name: 'Units', value: p.total_units } : null,
+  p.current_price_per_sqft !== null ? { '@type': 'PropertyValue', name: 'Price per sq ft', value: p.current_price_per_sqft, unitText: 'INR' } : null,
+].filter(Boolean);
+---
+
+<DataHubPage
+  art="builders"
+  title={tt('projects:seo.projectDetail.titleTemplate', { project: p.project_name })}
+  description={tt('projects:seo.projectDetail.descriptionTemplate', { project: p.project_name, developer: byDeveloper })}
+  {/* The city is the row's own district: this page serves Haryana, UP and Delhi
+      projects, so a fixed "Gurugram" was wrong for 133 of the 148 of them. The
+      keywords carry no "price" either — the registers publish no rate per square
+      foot, so there is no price on this page to rank for. */}
+  keywords={[
+    `${p.project_name} RERA`,
+    p.developer_name ? `${p.developer_name} projects` : null,
+    [p.location, p.district].filter(Boolean).join(' ') || null,
+    `${p.project_name} project details`,
+  ]
+    .filter(Boolean)
+    .join(', ')}
+  path={path}
+  heading={p.project_name}
+  lead={tt('projects:page.project.lead')}
+  longHeading
+  crumbs={[{ name: p.project_name }]}
+  jsonLd={[
+    {
+      '@type': 'Place',
+      name: p.project_name,
+      url: canonicalFor(path, locale),
+      ...(address ? { address } : {}),
+      ...(geo ? { geo } : {}),
+      ...(facts.length ? { additionalProperty: facts } : {}),
+      description: `${p.project_name}${byDeveloper}. RERA registration, land, cost, units, facilities and documents, from the 360Ghar data hub.`,
+    },
+    ...(faq.length ? [faqPage(faq.map((item) => ({ q: item.question, a: item.answer })))] : []),
+  ]}
+  related={['rera', 'builders', 'projectMap', 'marketPulse']}
+>
+  <div slot="head">
+    <WatchlistButton client:visible locale={locale} projectId={p.id} />
+  </div>
+
+  <ProjectHero locale={locale} project={p} />
+  <PriceHistoryChart locale={locale} points={p.price_history ?? []} />
+  <ProjectSections locale={locale} project={p} />
+  <ProjectFaq locale={locale} items={faq} />
+
+  <p slot="prose" class="dh-meta">{t.sourcesNote}</p>
+</DataHubPage>

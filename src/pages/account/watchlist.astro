@@ -1,0 +1,8 @@
+---
+/** /account/watchlist: the projects the signed-in visitor saved. */
+import WatchlistPage from '@/features/projects/WatchlistPage.astro';
+
+export const prerender = true;
+---
+
+<WatchlistPage locale={Astro.locals.locale} />

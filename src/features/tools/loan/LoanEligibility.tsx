@@ -1,9 +1,9 @@
 import { compactPrice } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/locale';
-import { inr, numParam, RangeField, RATE_TENURE_DEFAULTS, RATE_TENURE_PARSE, RateTenureFields, ResultPeek, ScrollArea, ToolActions, ToolShell, useShareState } from '../ui';
+import { inr, numParam, RangeField, RATE_TENURE_DEFAULTS, RATE_TENURE_PARSE, RateTenureFields, ResultPeek, ToolActions, ToolShell, useShareState } from '../ui';
 import { LOAN_UI } from './content';
 import { IncomeSplit } from './IncomeSplit';
-import { BANKS, eligibility } from './math';
+import { estimateLoanScenario } from './math';
 
 const DEFAULTS = { income: 50_000, emi: 0, expenses: 10_000, ...RATE_TENURE_DEFAULTS };
 const PARSE = {
@@ -17,7 +17,7 @@ function Loan({ locale }: { locale: Locale }) {
   const t = LOAN_UI[locale];
   const { state, set, reset, link } = useShareState(DEFAULTS, PARSE);
   const input = { income: state.income, emis: state.emi, expenses: state.expenses, rate: state.rate, tenure: state.tenure };
-  const e = eligibility(input);
+  const e = estimateLoanScenario(input);
   const money = (n: number) => compactPrice(n, locale);
 
   return (
@@ -52,51 +52,14 @@ function Loan({ locale }: { locale: Locale }) {
                 <dd>{inr(e.maxEmi, locale)}</dd>
               </div>
               <div>
-                <dt>{t.foir}</dt>
-                <dd>{Math.round(e.foir * 100)}%</dd>
+              <dt>{t.incomeShare}</dt>
+              <dd>{Math.round(e.incomeShare * 100)}%</dd>
               </div>
             </dl>
             <p className="tool-result-sub">{t.note}</p>
           </section>
 
-          <IncomeSplit income={state.income} expenses={state.expenses} emis={state.emi} foir={e.foir} maxEmi={e.maxEmi} locale={locale} />
-
-          <section className="tool-sheet" aria-labelledby="loan-banks">
-            <div>
-              <h2 id="loan-banks" className="tool-sheet-title">
-                {t.banks}
-              </h2>
-              <p className="tool-note mt-1">{t.banksLead}</p>
-            </div>
-            <ScrollArea label={t.banks}>
-              <table className="tool-table">
-                <thead>
-                  <tr>
-                    <th scope="col">{t.bank}</th>
-                    <th scope="col">{t.bankEmi}</th>
-                    <th scope="col">{t.bankLoan}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {BANKS.map((b) => {
-                    const r = eligibility(input, b.foir);
-                    return (
-                      <tr key={b.name}>
-                        <th scope="row">
-                          {b.name}
-                          <span className="block whitespace-nowrap text-sm font-normal text-ink-600">
-                            {t.bankFoir} {Math.round(b.foir * 100)}%
-                          </span>
-                        </th>
-                        <td>{inr(r.maxEmi, locale)}</td>
-                        <td>{inr(r.maxLoan, locale)}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </ScrollArea>
-          </section>
+          <IncomeSplit income={state.income} expenses={state.expenses} emis={state.emi} incomeShare={e.incomeShare} maxEmi={e.maxEmi} locale={locale} />
         </div>
       </div>
     </>

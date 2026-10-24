@@ -6,15 +6,19 @@ import type { Locale } from '@/lib/i18n/locale';
 import Icon from '@/ui/icons/Icon.astro';
 import Paper from '@/ui/Paper.astro';
 import type { Builder } from './api';
+import type { DeveloperDetail } from '@/features/projects/api';
+import DeveloperDossier from '@/features/projects/DeveloperDossier';
 import DataHubPage from './DataHubPage.astro';
 import { hubName } from './pages';
 import { fmtDate, scoreBand } from './format';
 import { Status } from './Status';
 import { ScoreRing } from './ScoreRing';
 import { label, text } from './text';
+import '@/features/projects/projects.css';
 
-type Props = { locale: Locale; b: Builder };
-const { locale, b } = Astro.props;
+/** `developer` is the project-intelligence dossier. It is optional: without it the page is the HRERA record alone. */
+type Props = { locale: Locale; b: Builder; developer?: DeveloperDetail | null };
+const { locale, b, developer } = Astro.props;
 const t = text(locale);
 const tt = getT(locale);
 const score = Math.round(b.builder_score);
@@ -25,7 +29,7 @@ const band = scoreBand(b.builder_score);
   art="builders"
   title={tt('seo:builderReputationDetail.titleTemplate', { builder: b.builder_name })}
   description={tt('seo:builderReputationDetail.descriptionTemplate', { builder: b.builder_name })}
-  keywords={`${b.builder_name} RERA score, ${b.builder_name} complaints, builder reputation Gurugram, HRERA ${b.builder_name}`}
+  keywords={`${b.builder_name} RERA score, ${b.builder_name} complaints, ${b.builder_name} projects`}
   path={`/builder-reputation/${b.slug}`}
   heading={b.builder_name}
   longHeading
@@ -144,4 +148,6 @@ const band = scoreBand(b.builder_score);
     </section>
   </div>
   <p class="dh-meta mt-6">{tt('data-hub:builderReputation.detail.disclaimer')}</p>
+
+  {developer ? <DeveloperDossier locale={locale} developer={developer} /> : null}
 </DataHubPage>

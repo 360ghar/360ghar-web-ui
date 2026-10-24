@@ -1,31 +1,26 @@
 ---
 import { getT } from '@/i18n';
-import { circleRate, circleRatesOfType, circleRatesPage, safe } from '@/features/data-hub/api';
 import CircleRatePage from '@/features/data-hub/CircleRatePage.astro';
 import DetailState from '@/features/data-hub/DetailState.astro';
 import { text } from '@/features/data-hub/text';
 import { hubName } from '@/features/data-hub/pages';
-import { settle, stateOf, validSlug } from '@/features/data-hub/route';
+import { validSlug } from '@/features/data-hub/route';
 
 export const prerender = false;
 
 const locale = Astro.locals.locale;
 const t = getT(locale);
-const slug = Astro.params.slug;
-const res = validSlug(slug) ? await safe(() => circleRate(slug)) : null;
-const state = stateOf(res);
-const rate = res?.data ?? null;
-const [near, ofType] = rate ? await Promise.all([safe(() => circleRatesPage({ sector: rate.sector }, null)), safe(() => circleRatesOfType(rate.property_type))]) : [null, null];
-const siblings = near?.data?.items ?? [];
-settle(Astro, state, 'day');
+const slug = Astro.params.slug ?? '';
+const valid = validSlug(slug);
+if (!valid) Astro.response.status = 404;
 ---
 
 {
-  rate ? (
-    <CircleRatePage locale={locale} rate={rate} siblings={siblings} ofType={ofType?.data ?? []} />
+  valid ? (
+    <CircleRatePage locale={locale} slug={slug} />
   ) : (
     <DetailState
-      state={state === 'ok' ? 'missing' : state}
+      state="missing"
       locale={locale}
       title={t('seo:circleRateDetail.notFoundTitle')}
       missingTitle={text(locale).nf.circle}

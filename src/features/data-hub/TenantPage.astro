@@ -1,116 +1,32 @@
 ---
-/** /tenant-demand-heatmap: the old static dataset (8 areas) as a demand strip per area, hottest first. */
-import { rupees } from '@/lib/format';
-import { absoluteUrl } from '@/lib/seo/site';
-import { AREAS, FAQ } from './content';
 import DataHubPage from './DataHubPage.astro';
-import { fmtDate } from './format';
-import { text } from './text';
 
-const locale = Astro.locals.locale;
-const t = text(locale);
-const hi = locale === 'hi';
-const MODIFIED = '2026-01-01';
-const L = hi
+const hi = Astro.locals.locale === 'hi';
+const copy = hi
   ? {
-      h1: 'किरायेदारों की माँग, गुरुग्राम 2026',
-      lead: 'इलाके के हिसाब से माँग का स्कोर, खाली मकानों की दर, औसत किराया और किरायेदार कौन हैं। 360Ghar लिस्टिंग डेटा और मार्केट रिसर्च पर आधारित।',
-      crumb: 'किरायेदारों की माँग',
-      score: 'माँग का स्कोर',
-      rent: '2BHK का औसत किराया',
-      vacancy: 'खाली दर',
-      trend: 'सालाना रुझान',
-      who: 'कौन किराये पर रहता है',
-      jobs: 'पास के बड़े दफ़्तर',
-      month: '/माह',
-      tiers: { 'ultra-high': 'बहुत ज़्यादा माँग', high: 'ज़्यादा माँग', medium: 'मध्यम माँग', emerging: 'तेज़ी से बढ़ती माँग' } as Record<string, string>,
+      title: 'गुरुग्राम किराया रिसर्च समीक्षा के अधीन | 360Ghar',
+      description: 'किराया और मांग संबंधी रिसर्च स्रोतों की समीक्षा तक रोकी गई है।',
+      heading: 'किरायेदार मांग रिसर्च समीक्षा के अधीन',
+      crumb: 'किरायेदार मांग रिसर्च',
+      notice: 'मांग स्कोर, किराया, रिक्तता और रुझान के आंकड़े स्रोतों और तरीकों की समीक्षा तक प्रकाशित नहीं हैं।',
     }
   : {
-      h1: 'Tenant demand in Gurugram, 2026',
-      lead: 'Demand score, vacancy, average rent and tenant profile by area. Based on 360Ghar listing data and market research.',
-      crumb: 'Tenant demand',
-      score: 'Demand score',
-      rent: 'Average 2BHK rent',
-      vacancy: 'Vacancy',
-      trend: 'Year on year',
-      who: 'Who rents here',
-      jobs: 'Employers nearby',
-      month: '/month',
-      tiers: { 'ultra-high': 'Ultra high demand', high: 'High demand', medium: 'Moderate demand', emerging: 'Emerging, fast growing' } as Record<string, string>,
+      title: 'Gurugram rental research under review | 360Ghar',
+      description: 'Rental and demand research is held while its sources are reviewed.',
+      heading: 'Tenant-demand research under review',
+      crumb: 'Tenant-demand research',
+      notice: 'Demand scores, rents, vacancy and trend figures are withheld while sources and methods are reviewed.',
     };
-// Tonal kesar steps: hotter demand, darker paper.
-const HEAT: Record<string, string> = { 'ultra-high': 'var(--color-kesar-800)', high: 'var(--color-kesar-700)', medium: 'var(--color-kesar-500)', emerging: 'var(--color-kesar-300)' };
-const areas = [...AREAS].sort((a, b) => b.demandScore - a.demandScore);
 ---
 
 <DataHubPage
-  art="tenant"
-  title="Tenant Demand Heatmap Gurugram 2026: Area-wise Rental Data | 360Ghar"
-  description="Where do tenants most want to live in Gurugram? Area-wise demand scores, vacancy rates, average rents, and tenant profiles. 2026 data by 360Ghar."
-  keywords="high demand areas rent Gurugram, where IT professionals rent Gurgaon, tenant demand heatmap Gurugram, best areas rental investment Gurugram 2026, vacancy rate Gurugram sectors"
+  title={copy.title}
+  description={copy.description}
   path="/tenant-demand-heatmap"
-  heading={L.h1}
-  lead={L.lead}
-  crumbs={[{ name: L.crumb, path: '/tenant-demand-heatmap' }]}
-  faqs={FAQ.tenant}
-  jsonLd={[
-    {
-      '@type': 'Dataset',
-      name: 'Tenant Demand Heatmap, Gurugram 2026',
-      description: 'Area-wise tenant demand scores, average rents, vacancy rates, and tenant profiles for residential localities in Gurugram, based on 360Ghar listing data.',
-      url: absoluteUrl('/tenant-demand-heatmap'),
-      creator: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
-      dateModified: MODIFIED,
-      spatialCoverage: { '@type': 'Place', name: 'Gurugram, Haryana, India' },
-      keywords: ['high demand areas rent Gurugram', 'where do IT professionals rent Gurgaon', 'best areas for rental investment Gurugram', 'tenant demand heatmap Gurugram 2026'],
-    },
-  ]}
-  related={['bestSectors', 'priceIndex', 'builderScore', 'circleRates']}
+  noindex
+  heading={copy.heading}
+  lead={copy.notice}
+  crumbs={[{ name: copy.crumb, path: '/tenant-demand-heatmap' }]}
 >
-  <p slot="head" class="dh-meta">{t.updated(fmtDate(MODIFIED, locale, 'long') ?? MODIFIED)}</p>
-
-  <ol class="sheet dh-rows max-w-[60rem]">
-    {
-      areas.map((a) => (
-        <li class="grid gap-3">
-          <div class="dh-row-head">
-            <h2 class="dh-row-title text-xl">{a.name}</h2>
-            <span class="text-ink-800 font-semibold">{L.tiers[a.tier]}</span>
-          </div>
-          <div class="grid grid-cols-[1fr_auto] items-center gap-4">
-            <div class="dh-heat" role="img" aria-label={`${L.score}: ${a.demandScore} ${t.bdOutOf}`}>
-              <span style={`width:${a.demandScore}%;background:${HEAT[a.tier]}`} />
-            </div>
-            <span class="dh-price w-[3ch] text-right" aria-hidden="true">
-              {a.demandScore}
-            </span>
-          </div>
-          <dl class="dh-facts mt-0">
-            <div>
-              <dt>{L.rent}</dt>
-              <dd>
-                {rupees(a.avgRent2bhk, locale)}
-                {L.month}
-              </dd>
-            </div>
-            <div>
-              <dt>{L.vacancy}</dt>
-              <dd>{a.vacancy}</dd>
-            </div>
-            <div>
-              <dt>{L.trend}</dt>
-              <dd>{a.demandTrend}</dd>
-            </div>
-          </dl>
-          <p class="text-ink-800">
-            <span class="font-semibold">{L.who}:</span> {a.profile}
-          </p>
-          <p class="dh-row-sub mt-0">
-            <span class="font-semibold text-ink-800">{L.jobs}:</span> {a.topEmployers.join(' · ')}
-          </p>
-        </li>
-      ))
-    }
-  </ol>
-  <p class="dh-meta mt-6">{t.disclaimer}</p>
+  <p>{copy.notice}</p>
 </DataHubPage>

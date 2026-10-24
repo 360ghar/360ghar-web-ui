@@ -58,9 +58,8 @@ Contract pass 2026-10-15: the backend contract changed (`openapi/openapi.json` i
 |---|---|---|---|
 | R1 | Match amenity filters by slug, or return a `slug` field on amenities | Landing URLs use slugs such as `swimming-pool`. The backend matches the exact lowercase title only, and drops the filter when nothing matches | `BE/services/property/search.py:478-491` |
 | R2 | Add a `developer` (or `developer_slug`) filter to `GET /data-hub/rera-projects` | The builder page needs the projects of one builder. The builder detail response has them, so this is optional | `BE/api/api_v1/endpoints/data_hub/rera.py:30-33` |
-| R3 | Expose `city`, `area_sqft`, `contact_person`, `contact_phone`, `contact_email`, `possession_type` in `BankAuctionResponse` | The model has these columns. The detail page cannot show them | `BE/schemas/data_hub.py:85-109` |
+| R3 | Expose `city`, `area_sqft`, `possession_type` in `BankAuctionResponse` | The model has these columns, but the response schema does not. Auction detail pages are held and do not render records during source review | `BE/schemas/data_hub.py` (`BankAuctionResponse`) |
 | R4 | Expose `setback_*_m`, `notes`, `master_plan_year` in `ZoningDataResponse` | The model has these columns | `BE/schemas/data_hub.py:190-207` |
-| R5 | Separate ids for bank and court auctions | `GET /data-hub/auctions/{id}` checks the bank table first. A court auction with the same id as a bank auction cannot be opened | `BE/api/api_v1/endpoints/data_hub/bank_auctions.py:132-149` |
 | R6 | Fix `area_acres` in Jamabandi results | The value comes from `area_kanal`, which is a different unit | `BE/api/api_v1/endpoints/data_hub/registry.py:83` |
 | R7 | Stamp duty: apply "higher of circle rate or deal value", use `property_type` | The looked-up circle rate is not used | `BE/api/api_v1/endpoints/data_hub/calculations.py:56-92`, `BE/services/data_hub/utils.py:159-175` |
 | R8 | Auth gate order | `password_setup` is checked before `profile_completion`. Google users without a password never reach profile completion | `BE/services/user.py:800-818` |
@@ -74,7 +73,6 @@ Contract pass 2026-10-15: the backend contract changed (`openapi/openapi.json` i
 | R16 | Circle-rate `sector` filter: exact match | `?sector=Sector 1` returns 30 rows from 10 sectors (substring match). The pages keep exact matches only. The stamp-duty rate lookup has the same problem | `BE/api/api_v1/endpoints/circle_rates.py:47` |
 | R17 | `ORDER BY` on offset lists (circle rates, RERA, auctions, zoning, colonies) | With no order, rows can repeat or be skipped between pages. The pages remove repeats | `docs/research/07-data-hub-report.md` |
 | R18 | Fill `developer_slug` on RERA projects | `/data-hub/builders` returns 0 rows because every `developer_slug` is null, so every builder page is a 404 | `docs/research/07-data-hub-report.md` |
-| R19 | `GET /data-hub/gazette?type=<unknown>` returns 500 | It should return 422. The page ignores unknown types | `docs/research/07-data-hub-report.md` |
 | R20 | Auction source counts include court (DRT) rows | DRT shows 0 although 10 court auctions exist | `docs/research/07-data-hub-report.md` |
 | R21 | Deploy the fix that stops `GET /pages/{name}/public` from changing `updated_at` and `view_count` on every read | Policy pages cannot show a "last updated" date. Each build also adds about 10 views | `BE/services/core.py:188-200` (fixed in code, not deployed) |
 | R22 | Hindi FAQs on `GET /faqs/public` | `/hi/faq` shows English answers | `docs/research/08-content-report.md` |
@@ -127,6 +125,22 @@ Contract pass 2026-10-15: the backend contract changed (`openapi/openapi.json` i
 | P5 | Live entity sources are unusable for new coverage (commonfloor 403, Squareyards lists no Gurgaon page) | A real source (HRERA list or a backend model) is needed to add localities |
 | P6 | Home copy: the H1 "Walk in before you visit." and the SEO copy still promise walkthroughs | See D9: 1 of 109 listings has a tour. Owner decision |
 
+## Closed by the RERA intelligence build (2026-10-24)
+
+The backend added the RERA project/developer/market surface. Two rows above are now closed, and one new rule affects a route the site already had.
+
+| Gap | Backend now | Client |
+|---|---|---|
+| R18 | `rera_projects.developer_slug` is set when a filing is written, and `developer_dossier` backfills any row whose slug is still null from its own `developer_name` on every weekly run. Only null slugs are touched, so a project another writer already grouped is never moved. `GET /data-hub/builders` returned 0 rows and every builder page 404'd before this | No change needed. `builder-reputation/[slug]` and `builders` render as written |
+| X11 | Superseded by the new surface. `GET /data-hub/projects` takes `city`, `sector`, `stage`, `developer_slug`, `q` and sorts by `order_by`; `GET /data-hub/rera-projects` is unchanged and still has no type filter | The project list and the project detail pages read `/data-hub/projects`, so the missing type filter no longer blocks them |
+| R2 | Still open and still optional. `GET /data-hub/rera-projects` has no `developer` filter, but `GET /data-hub/builders` returns each builder's `rera_projects` inline | The builder page reads the projects from the builder response |
+
+**New rule: the `{city}` segment of `/micro-markets/{city}/{slug}` is lowercase.** The site's middleware 301s any path containing an uppercase letter to its lowercase form, so the URL a browser asks for is `/micro-markets/gurugram/sector-76-77` even though the filed district is `Gurugram`. The backend matches the city case-insensitively for this reason, and `MicroMarketPage.astro` lowercases the segment when it builds the canonical URL and `og:url`. Emitting the filed spelling would have pointed the canonical at a redirect.
+
+**A micro-market's stats are now scoped to its own projects.** `project_count`, `avg_price_per_sqft` and `stage_breakdown` are counted by `rera_projects.micro_market_id`, the link the backend writes from each project's filed address. Before that link existed the backend could only scope by district, so two micro-markets in one district returned identical numbers under different names. The page's own FAQ no longer claims an average rate at all: `avg_price_per_sqft` is null on every response, because no register publishes a rate per square foot, and `MicroMarketPanel` drops a null figure rather than rendering a dash. The stage mix and the project count are the two figures the page shows, and they now mean what the page says they mean.
+
+**`POST /data-hub/watchlist` now refuses a project with no public page (404, same as an unknown project).** The slug is the public URL key, so a slug-less project has no page for a watch row to link to. This closes a hole rather than changing a live flow: `WatchlistButton` only renders on a project page, which cannot exist without a slug. `WatchlistList.tsx` already degrades gracefully on a legacy row (`project: null` renders as `#<id>` with no details and a working Remove), and those rows stay readable — only new ones are refused.
+
 ## Closed by the contract pass (2026-10-15)
 
 The backend closed these gaps, and the client follows the new contract. Source: `contract-audit/contract-changelog.md`. A row names the backend change and the client change.
@@ -135,14 +149,14 @@ The backend closed these gaps, and the client follows the new contract. Source: 
 |---|---|---|
 | M5, M12 | `POST /leads` exists: 201 `{id}`, unknown keys 422, 429 `RATE_LIMIT_EXCEEDED`. `GET /leads` is admin only. How long phone numbers are kept is an open product decision | `ContactPanel` sends `property_id`, `phone`, `note`, `website` only. A 422 shows under its field; any other failure shows its message |
 | X1 | `keywords` and `category_id` are 422. Lists take `categories` and `tags` | `features/blog/load.ts` sends `categories` and `tags` |
-| X12, R3 | Bank auctions have `contact_person`, `contact_phone`, `contact_email` and `kind`. Court rows have `locality`, `case_number`, `borrower_name` | `AuctionPage` shows the contact fields. `Auction = BankAuction \| CourtAuction`, split by `kind` |
+| X12, R3 | Bank auctions have `contact_person`, `contact_phone`, `contact_email` and `kind`. Court rows have `locality`, `case_number`, `borrower_name` | The typed client keeps `Auction = BankAuction \| CourtAuction`, split by `kind`. Both detail routes now show a noindex hold notice and render no auction fields |
 | X13, R6 | `area_kanal`, `area_marla`, request key `captcha_text` | `VerifyOwnership` sends `captcha_text` and shows kanal and marla |
 | X15 | Every non-2xx body is `{error: {code, message, details}}`. A 422 has `details.fields[{field, msg, type}]` | `lib/api/errors.ts` reads only that shape. Other `details` are never form errors |
 | X18 | No `fallback` frame. Frames are typed (`AgentStreamEvent`) | `chat/stream.ts` checks each frame with Zod and skips a frame that does not match |
-| R5 | `GET /data-hub/auctions/{id}` needs `kind` (`bank` or `court`) | Court auctions have their own page, `/bank-auctions/court/{id}`. The sitemap links each kind to its own page |
+| R5 | `GET /data-hub/auctions/{id}` needs `kind` (`bank` or `court`) | The detail routes pass the kind to distinguish bank and court ids. Both pages are noindex hold notices and are excluded from the sitemap while source and status checks are reviewed |
 | R17 | Keyset cursors with the id as tie-break on every list. `limit` is at most 100 | Lists follow `next_cursor` (`lib/api/pages.ts`). `total` is null unless `include_total` |
-| R19 | An unknown gazette `type` is a 422 | The page still drops an unknown type before it asks |
-| R20 | Source counts are live; `source-categories` is one flat `CursorPage` | `SourcesPage` groups the rows by `category` |
+| R19 | An unknown gazette `type` is a 422 | The public page is held and no longer requests gazette data |
+| R20 | Source counts are live; `source-categories` is one flat `CursorPage` | The public source directory is held and no longer requests or displays portal counts |
 | R23 | `PropertyUpdate` takes `daily_rate`, `owner_name`, `owner_contact`, `balconies`, `parking_spaces`, `age_of_property`. An explicit `null` clears a field | The edit form sends them. A cleared field is `null`, no amenities is `[]` |
 | R25 | `POST /upload/batch` returns one item per file (`status`, `result`, `error`) and takes `folder_type` | The wizard reads each item and tells the owner how many photos failed. It sends `folder_type=generic` (a `property_image` upload needs the presigned route) |
 | R26 | A PG or flatmate listing starts as `pending_review` in `listing_preferences.moderation_status`. A content edit sends a live one back to review | The success sheet of the wizard and the "My listings" row say "in review" |

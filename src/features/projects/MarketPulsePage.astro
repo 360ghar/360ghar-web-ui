@@ -1,0 +1,57 @@
+---
+/** /market-pulse: one reading per city, from GET /data-hub/market-pulse. */
+import { getT } from '@/i18n';
+import { formatNum } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import DataHubPage from '@/features/data-hub/DataHubPage.astro';
+import MarketPulsePanel from './MarketPulsePanel';
+import { faqs, text } from './text';
+import type { MarketPulse } from './types';
+import './projects.css';
+
+type Props = { locale: Locale; rows: MarketPulse[] };
+const { locale, rows } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+const path = '/market-pulse';
+const heading = tt('projects:page.marketPulse.heading');
+const lead = rows.length ? tt('projects:page.marketPulse.leadCount', { count: formatNum(rows.length, locale) }) : tt('projects:page.marketPulse.lead');
+---
+
+<DataHubPage
+  title={tt('projects:seo.marketPulse.title')}
+  description={tt('projects:seo.marketPulse.description')}
+  keywords="Gurugram market pulse, city price trend, property registrations, RERA complaints, 360Ghar data hub"
+  path={path}
+  heading={heading}
+  lead={lead}
+  crumbs={[{ name: heading }]}
+  faqs={faqs(locale, 'marketPulse')}
+  jsonLd={[
+    {
+      '@type': 'Dataset',
+      name: heading,
+      description: tt('projects:seo.marketPulse.description'),
+      url: canonicalFor(path, locale),
+      creator: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      spatialCoverage: { '@type': 'Place', name: rows.map((row) => row.city).join(', ') || 'Gurugram, Haryana, India' },
+      // The registers publish no rate per sq ft, so the two price variables are
+      // never populated. Structured data is a machine-readable claim, so it lists
+      // only the variables this dataset actually measures.
+      variableMeasured: ['new_registrations', 'new_complaints'],
+      keywords: ['Gurugram market pulse', 'property registrations', 'RERA complaints'],
+    },
+  ]}
+  related={['projectMap', 'rera', 'builders']}
+>
+  {
+    rows.length ? (
+      <MarketPulsePanel locale={locale} rows={rows} />
+    ) : (
+      <p class="dh-meta">{t.mpNone}</p>
+    )
+  }
+  <p slot="prose" class="dh-meta">{t.sourcesNote}</p>
+</DataHubPage>

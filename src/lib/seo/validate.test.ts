@@ -40,6 +40,13 @@ describe('validateSchema', () => {
     expect(product.errors.map((e) => e.path)).toContain('schema.offers[0].priceCurrency');
   });
 
+  it('warns when dateCreated is a date with no timezone, and rejects a date it cannot parse', () => {
+    const answer = (dateCreated: string) => validateSchema({ '@type': 'Answer', text: 'a', dateCreated });
+    expect(answer('2026-08-12').warnings.map((w) => w.path)).toEqual(['schema.dateCreated']);
+    expect(answer('2026-08-12T00:00:00+05:30').warnings).toEqual([]);
+    expect(answer('not a date').errors.map((e) => e.path)).toEqual(['schema.dateCreated']);
+  });
+
   it('warns about a missing Organization logo only on the page\'s own Organization, not on nested ones', () => {
     const own = validateSchema({ '@type': 'Organization', name: 'A' });
     expect(own.warnings.map((w) => w.path).sort()).toEqual(['schema.description', 'schema.logo', 'schema.url']);

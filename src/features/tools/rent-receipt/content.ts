@@ -1,7 +1,6 @@
 /**
- * Rent receipt text. SEO title, description, keywords and the HRA tips come
- * from tools.json. The receipt itself is printed in English (as on the old
- * site), so the receipt labels live in RentReceipt.tsx.
+ * Rent receipt copy. The generator creates a receipt from details the user
+ * enters. It does not determine tax, employer, stamp or legal requirements.
  */
 import type { Faq, HowTo } from '../seo';
 import type { Mode } from './receipt';
@@ -16,9 +15,8 @@ export const RR_UI = {
     landlordPh: 'For example, Sunita Gupta',
     pan: 'Landlord PAN',
     optional: '(optional)',
-    panHint: 'Format ABCDE1234F: 5 letters, 4 digits, 1 letter.',
-    panInvalid: 'This is not a valid PAN. Use the format ABCDE1234F.',
-    panNeeded: 'PAN is needed when the yearly rent is more than ₹1,00,000.',
+    panHint: 'Enter the details shown on the PAN document.',
+    panInvalid: 'Check the PAN details you entered.',
     signature: 'Landlord signature',
     signatureHint: 'An image of up to 2 MB. It stays in your browser.',
     upload: 'Add a signature image',
@@ -46,7 +44,22 @@ export const RR_UI = {
     fy: 'Financial year',
     required: 'Fill in this field.',
     rentRequired: 'Enter the monthly rent.',
-    stampNote: 'Cash above ₹5,000: stick a ₹1 revenue stamp on the printed receipt and have the landlord sign across it.',
+    paperTitle: 'Rent receipt',
+    receiptAria: 'Rent receipt',
+    receiptNoLabel: 'Receipt no.',
+    dateLabel: 'Date',
+    received: 'Received a sum of',
+    fromLabel: 'from',
+    propertyLabel: 'towards the rent of the property at',
+    periodLabel: 'for the period',
+    periodFrom: 'from',
+    periodTo: 'to',
+    modeLabel: 'Mode of payment',
+    chequeNoLabel: 'Cheque no.',
+    transactionRefLabel: 'Transaction ref.',
+    landlordLabel: 'Landlord',
+    panLabel: 'Landlord PAN',
+    signatureLabel: 'Landlord signature',
     preview: 'Receipt preview',
     previewYear: (fy: string) => `12 receipts for FY ${fy}`,
     print: 'Print or save as PDF',
@@ -68,9 +81,8 @@ export const RR_UI = {
     landlordPh: 'जैसे, सुनीता गुप्ता',
     pan: 'मकान मालिक का PAN',
     optional: '(वैकल्पिक)',
-    panHint: 'फ़ॉर्मेट ABCDE1234F: 5 अक्षर, 4 अंक, 1 अक्षर।',
-    panInvalid: 'यह सही PAN नहीं है। ABCDE1234F फ़ॉर्मेट में लिखें।',
-    panNeeded: 'सालाना किराया ₹1,00,000 से ज़्यादा हो तो PAN ज़रूरी है।',
+    panHint: 'PAN दस्तावेज़ पर दी गई जानकारी दर्ज करें।',
+    panInvalid: 'दर्ज की गई PAN जानकारी जाँचें।',
     signature: 'मकान मालिक के हस्ताक्षर',
     signatureHint: '2 MB तक की इमेज। यह आपके ब्राउज़र में ही रहती है।',
     upload: 'हस्ताक्षर की इमेज जोड़ें',
@@ -98,7 +110,22 @@ export const RR_UI = {
     fy: 'वित्त वर्ष',
     required: 'यह फ़ील्ड भरें।',
     rentRequired: 'मासिक किराया डालें।',
-    stampNote: '₹5,000 से ज़्यादा नकद: छपी रसीद पर ₹1 का रेवेन्यू स्टैंप लगाएँ और मकान मालिक उस पर हस्ताक्षर करें।',
+    paperTitle: 'किराया रसीद',
+    receiptAria: 'किराया रसीद',
+    receiptNoLabel: 'रसीद नंबर',
+    dateLabel: 'तारीख',
+    received: 'किराये के रूप में प्राप्त हुए',
+    fromLabel: 'किरायेदार',
+    propertyLabel: 'संपत्ति का पता',
+    periodLabel: 'अवधि',
+    periodFrom: 'से',
+    periodTo: 'तक',
+    modeLabel: 'भुगतान का तरीका',
+    chequeNoLabel: 'चेक नंबर',
+    transactionRefLabel: 'ट्रांज़ैक्शन रेफ़रेंस',
+    landlordLabel: 'मकान मालिक',
+    panLabel: 'मकान मालिक का PAN',
+    signatureLabel: 'मकान मालिक के हस्ताक्षर',
     preview: 'रसीद का प्रीव्यू',
     previewYear: (fy: string) => `वित्त वर्ष ${fy} की 12 रसीदें`,
     print: 'प्रिंट करें या PDF सेव करें',
@@ -109,129 +136,62 @@ export const RR_UI = {
     clear: 'सब साफ़ करें',
     fix: 'पहले लाल निशान वाले फ़ील्ड भरें।',
     private: 'आप जो लिखते हैं वह इसी डिवाइस पर रहता है।',
-    englishNote: 'रसीद अंग्रेज़ी में छपती है, क्योंकि ज़्यादातर नियोक्ता यही माँगते हैं।',
+    englishNote: '',
   },
 };
 
 export const RR_PAGE = {
   en: {
     heading: 'Rent receipt generator',
-    lead: 'Make rent receipts for your HRA claim, for one month or a full financial year. Print them or save them as PDF.',
-    validTitle: 'What a valid rent receipt shows',
+    lead: 'Create a receipt for one month or a financial year from the details you enter. The tool does not check tax, employer, stamp or legal requirements.',
+    validTitle: 'Receipt details',
     valid: [
       'Receipt number and date.',
-      'Tenant name, landlord name and the address of the rented home.',
-      'Rent amount in figures and in words.',
-      'The rent period, from and to.',
-      'Payment mode, and the cheque or transaction number.',
-      'Landlord PAN when the yearly rent is more than ₹1 lakh.',
-      'A ₹1 revenue stamp for a cash payment above ₹5,000, and the landlord signature.',
+      'Tenant and landlord names.',
+      'Property address and rent amount.',
+      'Rent period and payment mode.',
+      'Optional PAN, transaction reference and signature image.',
     ],
-    hraTitle: 'HRA rules to know',
-    hra: 'The HRA exemption is the lowest of three amounts: the HRA you get, rent paid minus 10% of salary, and 50% of salary in a metro city (40% elsewhere). Salary here means basic pay plus dearness allowance.',
-    faqTitle: 'Rent receipts and HRA: questions people ask',
+    hraTitle: 'Requirements vary',
+    hra: 'This tool does not determine HRA eligibility or whether a receipt meets a legal, employer, state or financial-year requirement. Check current requirements for your case.',
+    faqTitle: 'About rent receipts',
   },
   hi: {
     heading: 'किराया रसीद जनरेटर',
-    lead: 'HRA क्लेम के लिए किराया रसीद बनाएँ, एक महीने या पूरे वित्त वर्ष की। प्रिंट करें या PDF सेव करें।',
-    validTitle: 'सही किराया रसीद में क्या होता है',
+    lead: 'दर्ज की गई जानकारी से एक महीने या वित्त वर्ष की रसीद बनाएँ। यह टूल टैक्स, नियोक्ता, स्टैंप या कानूनी ज़रूरतें नहीं जाँचता।',
+    validTitle: 'रसीद की जानकारी',
     valid: [
       'रसीद नंबर और तारीख।',
-      'किरायेदार का नाम, मकान मालिक का नाम और किराये के घर का पता।',
-      'किराये की राशि अंकों और शब्दों में।',
-      'किराये की अवधि, कब से कब तक।',
-      'भुगतान का तरीका, और चेक या ट्रांज़ैक्शन नंबर।',
-      'सालाना किराया ₹1 लाख से ज़्यादा हो तो मकान मालिक का PAN।',
-      '₹5,000 से ज़्यादा नकद भुगतान पर ₹1 का रेवेन्यू स्टैंप, और मकान मालिक के हस्ताक्षर।',
+      'किरायेदार और मकान मालिक के नाम।',
+      'प्रॉपर्टी का पता और किराये की राशि।',
+      'किराये की अवधि और भुगतान का तरीका।',
+      'वैकल्पिक PAN, ट्रांज़ैक्शन रेफ़रेंस और हस्ताक्षर की इमेज।',
     ],
-    hraTitle: 'HRA के नियम',
-    hra: 'HRA छूट तीन राशियों में से सबसे कम होती है: मिला हुआ HRA, दिया गया किराया घटा वेतन का 10%, और मेट्रो शहर में वेतन का 50% (बाकी जगह 40%)। यहाँ वेतन का मतलब बेसिक और महँगाई भत्ता है।',
-    faqTitle: 'किराया रसीद और HRA: अक्सर पूछे जाने वाले सवाल',
+    hraTitle: 'ज़रूरतें अलग हो सकती हैं',
+    hra: 'यह टूल HRA पात्रता या रसीद की कानूनी, नियोक्ता, राज्य या वित्त वर्ष की ज़रूरतें तय नहीं करता। अपने मामले की मौजूदा ज़रूरतें जाँचें।',
+    faqTitle: 'किराया रसीद के बारे में',
   },
 };
 
-export const RR_FAQ: Record<'en' | 'hi', Faq[]> = {
-  en: [
-    {
-      q: 'Is a rent receipt needed for an HRA claim?',
-      a: 'Yes, if your HRA is more than ₹3,000 a month you must give rent receipts to your employer to claim the exemption under Section 10(13A). Below that, a CBDT circular does not ask for receipts, but many employers still do.',
-    },
-    {
-      q: 'When is the landlord PAN needed on a rent receipt?',
-      a: 'When the yearly rent is more than ₹1,00,000, that is, a monthly rent above ₹8,333. If the landlord has no PAN, give a written declaration from the landlord instead.',
-    },
-    {
-      q: 'Is a revenue stamp needed on a rent receipt?',
-      a: 'A ₹1 revenue stamp is needed on a receipt for a cash payment above ₹5,000 under the Indian Stamp Act. Rules differ a little by state. Payments by cheque, UPI or bank transfer are usually accepted without a stamp.',
-    },
-    {
-      q: 'Can I claim HRA if I pay rent to my spouse?',
-      a: 'Tax officers usually reject HRA on rent paid to a spouse. Rent paid to a parent is accepted when the payments are real and the parent shows the rent as income.',
-    },
-    {
-      q: 'How is the HRA exemption calculated?',
-      a: 'It is the lowest of: the HRA you receive; rent paid minus 10% of salary; and 50% of salary in a metro city or 40% elsewhere. Salary means basic pay plus dearness allowance.',
-    },
-    {
-      q: 'How many rent receipts do I need for a year?',
-      a: 'One per month, so 12 for a financial year when you pay monthly. Some employers accept one receipt per quarter. Use "Make 12 receipts for a year" to print all of them at once.',
-    },
-    {
-      q: 'Are printed or digital rent receipts valid?',
-      a: 'Yes. Employers accept printed or digitally made receipts when they show the tenant, landlord, address, amount, period and the landlord signature.',
-    },
-  ],
-  hi: [
-    {
-      q: 'क्या HRA क्लेम के लिए किराया रसीद ज़रूरी है?',
-      a: 'हाँ, अगर आपका HRA ₹3,000 महीने से ज़्यादा है तो धारा 10(13A) की छूट के लिए नियोक्ता को किराया रसीद देनी होती है। उससे कम पर CBDT सर्कुलर रसीद नहीं माँगता, पर कई नियोक्ता फिर भी माँगते हैं।',
-    },
-    {
-      q: 'किराया रसीद पर मकान मालिक का PAN कब चाहिए?',
-      a: 'जब सालाना किराया ₹1,00,000 से ज़्यादा हो, यानी मासिक किराया ₹8,333 से ऊपर। मकान मालिक के पास PAN न हो तो उनकी लिखित घोषणा दें।',
-    },
-    {
-      q: 'क्या किराया रसीद पर रेवेन्यू स्टैंप चाहिए?',
-      a: 'भारतीय स्टाम्प अधिनियम के तहत ₹5,000 से ज़्यादा के नकद भुगतान की रसीद पर ₹1 का रेवेन्यू स्टैंप चाहिए। राज्य के हिसाब से नियम थोड़े अलग हैं। चेक, UPI या बैंक ट्रांसफ़र वाले भुगतान आम तौर पर बिना स्टैंप माने जाते हैं।',
-    },
-    {
-      q: 'क्या पति/पत्नी को किराया देकर HRA क्लेम कर सकते हैं?',
-      a: 'टैक्स अधिकारी आम तौर पर पति/पत्नी को दिए किराये पर HRA नहीं मानते। माता-पिता को दिया किराया माना जाता है, जब भुगतान असली हो और माता-पिता इसे अपनी आय में दिखाएँ।',
-    },
-    {
-      q: 'HRA छूट कैसे निकलती है?',
-      a: 'यह इनमें से सबसे कम होती है: मिला हुआ HRA; दिया गया किराया घटा वेतन का 10%; और मेट्रो शहर में वेतन का 50% या बाकी जगह 40%। वेतन का मतलब बेसिक और महँगाई भत्ता है।',
-    },
-    {
-      q: 'एक साल के लिए कितनी किराया रसीदें चाहिए?',
-      a: 'हर महीने की एक, यानी मासिक किराये पर वित्त वर्ष की 12। कुछ नियोक्ता तिमाही की एक रसीद भी मानते हैं। सभी एक साथ छापने के लिए "पूरे साल की 12 रसीदें बनाएँ" का उपयोग करें।',
-    },
-    {
-      q: 'क्या छपी या डिजिटल किराया रसीद मान्य है?',
-      a: 'हाँ। नियोक्ता छपी या डिजिटल रसीद मानते हैं, जब उसमें किरायेदार, मकान मालिक, पता, राशि, अवधि और मकान मालिक के हस्ताक्षर हों।',
-    },
-  ],
-};
+export const RR_FAQ: Record<'en' | 'hi', Faq[]> = { en: [], hi: [] };
 
 export const RR_HOWTO: Record<'en' | 'hi', HowTo> = {
   en: {
-    name: 'How to make a rent receipt for an HRA claim',
-    description: 'Step-by-step guide to create rent receipts for HRA tax exemption claims in India.',
+    name: 'How to create a rent receipt',
+    description: 'Enter receipt details, review the preview and print or save it.',
     steps: [
-      { name: 'Enter the landlord details', text: 'Add the landlord name, and the PAN when the yearly rent is more than ₹1 lakh.' },
-      { name: 'Enter the tenant and property', text: 'Add your name and the full address of the rented home.' },
-      { name: 'Enter the rent and payment', text: 'Add the monthly rent, the period and the payment mode. The amount in words is filled in for you.' },
-      { name: 'Print or save as PDF', text: 'Check the preview, then print one receipt or all 12 receipts for the financial year.' },
+      { name: 'Enter landlord and tenant details', text: 'Add the names and property address.' },
+      { name: 'Enter rent and payment details', text: 'Add the amount, period and payment mode.' },
+      { name: 'Review and print', text: 'Review the receipt, then print or save it as a PDF.' },
     ],
   },
   hi: {
-    name: 'HRA क्लेम के लिए किराया रसीद कैसे बनाएँ',
-    description: 'भारत में HRA टैक्स छूट के लिए किराया रसीद बनाने का आसान तरीका।',
+    name: 'किराया रसीद कैसे बनाएँ',
+    description: 'रसीद की जानकारी दर्ज करें, प्रीव्यू जाँचें और प्रिंट या सेव करें।',
     steps: [
-      { name: 'मकान मालिक की जानकारी डालें', text: 'मकान मालिक का नाम डालें, और सालाना किराया ₹1 लाख से ज़्यादा हो तो PAN भी।' },
-      { name: 'किरायेदार और प्रॉपर्टी डालें', text: 'अपना नाम और किराये के घर का पूरा पता डालें।' },
-      { name: 'किराया और भुगतान डालें', text: 'मासिक किराया, अवधि और भुगतान का तरीका डालें। राशि शब्दों में अपने आप भर जाती है।' },
-      { name: 'प्रिंट करें या PDF सेव करें', text: 'प्रीव्यू जाँचें, फिर एक रसीद या वित्त वर्ष की सभी 12 रसीदें छापें।' },
+      { name: 'मकान मालिक और किरायेदार की जानकारी दर्ज करें', text: 'नाम और प्रॉपर्टी का पता डालें।' },
+      { name: 'किराया और भुगतान की जानकारी दर्ज करें', text: 'राशि, अवधि और भुगतान का तरीका डालें।' },
+      { name: 'जाँचें और प्रिंट करें', text: 'रसीद जाँचें, फिर प्रिंट या PDF के रूप में सेव करें।' },
     ],
   },
 };

@@ -1,0 +1,14 @@
+---
+/** /market-pulse: every city's latest reading from the data hub. */
+import { allMarketPulse, safe } from '@/features/projects/api';
+import MarketPulsePage from '@/features/projects/MarketPulsePage.astro';
+import { settleList } from '@/features/data-hub/route';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const rows = await safe(() => allMarketPulse());
+settleList(Astro, 'day', rows);
+---
+
+<MarketPulsePage locale={locale} rows={rows.data ?? []} />

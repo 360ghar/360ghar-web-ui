@@ -1,15 +1,9 @@
 ---
-import { settleList } from '@/features/data-hub/route';
-import { colonies, safe, zonesPage } from '@/features/data-hub/api';
-import { readParams, ZONE } from '@/features/data-hub/params';
 import ZonesPage from '@/features/data-hub/ZonesPage.astro';
 
 export const prerender = false;
 
 const locale = Astro.locals.locale;
-const filters = readParams(Astro.url.searchParams, ZONE);
-const [page, col] = await Promise.all([safe(() => zonesPage(filters, null)), safe(colonies)]);
-settleList(Astro, 'day', page, col);
 ---
 
-<ZonesPage locale={locale} filters={filters} page={page.data} error={page.error} colonies={col.data} />
+<ZonesPage locale={locale} />

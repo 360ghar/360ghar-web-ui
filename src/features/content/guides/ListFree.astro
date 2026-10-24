@@ -1,206 +1,24 @@
 ---
-/** /list-property-free. English body (as on the old site). The unsourced "3x more trust" line is removed. */
 import { getT } from '@/i18n';
 import Content from '@/layouts/Content.astro';
 import { localizer } from '@/lib/i18n/locale';
-import { faqPage } from '@/lib/seo/site';
-import Faq from '@/ui/Faq.astro';
-import Icon from '@/ui/icons/Icon.astro';
-import { howTo, trail } from '@/features/content/shared/schema';
-import Steps from '@/features/content/shared/Steps.astro';
-import { shared } from '@/features/content/shared/text';
-import TableScroll from '@/features/content/shared/TableScroll.astro';
-import PageArt from '@/features/content/shared/PageArt.astro';
 
 const locale = Astro.locals.locale;
-const t = getT(locale);
 const hi = locale === 'hi';
+const t = getT(locale);
 const L = localizer(locale);
-const PATH = '/list-property-free';
-
-const faqs = [
-  { q: 'Is listing on 360Ghar really free?', a: 'Yes, listing your property on 360Ghar is completely free. There are zero upfront fees, no listing charges, and no hidden costs. You only pay the standard brokerage when a deal successfully closes. We earn when you earn.' },
-  { q: 'Will I get spam calls after listing?', a: 'No. Unlike traditional portals that sell your phone number to multiple brokers and tele-callers, 360Ghar assigns you a dedicated Relationship Manager who handles all leads on your behalf. Your phone number is never publicly displayed or shared with third parties.' },
-  { q: 'How is 360Ghar different from MagicBricks?', a: 'MagicBricks monetises by selling your contact details to brokers, resulting in relentless spam calls. 360Ghar is fundamentally different: we provide physical on-site verification, create 360° virtual tours for your listing at no cost, and assign a dedicated Relationship Manager who screens and qualifies all leads. Zero spam calls, zero upfront fees, full transparency.' },
-  { q: 'What happens after I list my property?', a: 'Once you list, our team contacts you to schedule an on-site verification visit. We verify property documents, capture professional photos, and create a 360° virtual tour. Your dedicated Relationship Manager then handles all buyer inquiries, schedules visits, and manages negotiations on your behalf.' },
-  { q: 'Do I need to pay brokerage?', a: 'Standard brokerage applies only when a deal successfully closes. There are no upfront charges, no listing fees, and no payment until you get results. This aligns our incentives with yours: we succeed only when you do.' },
-  { q: 'How do virtual tours work on 360Ghar?', a: 'Our team creates studio-quality 360° guided walkthroughs of your property at no cost to you. Buyers can explore every room, check layouts, view amenities, and get a real feel of the space from anywhere. This increases qualified inquiries and reduces casual time-wasters.' },
-];
-
-const steps = [
-  { name: 'Create a free account', text: 'Sign up on 360Ghar with your phone number or email. No payment information needed: listing is always free.' },
-  { name: 'Add property details and photos', text: 'Fill in your property details (location, configuration, price, amenities) and upload photos. The more details you provide, the more qualified your leads will be.' },
-  { name: 'Our team verifies on site', text: 'A 360Ghar team member visits your property to verify documents, confirm details, capture professional photos, and create a 360° virtual tour, all at no cost to you.' },
-  { name: 'Your dedicated RM handles leads', text: 'Your Relationship Manager qualifies every inquiry, schedules visits with genuine buyers, and manages negotiations. You deal only with serious, verified leads.' },
-];
-
-const rows = [
-  ['Spam calls', 'Multiple daily', 'Zero'],
-  ['Upfront fees', 'Rs 1,500 - 15,000', 'Free'],
-  ['360° VR tours', 'Not available', 'Included free'],
-  ['Physical verification', 'Not available', 'On-site team'],
-  ['Dedicated RM', 'Not available', 'Assigned to you'],
-  ['Brokerage', 'Brokerage + listing fees', 'Only on deal closure'],
-];
-
-const usps = [
-  { name: 'No tele-calling harassment', text: 'Your number is never shared with brokers or telemarketers. Your Relationship Manager handles all inquiries; you only hear from us when there is a genuine, qualified lead.' },
-  { name: 'Physical verification included', text: 'Our on-site team visits your property to verify documents, confirm details, and validate ownership.' },
-  { name: 'A free 360° VR tour', text: 'We create a studio-quality 360° virtual tour of your property at no cost. Buyers can walk through your property online, which brings serious inquiries.' },
-  { name: 'Standard brokerage only on deal closure', text: 'No upfront fees, no listing charges, no hidden costs. You pay standard brokerage only when the deal closes.' },
-];
-
-const name = hi ? 'मुफ़्त प्रॉपर्टी लिस्टिंग' : 'List Property Free';
-const { crumbs, ld } = trail(locale, [{ name, path: PATH }]);
-const jsonLd = [
-  ld,
-  faqPage(faqs),
-  howTo('How to List Your Property on 360Ghar for Free', 'List your property on 360Ghar in 4 steps, from creating a free account to getting a dedicated Relationship Manager who handles all leads.', steps),
-];
-const cta = hi ? 'मुफ़्त में प्रॉपर्टी पोस्ट करें' : 'Post property free';
-const heading = hi ? 'स्पैम कॉल से परेशान? 360Ghar पर मुफ़्त लिस्ट करें' : 'Tired of MagicBricks Calling You? List on 360Ghar for Free';
+const path = '/list-property-free';
+const title = t('seo:listPropertyFree.title');
+const description = t('seo:listPropertyFree.description');
+const heading = hi ? 'लिस्टिंग सेवा की जानकारी समीक्षा के अधीन' : 'Listing service information under review';
+const notice = hi
+  ? 'शुल्क, गोपनीयता और सेवाओं से जुड़े दावे समीक्षा तक रोके गए हैं। प्रॉपर्टी की जानकारी भेजने से पहले मौजूदा फ़ॉर्म और शर्तें देखें।'
+  : 'Claims about fees, privacy and listing services are withheld while current terms and supporting evidence are reviewed. Check the current form and terms before submitting property details.';
 ---
 
-<Content
-  title={t('seo:listPropertyFree.title')}
-  description={t('seo:listPropertyFree.description')}
-  path={PATH}
-  heading={heading}
-  lead={hi ? 'ज़ीरो स्पैम कॉल। ज़ीरो अग्रिम शुल्क। पूरी पारदर्शिता।' : 'Zero spam calls. Zero upfront fees. Full transparency.'}
-  crumbs={crumbs}
-  jsonLd={jsonLd}
-  newsletter
->
-  <PageArt slot="head" scene="tour" seed="list-free" />
-  <div class="lf-zero">
-    <p class="lf-zero-num" aria-hidden="true">₹0</p>
-    <div class="lf-zero-copy">
-      <p class="lf-zero-text">{hi ? 'लिस्ट करने का अग्रिम शुल्क। ब्रोकरेज सिर्फ़ डील पूरी होने पर।' : 'Upfront fee to list your property. Brokerage only when the deal closes.'}</p>
-      <a class="btn btn-primary btn-lg" href={L('/post-property')}>
-        {cta}
-        <Icon name="arrow-up-right" size={18} class="arrow" />
-      </a>
-    </div>
-  </div>
-
-  <div lang={hi ? 'en' : undefined}>
-    <h2>360Ghar vs other portals</h2>
-    <p>Most property portals make money by selling your contact information to brokers and tele-callers. 360Ghar protects your privacy and only earns when you close a deal.</p>
-    <TableScroll label="360Ghar vs other portals">
-      <table class="lf-table">
-        <thead>
-          <tr>
-            <th scope="col">Feature</th>
-            <th scope="col">Other portals</th>
-            <th scope="col">360Ghar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            rows.map(([f, other, us]) => (
-              <tr>
-                <th scope="row">{f}</th>
-                <td>{other}</td>
-                <td class="lf-us">{us}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </TableScroll>
-
-    <h2>How it works, in 4 steps</h2>
-    <Steps items={steps} cols={2} />
-
-    <h2>Why 360Ghar is different</h2>
-    <dl class="lf-usps">
-      {
-        usps.map((u) => (
-          <div>
-            <dt>{u.name}</dt>
-            <dd>{u.text}</dd>
-          </div>
-        ))
-      }
-    </dl>
-
-    <h2>{shared(locale).faqs}</h2>
-    <Faq items={faqs} open={0} />
-  </div>
-
-  <div class="lf-actions">
-    <a class="link" href={L('/properties')}>{t('policies:gurugramGuide.browseProperties')}</a>
-  </div>
+<Content title={title} description={description} path={path} noindex heading={heading} lead={notice}>
+  <p>{notice}</p>
+  <a class="link" href={L('/post-property')}>
+    {hi ? 'मौजूदा लिस्टिंग फ़ॉर्म देखें' : 'Review the current listing form'}
+  </a>
 </Content>
-
-<style>
-  .lf-zero {
-    display: grid;
-    gap: 1rem 2rem;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  @media (min-width: 40rem) {
-    .lf-zero {
-      grid-template-columns: auto minmax(0, 1fr);
-    }
-  }
-
-  .lf-zero .lf-zero-num {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(5.5rem, 3rem + 10vw, 10rem);
-    line-height: 0.85;
-    letter-spacing: 0.02em;
-    color: var(--color-kesar-600);
-  }
-
-  .lf-zero-copy {
-    display: grid;
-    gap: 1rem;
-    justify-items: start;
-  }
-
-  .lf-zero .lf-zero-text {
-    max-width: 30ch;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-ink-950);
-  }
-
-  .lf-table th[scope='row'] {
-    background: transparent;
-  }
-
-  .lf-table .lf-us {
-    font-weight: 700;
-    color: var(--color-kesar-700);
-  }
-
-  .lf-usps {
-    display: grid;
-    gap: 1.25rem 2.5rem;
-    margin-top: 1.25rem;
-  }
-
-  @media (min-width: 48rem) {
-    .lf-usps {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  .lf-usps dt {
-    font-weight: 800;
-    font-size: 1.0625rem;
-  }
-
-  .lf-usps dd {
-    margin-top: 0.25rem;
-    color: var(--color-ink-800);
-  }
-
-  .lf-actions {
-    margin-top: 2rem;
-  }
-</style>

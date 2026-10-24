@@ -1,28 +1,25 @@
 import { describe, expect, it } from 'vitest';
-import { MCP_TOOLS } from '@/features/content/ai/mcp';
 import { ORGANIZATION_ID } from '@/lib/seo/siteSchemas';
 import { validateBlocks } from '@/lib/seo/validate';
 import { homeFacts } from './facts';
 
-const num = (n: number) => n.toLocaleString('en-IN');
-
 describe('homeFacts', () => {
-  it('uses the live home count and the real tool count', () => {
-    const f = homeFacts('en', { count: 109, localityTotal: 3215, num });
+  it('uses evidence-conscious static rows instead of unsupported counts', () => {
+    const f = homeFacts('en');
     const text = f.rows.map((r) => r.value).join('\n');
-    expect(text).toContain('109 homes listed');
-    expect(text).toContain('3,215 locality and project pages');
-    expect(text).toContain(`with ${MCP_TOOLS.length} tools`);
+    expect(f.rows.map((r) => r.label)).toEqual(['Scope', 'Listings', 'Locality pages', 'Data Hub', 'Tools', 'AI and MCP']);
+    expect(text).toContain('Details and availability can change.');
+    expect(text).not.toMatch(/109 homes listed|3,215 locality and project pages|verified inventory/i);
   });
 
-  it('leaves the homes row out when the count is not known', () => {
-    const f = homeFacts('en', { count: null, localityTotal: 3215, num });
+  it('does not add a live-count row', () => {
+    const f = homeFacts('en');
     expect(f.rows.map((r) => r.label)).not.toContain('Homes now');
-    expect(f.rows.length).toBe(9);
+    expect(f.rows.length).toBe(6);
   });
 
   it('makes the JSON-LD a WebPage that lists the same rows as the page, and never an Organization', () => {
-    const f = homeFacts('en', { count: 109, localityTotal: 3215, num });
+    const f = homeFacts('en');
     const ld = f.jsonLd;
     expect(ld['@type']).toBe('WebPage');
     expect(ld['@id']).toBe('https://360ghar.com/#facts');
@@ -34,14 +31,14 @@ describe('homeFacts', () => {
   });
 
   it('gives the Hindi page its own url and id', () => {
-    const f = homeFacts('hi', { count: 109, localityTotal: 3215, num });
+    const f = homeFacts('hi');
     expect(f.jsonLd.url).toBe('https://360ghar.com/hi');
     expect(f.jsonLd['@id']).toBe('https://360ghar.com/hi#facts');
   });
 
   it('passes the JSON-LD validator with no error and no warning', () => {
     for (const locale of ['en', 'hi'] as const) {
-      const f = homeFacts(locale, { count: 109, localityTotal: 3215, num });
+      const f = homeFacts(locale);
       const r = validateBlocks([f.jsonLd], `facts-${locale}`);
       expect(r.errors).toEqual([]);
       expect(r.warnings).toEqual([]);
@@ -49,14 +46,13 @@ describe('homeFacts', () => {
   });
 
   it('has the same rows in Hindi, and states no unchecked claim in either language', () => {
-    const en = homeFacts('en', { count: 109, localityTotal: 3215, num });
-    const hi = homeFacts('hi', { count: 109, localityTotal: 3215, num });
+    const en = homeFacts('en');
+    const hi = homeFacts('hi');
     expect(hi.rows).toHaveLength(en.rows.length);
     for (const r of [...en.rows, ...hi.rows]) expect(r.value).not.toMatch(/first|पहला|—/);
-    // The only 360° line is the honest tour row: no "every", no "walkthrough".
-    const tourLines = en.rows.filter((r) => /360°/.test(r.value));
-    expect(tourLines.map((r) => r.label)).toEqual(['Tours']);
-    expect(tourLines[0]!.value).toMatch(/for the homes that have one/);
-    expect(en.rows.map((r) => r.value).join(' ')).not.toMatch(/walkthrough|every listing|all listings/i);
+    const copy = [...en.rows, ...hi.rows].map((r) => r.value).join(' ');
+    expect(copy).toMatch(/selected locality pages/i);
+    expect(copy).toMatch(/not evidence of live inventory coverage/i);
+    expect(copy).toMatch(/do not verify property information/i);
   });
 });

@@ -1,44 +1,28 @@
 ---
-/** /regulatory-updates: gazette notices by type, page 1 on the server. */
-import { getT } from '@/i18n';
-import type { GazettePage } from '@/features/data-hub/api';
-import type { ApiError } from '@/lib/api/errors';
 import type { Locale } from '@/lib/i18n/locale';
-import { canonicalFor } from '@/lib/seo/site';
-import { FAQ } from './content';
-import DataHubPage from './DataHubPage.astro';
-import { hubName } from './pages';
-import GazetteNotices from './Gazette';
-import type { GazetteFilters } from './params';
-import { text } from './text';
+import DataHubHold from './DataHubHold.astro';
 
-type Props = { locale: Locale; filters: GazetteFilters; page: GazettePage | null; error: ApiError | null };
-const { locale, filters, page, error } = Astro.props;
-const t = text(locale);
-const tt = getT(locale);
+type Props = { locale: Locale };
+const { locale } = Astro.props;
 ---
 
-<DataHubPage
-  art="gazette"
-  title={tt('seo:regulatoryUpdates.title')}
-  description={tt('seo:regulatoryUpdates.description')}
-  keywords="Haryana Gazette notifications, Gurugram regulatory updates, land acquisition notices, circle rate revision, CLU change Gurgaon, HRERA policy update, 360Ghar data hub"
+<DataHubHold
+  locale={locale}
   path="/regulatory-updates"
-  heading={t.gzH1}
-  lead={tt('data-hub:regulatoryUpdates.description')}
-  crumbs={[{ name: hubName('gazette', locale), path: '/regulatory-updates' }]}
-  faqs={FAQ.gazette}
-  jsonLd={[
-    {
-      '@type': 'CollectionPage',
-      name: 'Regulatory Updates, Haryana Gazette',
-      description: 'Official notifications from the Haryana Government affecting real estate in Gurugram.',
-      url: canonicalFor('/regulatory-updates', locale),
-    },
-  ]}
-  related={['zones', 'circleRates', 'rera', 'builders']}
->
-  <div class="max-w-[56rem]">
-    <GazetteNotices client:load locale={locale} initialFilters={filters} initialPage={error ? null : page} />
-  </div>
-</DataHubPage>
+  en={{
+    title: 'Haryana regulatory records under review | 360Ghar',
+    description: 'Notification records are withheld while official sources and checked dates are reviewed.',
+    heading: 'Regulatory records under review',
+    crumb: 'Regulatory records',
+    lead: 'Notification records are not shown at this time.',
+    notice: 'We are reviewing the official source and checked date for each record before publishing it.',
+  }}
+  hi={{
+    title: 'हरियाणा नियामक रिकॉर्ड समीक्षा के अधीन | 360Ghar',
+    description: 'आधिकारिक स्रोतों और जाँच की तारीखों की समीक्षा तक अधिसूचना रिकॉर्ड रोके गए हैं।',
+    heading: 'नियामक रिकॉर्ड समीक्षा के अधीन',
+    crumb: 'नियामक रिकॉर्ड',
+    lead: 'अधिसूचना रिकॉर्ड अभी नहीं दिखाए जा रहे हैं।',
+    notice: 'हर रिकॉर्ड प्रकाशित करने से पहले हम उसके आधिकारिक स्रोत और जाँच की तारीख की समीक्षा कर रहे हैं।',
+  }}
+/>

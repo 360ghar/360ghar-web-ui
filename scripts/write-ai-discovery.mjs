@@ -37,8 +37,7 @@ if (args.help) {
 }
 
 const { buildAiDiscoveryArtifacts } = await import('../src/lib/seo/aiDiscovery.ts');
-const readJson = (rel) => JSON.parse(readFileSync(join(root, rel), 'utf8'));
-const a = buildAiDiscoveryArtifacts({ priceContext: readJson('src/data/priceContext.json'), localitiesIndex: readJson('src/data/localities-index.json'), landmarks: readJson('src/data/locality-landmarks.json'), today: args.date });
+const a = buildAiDiscoveryArtifacts({ today: args.date });
 
 const files = {
   'llms.txt': a.llmsTxt,

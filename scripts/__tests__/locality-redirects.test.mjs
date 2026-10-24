@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { ALL_LOCALITIES, isScrapedName, isThinLocality, resolveLocality } from '@/features/localities/data';
 import { legacyRedirect } from '@/lib/redirects';
-import { isScrapedName as aiScraped, isThinLocalityName } from '../../src/lib/seo/aiDiscovery.ts';
 import { baseName, buildRedirects, checkRedirects, findTwin, fullSlug } from '../data/lib/locality-redirects.mjs';
 
 const map = JSON.parse(readFileSync('src/data/locality-redirects.json', 'utf8'));
@@ -100,14 +99,5 @@ describe('twin matching', () => {
     expect(checkRedirects({ 'projects-in-dlf-phase-i-gurgaon': 'projects-in-dlf-phase-i-gurgaon' }, rows, t).join('|')).toMatch(/itself/);
     expect(checkRedirects({ 'projects-in-dlf-phase-i-gurgaon': 'mg-road-gurgaon', 'mg-road-gurgaon': 'dlf-phase-1-gurgaon' }, rows, t).join('|')).toMatch(/chain/);
     expect(checkRedirects({ 'projects-in-dlf-phase-i-gurgaon': 'nope-gurgaon' }, rows, t).join('|')).toMatch(/missing or thin/);
-  });
-});
-
-describe('the script copies of the predicate', () => {
-  it('aiDiscovery.ts (used by the script) agrees with data.ts on every row', () => {
-    for (const l of ALL_LOCALITIES) {
-      expect(aiScraped(l.name), l.name).toBe(isScrapedName(l));
-      expect(isThinLocalityName(l.name), l.name).toBe(isThinLocality(l));
-    }
   });
 });

@@ -60,16 +60,9 @@ test('property: booking a visit sends a signed-out user to sign in', async ({ pa
   await page.waitForURL(/\/login\?next=%2Fproperty%2F182/);
 });
 
-test('projects: list and detail', async ({ page, request }) => {
-  const w = watch(page);
-  await page.goto('/project');
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await axe(page);
-  const first = page.locator('a[href^="/project/"]').first();
-  await first.click();
-  await page.waitForURL(/\/project\/[a-z0-9-]+$/);
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await w.check();
+test('project routes: legacy aliases and unknown slugs', async ({ page, request }) => {
+  await page.goto('/project/luxury-apartments-in-sector-62');
+  await expect(page.getByRole('heading', { level: 1, name: 'Project details are under review' })).toBeVisible();
   expect((await request.get('/project/no-such-project')).status()).toBe(404);
   expect((await request.get('/projects', { maxRedirects: 0 })).status()).toBe(301);
 });

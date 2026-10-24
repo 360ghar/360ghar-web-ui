@@ -1,0 +1,34 @@
+---
+/** /micro-markets/[city]/[slug]: one micro-market from GET /data-hub/micro-markets/{city}/{slug}. */
+import { getT } from '@/i18n';
+import { microMarket, safe } from '@/features/projects/api';
+import MicroMarketPage from '@/features/projects/MicroMarketPage.astro';
+import DetailState from '@/features/data-hub/DetailState.astro';
+import { settle, stateOf, validSlug } from '@/features/data-hub/route';
+import { text } from '@/features/projects/text';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const city = Astro.params.city;
+const slug = Astro.params.slug;
+const res = validSlug(city) && validSlug(slug) ? await safe(() => microMarket(city, slug)) : null;
+const state = stateOf(res);
+settle(Astro, state, 'day');
+---
+
+{
+  res?.data ? (
+    <MicroMarketPage locale={locale} market={res.data} />
+  ) : (
+    <DetailState
+      state={state === 'ok' ? 'missing' : state}
+      locale={locale}
+      title={state === 'down' ? t('projects:seo.microMarket.errorTitle') : t('projects:seo.microMarket.notFoundTitle')}
+      missingTitle={text(locale).nf.market}
+      missingBody={t('projects:page.microMarket.missing')}
+      back={{ path: '/market-pulse', label: t('projects:nav.marketPulse') }}
+    />
+  )
+}

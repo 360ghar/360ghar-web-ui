@@ -1,0 +1,26 @@
+---
+/**
+ * Hero artwork study B: the Cyber City skyline, ground dropped. The full home
+ * page, with the study hero. Dev only, never in the production build.
+ */
+import HomePage from '@/features/home/HomePage.astro';
+import HomeHero from '@/features/home/hero/HomeHero.astro';
+import { loadHome } from '@/features/home/load';
+import HeroSwitch from '@/features/lab/HeroSwitch.astro';
+import Page from '@/layouts/Page.astro';
+import { Toaster } from '@/ui/react/Toaster';
+
+export const prerender = false;
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+
+const locale = Astro.locals.locale;
+const data = await loadHome(locale);
+---
+
+<Page title="Lab: Hero B" description="Hero study" path="/lab/home-b" overHero noindex>
+  <HomePage locale={locale} data={data}>
+    <HomeHero slot="hero" locale={locale} data={data} variant="skyline" />
+  </HomePage>
+  <HeroSwitch here="b" />
+  <Toaster client:idle />
+</Page>

@@ -17,10 +17,10 @@ const locale = Astro.locals.locale;
 const hi = locale === 'hi';
 const T = hi
   ? {
-      title: 'मुफ़्त प्रॉपर्टी टूल्स और कैलकुलेटर | 360Ghar',
-      description: `घर खरीदने, किराये पर लेने और बेचने के लिए ${TOOLS.length} मुफ़्त टूल्स: EMI, लोन पात्रता, कैपिटल गेन्स टैक्स, एरिया कनवर्टर, किराया रसीद, वास्तु चेकर और अन्य।`,
+      title: 'प्रॉपर्टी टूल और कैलकुलेटर | 360Ghar',
+      description: `घर खरीदने, किराये, एरिया गणना, दस्तावेज़ और डिज़ाइन के लिए ${TOOLS.length} टूल देखें।`,
       heading: 'प्रॉपर्टी टूल्स',
-      lead: `घर खरीदने, किराये पर लेने और बेचने के लिए ${TOOLS.length} मुफ़्त कैलकुलेटर और जाँच। ज़्यादातर टूल आपके ब्राउज़र में ही चलते हैं।`,
+      lead: `${TOOLS.length} टूल और कैलकुलेटर देखें। नतीजे पर भरोसा करने से पहले हर टूल के इनपुट, सीमाएँ और शर्तें पढ़ें।`,
       find: 'टूल खोजें',
       placeholder: 'जैसे EMI, गज, वास्तु',
       count: (n: number) => `${n} टूल्स`,
@@ -28,10 +28,10 @@ const T = hi
       listName: '360Ghar प्रॉपर्टी टूल्स',
     }
   : {
-      title: 'Free Property Tools and Calculators | 360Ghar',
-      description: `${TOOLS.length} free tools for buying, renting and selling a home: EMI, loan eligibility, capital gains tax, area converter, rent receipt, Vastu checker and more.`,
+      title: 'Property Tools and Calculators | 360Ghar',
+      description: `Explore ${TOOLS.length} tools for home buying, renting, area calculations, documents and design.`,
       heading: 'Property tools',
-      lead: `${TOOLS.length} free calculators and checks for buying, renting and selling a home. Most of them run in your browser.`,
+      lead: `Explore ${TOOLS.length} tools and calculators. Review each tool’s inputs, limits and terms before relying on its output.`,
       find: 'Find a tool',
       placeholder: 'For example EMI, gaj, Vastu',
       count: (n: number) => `${n} ${n === 1 ? 'tool' : 'tools'}`,

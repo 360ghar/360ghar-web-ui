@@ -1,6 +1,6 @@
 /**
  * Pure helpers for the data hub pages: dates in IST, the auction countdown,
- * the stamp-duty base value, FAR area and score bands. Unit tests: format.test.ts.
+ * FAR area and score bands. Unit tests: format.test.ts.
  */
 import { daysBetween } from '@/lib/dates';
 import { formatDate, parseNumber } from '@/lib/format';
@@ -41,29 +41,6 @@ export function countdownText(days: number | null, locale: Locale): string | nul
   if (days === 1) return hi ? 'कल नीलामी है' : '1 day to go';
   return hi ? `${days} दिन बाकी` : `${days} days to go`;
 }
-
-/**
- * Stamp duty is charged on the higher of the deal value and the circle-rate
- * value (area x rate). The backend does not apply this rule (backend-gaps R7),
- * so the page sends the higher value.
- */
-export function dutyBase(deal: number, areaSqyd?: number | null, ratePerSqyd?: number | null): { value: number; byCircle: boolean; circleValue: number | null } {
-  const circleValue = areaSqyd && ratePerSqyd && areaSqyd > 0 && ratePerSqyd > 0 ? Math.round(areaSqyd * ratePerSqyd) : null;
-  if (circleValue !== null && circleValue > deal) return { value: circleValue, byCircle: true, circleValue };
-  return { value: deal, byCircle: false, circleValue };
-}
-
-/** Stamp duty rates by state and buyer, as on the old site (Delhi row corrected: 6% men, 4% women). */
-export const STATE_RATES = [
-  { state: 'Haryana', buyer: 'male', rate: 7 },
-  { state: 'Haryana', buyer: 'female', rate: 5 },
-  { state: 'Delhi', buyer: 'male', rate: 6 },
-  { state: 'Delhi', buyer: 'female', rate: 4 },
-  { state: 'Uttar Pradesh', buyer: 'male', rate: 7 },
-  { state: 'Rajasthan', buyer: 'male', rate: 5 },
-] as const;
-
-export const duty = (value: number, ratePct: number) => Math.round((value * ratePct) / 100);
 
 /** Buildable floor area = plot area x FAR. */
 export function farArea(plot: number, far: number): number | null {

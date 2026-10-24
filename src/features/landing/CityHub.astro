@@ -4,7 +4,6 @@
  * intent, the places with homes now, the newest homes, homes near office
  * hubs, localities and the tools to check before deciding.
  */
-import priceContext from '@/data/priceContext.json';
 import type { Property } from '@/lib/api/types';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizer } from '@/lib/i18n/locale';
@@ -31,16 +30,15 @@ const hi = locale === 'hi';
 const L = localizer(locale);
 const meta = CITY_META[city]!;
 const name = hi ? CITIES[city]!.hi : meta.fullName;
-const prices = (priceContext as Record<string, Record<string, Record<string, string>>>)[city];
 const cityData = LISTED_LOCALITIES.filter((l) => citySlug(l.city) === city);
 const top =
   city === 'gurgaon'
     ? POPULAR.map((s) => cityData.find((l) => l.slug === s)).filter((l) => l !== undefined)
     : cityData.filter((l) => l.entityType === 'locality' || l.entityType === 'sector').slice(0, 12);
 const groups = [
-  { title: hi ? 'खरीदें' : 'Buy', links: [['flats', 'Flats', 'फ़्लैट'], ['independent-house', 'Independent houses', 'स्वतंत्र मकान'], ['builder-floor', 'Builder floors', 'बिल्डर फ़्लोर'], ['villa', 'Villas', 'विला'], ['plots', 'Plots', 'प्लॉट']].map(([s, en, h]) => ({ href: `/${city}/buy/${s}`, label: hi ? h! : en!, price: prices?.buy?.[({ flats: 'apartment', 'independent-house': 'house', 'builder-floor': 'builder_floor', villa: 'villa', plots: 'plot' } as Record<string, string>)[s!]!] })) },
-  { title: hi ? 'किराया' : 'Rent', links: [['flats', 'Flats', 'फ़्लैट'], ['independent-house', 'Independent houses', 'स्वतंत्र मकान'], ['builder-floor', 'Builder floors', 'बिल्डर फ़्लोर'], ['villa', 'Villas', 'विला'], ['office-space', 'Office space', 'ऑफ़िस स्पेस']].map(([s, en, h]) => ({ href: `/${city}/rent/${s}`, label: hi ? h! : en!, price: prices?.rent?.[({ flats: 'apartment', 'independent-house': 'house', 'builder-floor': 'builder_floor', villa: 'villa' } as Record<string, string>)[s!] ?? 'x'] })) },
-  { title: hi ? 'पीजी' : 'PG', links: [{ href: `/${city}/pg/flats`, label: hi ? `${name} में पीजी` : `PG in ${name}`, price: prices?.pg?.default }] },
+  { title: hi ? 'खरीदें' : 'Buy', links: [['flats', 'Flats', 'फ़्लैट'], ['independent-house', 'Independent houses', 'स्वतंत्र मकान'], ['builder-floor', 'Builder floors', 'बिल्डर फ़्लोर'], ['villa', 'Villas', 'विला'], ['plots', 'Plots', 'प्लॉट']].map(([s, en, h]) => ({ href: `/${city}/buy/${s}`, label: hi ? h! : en! })) },
+  { title: hi ? 'किराया' : 'Rent', links: [['flats', 'Flats', 'फ़्लैट'], ['independent-house', 'Independent houses', 'स्वतंत्र मकान'], ['builder-floor', 'Builder floors', 'बिल्डर फ़्लोर'], ['villa', 'Villas', 'विला'], ['office-space', 'Office space', 'ऑफ़िस स्पेस']].map(([s, en, h]) => ({ href: `/${city}/rent/${s}`, label: hi ? h! : en! })) },
+  { title: hi ? 'पीजी' : 'PG', links: [{ href: `/${city}/pg/flats`, label: hi ? `${name} में पीजी` : `PG in ${name}` }] },
 ];
 const faqs = cityFaqs(meta, name, locale);
 const count = (p: string) => homes.filter((h) => h.purpose === p).length;
@@ -98,7 +96,6 @@ const CITY_KIND: Record<string, PlaceKind> = { gurgaon: 'city', delhi: 'delhi', 
               <li>
                 <a href={L(x.href)}>
                   <span>{x.label}</span>
-                  {x.price && <span class="hub-price tabular">₹{x.price}</span>}
                   <Icon name="chevron-right" size={18} />
                 </a>
               </li>
@@ -108,8 +105,6 @@ const CITY_KIND: Record<string, PlaceKind> = { gurgaon: 'city', delhi: 'delhi', 
       ))
     }
   </div>
-  <p class="hub-small">{hi ? 'कीमतें पूरे शहर की अनुमानित रेंज हैं।' : 'Prices are city-wide ranges.'}</p>
-
   {
     listed.length > 0 && (
       <section class="hub-block" aria-labelledby="hub-where">
@@ -148,7 +143,7 @@ const CITY_KIND: Record<string, PlaceKind> = { gurgaon: 'city', delhi: 'delhi', 
             scene={failed ? 'offline' : 'empty'}
             level={3}
             title={failed ? (hi ? 'अभी घर लोड नहीं हो सके' : 'We could not load homes right now') : hi ? `${name} में अभी कोई घर लिस्ट नहीं है` : `No homes listed in ${name} yet`}
-            body={hi ? 'हम पहले गुरुग्राम में घर लिस्ट कर रहे हैं। वहाँ देखें, या अपना घर मुफ़्त लिस्ट करें।' : 'We list homes in Gurugram first. Look there, or list your own home free.'}
+            body={hi ? 'हम पहले गुरुग्राम में घर लिस्ट कर रहे हैं। वहाँ देखें, या अपनी प्रॉपर्टी पोस्ट करें।' : 'We list homes in Gurugram first. Look there, or post your property.'}
             action={{ href: L('/gurgaon'), label: hi ? 'गुड़गाँव देखें' : 'See Gurgaon' }}
             secondary={{ href: L('/post-property'), label: hi ? 'प्रॉपर्टी पोस्ट करें' : 'Post a property' }}
           />
@@ -258,18 +253,6 @@ const CITY_KIND: Record<string, PlaceKind> = { gurgaon: 'city', delhi: 'delhi', 
 
   .hub-group a :global(svg) {
     color: var(--color-ink-400);
-  }
-
-  .hub-price {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--color-ink-600);
-  }
-
-  .hub-small {
-    margin-top: 0.75rem;
-    font-size: 0.875rem;
-    color: var(--color-ink-600);
   }
 
   .hub-h2 {

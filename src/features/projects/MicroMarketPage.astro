@@ -1,0 +1,57 @@
+---
+/** /micro-markets/[city]/[slug]: one micro-market, its price level and its stage mix. */
+import { getT } from '@/i18n';
+import type { Locale } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import DataHubPage from '@/features/data-hub/DataHubPage.astro';
+import { citySlug } from '@/features/data-hub/route';
+import MicroMarketPanel from './MicroMarketPanel';
+import { faqs, text } from './text';
+import type { MicroMarketDetail } from './types';
+import './projects.css';
+
+type Props = { locale: Locale; market: MicroMarketDetail };
+const { locale, market } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+/**
+ * The city segment is lowercased, because the site's middleware 301s any path
+ * containing an uppercase letter to its lowercase form. The filed district is
+ * "Gurugram", so emitting it verbatim would make the canonical URL — and the
+ * og:url — point at a redirect rather than at the page that was served.
+ *
+ * The words are then joined with hyphens: a district can be several words
+ * ("New Delhi", "South West Delhi"), and a path segment cannot hold a space
+ * without percent-encoding it, which would put a `%20` in the canonical URL.
+ * The route accepts the hyphen form, and the backend matches either spelling.
+ */
+const path = `/micro-markets/${citySlug(market.city)}/${market.slug}`;
+const heading = market.name;
+---
+
+<DataHubPage
+  title={tt('projects:seo.microMarket.titleTemplate', { market: market.name, city: market.city })}
+  description={tt('projects:seo.microMarket.descriptionTemplate', { market: market.name, city: market.city })}
+  keywords={`${market.name} property market, ${market.city} micro-market, ${market.name} price per sq ft, ${market.district ?? market.city} RERA projects`}
+  path={path}
+  heading={heading}
+  lead={tt('projects:page.microMarket.lead')}
+  crumbs={[{ name: market.name }]}
+  faqs={faqs(locale, 'microMarket')}
+  jsonLd={[
+    {
+      '@type': 'Place',
+      name: `${market.name}, ${market.city}`,
+      url: canonicalFor(path, locale),
+      address: { '@type': 'PostalAddress', addressLocality: market.city, addressRegion: market.district ?? undefined, addressCountry: 'IN' },
+      ...(typeof market.latitude === 'number' && typeof market.longitude === 'number'
+        ? { geo: { '@type': 'GeoCoordinates', latitude: market.latitude, longitude: market.longitude } }
+        : {}),
+      description: `${market.name} in ${market.city}: projects, average price per sq ft and the stage mix, from the 360Ghar data hub.`,
+    },
+  ]}
+  related={['marketPulse', 'projectMap', 'rera']}
+>
+  <MicroMarketPanel locale={locale} market={market} />
+  <p slot="prose" class="dh-meta">{t.sourcesNote}</p>
+</DataHubPage>

@@ -12,15 +12,15 @@ const t = text(locale);
 const hi = locale === 'hi';
 const MODIFIED = '2026-01-01';
 const L = hi
-  ? { h1: 'बिल्डर स्कोर गाइड 2026', lead: 'गुरुग्राम के आठ बड़े बिल्डर, HRERA रजिस्ट्रेशन, शिकायतों और डिलीवरी रिकॉर्ड के आधार पर। ज़्यादा स्कोर मतलब ज़्यादा भरोसेमंद।', projects: 'RERA प्रोजेक्ट', complaints: 'शिकायतें', delivery: 'डिलीवरी', areas: 'इलाके', crumb: 'बिल्डर गाइड 2026' }
-  : { h1: 'Builder score guide 2026', lead: 'Eight large Gurugram builders, scored from HRERA registrations, complaints and delivery records. A higher score means a more reliable builder.', projects: 'RERA projects', complaints: 'Complaints', delivery: 'Delivery', areas: 'Areas', crumb: 'Builder guide 2026' };
+  ? { h1: 'बिल्डर स्कोर गाइड 2026', lead: 'गुरुग्राम के आठ बड़े बिल्डर, 360Ghar की जनवरी 2026 की अपनी रिसर्च के स्कोर के साथ। नीचे दिए स्कोर, प्रोजेक्ट और शिकायत के आँकड़े उसी रिसर्च के हैं, रजिस्टर के मौजूदा आँकड़े नहीं। रजिस्टर से बने आज के स्कोर के लिए बिल्डर प्रतिष्ठा निर्देशिका देखें।', projects: 'RERA प्रोजेक्ट', complaints: 'शिकायतें', delivery: 'डिलीवरी', areas: 'इलाके', crumb: 'बिल्डर गाइड 2026' }
+  : { h1: 'Builder score guide 2026', lead: 'Eight large Gurugram builders, with the scores from 360Ghar\u2019s own January 2026 research. The score, project and complaint figures below are that research\u2019s, not the register\u2019s current numbers. For the score the site computes today from the registers, open the builder reputation directory.', projects: 'RERA projects', complaints: 'Complaints', delivery: 'Delivery', areas: 'Areas', crumb: 'Builder guide 2026' };
 ---
 
 <DataHubPage
   art="builderScore"
-  title="Builder Reputation Score Gurugram 2026 | RERA & Complaint Data | 360Ghar"
-  description="Check reputation scores for all major builders in Gurugram. Ranked by HRERA compliance, complaints, and delivery history. Updated 2026 data by 360Ghar."
-  keywords="builder reputation score Gurugram, reliable builders Gurgaon 2026, RERA score builders Gurugram, HRERA complaint history, best developers Gurugram, DLF reputation, M3M reputation score"
+  title="Builder Score Guide 2026 | 360Ghar Research | 360Ghar"
+  description="360Ghar's own January 2026 research on eight large Gurugram builders. The scores are editorial estimates, not the register's current figures; the builder reputation directory carries those."
+  keywords="builder score guide Gurugram, reliable builders Gurgaon 2026, best developers Gurugram, DLF, M3M"
   path="/builder-reputation-score"
   heading={L.h1}
   lead={L.lead}
@@ -29,14 +29,14 @@ const L = hi
   jsonLd={[
     {
       '@type': 'Dataset',
-      name: 'Builder Reputation Scores, Gurugram 2026',
-      description: 'Reputation scores for real estate builders and developers active in Gurugram, based on HRERA registrations, complaint history, and delivery track record.',
+      name: 'Builder Score Guide, Gurugram 2026 (360Ghar research)',
+      description: '360Ghar editorial research from January 2026 on eight large Gurugram developers. These scores, project counts and complaint counts are the guide\u2019s own estimates; they are not the figures the 360Ghar builder reputation directory computes from the RERA registers.',
       url: absoluteUrl('/builder-reputation-score'),
       creator: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
       dateModified: MODIFIED,
       license: 'https://creativecommons.org/licenses/by/4.0/',
       spatialCoverage: { '@type': 'Place', name: 'Gurugram, Haryana, India' },
-      keywords: ['builder reputation Gurugram', 'RERA score Gurugram builders', 'reliable builders Gurgaon', 'HRERA complaint history'],
+      keywords: ['builder score guide Gurugram', 'Gurgaon developers 2026', 'reliable builders Gurgaon'],
     },
   ]}
   related={['builders', 'rera', 'tenant', 'bestSectors']}

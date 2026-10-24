@@ -151,8 +151,18 @@ export async function gazettePage(f: GazetteFilters, cursor: string | null): Pro
   return call(api.GET('/api/v1/data-hub/gazette', { params: { query: { type: f.type ?? null, limit: PAGE.gazette, ...first(cursor) } } }));
 }
 
-export async function buildersPage(f: BuilderFilters, cursor: string | null): Promise<BuilderPage> {
-  return call(api.GET('/api/v1/data-hub/builders', { params: { query: { q: f.q ?? null, order_by: f.order_by ?? null, limit: PAGE.builders, ...first(cursor) } } }));
+export async function buildersPage(f: BuilderFilters, cursor: string | null, limit: number = PAGE.builders): Promise<BuilderPage> {
+  return call(api.GET('/api/v1/data-hub/builders', { params: { query: { q: f.q ?? null, order_by: f.order_by ?? null, limit, ...first(cursor) } } }));
+}
+
+/**
+ * Every builder, page by page, for a caller that needs the whole set rather than page 1 —
+ * today the sitemap, which lists one detail page per builder slug. The builder index shows
+ * page 1 only (20 rows), and the register holds 97 builders, so reading one page would
+ * leave 77 detail pages out of the sitemap.
+ */
+export function allBuilders(): Promise<Builder[]> {
+  return collectPages((cursor) => buildersPage({}, cursor, 100));
 }
 
 export async function builder(slug: string): Promise<Builder> {

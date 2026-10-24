@@ -25854,6 +25854,16 @@
               }
             }
           },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -25883,7 +25893,7 @@
           "data-hub"
         ],
         "summary": "Verify RERA number",
-        "description": "Verify a RERA number — returns validity, status, and project name.",
+        "description": "Return verification only when reviewed evidence supports the exact number.",
         "operationId": "verify_rera_project_api_v1_data_hub_rera_projects_verify__rera_number__get",
         "parameters": [
           {
@@ -25903,6 +25913,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ReraVerifyResult"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
                 }
               }
             }
@@ -26031,6 +26051,16 @@
               }
             }
           },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -26084,6 +26114,16 @@
               }
             }
           },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -26105,6 +26145,1320 @@
             }
           }
         }
+      }
+    },
+    "/api/v1/data-hub/projects": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List projects",
+        "description": "List projects with cursor paging, ordered by primary key.",
+        "operationId": "list_projects_api_v1_data_hub_projects_get",
+        "parameters": [
+          {
+            "name": "district",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exact district match",
+              "title": "District"
+            },
+            "description": "Exact district match"
+          },
+          {
+            "name": "stage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ProjectStage"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filed lifecycle stage",
+              "title": "Stage"
+            },
+            "description": "Filed lifecycle stage"
+          },
+          {
+            "name": "developer_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Developer Slug"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search project name or developer",
+              "title": "Q"
+            },
+            "description": "Search project name or developer"
+          },
+          {
+            "name": "min_units",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Minimum total units",
+              "title": "Min Units"
+            },
+            "description": "Minimum total units"
+          },
+          {
+            "name": "max_units",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Maximum total units",
+              "title": "Max Units"
+            },
+            "description": "Maximum total units"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Opaque pagination cursor from a prior response's next_cursor.",
+              "title": "Cursor"
+            },
+            "description": "Opaque pagination cursor from a prior response's next_cursor."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max items to return (1-100).",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Max items to return (1-100)."
+          },
+          {
+            "name": "include_total",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "If true, include a total count (extra COUNT query).",
+              "default": false,
+              "title": "Include Total"
+            },
+            "description": "If true, include a total count (extra COUNT query)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CursorPage_ProjectSummaryResponse_"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/projects/{slug}": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "Get project detail",
+        "description": "Return the full filed project. A fixed number of queries; no lazy loads.",
+        "operationId": "get_project_api_v1_data_hub_projects__slug__get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDetailResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/projects/{slug}/nearby": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List projects near a project",
+        "description": "Projects in the same district, excluding the project itself, capped at a constant.",
+        "operationId": "list_nearby_projects_api_v1_data_hub_projects__slug__nearby_get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSummaryResponse"
+                  },
+                  "title": "Response List Nearby Projects Api V1 Data Hub Projects  Slug  Nearby Get"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/projects/{slug}/price-history": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List project price history",
+        "description": "Price points for one project, oldest quarter first.",
+        "operationId": "list_project_price_history_api_v1_data_hub_projects__slug__price_history_get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PricePointResponse"
+                  },
+                  "title": "Response List Project Price History Api V1 Data Hub Projects  Slug  Price History Get"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/projects/{slug}/documents": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List project documents",
+        "description": "Documents filed for one project, in filing order.",
+        "operationId": "list_project_documents_api_v1_data_hub_projects__slug__documents_get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDocumentResponse"
+                  },
+                  "title": "Response List Project Documents Api V1 Data Hub Projects  Slug  Documents Get"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/projects/{slug}/faq": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "Get project FAQ",
+        "description": "Deterministic FAQ built from filed values. A question without an answer is dropped.",
+        "operationId": "get_project_faq_api_v1_data_hub_projects__slug__faq_get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectFaqResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/developers": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List developers",
+        "description": "List developers with cursor paging, ordered by name or by total score.",
+        "operationId": "list_developers_api_v1_data_hub_developers_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search developer name",
+              "title": "Q"
+            },
+            "description": "Search developer name"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "name",
+                "score"
+              ],
+              "type": "string",
+              "description": "Sort by developer name or by total trust score",
+              "default": "name",
+              "title": "Order By"
+            },
+            "description": "Sort by developer name or by total trust score"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Opaque pagination cursor from a prior response's next_cursor.",
+              "title": "Cursor"
+            },
+            "description": "Opaque pagination cursor from a prior response's next_cursor."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max items to return (1-100).",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Max items to return (1-100)."
+          },
+          {
+            "name": "include_total",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "If true, include a total count (extra COUNT query).",
+              "default": false,
+              "title": "Include Total"
+            },
+            "description": "If true, include a total count (extra COUNT query)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CursorPage_DeveloperSummaryResponse_"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/developers/{slug}": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "Get developer detail",
+        "description": "Return one developer with its score and its filed portfolio.",
+        "operationId": "get_developer_api_v1_data_hub_developers__slug__get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeveloperDetailResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/developers/{slug}/score": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "Get developer score",
+        "description": "Return the current five-pillar trust score for one developer.",
+        "operationId": "get_developer_score_api_v1_data_hub_developers__slug__score_get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeveloperScoreResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/micro-markets": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List micro-markets",
+        "description": "List micro-markets, optionally filtered to one city.",
+        "operationId": "list_micro_markets_api_v1_data_hub_micro_markets_get",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter to one city",
+              "title": "City"
+            },
+            "description": "Filter to one city"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MicroMarketResponse"
+                  },
+                  "title": "Response List Micro Markets Api V1 Data Hub Micro Markets Get"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/micro-markets/{city}/{slug}": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "Get micro-market detail",
+        "description": "Return one micro-market with the stats for the projects that filed in it.",
+        "operationId": "get_micro_market_api_v1_data_hub_micro_markets__city___slug__get",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "City"
+            }
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MicroMarketDetailResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/market-pulse": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List market pulse snapshots",
+        "description": "Return the latest snapshot per city, optionally limited to one city.",
+        "operationId": "list_market_pulse_api_v1_data_hub_market_pulse_get",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter to one city",
+              "title": "City"
+            },
+            "description": "Filter to one city"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarketPulseResponse"
+                  },
+                  "title": "Response List Market Pulse Api V1 Data Hub Market Pulse Get"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/map/projects": {
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List project map points",
+        "description": "Return the project pins inside a bounding box, capped at a constant.",
+        "operationId": "list_map_projects_api_v1_data_hub_map_projects_get",
+        "parameters": [
+          {
+            "name": "min_lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Min Lat"
+            }
+          },
+          {
+            "name": "max_lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Max Lat"
+            }
+          },
+          {
+            "name": "min_lng",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Min Lng"
+            }
+          },
+          {
+            "name": "max_lng",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Max Lng"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectMapPointResponse"
+                  },
+                  "title": "Response List Map Projects Api V1 Data Hub Map Projects Get"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-hub/watchlist": {
+      "post": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "Add a project to the watchlist",
+        "description": "Watch a project. Idempotent: watching twice returns the existing row.\n\nA project with no slug is refused along with an unknown one. Every other\nproject route filters on ``slug IS NOT NULL`` because a slug is the public URL\nkey, and a watched row exists to link to that page — accepting one here would\nstore a row the list can only render as ``#<id>`` with no name, link or\nfigures. Refusing it keeps the watchlist free of entries nothing can display.",
+        "operationId": "add_watchlist_item_api_v1_data_hub_watchlist_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WatchlistItemCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WatchlistItemResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The per-user watchlist ceiling is reached",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "List my watchlist",
+        "description": "List the current user's watched projects, newest first.",
+        "operationId": "list_watchlist_items_api_v1_data_hub_watchlist_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WatchlistItemResponse"
+                  },
+                  "title": "Response List Watchlist Items Api V1 Data Hub Watchlist Get"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/data-hub/watchlist/{project_id}": {
+      "delete": {
+        "tags": [
+          "data-hub"
+        ],
+        "summary": "Remove a project from the watchlist",
+        "description": "Stop watching a project. 404 when it was not watched.",
+        "operationId": "delete_watchlist_item_api_v1_data_hub_watchlist__project_id__delete",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. Every non-2xx response has this body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/data-hub/auctions/banks": {
@@ -27387,7 +28741,7 @@
           "data-hub"
         ],
         "summary": "Trigger scraper",
-        "description": "Trigger a named scraper manually (admin only).",
+        "description": "Trigger a named scraper manually (admin only).\n\nThe optional body carries operator arguments, which only ``rera_portal_scan``\nreads: it walks a range of HRERA portal ids and fails without an ``end_id``\nrather than defaulting to an unbounded crawl. Options a scraper does not\naccept are dropped, so the body is safe to send to any scraper.",
         "operationId": "trigger_scraper_api_v1_data_hub_admin_scraper__scraper_name__trigger_post",
         "parameters": [
           {
@@ -27400,6 +28754,23 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/ScraperTriggerRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -27407,6 +28778,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ScraperTriggerResult"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "HRERA surface turned off by configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
                 }
               }
             }
@@ -30959,6 +32340,68 @@
         ],
         "title": "BalconyInfo",
         "description": "Information about balconies."
+      },
+      "BankAccountResponse": {
+        "properties": {
+          "bank_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bank Name"
+          },
+          "branch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch Name"
+          },
+          "ifsc": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ifsc"
+          },
+          "micr": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Micr"
+          },
+          "branch_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch Code"
+          }
+        },
+        "type": "object",
+        "title": "BankAccountResponse",
+        "description": "Project collection account. The account number and operators are never serialized."
       },
       "BankAuctionResponse": {
         "properties": {
@@ -36793,6 +38236,16 @@
             ],
             "title": "Source Url"
           },
+          "provenance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DataHubProvenanceSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "created_at": {
             "type": "string",
             "format": "date-time",
@@ -39433,6 +40886,58 @@
         ],
         "title": "CursorPage[CustomDomainResponse]"
       },
+      "CursorPage_DeveloperSummaryResponse_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DeveloperSummaryResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "default": false
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total",
+            "description": "Set only when the request sets include_total=true; otherwise null."
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor",
+          "has_more",
+          "limit",
+          "total"
+        ],
+        "title": "CursorPage[DeveloperSummaryResponse]"
+      },
       "CursorPage_Document_": {
         "properties": {
           "items": {
@@ -40524,6 +42029,58 @@
           "total"
         ],
         "title": "CursorPage[PageResponse]"
+      },
+      "CursorPage_ProjectSummaryResponse_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectSummaryResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "default": false
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total",
+            "description": "Set only when the request sets include_total=true; otherwise null."
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor",
+          "has_more",
+          "limit",
+          "total"
+        ],
+        "title": "CursorPage[ProjectSummaryResponse]"
       },
       "CursorPage_Property_": {
         "properties": {
@@ -41729,6 +43286,84 @@
         "title": "DashboardStats",
         "description": "Dashboard statistics for a user."
       },
+      "DataHubProvenanceSource": {
+        "properties": {
+          "authority": {
+            "type": "string",
+            "title": "Authority"
+          },
+          "citation_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Citation Url"
+          },
+          "effective_from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective From"
+          },
+          "effective_to": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective To"
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Checked At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "authority",
+          "checked_at"
+        ],
+        "title": "DataHubProvenanceSource",
+        "description": "Public-safe source metadata; never includes content, artifacts, or reviewer notes."
+      },
+      "DataHubProvenanceSummary": {
+        "properties": {
+          "verification_status": {
+            "type": "string",
+            "enum": [
+              "unverified",
+              "verified"
+            ],
+            "title": "Verification Status",
+            "default": "unverified"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/DataHubProvenanceSource"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "type": "object",
+        "title": "DataHubProvenanceSummary",
+        "description": "Public-safe source metadata and explicit verification status."
+      },
       "DefectSeverity": {
         "type": "string",
         "enum": [
@@ -41859,6 +43494,390 @@
         ],
         "title": "DesignImageOut",
         "description": "Response of POST /design-studio/generate: a base64 data URL of the generated image."
+      },
+      "DeveloperDetailResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "legal_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Name"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "website_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website Url"
+          },
+          "headquarters": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Headquarters"
+          },
+          "founded_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Founded Year"
+          },
+          "is_listed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Listed"
+          },
+          "total_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Score"
+          },
+          "project_count": {
+            "type": "integer",
+            "title": "Project Count",
+            "default": 0
+          },
+          "complaint_count": {
+            "type": "integer",
+            "title": "Complaint Count",
+            "default": 0
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "dossier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dossier"
+          },
+          "cin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cin"
+          },
+          "geographies": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Geographies"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DeveloperScoreResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "projects": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectSummaryResponse"
+            },
+            "type": "array",
+            "title": "Projects"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "name"
+        ],
+        "title": "DeveloperDetailResponse"
+      },
+      "DeveloperScoreResponse": {
+        "properties": {
+          "delivery": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delivery"
+          },
+          "regulatory": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Regulatory"
+          },
+          "complaints": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Complaints"
+          },
+          "financials": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Financials"
+          },
+          "market_reception": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Market Reception"
+          },
+          "total_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Score"
+          },
+          "project_count": {
+            "type": "integer",
+            "title": "Project Count",
+            "default": 0
+          },
+          "delivered_count": {
+            "type": "integer",
+            "title": "Delivered Count",
+            "default": 0
+          },
+          "under_construction_count": {
+            "type": "integer",
+            "title": "Under Construction Count",
+            "default": 0
+          },
+          "complaint_count": {
+            "type": "integer",
+            "title": "Complaint Count",
+            "default": 0
+          },
+          "computed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Computed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "computed_at"
+        ],
+        "title": "DeveloperScoreResponse"
+      },
+      "DeveloperSummaryResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "legal_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Name"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "website_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website Url"
+          },
+          "headquarters": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Headquarters"
+          },
+          "founded_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Founded Year"
+          },
+          "is_listed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Listed"
+          },
+          "total_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Score"
+          },
+          "project_count": {
+            "type": "integer",
+            "title": "Project Count",
+            "default": 0
+          },
+          "complaint_count": {
+            "type": "integer",
+            "title": "Complaint Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "name"
+        ],
+        "title": "DeveloperSummaryResponse"
       },
       "DeviceBreakdown": {
         "properties": {
@@ -42965,6 +44984,59 @@
         "additionalProperties": false,
         "type": "object",
         "title": "FAQUpdate"
+      },
+      "FacilityResponse": {
+        "properties": {
+          "facility": {
+            "type": "string",
+            "title": "Facility"
+          },
+          "estimated_cost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Cost"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facility"
+        ],
+        "title": "FacilityResponse"
+      },
+      "FaqItemResponse": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question",
+          "answer"
+        ],
+        "title": "FaqItemResponse"
       },
       "FlatmateAdminImage": {
         "properties": {
@@ -46641,6 +48713,52 @@
           "any"
         ],
         "title": "KitchenType"
+      },
+      "LandUsageResponse": {
+        "properties": {
+          "particular": {
+            "type": "string",
+            "title": "Particular"
+          },
+          "area_sqm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area Sqm"
+          },
+          "area_acres": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area Acres"
+          },
+          "percentage": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percentage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "particular"
+        ],
+        "title": "LandUsageResponse"
       },
       "LastMethodRequest": {
         "properties": {
@@ -50668,6 +52786,90 @@
         ],
         "title": "MarketDigestResult"
       },
+      "MarketPulseResponse": {
+        "properties": {
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "captured_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Captured On"
+          },
+          "sentiment": {
+            "$ref": "#/components/schemas/MarketSentiment"
+          },
+          "avg_price_per_sqft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Price Per Sqft"
+          },
+          "price_change_90d_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Change 90D Pct"
+          },
+          "new_registrations": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Registrations"
+          },
+          "new_complaints": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Complaints"
+          },
+          "computed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Computed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "city",
+          "captured_on",
+          "sentiment",
+          "computed_at"
+        ],
+        "title": "MarketPulseResponse"
+      },
+      "MarketSentiment": {
+        "type": "string",
+        "enum": [
+          "positive",
+          "neutral",
+          "negative",
+          "unknown"
+        ],
+        "title": "MarketSentiment",
+        "description": "Direction of a micro-market over the pulse window.\n\n``unknown`` is not a direction: it means no reading could be taken. The\nregister publishes no buyer-facing price, so the price move is always absent,\nand the fallback signal (filings inside the window) needs a registration date\nthe Delhi register never states. ``neutral`` would claim a flat market on that\nevidence; ``unknown`` says the evidence is missing."
+      },
       "MarketingNotification": {
         "properties": {
           "type_key": {
@@ -51261,6 +53463,173 @@
         ],
         "title": "MessageType"
       },
+      "MicroMarketDetailResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "district": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "District"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "project_count": {
+            "type": "integer",
+            "title": "Project Count",
+            "default": 0
+          },
+          "avg_price_per_sqft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Price Per Sqft"
+          },
+          "stage_breakdown": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Stage Breakdown"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "city",
+          "name",
+          "slug"
+        ],
+        "title": "MicroMarketDetailResponse"
+      },
+      "MicroMarketResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "district": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "District"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "city",
+          "name",
+          "slug"
+        ],
+        "title": "MicroMarketResponse"
+      },
       "ModerationAction": {
         "type": "string",
         "enum": [
@@ -51474,6 +53843,52 @@
           "created_at"
         ],
         "title": "NeighbourhoodScoreResponse"
+      },
+      "NocResponse": {
+        "properties": {
+          "facility": {
+            "type": "string",
+            "title": "Facility"
+          },
+          "provider_agency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Agency"
+          },
+          "approved": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved"
+          },
+          "approval_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approval Reference"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facility"
+        ],
+        "title": "NocResponse"
       },
       "NorthDirection": {
         "type": "string",
@@ -53144,6 +55559,51 @@
         "title": "PresignedUploadResponseItem",
         "description": "Signed parameters for a direct client upload. Confirm with ``upload_id`` when done."
       },
+      "PricePointResponse": {
+        "properties": {
+          "quarter": {
+            "type": "string",
+            "title": "Quarter"
+          },
+          "period_start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Start"
+          },
+          "unit_type": {
+            "type": "string",
+            "title": "Unit Type"
+          },
+          "price_per_sqft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Per Sqft"
+          },
+          "source": {
+            "$ref": "#/components/schemas/ProjectPriceSource"
+          }
+        },
+        "type": "object",
+        "required": [
+          "quarter",
+          "unit_type",
+          "source"
+        ],
+        "title": "PricePointResponse"
+      },
       "PrivacySettings": {
         "properties": {
           "profile_visibility": {
@@ -53427,6 +55887,968 @@
           "created_at"
         ],
         "title": "ProfileViewEventOut"
+      },
+      "ProjectCostResponse": {
+        "properties": {
+          "land_cost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Land Cost"
+          },
+          "construction_cost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Construction Cost"
+          },
+          "infrastructure_cost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Infrastructure Cost"
+          },
+          "other_cost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other Cost"
+          },
+          "total_cost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Cost"
+          }
+        },
+        "type": "object",
+        "title": "ProjectCostResponse"
+      },
+      "ProjectDetailResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "rera_number": {
+            "type": "string",
+            "title": "Rera Number"
+          },
+          "project_name": {
+            "type": "string",
+            "title": "Project Name"
+          },
+          "developer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Developer Name"
+          },
+          "developer_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Developer Slug"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectStage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_units": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Units"
+          },
+          "towers": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Towers"
+          },
+          "land_area_acres": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Land Area Acres"
+          },
+          "proposed_far": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Far"
+          },
+          "proposed_completion_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Completion Date"
+          },
+          "current_price_per_sqft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Price Per Sqft"
+          },
+          "possession_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Possession Date"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "complaint_count": {
+            "type": "integer",
+            "title": "Complaint Count",
+            "default": 0
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DataHubProvenanceSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectProfileResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "land_usage": {
+            "items": {
+              "$ref": "#/components/schemas/LandUsageResponse"
+            },
+            "type": "array",
+            "title": "Land Usage"
+          },
+          "cost": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectCostResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expenditure": {
+            "items": {
+              "$ref": "#/components/schemas/QuarterlyExpenditureResponse"
+            },
+            "type": "array",
+            "title": "Expenditure"
+          },
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectDocumentResponse"
+            },
+            "type": "array",
+            "title": "Documents"
+          },
+          "statutory": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StatutoryApprovalResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "facilities": {
+            "items": {
+              "$ref": "#/components/schemas/FacilityResponse"
+            },
+            "type": "array",
+            "title": "Facilities"
+          },
+          "nocs": {
+            "items": {
+              "$ref": "#/components/schemas/NocResponse"
+            },
+            "type": "array",
+            "title": "Nocs"
+          },
+          "people": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectPersonResponse"
+            },
+            "type": "array",
+            "title": "People"
+          },
+          "bank_account": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BankAccountResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit_configs": {
+            "items": {
+              "$ref": "#/components/schemas/UnitConfigResponse"
+            },
+            "type": "array",
+            "title": "Unit Configs"
+          },
+          "specifications": {
+            "items": {
+              "$ref": "#/components/schemas/SpecificationResponse"
+            },
+            "type": "array",
+            "title": "Specifications"
+          },
+          "nearby": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectSummaryResponse"
+            },
+            "type": "array",
+            "title": "Nearby"
+          },
+          "price_history": {
+            "items": {
+              "$ref": "#/components/schemas/PricePointResponse"
+            },
+            "type": "array",
+            "title": "Price History"
+          },
+          "faq": {
+            "items": {
+              "$ref": "#/components/schemas/FaqItemResponse"
+            },
+            "type": "array",
+            "title": "Faq"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "rera_number",
+          "project_name",
+          "district",
+          "updated_at"
+        ],
+        "title": "ProjectDetailResponse",
+        "description": "Every summary field plus the full filing. Contact details are never included."
+      },
+      "ProjectDocumentResponse": {
+        "properties": {
+          "ordinal": {
+            "type": "integer",
+            "title": "Ordinal"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "uploaded_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uploaded On"
+          },
+          "view_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "View Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ordinal",
+          "description"
+        ],
+        "title": "ProjectDocumentResponse"
+      },
+      "ProjectFaqResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/FaqItemResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "title": "ProjectFaqResponse"
+      },
+      "ProjectMapPointResponse": {
+        "properties": {
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "project_name": {
+            "type": "string",
+            "title": "Project Name"
+          },
+          "developer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Developer Name"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectStage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug",
+          "project_name"
+        ],
+        "title": "ProjectMapPointResponse",
+        "description": "One project pin. Only projects with filed coordinates are returned."
+      },
+      "ProjectPersonResponse": {
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/ProjectPersonRole"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "pan_last4": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pan Last4"
+          },
+          "photo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photo Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "name"
+        ],
+        "title": "ProjectPersonResponse",
+        "description": "Promoter-side person. Contact details (email, phones, address) are never serialized."
+      },
+      "ProjectPersonRole": {
+        "type": "string",
+        "enum": [
+          "chairman",
+          "managing_director",
+          "director",
+          "authorised_representative",
+          "licensee",
+          "other"
+        ],
+        "title": "ProjectPersonRole",
+        "description": "Role of a person listed in REP-I.\n\nCompany roles come from Part A; ``licensee`` covers the co-licensees named in\nPart B, who own the land but hold no company office."
+      },
+      "ProjectPriceSource": {
+        "type": "string",
+        "enum": [
+          "launch",
+          "filing",
+          "derived"
+        ],
+        "title": "ProjectPriceSource",
+        "description": "Where a price point came from. Only ``filing`` and ``launch`` are official figures."
+      },
+      "ProjectProfileResponse": {
+        "properties": {
+          "portal_project_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Portal Project Id"
+          },
+          "licensed_land_acres": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Licensed Land Acres"
+          },
+          "land_area_sqm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Land Area Sqm"
+          },
+          "proposed_far": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Far"
+          },
+          "permissible_far": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permissible Far"
+          },
+          "towers": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Towers"
+          },
+          "floors": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Floors"
+          },
+          "total_units": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Units"
+          },
+          "units_per_acre": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units Per Acre"
+          },
+          "rera_received_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rera Received Date"
+          },
+          "construction_start_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Construction Start Date"
+          },
+          "proposed_completion_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Completion Date"
+          },
+          "launch_price_per_sqft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Launch Price Per Sqft"
+          },
+          "current_price_per_sqft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Price Per Sqft"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectStage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "ProjectProfileResponse",
+        "description": "REP-I filing profile scalars. Never carries contact details."
+      },
+      "ProjectStage": {
+        "type": "string",
+        "enum": [
+          "pre_launch",
+          "under_construction",
+          "near_possession",
+          "completed"
+        ],
+        "title": "ProjectStage",
+        "description": "Lifecycle stage of a registered project.\n\nOnly the values a filing date can evidence are produced today. ``launched``\nand ``stalled`` are deliberately absent: neither follows from a filed date,\nso claiming one would be a guess."
+      },
+      "ProjectSummaryResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "rera_number": {
+            "type": "string",
+            "title": "Rera Number"
+          },
+          "project_name": {
+            "type": "string",
+            "title": "Project Name"
+          },
+          "developer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Developer Name"
+          },
+          "developer_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Developer Slug"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectStage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_units": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Units"
+          },
+          "towers": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Towers"
+          },
+          "land_area_acres": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Land Area Acres"
+          },
+          "proposed_far": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Far"
+          },
+          "proposed_completion_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Completion Date"
+          },
+          "current_price_per_sqft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Price Per Sqft"
+          },
+          "possession_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Possession Date"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "complaint_count": {
+            "type": "integer",
+            "title": "Complaint Count",
+            "default": 0
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DataHubProvenanceSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "rera_number",
+          "project_name",
+          "district",
+          "updated_at"
+        ],
+        "title": "ProjectSummaryResponse",
+        "description": "List-level project card. Field names are frozen: the web UI codes against them."
       },
       "Property": {
         "properties": {
@@ -57605,6 +61027,45 @@
         "type": "object",
         "title": "QnAAnswers"
       },
+      "QuarterlyExpenditureResponse": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "quarter": {
+            "type": "integer",
+            "title": "Quarter"
+          },
+          "particular": {
+            "type": "string",
+            "title": "Particular"
+          },
+          "amount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "year",
+          "quarter",
+          "particular"
+        ],
+        "title": "QuarterlyExpenditureResponse"
+      },
       "RealtimeViewBucket": {
         "properties": {
           "timestamp": {
@@ -59365,6 +62826,17 @@
             "type": "string",
             "title": "Project Name"
           },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
           "developer_name": {
             "anyOf": [
               {
@@ -59467,16 +62939,15 @@
             ],
             "title": "Status"
           },
-          "source_url": {
+          "provenance": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/DataHubProvenanceSummary"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Source Url"
+            ]
           },
           "created_at": {
             "type": "string",
@@ -59508,8 +62979,25 @@
       "ReraVerifyResult": {
         "properties": {
           "valid": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Valid"
+          },
+          "verification_status": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "unverified",
+              "verified"
+            ],
+            "title": "Verification Status",
+            "default": "unknown"
           },
           "status": {
             "anyOf": [
@@ -59532,12 +63020,20 @@
               }
             ],
             "title": "Project Name"
+          },
+          "official_source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Source Url"
           }
         },
         "type": "object",
-        "required": [
-          "valid"
-        ],
         "title": "ReraVerifyResult"
       },
       "RoomInfo": {
@@ -60378,6 +63874,50 @@
         ],
         "title": "ScraperStatus"
       },
+      "ScraperTriggerRequest": {
+        "properties": {
+          "start_id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Id"
+          },
+          "end_id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Id"
+          },
+          "delay_seconds": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 30.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delay Seconds"
+          }
+        },
+        "type": "object",
+        "title": "ScraperTriggerRequest",
+        "description": "Operator arguments for a manual scraper trigger.\n\nOnly ``rera_portal_scan`` reads these. It walks a range of HRERA portal ids and\nrefuses to run without an ``end_id``, so the range has to come from the\noperator rather than from a default. Every other scraper ignores the body, and\nan option a scraper does not accept is dropped rather than passed on."
+      },
       "ScraperTriggerResult": {
         "properties": {
           "message": {
@@ -60866,6 +64406,40 @@
         "title": "SpatialGraphSummary",
         "description": "Linking-quality report of a spatial job (see `tour_ai.spatial.graph_summary`).\n\nEvery field is declared: an undeclared key would be dropped on the way into\n`ai_jobs.result`, and the review UI would silently show nothing."
       },
+      "SpecificationResponse": {
+        "properties": {
+          "scope": {
+            "type": "string",
+            "title": "Scope"
+          },
+          "unit_type": {
+            "type": "string",
+            "title": "Unit Type"
+          },
+          "spec_key": {
+            "type": "string",
+            "title": "Spec Key"
+          },
+          "spec_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scope",
+          "unit_type",
+          "spec_key"
+        ],
+        "title": "SpecificationResponse"
+      },
       "StageRequest": {
         "properties": {
           "image": {
@@ -61074,6 +64648,114 @@
           "total_cost"
         ],
         "title": "StampDutyCalculationResponse"
+      },
+      "StatutoryApprovalResponse": {
+        "properties": {
+          "loi_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Loi Number"
+          },
+          "loi_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Loi Date"
+          },
+          "licence_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Licence Number"
+          },
+          "licence_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Licence Date"
+          },
+          "electric_load_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Electric Load Kw"
+          },
+          "water_available": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Water Available"
+          },
+          "storm_water_available": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Storm Water Available"
+          },
+          "sewerage_available": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sewerage Available"
+          },
+          "plan_approvals": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Approvals"
+          }
+        },
+        "type": "object",
+        "title": "StatutoryApprovalResponse"
       },
       "StitchResult": {
         "properties": {
@@ -62843,6 +66525,11 @@
               "flatmate_report_dismissed",
               "flatmate_visit_scheduled",
               "flatmate_visit_confirmed",
+              "auction_alert_match",
+              "watchlist_price_change",
+              "watchlist_stage_change",
+              "watchlist_possession_change",
+              "watchlist_new_filing",
               "admin_broadcast"
             ],
             "title": "Type Key"
@@ -62895,6 +66582,112 @@
           "body"
         ],
         "title": "TypedUserNotification"
+      },
+      "UnitConfigResponse": {
+        "properties": {
+          "ordinal": {
+            "type": "integer",
+            "title": "Ordinal"
+          },
+          "unit_type": {
+            "type": "string",
+            "title": "Unit Type"
+          },
+          "carpet_area_sqm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Carpet Area Sqm"
+          },
+          "built_up_area_sqm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Built Up Area Sqm"
+          },
+          "super_built_up_area_sqm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Super Built Up Area Sqm"
+          },
+          "carpet_efficiency": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Carpet Efficiency"
+          },
+          "units": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units"
+          },
+          "towers": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Towers"
+          },
+          "parkings": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parkings"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ordinal",
+          "unit_type"
+        ],
+        "title": "UnitConfigResponse"
       },
       "UnmatchPairRequest": {
         "properties": {
@@ -64638,6 +68431,101 @@
         "title": "VisitUpdate",
         "description": "Partial update. Cancel, reschedule and complete have their own routes."
       },
+      "WatchlistItemCreate": {
+        "properties": {
+          "project_id": {
+            "type": "integer",
+            "title": "Project Id"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "alert_prefs": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alert Prefs"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "project_id"
+        ],
+        "title": "WatchlistItemCreate",
+        "description": "Watchlist body. Unknown keys fail with 422."
+      },
+      "WatchlistItemResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "integer",
+            "title": "Project Id"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "alert_prefs": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alert Prefs"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "project": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectSummaryResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "created_at"
+        ],
+        "title": "WatchlistItemResponse"
+      },
       "WidgetFrame": {
         "properties": {
           "event": {
@@ -64824,6 +68712,16 @@
               }
             ],
             "title": "Source Url"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DataHubProvenanceSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "created_at": {
             "type": "string",

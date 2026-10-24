@@ -129,31 +129,11 @@ test('locality: the buy page works with the backend down in the browser', async 
   await w.check();
 });
 
-test('projects: counts, cards in line, detail with the honest fallback', async ({ page, request }) => {
+test('projects: legacy routes stay available during review', async ({ page, request }) => {
   const w = watch(page);
   await page.goto('/project');
-  await expect(page.getByRole('heading', { level: 1, name: 'Projects in Gurugram' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Project details are under review' })).toBeVisible();
   await axe(page);
-  const cards = page.locator('.pj-card');
-  await expect(cards).toHaveCount(8);
-  await expect(cards.first().locator('.pj-count')).toHaveText(/\d+ homes? now|No homes yet/);
-  // The foot of every card in a row sits on one line.
-  const feet = await cards.locator('.pj-foot').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().top + window.scrollY)));
-  const cols = await page.evaluate(() => getComputedStyle(document.querySelector('.pjs-grid')!).gridTemplateColumns.split(' ').length);
-  for (let i = 0; i + cols <= feet.length; i += cols) expect(new Set(feet.slice(i, i + cols)).size).toBe(1);
-
-  await page.getByRole('link', { name: 'Luxury Apartments in Sector 62' }).click();
-  await page.waitForURL(/\/project\/luxury-apartments-in-sector-62$/, { timeout: 40_000, waitUntil: 'commit' });
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Luxury Apartments in Sector 62');
-  await expect(page.locator('.ph-sheet')).toContainText('Apartments');
-  const note = page.getByText(/No apartments are listed in Sector 62 yet/);
-  if (await note.count()) await expect(page.getByRole('heading', { name: 'Homes like this elsewhere in Gurugram' })).toBeVisible();
-  await axe(page);
-  await page.locator('.ph-sheet').getByRole('link', { name: /Sector 62/ }).click();
-  await page.waitForURL(/\/locality\/sector-62-gurgaon$/, { timeout: 40_000, waitUntil: 'commit' });
-  await page.goBack();
-  await page.locator('.pj-others a').first().click();
-  await page.waitForURL(/\/project\/[a-z0-9-]+$/, { timeout: 40_000, waitUntil: 'commit' });
   await w.check();
 
   expect((await request.get('/project/no-such-project')).status()).toBe(404);

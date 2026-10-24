@@ -16,7 +16,7 @@ export const realEstateStructuredData = {
     alternateName: ['360 Ghar', '360Ghar.com', 'Three Sixty Ghar', '३६०घर', '360 Ghar Hindi'],
     legalName: '360 Ghar',
     inLanguage: ['en-IN', 'hi-IN'],
-    description: "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. We eliminate fake and misleading property listings in Gurugram with studio-quality 360° guided walkthroughs and physically verified property details. Buy, sell, or rent with zero upfront fees and AI-powered matching.",
+    description: '360Ghar is a real estate platform for property search in Gurugram, India.',
     url: 'https://360ghar.com',
     logo: {
       '@type': 'ImageObject',
@@ -29,8 +29,8 @@ export const realEstateStructuredData = {
     email: siteMetadata.organization.email,
     foundingDate: '2025',
     foundingLocation: 'Gurgaon, Haryana, India',
-    slogan: "India's VR-First Way to Find a Home.",
-    keywords: 'real estate Gurgaon, verified property, 360 virtual tour, VR real estate India, AI property search',
+    slogan: 'Property search in Gurugram.',
+    keywords: 'real estate Gurgaon, property listings, property search',
     areaServed: [
       { '@type': 'City', name: 'Gurgaon', alternateName: 'Gurugram' },
       { '@type': 'State', name: 'Haryana' },
@@ -67,16 +67,9 @@ export const realEstateStructuredData = {
       '@type': 'OfferCatalog',
       name: '360Ghar Real Estate Services',
       itemListElement: [
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Properties for Sale Gurugram', description: 'Browse verified flats, apartments & villas for sale in Gurugram with 360° virtual tours' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Properties for Rent Gurugram', description: 'Find verified rental flats and apartments in Gurugram with immersive 360° walkthroughs' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '360° VR Virtual Property Tours', description: 'Studio-quality 360-degree immersive virtual walkthroughs for every listed property' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Free Property Listing', description: 'Zero-cost property listing with professional photography and VR tour creation' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'AI Property Matching', description: 'AI-powered smart property recommendations based on buyer preferences' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dedicated Relationship Manager', description: 'Personal RM assigned to every buyer, tenant, and owner' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Property Documentation Support', description: 'End-to-end paperwork and legal documentation for property transactions' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'In-App Visit Scheduling', description: 'Schedule and manage property site visits directly through the 360Ghar app' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'AI Real Estate Assistant', description: 'Smart AI-powered assistant for property search, visit booking, and management through natural conversation' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'MCP Server Integration', description: 'Connect AI assistants like Claude and ChatGPT to 360Ghar via Model Context Protocol for seamless property services' } }
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Property listings for sale in Gurugram', description: 'Browse property listings for sale in Gurugram.' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Property listings for rent in Gurugram', description: 'Browse property listings for rent in Gurugram.' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '360° Virtual Property Tours', description: 'Some property listings include a 360° virtual tour.' } }
       ]
     }
   },
@@ -87,7 +80,7 @@ export const realEstateStructuredData = {
     name: '360Ghar',
     alternateName: '360 Ghar',
     url: 'https://360ghar.com',
-    description: "India's VR-First Way to Find a Home. India's first AI + VR real estate platform with verified properties in Gurugram and studio-quality 360° guided walkthroughs.",
+    description: 'Property listings and search in Gurugram, India.',
     inLanguage: ['en-IN', 'hi-IN'],
     potentialAction: {
       '@type': 'SearchAction',
@@ -103,7 +96,7 @@ export const realEstateStructuredData = {
   realEstateListing: {
     '@type': 'ItemList',
     name: 'Properties for Sale and Rent in Gurugram',
-    description: 'Verified properties by our on-site team with 360° virtual tours in prime Gurugram locations. End-to-end support by dedicated Relationship Managers.',
+    description: 'Property listings for sale and rent in Gurugram.',
     url: `${siteMetadata.siteUrl}/properties`
   },
 
@@ -158,220 +151,13 @@ export const realEstateStructuredData = {
     areaServed: 'Gurgaon, Haryana, India'
   },
 
-  // Enhanced FAQ schema for AI/LLM optimization with comprehensive real estate questions
-  faq: {
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is 360Ghar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: '360Ghar is India\'s first AI + VR real estate platform. All properties are verified by our on-site team. Our dedicated Relationship Manager handles your end-to-end flow so that you can relax and enjoy. We provide end-to-end visibility, convenience, and transparency for the same brokerage amount.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How can I list my property on 360Ghar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'You can list your property on 360Ghar by visiting the post-property page. There are no upfront listing fees for owners. Simply provide property details, upload photos, and our team will help with verification and adding 360° virtual tours for maximum visibility.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What types of properties are available in Gurugram?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: '360Ghar offers various property types in Gurugram including apartments, flats, builder floors, independent houses, commercial spaces, and PG accommodations in prime locations like DLF Phase, Golf Course Road, Sohna Road, Cyber City, Sector 29, MG Road, and more. All properties come with verified details and virtual tours.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Are all properties on 360Ghar verified?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, 360Ghar features verified properties with authentic photos, accurate details, exact locations, and 360° virtual tours to ensure transparency and authenticity. We verify each listing to provide you with reliable real estate information.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I search for properties in Gurugram?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Use our AI-enabled search to find properties in Gurugram by location, price range, property type, BHK, furnishing status, and amenities. Browse verified listings with 360° virtual tours and get end-to-end assistance from a dedicated Relationship Manager.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What are the advantages of 360° virtual tours?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: '360° virtual tours allow you to explore properties remotely from anywhere. Walk through rooms, check layouts, view amenities, and get a real feel of the property before scheduling a physical visit. This saves time and helps you make better real estate decisions.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How much does it cost to rent/buy property in Gurugram?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Property prices in Gurugram vary by location and type. Luxury apartments in Golf Course Road start from ₹2-5 lakhs/month for rent and ₹2-10 crores for purchase. Affordable options in Sohna Road range from ₹15,000-50,000/month for rent. Check our platform for current market rates and verified listings.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Are there PG options available in Gurugram?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, 360Ghar offers verified PG accommodations in Gurugram with options for working professionals and students. PGs are available in prime locations with amenities like WiFi, meals, housekeeping, and security. Prices typically range from ₹8,000-25,000 per month including facilities.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What are the best areas to live in Gurugram?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Top areas in Gurugram include DLF Phase 1-5, Golf Course Road, Sohna Road, Cyber City, Sector 29, MG Road, and Nirvana Country. Each area offers different price points and amenities. DLF Phase offers luxury living, Golf Course Road has premium malls and restaurants, while Sohna Road provides more affordable options.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I schedule a property visit?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Schedule instant visits through our platform. Use our 360° virtual tours first to shortlist properties, then our Relationship Manager will coordinate physical visits at your convenience and handle the entire process.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What makes 360Ghar India\'s first AI + VR real estate platform?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: '360Ghar leverages AI technology to power smart property search, personalized recommendations, and immersive 360° virtual tours. We combine this technology with on-site verification and human expertise (Relationship Managers) to offer a seamless, transparent experience.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How are properties verified by on-site team at 360Ghar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Our on-site verification team personally visits each property to verify ownership documents, confirm exact location, check amenities, and capture authentic photos and 360° virtual tours. This ensures every listing on 360Ghar is genuine and trustworthy.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What does the Relationship Manager service include at 360Ghar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Your dedicated Relationship Manager handles your entire property journey from end-to-end. They assist with shortlisting, scheduling visits, negotiations, documentation, and handover. They ensure you get value for your money, with full visibility and transparency throughout the process.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Why should I choose 360Ghar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Customers often feel they pay huge brokerage without getting value. At 360Ghar, for the same brokerage amount, we provide end-to-end visibility, convenience, and transparency. You get AI-enabled search, 360° virtual tours, properties verified by our on-site team, and a dedicated Relationship Manager to handle everything so you can relax.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How do 360° virtual tours work on 360Ghar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Our 360° virtual tours let you explore properties online as if you were there in person. You can navigate through rooms, zoom in on details, check layouts, view amenities, and understand the space before scheduling visits. This saves time and helps you make confident decisions.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Does 360Ghar offer property management features for landlords?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, 360Ghar provides a complete property management platform for landlords. Features include financial dashboards for tracking rent and expenses, tenant management tools, maintenance request tracking, secure document storage, and automated financial reports. All accessible through our mobile app.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How can I track rent collection on 360Ghar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: "360Ghar's financial dashboard gives you real-time visibility into rent collection. Track outstanding payments, view payment history, generate invoices, and get notifications for due dates."
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What is 360Ghar\'s AI Agent?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: "360Ghar's AI Agent is an intelligent assistant powered by our MCP server that helps you find properties, book visits, and manage rentals through natural conversation. Connect it to Claude, ChatGPT, or any AI assistant to access all 360Ghar services via chat."
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I connect my AI assistant to 360Ghar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: "Visit the MCP login page on 360Ghar and authenticate your account. Once connected, your AI assistant will have access to search properties, schedule visits, and manage your rentals. The connection persists until you revoke access."
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Which AI assistants can connect to 360Ghar via MCP?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: "Our MCP server is compatible with any AI assistant that supports the Model Context Protocol, including Claude (via Claude Desktop), ChatGPT, and custom AI implementations. The MCP server URL is https://api.360ghar.com/mcp"
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Can the AI help me manage rental properties?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: "Yes! Landlords can use the AI assistant to track rent collection, manage tenants, handle maintenance requests, and access property documents. Just ask: \"Show me this month's rent status\" or \"List all maintenance requests\"."
-        }
-      },
-      {
-        '@type': 'Question',
-        name: '360Ghar kya hai?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: '360Ghar India ka pehla AI aur Virtual Tour-first real estate platform hai. Yahan sabhi properties humare on-site team dwara verify ki jaati hain. Aapko milta hai dedicated Relationship Manager jo aapki poori journey handle karta hai — property search se lekar final handover tak. Same brokerage mein end-to-end visibility aur transparency.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Gurgaon mein flat kaise khariden?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: '360Ghar par Gurgaon ke verified flats browse karein. AI-powered search se apni budget aur requirement ke hisaab se filter karein. Har listing mein 360° virtual tour available hai. Apna dedicated Relationship Manager shortlisting, site visits, negotiations, aur documentation mein help karta hai. Koi hidden charges nahi.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'क्या 360Ghar पर सभी प्रॉपर्टी verified हैं?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'हाँ, 360Ghar पर हर प्रॉपर्टी हमारी on-site team द्वारा physically verify की जाती है। हम ownership documents, exact location, authentic photos, और 360° virtual tour verify करते हैं। कोई fake listing नहीं, कोई outdated inventory नहीं।'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Gurugram mein kiraye par flat kaise milega?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: '360Ghar par Gurugram ke verified rental flats search karein — DLF Phase, Golf Course Road, Sohna Road, Sector 56 jaise prime areas mein. Budget, BHK, aur amenity filters use karein. Har listing mein 360° virtual tour hai taaki aap ghar baithke property explore kar sakein. Relationship Manager agreement aur handover mein help karta hai.'
-        }
-      }
-    ]
-  },
-
   // Knowledge Panel data for AI/LLM responses
   knowledgePanel: {
     '@type': 'Organization',
     '@id': siteMetadata.siteUrl,
     name: siteMetadata.siteName,
     alternateName: ['360Ghar', '360 Ghar', '360Ghar Real Estate'],
-    description: siteMetadata.defaultDescription,
+    description: 'Property search in Gurugram, India.',
     url: siteMetadata.siteUrl,
     logo: siteMetadata.defaultOgImage,
     image: siteMetadata.defaultOgImage,
@@ -398,7 +184,7 @@ export const realEstateStructuredData = {
           itemOffered: {
             '@type': 'Service',
             name: 'Property Buying Assistance',
-            description: 'Help buyers find verified properties in Gurugram with virtual tours'
+            description: 'Browse property listings for sale in Gurugram.'
           }
         },
         {
@@ -406,7 +192,7 @@ export const realEstateStructuredData = {
           itemOffered: {
             '@type': 'Service',
             name: 'Property Rental Services',
-            description: 'Find rental properties and PG accommodations in Gurugram'
+            description: 'Browse property listings for rent and PG accommodations in Gurugram.'
           }
         },
         {
@@ -414,7 +200,7 @@ export const realEstateStructuredData = {
           itemOffered: {
             '@type': 'Service',
             name: 'Property Listing Service',
-            description: 'List properties for free with 360° virtual tours'
+            description: 'Property listing services in Gurugram.'
           }
         }
       ]
@@ -433,7 +219,7 @@ export const realEstateStructuredData = {
       'किराये पर मकान',
       'Flat rent Gurgaon',
       'DLF Gurgaon real estate',
-      'Verified property India'
+      'Property listings India'
     ]
   },
 
@@ -449,14 +235,14 @@ export const realEstateStructuredData = {
       price: '0',
       priceCurrency: 'INR'
     },
-    description: 'Complete property management for landlords and AI-powered property search. Manage rent, tenants, maintenance, and documents.',
+    description: 'Property search and management tools for Android.',
     featureList: [
       'Financial Dashboard',
       'Tenant Management',
       'Maintenance Tracking',
       'Document Vault',
       'AI Property Search',
-      '360 Virtual Tours',
+      '360° Virtual Tours on supported listings',
       'Visit Scheduling'
     ],
     downloadUrl: 'https://play.google.com/store/apps/details?id=com.the360ghar.ghar360',
@@ -476,7 +262,7 @@ export const realEstateStructuredData = {
       name: '360Ghar',
       url: 'https://360ghar.com'
     },
-    description: authors['saksham-mittal'].bio,
+    description: 'Saksham Mittal is the founder and CEO of 360Ghar. He leads product strategy and technology.',
     url: authors['saksham-mittal'].linkedin,
     image: `https://360ghar.com${authors['saksham-mittal'].image}`,
     sameAs: [
@@ -1006,7 +792,7 @@ export const generatePersonStructuredData = ({ name, jobTitle, image, bio, linke
     name: '360Ghar',
     url: 'https://360ghar.com',
   },
-  description: bio || `Key team member at 360Ghar, India's first AI + VR real estate platform.`,
+  description: bio || 'Team member at 360Ghar.',
   url: 'https://360ghar.com/about-us',
   image: image || 'https://360ghar.com/team/member.jpg',
   sameAs: [

@@ -110,6 +110,26 @@ describe('thin localities (owner decision 2026-09-29)', () => {
   }, 30_000); // walks all 3,215 rows: close to the 5 s default on a busy machine
 });
 
+describe('locality evidence freshness', () => {
+  it('does not use the shared lastVerifiedAt field as freshness or provenance', () => {
+    for (const f of [
+      'src/features/localities/LocalityPage.astro',
+      'src/pages/locality/[slug].astro',
+      'src/features/feeds/data.ts',
+      'src/pages/rss/[feed].xml.ts',
+    ]) {
+      expect(readFileSync(f, 'utf8'), f).not.toContain('lastVerifiedAt');
+    }
+  });
+
+  it('keeps source-backed generated dates for locality provenance and structured data', () => {
+    const page = readFileSync('src/features/localities/LocalityPage.astro', 'utf8');
+    const route = readFileSync('src/pages/locality/[slug].astro', 'utf8');
+    expect(page).toContain('<Provenance date={generated.date} sources={generated.sources} />');
+    expect(route).toContain('...(generated ? { dateModified: generated.date } : {})');
+  });
+});
+
 describe('lists and links use LISTED_LOCALITIES', () => {
   const walk = (dir: string): string[] => readdirSync(dir).flatMap((n) => (statSync(join(dir, n)).isDirectory() ? walk(join(dir, n)) : [join(dir, n)]));
   const sources = walk('src').filter((f) => /\.(ts|tsx|astro)$/.test(f) && !/\.test\./.test(f));
@@ -120,7 +140,7 @@ describe('lists and links use LISTED_LOCALITIES', () => {
   });
 
   it('the pages that read the directory, city hub, sitemap, RSS and place lists use the listed rows', () => {
-    for (const f of ['src/features/localities/DirectoryPage.astro', 'src/features/landing/CityHub.astro', 'src/features/feeds/data.ts', 'src/pages/rss/[feed].xml.ts', 'src/features/localities/live.ts', 'src/features/projects/ProjectPage.astro']) {
+    for (const f of ['src/features/localities/DirectoryPage.astro', 'src/features/landing/CityHub.astro', 'src/features/feeds/data.ts', 'src/pages/rss/[feed].xml.ts', 'src/features/localities/live.ts']) {
       expect(readFileSync(f, 'utf8'), f).toContain('LISTED_LOCALITIES');
     }
   });

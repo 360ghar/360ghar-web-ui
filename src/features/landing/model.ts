@@ -54,7 +54,6 @@ export function parseLanding(city: string, intent: string, type: string): Landin
   if (!t) return null;
   return { city, cityName: c.name, intent: i, typeSegment: type, type: t, path: `/${city}/${i}/${type}` };
 }
-
 export type Facet = { kind: 'bhk'; bhk: number } | { kind: 'budget'; key: string } | { kind: 'amenity'; slug: string; title: string };
 
 export function parseBhk(seg: string): number | null {
@@ -113,7 +112,7 @@ export function budgetLabel(key: string, hi = false): string {
   return map[key]?.[hi ? 1 : 0] ?? key;
 }
 
-/* ---------- Live numbers and price bands for the landing header and chart ---------- */
+/* ---------- Live numbers for the landing header and chart ---------- */
 
 type Priced = { purpose: string; base_price: number; monthly_rent?: number | null; daily_rate?: number | null; area_sqft?: number | null; price_per_sqft?: number | null; locality?: string | null };
 
@@ -159,24 +158,4 @@ export function landingStats(homes: Priced[]) {
     medianRate: median(rates),
     localities,
   };
-}
-
-const UNIT: Record<string, number> = { k: 1e3, l: 1e5, cr: 1e7 };
-
-/**
- * A band from `landingTypeContext.json` in rupees: "65L-1.2Cr" -> [6.5e6, 1.2e7],
- * "1.5-3.5Cr" -> [1.5e7, 3.5e7], "3.5Cr+" -> [3.5e7, null], "10K-25K/mo" -> [1e4, 2.5e4].
- * A number without a unit takes the unit of the other end. Returns null if unreadable.
- */
-export function parseBand(range: string): [number, number | null] | null {
-  const m = range
-    .toLowerCase()
-    .replace(/\/mo(nth)?|\s/g, '')
-    .match(/^([\d.]+)(k|l|cr)?(?:-([\d.]+)(k|l|cr)?|(\+))$/);
-  if (!m) return null;
-  const [, a, ua, b, ub, plus] = m;
-  const lo = Number(a) * UNIT[ua ?? ub ?? '']!;
-  if (plus) return Number.isFinite(lo) ? [lo, null] : null;
-  const hi = Number(b) * UNIT[ub ?? ua ?? '']!;
-  return Number.isFinite(lo) && Number.isFinite(hi) && hi > lo ? [lo, hi] : null;
 }

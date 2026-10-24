@@ -48,6 +48,8 @@ export function ForgetLocation({ locale, className = 'btn btn-quiet' }: { locale
     <button
       type="button"
       className={className}
+      // The label is hidden at the widest hero search, so the name is explicit.
+      aria-label={c.forget}
       onClick={() => {
         clear();
         setDone(true);
@@ -55,7 +57,7 @@ export function ForgetLocation({ locale, className = 'btn btn-quiet' }: { locale
       }}
     >
       <Icon name="close" size={16} />
-      {c.forget}
+      <span>{c.forget}</span>
     </button>
   );
 }

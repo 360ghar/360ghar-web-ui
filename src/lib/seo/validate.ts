@@ -52,7 +52,12 @@ const NOT_SCHEMA_ORG: Record<string, string> = {
 };
 
 const URL_PROPS = ['url', 'image', 'thumbnailUrl', 'downloadUrl', 'installUrl', 'contentUrl', 'embedUrl'];
-const DATE_PROPS = ['startDate', 'endDate', 'datePublished', 'dateModified', 'uploadDate', 'datePosted', 'validThrough'];
+const DATE_PROPS = ['startDate', 'endDate', 'datePublished', 'dateModified', 'dateCreated', 'uploadDate', 'datePosted', 'validThrough'];
+/**
+ * DateTime properties that must carry a timezone. Search Console reported both "missing a timezone"
+ * and "Invalid datetime value" for a date-only `dateCreated` on an Answer, so it is checked here.
+ */
+const DATE_TIME_PROPS = ['dateCreated'];
 
 const isObj = (v: unknown): v is Obj => !!v && typeof v === 'object' && !Array.isArray(v);
 const typesOf = (s: Obj): string[] => (Array.isArray(s['@type']) ? (s['@type'] as string[]) : [String(s['@type'])]);
@@ -137,6 +142,12 @@ export function validateSchema(schema: unknown, name = 'schema', top = false, ne
   }
   for (const prop of DATE_PROPS) {
     if (schema[prop] && Number.isNaN(new Date(String(schema[prop])).getTime())) err(`Invalid date format for "${prop}": ${String(schema[prop])}`, `${name}.${prop}`);
+  }
+  for (const prop of DATE_TIME_PROPS) {
+    // A date-only value parses fine but carries no timezone, so Google rejects it as a DateTime.
+    if (typeof schema[prop] === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(schema[prop])) {
+      warn(`"${prop}" is a date with no timezone: use ISO 8601 with an offset (${schema[prop]}T00:00:00+05:30)`, `${name}.${prop}`);
+    }
   }
   if (schema.price != null && (Number.isNaN(Number(schema.price)) || Number(schema.price) < 0)) err(`Invalid price value: ${String(schema.price)}`, `${name}.price`);
   if (schema.ratingValue != null) {

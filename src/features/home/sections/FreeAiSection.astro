@@ -1,10 +1,8 @@
 ---
 /**
- * The free AI tools. The signature is one real before/after pair: an empty
- * handed-over flat, and the same room redesigned by Agnes AI image-to-image
- * (the same call AI Design Studio makes). Drag or arrow-key the slider to
- * compare. Without script both halves still show at 50%.
- * Below: the three free tools as plain text links on one grid.
+ * Home property tools. The before/after is labeled as a design example in the
+ * visible copy; the slider only compares those two images. The links below
+ * point to the tools without promising access terms or typical results.
  */
 import type { Locale } from '@/lib/i18n/locale';
 import { localizer } from '@/lib/i18n/locale';
@@ -16,29 +14,29 @@ const L = localizer(locale);
 
 const COPY = {
   en: {
-    title: 'Your empty flat, furnished in half a minute.',
-    lead: 'All 360Ghar AI tools are free. No sign-up, no credits, no card.',
-    by: 'Made with 360Ghar AI models.',
-    before: 'Empty flat',
-    after: 'AI redesign',
-    slider: 'Show more of the empty flat or the AI redesign',
+    title: 'Explore property tools',
+    lead: 'Check each tool’s current inputs, limits and access terms before use.',
+    by: 'Results can be incomplete and are not professional advice.',
+    before: 'Starting room',
+    after: 'Design example',
+    slider: 'Compare the starting room with the design example',
     tools: [
-      { name: 'AI Design Studio', note: 'Upload a room photo or describe a room. Pick from 12 styles.', cta: 'Design a room', href: '/ai-design-studio' },
-      { name: 'Vastu checker', note: 'Upload a floor plan. Get a score out of 10 and room-by-room fixes.', cta: 'Check a plan', href: '/vastu-checker' },
-      { name: 'Ask 360Ghar', note: 'Ask for homes in plain words, in English or Hindi. It searches live listings.', cta: 'Start a chat', chat: true },
+      { name: 'AI Design Studio', note: 'Explore room-design concepts from a photo or prompt. Review input limits before uploading.', cta: 'Open the tool', href: '/ai-design-studio' },
+      { name: 'Vastu checker', note: 'Compare a floor plan with the tool’s Vastu rules. Results are not structural or safety advice.', cta: 'Open the tool', href: '/vastu-checker' },
+      { name: 'Ask 360Ghar', note: 'Ask about property search. A response does not verify property details or availability; confirm both with the listing party.', cta: 'Open chat', chat: true },
     ],
   },
   hi: {
-    title: 'खाली फ़्लैट, आधे मिनट में सजा हुआ।',
-    lead: '360Ghar के सभी AI टूल मुफ़्त हैं। साइन-अप नहीं, क्रेडिट नहीं, कार्ड नहीं।',
-    by: '360Ghar AI मॉडल से बना।',
-    before: 'खाली फ़्लैट',
-    after: 'AI डिज़ाइन',
-    slider: 'खाली फ़्लैट या AI डिज़ाइन ज़्यादा दिखाएँ',
+    title: 'प्रॉपर्टी टूल देखें',
+    lead: 'हर टूल के इनपुट, सीमाएँ और उपयोग की शर्तें चलाने से पहले देखें।',
+    by: 'नतीजे अधूरे हो सकते हैं; ये पेशेवर सलाह नहीं हैं।',
+    before: 'शुरुआती कमरा',
+    after: 'डिज़ाइन उदाहरण',
+    slider: 'शुरुआती कमरे और डिज़ाइन उदाहरण की तुलना करें',
     tools: [
-      { name: 'AI डिज़ाइन स्टूडियो', note: 'कमरे की फ़ोटो डालें या कमरे का वर्णन लिखें। 12 स्टाइल में से चुनें।', cta: 'कमरा डिज़ाइन करें', href: '/ai-design-studio' },
-      { name: 'वास्तु चेकर', note: 'फ़्लोर प्लान डालें। 10 में से स्कोर और कमरे-दर-कमरे उपाय पाएँ।', cta: 'प्लान जाँचें', href: '/vastu-checker' },
-      { name: '360Ghar से पूछें', note: 'आसान शब्दों में, हिंदी या अंग्रेज़ी में घर पूछें। यह लाइव लिस्टिंग खोजता है।', cta: 'चैट शुरू करें', chat: true },
+      { name: 'AI डिज़ाइन स्टूडियो', note: 'फ़ोटो या प्रॉम्प्ट से कमरे के डिज़ाइन विकल्प देखें। अपलोड से पहले इनपुट की सीमाएँ पढ़ें।', cta: 'टूल खोलें', href: '/ai-design-studio' },
+      { name: 'वास्तु चेकर', note: 'टूल के वास्तु नियमों से फ़्लोर प्लान देखें। नतीजे संरचना या सुरक्षा की सलाह नहीं हैं।', cta: 'टूल खोलें', href: '/vastu-checker' },
+      { name: '360Ghar से पूछें', note: 'प्रॉपर्टी खोज के बारे में पूछें। जवाब प्रॉपर्टी या उपलब्धता की पुष्टि नहीं करता; लिस्टिंग देने वाले से जाँचें।', cta: 'चैट खोलें', chat: true },
     ],
   },
 }[locale];

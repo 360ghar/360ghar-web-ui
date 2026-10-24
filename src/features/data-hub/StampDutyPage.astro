@@ -1,91 +1,37 @@
 ---
-/** /stamp-duty-calculator: calculator island (with the state table) and the Haryana rates. */
-import { getT } from '@/i18n';
+/** /stamp-duty-calculator: unavailable until an official schedule is verified. */
 import type { Locale } from '@/lib/i18n/locale';
-import { generateToolSchema, toolSchemas } from '@/lib/seo/legacy/toolSchemas.js';
-import { FAQ, STEPS } from './content';
 import DataHubPage from './DataHubPage.astro';
 import { hubName } from './pages';
 import StampDuty from './StampDuty';
-import { text } from './text';
 
-type Props = { locale: Locale; sectors: string[] };
-const { locale, sectors } = Astro.props;
-const t = text(locale);
-const tt = getT(locale);
-const hi = locale === 'hi';
-const rates = [
-  ['male', 7],
-  ['female', 5],
-  ['joint', 6],
-] as const;
-const steps = hi
-  ? [
-      'इस कैलकुलेटर से स्टैंप ड्यूटी और रजिस्ट्रेशन फ़ीस निकालें।',
-      'SHCIL पोर्टल (shcilestamp.com) पर ई-स्टैंप पेपर खरीदें। नेट बैंकिंग, कार्ड या UPI से भुगतान करें।',
-      'ई-स्टैंप पेपर, सेल डीड, प्रॉपर्टी के मूल कागज़, आधार, PAN और फ़ोटो लेकर सब-रजिस्ट्रार ऑफ़िस जाएँ। खरीदार और विक्रेता (या उनके पावर ऑफ़ अटॉर्नी धारक) और दो गवाह साथ हों।',
-      'उँगलियों के निशान और फ़ोटो दें, और सब-रजिस्ट्रार के सामने डीड पर हस्ताक्षर करें।',
-      'रजिस्टर्ड डीड लें। इसमें आमतौर पर 7 से 15 कामकाजी दिन लगते हैं।',
-    ]
-  : [
-      'Work out the stamp duty and the registration fee with this calculator.',
-      'Buy e-stamp paper on the SHCIL portal (shcilestamp.com). Pay by net banking, card or UPI.',
-      'Go to the Sub-Registrar office with the e-stamp paper, the sale deed, the original property papers, Aadhaar, PAN and photos. The buyer and the seller (or their power of attorney holders) and two witnesses must attend.',
-      'Give your fingerprints and photo, and sign the deed in front of the Sub-Registrar.',
-      'Collect the registered deed. This usually takes 7 to 15 working days.',
-    ];
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const copy =
+  locale === 'hi'
+    ? {
+        title: 'स्टैंप ड्यूटी का अनुमान उपलब्ध नहीं',
+        description: 'आधिकारिक दर-सूची और लागू होने की तारीख सत्यापित होने तक यह जानकारी उपलब्ध नहीं है।',
+        keywords: 'स्टैंप ड्यूटी जानकारी',
+      }
+    : {
+        title: 'Stamp duty estimate unavailable',
+        description: 'This information is unavailable until an official schedule and effective date are verified.',
+        keywords: 'stamp duty information',
+      };
 ---
 
 <DataHubPage
   art="stampDuty"
-  title={tt('seo:stampDuty.title')}
-  description={tt('seo:stampDuty.description')}
-  keywords="Haryana stamp duty calculator, Gurugram property registration charges, DLC rate stamp duty, stamp duty female buyer Haryana, property registration cost Gurgaon"
+  title={copy.title}
+  description={copy.description}
+  keywords={copy.keywords}
   path="/stamp-duty-calculator"
-  heading={hi ? 'हरियाणा स्टैंप ड्यूटी कैलकुलेटर' : 'Haryana stamp duty calculator'}
-  lead={tt('data-hub:stampDuty.description')}
+  noindex
+  heading={copy.title}
+  lead={copy.description}
   crumbs={[{ name: hubName('stampDuty', locale), path: '/stamp-duty-calculator' }]}
-  faqs={FAQ.stampDuty}
-  howTo={{
-    name: 'How to Calculate Stamp Duty in Haryana',
-    description: 'Calculate stamp duty and registration charges for property registration in Gurugram, Haryana based on buyer type and property value.',
-    steps: STEPS.stampDuty,
-  }}
-  jsonLd={[generateToolSchema(toolSchemas.stampDutyCalculator)]}
   related={['circleRates', 'zones', 'ownership', 'auctions']}
 >
-  {/* The header already carries the stamp scene, so the empty result stays plain here. */}
-  <StampDuty client:load locale={locale} sectors={sectors} states />
-
-  <section class="dh-section" aria-labelledby="sd-rates">
-    <h2 id="sd-rates" class="dh-h2">{t.sdRates}</h2>
-    <div class="sheet dh-sheet mt-4 max-w-xl">
-      <table class="dh-table">
-        <thead>
-          <tr>
-            <th scope="col">{tt('data-hub:stampDuty.tableHeaders.buyerType')}</th>
-            <th scope="col" class="num">{tt('data-hub:stampDuty.tableHeaders.stampDuty')}</th>
-            <th scope="col" class="num">{tt('data-hub:stampDuty.tableHeaders.regFee')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            rates.map(([b, r]) => (
-              <tr>
-                <td>{t.buyers[b]}</td>
-                <td class="num">{r}%</td>
-                <td class="num">1%</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-    <p class="dh-meta mt-3">{tt('data-hub:stampDuty.source')}</p>
-  </section>
-
-  <div slot="prose">
-    <h2>{t.sdSteps}</h2>
-    <ol>{steps.map((s) => <li>{s}</li>)}</ol>
-  </div>
+  <StampDuty client:load locale={locale} />
 </DataHubPage>

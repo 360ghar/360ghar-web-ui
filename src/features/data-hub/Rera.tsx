@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState, type SyntheticEvent } from 'react';
 import { describeError } from '@/lib/api/errors';
 import { formatNum } from '@/lib/format';
+import { localizePath } from '@/lib/i18n/locale';
 import type { ReraProjectPage } from '@/features/data-hub/api';
 import type { Locale } from '@/lib/i18n/locale';
 import { Icon } from '@/ui/icons/Icon';
@@ -58,7 +59,12 @@ function Projects({ locale, initialFilters, initialPage }: ListProps) {
           {items.map((p) => (
             <li key={p.id}>
               <div className="dh-row-head">
-                <h3 className="dh-row-title">{p.project_name}</h3>
+                {/* The slug is the public URL key of the project-intelligence page.
+                    A row whose filing named no project name has none, and that page
+                    would 404, so the title stays plain text for those rows. */}
+                <h3 className="dh-row-title">
+                  {p.slug ? <a href={localizePath(`/project/${p.slug}`, locale)}>{p.project_name}</a> : p.project_name}
+                </h3>
                 <Status value={p.status} locale={locale} />
               </div>
               <p className="dh-row-sub">{[p.developer_name, p.location, p.project_type ? label(t.types, p.project_type) : null].filter(Boolean).join(' · ')}</p>

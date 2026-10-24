@@ -1,12 +1,9 @@
 ---
-import { circleSectors, safe } from '@/features/data-hub/api';
 import StampDutyPage from '@/features/data-hub/StampDutyPage.astro';
 
 export const prerender = true;
 
 const locale = Astro.locals.locale;
-// Build time: the sector list is optional; without it the calculator still works.
-const sectors = (await safe(circleSectors)).data ?? [];
 ---
 
-<StampDutyPage locale={locale} sectors={sectors} />
+<StampDutyPage locale={locale} />

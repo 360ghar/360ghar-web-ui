@@ -1,203 +1,29 @@
 ---
-/** /gurugram-real-estate-guide. Copy from i18n `policies:gurugramGuide.*` (en + hi); the price table is the old hard-coded one. */
-import { getT } from '@/i18n';
 import Content from '@/layouts/Content.astro';
-import { localizer, byLocale } from '@/lib/i18n/locale';
-import Icon from '@/ui/icons/Icon.astro';
-import Paper from '@/ui/Paper.astro';
-import { splitLabel } from '@/features/content/shared/label';
-import { article, trail } from '@/features/content/shared/schema';
-import TableScroll from '@/features/content/shared/TableScroll.astro';
-import PageArt from '@/features/content/shared/PageArt.astro';
-import type { VignetteTheme } from '@/lib/paper/vignettes';
-import PaperVignette from '@/ui/paper/PaperVignette.astro';
+import { byLocale, localizer } from '@/lib/i18n/locale';
 
 const locale = Astro.locals.locale;
-const t = getT(locale);
-const g = (k: string) => t(`policies:gurugramGuide.${k}`);
 const L = localizer(locale);
-const PATH = '/gurugram-real-estate-guide';
-
-const list = (keys: string[]) => keys.map((k) => splitLabel(g(k)));
-const advantages = list(['advantageLocation', 'advantageEconomy', 'advantageInfra', 'advantageRoi', 'advantageLifestyle']);
-const trends = list(['trendDemand', 'trendAffordable', 'trendVirtual', 'trendGreen', 'trendColiving']);
-const invest = list(['investUnderConstruction', 'investRentalYield', 'investAppreciation', 'investCommercial', 'investLandBanking']);
-const N = byLocale(locale, {
+const path = '/gurugram-real-estate-guide';
+const copy = byLocale(locale, {
   en: {
-    estimate: "These ranges are estimates from 2024, not live 360Ghar data. See today's asking prices on the listings, and government rates on the circle rates page.",
-    help: 'Our team visits every home we list and records a 360° walkthrough, so you can shortlist from home. Owners list for free.',
-    rates: 'See circle rates',
+    title: 'Gurugram real estate guide under review | 360Ghar',
+    description: 'Market prices, trends and service claims are withheld while their sources, evidence dates and reuse terms are reviewed.',
+    heading: 'Gurugram market guide under review',
+    notice: 'Price ranges, market trends and service claims from this guide are withheld until their sources and dates can be checked. This page does not provide investment, legal or tax advice.',
+    browse: 'Browse property listings',
   },
   hi: {
-    estimate: 'ये दायरे 2024 के अनुमान हैं, 360Ghar का लाइव डेटा नहीं। आज की कीमतें लिस्टिंग में देखें, और सरकारी रेट सर्कल रेट पेज पर।',
-    help: 'हम जो भी घर लिस्ट करते हैं, हमारी टीम वहाँ जाकर 360° वॉकथ्रू बनाती है, ताकि आप घर बैठे शॉर्टलिस्ट कर सकें। मालिक मुफ़्त में लिस्ट करते हैं।',
-    rates: 'सर्कल रेट देखें',
+    title: 'गुरुग्राम रियल एस्टेट गाइड समीक्षा के अधीन | 360Ghar',
+    description: 'स्रोत, साक्ष्य की तारीख और उपयोग की शर्तों की समीक्षा तक बाज़ार कीमतें, रुझान और सेवा संबंधी दावे रोके गए हैं।',
+    heading: 'गुरुग्राम बाज़ार गाइड की समीक्षा जारी',
+    notice: 'इस गाइड की कीमतें, बाज़ार रुझान और सेवा संबंधी दावे तब तक रोके गए हैं, जब तक उनके स्रोत और तारीख जाँचे न जाएँ। यह पेज निवेश, क़ानूनी या टैक्स सलाह नहीं देता।',
+    browse: 'प्रॉपर्टी लिस्टिंग देखें',
   },
 });
-const THEMES: VignetteTheme[] = ['society', 'tower', 'home', 'office'];
-const places = [
-  ['dlfTitle', 'dlfDesc'],
-  ['golfCourseTitle', 'golfCourseDesc'],
-  ['sohnaTitle', 'sohnaDesc'],
-  ['cyberCityTitle', 'cyberCityDesc'],
-].map(([a, b]) => ({ title: g(a!), body: g(b!) }));
-const prices = [
-  ['DLF Phase', '₹2-4 Cr', '₹4-8 Cr', '₹45,000-85,000', '₹75,000-1.5L'],
-  ['Golf Course Road', '₹3-6 Cr', '₹6-12 Cr', '₹60,000-1.2L', '₹1-2.5L'],
-  ['Sohna Road', '₹50L-1.5 Cr', '₹80L-3 Cr', '₹15,000-45,000', '₹25,000-75,000'],
-  ['Cyber City', '₹1.5-3 Cr', '₹2.5-6 Cr', '₹35,000-70,000', '₹55,000-1.2L'],
-];
-
-const { crumbs, ld } = trail(locale, [{ name: g('breadcrumbCurrent'), path: PATH }]);
-const jsonLd = [ld, article({ headline: g('pageTitle'), description: g('seoDescription'), path: PATH, locale, published: '2024-01-01' })];
 ---
 
-<Content
-  title={g('seoTitle')}
-  description={g('seoDescription')}
-  keywords={g('seoKeywords')}
-  path={PATH}
-  type="article"
-  article={{ published: '2024-01-01', section: 'Guides' }}
-  heading={g('pageTitle')}
-  lead={g('pageDesc')}
-  crumbs={crumbs}
-  jsonLd={jsonLd}
-  newsletter
->
-  <PageArt slot="head" scene="flyover" seed="gurugram-guide" />
-  <h2>{g('whyInvestTitle')}</h2>
-  <p>{g('whyInvestDesc')}</p>
-  <h3>{g('keyAdvantages').replace(/:$/, '')}</h3>
-  <ul>{advantages.map((a) => <li>{a.label && <strong>{a.label}: </strong>}{a.text}</li>)}</ul>
-
-  <h2>{g('topLocations')}</h2>
-  <div class="gg-places">
-    {
-      places.map((p, i) => (
-        <section class="gg-place">
-          <div class="gg-place-art">
-            <PaperVignette theme={THEMES[i] ?? 'home'} seed={`gg-${i}`} />
-          </div>
-          <div>
-            <h3>{p.title}</h3>
-            <p>{p.body}</p>
-          </div>
-        </section>
-      ))
-    }
-  </div>
-
-  <div class="gg-prices">
-  <Paper seed="gg-prices" tone="mist-50" depth={2} innerClass="gg-prices-inner">
-    <h2 class="gg-prices-title">{g('priceTitle')}</h2>
-    <TableScroll label={g('priceTitle')}>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">{g('thLocation')}</th>
-            <th scope="col">{g('th2bhkBuy')}</th>
-            <th scope="col">{g('th3bhkBuy')}</th>
-            <th scope="col">{g('th2bhkRent')}</th>
-            <th scope="col">{g('th3bhkRent')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            prices.map(([place, ...cells]) => (
-              <tr>
-                <th scope="row">{place}</th>
-                {cells.map((c) => (
-                  <td class="tabular">{c}</td>
-                ))}
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </TableScroll>
-    <p class="gg-note">
-      {N.estimate}{' '}
-      <a href={L('/circle-rates')}>{N.rates}</a>
-    </p>
-  </Paper>
-  </div>
-
-  <h2>{g('marketTrends')}</h2>
-  <ul>{trends.map((a) => <li>{a.label && <strong>{a.label}: </strong>}{a.text}</li>)}</ul>
-
-  <h2>{g('investmentTitle')}</h2>
-  <p>{g('investmentDesc')}</p>
-  <ul>{invest.map((a) => <li>{a.label && <strong>{a.label}: </strong>}{a.text}</li>)}</ul>
-
-  <h2>{g('howHelpTitle')}</h2>
-  <p>{N.help}</p>
-
-  <div class="page-actions">
-    <a class="btn btn-primary btn-lg" href={L('/properties')}>
-      {g('browseProperties')}
-      <Icon name="arrow-up-right" size={18} class="arrow" />
-    </a>
-    <a class="link" href={L('/post-property')}>{g('listYourProperty')}</a>
-  </div>
+<Content title={copy.title} description={copy.description} path={path} noindex heading={copy.heading} lead={copy.notice}>
+  <p>{copy.notice}</p>
+  <a class="btn btn-primary" href={L('/properties')}>{copy.browse}</a>
 </Content>
-
-<style>
-  .gg-places {
-    display: grid;
-    gap: 0 2rem;
-  }
-
-  @media (min-width: 48rem) {
-    .gg-places {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  .gg-place {
-    display: grid;
-    gap: 0.75rem 1.25rem;
-    align-content: start;
-    margin-top: 1.25rem;
-  }
-
-  .gg-place-art {
-    width: 8.5rem;
-  }
-
-  .gg-places .gg-place h3 {
-    margin-top: 0;
-  }
-
-  .gg-note {
-    margin-top: 1rem;
-    font-size: 0.875rem;
-    color: var(--color-ink-800);
-  }
-
-  .gg-prices {
-    margin-top: 2.5rem;
-  }
-
-  .gg-prices :global(.gg-prices-inner) {
-    padding: clamp(1.25rem, 3vw, 2rem);
-  }
-
-  .gg-prices .gg-prices-title {
-    margin-top: 0;
-  }
-
-  .gg-prices table {
-    margin-top: 1rem;
-    background: var(--color-paper);
-  }
-
-  .gg-prices th[scope='row'] {
-    background: transparent;
-    white-space: nowrap;
-  }
-
-  .gg-prices td {
-    white-space: nowrap;
-  }
-</style>

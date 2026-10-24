@@ -1,17 +1,14 @@
 ---
 import { getT } from '@/i18n';
-import { localizePath } from '@/lib/i18n/locale';
 import ToolPage from '@/features/tools/ToolPage.astro';
 import CapitalGains from '@/features/tools/capital-gains/CapitalGains';
 import { CG_FAQ, CG_HOWTO, CG_PAGE } from '@/features/tools/capital-gains/content';
-import { CII, fyLabel } from '@/features/tools/capital-gains/math';
 
 export const prerender = true;
 
 const locale = Astro.locals.locale;
 const t = getT(locale);
 const c = CG_PAGE[locale];
-const years = Object.keys(CII).map(Number).reverse();
 ---
 
 <ToolPage
@@ -34,51 +31,6 @@ const years = Object.keys(CII).map(Number).reverse();
   <Fragment slot="body">
     <h2>{c.rulesTitle}</h2>
     <ul>{c.rules.map((r) => <li>{r}</li>)}</ul>
-    <h2>{c.indexTitle}</h2>
-    <p>{c.index}</p>
-    <ul>{c.example.map((e) => <li>{e}</li>)}</ul>
-    <h2>{c.exTitle}</h2>
-    {
-      c.ex.map((e) => (
-        <>
-          <h3>{e.h}</h3>
-          <p>{e.t}</p>
-        </>
-      ))
-    }
-    <p>{c.actNote}</p>
-    <h2>{c.ciiTitle}</h2>
-    <div class="cii-table">
-      <table class="tool-table">
-        <thead>
-          <tr>
-            <th scope="col">{c.fy}</th>
-            <th scope="col">{c.ciiCol}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            years.map((y) => (
-              <tr>
-                <th scope="row">{fyLabel(y)}</th>
-                <td>{CII[y]}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-    <p>
-      <a href={localizePath('/stamp-duty-calculator', locale)}>
-        {locale === 'hi' ? 'खरीदार के लिए स्टैंप ड्यूटी देखें' : 'See the stamp duty for the buyer'}
-      </a>
-    </p>
+    <p>{c.taxNote}</p>
   </Fragment>
 </ToolPage>
-
-<style>
-  .cii-table {
-    max-width: 22rem;
-    margin-bottom: 1rem;
-  }
-</style>

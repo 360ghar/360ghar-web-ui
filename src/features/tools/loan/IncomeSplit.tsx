@@ -1,21 +1,21 @@
 /**
  * The monthly income as one strip: other expenses, EMIs already paid, the EMI
  * the new loan can take, and what is left. A bracket marks the EMI limit
- * (FOIR x income after expenses). All numbers are the person's own (math.ts).
+ * from the scenario's assumed share of income after expenses.
  */
 import type { CSSProperties } from 'react';
 import type { Locale } from '@/lib/i18n/locale';
 import { inr } from '../ui';
 import { LOAN_UI } from './content';
 
-type Props = { income: number; expenses: number; emis: number; foir: number; maxEmi: number; locale: Locale };
+type Props = { income: number; expenses: number; emis: number; incomeShare: number; maxEmi: number; locale: Locale };
 
-export function IncomeSplit({ income, expenses, emis, foir, maxEmi, locale }: Props) {
+export function IncomeSplit({ income, expenses, emis, incomeShare, maxEmi, locale }: Props) {
   const t = LOAN_UI[locale];
   if (!(income > 0)) return null;
   const spent = Math.min(expenses, income);
   const base = income - spent;
-  const cap = base * foir;
+  const cap = base * incomeShare;
   const now = Math.min(emis, income - spent);
   const free = Math.max(income - spent - now - maxEmi, 0);
   const parts = [
@@ -36,7 +36,7 @@ export function IncomeSplit({ income, expenses, emis, foir, maxEmi, locale }: Pr
         <h2 id="loan-split" className="tool-sheet-title">
           {t.split}
         </h2>
-        <p className="tool-note mt-1">{t.splitLead(Math.round(foir * 100), inr(base, locale), inr(cap, locale))}</p>
+        <p className="tool-note mt-1">{t.splitLead(Math.round(incomeShare * 100), inr(base, locale), inr(cap, locale))}</p>
       </div>
       <figure className="tool-chart loan-split">
         <div className="loan-cap" style={{ '--x0': `${x0}%`, '--x1': `${x1}%` } as CSSProperties} aria-hidden="true">
