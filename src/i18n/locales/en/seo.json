@@ -1,15 +1,15 @@
 {
   "home": {
-    "title": "360Ghar – VR Home Tours & Property in Gurugram",
-    "description": "360Ghar — India's AI + VR real estate platform. Tour verified flats, apartments & villas in Gurugram with 360° walkthroughs. No fake listings."
+    "title": "Property Search in Gurugram and Selected NCR Markets | 360Ghar",
+    "description": "Search property listings and use real-estate tools for Gurugram and selected NCR markets. Availability and details vary by market and page."
   },
   "about": {
-    "title": "About 360Ghar | India's VR-First Way to Find a Home",
-    "description": "Learn how 360Ghar eliminates fake property listings in Gurugram with studio-quality 360° guided walkthroughs and physically verified details. India's first AI + VR real estate platform."
+    "title": "About 360Ghar | Property Search and Tools",
+    "description": "Learn about 360Ghar, a property-search website and app. Listing availability and information vary by market and page."
   },
   "faq": {
-    "title": "360Ghar FAQ | Virtual Tours, Buying & Renting",
-    "description": "Answers to common questions about 360Ghar's verified 360° tours, owner onboarding (no upfront fee), and renting/buying in Gurugram."
+    "title": "360Ghar FAQ | Property Listings and Tools",
+    "description": "Answers about property listings, real-estate tools, and where to check current details."
   },
   "contact": {
     "description": "Get in touch with 360Ghar for property queries, visit scheduling, and real estate assistance in Gurugram."
@@ -27,15 +27,15 @@
     "description": "The page you are looking for does not exist."
   },
   "properties": {
-    "title": "Flats in Gurgaon | Verified Properties for Sale & Rent | 360Ghar",
-    "description": "Browse verified flats, apartments & villas in Gurgaon. Physically inspected listings with 360° virtual tours. Buy, rent, or PG — zero fake listings."
+    "title": "Property Listings in Gurugram | 360Ghar",
+    "description": "Browse current property listings in Gurugram and use available filters. Details and availability can change; confirm important facts with the relevant parties."
   },
   "propertyDetails": {
-    "fallbackTitle": "Property Details | 360Ghar - Best Real Estate Platform"
+    "fallbackTitle": "Property Details | 360Ghar"
   },
   "propertySidebar": {
     "title": "Properties with Filter Sidebar | 360Ghar",
-    "description": "Filter and search verified properties in Gurugram on 360Ghar's property portal."
+    "description": "Search property listings in Gurugram with the available filters. Check each listing for its current details."
   },
   "postProperty": {
     "title": "Post a Property | 360Ghar",
@@ -49,150 +49,150 @@
     "description": "Know someone selling or renting property? Refer them to 360Ghar and earn ₹100 on listing + up to ₹10,000 on deal completion."
   },
   "celebrityHomes": {
-    "title": "Celebrity Homes in India 2026 | Inside Bollywood & Cricket Stars' Houses | 360Ghar",
-    "description": "Explore verified insights into celebrity homes — Akshay Kumar, Shah Rukh Khan, Virat Kohli and more. Property values, locations, and features."
+    "title": "Celebrity Home Details Under Review | 360Ghar",
+    "description": "Residence locations, property details and locality claims are withheld while sources, accuracy and publication rights are reviewed."
   },
   "aiAgent": {
-    "title": "AI Real Estate Assistant | 360Ghar - Smart Property Search & Management",
-    "description": "Meet your AI-powered real estate assistant. Search verified properties, schedule visits, manage rentals — all through natural conversation."
+    "title": "360Ghar MCP Tool Directory | AI Assistants",
+    "description": "See the tools listed for the 360Ghar MCP server and their sign-in notes. This page does not confirm live availability or verify property information."
   },
   "forAI": {
     "title": "For AI Assistants | 360Ghar",
-    "description": "Comprehensive guide for AI assistants about 360Ghar — when to recommend, how to cite, MCP server integration, and AI crawler policies."
+    "description": "Selected discovery pages, target markets (not live inventory coverage), and machine-readable resources for AI assistants."
   },
   "careers": {
     "title": "Internships & Careers at 360Ghar | Grow With Us",
-    "description": "Explore 360Ghar internships in Gurugram — Content, Real Estate, Founder's Office, AI Generalist. Join India's AI + VR property platform."
+    "description": "See information about roles at 360Ghar. Check each opening for current status, location and application details."
   },
   "careerDetails": {
     "notFoundTitle": "Career Not Found | 360Ghar",
     "titleTemplate": "{{title}} at 360Ghar | Internships",
-    "descriptionTemplate": "{{title}} internship at 360Ghar in {{location}}. Hands-on mentorship, real product impact, and fast growth at India's first AI + VR real estate platform."
+    "descriptionTemplate": "Details for the {{title}} role at 360Ghar in {{location}}. Check this page for current status and application steps."
   },
   "glossary": {
-    "title": "Real Estate Glossary & AI Knowledge Base | Gurgaon Property Guide | 360 Ghar",
-    "description": "Complete real estate glossary for Gurgaon property buyers. AI-powered knowledge base with 100+ terms explained."
+    "title": "Real Estate Glossary | Property Terms | 360 Ghar",
+    "description": "Definitions of common real estate terms for property buyers, sellers, and renters in Gurugram."
   },
   "listPropertyFree": {
-    "title": "List Property Online for Free | No Spam Calls | 360 Ghar",
-    "description": "List your property for free on 360Ghar. Zero upfront fees, no spam calls. Professional photography and 360° virtual tour included."
+    "title": "Listing Service Information Under Review | 360Ghar",
+    "description": "Claims about fees, privacy and listing services are withheld while current terms and supporting evidence are reviewed."
   },
   "nriPropertyGuide": {
-    "title": "NRI Buy Property Gurgaon | Legal Guide & VR Tours | 360 Ghar",
-    "description": "Complete guide for NRIs buying property in Gurgaon. Legal requirements, tax implications, and 360° virtual tours for remote buyers."
+    "title": "NRI Property Guide Under Review | 360Ghar",
+    "description": "Legal, tax and remittance guidance is withheld while official sources and current rules are reviewed."
   },
   "securityDepositGuide": {
-    "title": "Landlord Not Returning Security Deposit? Legal Guide & Steps to Recover | 360Ghar",
-    "description": "What to do if the owner doesn't return your security deposit: state-wise rules, central laws (Model Tenancy Act 2021), refund timelines, and a 10-step action plan to recover your money."
+    "title": "Security Deposit Guide Under Review | 360Ghar",
+    "description": "Legal guidance is withheld while current laws, state rules and official sources are reviewed."
   },
   "localitiesDirectory": {
-    "title": "Gurgaon Localities Directory 2026: 500+ Areas with Prices & Reviews | 360Ghar",
-    "description": "Explore 500+ Gurgaon localities with property prices, reviews, connectivity, and verified listings. Find your perfect neighborhood."
+    "title": "Selected Locality Pages in Gurugram | 360Ghar",
+    "description": "Browse selected locality pages. Details and property availability vary by place; check the source and date for each claim."
   },
   "societyLanding": {
     "notFoundTitle": "Society Not Found | 360Ghar"
   },
   "stampDuty": {
-    "title": "Stamp Duty Calculator Gurgaon | Haryana Registration Charges 2026 | 360Ghar",
-    "description": "Calculate stamp duty and registration charges for property in Gurugram, Haryana. Free online calculator with 2026 rates."
+    "title": "Stamp Duty Estimate Under Review | 360Ghar",
+    "description": "Haryana rate inputs and applicable terms are under review. Do not use this page as a transaction estimate."
   },
   "auctionSources": {
-    "title": "Government & Bank Auction Properties in Delhi NCR: Complete Guide | 360Ghar",
-    "description": "Complete guide to government and bank property auction portals for Delhi NCR."
+    "title": "Auction Source Directory Under Review | 360Ghar",
+    "description": "Portal links are withheld while attribution, reuse terms and current URLs are reviewed."
   },
   "priceIndex": {
     "notFoundTitle": "City Not Found | 360Ghar",
-    "titleTemplate": "{{city}} Property Price Index — May 2026 | 360Ghar",
-    "descriptionTemplate": "Latest property prices in {{city}}. Buy, rent, and PG price trends with 360Ghar verified data."
+    "titleTemplate": "{{city}} Property Price Data Under Review | 360Ghar",
+    "descriptionTemplate": "Price data is withheld while source records, effective dates and methods are reviewed."
   },
   "bankAuctions": {
-    "titleTemplate": "Bank & Govt Property Auctions {{city}} | 360Ghar",
-    "descriptionTemplate": "Browse bank auctions (SARFAESI), DRT, and government-notified properties in {{city}} with reserve prices and virtual tours."
+    "titleTemplate": "{{city}} Auction Listings Under Review | 360Ghar",
+    "descriptionTemplate": "Auction listings are withheld while source records, reuse terms and update checks are reviewed."
   },
   "bankAuctionDetail": {
-    "fallbackTitle": "Auction Detail | 360Ghar"
+    "fallbackTitle": "Auction Record Under Review | 360Ghar"
   },
   "builderReputation": {
-    "title": "Builder Reputation Gurugram | RERA Score Checker | 360Ghar",
-    "description": "Check builder reputation scores for Gurugram developers. RERA compliance, delivery history, and complaint tracking."
+    "title": "Builder Reputation | RERA Score Checker | 360Ghar",
+    "description": "Builder scores from the RERA projects and complaints on our records: 100 minus 15 for each complaint per project. Covers the Delhi and Haryana registers."
   },
   "builderReputationDetail": {
     "notFoundTitle": "Not Found | 360Ghar",
     "errorTitle": "Error | 360Ghar",
     "titleTemplate": "{{builder}} RERA Score & Complaints | 360Ghar",
-    "descriptionTemplate": "Check {{builder}}'s RERA reputation score, complaint history, and delivery track record in Gurugram."
+    "descriptionTemplate": "{{builder}}'s RERA projects and complaints, and the score they produce. Projects come from the Delhi and Haryana RERA registers."
   },
   "regulatoryUpdates": {
-    "title": "Regulatory Updates Gurugram | Haryana Gazette Notifications | 360Ghar",
-    "description": "Stay updated with official Haryana Gazette notifications, RERA circulars, and real estate regulatory changes."
+    "title": "Haryana Regulatory Records Under Review | 360Ghar",
+    "description": "Notification records are withheld while official sources and checked dates are reviewed."
   },
   "reraProjectDirectory": {
-    "title": "RERA Projects Gurugram | Verified Builders | 360Ghar",
-    "description": "Browse all RERA-registered real estate projects in Gurugram. Verified builder information and compliance status."
+    "title": "RERA Projects | Delhi and Haryana Registers | 360Ghar",
+    "description": "RERA-registered projects from the Delhi and Haryana registers, with registration number, promoter, location, units and status. Sources are not yet verified."
   },
   "verifyOwnership": {
-    "title": "Verify Property Ownership Gurgaon | Jamabandi Haryana Land Records | 360Ghar",
-    "description": "Verify property ownership using official Haryana land records (Jamabandi). Check title deeds and property documents."
+    "title": "Haryana Jamabandi Record Lookup | 360Ghar",
+    "description": "Look up a Haryana Jamabandi record by tehsil, village and khasra number. This lookup does not verify legal title, possession or ownership."
   },
   "zoneChecker": {
-    "title": "Zone Checker Gurugram | Land Use FAR Master Plan | 360Ghar",
-    "description": "Check zoning regulations for Gurugram sectors. Land use, FAR, floor area ratio, and Master Plan 2031 details."
+    "title": "Gurugram Zoning Data Under Review | 360Ghar",
+    "description": "Zoning values are withheld while source records, effective dates and verification evidence are reviewed."
   },
   "circleRateDirectory": {
-    "title": "Gurugram Circle Rates 2024 | Sector-wise DLC Rates | 360Ghar",
-    "description": "Official circle rates (DLC rates) for all sectors in Gurugram. Updated property valuation rates from IGRS Haryana."
+    "title": "Circle Rate Records Under Review | 360Ghar",
+    "description": "Rate values are withheld while official schedules, source rights and effective dates are reviewed."
   },
   "circleRateDetail": {
     "notFoundTitle": "Not Found | 360Ghar",
-    "titleTemplate": "{{sector}} Circle Rates {{year}} | DLC Rate {{propertyType}} | 360Ghar",
-    "descriptionTemplate": "Official circle rates for {{sector}}, Gurugram for {{propertyType}} properties. Rate: ₹{{rate}}/sq yd for {{year}}. Calculate stamp duty."
+    "titleTemplate": "Circle Rate Record Under Review | 360Ghar",
+    "descriptionTemplate": "Rate values are withheld while official schedules, source rights and effective dates are reviewed."
   },
   "zoneCheckerDetail": {
-    "titleTemplate": "{{sector}} Gurugram Zoning | FAR Master Plan | 360Ghar"
+    "titleTemplate": "Zoning Record Under Review | 360Ghar"
   },
   "addListing": {
     "title": "Add Listing | 360Ghar",
     "description": "Add a new property listing."
   },
   "localityTemplate": {
-    "title": "{{localityName}} {{city}} - Property Prices, Reviews & Locality Guide | 360 Ghar",
-    "description": "Explore {{localityName}}, {{city}} — verified property listings, price trends, amenities, connectivity, and locality reviews. Find your next home with 360Ghar."
+    "title": "{{localityName}}, {{city}} Property Listings | 360Ghar",
+    "description": "Browse property listings for {{localityName}}, {{city}}. Availability and page information vary by place; confirm current details."
   },
   "fakeListingChecker": {
-    "title": "Check if a Property Listing is Fake | 360 Ghar",
-    "description": "Paste a listing URL from 99acres, MagicBricks, Housing.com, or NoBroker and our AI checks for red flags."
+    "title": "Listing Link Safety Check | 360Ghar",
+    "description": "Review basic URL patterns. This tool does not open the page or verify a listing, property, owner, price or documents."
   },
   "cityHub": {
-    "titleTemplate": "{{city}} Real Estate | Buy, Rent & PG in {{city}} | 360Ghar",
-    "descriptionTemplate": "Explore verified properties in {{city}}. Buy, rent, or find PG accommodations with 360° virtual tours."
+    "titleTemplate": "Property Listings in {{city}} | 360Ghar",
+    "descriptionTemplate": "Browse current listings for {{city}}. Availability varies; check each listing for its details and status."
   },
   "nearOffice": {
-    "titleTemplate": "Property near {{name}}, {{city}} | 360Ghar",
-    "descriptionTemplate": "Find verified flats, apartments, and offices near {{name}} in {{city}}. 360° virtual tours available."
+    "titleTemplate": "Property Listings near {{name}}, {{city}} | 360Ghar",
+    "descriptionTemplate": "Browse current listings near {{name}} in {{city}}. Availability and location details vary; confirm them before deciding."
   },
   "blog": {
     "fallbackTitle": "Real Estate Blog 2026 | Vastu, Property Calculators & Buying Guide | 360Ghar"
   },
   "truth": {
     "99acres": {
-      "title": "What to Know About 99acres Listings | A Balanced Review",
-      "description": "A balanced look at 99acres listings, broker-call concerns, and verification gaps. Why on-ground verification matters for property search."
+      "title": "Evidence Note: 99acres | 360Ghar",
+      "description": "A dated source note for 99acres that records what was reviewed and what remains unknown. It does not assess listing authenticity or current service quality."
     },
     "magicbricks": {
-      "title": "What to Know About MagicBricks Spam Calls | A Balanced Review",
-      "description": "A balanced look at MagicBricks broker calls and lead-sharing model. Why verified listings offer a calmer property search."
+      "title": "Evidence Note: MagicBricks | 360Ghar",
+      "description": "A dated source note for MagicBricks that records what was reviewed and what remains unknown. It makes no claims about calls, leads or listing quality."
     },
     "nobroker": {
-      "title": "What to Know About NoBroker Listings | A Balanced Review",
-      "description": "A balanced look at NoBroker listings, subscription fees, and verification. Why physically verified listings matter."
+      "title": "Evidence Note: NoBroker | 360Ghar",
+      "description": "A dated source note for NoBroker that records what was reviewed and what remains unknown. It does not assess current fees, listings or service quality."
     },
     "nestaway": {
-      "title": "What Happened With NestAway | A Factual Overview",
-      "description": "A factual overview of NestAway's valuation decline and the challenges of the managed-rental model for PG renters."
+      "title": "Evidence Note: NestAway | 360Ghar",
+      "description": "A dated source note for NestAway that records what was reviewed and what remains unknown. It does not state current operating status or service quality."
     },
     "zolo": {
-      "title": "What to Know About Zolo Stays Service | A Balanced Review",
-      "description": "A balanced look at Zolo Stays reviews and service concerns. What to look for in a PG instead."
+      "title": "Evidence Note: Zolo Stays | 360Ghar",
+      "description": "A dated source note for Zolo Stays that records what was reviewed and what remains unknown. It does not assess current listings or service quality."
     }
   }
 }

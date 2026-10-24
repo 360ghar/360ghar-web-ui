@@ -1,0 +1,56 @@
+---
+/**
+ * /map-discovery: the projects inside a bounding box, drawn as a positioned overlay.
+ * The note about the drawing comes from the overlay itself, which is rendered on
+ * the server too; the page does not repeat it.
+ */
+import { getT } from '@/i18n';
+import { formatNum } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/locale';
+import { canonicalFor } from '@/lib/seo/site';
+import DataHubPage from '@/features/data-hub/DataHubPage.astro';
+import MapDiscovery from './MapDiscovery';
+import { faqs, text } from './text';
+import type { MapBounds, ProjectMapPoint } from './types';
+import './projects.css';
+
+/** `down`: the map route did not answer, so an empty list is not "no coordinates". */
+type Props = { locale: Locale; points: ProjectMapPoint[]; bounds: MapBounds; down?: boolean };
+const { locale, points, bounds, down = false } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+const path = '/map-discovery';
+const heading = tt('projects:page.mapDiscovery.heading');
+const placed = points.filter((p) => typeof p.latitude === 'number' && typeof p.longitude === 'number').length;
+const lead = points.length ? tt('projects:page.mapDiscovery.leadCount', { count: formatNum(placed, locale) }) : tt('projects:page.mapDiscovery.lead');
+---
+
+<DataHubPage
+  title={tt('projects:seo.mapDiscovery.title')}
+  description={tt('projects:seo.mapDiscovery.description')}
+  keywords="Gurugram project map, RERA project locations, project coordinates, new projects map, 360Ghar data hub"
+  path={path}
+  heading={heading}
+  lead={lead}
+  crumbs={[{ name: heading }]}
+  faqs={faqs(locale, 'mapDiscovery')}
+  jsonLd={[
+    {
+      '@type': 'ItemList',
+      name: heading,
+      description: tt('projects:seo.mapDiscovery.description'),
+      url: canonicalFor(path, locale),
+      numberOfItems: points.length,
+      itemListElement: points.slice(0, 200).map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.project_name, url: canonicalFor(`/project/${p.slug}`, locale) })),
+    },
+  ]}
+  related={['marketPulse', 'rera', 'builders']}
+>
+  {
+    down ? (
+      <p class="dh-meta" role="status">{t.down.title}. {t.down.body}</p>
+    ) : (
+      <MapDiscovery client:visible locale={locale} points={points} bounds={bounds} />
+    )
+  }
+</DataHubPage>

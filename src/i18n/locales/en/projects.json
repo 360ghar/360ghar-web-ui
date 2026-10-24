@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "marketPulse": "Market pulse",
+    "projectMap": "Project map",
+    "watchlist": "My watchlist"
+  },
+  "seo": {
+    "projectDetail": {
+      "notFoundTitle": "Project Not Found | 360Ghar",
+      "errorTitle": "Project Data Unavailable | 360Ghar",
+      "titleTemplate": "{{project}} RERA Details and Status | 360Ghar",
+      "descriptionTemplate": "RERA registration, land, units and documents for {{project}}{{developer}}, as filed with the authority. Sections the filing does not state are left out."
+    },
+    "marketPulse": {
+      "title": "Market Pulse | City Registration and Complaint Readings | 360Ghar",
+      "description": "One reading per city: the new registrations and complaints the authority recorded, each with its capture date."
+    },
+    "mapDiscovery": {
+      "title": "Project Map | RERA Projects by Filed Coordinates | 360Ghar",
+      "description": "RERA projects from the Delhi and Haryana registers. Zoom to one locality, then open a project for its registration and status. No filing on record carries coordinates yet, so the map draws nothing today."
+    },
+    "microMarket": {
+      "notFoundTitle": "Micro-market Not Found | 360Ghar",
+      "errorTitle": "Micro-market Data Unavailable | 360Ghar",
+      "titleTemplate": "{{market}}, {{city}} Property Market Data | 360Ghar",
+      "descriptionTemplate": "Projects and the stage mix of {{market}} in {{city}}, from the 360Ghar data hub."
+    },
+    "watchlist": {
+      "title": "My Watchlist | Saved Projects | 360Ghar",
+      "description": "The RERA projects you saved, with their current stage. Remove one any time; the list stays on your 360Ghar account."
+    }
+  },
+  "page": {
+    "project": {
+      "lead": "Registration, land, units and documents, as filed with the authority. A section the filing does not state is left out.",
+      "missing": "We have no project record at this link. It may have been removed, or the address may be mistyped.",
+      "fallbackHeading": "Project record",
+      "byDeveloper": ", developed by {{developer}}",
+      "nearbyLead": "Other projects on our records in the same district.",
+      "related": "Other data for this project"
+    },
+    "marketPulse": {
+      "heading": "Market pulse",
+      "lead": "The latest reading for each city in the data hub: the registrations and complaints the authority recorded, each with its capture date.",
+      "leadCount": "The latest reading for {{count}} cities in the data hub, each with its capture date and the date it was computed."
+    },
+    "mapDiscovery": {
+      "heading": "Project map",
+      "lead": "Project positions come from the coordinates in their RERA filing, drawn where the developer filed them. None of the filings on record carries coordinates yet, so this map draws nothing today.",
+      "leadCount": "{{count}} projects with filed coordinates are drawn below."
+    },
+    "microMarket": {
+      "lead": "Projects and the stage mix of this micro-market, from the 360Ghar data hub.",
+      "missing": "We have no micro-market record at this link. It may have been renamed, or the address may be mistyped.",
+      "fallbackHeading": "Micro-market record"
+    },
+    "watchlist": {
+      "heading": "Projects you are watching",
+      "lead": "Every project you saved, with its current stage. The list lives on your 360Ghar account."
+    }
+  }
+}

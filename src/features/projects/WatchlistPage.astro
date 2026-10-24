@@ -1,0 +1,32 @@
+---
+/**
+ * /account/watchlist: the projects the signed-in visitor saved. The list is
+ * per-account, so the page is noindex and the rows are read in the browser
+ * after the session settles (see WatchlistList).
+ */
+import { getT } from '@/i18n';
+import type { Locale } from '@/lib/i18n/locale';
+import Page from '@/layouts/Page.astro';
+import '@/features/data-hub/data-hub.css';
+import WatchlistList from './WatchlistList';
+import { text } from './text';
+import './projects.css';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const t = text(locale);
+const tt = getT(locale);
+---
+
+<Page title={tt('projects:seo.watchlist.title')} description={tt('projects:seo.watchlist.description')} noindex>
+  <div class="container-page py-8 md:py-12">
+    <header class="max-w-[52rem]">
+      <h1 class="dh-h1">{tt('projects:page.watchlist.heading')}</h1>
+      <p class="dh-lead mt-3">{tt('projects:page.watchlist.lead')}</p>
+    </header>
+    <div class="mt-6 max-w-[56rem]">
+      <WatchlistList client:load locale={locale} />
+    </div>
+    <p class="dh-meta mt-6">{t.sourcesNote}</p>
+  </div>
+</Page>

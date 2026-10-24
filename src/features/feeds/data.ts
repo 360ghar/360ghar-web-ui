@@ -9,7 +9,6 @@ import type { Property } from '@/lib/api/types';
 import { memo } from '@/lib/memo';
 import { CITIES, INTENTS, TYPE_SEGMENTS, budgetsFor, isIndexable, landingFilters, parseLanding, type Facet, type Landing } from '@/features/landing/model';
 import { INTENT_TYPES, LISTED_LOCALITIES, localitySlug, type Locality } from '@/features/localities/data';
-import { PROJECTS } from '@/features/projects/catalog';
 import type { SitemapEntry } from './xml';
 
 // The list cursor is keyset on (sort value, id), so a page never repeats or skips a home. The id dedupe stays as a guard.
@@ -27,15 +26,14 @@ export const allPosts = () =>
  * without the data hub pages: sitemap-datahub.xml lists those.
  */
 export const STATIC_PATHS = [
-  '/', '/properties', '/about-us', '/contact', '/faq', '/project', '/blog', '/policies', '/policies/terms-of-service', '/policies/privacy-policy',
+  '/', '/properties', '/about-us', '/contact', '/faq', '/blog', '/policies', '/policies/terms-of-service', '/policies/privacy-policy',
   '/policies/content-guidelines', '/policies/content-takedown-policy', '/policies/grievance-redressal-mechanism', '/refer-and-earn',
-  '/gurugram-real-estate-guide', '/property-investment-gurugram', '/for-ai', '/ai-agent', '/localities', '/emi-calculator', '/area-converter',
+  '/for-ai', '/ai-agent', '/localities', '/emi-calculator', '/area-converter',
   '/area-calculator', '/mofa-to-rera-converter', '/sq-ft-calculator', '/acre-in-gaj', '/loan-eligibility-calculator',
   '/capital-gains-tax-calculator', '/property-document-checklist', '/design-blueprint', '/vastu-checker', '/ai-design-studio', '/vs', '/vs/nobroker',
-  '/vs/magicbricks', '/vs/99acres', '/vs/housing', '/vs/commonfloor', '/vs/proptiger', '/vs/squareyards', '/vs/nestaway', '/vs/zolo',
-  '/vs/stanza-living', '/truth/nobroker-listings', '/truth/magicbricks-spam', '/truth/99acres-fake', '/truth/nestaway-collapse',
-  '/truth/zolo-issues', '/careers', '/careers/content-creator-internship', '/careers/real-estate-agent', '/careers/founders-office-intern', '/careers/ai-generalist-intern',
-  '/celebrity-homes', '/nri-property-guide', '/landlord-not-returning-security-deposit', '/list-property-free', '/glossary', '/links', '/app', '/price-index', '/authors', '/editorial-policy', '/methodology',
+  '/vs/magicbricks', '/vs/99acres', '/vs/housing', '/vs/proptiger', '/vs/squareyards', '/vs/zolo',
+  '/vs/stanza-living', '/careers', '/careers/content-creator-internship', '/careers/real-estate-agent', '/careers/founders-office-intern', '/careers/ai-generalist-intern',
+  '/links', '/app', '/authors', '/editorial-policy', '/methodology',
   '/check-fake-listing', '/rent-receipt', '/near/cyber-city', '/near/udyog-vihar', '/near/golf-course-road-corporate',
   '/near/millennium-city-centre', '/near/medanta', '/near/artemis', '/near/sector-55-56-metro', '/near/dlf-cyber-park', '/near/ambience-mall',
   '/near/hero-honda-chowk',
@@ -103,10 +101,11 @@ const hasIntentPages = (l: Locality) => INTENT_TYPES.has((l.entityType || '').to
 export function localityEntries(): SitemapEntry[] {
   return LISTED_LOCALITIES.flatMap((l) => {
     const base = `/locality/${localitySlug(l)}`;
-    const e: SitemapEntry[] = [{ path: base, lastmod: l.lastVerifiedAt, changefreq: 'weekly', priority: '0.7' }];
-    if (hasIntentPages(l)) for (const i of ['buy', 'rent']) e.push({ path: `${base}/${i}`, lastmod: l.lastVerifiedAt, changefreq: 'weekly', priority: '0.65' });
+    const e: SitemapEntry[] = [{ path: base, changefreq: 'weekly', priority: '0.7' }];
+    if (hasIntentPages(l)) for (const i of ['buy', 'rent']) e.push({ path: `${base}/${i}`, changefreq: 'weekly', priority: '0.65' });
     return e;
   });
 }
 
-export const projectEntries = (): SitemapEntry[] => PROJECTS.map((p) => ({ path: `/project/${p.slug}`, changefreq: 'weekly', priority: '0.7' }));
+/** Project catalog routes stay out of sitemaps while their pages are noindex for source review. */
+export const projectEntries = (): SitemapEntry[] => [];

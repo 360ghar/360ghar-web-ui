@@ -4177,7 +4177,7 @@ export interface paths {
         put?: never;
         /**
          * Generate design image
-         * @description Generate an AI design image. Free, no login required. Powered by Agnes AI.
+         * @description Generate an AI design image. Free, no login required. Powered by 360Ghar AI.
          *
          *     **Rate limit:** 10 requests per minute per IP address.
          *
@@ -4214,7 +4214,7 @@ export interface paths {
         put?: never;
         /**
          * Virtually stage a room photo
-         * @description Add furniture to an empty-room photo. Free, no login required. Powered by Agnes AI.
+         * @description Add furniture to an empty-room photo. Free, no login required. Powered by 360Ghar AI.
          *
          *     **Rate limit:** 5 requests per minute per IP address.
          *
@@ -4262,7 +4262,7 @@ export interface paths {
          *     - `right`: North is to the right
          *     - `unknown`: Not sure (AI will attempt to detect)
          *
-         *     **AI Provider:** Agnes AI (`agnes-3.0-flash`).
+         *     **AI Provider:** 360Ghar AI.
          *
          *     **Rate limit:** 5 requests per minute per IP address.
          */
@@ -5534,7 +5534,7 @@ export interface paths {
         };
         /**
          * Verify RERA number
-         * @description Verify a RERA number — returns validity, status, and project name.
+         * @description Return verification only when reviewed evidence supports the exact number.
          */
         get: operations["verify_rera_project_api_v1_data_hub_rera_projects_verify__rera_number__get"];
         put?: never;
@@ -5580,6 +5580,316 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List projects
+         * @description List projects with cursor paging, ordered by primary key.
+         */
+        get: operations["list_projects_api_v1_data_hub_projects_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/projects/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get project detail
+         * @description Return the full filed project. A fixed number of queries; no lazy loads.
+         */
+        get: operations["get_project_api_v1_data_hub_projects__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/projects/{slug}/nearby": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List projects near a project
+         * @description Projects in the same district, excluding the project itself, capped at a constant.
+         */
+        get: operations["list_nearby_projects_api_v1_data_hub_projects__slug__nearby_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/projects/{slug}/price-history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List project price history
+         * @description Price points for one project, oldest quarter first.
+         */
+        get: operations["list_project_price_history_api_v1_data_hub_projects__slug__price_history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/projects/{slug}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List project documents
+         * @description Documents filed for one project, in filing order.
+         */
+        get: operations["list_project_documents_api_v1_data_hub_projects__slug__documents_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/projects/{slug}/faq": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get project FAQ
+         * @description Deterministic FAQ built from filed values. A question without an answer is dropped.
+         */
+        get: operations["get_project_faq_api_v1_data_hub_projects__slug__faq_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/developers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List developers
+         * @description List developers with cursor paging, ordered by name or by total score.
+         */
+        get: operations["list_developers_api_v1_data_hub_developers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/developers/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get developer detail
+         * @description Return one developer with its score and its filed portfolio.
+         */
+        get: operations["get_developer_api_v1_data_hub_developers__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/developers/{slug}/score": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get developer score
+         * @description Return the current five-pillar trust score for one developer.
+         */
+        get: operations["get_developer_score_api_v1_data_hub_developers__slug__score_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/micro-markets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List micro-markets
+         * @description List micro-markets, optionally filtered to one city.
+         */
+        get: operations["list_micro_markets_api_v1_data_hub_micro_markets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/micro-markets/{city}/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get micro-market detail
+         * @description Return one micro-market with the stats for the projects that filed in it.
+         */
+        get: operations["get_micro_market_api_v1_data_hub_micro_markets__city___slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/market-pulse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List market pulse snapshots
+         * @description Return the latest snapshot per city, optionally limited to one city.
+         */
+        get: operations["list_market_pulse_api_v1_data_hub_market_pulse_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/map/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List project map points
+         * @description Return the project pins inside a bounding box, capped at a constant.
+         */
+        get: operations["list_map_projects_api_v1_data_hub_map_projects_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/watchlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List my watchlist
+         * @description List the current user's watched projects, newest first.
+         */
+        get: operations["list_watchlist_items_api_v1_data_hub_watchlist_get"];
+        put?: never;
+        /**
+         * Add a project to the watchlist
+         * @description Watch a project. Idempotent: watching twice returns the existing row.
+         *
+         *     A project with no slug is refused along with an unknown one. Every other
+         *     project route filters on ``slug IS NOT NULL`` because a slug is the public URL
+         *     key, and a watched row exists to link to that page — accepting one here would
+         *     store a row the list can only render as ``#<id>`` with no name, link or
+         *     figures. Refusing it keeps the watchlist free of entries nothing can display.
+         */
+        post: operations["add_watchlist_item_api_v1_data_hub_watchlist_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/data-hub/watchlist/{project_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove a project from the watchlist
+         * @description Stop watching a project. 404 when it was not watched.
+         */
+        delete: operations["delete_watchlist_item_api_v1_data_hub_watchlist__project_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -5937,6 +6247,11 @@ export interface paths {
         /**
          * Trigger scraper
          * @description Trigger a named scraper manually (admin only).
+         *
+         *     The optional body carries operator arguments, which only ``rera_portal_scan``
+         *     reads: it walks a range of HRERA portal ids and fails without an ``end_id``
+         *     rather than defaulting to an unbounded crawl. Options a scraper does not
+         *     accept are dropped, so the body is safe to send to any scraper.
          */
         post: operations["trigger_scraper_api_v1_data_hub_admin_scraper__scraper_name__trigger_post"];
         delete?: never;
@@ -7150,6 +7465,22 @@ export interface components {
             count: number;
             /** Directions */
             directions: string[];
+        };
+        /**
+         * BankAccountResponse
+         * @description Project collection account. The account number and operators are never serialized.
+         */
+        BankAccountResponse: {
+            /** Bank Name */
+            bank_name?: string | null;
+            /** Branch Name */
+            branch_name?: string | null;
+            /** Ifsc */
+            ifsc?: string | null;
+            /** Micr */
+            micr?: string | null;
+            /** Branch Code */
+            branch_code?: string | null;
         };
         /** BankAuctionResponse */
         BankAuctionResponse: {
@@ -9168,6 +9499,7 @@ export interface components {
             approval_date?: string | null;
             /** Source Url */
             source_url?: string | null;
+            provenance?: components["schemas"]["DataHubProvenanceSummary"] | null;
             /**
              * Created At
              * Format: date-time
@@ -10120,6 +10452,25 @@ export interface components {
              */
             total: number | null;
         };
+        /** CursorPage[DeveloperSummaryResponse] */
+        CursorPage_DeveloperSummaryResponse_: {
+            /** Items */
+            items: components["schemas"]["DeveloperSummaryResponse"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
+            /** Limit */
+            limit: number;
+            /**
+             * Total
+             * @description Set only when the request sets include_total=true; otherwise null.
+             */
+            total: number | null;
+        };
         /** CursorPage[Document] */
         CursorPage_Document_: {
             /** Items */
@@ -10504,6 +10855,25 @@ export interface components {
         CursorPage_PageResponse_: {
             /** Items */
             items: components["schemas"]["PageResponse"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
+            /** Limit */
+            limit: number;
+            /**
+             * Total
+             * @description Set only when the request sets include_total=true; otherwise null.
+             */
+            total: number | null;
+        };
+        /** CursorPage[ProjectSummaryResponse] */
+        CursorPage_ProjectSummaryResponse_: {
+            /** Items */
+            items: components["schemas"]["ProjectSummaryResponse"][];
             /** Next Cursor */
             next_cursor: string | null;
             /**
@@ -11018,6 +11388,39 @@ export interface components {
             storage_limit?: number;
         };
         /**
+         * DataHubProvenanceSource
+         * @description Public-safe source metadata; never includes content, artifacts, or reviewer notes.
+         */
+        DataHubProvenanceSource: {
+            /** Authority */
+            authority: string;
+            /** Citation Url */
+            citation_url?: string | null;
+            /** Effective From */
+            effective_from?: string | null;
+            /** Effective To */
+            effective_to?: string | null;
+            /**
+             * Checked At
+             * Format: date-time
+             */
+            checked_at: string;
+        };
+        /**
+         * DataHubProvenanceSummary
+         * @description Public-safe source metadata and explicit verification status.
+         */
+        DataHubProvenanceSummary: {
+            /**
+             * Verification Status
+             * @default unverified
+             * @enum {string}
+             */
+            verification_status?: "unverified" | "verified";
+            /** Sources */
+            sources?: components["schemas"]["DataHubProvenanceSource"][];
+        };
+        /**
          * DefectSeverity
          * @description Severity level of a Vastu defect.
          * @enum {string}
@@ -11081,6 +11484,123 @@ export interface components {
         DesignImageOut: {
             /** Image */
             image: string;
+        };
+        /** DeveloperDetailResponse */
+        DeveloperDetailResponse: {
+            /** Id */
+            id: number;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Legal Name */
+            legal_name?: string | null;
+            /** Logo Url */
+            logo_url?: string | null;
+            /** Website Url */
+            website_url?: string | null;
+            /** Headquarters */
+            headquarters?: string | null;
+            /** Founded Year */
+            founded_year?: number | null;
+            /** Is Listed */
+            is_listed?: boolean | null;
+            /** Total Score */
+            total_score?: number | null;
+            /**
+             * Project Count
+             * @default 0
+             */
+            project_count?: number;
+            /**
+             * Complaint Count
+             * @default 0
+             */
+            complaint_count?: number;
+            /** Summary */
+            summary?: string | null;
+            /** Dossier */
+            dossier?: string | null;
+            /** Cin */
+            cin?: string | null;
+            /** Geographies */
+            geographies?: string[] | null;
+            score?: components["schemas"]["DeveloperScoreResponse"] | null;
+            /** Projects */
+            projects?: components["schemas"]["ProjectSummaryResponse"][];
+        };
+        /** DeveloperScoreResponse */
+        DeveloperScoreResponse: {
+            /** Delivery */
+            delivery?: number | null;
+            /** Regulatory */
+            regulatory?: number | null;
+            /** Complaints */
+            complaints?: number | null;
+            /** Financials */
+            financials?: number | null;
+            /** Market Reception */
+            market_reception?: number | null;
+            /** Total Score */
+            total_score?: number | null;
+            /**
+             * Project Count
+             * @default 0
+             */
+            project_count?: number;
+            /**
+             * Delivered Count
+             * @default 0
+             */
+            delivered_count?: number;
+            /**
+             * Under Construction Count
+             * @default 0
+             */
+            under_construction_count?: number;
+            /**
+             * Complaint Count
+             * @default 0
+             */
+            complaint_count?: number;
+            /**
+             * Computed At
+             * Format: date-time
+             */
+            computed_at: string;
+        };
+        /** DeveloperSummaryResponse */
+        DeveloperSummaryResponse: {
+            /** Id */
+            id: number;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Legal Name */
+            legal_name?: string | null;
+            /** Logo Url */
+            logo_url?: string | null;
+            /** Website Url */
+            website_url?: string | null;
+            /** Headquarters */
+            headquarters?: string | null;
+            /** Founded Year */
+            founded_year?: number | null;
+            /** Is Listed */
+            is_listed?: boolean | null;
+            /** Total Score */
+            total_score?: number | null;
+            /**
+             * Project Count
+             * @default 0
+             */
+            project_count?: number;
+            /**
+             * Complaint Count
+             * @default 0
+             */
+            complaint_count?: number;
         };
         /**
          * DeviceBreakdown
@@ -11461,6 +11981,22 @@ export interface components {
             display_order?: number | null;
             /** Is Active */
             is_active?: boolean | null;
+        };
+        /** FacilityResponse */
+        FacilityResponse: {
+            /** Facility */
+            facility: string;
+            /** Estimated Cost */
+            estimated_cost?: number | null;
+            /** Status */
+            status?: string | null;
+        };
+        /** FaqItemResponse */
+        FaqItemResponse: {
+            /** Question */
+            question: string;
+            /** Answer */
+            answer: string;
         };
         /** FlatmateAdminImage */
         FlatmateAdminImage: {
@@ -12532,6 +13068,17 @@ export interface components {
          * @enum {string}
          */
         KitchenType: "vegetarian" | "non_vegetarian" | "eggetarian" | "any";
+        /** LandUsageResponse */
+        LandUsageResponse: {
+            /** Particular */
+            particular: string;
+            /** Area Sqm */
+            area_sqm?: number | null;
+            /** Area Acres */
+            area_acres?: number | null;
+            /** Percentage */
+            percentage?: number | null;
+        };
         /** LastMethodRequest */
         LastMethodRequest: {
             method: components["schemas"]["AuthMethod"];
@@ -13599,6 +14146,42 @@ export interface components {
              */
             calls?: number;
         };
+        /** MarketPulseResponse */
+        MarketPulseResponse: {
+            /** City */
+            city: string;
+            /**
+             * Captured On
+             * Format: date
+             */
+            captured_on: string;
+            sentiment: components["schemas"]["MarketSentiment"];
+            /** Avg Price Per Sqft */
+            avg_price_per_sqft?: number | null;
+            /** Price Change 90D Pct */
+            price_change_90d_pct?: number | null;
+            /** New Registrations */
+            new_registrations?: number | null;
+            /** New Complaints */
+            new_complaints?: number | null;
+            /**
+             * Computed At
+             * Format: date-time
+             */
+            computed_at: string;
+        };
+        /**
+         * MarketSentiment
+         * @description Direction of a micro-market over the pulse window.
+         *
+         *     ``unknown`` is not a direction: it means no reading could be taken. The
+         *     register publishes no buyer-facing price, so the price move is always absent,
+         *     and the fallback signal (filings inside the window) needs a registration date
+         *     the Delhi register never states. ``neutral`` would claim a flat market on that
+         *     evidence; ``unknown`` says the evidence is missing.
+         * @enum {string}
+         */
+        MarketSentiment: "positive" | "neutral" | "negative" | "unknown";
         /** MarketingNotification */
         MarketingNotification: {
             /**
@@ -13790,6 +14373,55 @@ export interface components {
          * @enum {string}
          */
         MessageType: "text" | "image" | "system" | "visit_request";
+        /** MicroMarketDetailResponse */
+        MicroMarketDetailResponse: {
+            /** Id */
+            id: number;
+            /** City */
+            city: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** District */
+            district?: string | null;
+            /** Summary */
+            summary?: string | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /**
+             * Project Count
+             * @default 0
+             */
+            project_count?: number;
+            /** Avg Price Per Sqft */
+            avg_price_per_sqft?: number | null;
+            /** Stage Breakdown */
+            stage_breakdown?: {
+                [key: string]: number;
+            };
+        };
+        /** MicroMarketResponse */
+        MicroMarketResponse: {
+            /** Id */
+            id: number;
+            /** City */
+            city: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** District */
+            district?: string | null;
+            /** Summary */
+            summary?: string | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+        };
         /**
          * ModerationAction
          * @description Actions available when moderating a flatmate listing.
@@ -13882,6 +14514,17 @@ export interface components {
             created_at: string;
             /** Updated At */
             updated_at?: string | null;
+        };
+        /** NocResponse */
+        NocResponse: {
+            /** Facility */
+            facility: string;
+            /** Provider Agency */
+            provider_agency?: string | null;
+            /** Approved */
+            approved?: boolean | null;
+            /** Approval Reference */
+            approval_reference?: string | null;
         };
         /**
          * NorthDirection
@@ -14524,6 +15167,18 @@ export interface components {
              */
             type?: "authenticated" | null;
         };
+        /** PricePointResponse */
+        PricePointResponse: {
+            /** Quarter */
+            quarter: string;
+            /** Period Start */
+            period_start?: string | null;
+            /** Unit Type */
+            unit_type: string;
+            /** Price Per Sqft */
+            price_per_sqft?: number | null;
+            source: components["schemas"]["ProjectPriceSource"];
+        };
         /**
          * PrivacySettings
          * @description Privacy preferences as returned by the API. Unknown stored keys are ignored on read.
@@ -14637,6 +15292,259 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+        };
+        /** ProjectCostResponse */
+        ProjectCostResponse: {
+            /** Land Cost */
+            land_cost?: number | null;
+            /** Construction Cost */
+            construction_cost?: number | null;
+            /** Infrastructure Cost */
+            infrastructure_cost?: number | null;
+            /** Other Cost */
+            other_cost?: number | null;
+            /** Total Cost */
+            total_cost?: number | null;
+        };
+        /**
+         * ProjectDetailResponse
+         * @description Every summary field plus the full filing. Contact details are never included.
+         */
+        ProjectDetailResponse: {
+            /** Id */
+            id: number;
+            /** Slug */
+            slug: string;
+            /** Rera Number */
+            rera_number: string;
+            /** Project Name */
+            project_name: string;
+            /** Developer Name */
+            developer_name?: string | null;
+            /** Developer Slug */
+            developer_slug?: string | null;
+            /** Location */
+            location?: string | null;
+            /** District */
+            district: string;
+            stage?: components["schemas"]["ProjectStage"] | null;
+            /** Total Units */
+            total_units?: number | null;
+            /** Towers */
+            towers?: number | null;
+            /** Land Area Acres */
+            land_area_acres?: number | null;
+            /** Proposed Far */
+            proposed_far?: number | null;
+            /** Proposed Completion Date */
+            proposed_completion_date?: string | null;
+            /** Current Price Per Sqft */
+            current_price_per_sqft?: number | null;
+            /** Possession Date */
+            possession_date?: string | null;
+            /** Status */
+            status?: string | null;
+            /**
+             * Complaint Count
+             * @default 0
+             */
+            complaint_count?: number;
+            /** Source Url */
+            source_url?: string | null;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            provenance?: components["schemas"]["DataHubProvenanceSummary"] | null;
+            profile?: components["schemas"]["ProjectProfileResponse"] | null;
+            /** Land Usage */
+            land_usage?: components["schemas"]["LandUsageResponse"][];
+            cost?: components["schemas"]["ProjectCostResponse"] | null;
+            /** Expenditure */
+            expenditure?: components["schemas"]["QuarterlyExpenditureResponse"][];
+            /** Documents */
+            documents?: components["schemas"]["ProjectDocumentResponse"][];
+            statutory?: components["schemas"]["StatutoryApprovalResponse"] | null;
+            /** Facilities */
+            facilities?: components["schemas"]["FacilityResponse"][];
+            /** Nocs */
+            nocs?: components["schemas"]["NocResponse"][];
+            /** People */
+            people?: components["schemas"]["ProjectPersonResponse"][];
+            bank_account?: components["schemas"]["BankAccountResponse"] | null;
+            /** Unit Configs */
+            unit_configs?: components["schemas"]["UnitConfigResponse"][];
+            /** Specifications */
+            specifications?: components["schemas"]["SpecificationResponse"][];
+            /** Nearby */
+            nearby?: components["schemas"]["ProjectSummaryResponse"][];
+            /** Price History */
+            price_history?: components["schemas"]["PricePointResponse"][];
+            /** Faq */
+            faq?: components["schemas"]["FaqItemResponse"][];
+        };
+        /** ProjectDocumentResponse */
+        ProjectDocumentResponse: {
+            /** Ordinal */
+            ordinal: number;
+            /** Description */
+            description: string;
+            /** Uploaded On */
+            uploaded_on?: string | null;
+            /** View Url */
+            view_url?: string | null;
+        };
+        /** ProjectFaqResponse */
+        ProjectFaqResponse: {
+            /** Items */
+            items?: components["schemas"]["FaqItemResponse"][];
+        };
+        /**
+         * ProjectMapPointResponse
+         * @description One project pin. Only projects with filed coordinates are returned.
+         */
+        ProjectMapPointResponse: {
+            /** Slug */
+            slug: string;
+            /** Project Name */
+            project_name: string;
+            /** Developer Name */
+            developer_name?: string | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            stage?: components["schemas"]["ProjectStage"] | null;
+        };
+        /**
+         * ProjectPersonResponse
+         * @description Promoter-side person. Contact details (email, phones, address) are never serialized.
+         */
+        ProjectPersonResponse: {
+            role: components["schemas"]["ProjectPersonRole"];
+            /** Name */
+            name: string;
+            /** Pan Last4 */
+            pan_last4?: string | null;
+            /** Photo Url */
+            photo_url?: string | null;
+        };
+        /**
+         * ProjectPersonRole
+         * @description Role of a person listed in REP-I.
+         *
+         *     Company roles come from Part A; ``licensee`` covers the co-licensees named in
+         *     Part B, who own the land but hold no company office.
+         * @enum {string}
+         */
+        ProjectPersonRole: "chairman" | "managing_director" | "director" | "authorised_representative" | "licensee" | "other";
+        /**
+         * ProjectPriceSource
+         * @description Where a price point came from. Only ``filing`` and ``launch`` are official figures.
+         * @enum {string}
+         */
+        ProjectPriceSource: "launch" | "filing" | "derived";
+        /**
+         * ProjectProfileResponse
+         * @description REP-I filing profile scalars. Never carries contact details.
+         */
+        ProjectProfileResponse: {
+            /** Portal Project Id */
+            portal_project_id?: string | null;
+            /** Licensed Land Acres */
+            licensed_land_acres?: number | null;
+            /** Land Area Sqm */
+            land_area_sqm?: number | null;
+            /** Proposed Far */
+            proposed_far?: number | null;
+            /** Permissible Far */
+            permissible_far?: number | null;
+            /** Towers */
+            towers?: number | null;
+            /** Floors */
+            floors?: number | null;
+            /** Total Units */
+            total_units?: number | null;
+            /** Units Per Acre */
+            units_per_acre?: number | null;
+            /** Rera Received Date */
+            rera_received_date?: string | null;
+            /** Construction Start Date */
+            construction_start_date?: string | null;
+            /** Proposed Completion Date */
+            proposed_completion_date?: string | null;
+            /** Launch Price Per Sqft */
+            launch_price_per_sqft?: number | null;
+            /** Current Price Per Sqft */
+            current_price_per_sqft?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            stage?: components["schemas"]["ProjectStage"] | null;
+        };
+        /**
+         * ProjectStage
+         * @description Lifecycle stage of a registered project.
+         *
+         *     Only the values a filing date can evidence are produced today. ``launched``
+         *     and ``stalled`` are deliberately absent: neither follows from a filed date,
+         *     so claiming one would be a guess.
+         * @enum {string}
+         */
+        ProjectStage: "pre_launch" | "under_construction" | "near_possession" | "completed";
+        /**
+         * ProjectSummaryResponse
+         * @description List-level project card. Field names are frozen: the web UI codes against them.
+         */
+        ProjectSummaryResponse: {
+            /** Id */
+            id: number;
+            /** Slug */
+            slug: string;
+            /** Rera Number */
+            rera_number: string;
+            /** Project Name */
+            project_name: string;
+            /** Developer Name */
+            developer_name?: string | null;
+            /** Developer Slug */
+            developer_slug?: string | null;
+            /** Location */
+            location?: string | null;
+            /** District */
+            district: string;
+            stage?: components["schemas"]["ProjectStage"] | null;
+            /** Total Units */
+            total_units?: number | null;
+            /** Towers */
+            towers?: number | null;
+            /** Land Area Acres */
+            land_area_acres?: number | null;
+            /** Proposed Far */
+            proposed_far?: number | null;
+            /** Proposed Completion Date */
+            proposed_completion_date?: string | null;
+            /** Current Price Per Sqft */
+            current_price_per_sqft?: number | null;
+            /** Possession Date */
+            possession_date?: string | null;
+            /** Status */
+            status?: string | null;
+            /**
+             * Complaint Count
+             * @default 0
+             */
+            complaint_count?: number;
+            /** Source Url */
+            source_url?: string | null;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            provenance?: components["schemas"]["DataHubProvenanceSummary"] | null;
         };
         /** Property */
         Property: {
@@ -15632,6 +16540,19 @@ export interface components {
                 [key: string]: string;
             };
         };
+        /** QuarterlyExpenditureResponse */
+        QuarterlyExpenditureResponse: {
+            /** Category */
+            category: string;
+            /** Year */
+            year: number;
+            /** Quarter */
+            quarter: number;
+            /** Particular */
+            particular: string;
+            /** Amount */
+            amount?: number | null;
+        };
         /**
          * RealtimeViewBucket
          * @description View count for one 5-minute bucket of the last hour. timestamp is the bucket start (UTC).
@@ -16219,6 +17140,8 @@ export interface components {
             rera_number: string;
             /** Project Name */
             project_name: string;
+            /** Slug */
+            slug?: string | null;
             /** Developer Name */
             developer_name?: string | null;
             /** Project Type */
@@ -16237,8 +17160,7 @@ export interface components {
             expiry_date?: string | null;
             /** Status */
             status?: string | null;
-            /** Source Url */
-            source_url?: string | null;
+            provenance?: components["schemas"]["DataHubProvenanceSummary"] | null;
             /**
              * Created At
              * Format: date-time
@@ -16250,11 +17172,19 @@ export interface components {
         /** ReraVerifyResult */
         ReraVerifyResult: {
             /** Valid */
-            valid: boolean;
+            valid?: boolean | null;
+            /**
+             * Verification Status
+             * @default unknown
+             * @enum {string}
+             */
+            verification_status?: "unknown" | "unverified" | "verified";
             /** Status */
             status?: string | null;
             /** Project Name */
             project_name?: string | null;
+            /** Official Source Url */
+            official_source_url?: string | null;
         };
         /**
          * RoomInfo
@@ -16558,6 +17488,23 @@ export interface components {
          * @enum {string}
          */
         ScraperStatus: "running" | "success" | "partial" | "failed";
+        /**
+         * ScraperTriggerRequest
+         * @description Operator arguments for a manual scraper trigger.
+         *
+         *     Only ``rera_portal_scan`` reads these. It walks a range of HRERA portal ids and
+         *     refuses to run without an ``end_id``, so the range has to come from the
+         *     operator rather than from a default. Every other scraper ignores the body, and
+         *     an option a scraper does not accept is dropped rather than passed on.
+         */
+        ScraperTriggerRequest: {
+            /** Start Id */
+            start_id?: number | null;
+            /** End Id */
+            end_id?: number | null;
+            /** Delay Seconds */
+            delay_seconds?: number | null;
+        };
         /** ScraperTriggerResult */
         ScraperTriggerResult: {
             /** Message */
@@ -16748,6 +17695,17 @@ export interface components {
             /** Warnings */
             warnings?: string[];
         };
+        /** SpecificationResponse */
+        SpecificationResponse: {
+            /** Scope */
+            scope: string;
+            /** Unit Type */
+            unit_type: string;
+            /** Spec Key */
+            spec_key: string;
+            /** Spec Value */
+            spec_value?: string | null;
+        };
         /** StageRequest */
         StageRequest: {
             /**
@@ -16829,6 +17787,29 @@ export interface components {
             total_cost: number;
             /** Current Bank Rate */
             current_bank_rate?: number | null;
+        };
+        /** StatutoryApprovalResponse */
+        StatutoryApprovalResponse: {
+            /** Loi Number */
+            loi_number?: string | null;
+            /** Loi Date */
+            loi_date?: string | null;
+            /** Licence Number */
+            licence_number?: string | null;
+            /** Licence Date */
+            licence_date?: string | null;
+            /** Electric Load Kw */
+            electric_load_kw?: number | null;
+            /** Water Available */
+            water_available?: boolean | null;
+            /** Storm Water Available */
+            storm_water_available?: boolean | null;
+            /** Sewerage Available */
+            sewerage_available?: boolean | null;
+            /** Plan Approvals */
+            plan_approvals?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * StitchResult
@@ -17451,7 +18432,7 @@ export interface components {
              * Type Key
              * @enum {string}
              */
-            type_key: "booking_confirmed" | "payment_failed" | "document_approved" | "chat_message" | "password_changed" | "security_alert" | "app_update" | "policy_update" | "promotion_generic" | "discount_offer" | "win_back" | "upsell_suggestion" | "onboarding_nudge" | "visit_reminder" | "property_recommendation" | "daily_digest" | "flatmate_new_message" | "flatmate_new_match" | "flatmate_listing_approved" | "flatmate_listing_rejected" | "flatmate_account_suspended" | "flatmate_account_warned" | "flatmate_report_actioned" | "flatmate_report_dismissed" | "flatmate_visit_scheduled" | "flatmate_visit_confirmed" | "admin_broadcast";
+            type_key: "booking_confirmed" | "payment_failed" | "document_approved" | "chat_message" | "password_changed" | "security_alert" | "app_update" | "policy_update" | "promotion_generic" | "discount_offer" | "win_back" | "upsell_suggestion" | "onboarding_nudge" | "visit_reminder" | "property_recommendation" | "daily_digest" | "flatmate_new_message" | "flatmate_new_match" | "flatmate_listing_approved" | "flatmate_listing_rejected" | "flatmate_account_suspended" | "flatmate_account_warned" | "flatmate_report_actioned" | "flatmate_report_dismissed" | "flatmate_visit_scheduled" | "flatmate_visit_confirmed" | "auction_alert_match" | "watchlist_price_change" | "watchlist_stage_change" | "watchlist_possession_change" | "watchlist_new_filing" | "admin_broadcast";
             /** Title */
             title: string;
             /** Body */
@@ -17462,6 +18443,29 @@ export interface components {
             } | null;
             /** Deep Link */
             deep_link?: string | null;
+        };
+        /** UnitConfigResponse */
+        UnitConfigResponse: {
+            /** Ordinal */
+            ordinal: number;
+            /** Unit Type */
+            unit_type: string;
+            /** Carpet Area Sqm */
+            carpet_area_sqm?: number | null;
+            /** Built Up Area Sqm */
+            built_up_area_sqm?: number | null;
+            /** Super Built Up Area Sqm */
+            super_built_up_area_sqm?: number | null;
+            /** Carpet Efficiency */
+            carpet_efficiency?: number | null;
+            /** Units */
+            units?: number | null;
+            /** Towers */
+            towers?: number | null;
+            /** Parkings */
+            parkings?: number | null;
+            /** Price */
+            price?: number | null;
         };
         /**
          * UnmatchPairRequest
@@ -18088,6 +19092,39 @@ export interface components {
             /** Follow Up Date */
             follow_up_date?: string | null;
         };
+        /**
+         * WatchlistItemCreate
+         * @description Watchlist body. Unknown keys fail with 422.
+         */
+        WatchlistItemCreate: {
+            /** Project Id */
+            project_id: number;
+            /** Notes */
+            notes?: string | null;
+            /** Alert Prefs */
+            alert_prefs?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /** WatchlistItemResponse */
+        WatchlistItemResponse: {
+            /** Id */
+            id: number;
+            /** Project Id */
+            project_id: number;
+            /** Notes */
+            notes?: string | null;
+            /** Alert Prefs */
+            alert_prefs?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            project?: components["schemas"]["ProjectSummaryResponse"] | null;
+        };
         /** WidgetFrame */
         WidgetFrame: {
             /**
@@ -18130,6 +19167,7 @@ export interface components {
             slug: string;
             /** Source Url */
             source_url?: string | null;
+            provenance?: components["schemas"]["DataHubProvenanceSummary"] | null;
             /**
              * Created At
              * Format: date-time
@@ -31914,6 +32952,15 @@ export interface operations {
                     "application/json": components["schemas"]["ValidationErrorEnvelope"];
                 };
             };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Error. Every non-2xx response has this body. */
             default: {
                 headers: {
@@ -31952,6 +32999,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Error. Every non-2xx response has this body. */
@@ -32003,6 +33059,15 @@ export interface operations {
                     "application/json": components["schemas"]["ValidationErrorEnvelope"];
                 };
             };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Error. Every non-2xx response has this body. */
             default: {
                 headers: {
@@ -32041,6 +33106,837 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_projects_api_v1_data_hub_projects_get: {
+        parameters: {
+            query?: {
+                /** @description Exact district match */
+                district?: string | null;
+                /** @description Filed lifecycle stage */
+                stage?: components["schemas"]["ProjectStage"] | null;
+                developer_slug?: string | null;
+                /** @description Search project name or developer */
+                q?: string | null;
+                /** @description Minimum total units */
+                min_units?: number | null;
+                /** @description Maximum total units */
+                max_units?: number | null;
+                /** @description Opaque pagination cursor from a prior response's next_cursor. */
+                cursor?: string | null;
+                /** @description Max items to return (1-100). */
+                limit?: number;
+                /** @description If true, include a total count (extra COUNT query). */
+                include_total?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CursorPage_ProjectSummaryResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    get_project_api_v1_data_hub_projects__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_nearby_projects_api_v1_data_hub_projects__slug__nearby_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectSummaryResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_project_price_history_api_v1_data_hub_projects__slug__price_history_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PricePointResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_project_documents_api_v1_data_hub_projects__slug__documents_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDocumentResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    get_project_faq_api_v1_data_hub_projects__slug__faq_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectFaqResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_developers_api_v1_data_hub_developers_get: {
+        parameters: {
+            query?: {
+                /** @description Search developer name */
+                q?: string | null;
+                /** @description Sort by developer name or by total trust score */
+                order_by?: "name" | "score";
+                /** @description Opaque pagination cursor from a prior response's next_cursor. */
+                cursor?: string | null;
+                /** @description Max items to return (1-100). */
+                limit?: number;
+                /** @description If true, include a total count (extra COUNT query). */
+                include_total?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CursorPage_DeveloperSummaryResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    get_developer_api_v1_data_hub_developers__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeveloperDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    get_developer_score_api_v1_data_hub_developers__slug__score_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeveloperScoreResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_micro_markets_api_v1_data_hub_micro_markets_get: {
+        parameters: {
+            query?: {
+                /** @description Filter to one city */
+                city?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MicroMarketResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    get_micro_market_api_v1_data_hub_micro_markets__city___slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                city: string;
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MicroMarketDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_market_pulse_api_v1_data_hub_market_pulse_get: {
+        parameters: {
+            query?: {
+                /** @description Filter to one city */
+                city?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketPulseResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_map_projects_api_v1_data_hub_map_projects_get: {
+        parameters: {
+            query: {
+                min_lat: number;
+                max_lat: number;
+                min_lng: number;
+                max_lng: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectMapPointResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    list_watchlist_items_api_v1_data_hub_watchlist_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchlistItemResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    add_watchlist_item_api_v1_data_hub_watchlist_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WatchlistItemCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchlistItemResponse"];
+                };
+            };
+            /** @description The per-user watchlist ceiling is reached */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Error. Every non-2xx response has this body. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    delete_watchlist_item_api_v1_data_hub_watchlist__project_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Error. Every non-2xx response has this body. */
@@ -32785,7 +34681,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ScraperTriggerRequest"] | null;
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -32803,6 +34703,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ValidationErrorEnvelope"];
+                };
+            };
+            /** @description HRERA surface turned off by configuration */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Error. Every non-2xx response has this body. */

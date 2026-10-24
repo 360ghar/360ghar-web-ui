@@ -1,79 +1,22 @@
 ---
-/** /best-sectors-investment-2026: the old static ranking (5 micro-markets), data as it was. */
-import { absoluteUrl, DEFAULT_OG_IMAGE } from '@/lib/seo/site';
-import { FAQ, SECTORS } from './content';
-import DataHubPage from './DataHubPage.astro';
-import { fmtDate } from './format';
-import { text } from './text';
-
-const locale = Astro.locals.locale;
-const t = text(locale);
-const hi = locale === 'hi';
-const DATE = '2026-01-01';
-const L = hi
-  ? { h1: 'निवेश के लिए सबसे अच्छे सेक्टर, 2026', lead: 'गुरुग्राम के पाँच माइक्रो-मार्केट, संभावित रिटर्न, किराये की आय और जोखिम के हिसाब से क्रम में।', crumb: 'सबसे अच्छे सेक्टर 2026', price: 'कीमत', ret: 'संभावित रिटर्न', yield: 'किराये की आय', risk: 'जोखिम', horizon: 'अवधि', best: 'किसके लिए', note: 'अस्वीकरण: अनुमान मौजूदा बाज़ार रुझानों पर आधारित हैं। रियल एस्टेट निवेश में जोखिम है। पिछला प्रदर्शन भविष्य के रिटर्न की गारंटी नहीं है। फ़ैसले से पहले SEBI-पंजीकृत सलाहकार से बात करें।' }
-  : { h1: 'Best sectors to invest in, 2026', lead: 'Five Gurugram micro-markets, ranked by expected capital growth, rental yield and risk.', crumb: 'Best sectors 2026', price: 'Price range', ret: 'Expected returns', yield: 'Rental yield', risk: 'Risk', horizon: 'Time horizon', best: 'Best for', note: 'Disclaimer: projections are based on current market trends and expert analysis. Real estate investments carry risk. Past performance does not guarantee future returns. Talk to a SEBI-registered investment adviser before you invest.' };
+/** A held data page: the shared hold shell, with the notice once in the body. */
+import DataHubHold from './DataHubHold.astro';
+const en = {
+  title: 'Gurugram investment research under review | 360Ghar',
+  description: 'Investment research is held while its sources and methods are reviewed.',
+  heading: 'Investment research under review',
+  crumb: 'Investment research',
+  lead: 'Investment research is held while its sources and methods are reviewed.',
+  notice: 'Forecasts, prices and rankings are withheld while source samples and reproducible methods are reviewed.',
+};
+const hi = {
+  title: 'गुरुग्राम निवेश रिसर्च समीक्षा के अधीन | 360Ghar',
+  description: 'निवेश रिसर्च स्रोतों और तरीकों की समीक्षा तक रोकी गई है।',
+  heading: 'निवेश रिसर्च समीक्षा के अधीन',
+  crumb: 'निवेश रिसर्च',
+  lead: 'निवेश रिसर्च स्रोतों और तरीकों की समीक्षा तक रोकी गई है।',
+  notice: 'स्रोत नमूनों और दोहराए जा सकने वाले तरीकों की समीक्षा तक अनुमान, कीमतें और रैंकिंग प्रकाशित नहीं हैं।',
+};
 ---
 
-<DataHubPage
-  art="bestSectors"
-  title="Best Sectors for Property Investment in Gurugram 2026 | 360Ghar"
-  description="Top 5 areas to invest in Gurugram property in 2026. Ranked by expected returns, rental yield, and risk. Expert analysis by 360Ghar."
-  keywords="best place to invest Gurugram 2026, upcoming areas Gurugram investment, which sector Gurugram best investment, Gurugram property returns 2026, Dwarka Expressway investment, New Gurugram sectors"
-  path="/best-sectors-investment-2026"
-  type="article"
-  article={{ published: DATE, modified: DATE }}
-  heading={L.h1}
-  lead={L.lead}
-  crumbs={[{ name: L.crumb, path: '/best-sectors-investment-2026' }]}
-  faqs={FAQ.bestSectors}
-  jsonLd={[
-    {
-      '@type': 'Article',
-      headline: 'Best Sectors for Property Investment in Gurugram 2026',
-      description: 'A curated guide to the best areas for real estate investment in Gurugram in 2026, ranked by expected returns, rental yield, and risk profile.',
-      url: absoluteUrl('/best-sectors-investment-2026'),
-      author: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
-      publisher: { '@type': 'Organization', name: '360Ghar', logo: { '@type': 'ImageObject', url: 'https://360ghar.com/assets/images/logo/logo.png' } },
-      datePublished: DATE,
-      dateModified: DATE,
-      image: DEFAULT_OG_IMAGE,
-      keywords: ['best place to invest in Gurugram 2026', 'upcoming areas Gurugram investment', 'Gurugram property investment returns', 'which sector in Gurugram is best for investment'],
-    },
-  ]}
-  related={['tenant', 'priceIndex', 'builderScore', 'circleRates']}
->
-  <p slot="head" class="dh-meta">{t.updated(fmtDate(DATE, locale, 'long') ?? DATE)}</p>
-
-  <ol class="grid gap-4 max-w-[60rem]">
-    {
-      SECTORS.map((s) => (
-        <li class="sheet dh-panel grid gap-4 sm:grid-cols-[4.5rem_1fr]">
-          <span class="dh-rank" aria-hidden="true">
-            {s.rank}
-          </span>
-          <div class="grid gap-3 min-w-0">
-            <div class="dh-row-head">
-              <h2 class="dh-row-title text-xl">
-                <span class="visually-hidden">{s.rank}. </span>
-                {s.name}
-              </h2>
-              <span class="font-bold text-kesar-700">{s.verdict}</span>
-            </div>
-            <p class="dh-row-sub mt-0">{s.type}</p>
-            <dl class="dh-facts mt-0">
-              <div><dt>{L.price}</dt><dd>{s.priceRange}</dd></div>
-              <div><dt>{L.ret}</dt><dd>{s.expectedReturn}</dd></div>
-              <div><dt>{L.yield}</dt><dd>{s.rentalYield}</dd></div>
-              <div><dt>{L.risk}</dt><dd>{s.risk}</dd></div>
-              <div><dt>{L.horizon}</dt><dd>{s.horizon}</dd></div>
-              <div><dt>{L.best}</dt><dd>{s.bestFor}</dd></div>
-            </dl>
-            <p class="text-ink-800">{s.reason}</p>
-          </div>
-        </li>
-      ))
-    }
-  </ol>
-  <p class="dh-meta mt-6 max-w-[68ch]">{L.note}</p>
-</DataHubPage>
+<DataHubHold locale={Astro.locals.locale} path={'/best-sectors-investment-2026'} en={en} hi={hi} />

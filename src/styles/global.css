@@ -49,6 +49,17 @@
   --color-dio-metro: #b9694a;
   --color-dio-street: #7a4a36;
   --color-dio-kerb: #3a2219;
+  --color-dio-train: var(--color-kesar-500);
+  --color-dio-kite: var(--color-kesar-600);
+
+  /* Diorama shadows, far layer to near. Full `rgb()` values, because the scene
+     puts them straight into `flood-color`. */
+  --dio-sh-cloud: rgb(38 78 68 / 0.16);
+  --dio-sh-tower: rgb(38 78 68 / 0.32);
+  --dio-sh-block: rgb(120 58 34 / 0.34);
+  --dio-sh-metro: rgb(84 38 22 / 0.4);
+  --dio-sh-street: rgb(48 24 14 / 0.45);
+  --dio-sh-kerb: rgb(24 12 8 / 0.5);
 
   /* Ink: green-neutral near-black and its steps. Used for text. */
   --color-ink-950: #0f1d19;
@@ -1184,13 +1195,46 @@
 
   /* ---------- Hero search ---------- */
 
+  /* The search is its own query container, so the row count follows the width
+     the search actually gets. The home sheet, the lab slip and the map slip
+     all host it at different widths. */
   .hero-search {
+    container-type: inline-size;
+  }
+
+  /* Three rows on a phone, two rows from 36rem, one line from 53rem: the foot
+     group (Near me, Forget saved location) joins the tabs, field and Search on
+     the same line. The home card is wide enough for that from a 960px viewport. */
+  .hero-search-rows {
     display: grid;
-    gap: 0.75rem;
+    align-items: center;
+    gap: 0.75rem 0.5rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'purpose purpose'
+      'field   go'
+      'foot    foot';
+  }
+
+  @container (min-width: 36rem) {
+    .hero-search-rows {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        'purpose field go'
+        'foot    foot  foot';
+    }
+  }
+
+  @container (min-width: 53rem) {
+    .hero-search-rows {
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      grid-template-areas: 'purpose field go foot';
+    }
   }
 
   /* Segmented control: one tonal track, the chosen option is the dark paper. */
   .hero-purpose {
+    grid-area: purpose;
     display: flex;
     justify-self: center;
     gap: 0.125rem;
@@ -1199,6 +1243,12 @@
     padding: 4px;
     background: var(--color-ink-100);
     border-radius: var(--radius-md);
+  }
+
+  @container (min-width: 36rem) {
+    .hero-purpose {
+      justify-self: start;
+    }
   }
 
   .hero-purpose-opt {
@@ -1216,8 +1266,8 @@
   .hero-purpose-opt span {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    padding: 0 1.25rem;
+    min-height: 44px;
+    padding: 0 1rem;
     border-radius: var(--radius-sm);
     font-weight: 700;
     color: var(--color-ink-600);
@@ -1238,10 +1288,9 @@
     outline-offset: 2px;
   }
 
-  .hero-search-row {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.5rem;
+  .hero-search-field {
+    grid-area: field;
+    min-width: 0;
   }
 
   .hero-search-input {
@@ -1250,6 +1299,7 @@
   }
 
   .hero-search-go {
+    grid-area: go;
     min-height: 56px;
   }
 
@@ -1264,6 +1314,7 @@
   }
 
   .hero-search-foot {
+    grid-area: foot;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -1271,8 +1322,31 @@
     gap: 0 1.5rem;
   }
 
+  /* One line: the foot group is the fourth column, so it stops centring, loses
+     its 1.5rem gap, and wraps its own children inside a capped width. The cap
+     keeps the "Saved location removed." status from pushing the field narrower. */
+  @container (min-width: 53rem) {
+    .hero-search-foot {
+      justify-content: flex-end;
+      gap: 0 0.25rem;
+      max-width: 12rem;
+    }
+
+    .hero-forget {
+      padding-inline: 0.5rem;
+    }
+
+    .hero-forget span {
+      display: none;
+    }
+  }
+
   .hero-search-foot .link {
     padding-inline: 0.5rem;
+  }
+
+  .hero-search-notice {
+    grid-column: 1 / -1;
   }
 
   /* ---------- Favourite over a card image ---------- */

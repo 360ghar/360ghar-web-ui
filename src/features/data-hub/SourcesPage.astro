@@ -1,108 +1,28 @@
 ---
-/** /auction-sources: portals by group with live counts; the old static list when the API is down. */
-import { getT } from '@/i18n';
 import type { Locale } from '@/lib/i18n/locale';
-import { localizePath } from '@/lib/i18n/locale';
-import Icon from '@/ui/icons/Icon.astro';
-import type { AuctionSource } from './api';
-import { FAQ, SOURCE_GROUPS, STEPS } from './content';
-import DataHubPage from './DataHubPage.astro';
-import { hubName } from './pages';
-import { text } from './text';
+import DataHubHold from './DataHubHold.astro';
 
-type Props = { locale: Locale; live: AuctionSource[] | null };
-const { locale, live } = Astro.props;
-const t = text(locale);
-const tt = getT(locale);
-
-const described = new Map<string, string>();
-for (const g of SOURCE_GROUPS) for (const s of g.sources) if (s.source && 'description' in s) described.set(s.source, s.description);
-
-type Row = { key: string; label: string; url: string; count: number | null; description: string | null };
-// The API sends one flat list; each row names its group in `category`.
-const liveGroups = (rows: AuctionSource[]) => {
-  const byCategory = new Map<string, Row[]>();
-  for (const r of rows) {
-    const list = byCategory.get(r.category) ?? [];
-    list.push({ key: r.source, label: r.label, url: r.url, count: r.count ?? 0, description: described.get(r.source) ?? null });
-    byCategory.set(r.category, list);
-  }
-  return [...byCategory].map(([key, groupRows]) => ({ key, rows: groupRows }));
-};
-const groups: { key: string; rows: Row[] }[] = live
-  ? liveGroups(live)
-  : SOURCE_GROUPS.map((g) => ({
-      key: g.key,
-      rows: g.sources.map((s) => ({ key: s.source, label: s.label, url: s.url, count: null, description: 'description' in s ? s.description : null })),
-    }));
-const host = (url: string) => {
-  try {
-    return new URL(url).host.replace(/^www\./, '');
-  } catch {
-    return url;
-  }
-};
+type Props = { locale: Locale };
+const { locale } = Astro.props;
 ---
 
-<DataHubPage
-  art="sources"
-  title={tt('seo:auctionSources.title')}
-  description={tt('seo:auctionSources.description')}
-  keywords="government property auctions Delhi, bank auction portals, IBAPI, DDA auction, HSVP e-auction, BaankNet, SARFAESI auction Delhi NCR, MDA auction Meerut, YEIDA auction, bank auction guide India"
+<DataHubHold
+  locale={locale}
   path="/auction-sources"
-  type="article"
-  article={{ published: '2025-05-01', modified: '2025-05-04' }}
-  heading={t.srcH1}
-  lead={t.srcLead}
-  crumbs={[{ name: hubName('sources', locale), path: '/auction-sources' }]}
-  faqs={FAQ.sources}
-  howTo={{ name: 'How to Participate in a Property Auction', description: 'Step-by-step guide to participating in bank and government property auctions in Delhi NCR.', steps: STEPS.sources }}
-  jsonLd={[
-    {
-      '@type': 'Article',
-      headline: 'Complete Guide to Government & Bank Property Auctions in Delhi NCR',
-      description: 'Comprehensive guide covering 25+ government, bank, and aggregator auction portals for property auctions in Delhi, Gurugram, Meerut, and the NCR region.',
-      image: 'https://360ghar.com/og-image-home.jpg',
-      url: 'https://360ghar.com/auction-sources',
-      datePublished: '2025-05-01',
-      dateModified: '2025-05-04',
-      author: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
-      publisher: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com', logo: { '@type': 'ImageObject', url: 'https://360ghar.com/assets/images/logo/logo.png' } },
-    },
-  ]}
-  related={['auctions', 'circleRates', 'ownership', 'stampDuty']}
->
-  <div slot="head" class="flex flex-wrap items-center gap-x-5 gap-y-2">
-    <a class="btn btn-ink" href={localizePath('/bank-auctions', locale)}>
-      {t.srcBrowse}
-      <Icon name="arrow-up-right" size={18} class="arrow" />
-    </a>
-    {!live && <p class="dh-meta" role="status">{t.srcOffline}</p>}
-  </div>
-
-  <div class="grid gap-10 max-w-[52rem]">
-    {
-      groups.map((g) => (
-        <section aria-labelledby={`src-${g.key}`}>
-          <h2 id={`src-${g.key}`} class="dh-h2">
-            {t.srcGroups[g.key] ?? g.key}
-          </h2>
-          <ul class="sheet dh-rows mt-4">
-            {g.rows.map((r) => (
-              <li>
-                <div class="dh-row-head">
-                  <a class="link text-[1.0625rem]" href={r.url} target="_blank" rel="noopener noreferrer">
-                    {r.label}
-                    <Icon name="arrow-up-right" size={16} class="arrow" />
-                  </a>
-                  {r.count ? <span class="font-semibold tabular text-ink-800">{t.srcCount(r.count)}</span> : null}
-                </div>
-                <p class="dh-row-sub">{r.description ?? host(r.url)}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))
-    }
-  </div>
-</DataHubPage>
+  en={{
+    title: 'Auction source directory under review | 360Ghar',
+    description: 'Portal links are withheld while attribution, reuse terms and current URLs are reviewed.',
+    heading: 'Auction source directory under review',
+    crumb: 'Auction sources',
+    lead: 'Portal links are not shown at this time.',
+    notice: 'We are reviewing source attribution, reuse terms and current URLs before publishing the directory.',
+  }}
+  hi={{
+    title: 'नीलामी स्रोत निर्देशिका समीक्षा के अधीन | 360Ghar',
+    description: 'श्रेय, उपयोग की शर्तों और मौजूदा URL की समीक्षा तक पोर्टल लिंक रोके गए हैं।',
+    heading: 'नीलामी स्रोत निर्देशिका समीक्षा के अधीन',
+    crumb: 'नीलामी स्रोत',
+    lead: 'पोर्टल लिंक अभी नहीं दिखाए जा रहे हैं।',
+    notice: 'निर्देशिका प्रकाशित करने से पहले हम स्रोत श्रेय, उपयोग की शर्तों और मौजूदा URL की समीक्षा कर रहे हैं।',
+  }}
+/>

@@ -65,7 +65,6 @@ function appBlock(id: string, app: { play: string; ios: string | null }, fields:
     '@id': id,
     ...fields,
     operatingSystem: app.ios ? 'Android, iOS' : 'Android',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
     downloadUrl: urls.length === 1 ? urls[0] : urls,
     installUrl: urls.length === 1 ? urls[0] : urls,
     publisher: { '@id': ORGANIZATION_ID },

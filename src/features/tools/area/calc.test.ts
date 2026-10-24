@@ -24,12 +24,11 @@ describe('carpetAreas', () => {
 });
 
 describe('convertCarpet', () => {
-  it('adds 6% by default and rounds', () => {
-    expect(convertCarpet(1000, 'mofa_to_rera')).toEqual({ result: 1060, delta: 60 });
-    expect(convertCarpet(1060, 'rera_to_mofa')).toEqual({ result: 1000, delta: -60 });
+  it('does not calculate without a user-entered assumption', () => {
+    expect(Number.isNaN(convertCarpet(1000, 'mofa_to_rera').result)).toBe(true);
   });
 
-  it('uses the chosen uplift', () => {
+  it('uses only the explicit user-entered assumption', () => {
     expect(convertCarpet(1000, 'mofa_to_rera', 8).result).toBe(1080);
     expect(convertCarpet(1000, 'mofa_to_rera', 5).result).toBe(1050);
   });

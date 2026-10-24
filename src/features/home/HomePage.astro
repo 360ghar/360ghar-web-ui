@@ -1,9 +1,9 @@
 ---
 /**
- * Home. Server-rendered: the diorama, the real listing count, a lead home with
+ * Home. Server-rendered: the diorama, the API listing count, a lead home with
  * its photos, a rail of recommended homes, the paper-cut "how it works" steps,
- * localities with live counts, the owner enquiry, refer and earn, the app, the
- * tools with live counts, the AI assistant, the review form, FAQ, latest posts,
+ * localities with API counts, the owner enquiry, refer and earn, the app, the
+ * tools, the AI assistant, the review form, FAQ, latest posts,
  * the fact sheet and the newsletter are in the HTML. Islands: the search (above
  * the fold), the favourite buttons, the two forms and the copy button (all
  * hydrate when visible). One small script adds the rail's previous and next buttons.
@@ -11,9 +11,8 @@
 import { getT } from '@/i18n';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizer } from '@/lib/i18n/locale';
-import Diorama from './diorama/Diorama.astro';
 import type { HomeData } from './load';
-import HeroSearch from '@/features/search/HeroSearch';
+import HomeHero from './hero/HomeHero.astro';
 import { cardPlace, PropertyCardView } from '@/features/property/PropertyCardView';
 import FavouriteButton from '@/features/favourites/FavouriteButton';
 import { BlogCardView } from '@/features/blog/BlogCardView';
@@ -22,11 +21,10 @@ import Paper from '@/ui/Paper.astro';
 import Icon from '@/ui/icons/Icon.astro';
 import StateBlock from '@/ui/states/StateBlock.astro';
 import { galleryPhotos } from '@/features/property/photos';
-import { areaSqft, formatNum, homeKind, imageUrl, listingPrice, srcSet } from '@/lib/format';
+import { areaSqft, homeKind, imageUrl, listingPrice, srcSet } from '@/lib/format';
 import Vignette from './vignettes/Vignette.astro';
 import PaperVignette from '@/ui/paper/PaperVignette.astro';
 import { COPY } from './copy';
-import { MORE } from './more';
 import AppSection from './sections/AppSection.astro';
 import AiSection from './sections/AiSection.astro';
 import FreeAiSection from './sections/FreeAiSection.astro';
@@ -40,12 +38,8 @@ type Props = { locale: Locale; data: HomeData };
 const { locale, data } = Astro.props;
 const t = getT(locale);
 const L = localizer(locale);
-const { lead, homes, count, localities, localityTotal, posts: blog, faqs, homesError, stats, facts } = data;
+const { lead, homes, count, localities, posts: blog, faqs, homesError, facts } = data;
 const c = COPY[locale];
-const num = (n: number) => formatNum(n, locale);
-type StatKey = keyof typeof stats;
-/** "183 listed" for a tool whose count is known; nothing when the API did not answer. */
-const statOf = (key?: StatKey) => (key && stats[key] ? MORE[locale].stat(num(stats[key]!)) : null);
 
 const leadPhotos = lead ? galleryPhotos(lead).slice(0, 5) : [];
 const leadName = lead ? homeKind(lead, locale) : '';
@@ -74,22 +68,7 @@ const pmFeatures = c.owner;
 ---
 
 {/* Lab pages (src/pages/lab) pass their own hero and the sections that follow it. */}
-{Astro.slots.has('hero') ? <slot name="hero" /> : (
-<section class="home-hero" aria-labelledby="home-title">
-  <Diorama class="home-diorama" label={c.diorama}>
-    <div class="container-page home-hero-copy">
-      <h1 id="home-title" class="home-title">{t('site:home.title')}</h1>
-    </div>
-  </Diorama>
-  <div class="container-page home-search-wrap">
-    <div class="home-search-lift">
-      <div class="home-search-sheet">
-        <HeroSearch client:load locale={locale} />
-      </div>
-    </div>
-  </div>
-</section>
-)}
+{Astro.slots.has('hero') ? <slot name="hero" /> : <HomeHero locale={locale} data={data} />}
 <slot name="after-hero" />
 
 <section class="home-block home-homes" aria-labelledby="home-homes" data-rail>
@@ -229,7 +208,7 @@ const pmFeatures = c.owner;
             {c.placesTitle}
           </h2>
           <a class="link" href={L('/localities')}>
-            {c.allPlaces(num(localityTotal))}
+            {c.allPlaces}
             <Icon name="arrow-up-right" size={16} class="arrow" />
           </a>
         </div>
@@ -340,7 +319,6 @@ const pmFeatures = c.owner;
                   <Icon name={tool.icon} size={22} />
                   <span class="home-tool-name">
                     {tool.name}
-                    {statOf((tool as { stat?: StatKey }).stat) ? <span class="home-tool-stat tabular">{statOf((tool as { stat?: StatKey }).stat)}</span> : null}
                   </span>
                   <span class="home-tool-note">{tool.note}</span>
                   <Icon name="arrow-up-right" size={16} class="arrow" />
@@ -462,62 +440,7 @@ const pmFeatures = c.owner;
 </script>
 
 <style>
-  .home-hero {
-    position: relative;
-  }
-
-  .home-hero :global(.home-diorama) {
-    height: clamp(30rem, calc(100svh - 64px - 9rem), 46rem);
-  }
-
-  .home-hero-copy {
-    position: relative;
-    z-index: 10;
-    padding-top: clamp(1.5rem, 6vh, 4.5rem);
-    text-align: center;
-  }
-
-  .home-title {
-    max-width: 14ch;
-    margin-inline: auto;
-    font-size: clamp(2.6rem, 1rem + 6.6vw, 6.25rem);
-    font-weight: 500;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    color: var(--color-ink-950);
-  }
-
-  /* The search sheet crosses the edge of the scene: half on the street, half on the page. */
-  .home-search-wrap {
-    position: relative;
-    z-index: 20;
-    margin-top: -4.5rem;
-  }
-
-  @media (min-width: 48rem) {
-    .home-search-wrap {
-      margin-top: -5.5rem;
-    }
-  }
-
-  .home-search-lift {
-    max-width: 46rem;
-    margin-inline: auto;
-  }
-
-  .home-search-sheet {
-    padding: 1rem;
-    background: var(--color-paper);
-    border-radius: var(--radius-xl);
-    box-shadow: 0 2px 2px rgb(var(--tint) / 0.06), 0 18px 32px -14px rgb(var(--tint) / 0.24);
-  }
-
-  @media (min-width: 48rem) {
-    .home-search-sheet {
-      padding: 1.25rem 1.5rem;
-    }
-  }
-
+  /* The hero (scene, title, search sheet) lives in features/home/hero. */
   .home-block {
     margin-top: clamp(3.5rem, 8vw, 6rem);
   }
@@ -1240,13 +1163,6 @@ const pmFeatures = c.owner;
 
   .home-tool-name {
     font-weight: 700;
-  }
-
-  .home-tool-stat {
-    margin-inline-start: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--color-ink-600);
   }
 
   .home-tool-note {

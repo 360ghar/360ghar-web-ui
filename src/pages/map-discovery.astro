@@ -1,0 +1,18 @@
+---
+/**
+ * /map-discovery: the projects inside the default window, drawn as a positioned
+ * overlay. The window is `DEFAULT_BOUNDS` until the overlay sends its own box
+ * back (see the note on MapDiscovery).
+ */
+import { DEFAULT_BOUNDS, mapProjects, safe } from '@/features/projects/api';
+import MapDiscoveryPage from '@/features/projects/MapDiscoveryPage.astro';
+import { settleList } from '@/features/data-hub/route';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const points = await safe(() => mapProjects(DEFAULT_BOUNDS));
+settleList(Astro, 'day', points);
+---
+
+<MapDiscoveryPage locale={locale} points={points.data ?? []} bounds={DEFAULT_BOUNDS} down={Boolean(points.error)} />

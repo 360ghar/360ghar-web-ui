@@ -99,8 +99,8 @@ export function checkPriceContext(ctx, parseRange) {
   return out;
 }
 
-/** `parseBand` is `parseBand` from src/features/landing/model.ts. */
-export function checkLandingTypeContext(ctx, parseBand) {
+/** Price bands were removed from this file with their sources under review; a band is now an error. */
+export function checkLandingTypeContext(ctx) {
   const out = [];
   if (!isObj(ctx)) return ['landingTypeContext: not an object'];
   const bad = reporter(out);
@@ -113,10 +113,7 @@ export function checkLandingTypeContext(ctx, parseBand) {
         if (!PROPERTY_TYPES.includes(type)) bad('type', `${at}: unknown property type`);
         if (c.topSocieties !== undefined && !(Array.isArray(c.topSocieties) && c.topSocieties.every(isStr))) bad('societies', `${at}: topSocieties must be a list of strings`);
         for (const k of ['typicalConfiguration', 'metroAccess', 'officeHubAccess', 'reraNote']) if (c[k] !== undefined && !isStr(c[k])) bad('text', `${at}: ${k} must be a string`);
-        for (const b of c.priceBands ?? []) {
-          if (!isStr(b.label) || !isStr(b.range) || !isStr(b.localities)) bad('band', `${at}: a price band needs label, range and localities`);
-          else if (parseBand && parseBand(b.range) === null) bad('bandRange', `${at}: band range "${b.range}" cannot be read`);
-        }
+        if (c.priceBands !== undefined) bad('band', `${at}: priceBands are withheld; remove them`);
       }
     }
   }

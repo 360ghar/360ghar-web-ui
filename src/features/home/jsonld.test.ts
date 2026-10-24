@@ -22,7 +22,7 @@ const homeBlocks = (locale: 'en' | 'hi') =>
   [
     ...siteBlocks(),
     faqPage([{ q: 'A question?', a: 'An answer.' }]),
-    homeFacts(locale, { count: 109, localityTotal: 3215, num: String }).jsonLd,
+    homeFacts(locale).jsonLd,
   ].map((b) => ({ ...(b as Obj), '@context': 'https://schema.org' })); // Seo.astro does the same (withContext)
 
 describe('home page JSON-LD', () => {

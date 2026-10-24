@@ -6,6 +6,7 @@
  * the month became the last day of the month before.
  */
 import { daysIn, formatIso } from '@/lib/dates';
+import type { Locale } from '@/lib/i18n/locale';
 
 export { todayIso } from '@/lib/dates';
 
@@ -13,10 +14,6 @@ export type Mode = 'upi' | 'bank_transfer' | 'cheque' | 'cash';
 export const MODES: Mode[] = ['upi', 'bank_transfer', 'cheque', 'cash'];
 
 export const PAN_RE = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
-/** Landlord PAN is needed when the yearly rent is more than ₹1 lakh. */
-export const panRequired = (monthly: number) => monthly * 12 > 100_000;
-/** A ₹1 revenue stamp is needed on a cash receipt above ₹5,000. */
-export const stampRequired = (mode: Mode, monthly: number) => mode === 'cash' && monthly > 5_000;
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -36,12 +33,12 @@ export function fyMonths(start: number): { y: number; m: number }[] {
   });
 }
 
-/** "2026-04-01" -> "01 April 2026". Built from the parts, so no time zone shift. */
-export function formatDate(iso: string): string {
+/** Formats a date from its parts, so local dates do not shift across time zones. */
+export function formatDate(iso: string, locale: Locale = 'en'): string {
   const parts = iso.split('-').map(Number);
   if (parts.length !== 3 || parts.some((n) => !Number.isFinite(n))) return '';
   const [y, m, d] = parts as [number, number, number];
-  return new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(y, m - 1, d));
+  return new Intl.DateTimeFormat(locale === 'hi' ? 'hi-IN' : 'en-IN', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(y, m - 1, d));
 }
 
 /** A short receipt number, "RR-" plus 5 characters. */

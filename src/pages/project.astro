@@ -1,11 +1,9 @@
 ---
-import ProjectsPage from '@/features/projects/ProjectsPage.astro';
-import { projectCounts } from '@/features/projects/load';
+import ProjectHold from '@/features/projects/ProjectHold.astro';
 import { cachePage } from '@/lib/cache';
 
 export const prerender = false;
-const counts = await projectCounts();
-cachePage(Astro, 'hour', { error: !counts });
+cachePage(Astro, 'hour');
 ---
 
-<ProjectsPage counts={counts} />
+<ProjectHold />

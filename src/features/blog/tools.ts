@@ -6,7 +6,7 @@
 import { DATA_HUB, TOOLS, type NavLink } from '@/features/layout/nav';
 
 const EXTRA: NavLink[] = [
-  { key: 'common:nav.propertyChecklist', href: '/property-document-checklist', icon: 'document', desc: { en: 'Papers to check before you pay', hi: 'भुगतान से पहले जाँचने वाले कागज़' } },
+  { key: 'common:nav.propertyChecklist', href: '/property-document-checklist', icon: 'document', desc: { en: 'Prompts to organize a review with a professional', hi: 'पेशेवर के साथ समीक्षा के लिए संकेत' } },
   { key: 'common:nav.localities', href: '/localities', icon: 'pin', desc: { en: 'Sectors and societies in Gurugram', hi: 'गुरुग्राम के सेक्टर और सोसाइटी' } },
 ];
 

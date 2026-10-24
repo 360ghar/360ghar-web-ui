@@ -1,131 +1,26 @@
 ---
-/**
- * /price-index/:citySlug from the static priceContext.json (5 cities). No trend
- * chart: the old "illustrative" chart used invented numbers (backend-gaps M10).
- */
-import localities from '@/data/localities-index.json';
-import prices from '@/data/priceContext.json';
-import { isThinLocality } from '@/features/localities/data';
+/** A held data page: the shared hold shell, with the notice once in the body. */
 import type { Locale } from '@/lib/i18n/locale';
-import { localizePath } from '@/lib/i18n/locale';
-import { absoluteUrl } from '@/lib/seo/site';
-import { DATA_UPDATED } from '@/lib/dataDates';
-import Icon from '@/ui/icons/Icon.astro';
-import Provenance from '@/ui/Provenance.astro';
-import { chartText } from './charts';
-import { PRICE_CITY_NAMES } from './cities';
-import DataHubPage from './DataHubPage.astro';
-import PriceRanges from './PriceRanges.astro';
-import { text } from './text';
+import DataHubHold from './DataHubHold.astro';
 
-type Ranges = Record<string, string>;
-type City = { buy?: Ranges; rent?: Ranges; pg?: Ranges };
-type Props = { locale: Locale; slug: keyof typeof prices };
+type Props = { locale: Locale; slug: string };
 const { locale, slug } = Astro.props;
-const t = text(locale);
-const c = chartText(locale);
-const hi = locale === 'hi';
-const city = prices[slug] as City;
-const [nameEn, nameHi, region] = PRICE_CITY_NAMES[slug] ?? [slug, slug, 'Haryana'];
-const name = hi ? nameHi : nameEn;
-const types = [...new Set([...Object.keys(city.buy ?? {}), ...Object.keys(city.rent ?? {})])].filter((k) => k !== 'default');
-const rows = types.map((k) => ({ type: k, buy: city.buy?.[k] ?? city.buy?.default ?? '–', rent: city.rent?.[k] ?? city.rent?.default ?? '–' }));
-const pg = city.pg?.default ?? null;
-const citySlug = (c: string) => (c.trim().toLowerCase() === 'gurugram' ? 'gurgaon' : c.trim().toLowerCase().replace(/\s+/g, '-'));
-const places = (localities as { slug: string; name: string; city: string; entityType: string }[])
-  .filter((l) => l.entityType === 'locality' && !isThinLocality(l) && citySlug(l.city) === slug)
-  .sort((a, b) => Number(/^\d/.test(a.name)) - Number(/^\d/.test(b.name)) || a.name.localeCompare(b.name))
-  .slice(0, 20);
-const faqs = [
-  {
-    q: `What is the average property price in ${nameEn}?`,
-    a: `Property prices in ${nameEn} vary by type and locality. Apartments typically range from the mid-lakhs to several crore, while villas and independent houses command higher prices. Use our price index table above for price ranges by property type.`,
-  },
-  { q: 'How often are property prices updated on 360Ghar?', a: 'The current data is as of May 2026, covering buy, rent, and PG segments across major cities in NCR.' },
-  {
-    q: `Are these prices negotiable in ${nameEn}?`,
-    a: `Yes, property prices in ${nameEn} are typically negotiable. The ranges shown represent the market spread; actual transaction prices depend on locality, builder reputation, floor, facing, amenities, and market conditions. Circle rates set the government floor price; market rates are usually higher.`,
-  },
-];
+const en = {
+  title: 'City property price data under review | 360Ghar',
+  description: 'City property price data is held while its sources are reviewed.',
+  heading: 'Property price data under review',
+  crumb: 'Property price data',
+  lead: 'City property price data is held while its sources are reviewed.',
+  notice: 'City price ranges are withheld while source samples and reproducible methods are reviewed.',
+};
+const hi = {
+  title: 'शहर का प्रॉपर्टी कीमत डेटा समीक्षा के अधीन | 360Ghar',
+  description: 'शहर का प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
+  heading: 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन',
+  crumb: 'प्रॉपर्टी कीमत डेटा',
+  lead: 'शहर का प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
+  notice: 'शहर-वार कीमत रेंज स्रोत नमूनों और दोहराए जा सकने वाले तरीकों की समीक्षा तक प्रकाशित नहीं हैं।',
+};
 ---
 
-<DataHubPage
-  art="priceIndex"
-  title={`${nameEn} Property Price Index, May 2026 | 360Ghar`}
-  description={`Latest property prices in ${nameEn}. Buy, rent, and PG price ranges by property type from 360Ghar.`}
-  keywords={`${nameEn} property price index, property rates ${nameEn}, real estate prices ${nameEn} May 2026, ${nameEn} flat price, ${nameEn} rent range`}
-  path={`/price-index/${slug}`}
-  heading={t.piH1(name)}
-  lead={t.piLead(name)}
-  crumbs={[{ name: t.piH1(name), path: `/price-index/${slug}` }]}
-  faqs={faqs}
-  jsonLd={[
-    {
-      '@type': 'Dataset',
-      name: `${nameEn} Property Price Index, May 2026`,
-      description: `Property price ranges for ${nameEn} across apartments, villas, builder floors, plots, and more. Includes buy and rent segments.`,
-      url: absoluteUrl(`/price-index/${slug}`),
-      temporalCoverage: '2026-05',
-      dateModified: DATA_UPDATED.priceContext,
-      spatialCoverage: { '@type': 'City', name: nameEn, address: { '@type': 'PostalAddress', addressRegion: region, addressCountry: 'IN' } },
-      creator: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
-      license: 'https://creativecommons.org/licenses/by/4.0/',
-      distribution: { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: absoluteUrl('/data/llm-feed.json') },
-    },
-  ]}
-  related={['circleRates', 'stampDuty', 'tenant', 'bestSectors']}
->
-  <section class="sheet dh-panel dh-ranges" aria-labelledby="pi-chart">
-    <h2 id="pi-chart" class="dh-panel-title">{c.piChart}</h2>
-    <div class="dh-ranges-grid">
-      <PriceRanges locale={locale} id="pi-buy" title={c.piBuy} rows={rows.filter((r) => r.buy !== '–').map((r) => ({ name: t.piTypes[r.type] ?? r.type, raw: r.buy }))} />
-      <PriceRanges
-        locale={locale}
-        id="pi-rent"
-        title={c.piRent}
-        rows={[
-          ...rows.filter((r) => r.rent !== '–').map((r) => ({ name: t.piTypes[r.type] ?? r.type, raw: r.rent.replace(/\/month$/, '') })),
-          ...(pg ? [{ name: t.piPg, raw: pg.replace(/\/month$/, '') }] : []),
-        ]}
-      />
-    </div>
-    <p class="dh-meta mt-4">{c.piSource(name)}</p>
-    <Provenance date={DATA_UPDATED.priceContext} class="mt-1" />
-  </section>
-  <p class="dh-meta mt-3 max-w-[68ch]">{t.piNote}</p>
-
-  <div class="dh-split dh-section">
-    {
-      places.length > 0 && (
-        <section aria-labelledby="pi-places">
-          <h2 id="pi-places" class="dh-h2">
-            {t.piLocalities(name)}
-          </h2>
-          <ul class="mt-4 grid gap-x-6 sm:grid-cols-2">
-            {places.map((p) => (
-              <li class="border-b border-ink-100">
-                <a class="link w-full no-underline hover:underline" href={localizePath(`/locality/${p.slug}-${citySlug(p.city)}`, locale)}>
-                  {p.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
-    <section class="sheet dh-panel grid gap-3 content-start" aria-labelledby="pi-data">
-      <h2 id="pi-data" class="dh-panel-title mb-0">{t.piDownload}</h2>
-      <p class="text-ink-800">{t.piDownloadLead}</p>
-      <div>
-        <a class="btn btn-ink" href="/data/llm-feed.json" download>
-          <Icon name="download" size={18} />
-          JSON
-        </a>
-      </div>
-      <a class="link" href={localizePath(`/${slug}/buy/flats`, locale)}>
-        {t.piHomes(name)}
-        <Icon name="arrow-up-right" size={16} class="arrow" />
-      </a>
-    </section>
-  </div>
-</DataHubPage>
+<DataHubHold locale={locale} path={`/price-index/${slug}`} en={en} hi={hi} />

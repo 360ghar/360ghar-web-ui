@@ -2,14 +2,23 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { Property } from '@/lib/api/types';
 import { parseLanding } from '@/features/landing/model';
-import { ALL_LOCALITIES, isThinLocality, localitySlug, resolveLocality } from '@/features/localities/data';
+import { ALL_LOCALITIES, isNoindexLocality, isThinLocality, localitySlug, resolveLocality } from '@/features/localities/data';
 import { resolveRoute } from '@/lib/seo/routes';
 import { landingCount, localityEntries, projectEntries, staticEntries } from './data';
 import { parseSitemapName, SITEMAPS } from './sitemaps';
 import { rss, SITEMAP_MAX_BYTES, SITEMAP_MAX_URLS, urlset, urlsetPages, type SitemapEntry } from './xml';
 
 /** Pages that render noindex (login, account, tools that carry no content, duplicates). None may be in a sitemap. */
-const NOINDEX_PATHS = ['/account', '/login', '/register', '/forgot-password', '/reset-password', '/add-phone', '/profile-completion', '/post-property', '/compare', '/delete-account', '/map-location', '/styleguide', '/property-sidebar', '/add-new-listing'];
+const NOINDEX_PATHS = [
+  '/account', '/login', '/register', '/forgot-password', '/reset-password', '/add-phone', '/profile-completion',
+  '/post-property', '/compare', '/delete-account', '/map-location', '/styleguide', '/property-sidebar', '/add-new-listing',
+  '/project',
+  '/celebrity-homes', '/list-property-free',
+  '/vs/commonfloor', '/vs/nestaway', '/truth/nobroker-listings', '/truth/magicbricks-spam',
+  '/truth/99acres-fake', '/truth/nestaway-collapse', '/truth/zolo-issues',
+  '/nri-property-guide', '/property-investment-gurugram', '/landlord-not-returning-security-deposit',
+  '/price-index', '/glossary', '/gurugram-real-estate-guide',
+];
 
 /** <url> blocks of a urlset as { loc, alternates }. */
 function parse(xml: string) {
@@ -109,6 +118,14 @@ describe('localities sitemap leaves out thin rows (owner decision 2026-09-29)', 
     }
   });
 
+  it('matches the locality pages’ noindex decision and has no unsupported lastmod dates', () => {
+    for (const p of paths) {
+      const l = resolveLocality(p.split('/')[2]!)!.locality;
+      expect(isNoindexLocality(l), p).toBe(false);
+    }
+    expect(entries.every((entry) => entry.lastmod == null)).toBe(true);
+  });
+
   it('lists every other row, so the counts are exact', () => {
     const listed = ALL_LOCALITIES.filter((l) => !isThinLocality(l));
     expect(listed).toHaveLength(2043);
@@ -142,6 +159,11 @@ describe('sitemap URL rules', () => {
 
   it('lists no noindex page and no removed duplicate route', () => {
     for (const entries of Object.values(offline)) for (const e of entries) expect(NOINDEX_PATHS, e.path).not.toContain(e.path);
+  });
+
+  it('does not advertise held project routes', () => {
+    expect(staticEntries().map((entry) => entry.path)).not.toContain('/project');
+    expect(projectEntries()).toEqual([]);
   });
 
   it('lists only fixed pages that exist and do not set noindex', () => {

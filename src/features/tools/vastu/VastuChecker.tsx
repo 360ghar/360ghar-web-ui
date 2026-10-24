@@ -492,6 +492,7 @@ function Report({ res, preview, north, strings, locale, onReset }: { res: VastuR
 
   return (
     <div className="tool-desk tool-print-area vastu-report">
+      <p className="tool-note">{t.resultCaveat}</p>
       <p className="vastu-print-head">
         {t.printTitle}
         {res.analyzed_at ? ` · ${formatDate(res.analyzed_at, locale, { dateStyle: 'medium', timeStyle: 'short' })}` : ''}

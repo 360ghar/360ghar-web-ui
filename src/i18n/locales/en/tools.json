@@ -1,63 +1,63 @@
 {
   "emi": {
-    "title": "Home Loan EMI Calculator India | Calculate Mortgage EMI | 360Ghar",
-    "description": "Calculate your Home Loan EMI instantly with 360Ghar's free EMI Calculator. Plan your budget, check monthly installments, and view amortization schedule for properties in Gurugram & India.",
-    "keywords": "home loan EMI calculator India, housing loan calculator, mortgage calculator India, loan repayment schedule, SBI home loan EMI, HDFC home loan EMI, real estate finance tool, 360ghar financial tools",
+    "title": "Home Loan EMI Estimate | 360Ghar",
+    "description": "Estimate monthly EMI, total interest and year-by-year payments from entered values. This is a calculation, not a lender quote, loan approval or affordability check. Fees and lender terms are not included.",
+    "keywords": "home loan EMI estimate, housing loan calculation, mortgage payment estimate, principal and interest schedule, prepayment scenario, Gurugram property finance",
     "years": "Years",
     "reset": "Reset",
     "principal": "Principal",
     "whatIsEmi": "What is EMI?",
     "whatIsEmiDesc": "EMI (Equated Monthly Installment) is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. It consists of both principal and interest components.",
-    "tipsForHomeLoan": "Tips for Home Loan",
-    "tipCreditScore": "Maintain a good credit score for better interest rates",
-    "tipShorterTenure": "Choose a shorter tenure to save on interest",
-    "tipPrepayments": "Make prepayments when possible to reduce interest burden",
-    "tipCompareRates": "Compare rates from multiple lenders",
+    "tipsForHomeLoan": "Check with your lender",
+    "tipCreditScore": "Confirm the actual rate and whether it can change over time",
+    "tipShorterTenure": "Compare modeled EMI and interest for different tenures; this is not a recommendation",
+    "tipPrepayments": "Ask how your lender applies prepayments and whether charges apply",
+    "tipCompareRates": "Compare written lender quotes, including fees and rate conditions",
     "browseProperties": "Browse Properties",
     "months": "months",
     "year": "Year",
     "balance": "Balance"
   },
   "areaConverter": {
-    "title": "Land Area Converter - Gaj to Acre, Sq Ft to Gaj, Bigha to Acre | 360Ghar",
-    "description": "Free land area converter for Indian real estate. Convert Gaj to Acre, Sq Ft to Gaj, Bigha to Acre, Ground to Acre, and more. Instant and accurate area unit conversion for property buyers in India.",
-    "keywords": "area converter india, sq ft to gaj, gaj to acre, bigha to acre, 4840 gaj in acre, 360 sq ft in gaj, 2400 gaj in acre, 2400 sq ft in gaj, bigha to acre calculator, bigha to acre conversion, gaj to bigha, 43560 sq ft to ground, ground to acre, land calculator india, bigha in acre, sq ft to gaj converter, gaj to sq ft, bigha converter, 1 acre to bigha in haryana, jamin calculator, 360 sq yard to gaj, land area converter India, acre to bigha, square feet to gaj, 1 gaj in bigha, 360ghar",
+    "title": "Land Area Unit Converter | Check Local Unit Definitions | 360Ghar",
+    "description": "Convert using the factors shown by this tool. Local land-unit definitions may differ; check your source document before relying on a result.",
+    "keywords": "area unit converter, square feet conversion, square metre conversion, square yard conversion, land-area factors, 360ghar",
     "faqs": {
       "q1": {
         "question": "How do I convert square feet to square meters?",
-        "answer": "Multiply square feet by 0.0929. For example, 1000 sq ft = 92.9 sq m. Use our area converter for instant, accurate results."
+        "answer": "This tool converts using its displayed factors. For square feet to square metres, multiply by about 0.0929. Check the unit and rounding used in your source document."
       },
       "q2": {
-        "question": "What is 1 bigha in square feet?",
-        "answer": "1 bigha equals approximately 27,000 sq ft in Haryana and 27,220 sq ft in Uttar Pradesh. Bigha varies by state — always verify the local measurement standard."
+        "question": "What factor does this tool use for bigha?",
+        "answer": "The calculator uses 27,000 sq ft per bigha. Local or recorded definitions may differ; this is not a determination of the value for a property."
       },
       "q3": {
-        "question": "How many square feet in 1 kanal?",
-        "answer": "1 kanal equals 5,445 sq ft. This is standard across Punjab, Haryana, and Himachal Pradesh."
+        "question": "What factor does this tool use for kanal?",
+        "answer": "The calculator uses 5,445 sq ft per kanal. Check whether this factor matches the definition in your source document."
       },
       "q4": {
-        "question": "What is the difference between carpet area and built-up area?",
-        "answer": "Carpet area is the net usable floor area inside walls. Built-up area includes carpet area plus walls and balconies. Super built-up area adds common areas like corridors and lobbies."
+        "question": "Does a unit conversion define carpet or built-up area?",
+        "answer": "No. Converting units does not establish a property's carpet, built-up, super built-up or legally recorded area. Check the definitions in the relevant document."
       },
       "q5": {
         "question": "How do I convert Gaj to Acre?",
-        "answer": "1 Gaj equals 9 sq ft, and 1 Acre equals 43,560 sq ft. So to convert Gaj to Acre, divide the number of Gaj by 4,840. For example, 4,840 Gaj = 1 Acre, and 2,400 Gaj = 0.496 Acre. Use the converter above for instant results."
+        "answer": "Using this tool's factors of 9 sq ft per gaj and 43,560 sq ft per acre, divide gaj by 4,840. Check the unit definitions in your source document."
       },
       "q6": {
-        "question": "How do I convert Bigha to Acre?",
-        "answer": "1 Bigha in Haryana equals approximately 27,000 sq ft, which is about 0.6198 Acre (27,000 ÷ 43,560). In Uttar Pradesh, 1 Bigha ≈ 0.625 Acre. Since Bigha varies by state, use our converter to get accurate results for your region."
+        "question": "Can I use this result as the bigha value for my land?",
+        "answer": "No. The calculator uses a fixed 27,000 sq ft factor for bigha. Check the local definition in your land record or other source document."
       },
       "q7": {
         "question": "How do I convert Square Feet to Gaj?",
-        "answer": "1 Gaj = 9 sq ft. To convert sq ft to Gaj, divide the square feet value by 9. For example, 360 sq ft = 40 Gaj, and 2,400 sq ft = 266.67 Gaj. The converter above calculates this instantly."
+        "answer": "Using this tool's factor of 9 sq ft per gaj, divide square feet by 9. Check whether the gaj definition in your source document matches this factor."
       },
       "q8": {
-        "question": "How many Gaj are in 1 Acre?",
-        "answer": "1 Acre = 43,560 sq ft = 4,840 Gaj (since 1 Gaj = 9 sq ft). So if you see a plot listed as 4,840 Gaj, it equals exactly 1 Acre."
+        "question": "What acre and gaj factors does this tool use?",
+        "answer": "The calculator uses 43,560 sq ft per acre and 9 sq ft per gaj. Under those factors, 1 acre equals 4,840 gaj."
       },
       "q9": {
-        "question": "How do I convert Ground to Acre?",
-        "answer": "1 Ground = 2,400 sq ft. Since 1 Acre = 43,560 sq ft, 1 Ground equals approximately 0.0551 Acre (2,400 ÷ 43,560). Ground is commonly used in South India, especially Tamil Nadu."
+        "question": "What factor does this tool use for ground?",
+        "answer": "The calculator uses 2,400 sq ft per ground. Check whether that factor matches the definition in your source document."
       }
     },
     "howToSteps": {
@@ -71,22 +71,22 @@
       },
       "step3": {
         "name": "Select output unit",
-        "text": "Choose the unit you want to convert to. The result updates instantly."
+        "text": "Choose the unit you want to convert to. The result uses the factors shown by this tool."
       },
       "step4": {
-        "name": "Copy or note the result",
-        "text": "The converted value is displayed immediately. You can copy it for use in property documents or calculations."
+        "name": "Check the result",
+        "text": "Compare the unit definitions and factors with your source document. The tool does not verify a property measurement."
       }
     },
     "heroTitle": "Land Area Converter",
-    "heroDesc": "Convert between Indian land measurement units instantly — Gaj to Acre, Sq Ft to Gaj, Bigha to Acre, Ground to Acre, and more. Free and accurate area conversion for property buyers and sellers.",
+    "heroDesc": "Convert areas using the factors displayed by this tool. Local land-unit definitions may differ; check your source document.",
     "faqTitle": "Frequently Asked Questions",
     "gajToAcreTitle": "Gaj to Acre Conversion",
-    "gajToAcreDesc": "Gaj (also called Square Yard) is one of the most commonly used land measurement units in North India, especially in Haryana, Punjab, and Delhi NCR. 1 Gaj equals 9 square feet, and 1 Acre equals 4,840 Gaj (43,560 sq ft). To convert Gaj to Acre, divide the Gaj value by 4,840. For example, 4,840 Gaj equals 1 Acre, and 2,400 Gaj equals approximately 0.496 Acre. This conversion is essential when comparing plot sizes listed in Gaj with agricultural land measured in Acres. Use the converter above for instant, accurate results.",
+    "gajToAcreDesc": "This tool uses 9 square feet per gaj and 43,560 square feet per acre. Under those factors, divide gaj by 4,840 to calculate acres. Check the unit definitions in your source document.",
     "sqFtToGajTitle": "Square Feet to Gaj Conversion",
-    "sqFtToGajDesc": "Converting square feet to Gaj is one of the most frequent calculations in Indian real estate, especially in Haryana and Uttar Pradesh. Since 1 Gaj equals 9 square feet, you simply divide the square feet value by 9. For example, 360 sq ft equals 40 Gaj, 2,400 sq ft equals 266.67 Gaj, and 43,560 sq ft (1 Acre) equals 4,840 Gaj. Property listings in Gurugram, Faridabad, and other NCR cities often use Gaj, making this conversion crucial for buyers comparing plot sizes across different listings and portals.",
+    "sqFtToGajDesc": "This tool uses 9 square feet per gaj. Divide the entered square-foot value by 9 to calculate gaj under that factor. Check the unit definition in your source document.",
     "headingTitle": "Land Area Converter",
-    "headingDesc": "Compare properties easily by converting between local and standard measurement units.",
+    "headingDesc": "Compare values using this tool's displayed unit factors. Check local definitions against your source document.",
     "from": "From",
     "to": "To",
     "swapUnits": "Swap Units",
@@ -108,232 +108,232 @@
     "marla": "Marla"
   },
   "areaCalculator": {
-    "title": "Free Carpet Area & Loading Factor Calculator | Super Built-up | 360Ghar",
-    "description": "Free carpet area calculator: convert super built-up to carpet area, estimate built-up area, and find loading factor. Instant sq ft results for Indian homes.",
-    "keywords": "carpet area calculator, super built up area to carpet area calculator, loading factor calculator, built up area to carpet area calculator, carpet area vs built up area, carpet area calculation formula, flat carpet area calculator, area calculation formula India, RERA carpet area, 360ghar",
+    "title": "Carpet Area Scenario Calculator | 360Ghar",
+    "description": "Explore an illustrative carpet and built-up area scenario from entered values. The result is not a measurement, official area figure, or property assessment.",
+    "keywords": "illustrative carpet area scenario, built-up area estimate, loading assumption, 360ghar",
     "faqs": {
       "q1": {
-        "question": "How do I calculate the area of a room?",
-        "answer": "Measure length and width in feet or meters, then multiply them. Area = Length × Width. For irregular shapes, break the room into rectangles and add the areas."
+        "question": "What does this calculator do?",
+        "answer": "It estimates carpet and built-up area from an entered super built-up value and percentage assumptions. It does not measure a property."
       },
       "q2": {
-        "question": "What is carpet area?",
-        "answer": "Carpet area is the net usable floor area inside the walls of an apartment. It excludes walls, balconies, and common areas. RERA mandates that developers disclose carpet area."
+        "question": "Does this result establish carpet area?",
+        "answer": "No. The result follows this tool's inputs and formula. It is not an official, RERA, measured or legally recorded area."
       },
       "q3": {
-        "question": "How is super built-up area calculated?",
-        "answer": "Super built-up area = Built-up area + Proportionate common area. The loading factor (usually 25-35%) is applied to carpet area to arrive at super area."
+        "question": "What is the loading percentage in this tool?",
+        "answer": "It is a user-selected scenario input. The tool subtracts it from the entered super built-up value to estimate carpet area; it does not supply a usual or official rate."
       },
       "q4": {
-        "question": "What is the difference between RERA carpet area and usable area?",
-        "answer": "RERA carpet area includes the area enclosed by walls (up to the inner face). Usable area may exclude some wall portions. RERA definition is more generous than the older 'carpet area' standard."
+        "question": "Does this calculator apply an official area definition?",
+        "answer": "No. Area terms and measurement rules depend on the relevant documents and applicable requirements. Check the definition for your property independently."
       },
       "q5": {
         "question": "How do I convert carpet area to built-up area?",
-        "answer": "Under MOFA (Maharashtra Ownership Flats Act), carpet area excluded internal partition walls. RERA carpet area includes internal walls and is typically about 5-8% larger — an estimate only; exact figures depend on the flat layout. Use our dedicated MOFA to RERA converter for a rule-of-thumb estimate, and always verify against the registered sale agreement."
+        "answer": "This tool applies the wall-and-balcony percentage you enter to its estimated carpet area. The result is a scenario, not a standard conversion; compare it with your property documents."
       },
       "q6": {
         "question": "What is MOFA to RERA carpet area conversion?",
-        "answer": "Under MOFA (Maharashtra Ownership Flats Act), carpet area excluded internal partition walls. RERA carpet area includes the area within internal walls, making it about 5-8% larger than MOFA carpet area. For example, a flat with MOFA carpet area of 1000 sq ft would have approximately 1050-1080 sq ft RERA carpet area. Use our calculator to convert accurately."
+        "answer": "This site does not provide an official conversion. The separate comparison tool requires your own percentage assumption and returns an illustration only."
       },
       "q7": {
-        "question": "How to calculate RERA carpet area?",
-        "answer": "RERA carpet area is the net usable floor area of an apartment, measured from the inner face of walls. It includes internal partition walls but excludes external walls, common areas, balconies, and open terraces. Formula: RERA Carpet Area = Total Floor Area − External Walls − Balconies − Open Terraces − Common Areas."
+        "question": "Can I use this result as a RERA or legal area?",
+        "answer": "No. This calculator does not apply or verify an official area definition. Check the applicable source documents and requirements."
       },
       "q8": {
         "question": "How to convert carpet area to square feet?",
-        "answer": "If carpet area is given in square meters, multiply by 10.764 to get square feet. If in square yards (gaj), multiply by 9. For example, 100 sq m carpet area = 1076.4 sq ft. Use our free area converter tool for other unit conversions like bigha, kanal, or marla to square feet."
+        "answer": "Use a unit converter with displayed factors, then check that the unit definition and rounding match your source document. Local-unit factors may differ."
       },
       "q9": {
-        "question": "How to calculate carpet area for a flat?",
-        "answer": "To calculate carpet area for a flat, measure each room's length × width from the inner face of walls, then sum all rooms. Exclude balconies, external walls, service shafts, and open terraces. Alternatively, if you know the super built-up area and loading factor, use: Carpet Area = Super Built-up Area × (1 − Loading Factor/100)."
+        "question": "How does the calculator estimate built-up area?",
+        "answer": "It adds the entered wall-and-balcony percentage to its estimated carpet area. The percentage is an assumption, not a measurement or verified property figure."
       }
     },
     "howToSteps": {
       "step1": {
-        "name": "Measure room dimensions",
-        "text": "Measure the length and width of each room in feet or meters using a measuring tape or laser distance meter."
+        "name": "Enter super built-up area",
+        "text": "Enter a value from the source document you want to use. The calculator does not verify it."
       },
       "step2": {
-        "name": "Calculate carpet area",
-        "text": "Multiply length × width for each room. Add all room areas to get total carpet area."
+        "name": "Choose a loading assumption",
+        "text": "Set the percentage to use in this scenario. The default is an example, not a usual or official value."
       },
       "step3": {
-        "name": "Add walls for built-up area",
-        "text": "Add 10-15% to carpet area for walls and balconies to get built-up area."
+        "name": "Choose a walls-and-balconies assumption",
+        "text": "Set the percentage to apply to the estimated carpet area. The default is an example input."
       },
       "step4": {
-        "name": "Calculate super built-up area",
-        "text": "Add the loading factor (25-35%) to built-up area to get super built-up area. This includes common areas like corridors and lobbies."
+        "name": "Review the scenario",
+        "text": "Treat the outputs as illustrative calculations, not measurements or official area figures."
       }
     },
     "enterPropertyDetails": "Enter Property Details",
     "superBuiltupArea": "Super Built-up Area (Sq. Ft.)",
-    "superBuiltupHint": "Total area advertised by builder",
-    "loadingFactor": "Loading Factor (%)",
-    "loadingHint": "Standard loading is 25-35%",
-    "builtUpLoadingFactor": "Built-up Loading Factor (%)",
-    "builtUpLoadingHint": "Extra over carpet for walls & balconies (default 15%)",
+    "superBuiltupHint": "Enter the value shown in your source document; the tool does not verify it.",
+    "loadingFactor": "Loading assumption (%)",
+    "loadingHint": "The default is an example, not a usual or official share. Choose a value to test.",
+    "builtUpLoadingFactor": "Walls-and-balconies assumption (%)",
+    "builtUpLoadingHint": "The default is an example, not an official rate. Choose a value to test.",
     "areaBreakdown": "Area Breakdown",
-    "estimatedCarpetArea": "ESTIMATED CARPET AREA (Usable Space)",
+    "estimatedCarpetArea": "ILLUSTRATIVE CARPET-AREA ESTIMATE",
     "sqFt": "Sq. Ft.",
-    "carpetDesc": "This is the actual area you can use within the walls.",
-    "builtUpArea": "BUILT-UP AREA (Approx)",
-    "builtUpHint": "Includes walls & balconies",
-    "commonArea": "COMMON AREA (Loading)",
-    "commonAreaHint": "Lobby, stairs, lift, etc.",
-    "loadingArea": "LOADING AREA (Super − Carpet)",
-    "loadingAreaHint": "The portion of super area that is not usable carpet space.",
-    "understandingTerms": "Understanding the Terms",
-    "carpetAreaTitle": "Carpet Area",
-    "carpetAreaDesc": "The area enclosed within the walls, actual usable floor area. According to RERA, it excludes external walls, service shafts, balconies, and open terraces.",
+    "carpetDesc": "Scenario output only, not a measured usable area or official figure.",
+    "builtUpArea": "BUILT-UP AREA ESTIMATE",
+    "builtUpHint": "Calculated using your entered wall-and-balcony assumption.",
+    "commonArea": "Remaining area in this scenario",
+    "commonAreaHint": "A model difference, not a verified common-area measurement.",
+    "loadingArea": "Super minus carpet estimate",
+    "loadingAreaHint": "Difference shown by this model.",
+    "understandingTerms": "How this model works",
+    "carpetAreaTitle": "Carpet-area scenario",
+    "carpetAreaDesc": "The tool estimates this from the entered super area and loading assumption. It is not an official definition or measurement.",
     "builtUpAreaTitle": "Built-up Area",
-    "builtUpAreaDesc": "Carpet Area + Area of walls + Area of balconies. This is typically 10-15% more than the carpet area.",
-    "superBuiltUpAreaTitle": "Super Built-up Area",
-    "superBuiltUpAreaDesc": "Built-up Area + Proportionate share of common areas (lobby, lifts, stairs, amenities). This is what you usually pay for.",
-    "heroTitle": "Carpet Area Calculator",
-    "heroDesc": "Convert between Carpet Area, Built-up Area, and Super Built-up Area instantly. RERA-compliant calculations with loading factor for properties in India.",
+    "builtUpAreaDesc": "The output uses the entered walls-and-balconies assumption. Definitions and calculations can vary; check the relevant source.",
+    "superBuiltUpAreaTitle": "Super built-up area input",
+    "superBuiltUpAreaDesc": "Enter a value from a source document. This calculator does not verify the measurement or its definition.",
+    "heroTitle": "Carpet Area Scenario Calculator",
+    "heroDesc": "Explore an illustrative area scenario from entered values. This is not a measurement or official area figure.",
     "faqTitle": "Frequently Asked Questions",
-    "carpetToBuiltUpTitle": "Carpet Area to Built-up Area Conversion",
-    "carpetToBuiltUpDesc": "Converting carpet area to built-up area is essential when comparing property sizes. Built-up area includes the carpet area plus the area covered by walls and balconies. Typically, built-up area is 10-15% more than carpet area. For example, a flat with 1000 sq ft carpet area will have approximately 1100-1150 sq ft built-up area. When a builder quotes a super built-up area, the carpet area (your actual usable space) is calculated by subtracting the loading factor — usually 25-35% — from the super built-up area.",
+    "carpetToBuiltUpTitle": "Area scenario formula",
+    "carpetToBuiltUpDesc": "This tool subtracts your loading assumption from the entered super area to estimate carpet area, then adds your walls-and-balconies assumption for built-up area. These are illustrative calculations; no typical or official percentage is supplied.",
     "reraVsMofaTitle": "RERA Carpet Area vs MOFA Carpet Area",
-    "reraVsMofaDesc": "Before RERA, Maharashtra followed MOFA (Maharashtra Ownership Flats Act), which defined carpet area as the area excluding internal partition walls. RERA expanded the definition to include the area within internal walls, making RERA carpet area approximately 5-8% larger than MOFA carpet area. This difference matters because homebuyers paying per square foot get more usable space under the RERA definition. If a builder quotes MOFA carpet area of 1000 sq ft, the RERA equivalent would be roughly 1050-1080 sq ft. Always verify which standard is being used when comparing property prices."
+    "reraVsMofaDesc": "MOFA and RERA terms may refer to different definitions. This site does not provide an official conversion. Compare only with an assumption you have checked independently."
   },
   "loanEligibility": {
-    "title": "Home Loan Eligibility Calculator India | Check Max Loan Amount | 360Ghar",
-    "description": "Check your Home Loan Eligibility instantly. Calculate the maximum loan amount you can get based on your salary, existing EMIs, and tenure. Plan your home purchase budget.",
-    "keywords": "home loan eligibility calculator India, how much home loan can I get, housing loan eligibility check, salary based home loan calculator, 360ghar financial tools",
+    "title": "Home Loan Estimate Calculator | Scenario tool | 360Ghar",
+    "description": "Explore an illustrative loan amount from entered income, current EMIs, monthly expenses, interest rate and tenure. Uses a fixed 50% income-share assumption. Not a lender offer or approval.",
+    "keywords": "home loan estimate scenario, illustrative loan calculation, income-share assumption, 360ghar",
     "faqs": {
       "q1": {
-        "question": "How much home loan can I get on my salary?",
-        "answer": "Most banks offer 60 times your monthly income as the maximum loan amount. For a ₹1 lakh/month salary, you may qualify for ₹60 lakhs. Your existing EMIs, credit score, and property value also affect eligibility."
+        "question": "What does this estimate assume?",
+        "answer": "It assigns 50% of income after entered expenses to all EMIs, subtracts current EMIs and uses your entered rate and tenure. The share is a model assumption, not a lender policy."
       },
       "q2": {
-        "question": "What is the FOIR for home loans?",
-        "answer": "FOIR (Fixed Obligation to Income Ratio) is the percentage of income used for debt repayment. Banks typically allow 40-50% FOIR. Lower FOIR means higher loan eligibility."
+        "question": "Is this a loan offer or approval?",
+        "answer": "No. It is a mathematical scenario from the values you enter. A lender decides whether to offer a loan and sets its terms."
       },
       "q3": {
-        "question": "Does credit score affect loan eligibility?",
-        "answer": "Yes. A CIBIL score above 750 increases eligibility and gets better interest rates. Scores below 650 may result in loan rejection or higher rates."
+        "question": "Why can a lender's decision differ?",
+        "answer": "This tool does not check lender criteria or assess an application. Ask the lender to review your circumstances and current terms."
       },
       "q4": {
-        "question": "Can I increase my home loan eligibility?",
-        "answer": "Yes. Add a co-applicant with income, close existing loans, increase loan tenure, or improve your credit score. A higher down payment also reduces the required loan amount."
+        "question": "What should I confirm with a lender?",
+        "answer": "Ask about the current interest rate, tenure, fees, repayment terms and documents that apply to your application."
       }
     },
     "howToSteps": {
       "step1": {
-        "name": "Enter your monthly income",
-        "text": "Enter your gross monthly income including salary, business income, and any other regular income sources."
+        "name": "Enter monthly income",
+        "text": "Enter the monthly income amount you want to use in this scenario. The calculator does not verify it."
       },
       "step2": {
-        "name": "Add existing obligations",
-        "text": "Enter your current EMIs, credit card payments, and any other fixed monthly debt obligations."
+        "name": "Add current EMIs and expenses",
+        "text": "Enter the monthly amounts you want included in the scenario."
       },
       "step3": {
-        "name": "Check the eligibility result",
-        "text": "The calculator shows your maximum eligible loan amount based on FOIR, income multiplier, and other factors."
+        "name": "Review the scenario amount",
+        "text": "The calculation assigns 50% of income after entered expenses to all EMIs. This is a model assumption, not lender policy."
       },
       "step4": {
-        "name": "Compare with property value",
-        "text": "Banks fund 75-90% of property value. Ensure your eligible amount covers the required portion after your down payment."
+        "name": "Confirm terms with a lender",
+        "text": "Ask the lender to assess your application and confirm its current rate, fees and repayment terms."
       }
     }
   },
   "capitalGains": {
-    "title": "Capital Gains Tax Calculator India | Property LTCG & STCG Calculator | 360Ghar",
-    "description": "Calculate Capital Gains Tax on property sale in India. Check Long Term (LTCG) and Short Term (STCG) tax liability with indexation benefits. Plan your property sale tax efficiently.",
-    "keywords": "capital gains tax calculator property India, LTCG on property, STCG on property, property sale tax calculator, indexation benefit calculator, income tax on property sale, 360ghar tax tools",
+    "title": "Property Sale Gain Worksheet | Pre-tax Calculator | 360Ghar",
+    "description": "Calculate pre-tax gain from property sale price, purchase price and transfer expenses. Arithmetic only; this tool does not estimate income tax.",
+    "keywords": "property sale gain calculator, pre-tax property gain, sale price minus purchase price, 360ghar",
     "capitalGains": "Capital Gains",
-    "capitalLossWarning": "You have a capital loss. No tax is payable; the loss can be set off against other capital gains or carried forward for 8 years."
+    "capitalLossWarning": "Sale price minus purchase price and transfer expenses is below zero."
   },
   "propertyChecklist": {
-    "title": "Property Documents Checklist India | Home Buying Legal Checklist | 360Ghar",
-    "description": "Essential document checklist for buying property in India. Ensure you have all legal papers: Title Deed, EC, Occupancy Certificate, etc. Verified by 360Ghar experts.",
-    "keywords": "property document checklist India, documents for buying flat, home loan documents list, property legal verification checklist, real estate documents India, 360ghar guide",
+    "title": "Property Document Prompts | 360Ghar",
+    "description": "A non-exhaustive set of 13 property-document prompts. Requirements vary by transaction and location. This tool does not review documents or confirm title or legal compliance.",
+    "keywords": "property document prompts, property transaction checklist, documents to review, 360ghar",
     "faqs": {
       "q1": {
-        "question": "What documents are needed to buy a flat?",
-        "answer": "Key documents include sale deed, property registration, encumbrance certificate, tax receipts, building approval plan, occupancy certificate, and society transfer papers. Our checklist covers 40+ documents."
+        "question": "Which documents may be relevant to a property purchase?",
+        "answer": "This tool lists 13 prompts, not a complete or universal document list. Requirements vary by transaction and location. Confirm what applies with the relevant authority or a qualified professional."
       },
       "q2": {
-        "question": "What is an encumbrance certificate?",
-        "answer": "An encumbrance certificate (EC) records all financial transactions on a property — mortgages, liens, and transfers. It proves the property has a clear title. Get it from the sub-registrar office."
+        "question": "Does an encumbrance certificate prove clear title?",
+        "answer": "This checklist does not interpret an encumbrance certificate or establish clear title. Ask the issuing authority or a qualified professional about the record’s scope and period."
       },
       "q3": {
-        "question": "Do I need a lawyer for property purchase?",
-        "answer": "While not legally required, hiring a property lawyer is strongly recommended for title verification, agreement review, and due diligence. The cost (₹10,000-50,000) is negligible compared to the property value at risk."
+        "question": "Does this checklist decide whether I need legal advice?",
+        "answer": "No. It cannot assess your transaction or determine legal requirements. A qualified professional can review the documents and rules that apply to your case."
       },
       "q4": {
-        "question": "What is an occupancy certificate?",
-        "answer": "An occupancy certificate (OC) is issued by the local authority confirming the building is complete and fit for occupation. Without OC, the property may be illegal and face demolition risk."
+        "question": "Does this checklist verify an occupancy certificate?",
+        "answer": "No. It does not verify an occupancy certificate, building status or safety. Confirm the document’s scope and status with the issuing authority or a qualified professional."
       }
     },
     "howToSteps": {
       "step1": {
-        "name": "Select property type",
-        "text": "Choose whether you're buying a flat, plot, villa, or commercial property. The checklist adjusts based on property type."
+        "name": "Review the prompts",
+        "text": "Use the 13 entries as examples, not a complete list for your transaction."
       },
       "step2": {
-        "name": "Review required documents",
-        "text": "Browse the complete checklist of 40+ documents organized by category — identity, property, legal, financial."
+        "name": "Mark your progress",
+        "text": "Mark an item after your own review. The checklist does not verify document contents or authenticity."
       },
       "step3": {
-        "name": "Track document status",
-        "text": "Mark each document as collected, pending, or not applicable. Track your progress through the property purchase."
+        "name": "Note a file name",
+        "text": "Optionally note a file name. The tool stores its name and size, not the selected file."
       },
       "step4": {
-        "name": "Download or share the checklist",
-        "text": "Export your checklist progress or share it with your lawyer or family members for collaborative tracking."
+        "name": "Print or share the summary",
+        "text": "Share the prompts with a qualified professional. They are not a legal review."
       }
     },
-    "completed": "% Completed",
-    "catLegalDocuments": "Legal Documents (Pre-Purchase)",
-    "catFinancialTax": "Financial & Tax Documents",
-    "catAgreementRegistration": "Agreement & Registration",
+    "completed": "% of prompts marked",
+    "catLegalDocuments": "Property and record prompts",
+    "catFinancialTax": "Payment and account prompts",
+    "catAgreementRegistration": "Transaction and registration prompts",
     "docTitleDeed": "Title Deed / Sale Deed",
-    "docTitleDeedDesc": "Verify the seller has clear ownership of the property.",
+    "docTitleDeedDesc": "Review with a qualified professional; this tool does not verify ownership or title.",
     "docEncumbrance": "Encumbrance Certificate (EC)",
-    "docEncumbranceDesc": "Ensures the property is free from legal dues or mortgages.",
+    "docEncumbranceDesc": "Ask the issuing authority or a qualified professional what the record covers; it does not by itself establish clear title.",
     "docNAOrder": "NA Order (Non-Agricultural)",
-    "docNAOrderDesc": "Required if buying land to build a home.",
+    "docNAOrderDesc": "Check whether this type of permission applies to the specific parcel and intended use.",
     "docBuildingPlan": "Approved Building Plan",
-    "docBuildingPlanDesc": "Check if the building plan is approved by the local municipal authority.",
+    "docBuildingPlanDesc": "Ask the relevant authority or a qualified professional to review the plan; this tool does not verify approval.",
     "docCompletion": "Completion / Occupancy Certificate",
-    "docCompletionDesc": "Proof that the building is constructed according to approved plans and is ready for habitation.",
+    "docCompletionDesc": "Review the document and its scope with the issuing authority or a qualified professional; this tool does not assess the building.",
     "docPropertyTax": "Property Tax Receipts",
-    "docPropertyTaxDesc": "Ensure all previous property taxes have been paid by the seller.",
+    "docPropertyTaxDesc": "Use this as a prompt to ask whether payment records or outstanding amounts need review; this tool does not verify payments.",
     "docKhata": "Khata Certificate",
-    "docKhataDesc": "Proof that the property is registered in the municipal records.",
+    "docKhataDesc": "Ask the relevant authority or a qualified professional what this record establishes; this tool does not infer title.",
     "docNocBank": "NOC from Bank",
-    "docNocBankDesc": "If the seller had a loan, ensure they have a No Objection Certificate from the bank.",
+    "docNocBankDesc": "Check whether a bank or lender document applies to this transaction and ask the issuer to confirm its status.",
     "docNocSociety": "NOC from Society/RWA",
-    "docNocSocietyDesc": "Required for transferring the share certificate in housing societies.",
+    "docNocSocietyDesc": "Check whether this document applies to the property and transaction with the relevant society or professional.",
     "docSaleAgreement": "Sale Agreement",
-    "docSaleAgreementDesc": "Drafted on stamp paper, outlining terms and conditions of the sale.",
+    "docSaleAgreementDesc": "Review the agreement and its terms with a qualified professional; this tool does not assess the contract.",
     "docStampDuty": "Stamp Duty Payment",
-    "docStampDutyDesc": "Proof of stamp duty payment to the government.",
+    "docStampDutyDesc": "Check the applicable official schedule and payment record; current rates are not provided by this tool.",
     "docRegistration": "Registration Receipt",
-    "docRegistrationDesc": "Final proof of transaction registration with the sub-registrar.",
+    "docRegistrationDesc": "Check the applicable registration record with the relevant authority; this tool does not verify it.",
     "docPossession": "Possession Letter",
-    "docPossessionDesc": "Issued by the builder/seller when handing over keys.",
-    "noteDesc": "This checklist is for general guidance only. Property laws vary by state in India. It is highly recommended to consult a property lawyer for legal verification of documents before making a purchase.",
-    "verified": "Verified",
+    "docPossessionDesc": "Review the dates and details with a qualified professional; this document prompt does not establish title or legal possession.",
+    "noteDesc": "This is a non-exhaustive prompt list. Requirements vary by location and transaction. No documents are reviewed or verified; consult the relevant authority or a qualified legal professional for your case.",
+    "verified": "Reviewed",
     "remove": "Remove"
   },
   "designBlueprint": {
-    "title": "Online Floor Planner & 3D Blueprint Designer India | 360Ghar",
-    "description": "Free online floor planner and 3D blueprint designer by 360Ghar. Create 2D & 3D floor plans, visualize your dream home, and plan interior layouts. Perfect for Indian homes.",
-    "keywords": "floor planner India, 3D home design tool, online blueprint designer, free floor plan creator, interior design software India, virtual home staging, 360ghar tools, 2D 3D floor planner",
+    "title": "3D Floor Planner for Visual Layouts | 360Ghar",
+    "description": "Sketch rooms, add doors and furniture, and view a plan concept in 3D. This tool does not check measurements, approvals, building rules, or structural safety.",
+    "keywords": "2D floor plan sketch, 3D floor planner, room layout concept, 360ghar tools",
     "loading": "Loading blueprint designer...",
     "iframeTitle": "360Ghar Blueprint Designer"
   },
   "vastu": {
-    "title": "Free Online Vastu Checker - Check Vastu for House & Flat | 360Ghar",
-    "description": "Free online Vastu checker: upload your floor plan for an instant AI Vastu score, room-by-room analysis, and remedies for kitchen, bedroom & entrance.",
-    "keywords": "AI vastu check online free, online vastu check for flat free, vastu checker, vastu analysis, floor plan vastu, vastu shastra, vastu score, vastu remedies, 360ghar, free vastu analysis, vastu consultant, vastu for home, vastu tips, vastu dosh, vastu shastra in hindi, online vastu check, vastu check online free, vastu calculator, vastu for flat, how to check vastu of house, AI vastu checker, vastu dosh remedies, vastu for kitchen, vastu for bedroom, vastu for entrance, vastu compliance checker, check vastu online, vastu report online, automated vastu analysis, vastu ai app, ghar ka vastu, flat ka vastu",
-    "heroTitle": "AI-Powered Vastu Checker",
-    "heroDesc": "Upload your floor plan and receive a comprehensive Vastu Shastra analysis with personalized recommendations and practical remedies.",
+    "title": "Vastu Floor-plan Tool | 360Ghar",
+    "description": "Upload a floor-plan image for an AI-generated score and notes. The tool output is an interpretation, not an official, scientific, legal, or structural assessment.",
+    "keywords": "Vastu floor plan tool, Vastu rule-set notes, 360ghar",
+    "heroTitle": "Vastu floor-plan tool",
+    "heroDesc": "The tool applies its own Vastu rules to an uploaded image. Its output is an interpretation, not a certification or assessment.",
     "additionalNotes": "Additional Notes",
     "optional": "(optional)",
     "notesPlaceholder": "Any specific concerns about your property? E.g., 'Planning kitchen renovation', 'Health issues in family', 'Want to improve prosperity'...",
@@ -346,18 +346,18 @@
     "errorNoFile": "Please upload a floor plan image",
     "errorFileTooLarge": "Image is too large. Maximum allowed size is {{mb}} MB.",
     "errorDefault": "Analysis failed. Please try again.",
-    "errorTimeoutMsg": "The analysis is taking longer than expected. This may be due to high demand or a complex floor plan.",
+    "errorTimeoutMsg": "The request took too long to complete. Review the image and try again later.",
     "errorNetworkMsg": "Unable to connect to the server. Please check your internet connection and try again.",
     "errorFileSize": "The image file is too large. Please upload an image smaller than 5MB.",
     "errorFileFormat": "Unsupported image format. Please upload a JPEG, PNG, or WebP image.",
-    "errorServerMsg": "Our servers are experiencing issues. Please try again in a few minutes.",
+    "errorServerMsg": "The service could not complete the request. Try again later.",
     "suggestions": "Suggestions",
     "suggestionNetwork1": "Check your internet connection",
     "suggestionNetwork2": "Try refreshing the page",
     "suggestionNetwork3": "Disable any VPN or proxy that might be blocking the connection",
     "suggestionTimeout1": "Try uploading a smaller or simpler floor plan image",
     "suggestionTimeout2": "Ensure the image is clear and well-lit",
-    "suggestionTimeout3": "Try again in a few minutes if the server is busy",
+    "suggestionTimeout3": "Try again later.",
     "suggestionValidation1": "Use JPEG, PNG, or WebP image format",
     "suggestionValidation2": "Keep the file size under 5MB",
     "suggestionValidation3": "Ensure the image shows a clear 2D floor plan",
@@ -371,15 +371,15 @@
     "stepNorthTitle": "2. Set North Direction",
     "stepNorthDesc": "Indicate which direction is North in your floor plan image",
     "stepReportTitle": "3. Get AI Report",
-    "stepReportDesc": "Receive detailed Vastu analysis with score and practical remedies",
-    "whatIsVastu": "What is Vastu Shastra?",
-    "whatIsVastuDesc": "Vastu Shastra is an ancient Indian science of architecture and design that harmonizes the five elements of nature - Earth, Water, Fire, Air, and Space - with your living space. It provides guidelines for the layout and positioning of rooms to enhance positive energy flow.",
-    "vastuTip1": "Entrance facing North or East brings prosperity",
-    "vastuTip2": "Kitchen in South-East for health and wealth",
-    "vastuTip3": "Master bedroom in South-West for stability",
-    "vastuTip4": "Center (Brahmasthan) should be open",
-    "ctaTitle": "Looking for a Vastu-Compliant Home?",
-    "ctaDesc": "Explore our curated collection of properties with 360° virtual tours. Find your perfect home with confidence.",
+    "stepReportDesc": "Review the tool score and generated notes. Check them independently.",
+    "whatIsVastu": "About Vastu Shastra",
+    "whatIsVastuDesc": "Vastu Shastra is a traditional approach to spatial design. Interpretations vary. This tool applies its own rule set to an image and does not establish scientific, legal, or building compliance.",
+    "vastuTip1": "This tool treats a north- or east-facing entrance as a positive match.",
+    "vastuTip2": "This tool treats a south-east kitchen as a positive match.",
+    "vastuTip3": "This tool treats a south-west main bedroom as a positive match.",
+    "vastuTip4": "This tool treats an open centre as a positive match.",
+    "ctaTitle": "Looking for a property to review?",
+    "ctaDesc": "Browse listings and check each property's details independently. This tool does not rate or certify properties.",
     "browseProperties": "Browse Properties",
     "contactUs": "Contact Us",
     "floorPlanImage": "Floor Plan Image",
@@ -393,7 +393,7 @@
     "validationFileType": "Invalid file type. Please upload JPEG, PNG, or WebP images only.",
     "validationFileSize": "File too large. Maximum size is {{max}}MB.",
     "northDirection": "North Direction in Image",
-    "northHint": "Don't know the direction? Stand at the center of your house with a compass app.",
+    "northHint": "Use the north direction shown on the source plan, if available.",
     "dirTop": "Top",
     "dirRight": "Right",
     "dirBottom": "Bottom",
@@ -403,29 +403,29 @@
     "dirRightDesc": "North is to the right of the image",
     "dirBottomDesc": "North is at the bottom of the image",
     "dirLeftDesc": "North is to the left of the image",
-    "dirUnknownDesc": "Let AI detect the orientation",
-    "notSure": "I'm not sure - Let AI detect",
+    "dirUnknownDesc": "The tool may estimate north from the image.",
+    "notSure": "Not sure - let the tool estimate",
     "selected": "Selected:",
-    "loadingAnalyzingTitle": "Analyzing Floor Plan",
-    "loadingAnalyzingDesc": "Our AI is examining your floor plan layout, identifying rooms and spaces...",
-    "loadingGeneratingTitle": "Generating Vastu Report",
-    "loadingGeneratingDesc": "Applying Vastu Shastra principles and preparing your personalized analysis...",
+    "loadingAnalyzingTitle": "Processing Floor-plan Image",
+    "loadingAnalyzingDesc": "The tool may identify rooms and directions from the image.",
+    "loadingGeneratingTitle": "Preparing Tool Output",
+    "loadingGeneratingDesc": "Preparing a score and notes from the image input.",
     "loadingAnalyzeLayout": "Analyze Layout",
     "loadingGenerateReport": "Generate Report",
-    "loadingTime": "This usually takes 30-60 seconds",
-    "scoreExcellent": "Excellent",
-    "scoreGood": "Good",
-    "scoreNeedsImprovement": "Needs Improvement",
-    "scorePoor": "Poor",
-    "scoreDescExcellent": "Your property follows most Vastu principles excellently!",
-    "scoreDescGood": "Your property has good Vastu compliance with minor improvements needed.",
-    "scoreDescNeedsImprovement": "Several Vastu corrections recommended for better energy flow.",
-    "scoreDescPoor": "Significant Vastu remedies recommended for this property.",
+    "loadingTime": "Processing time varies.",
+    "scoreExcellent": "High tool-score range",
+    "scoreGood": "Mid-range tool score",
+    "scoreNeedsImprovement": "Lower tool-score range",
+    "scorePoor": "Lowest tool-score range",
+    "scoreDescExcellent": "The tool returned a higher score under its rule set. This does not certify a property.",
+    "scoreDescGood": "The tool returned a mid-range score. Review its notes independently.",
+    "scoreDescNeedsImprovement": "The tool returned a lower score. Check the image and notes independently.",
+    "scoreDescPoor": "The tool returned a low score. This is not a property assessment or certification.",
     "outOf10": "out of 10",
     "vastuAnalysisComplete": "Vastu Analysis Complete",
     "summary": "Summary",
-    "analysisConfidence": "Analysis Confidence",
-    "confidenceNote": "This score may be less reliable due to image quality or unclear floor plan layout.",
+    "analysisConfidence": "Image-read estimate",
+    "confidenceNote": "This estimate is not a validated measure of accuracy. The tool may miss or misread details.",
     "copyReport": "Copy Report",
     "printReport": "Print Report",
     "downloadPdf": "Download PDF",
@@ -436,11 +436,11 @@
     "generatingPdf": "Generating PDF...",
     "pdfDownloaded": "PDF downloaded successfully!",
     "pdfFailed": "Failed to generate PDF. Please try printing instead.",
-    "roomAnalysis": "Room Analysis",
-    "majorDefects": "Major Defects Identified",
-    "recommendedRemedies": "Recommended Remedies",
-    "suggestedImprovements": "Suggested Improvements",
-    "fullAnalysisReport": "Full Analysis Report",
+    "roomAnalysis": "Tool-generated room notes",
+    "majorDefects": "Items flagged by the tool",
+    "recommendedRemedies": "Generated suggestions",
+    "suggestedImprovements": "Other tool suggestions",
+    "fullAnalysisReport": "Full tool-generated text",
     "disclaimer": "Disclaimer:",
     "warningNotFloorPlan": "Image May Not Be a Floor Plan",
     "warningMissingKitchen": "Kitchen Not Detected",
@@ -473,87 +473,87 @@
     "compassDetected": "Compass/North indicator detected in floor plan",
     "faqs": {
       "q1": {
-        "question": "What is Vastu Shastra?",
-        "answer": "Vastu Shastra is an ancient Indian science of architecture that guides building orientation, room placement, and spatial arrangement for positive energy flow. It combines earth's magnetic fields, sun direction, and cosmic energy principles."
+        "question": "What does this Vastu tool do?",
+        "answer": "It applies its own Vastu rule set to an uploaded floor-plan image and returns a score and notes. Interpretations vary. The output is not a scientific, legal, or structural assessment."
       },
       "q2": {
-        "question": "Which direction should the main entrance face?",
-        "answer": "North, northeast, or east-facing entrances are considered auspicious in Vastu. South-facing entrances are generally avoided but can be corrected with remedies."
+        "question": "Does the score certify a home?",
+        "answer": "No. It is a tool-generated score based on an image and a rule set. It does not certify a home or confirm that a property is suitable."
       },
       "q3": {
-        "question": "Is Vastu important for apartments?",
-        "answer": "Yes, Vastu principles apply to apartments too. Key factors include entrance direction, kitchen placement (southeast), master bedroom (southwest), and pooja room (northeast)."
+        "question": "Can it assess an apartment or building?",
+        "answer": "You can upload a floor-plan image. The tool does not inspect the apartment, building, site, structure, approvals, or local rules."
       },
       "q4": {
-        "question": "Can Vastu defects be corrected without demolition?",
-        "answer": "Yes. Many Vastu defects can be corrected using mirrors, colors, metals, pyramids, and specific placement of objects. Professional Vastu consultants can suggest non-structural remedies."
+        "question": "Are the generated suggestions guaranteed to work?",
+        "answer": "No. Generated suggestions are not guarantees or professional advice. Do not make structural changes based only on this output."
       },
       "q5": {
-        "question": "Is Vastu Shastra scientifically proven?",
-        "answer": "While Vastu Shastra is rooted in traditional Indian knowledge, many of its principles align with environmental science — natural light, ventilation, and spatial planning. It is widely followed in India as a cultural and architectural practice rather than a strict science."
+        "question": "Does this tool establish scientific benefits?",
+        "answer": "No. Its score and notes do not establish effects on health, wealth, safety, or other outcomes. Treat them as an interpretation of a traditional framework."
       },
       "q6": {
-        "question": "How to check Vastu of house online?",
-        "answer": "You can check Vastu of your house online for free using 360Ghar's AI Vastu checker. Simply upload a photo or screenshot of your floor plan, mark the north direction, and the AI will analyze room placements, entrance direction, kitchen position, and other Vastu factors. You receive a compliance score out of 10 along with room-by-room analysis and practical remedies — all in under a minute, without any on-site visit."
+        "question": "How do I use the tool?",
+        "answer": "Upload a floor-plan image, select where north is, and review the generated score and notes. The tool may miss or misread details."
       },
       "q7": {
-        "question": "How to check Vastu for flat or apartment?",
-        "answer": "For flats and apartments, Vastu analysis focuses on the unit's entrance direction, kitchen placement (ideally southeast), master bedroom (southwest), and toilet positions. Upload your apartment's floor plan to 360Ghar's Vastu checker, mark the north direction, and get an instant AI-powered analysis. Since structural changes are limited in flats, the tool emphasizes non-structural remedies like color adjustments, mirror placements, and elemental corrections."
+        "question": "What if the floor-plan direction is unclear?",
+        "answer": "Check the source plan before selecting north. An incorrect or unclear direction can affect the generated notes."
       },
       "q8": {
-        "question": "Is there a free online Vastu calculator?",
-        "answer": "Yes, 360Ghar offers a free online Vastu calculator that analyzes your floor plan using AI. Unlike simple direction-based calculators, it evaluates the complete layout — room positions, entrance orientation, kitchen and toilet placements — and generates a Vastu compliance score with specific recommendations. There is no charge and no sign-up required."
+        "question": "Is this a legal or structural review?",
+        "answer": "No. The tool reviews an image only. It does not verify title, building approvals, local rules, structural safety, or site conditions."
       },
       "q9": {
-        "question": "What are common Vastu dosh and their remedies?",
-        "answer": "Common Vastu dosh include south-facing entrance, kitchen in the northeast, toilet in the northeast or center, and master bedroom in the northeast. Remedies vary by dosh: a south entrance can be corrected with a copper swastik or pyramid; a northeast kitchen may need color corrections and Vastu salt; toilet dosh can be balanced with metal strips and specific colors. 360Ghar's Vastu checker identifies these dosh automatically and suggests tailored remedies for each."
+        "question": "What does the score mean?",
+        "answer": "It is the score returned by this tool under its own rule set. It is not an official rating, a scientific result, or a certification."
       },
       "q10": {
-        "question": "Is there an AI Vastu check online free?",
-        "answer": "Yes, 360Ghar offers a completely free AI-powered Vastu check online. You do not need to pay or sign up — simply upload your floor plan image, mark the north direction, and our AI will analyze your property's Vastu compliance instantly. The free online Vastu check covers room-by-room analysis, entrance direction, kitchen placement, bedroom positions, toilet locations, and more. You get a detailed Vastu score, identified dosh, and practical remedies — all generated by AI in under a minute."
+        "question": "Does the tool provide construction advice?",
+        "answer": "No. Use the output as an informational interpretation only. Ask a qualified professional to review plans before making design or construction decisions."
       },
       "q11": {
-        "question": "How can I do an online Vastu check for my flat for free?",
-        "answer": "To do a free online Vastu check for your flat, visit 360Ghar's Vastu Checker page, upload your apartment's floor plan image (take a photo from your sale deed or ask your builder), select the north direction, and click 'Analyze Vastu'. The AI will evaluate your flat's entrance direction, kitchen placement (ideally southeast), master bedroom position (ideally southwest), toilet locations, and the center (Brahmasthan) area. You receive a compliance score out of 10, identified Vastu dosh specific to flats, and actionable remedies — all free and online without any registration."
+        "question": "Can I rely on the tool to read every room?",
+        "answer": "No. Image quality, labels, and orientation can affect what the tool detects. Review the original plan and treat the output as incomplete."
       },
       "q12": {
-        "question": "What is the difference between vastu checker and vastu calculator?",
-        "answer": "A Vastu checker evaluates your entire floor plan layout — room positions, entrance direction, kitchen and toilet placements, and overall compliance — providing a detailed analysis with scores and remedies. A Vastu calculator typically only checks a few parameters like direction-based compatibility (e.g., facing direction for a plot). 360Ghar's AI Vastu Checker is a comprehensive analyzer that provides both a numeric compliance score (out of 10) AND detailed room-by-room analysis, making it more advanced than a simple calculator."
+        "question": "Does the tool verify a property on site?",
+        "answer": "No. It processes an uploaded image and does not visit or inspect a property."
       }
     },
     "howToSteps": {
       "step1": {
         "name": "Upload your floor plan",
-        "text": "Upload an image or photo of your property's floor plan. Our AI will analyze the layout."
+        "text": "Select an image or photo of the floor plan. The tool may misread or omit details."
       },
       "step2": {
         "name": "Mark the compass directions",
-        "text": "Ensure the floor plan shows north direction correctly. The analysis depends on accurate orientation."
+        "text": "Select north using the source plan where possible. The notes depend on the direction entered."
       },
       "step3": {
         "name": "Review Vastu analysis",
-        "text": "The AI checker identifies Vastu-compliant and non-compliant zones in your floor plan."
+        "text": "Review the generated score and notes. They are not a certification or professional assessment."
       },
       "step4": {
-        "name": "Apply Vastu remedies",
-        "text": "For non-compliant areas, the tool suggests remedies like color changes, mirror placement, or room reassignment."
+        "name": "Check suggestions independently",
+        "text": "Ask a suitable professional before acting on design, structural, or property decisions."
       }
     },
-    "faqTitle": "Frequently Asked Questions About Vastu",
-    "howToCheckOnlineTitle": "How to Check Vastu of Your House Online",
-    "howToCheckOnlineDesc": "Checking Vastu online is now simple and free. With 360Ghar's AI-powered Vastu checker, you can upload any floor plan — whether it's an independent house, builder floor, or apartment layout — and get a detailed Vastu compliance report in under a minute. Unlike traditional Vastu consultations that require an on-site visit, our online Vastu checker analyzes room directions, entrance placement, kitchen position, and toilet locations using AI vision technology. You receive a Vastu score out of 10, room-by-room compliance breakdown, identified Vastu dosh, and practical remedies — all without leaving your home.",
-    "howToCheckOnlineStep1": "Take a photo or screenshot of your floor plan",
-    "howToCheckOnlineStep2": "Upload the image and mark the north direction",
-    "howToCheckOnlineStep3": "Get your AI-generated Vastu report with score and remedies",
+    "faqTitle": "Vastu tool: questions and limits",
+    "howToCheckOnlineTitle": "How to review a floor-plan image",
+    "howToCheckOnlineDesc": "Upload an image and select north to receive a score and notes from the tool's rule set. The result can be incomplete or wrong. It is not an official, scientific, legal, or structural assessment.",
+    "howToCheckOnlineStep1": "Select a floor-plan image",
+    "howToCheckOnlineStep2": "Select north using the source plan where possible",
+    "howToCheckOnlineStep3": "Review the generated score and notes independently",
     "vastuFlatVsHouseTitle": "Vastu for Flats vs Independent Houses",
-    "vastuFlatVsHouseDesc": "Vastu Shastra applies to both flats and independent houses, but the evaluation priorities differ. For independent houses, you have full control over plot orientation, entrance placement, and room positioning. For apartments and flats, you share the building's orientation and must work within the builder's layout. Key Vastu factors for flats include the apartment's entrance direction, kitchen position relative to the unit's center, master bedroom location, and toilet placements. While you cannot change the structural layout of a flat, our Vastu checker identifies non-compliant areas and suggests practical remedies like color adjustments, mirror placements, and elemental corrections that do not require demolition."
+    "vastuFlatVsHouseDesc": "The tool processes a floor-plan image only. It does not inspect a building or site, check approvals or local rules, or assess structural safety. Treat its output as an interpretation, not a property review."
   },
   "aiDesignStudio": {
-    "title": "AI Design Studio - Interior & Exterior Design Generator | 360Ghar",
-    "description": "Transform your space with AI-powered interior and exterior design generation. Create stunning room designs or reimagine your existing photos with our free AI design tool.",
-    "keywords": "AI interior design, AI exterior design, room design generator, home design AI, interior decorator AI, 360ghar, free design tool",
+    "title": "AI Interior and Exterior Design Concepts | 360Ghar",
+    "description": "Explore AI-generated interior and exterior design concepts from a prompt or photo. Results may vary and do not show verified dimensions or construction details.",
+    "keywords": "AI interior design, AI exterior design, room design concepts, home design AI, 360ghar",
     "heroTitle": "AI Design Studio",
-    "heroDescAuth": "Free AI room designs. No sign-up.",
+    "heroDescAuth": "Explore AI-generated room-design concepts.",
     "heroDescInput": "Select your preferences and generate",
     "generateDesign": "Generate Design",
     "errorConnection": "Connection Error",
@@ -561,7 +561,7 @@
     "errorValidation": "Invalid Input",
     "errorQuota": "Too many designs at once",
     "errorGeneral": "Generation Failed",
-    "errorQuotaMsg": "This device made many designs in the last minute. Wait a minute, then try again. It stays free.",
+    "errorQuotaMsg": "The request could not be completed. Try again later.",
     "errorTimeoutMsg": "The generation is taking too long. Please try again with a simpler prompt.",
     "errorNetworkMsg": "No internet connection. Please check your network and try again.",
     "errorGeneralMsg": "Failed to generate design. Please try again.",
@@ -572,13 +572,13 @@
     "suggestionNetwork3": "Disable any VPN or proxy",
     "suggestionTimeout1": "Try a simpler prompt",
     "suggestionTimeout2": "Use a smaller image (for img2img)",
-    "suggestionTimeout3": "Try again in a few minutes",
+    "suggestionTimeout3": "Try again later.",
     "suggestionValidation1": "Make sure all required fields are filled",
     "suggestionValidation2": "Upload a valid image (JPEG, PNG, WebP)",
     "suggestionValidation3": "Write a prompt of at least a few words",
-    "suggestionQuota1": "Wait about a minute",
+    "suggestionQuota1": "Wait before sending another request.",
     "suggestionQuota2": "Then press Try Again",
-    "suggestionQuota3": "Designs stay free, with no sign-up",
+    "suggestionQuota3": "If the issue continues, try again later.",
     "suggestionGeneral1": "Try a different style or room type",
     "suggestionGeneral2": "Simplify your custom prompt",
     "suggestionGeneral3": "Refresh the page and try again",
@@ -587,23 +587,23 @@
     "original": "Original",
     "aiRedesign": "AI Redesign",
     "stepStyleTitle": "1. Choose Your Style",
-    "stepStyleDesc": "Select from 12+ design styles including Modern, Traditional Indian, Minimalist, and more",
+    "stepStyleDesc": "Choose from 12 design styles, including Modern, Traditional Indian, and Minimalist",
     "stepGenerateTitle": "2. Generate with AI",
     "stepGenerateDesc": "Create from scratch or upload a photo to reimagine your existing space",
     "stepSaveTitle": "3. Save & Share",
     "stepSaveDesc": "Download your designs, save to your gallery, or share with friends",
     "whyAiStudio": "Why Use AI Design Studio?",
-    "whyAiStudioDesc": "Our AI Design Studio uses cutting-edge image generation technology to help you visualize your dream space. Whether you're planning a renovation, seeking inspiration, or just curious about different design styles, our tool makes it easy to explore endless possibilities.",
-    "featurePhotorealistic": "Generate photorealistic room designs in seconds",
-    "featureTransform": "Transform existing photos into new styles",
-    "featureStyles": "12+ design styles from Modern to Traditional Indian",
-    "featureGallery": "Save designs to your personal gallery",
+    "whyAiStudioDesc": "Use a text prompt or room photo to explore an interior or exterior design concept. Generated images may change room details and do not provide measured plans.",
+    "featurePhotorealistic": "Explore AI-generated room-design concepts",
+    "featureTransform": "Create a design concept from a room photo. Details may change.",
+    "featureStyles": "Choose from 12 design styles",
+    "featureGallery": "Save generated designs in this browser",
     "ctaTitle": "Looking for Your Dream Home?",
     "ctaDesc": "Explore our curated collection of properties with 360° virtual tours. Find your perfect home and visualize it with our AI design tools.",
     "browseProperties": "Browse Properties",
     "contactUs": "Contact Us",
     "howItWorks": "How it works",
-    "privacyFocused": "<strong>Privacy-focused</strong> - No tracking or data collection",
+    "privacyFocused": "Review the privacy policy before uploading images.",
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
     "generationMode": "Generation Mode",
@@ -630,7 +630,7 @@
     "orBrowse": "or click to browse files",
     "remove": "Remove",
     "sourcePreview": "Source preview",
-    "photoTip": "Tip: Use a clear, well-lit photo for best results",
+    "photoTip": "Use a clear, well-lit image as the source.",
     "validationNoFile": "No file selected",
     "validationFileType": "Invalid file type. Please upload JPEG, PNG, or WebP images only.",
     "validationFileSize": "File too large. Maximum size is {{max}}MB.",
@@ -655,50 +655,50 @@
     "loadingUnderstanding": "Understanding your vision",
     "loadingGenerating": "Generating design",
     "loadingEnhancing": "Applying finishing touches",
-    "loadingNote": "This may take 15-30 seconds depending on complexity",
+    "loadingNote": "Processing time varies.",
     "loadingTip1": "AI is analyzing your preferences...",
-    "loadingTip2": "Creating the perfect composition...",
-    "loadingTip3": "Adding realistic textures and lighting...",
-    "loadingTip4": "Fine-tuning details for photorealism...",
-    "loadingTip5": "Almost there! Polishing the final result...",
+    "loadingTip2": "Preparing a composition...",
+    "loadingTip3": "Generating image details...",
+    "loadingTip4": "Applying the selected style...",
+    "loadingTip5": "Finishing the image...",
     "confirmClearGallery": "Are you sure you want to clear all saved designs?"
   },
   "aiDesign": {
     "browseProperties": "Browse Properties"
   },
   "rentReceipt": {
-    "title": "Rent Receipt Generator for HRA Claim | Free PDF Download | 360Ghar",
-    "description": "Generate rent receipts for HRA tax exemption claims instantly. Free online rent receipt maker with landlord PAN, revenue stamp, monthly & full-year batch generation. Download PDF for Income Tax submission.",
-    "keywords": "rent receipt generator, HRA receipt, rent receipt for tax exemption, rent receipt download, generate rent receipt online, monthly rent receipt, HRA claim receipt, landlord PAN rent receipt, revenue stamp rent receipt, rent receipt PDF, kiraya rasid, किराया रसीद, rent receipt India",
-    "stampStateNote": "The ₹5,000 revenue stamp threshold varies by state under the Indian Stamp Act. Some states (e.g., Maharashtra, Karnataka) have different limits or surcharges. Confirm the applicable stamp duty rule for your state before submitting receipts for HRA claims.",
+    "title": "Rent Receipt Generator | Monthly and Financial-year Receipts | 360Ghar",
+    "description": "Create rent receipts from details you enter. Review, print or save as PDF. This tool does not verify tax, employer, stamp or legal requirements.",
+    "keywords": "rent receipt generator, rent receipt PDF, monthly rent receipt, financial-year rent receipt, 360ghar",
+    "stampStateNote": "This tool does not determine stamp requirements. Check current requirements for your state, receipt date and payment details.",
     "clearAll": "Clear All",
     "reset": "Reset",
-    "tipMetroTitle": "Metro vs Non-Metro",
-    "tipMetro": "For metro cities (Mumbai, Delhi, Kolkata, Chennai, Bengaluru, Hyderabad, Pune, Ahmedabad), HRA exemption is 50% of basic salary. For non-metro cities, it is 40%.",
-    "tipPANTitle": "When is Landlord PAN Needed?",
-    "tipPAN": "If your annual rent exceeds ₹1,00,000, you must provide your landlord's PAN to your employer. If the landlord doesn't have a PAN, a written declaration is required.",
-    "tipStampTitle": "Revenue Stamp Rule",
-    "tipStamp": "A ₹1 revenue stamp is mandatory on rent receipts for cash payments exceeding ₹5,000 under the Indian Stamp Act. No stamp needed for UPI, bank transfer, or cheque payments.",
-    "tipDocsTitle": "Supporting Documents",
-    "tipDocs": "Along with rent receipts, keep rental agreement, bank statements showing rent transfers, and landlord PAN (if applicable) ready for HRA claim verification."
+    "tipMetroTitle": "HRA requirements",
+    "tipMetro": "HRA treatment depends on current rules, financial year, location and individual circumstances. This tool does not calculate eligibility.",
+    "tipPANTitle": "Optional PAN field",
+    "tipPAN": "The PAN field is optional in this tool. Check current official or employer guidance for any submission requirement.",
+    "tipStampTitle": "Stamp requirements",
+    "tipStamp": "This tool does not determine whether a receipt needs a stamp. Check current requirements for your state and receipt details.",
+    "tipDocsTitle": "Supporting records",
+    "tipDocs": "Keep records that apply to your own submission. Requirements can depend on the employer, state and financial year."
   },
   "mofaToRera": {
-    "title": "MOFA to RERA Carpet Area Converter – Free Online Calculator | 360Ghar",
-    "description": "Convert MOFA carpet area to RERA carpet area instantly. Free MOFA to RERA carpet conversion calculator for Maharashtra flats. Accurate sq ft results.",
-    "keywords": "mofa to rera carpet conversion, mofa to rera calculator, mofa carpet area, rera carpet area, mofa vs rera carpet area, maharashtra carpet area calculator, mofa to rera conversion formula, rera carpet area calculator, carpet area converter mofa rera, mofa rera difference, 360ghar",
-    "heroTitle": "MOFA to RERA Carpet Area Converter",
-    "heroDesc": "Estimate MOFA carpet area to RERA carpet area in seconds. RERA carpet is often roughly 5-8% larger than MOFA carpet because it includes internal partition walls that MOFA excluded. This is a rule-of-thumb estimate — always verify against the sale agreement (RERA Act 2016 §2(k)).",
-    "result": "Result",
-    "explanationTitle": "MOFA Carpet vs RERA Carpet",
-    "explanationMofa": "MOFA carpet area (Maharashtra Ownership Flats Act) is the net usable internal floor area of a flat measured within the inner face of the walls. It excludes internal partition walls, balconies, verandahs, and open terraces.",
-    "explanationRera": "RERA carpet area is the net usable floor area of an apartment, measured from the inner face of the external/peripheral walls. It INCLUDES internal partition walls, but EXCLUDES external walls, service shafts, common areas, and exclusive balconies, verandahs, and open terraces (RERA Act 2016 §2(k)).",
-    "explanationWhy": "Because RERA carpet includes internal partition walls that MOFA carpet excluded, RERA carpet area is typically about 5-8% larger than MOFA carpet area for the same flat. Both definitions exclude exclusive balconies and open terraces — the size gap comes from the internal walls. The difference is not a fixed percentage — it depends on the number and thickness of internal walls.",
-    "formulaTitle": "Conversion Formula",
-    "formulaDesc": "For an approximate conversion, use a 6% uplift when going from MOFA to RERA, and about 5.7% reduction the other way. Always verify against the registered sale agreement and the RERA project brochure for exact figures.",
-    "tableTitle": "Typical MOFA → RERA Conversion",
-    "unitCol": "MOFA Carpet Area",
-    "reraCol": "RERA Carpet Area (approx)",
-    "howToTitle": "How to Convert MOFA to RERA Carpet Area",
+    "title": "MOFA and RERA Area Comparison | 360Ghar",
+    "description": "Compare area figures with a user-entered assumption. Illustrative only; not an official or legal conversion.",
+    "keywords": "MOFA RERA area comparison, illustrative area calculator, user-entered area assumption, 360ghar",
+    "heroTitle": "MOFA and RERA Area Comparison",
+    "heroDesc": "Enter an area and your own percentage assumption to view illustrative arithmetic. This tool does not provide an official or legal conversion.",
+    "result": "Illustrative result",
+    "explanationTitle": "About this comparison",
+    "explanationMofa": "MOFA is the Maharashtra Ownership Flats Act. This tool does not validate a property's MOFA area.",
+    "explanationRera": "RERA refers to the Real Estate Regulatory Authority. This tool does not validate a project's registered area or interpret a legal definition.",
+    "explanationWhy": "MOFA terminology is specific to Maharashtra and is outside 360Ghar's target markets. This tool compares entered values only; verify project-specific areas in official records.",
+    "formulaTitle": "User-entered assumption",
+    "formulaDesc": "Enter your own percentage assumption. The result is illustrative arithmetic only and is not a legal conversion.",
+    "tableTitle": "Example input values; no conversion without an assumption",
+    "unitCol": "Example input area",
+    "reraCol": "Illustrative output (assumption required)",
+    "howToTitle": "How to compare entered area figures",
     "howToSteps": {
       "step1": {
         "name": "Enter the carpet area",
@@ -709,43 +709,43 @@
         "text": "Select whether you are converting from MOFA to RERA, or from RERA to MOFA."
       },
       "step3": {
-        "name": "Read the converted value",
-        "text": "The converter applies the standard ~6% uplift (or ~5.7% reduction) and shows the equivalent carpet area instantly."
+        "name": "Read the illustrative output",
+        "text": "The result uses your assumption and is not an official conversion."
       },
       "step4": {
-        "name": "Cross-check the agreement",
-        "text": "Confirm the figure against the registered sale agreement and the project's RERA registration for exact numbers."
+        "name": "Check project records",
+        "text": "Review the applicable project documents; this tool does not verify them."
       }
     },
-    "faqTitle": "Frequently Asked Questions",
+    "faqTitle": "Questions about this comparison",
     "faqs": {
       "q1": {
-        "question": "What is the difference between MOFA carpet area and RERA carpet area?",
-        "answer": "MOFA carpet area is the net usable internal floor area measured within the inner face of the walls, excluding internal partition walls. RERA carpet area additionally includes internal partition walls (but still excludes external walls, service shafts, and exclusive balconies/verandahs/open terraces under RERA Act 2016 §2(k)), measured from the inner face of the external walls. As a result, RERA carpet area is usually 5-8% larger than MOFA carpet area for the same flat."
+        "question": "Does this tool provide a legal area conversion?",
+        "answer": "No. It applies only your entered assumption to the entered area; the output is illustrative."
       },
       "q2": {
-        "question": "How much larger is RERA carpet area than MOFA carpet area?",
-        "answer": "For most flats, RERA carpet area is about 5-8% larger than MOFA carpet area. The exact difference depends on how many internal partition walls the flat has and how large its exclusive balconies and open terraces are. Use our converter to apply the standard ~6% uplift."
+        "question": "What assumption should I enter?",
+        "answer": "Enter a percentage assumption you have verified independently. The tool does not recommend a value."
       },
       "q3": {
-        "question": "Is MOFA to RERA conversion applicable outside Maharashtra?",
-        "answer": "MOFA (the Maharashtra Ownership Flats Act, 1963) applies to Maharashtra. The MOFA carpet-area definition was the older standard used by Maharashtra builders. RERA (Real Estate Regulation and Development Act, 2016) applies pan-India, so the MOFA-to-RERA conversion is most relevant for Maharashtra flats registered before RERA came into force."
+        "question": "What does MOFA mean in this comparison?",
+        "answer": "MOFA refers to Maharashtra terminology. This comparison does not determine whether it applies to a property."
       },
       "q4": {
-        "question": "Which one should I use — MOFA carpet area or RERA carpet area?",
-        "answer": "For any sale agreement registered on or after 1 May 2017, builders must disclose RERA carpet area. If you are buying or comparing a Maharashtra flat whose older documents quote MOFA carpet area, convert it to RERA carpet area for an apples-to-apples comparison with newer RERA-registered projects."
+        "question": "Does this confirm a RERA area?",
+        "answer": "No. The tool does not check project records or validate a registered area."
       },
       "q5": {
-        "question": "Does RERA carpet area include the balcony?",
-        "answer": "No. Under RERA Act 2016 §2(k), RERA carpet area EXCLUDES exclusive balconies, verandahs, and open terraces, as well as external walls and service shafts. It includes only the net usable floor area within the external walls plus internal partition walls. (Balconies and open terraces are typically counted separately under the built-up or super built-up area.)"
+        "question": "Can I use this result in a sale agreement?",
+        "answer": "No. The output is illustrative arithmetic and does not replace project documents or official guidance."
       },
       "q6": {
-        "question": "Why does my RERA carpet area look bigger than the MOFA figure in the old brochure?",
-        "answer": "This is expected. The same physical flat measures larger under the RERA definition because internal partition walls (which MOFA excluded) are now counted. Exclusive balconies and open terraces are still excluded under both definitions — the difference comes from the internal walls. It is not a change in the flat's size — it is a change in what is measured. Use the converter to translate between the two definitions."
+        "question": "Why can area figures differ?",
+        "answer": "The tool uses only the entered area and assumption. It does not review plans, definitions or documents."
       }
     },
-    "explanationMofaLabel": "MOFA carpet area",
-    "explanationReraLabel": "RERA carpet area"
+    "explanationMofaLabel": "MOFA area",
+    "explanationReraLabel": "RERA area"
   },
   "sqFtCalculator": {
     "title": "Carpet Area to Sq Ft Calculator – Free Online Tool | 360Ghar",

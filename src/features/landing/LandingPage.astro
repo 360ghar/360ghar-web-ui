@@ -5,10 +5,9 @@
  * results island adds filters and more pages. Facets from the path are locked.
  *
  * Around the list: live numbers from the homes themselves (count, price range,
- * median price per sq ft), a price chart by locality against the usual market
- * bands, notes from landingTypeContext.json, and links to nearby pages.
+ * median price per sq ft), a chart of listed prices, notes from
+ * landingTypeContext.json, and links to nearby pages.
  */
-import priceContext from '@/data/priceContext.json';
 import type { ListingPage } from '@/features/search/listingItem';
 import typeContext from '@/data/landingTypeContext.json';
 import type { Property } from '@/lib/api/types';
@@ -50,13 +49,7 @@ const L = localizer(locale);
 const copy = landingCopy(l, facet, locale);
 const rent = l.intent !== 'buy';
 const cityName = hi ? (CITIES[l.city]?.hi ?? l.cityName) : l.cityName;
-// The price context file is in English; Hindi pages get Hindi units.
-const hiUnits = (v: string) => (hi ? v.replace(/lakhs?/g, 'लाख').replace(/crore/g, 'करोड़').replace(/\/month/g, '/माह') : v);
-
-type PriceMap = Record<string, Record<string, Record<string, string>>>;
-const prices = (priceContext as PriceMap)[l.city]?.[l.intent];
-const priceRange = prices?.[l.type] ?? prices?.default ?? null;
-type TypeCtx = { topSocieties?: string[]; typicalConfiguration?: string; priceBands?: { label: string; range: string; localities: string }[]; metroAccess?: string; officeHubAccess?: string; reraNote?: string };
+type TypeCtx = { topSocieties?: string[]; typicalConfiguration?: string; metroAccess?: string; officeHubAccess?: string; reraNote?: string };
 const ctx = (typeContext as unknown as Record<string, Record<string, Record<string, TypeCtx>>>)[l.city]?.[l.intent === 'pg' ? 'rent' : l.intent]?.[l.type] ?? null;
 
 // Live numbers. The count is the API total; the rest comes from up to 100 homes.
@@ -64,7 +57,7 @@ const total = page?.total ?? null;
 const stats = homes?.length ? landingStats(homes) : null;
 const complete = Boolean(homes && total !== null && homes.length >= total);
 const per = rent ? (hi ? '/माह' : '/month') : '';
-const showChart = Boolean(stats && complete && stats.count - stats.unpriced >= 3);
+const showChart = Boolean(stats && complete && stats.range && stats.count - stats.unpriced >= 3);
 // Where most prices sit (25th to 75th percentile), rounded the way the cards show prices.
 const most = complete && stats?.range && total && total > 1 ? (stats.range.map((v) => compactPrice(v, locale)) as [string, string]) : null;
 const rate = complete && stats?.medianRate ? rupees(Math.round(stats.medianRate), locale) : null;
@@ -111,8 +104,8 @@ const empty =
             ? 'इन पेजों पर आज घर हैं:'
             : 'These pages have homes today:'
           : hi
-            ? 'सभी घर देखें, या अपना घर मुफ़्त लिस्ट करें।'
-            : 'See all homes, or list your own home free.',
+            ? 'सभी घर देखें, या अपनी प्रॉपर्टी पोस्ट करें।'
+            : 'See all homes, or post your property.',
         links: related.map((r) => ({ ...r, href: L(r.href) })),
       }
     : undefined;
@@ -192,15 +185,6 @@ const notes = ctx
       </p>
     ) : null
   }
-  {
-    priceRange && (
-      <p class="landing-lead">
-        {hi ? `${cityName} में आम बाज़ार कीमत: ` : `Usual market price in ${cityName}: `}
-        <span class="tabular landing-range">₹{hiUnits(priceRange.replace(' - ', ' – '))}</span>
-        {hi ? '।' : '.'}
-      </p>
-    )
-  }
 </div>
 
 <div class="container-page mt-4">
@@ -222,7 +206,6 @@ const notes = ctx
     showChart && stats && (
       <LandingPrices
         stats={stats}
-        bands={ctx?.priceBands ?? []}
         path={pagePath}
         rent={rent}
         locale={locale}
@@ -250,24 +233,6 @@ const notes = ctx
               <dd>{n.body}</dd>
             </div>
           ))}
-          {!showChart && ctx?.priceBands && ctx.priceBands.length > 0 && (
-            <div>
-              <dt>
-                <Icon name="rupee" size={20} />
-                {hi ? 'कीमत के हिसाब से इलाके' : 'Areas by price'}
-              </dt>
-              <dd>
-                {ctx.priceBands.map((b) => (
-                  <span class="landing-band">
-                    <strong>
-                      {b.label} <span class="tabular">₹{b.range}</span>
-                    </strong>
-                    : {b.localities}
-                  </span>
-                ))}
-              </dd>
-            </div>
-          )}
         </dl>
       </section>
     )
@@ -303,7 +268,7 @@ const notes = ctx
   <p class="landing-post">
     <Icon name="home" size={18} />
     {hi ? 'यहाँ घर है?' : 'Own a home here?'}
-    <a class="link" href={L('/post-property')}>{hi ? 'मुफ़्त लिस्ट करें' : 'List it free'}</a>
+    <a class="link" href={L('/post-property')}>{hi ? 'अपना घर लिस्ट करें' : 'List your home'}</a>
   </p>
 </div>
 
@@ -369,10 +334,6 @@ const notes = ctx
     max-width: 62ch;
   }
 
-  .landing-range {
-    white-space: nowrap;
-  }
-
   .landing-more {
     margin-top: 4rem;
     display: grid;
@@ -421,11 +382,6 @@ const notes = ctx
     margin-top: 0.25rem;
     padding-left: 1.75rem;
     color: var(--color-ink-800);
-  }
-
-  .landing-band {
-    display: block;
-    margin-top: 0.25rem;
   }
 
   .landing-facet-grid {

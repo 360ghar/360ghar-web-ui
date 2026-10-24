@@ -19,24 +19,24 @@ const H = byLocale(locale, {
   en: {
     name: 'Glossary',
     h1: 'Real Estate Glossary',
-    lead: 'Direct answers to common real estate questions for Gurgaon property buyers, sellers and NRIs.',
+    lead: 'General definitions for common real estate terms. This is not legal or tax advice; rules vary by transaction and jurisdiction.',
     search: 'Search terms',
     placeholder: 'RERA, stamp duty, carpet area',
     showing: '{shown} of {total} terms',
     clear: 'Clear filters',
-    next: 'Ready to explore verified properties?',
+    next: 'Ready to explore property listings?',
     browse: 'Browse listings',
     emi: 'EMI calculator',
   },
   hi: {
     name: 'शब्दावली',
     h1: 'रियल एस्टेट शब्दावली',
-    lead: 'गुड़गाँव के खरीदारों, विक्रेताओं और NRI के आम सवालों के सीधे जवाब। जवाब अंग्रेज़ी में हैं।',
+    lead: 'आम रियल एस्टेट शब्दों की सामान्य जानकारी। यह कानूनी या कर सलाह नहीं है; नियम लेन-देन और स्थान के अनुसार बदलते हैं। जवाब अंग्रेज़ी में हैं।',
     search: 'शब्द खोजें',
     placeholder: 'RERA, stamp duty, carpet area',
     showing: '{total} में से {shown} शब्द',
     clear: 'फ़िल्टर हटाएँ',
-    next: 'वेरिफाइड प्रॉपर्टी देखने के लिए तैयार?',
+    next: 'प्रॉपर्टी लिस्टिंग देखने के लिए तैयार?',
     browse: 'लिस्टिंग देखें',
     emi: 'EMI कैलकुलेटर',
   },
@@ -55,7 +55,7 @@ const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
 const jsonLd = [ld, faqPage(GLOSSARY.map((e) => ({ q: e.question, a: e.answer })))];
 ---
 
-<Content title={t('seo:glossary.title')} description={t('seo:glossary.description')} path={PATH} heading={H.h1} lead={H.lead} crumbs={crumbs} jsonLd={jsonLd} newsletter>
+<Content title={t('seo:glossary.title')} description={t('seo:glossary.description')} path={PATH} noindex heading={H.h1} lead={H.lead} crumbs={crumbs} jsonLd={jsonLd} newsletter>
   <PageArt slot="head" scene="book" />
   <Glossary client:load locale={locale} entries={GLOSSARY} s={s} />
 

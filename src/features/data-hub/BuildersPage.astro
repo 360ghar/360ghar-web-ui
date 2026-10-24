@@ -32,8 +32,8 @@ const items = page?.items ?? [];
   jsonLd={[
     {
       '@type': 'ItemList',
-      name: 'Builder Reputation Directory, Gurugram',
-      description: 'Builder reputation scores based on HRERA registered projects and complaints.',
+      name: 'Builder Reputation Directory',
+      description: 'Builder reputation scores from the RERA projects and complaints on 360Ghar records. Score = 100 minus 15 for each complaint per project.',
       url: canonicalFor('/builder-reputation', locale),
       numberOfItems: page?.total ?? items.length,
       itemListElement: items.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b.builder_name, url: canonicalFor(`/builder-reputation/${b.slug}`, locale) })),

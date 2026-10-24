@@ -1,6 +1,6 @@
 ---
 import { getT } from '@/i18n';
-import { auction, auctionBanks, safe } from '@/features/data-hub/api';
+import { auction, safe } from '@/features/data-hub/api';
 import AuctionPage from '@/features/data-hub/AuctionPage.astro';
 import DetailState from '@/features/data-hub/DetailState.astro';
 import { text } from '@/features/data-hub/text';
@@ -13,16 +13,16 @@ const locale = Astro.locals.locale;
 const t = getT(locale);
 const raw = Astro.params.id ?? '';
 const id = /^\d{1,9}$/.test(raw) ? Number(raw) : null;
-// A bad id is a 404 with no API call. The banks are for the page's filter links only.
+// A bad id is a 404 with no API call.
 // Court auctions have their own id space and their own route: /bank-auctions/court/:id.
-const [res, banks] = id ? await Promise.all([safe(() => auction(id, 'bank')), auctionBanks()]) : [null, []];
+const res = id ? await safe(() => auction(id, 'bank')) : null;
 const state = stateOf(res);
 settle(Astro, state, 'hour');
 ---
 
 {
   res?.data ? (
-    <AuctionPage locale={locale} a={res.data} banks={banks} />
+    <AuctionPage locale={locale} path={`/bank-auctions/${id ?? ''}`} />
   ) : (
     <DetailState
       state={state === 'ok' ? 'missing' : state}

@@ -49,9 +49,9 @@ describe('celebrity cards', () => {
     expect(known('/nowhere/at-all')).toBe(false);
   });
 
-  it('the page has no link of its own except the case-study link', () => {
+  it('the held page has no link of its own', () => {
     const src = fs.readFileSync(path.join(process.cwd(), 'src/features/content/celebrity/CelebrityPage.astro'), 'utf8');
     const hrefs = [...src.matchAll(/href=(\{[^}]*\}|"[^"]*")/g)].map((m) => m[1]);
-    expect(hrefs).toEqual(['{L(c.post)}']);
+    expect(hrefs).toEqual([]);
   });
 });

@@ -3,7 +3,7 @@
 import { getT } from '@/i18n';
 import Content from '@/layouts/Content.astro';
 import { localizer } from '@/lib/i18n/locale';
-import { canonicalFor, faqPage } from '@/lib/seo/site';
+import { faqPage } from '@/lib/seo/site';
 import Faq from '@/ui/Faq.astro';
 import Icon from '@/ui/icons/Icon.astro';
 import Paper from '@/ui/Paper.astro';
@@ -20,16 +20,15 @@ const t = getT(locale);
 const hi = locale === 'hi';
 const L = localizer(locale);
 const PATH = '/landlord-not-returning-security-deposit';
-const url = canonicalFor(PATH, locale);
 
 const headline = 'Landlord Not Returning Security Deposit? Complete Legal Guide & Steps to Recover';
 const summary =
   'What to do when a landlord refuses to return the security deposit: central laws, state-wise rules, legal notice, refund timelines, and a 10-step recovery action plan for Indian tenants.';
-const answer =
-  'Send a written demand for refund with an itemised deduction list and a 15-day deadline. If the owner refuses, escalate to the state Rent Authority or Rent Controller, a consumer forum (if a company is involved), or a civil suit for recovery with interest. Keep the rent agreement, deposit receipt, payment proofs, and move-in/move-out photos: courts decide these cases on documents.';
 
 const name = hi ? 'सिक्योरिटी डिपॉज़िट वापसी गाइड' : 'Security Deposit Refund Guide';
 const { crumbs, ld } = trail(locale, [{ name, path: PATH }]);
+// No QAPage here: Google only allows it on pages where users can submit answers, and a guide
+// written by the site itself is an explicit invalid use case. FAQPage already covers the FAQs.
 const jsonLd = [
   ld,
   article({ headline, description: summary, path: PATH, locale, published: DEPOSIT_DATE }),
@@ -39,20 +38,6 @@ const jsonLd = [
     'Step-by-step action plan for Indian tenants to recover a security deposit withheld by a landlord: documentation, written demand, legal notice, and escalation to rent authorities, consumer forums, and courts.',
     steps,
   ),
-  {
-    '@type': 'QAPage',
-    name: faqs[0]!.q,
-    url,
-    mainEntity: {
-      '@type': 'Question',
-      name: faqs[0]!.q,
-      text: faqs[0]!.q,
-      answerCount: 1,
-      datePublished: DEPOSIT_DATE,
-      author: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' },
-      acceptedAnswer: { '@type': 'Answer', text: answer, url, dateCreated: DEPOSIT_DATE, author: { '@type': 'Organization', name: '360Ghar', url: 'https://360ghar.com' } },
-    },
-  },
 ];
 // Short labels for the contents list (the body is English on both locales).
 const toc = [

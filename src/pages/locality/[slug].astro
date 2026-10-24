@@ -31,12 +31,17 @@ const slug = l ? localitySlug(l) : '';
 const cityName = l && l.city.toLowerCase() !== 'gurgaon' ? displayName(l.city) : 'Gurugram';
 const month = new Date().toLocaleDateString('en-IN', { month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
 const dataTitle = l && data && !data.failed ? localityTitle(name, cityName, data.homes, month) : null;
+const pageTitle = l ? (dataTitle ?? `${name}, ${cityName} locality information | 360Ghar`) : 'Locality not found | 360Ghar';
+const pageDescription = l
+  ? hi
+    ? `${name}, ${cityName} की प्रॉपर्टी लिस्टिंग और सामान्य जानकारी। उपलब्धता और डेटा कवरेज अलग-अलग हो सकते हैं।`
+    : `Property listings for ${name}, ${cityName}. Availability and data coverage vary.`
+  : 'This locality is not on our map.';
 ---
 
 <Page
-  title={l ? (dataTitle ?? l.seo?.title ?? `${name} ${cityName} - Property Prices, Reviews & Locality Guide | 360Ghar`) : 'Locality not found | 360Ghar'}
-  description={l ? (generated?.metaDescription ?? l.seo?.description ?? l.description ?? '') : 'This locality is not on our map.'}
-  keywords={l?.seo?.keywords}
+  title={pageTitle}
+  description={pageDescription}
   path={l ? `/locality/${slug}` : Astro.url.pathname}
   noindex={isNoindexLocality(l)}
   image={l ? apiOgImage('locality', l.slug) : null}
@@ -49,7 +54,7 @@ const dataTitle = l && data && !data.failed ? localityTitle(name, cityName, data
           address: { '@type': 'PostalAddress', addressLocality: cityName, addressRegion: 'Haryana', addressCountry: 'IN' },
           ...(l.geo ? { geo: { '@type': 'GeoCoordinates', latitude: l.geo.lat, longitude: l.geo.lng } } : {}),
         },
-        { '@type': 'WebPage', name: dataTitle ?? l.seo?.title ?? name, url: canonicalFor(`/locality/${slug}`, locale), ...(generated || l.lastVerifiedAt ? { dateModified: generated?.date ?? l.lastVerifiedAt } : {}) },
+         { '@type': 'WebPage', name: dataTitle ?? name, url: canonicalFor(`/locality/${slug}`, locale), ...(generated ? { dateModified: generated.date } : {}) },
         faqPage(faqs),
       ]
     : []}

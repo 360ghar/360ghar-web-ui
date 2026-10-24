@@ -295,7 +295,7 @@ function Studio({ locale, strings }: Props) {
             hint={`${s('promptNote')}. ${t.chars(custom.length, MAX_PROMPT)}`}
             onChange={(e) => setCustom(e.target.value.slice(0, MAX_PROMPT))}
           />
-          <p className="aid-free">{t.free}</p>
+          <p className="aid-note">{t.note}</p>
           <div className="tool-actions">
             <button type="submit" className="btn btn-primary btn-lg" disabled={busyNow}>
               {s('generateDesign')}

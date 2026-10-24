@@ -1,48 +1,28 @@
 ---
-/** /bank-auctions: page 1 on the server, filters, cards, alerts. */
-import { getT } from '@/i18n';
-import { isCourt, type AuctionPage } from '@/features/data-hub/api';
-import type { ApiError } from '@/lib/api/errors';
 import type { Locale } from '@/lib/i18n/locale';
-import { canonicalFor } from '@/lib/seo/site';
-import { generateToolSchema, toolSchemas } from '@/lib/seo/legacy/toolSchemas.js';
-import Auctions from './Auctions';
-import { FAQ, STEPS } from './content';
-import DataHubPage from './DataHubPage.astro';
-import { hubName } from './pages';
-import { todayIst } from './format';
-import type { AuctionFilters } from './params';
-import { text } from './text';
+import DataHubHold from './DataHubHold.astro';
 
-type Props = { locale: Locale; filters: AuctionFilters; page: AuctionPage | null; error: ApiError | null; banks: string[]; cities: string[] };
-const { locale, filters, page, error, banks, cities } = Astro.props;
-const t = text(locale);
-const tt = getT(locale);
-const city = filters.city ?? 'Delhi NCR';
+type Props = { locale: Locale };
+const { locale } = Astro.props;
 ---
 
-<DataHubPage
-  art="auctions"
-  title={tt('seo:bankAuctions.titleTemplate', { city })}
-  description={`Bank (SARFAESI) and court-ordered property auctions in ${city}, with reserve prices, EMD amounts and auction dates. Set an alert for new auctions.`}
-  keywords="bank auction property, SARFAESI auction Gurugram, DRT auction Delhi, court ordered property sale, bank auction flats Gurgaon"
+<DataHubHold
+  locale={locale}
   path="/bank-auctions"
-  heading={t.auH1}
-  lead={tt('data-hub:bankAuctions.description')}
-  crumbs={[{ name: hubName('auctions', locale), path: '/bank-auctions' }]}
-  faqs={FAQ.auctions}
-  howTo={{ name: 'How to Buy Bank Auction Properties', description: 'Step-by-step guide to finding and bidding on bank auction properties in India.', steps: STEPS.auctions }}
-  jsonLd={[
-    generateToolSchema(toolSchemas.bankAuctions),
-    {
-      '@type': 'ItemList',
-      name: `Bank and court property auctions in ${city}`,
-      url: canonicalFor('/bank-auctions', locale),
-      numberOfItems: page?.total ?? page?.items.length ?? 0,
-      itemListElement: (page?.items ?? []).map((a, i) => ({ '@type': 'ListItem', position: i + 1, name: a.property_description || a.property_type || t.auH1, url: canonicalFor(isCourt(a) ? `/bank-auctions/court/${a.id}` : `/bank-auctions/${a.id}`, locale) })),
-    },
-  ]}
-  related={['sources', 'circleRates', 'stampDuty', 'ownership']}
->
-  <Auctions client:load locale={locale} initialFilters={filters} initialPage={error ? null : page} banks={banks} cities={cities} today={todayIst()} />
-</DataHubPage>
+  en={{
+    title: 'Bank auction listings under review | 360Ghar',
+    description: 'Auction listings are withheld while source records, reuse terms and update checks are reviewed.',
+    heading: 'Bank auction listings under review',
+    crumb: 'Bank auctions',
+    lead: 'Auction listings are not shown at this time.',
+    notice: 'We are reviewing source records, reuse terms and update checks before showing auction listings.',
+  }}
+  hi={{
+    title: 'बैंक नीलामी लिस्टिंग समीक्षा के अधीन | 360Ghar',
+    description: 'स्रोत रिकॉर्ड, उपयोग की शर्तों और अपडेट जाँच की समीक्षा तक नीलामी लिस्टिंग रोकी गई हैं।',
+    heading: 'बैंक नीलामी लिस्टिंग समीक्षा के अधीन',
+    crumb: 'बैंक नीलामी',
+    lead: 'नीलामी लिस्टिंग अभी नहीं दिखाई जा रही हैं।',
+    notice: 'नीलामी लिस्टिंग दिखाने से पहले हम स्रोत रिकॉर्ड, उपयोग की शर्तों और अपडेट जाँच की समीक्षा कर रहे हैं।',
+  }}
+/>

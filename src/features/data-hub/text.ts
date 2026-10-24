@@ -31,6 +31,8 @@ const en = {
   auctionCrumb: (id: number) => `Auction ${id}`,
 
   // Circle rates
+  crUnavailableTitle: 'Circle rates unavailable',
+  crUnavailableBody: 'Current rates are not published because the applicable dated official schedule could not be confirmed. No rates or estimates are shown.',
   crH1: 'Gurugram circle rates',
   crCount: (n: number) => `${formatNum(n, 'en')} ${n === 1 ? 'rate' : 'rates'}`,
   crSector: 'Sector',
@@ -82,7 +84,7 @@ const en = {
   sdSteps: 'Register the deed in Haryana',
 
   // RERA
-  reraH1: 'RERA projects in Gurugram',
+  reraH1: 'RERA projects on our records',
   reraCount: (n: number) => `${formatNum(n, 'en')} ${n === 1 ? 'project' : 'projects'}`,
   reraSearch: 'Project or developer',
   reraStatus: 'Status',
@@ -98,7 +100,7 @@ const en = {
   verifyBusy: 'Checking…',
   verifyYes: (name: string) => `Found: ${name}`,
   verifyStatus: (s: string) => `Status: ${s}`,
-  verifyNo: 'No project with this number is on our records. Check the number on hrera.org.in.',
+  verifyNo: 'No project with this number is on our records. Check the number on haryanarera.gov.in.',
   verifyEmpty: 'Enter a RERA number.',
 
   // Auctions
@@ -241,7 +243,7 @@ const en = {
   gzNone: 'No notices on our records yet',
 
   // Builders
-  bdH1: 'Builder reputation in Gurugram',
+  bdH1: 'Builder reputation on our records',
   bdCount: (n: number) => `${formatNum(n, 'en')} ${n === 1 ? 'builder' : 'builders'}`,
   bdSearch: 'Builder name',
   bdSort: 'Order',
@@ -254,12 +256,12 @@ const en = {
   bands: { good: '70 and above: good', average: '40 to 69: average', poor: 'Below 40: poor' } as Record<string, string>,
   bandShort: { good: 'Good', average: 'Average', poor: 'Poor' } as Record<string, string>,
   bdEmptyTitle: (q: string) => `No builder matches “${q}”`,
-  bdEmptyBody: 'Check the spelling. The list has builders with projects on HRERA.',
+  bdEmptyBody: 'Check the spelling. The list has the promoters named on the RERA projects on our records.',
   bdNoneTitle: 'Builder scores are not ready yet',
-  bdNoneBody: 'We build these scores from HRERA projects and complaints. Until then, check a project on the RERA list.',
+  bdNoneBody: 'We build these scores from the RERA projects and complaints on our records. Until then, check a project on the RERA list.',
   bdGuide: 'See the 2026 builder guide',
   bdRera: 'See RERA projects',
-  bdProjectsTitle: 'Projects on HRERA',
+  bdProjectsTitle: 'Projects on the RERA registers',
   bdComplaintsTitle: 'Recent complaints and orders',
   bdNoComplaints: 'No complaints or orders are on our records for this builder.',
   bdOrder: 'Order',
@@ -270,7 +272,7 @@ const en = {
 
   // Static pages
   updated: (date: string) => `Last updated ${date}.`,
-  disclaimer: 'Data from public HRERA records and 360Ghar research. Check with hrera.org.in before you decide.',
+  disclaimer: 'Data from public RERA registers and 360Ghar research. Check with the register before you decide.',
   browse: 'Browse homes',
 
   // Price index
@@ -315,6 +317,8 @@ const hi: Text = {
   nf: { circle: 'इस लिंक पर कोई सर्कल रेट नहीं', auction: 'इस लिंक पर कोई नीलामी नहीं', zone: 'इस लिंक पर ज़ोनिंग डेटा नहीं', builder: 'इस लिंक पर कोई बिल्डर नहीं' },
   auctionCrumb: (id) => `नीलामी ${id}`,
 
+  crUnavailableTitle: 'सर्कल रेट उपलब्ध नहीं हैं',
+  crUnavailableBody: 'लागू होने वाली तारीख़-सहित आधिकारिक दर-सूची की पुष्टि नहीं हो सकी, इसलिए मौजूदा दरें प्रकाशित नहीं हैं। कोई दर या अनुमान नहीं दिखाया गया है।',
   crH1: 'गुरुग्राम सर्कल रेट',
   crCount: (n) => `${formatNum(n, 'hi')} रेट`,
   crSector: 'सेक्टर',
@@ -364,7 +368,7 @@ const hi: Text = {
   sdRates: 'हरियाणा की दरें',
   sdSteps: 'हरियाणा में डीड का रजिस्ट्रेशन',
 
-  reraH1: 'गुरुग्राम के RERA प्रोजेक्ट',
+  reraH1: 'हमारे रिकॉर्ड के RERA प्रोजेक्ट',
   reraCount: (n) => `${formatNum(n, 'hi')} प्रोजेक्ट`,
   reraSearch: 'प्रोजेक्ट या डेवलपर',
   reraStatus: 'स्थिति',
@@ -380,7 +384,7 @@ const hi: Text = {
   verifyBusy: 'जाँच हो रही है…',
   verifyYes: (name) => `मिला: ${name}`,
   verifyStatus: (s) => `स्थिति: ${s}`,
-  verifyNo: 'इस नंबर का कोई प्रोजेक्ट हमारे रिकॉर्ड में नहीं है। hrera.org.in पर नंबर जाँचें।',
+  verifyNo: 'इस नंबर का कोई प्रोजेक्ट हमारे रिकॉर्ड में नहीं है। haryanarera.gov.in पर नंबर जाँचें।',
   verifyEmpty: 'RERA नंबर डालें।',
 
   auH1: 'बैंक और कोर्ट नीलामी',
@@ -516,7 +520,7 @@ const hi: Text = {
   gzAll: 'सभी नोटिस देखें',
   gzNone: 'अभी हमारे रिकॉर्ड में कोई नोटिस नहीं',
 
-  bdH1: 'गुरुग्राम में बिल्डरों की साख',
+  bdH1: 'हमारे रिकॉर्ड में बिल्डरों की साख',
   bdCount: (n) => `${formatNum(n, 'hi')} बिल्डर`,
   bdSearch: 'बिल्डर का नाम',
   bdSort: 'क्रम',
@@ -529,12 +533,12 @@ const hi: Text = {
   bands: { good: '70 और ऊपर: अच्छा', average: '40 से 69: औसत', poor: '40 से कम: कमज़ोर' },
   bandShort: { good: 'अच्छा', average: 'औसत', poor: 'कमज़ोर' },
   bdEmptyTitle: (q) => `“${q}” से कोई बिल्डर नहीं मिला`,
-  bdEmptyBody: 'स्पेलिंग जाँचें। सूची में वे बिल्डर हैं जिनके प्रोजेक्ट HRERA पर हैं।',
+  bdEmptyBody: 'स्पेलिंग जाँचें। सूची में हमारे रिकॉर्ड के RERA प्रोजेक्ट पर दर्ज प्रोमोटर हैं।',
   bdNoneTitle: 'बिल्डर स्कोर अभी तैयार नहीं हैं',
-  bdNoneBody: 'हम ये स्कोर HRERA के प्रोजेक्ट और शिकायतों से बनाते हैं। तब तक RERA सूची में प्रोजेक्ट जाँचें।',
+  bdNoneBody: 'हम ये स्कोर हमारे रिकॉर्ड के RERA प्रोजेक्ट और शिकायतों से बनाते हैं। तब तक RERA सूची में प्रोजेक्ट जाँचें।',
   bdGuide: '2026 की बिल्डर गाइड देखें',
   bdRera: 'RERA प्रोजेक्ट देखें',
-  bdProjectsTitle: 'HRERA पर प्रोजेक्ट',
+  bdProjectsTitle: 'RERA रजिस्टर के प्रोजेक्ट',
   bdComplaintsTitle: 'हाल की शिकायतें और आदेश',
   bdNoComplaints: 'इस बिल्डर की कोई शिकायत या आदेश हमारे रिकॉर्ड में नहीं है।',
   bdOrder: 'आदेश',
@@ -544,7 +548,7 @@ const hi: Text = {
   bdOutOf: '100 में से',
 
   updated: (date) => `आखिरी अपडेट ${date}।`,
-  disclaimer: 'आँकड़े सार्वजनिक HRERA रिकॉर्ड और 360Ghar रिसर्च से। फ़ैसले से पहले hrera.org.in पर जाँचें।',
+  disclaimer: 'आँकड़े सार्वजनिक RERA रजिस्टर और 360Ghar रिसर्च से। फ़ैसले से पहले रजिस्टर पर जाँचें।',
   browse: 'घर देखें',
 
   piH1: (city) => `${city} प्रॉपर्टी प्राइस इंडेक्स`,

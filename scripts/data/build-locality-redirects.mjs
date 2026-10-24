@@ -8,14 +8,14 @@
  * Dry run by default: prints counts and a sample, and whether the file would change. `--write` writes the file,
  * and refuses when a target is thin or missing, equals its source, or the map has a chain or a loop.
  * Deterministic: same rows, same bytes. Scraped rows without a twin, and seed rows, are not redirected.
- * Needs Node type stripping (Node 22.18+) because the thin predicate comes from src/lib/seo/aiDiscovery.ts.
+ * Needs Node type stripping (Node 22.18+) because the thin predicate comes from src/features/localities/thin.ts.
  */
 import fs from 'node:fs';
 import { parseArgs, readJson, srcData, writeJson } from './lib/cli.mjs';
 import { buildRedirects, checkRedirects } from './lib/locality-redirects.mjs';
 
 const args = parseArgs();
-const { isScrapedName, isThinLocalityName } = await import('../../src/lib/seo/aiDiscovery.ts');
+const { isScrapedName, isThinLocalityName } = await import('../../src/features/localities/thin.ts');
 const rows = readJson(srcData('localities.json'));
 const scraped = (r) => isScrapedName(r.name);
 const thin = (r) => isThinLocalityName(r.name);

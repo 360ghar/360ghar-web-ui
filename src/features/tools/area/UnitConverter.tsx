@@ -59,7 +59,7 @@ function Converter({ locale, units, labels, defaults, compare = false }: Props) 
               {options}
             </SelectField>
           </div>
-          {from === 'bigha' || to === 'bigha' ? <p className="tool-note">{t.bighaNote}</p> : null}
+          <p className="tool-note">{t.unitNote}</p>
           <ToolActions locale={locale} link={link} onReset={reset} />
         </section>
 

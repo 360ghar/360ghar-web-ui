@@ -73,7 +73,7 @@ export type Prepayment = { newMonths: number; monthsSaved: number; interestSaved
 
 /**
  * One lump-sum prepayment paid together with EMI number `afterMonth`. The EMI
- * stays the same and the tenure gets shorter (the usual bank default).
+ * stays the same and the modeled tenure gets shorter. Lender terms can differ.
  */
 export function prepayment(principal: number, annualRate: number, years: number, amount: number, afterMonth: number): Prepayment | null {
   const t = terms(principal, annualRate, years);

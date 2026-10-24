@@ -1,16 +1,14 @@
 /**
- * The image provider for AI Design Studio: POST /api/v1/design-studio/generate.
- * The backend runs Agnes AI (agnes-image-2.5-flash). It is free and needs no
- * sign-in (the route is anonymous, so no token is required), and the backend
- * limits requests per IP. A 200 body is `{ image }`. A failure is the error
- * envelope with a code: QUOTA_EXCEEDED (429), SERVICE_UNAVAILABLE (503),
- * CONTENT_BLOCKED, GENERATION_FAILED, NO_IMAGE_RETURNED, TIMEOUT (422).
+ * Frontend adapter for the design-studio generation endpoint.
+ * The service controls availability, access requirements, provider and limits.
+ * A successful response must contain `image`; API failures are surfaced as
+ * ApiError values.
  */
 import { api, call, timeoutMs } from '@/lib/api/client';
 import { ApiError } from '@/lib/api/errors';
 import type { components } from '@/lib/api/schema';
 
-/** Image generation can take up to a minute; the backend also retries. */
+/** Client-side timeout for image generation requests. */
 const GENERATE_TIMEOUT_MS = 180_000;
 
 type GenerateBody = components['schemas']['ImageGenRequest'];

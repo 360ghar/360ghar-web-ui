@@ -1,30 +1,30 @@
 {
   "seo": {
-    "title": "360Ghar – India's VR-First Way to Find a Home | Buy, Sell & Rent Property in Gurugram",
-    "description": "India's VR-First Way to Find a Home. 360Ghar is India's first AI + VR real estate platform. Explore verified flats, apartments & villas in Gurugram with studio-quality 360° guided walkthroughs. Zero upfront fees. No fake listings. AI-powered search."
+    "title": "Property Search in Gurugram and Selected NCR Markets | 360Ghar",
+    "description": "Search property listings and use real-estate tools for Gurugram and selected NCR markets. Listing availability and details vary by market and page."
   },
   "hero": {
-    "title": "India's VR-First Way to"
+    "title": "Search property listings"
   },
   "filterTabs": {
     "rent": "Rent",
     "buy": "Buy"
   },
   "about": {
-    "title": "India's First AI + VR Real Estate Platform"
+    "title": "About 360Ghar"
   },
   "referEarn": {
     "title": "Know Someone Selling or Renting? ",
     "note": "Open to all. No account needed."
   },
   "propertyType": {
-    "title": "Real value for your investment—not just brokerage"
+    "title": "Choose a property type"
   },
   "properties": {
-    "title": "Real estate Investing in made it lot easy"
+    "title": "Find a property that fits your needs"
   },
   "message": {
-    "title": "Free Owner Onboarding + Photography"
+    "title": "Owner listing support"
   },
   "pm": {
     "title": "Own a Rental Property?"
@@ -36,26 +36,27 @@
     "title": "Get the "
   },
   "testimonials": {
-    "title": "Loved by home seekers in Gurugram"
+    "title": "Customer feedback"
   },
   "aiAgent": {
-    "title": "Meet Your AI-Powered Property Guide",
+    "title": "Explore the 360Ghar AI assistant",
     "mcpServerLabel": "MCP Server:"
   },
   "tools": {
     "title": "Plan & Analyze Your"
   },
   "faq": {
-    "title": "Everything about our verified 360° listings",
-    "q1": "How is 360Ghar different from traditional brokers?",
-    "a1": "Unlike traditional brokers, we don't push partnered inventories. Our AI-powered platform shows verified properties inspected by our on-site team. Your dedicated Relationship Manager handles everything end-to-end—complete transparency with zero upfront fees.",
-    "q2": "What does \"AI-enabled platform\" mean?",
-    "a2": "Our AI technology powers property matching, virtual tour creation, and verification workflows. Every listing gets a studio-quality 360° guided walkthrough, inspected and verified by our team—ensuring you see only genuine properties.",
-    "q3": "Do I really get a dedicated Relationship Manager?",
-    "a3": "Yes! Unlike traditional brokers who just show properties, your RM manages your entire journey—from search to documentation to closing. One point of contact, complete visibility, zero hassle.",
-    "q4": "Why is there no upfront cost?",
-    "q5": "How are properties verified?",
-    "a5": "Our on-site team physically inspects every property, captures 360° tours, verifies details, and confirms exact location. No fake photos, no duplicates, no misleading information—just authentic, verified listings you can trust."
+    "title": "Property listings and tools: common questions",
+    "q1": "What does 360Ghar do?",
+    "a1": "360Ghar provides property listings and related real-estate tools. Availability and details vary by market and page.",
+    "q2": "Does every listing include a virtual tour?",
+    "a2": "No. A 360° tour appears only when the listing provides one. Check the listing details.",
+    "q3": "Are listings independently verified?",
+    "a3": "Do not assume a listing has been independently verified. Check the property, owner, price and documents with the relevant parties before paying.",
+    "q4": "Are there fees for listing a property?",
+    "a4": "Check the current listing form and terms for applicable fees.",
+    "q5": "Can I get help with a property search?",
+    "a5": "Support options depend on the service. Use the contact information shown on the relevant page."
   },
   "blog": {
     "title": "Stay Updated",
@@ -66,24 +67,24 @@
   },
   "structuredFaq": {
     "q1": "What is 360Ghar?",
-    "a1": "360Ghar is India's first AI + VR real estate platform. We convert every property listing into a studio-quality 360° virtual walkthrough, allowing buyers to explore properties remotely before scheduling a physical visit. We verify all properties to connect buyers and tenants directly to owners.",
-    "q2": "Is listing property on 360Ghar really free?",
-    "a2": "Yes! Listing your property on 360Ghar is absolutely free. Our team will visit the property to verify it, arrange for professional photography, and create the 360° VR tour at zero cost to the owner.",
-    "q3": "How does 360Ghar verify properties?",
-    "a3": "Our dedicated on-ground team physically visits every single property listed on our platform. We verify the actual condition, create the VR tour on the spot, and check ownership documents to ensure zero fake listings.",
-    "q4": "What is a 360° virtual property tour?",
-    "a4": "A 360° virtual tour is an immersive walkthrough that allows you to explore the property digitally from your phone or laptop. You can look up, down, and entirely around every room, giving you a perfect sense of the space without visiting in person.",
-    "q5": "Does 360Ghar charge any upfront fees?",
-    "a5": "360Ghar charges no upfront fees to property owners to list their property. We connect direct buyers and tenants directly to property owners to ensure maximum transparency.",
-    "q6": "Which areas in Gurugram does 360Ghar cover?",
-    "a6": "We heavily cover major Gurugram areas including Golf Course Road, Sohna Road, Dwarka Expressway, all DLF Phases, New Gurugram (Sectors 80-115), and expanding regions across Delhi NCR.",
-    "q7": "Can I buy a flat in Gurugram without visiting physically?",
-    "a7": "Our 360° virtual tours give you a completely transparent view of the property. While we always encourage a physical visit before final transaction, many of our users are able to confidently shortlist and begin the buying process entirely based on our immersive tours.",
-    "q8": "What is a Relationship Manager on 360Ghar?",
-    "a8": "Every buyer, tenant, and owner on 360Ghar is assigned a dedicated Relationship Manager who handles your query end-to-end. They will help you find matched properties, assist in scheduling visits, and support your documentation.",
-    "q9": "How does AI property matching work on 360Ghar?",
-    "a9": "Our platform uses AI to learn your specific preferences, from location to budget and amenities, to surface the freshest and most highly matched properties directly to your feed.",
+    "a1": "360Ghar helps people search property listings and use related real-estate tools. Listing availability and data coverage vary by market.",
+    "q2": "Can I list my property?",
+    "a2": "Use the listing form to submit property details. Review the current terms and form before submitting; submitted details may be subject to review.",
+    "q3": "Are property listings independently verified?",
+    "a3": "Do not assume a listing has been independently verified. Confirm the property, owner, price and documents with the relevant parties before you pay.",
+    "q4": "What does a 360° virtual tour show?",
+    "a4": "A 360° tour, when a listing includes one, shows captured views of that property. It does not replace an in-person visit or document checks.",
+    "q5": "Are there fees for listing a property?",
+    "a5": "Check the current listing form and terms for any applicable fees. 360Ghar does not confirm the cost of a specific transaction.",
+    "q6": "Which markets does 360Ghar target?",
+    "a6": "Gurugram, Delhi, Noida, Faridabad and Ghaziabad are target markets. This does not confirm listing availability in each one. Search current inventory.",
+    "q7": "Can I choose a home using only a virtual tour?",
+    "a7": "A tour is a viewing aid. Visit the property and verify its details before you agree to a transaction.",
+    "q8": "Do all users get a relationship manager?",
+    "a8": "Support options depend on the service. Check the contact details shown for your account or transaction.",
+    "q9": "How should I compare homes?",
+    "a9": "Compare listing details, total costs, location and documents. Confirm each item with the owner or relevant authority.",
     "q10": "Are properties on 360Ghar RERA approved?",
-    "a10": "Yes, we verify the RERA registration details for all new and under-construction properties heavily featured on our platform to ensure compliance with real estate guidelines."
+    "a10": "This site does not confirm RERA approval for each property or project. Check the relevant official RERA register using the exact registration details."
   }
 }

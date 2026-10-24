@@ -19,12 +19,12 @@ settle(Astro, state, 'day');
 
 {
   res?.data ? (
-    <ZonePage locale={locale} z={res.data} />
+    <ZonePage locale={locale} path={`/zone-checker/${slug ?? ''}`} />
   ) : (
     <DetailState
       state={state === 'ok' ? 'missing' : state}
       locale={locale}
-      title="Zone Details Gurugram | FAR Master Plan | 360Ghar"
+      title={locale === 'hi' ? 'ज़ोन रिकॉर्ड | 360Ghar' : 'Zoning record | 360Ghar'}
       missingTitle={text(locale).nf.zone}
       missingBody={t('data-hub:zoneChecker.detail.notFoundDesc')}
       back={{ path: '/zone-checker', label: hubName('zones', locale) }}

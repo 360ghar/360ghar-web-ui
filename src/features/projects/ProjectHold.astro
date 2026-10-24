@@ -1,0 +1,37 @@
+---
+/** The hold page for the legacy catalog project slugs (editorial hold). */
+import { localizer } from '@/lib/i18n/locale';
+import Page from '@/layouts/Page.astro';
+
+const locale = Astro.locals.locale;
+const hi = locale === 'hi';
+const L = localizer(locale);
+const title = hi ? 'प्रोजेक्ट की जानकारी की समीक्षा चल रही है' : 'Project details are under review';
+const description = hi
+  ? 'इन प्रोजेक्ट की जानकारी की समीक्षा हो रही है, क्योंकि इनके स्रोत दर्ज नहीं हैं।'
+  : 'We are reviewing these project details because their sources are not documented.';
+---
+
+<Page title={`${title} | 360Ghar`} description={description} noindex bare>
+  <section class="container-page project-hold" aria-labelledby="project-hold-title">
+    <h1 id="project-hold-title">{title}</h1>
+    <p>{description}</p>
+    <a class="btn btn-primary" href={L('/properties')}>{hi ? 'घर खोजें' : 'Search properties'}</a>
+  </section>
+</Page>
+
+<style>
+  .project-hold {
+    padding-block: clamp(3rem, 8vw, 6rem);
+  }
+
+  .project-hold h1 {
+    max-width: 24ch;
+  }
+
+  .project-hold p {
+    max-width: 58ch;
+    margin-block: 1rem 1.5rem;
+    color: var(--color-ink-800);
+  }
+</style>

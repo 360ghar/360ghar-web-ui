@@ -3,7 +3,6 @@ import { api, attempt } from '@/lib/api/client';
 import type { PropertyPage } from '@/lib/api/types';
 import type { Property } from '@/lib/api/types';
 import type { Locale } from '@/lib/i18n/locale';
-import { formatNum } from '@/lib/format';
 import { memo } from '@/lib/memo';
 import { faqPage } from '@/lib/seo/site';
 import { capped } from './cap';
@@ -63,14 +62,10 @@ function pickLead(homes: Property[]) {
 /** Loads everything the home page needs in parallel. Never throws. */
 export async function loadHome(locale: Locale) {
   const t = getT(locale);
-  const [recs, total, posts, circle, rera, auctions, ...places] = await Promise.all([
+  const [recs, total, posts, ...places] = await Promise.all([
     attempt(api.GET('/api/v1/properties/recommendations', { params: { query: { limit: 9 } } })),
     attempt(api.GET('/api/v1/properties', { params: { query: { limit: 1, include_total: true } } })),
     attempt(api.GET('/api/v1/blog/posts', { params: { query: { limit: 3 } } })),
-    // Counts for the tool notes. One row each, only for the `total`. A failed call hides that number.
-    cached('count:circle-rates', () => attempt(api.GET('/api/v1/data-hub/circle-rates', { params: { query: { limit: 1, include_total: true } } }))),
-    cached('count:rera-projects', () => attempt(api.GET('/api/v1/data-hub/rera-projects', { params: { query: { limit: 1, include_total: true } } }))),
-    cached('count:auctions', () => attempt(api.GET('/api/v1/data-hub/auctions', { params: { query: { limit: 1, include_total: true } } }))),
     // The spotlight localities: count and one photo each. Same cache and cap.
     ...SPOTLIGHT.map((l) =>
       cached(`locality:${l.name}`, () =>
@@ -95,9 +90,10 @@ export async function loadHome(locale: Locale) {
     homes: all.filter((p) => p !== lead).slice(0, 8),
     count,
     localities,
-    localityTotal: LOCALITY_TOTAL,
-    facts: homeFacts(locale, { count, localityTotal: LOCALITY_TOTAL, num: (n) => formatNum(n, locale) }),
-    stats: { circle: totalOf(circle), rera: totalOf(rera), auctions: totalOf(auctions) },
+    facts: homeFacts(locale),
+    // Preserve the stats shape for the dev-only map study, but never expose
+    // counts for Data Hub records while their sources are held.
+    stats: { circle: null, rera: null, auctions: null },
     posts: (posts.data?.items ?? []).slice(0, 3),
     homesError: recs.error,
     faqs,

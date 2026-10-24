@@ -81,13 +81,10 @@ export function landingCopy(l: Landing, facet: Facet | undefined, locale: Locale
   const faqs = (facet ? facetFaqs() : baseFaqs()).map((f) => ({ q: undash(f.q), a: undash(f.a) }));
 
   function baseFaqs() {
-    const preposition = l.intent === 'pg' ? 'in' : `for ${verbEn}`;
     const vars = {
       facetLower,
-      preposition,
       city,
-      accommodation: l.intent === 'pg' ? 'accommodation' : verbEn,
-      intentNoun: l.intent === 'rent' ? 'Rental' : l.intent === 'pg' ? 'PG' : 'Sale',
+      searchAction: hi ? (l.intent === 'buy' ? 'घर खरीदते समय' : l.intent === 'rent' ? 'घर किराये पर लेते समय' : 'PG खोजते समय') : (l.intent === 'buy' ? 'buying' : l.intent === 'rent' ? 'renting' : 'looking for'),
       hindiAction: l.intent === 'buy' ? 'kharidne' : 'kiraye par lene',
       hindiBuyRent: l.intent === 'buy' ? 'kharidne' : 'kiraye',
       hindiDocSuffix: t(l.intent === 'buy' ? 'landing:landingFaqs.q4DocBuy' : 'landing:landingFaqs.q4DocRent'),
@@ -108,7 +105,6 @@ export function landingCopy(l: Landing, facet: Facet | undefined, locale: Locale
       budgetSuffixDetail: budget,
       hindiAction: l.intent === 'buy' ? 'kharidne ke liye' : 'kiraye par',
       verb: l.intent === 'buy' ? 'buy' : 'rent',
-      verbIng: l.intent === 'buy' ? 'buying' : 'renting',
       amenityPretty: facet?.kind === 'amenity' ? facet.title : '',
     };
     const list = [

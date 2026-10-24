@@ -1,7 +1,7 @@
 /**
  * Rules-based link check for property listings. No AI and no network call:
  * it reads the pasted URL, finds the portal from the hostname (the old site's
- * list of 5 portals) and flags link patterns that often hide a fake page.
+ * list of 5 portals) and flags URL patterns for a person's review.
  */
 
 export type PortalKey = '99acres' | 'magicbricks' | 'housing' | 'nobroker' | 'commonfloor';

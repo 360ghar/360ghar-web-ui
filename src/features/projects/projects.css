@@ -1,0 +1,470 @@
+/*
+ * Project-intelligence screens. Loaded by the pages under /project,
+ * /market-pulse, /map-discovery, /micro-markets and /account/watchlist, on top
+ * of data-hub.css (the shell imports it), so `dh-*` and `sheet` are available
+ * here and only the new parts live in this file.
+ *
+ * Every class is prefixed `pj-`. Tokens and paper rules come from the global
+ * stylesheet; nothing is animated, colour is never the only signal, and every
+ * control keeps a 44 px target.
+ */
+
+/* Same order as Tailwind, so utilities on these elements still win. */
+@layer theme, base, components, utilities;
+
+@layer components {
+  /* ---------- Hero ---------- */
+
+  .pj-hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.5rem);
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--color-ink-950);
+  }
+
+  .pj-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-top: 0.625rem;
+  }
+
+  .pj-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-mist-100);
+    color: var(--color-ink-800);
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .pj-chip.is-link {
+    /* A link: the 44px touch target. */
+    min-height: 44px;
+    color: var(--color-ink-950);
+    text-decoration: underline;
+    text-decoration-color: var(--color-ink-200);
+    text-underline-offset: 3px;
+  }
+
+  .pj-chip.is-link:hover {
+    color: var(--color-kesar-700);
+    text-decoration-color: currentColor;
+  }
+
+  .pj-hero-facts {
+    margin-top: 1rem;
+  }
+
+  .pj-hero-source {
+    margin-top: 0.75rem;
+  }
+
+  /* ---------- Sections ---------- */
+
+  .pj-sections {
+    display: grid;
+    gap: 0;
+  }
+
+  /* ---------- Disclosure list (the filing FAQ) ---------- */
+
+  .pj-faq-list {
+    padding: 0 1.25rem;
+  }
+
+  .pj-faq-item {
+    border-bottom: 1px solid var(--color-ink-100);
+  }
+
+  .pj-faq-item:last-child {
+    border-bottom: 0;
+  }
+
+  .pj-faq-item > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 44px;
+    padding: 0.75rem 0;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--color-ink-950);
+    list-style: none;
+  }
+
+  .pj-faq-item > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .pj-faq-item > summary:hover {
+    color: var(--color-kesar-700);
+  }
+
+  .pj-faq-mark {
+    transition: transform 140ms var(--ease-paper);
+  }
+
+  .pj-faq-item[open] .pj-faq-mark {
+    transform: rotate(180deg);
+  }
+
+  .pj-faq-answer {
+    padding: 0 0 1rem;
+    max-width: 68ch;
+    color: var(--color-ink-800);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pj-faq-mark {
+      transition: none;
+    }
+  }
+
+  /* ---------- Price history chart ---------- */
+
+  .pj-chart-fig {
+    margin-top: 1.25rem;
+  }
+
+  .pj-chart-plot {
+    position: relative;
+    height: clamp(11rem, 26vw, 17rem);
+    margin-left: 4.5rem;
+    border-bottom: 1px solid var(--color-ink-200);
+  }
+
+  .pj-chart-plot svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .pj-chart-guide {
+    position: absolute;
+    right: 0;
+    left: 0;
+    border-top: 1px dashed var(--color-ink-100);
+    pointer-events: none;
+  }
+
+  .pj-chart-guide > i {
+    position: absolute;
+    top: -0.7em;
+    left: -4.5rem;
+    width: 4.5rem;
+    padding-right: 0.5rem;
+    text-align: right;
+    font-size: 0.8125rem;
+    font-style: normal;
+    color: var(--color-ink-600);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pj-chart-dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .pj-dot {
+    position: absolute;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: -0.25rem 0 0 -0.25rem;
+    border-radius: 50%;
+    background: var(--color-ink-800);
+  }
+
+  .pj-line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .pj-line.is-0,
+  .pj-dot.is-0 {
+    stroke: var(--color-pine-800);
+    background: var(--color-pine-800);
+  }
+
+  .pj-line.is-1,
+  .pj-dot.is-1 {
+    stroke: var(--color-kesar-600);
+    background: var(--color-kesar-600);
+  }
+
+  .pj-line.is-2,
+  .pj-dot.is-2 {
+    stroke: var(--color-ink-800);
+    background: var(--color-ink-800);
+  }
+
+  .pj-line.is-3,
+  .pj-dot.is-3 {
+    stroke: var(--color-leaf-700);
+    background: var(--color-leaf-700);
+  }
+
+  .pj-line.is-4,
+  .pj-dot.is-4 {
+    stroke: var(--color-chili-700);
+    background: var(--color-chili-700);
+  }
+
+  .pj-chart-axis {
+    position: relative;
+    height: 1.5rem;
+    margin-left: 4.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .pj-chart-axis > span {
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.8125rem;
+    color: var(--color-ink-600);
+  }
+
+  .pj-chart-cap {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .pj-chart-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 1rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-800);
+  }
+
+  .pj-chart-keys > li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .pj-key {
+    width: 0.875rem;
+    height: 0.25rem;
+    border-radius: 2px;
+    background: var(--color-ink-800);
+  }
+
+  .pj-key.is-0 {
+    background: var(--color-pine-800);
+  }
+
+  .pj-key.is-1 {
+    background: var(--color-kesar-600);
+  }
+
+  .pj-key.is-2 {
+    background: var(--color-ink-800);
+  }
+
+  .pj-key.is-3 {
+    background: var(--color-leaf-700);
+  }
+
+  .pj-key.is-4 {
+    background: var(--color-chili-700);
+  }
+
+  /* ---------- Developer dossier ---------- */
+
+  .pj-pillars {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 40rem;
+  }
+
+  .pj-pillar {
+    display: grid;
+    grid-template-columns: minmax(7rem, 12rem) 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9375rem;
+  }
+
+  .pj-pillar > dt {
+    color: var(--color-ink-800);
+    font-weight: 600;
+  }
+
+  .pj-pillar > dd {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pj-pillar-track {
+    flex: 1 1 auto;
+    height: 0.625rem;
+    border-radius: 999px;
+    background: var(--color-ink-100);
+    overflow: hidden;
+  }
+
+  .pj-pillar-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-ink-600);
+  }
+
+  /* ---------- Micro-market ---------- */
+
+  .pj-bar-track {
+    display: block;
+    height: 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 999px;
+    background: var(--color-ink-100);
+    overflow: hidden;
+  }
+
+  .pj-bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-ink-600);
+  }
+
+  .pj-pillar-fill.is-good,
+  .pj-bar-fill.is-good {
+    background: var(--color-leaf-700);
+  }
+
+  .pj-pillar-fill.is-wait,
+  .pj-bar-fill.is-wait {
+    background: var(--color-haldi-700);
+  }
+
+  .pj-pillar-fill.is-bad,
+  .pj-bar-fill.is-bad {
+    background: var(--color-chili-700);
+  }
+
+  /* ---------- Market pulse ---------- */
+
+  .pj-pulse-computed {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--color-ink-600);
+  }
+
+  /* ---------- Map overlay ---------- */
+
+  .pj-map-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .pj-map {
+    position: relative;
+    margin-top: 1rem;
+    aspect-ratio: 3 / 2;
+    min-height: 18rem;
+    max-height: 34rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-ink-200);
+    background: var(--color-mist-50);
+    overflow: hidden;
+  }
+
+  .pj-map-points {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pj-map-point {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    max-width: 12rem;
+  }
+
+  .pj-map-point > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 44px;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-paper);
+    box-shadow: 0 1px 2px rgb(15 29 25 / 0.18);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-ink-950);
+    text-decoration: none;
+  }
+
+  .pj-map-point > a:hover,
+  .pj-map-point > a:focus-visible {
+    background: var(--color-kesar-100);
+    color: var(--color-ink-950);
+  }
+
+  .pj-map-dot {
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-ink-600);
+  }
+
+  .pj-map-point.is-good .pj-map-dot {
+    background: var(--color-leaf-700);
+  }
+
+  .pj-map-point.is-wait .pj-map-dot {
+    background: var(--color-haldi-700);
+  }
+
+  .pj-map-point.is-bad .pj-map-dot {
+    background: var(--color-chili-700);
+  }
+
+  .pj-map-name {
+    overflow-wrap: anywhere;
+  }
+
+  .pj-map-none {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--color-ink-600);
+  }
+
+  /* ---------- Watchlist ---------- */
+
+  .pj-watch {
+    min-height: 44px;
+  }
+
+  .pj-watchlist {
+    display: grid;
+    gap: 1rem;
+  }
+}

@@ -1,7 +1,18 @@
 ---
-import DepositGuide from '@/features/content/guides/DepositGuide.astro';
+import Content from '@/layouts/Content.astro';
+
+const hi = Astro.locals.locale === 'hi';
+const path = '/landlord-not-returning-security-deposit';
+const title = hi ? 'सिक्योरिटी डिपॉज़िट गाइड समीक्षा के अधीन | 360Ghar' : 'Security deposit guide under review | 360Ghar';
+const description = hi
+  ? 'राज्य-विशिष्ट जानकारी प्राथमिक स्रोतों की समीक्षा तक रोकी गई है।'
+  : 'State-specific guidance is withheld pending primary-source review.';
+const heading = hi ? 'सिक्योरिटी डिपॉज़िट गाइड समीक्षा के अधीन' : 'Security deposit guide under review';
+const notice = hi
+  ? 'राज्य-विशिष्ट कानूनी दावे प्राथमिक स्रोतों की समीक्षा तक हटा दिए गए हैं। यह पृष्ठ कानूनी सलाह नहीं है।'
+  : 'State-specific legal claims have been removed pending primary-source review. This page is not legal advice.';
 
 export const prerender = true;
 ---
 
-<DepositGuide />
+<Content title={title} description={description} path={path} noindex heading={heading} lead={notice} />

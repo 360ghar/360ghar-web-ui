@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { batch, batchNumber, formatDate, fyMonths, fyStart, monthPeriod, numberToWords, PAN_RE, panRequired, receiptBase, rupeesInWords, stampRequired, todayIso } from './receipt';
+import * as receipt from './receipt';
+import { batch, batchNumber, formatDate, fyMonths, fyStart, monthPeriod, numberToWords, PAN_RE, receiptBase, rupeesInWords, todayIso } from './receipt';
 
 // The old bug showed in India (UTC+5:30): run these tests in that time zone.
 const tz = process.env.TZ;
@@ -38,6 +39,7 @@ describe('dates', () => {
   it('formats a date without a time zone shift', () => {
     expect(formatDate('2026-04-01')).toBe('01 April 2026');
     expect(formatDate('2027-03-31')).toBe('31 March 2027');
+    expect(formatDate('2026-04-01', 'hi')).toContain('अप्रैल');
     expect(formatDate('')).toBe('');
   });
 });
@@ -58,19 +60,16 @@ describe('numbers', () => {
   });
 });
 
-describe('rules', () => {
-  it('needs PAN only above ₹1 lakh a year', () => {
-    expect(panRequired(8_333)).toBe(false);
-    expect(panRequired(8_334)).toBe(true);
+describe('receipt fields', () => {
+  it('does not encode PAN or revenue-stamp thresholds', () => {
+    expect(receipt).not.toHaveProperty('panRequired');
+    expect(receipt).not.toHaveProperty('stampRequired');
+  });
+
+  it('can validate the entered PAN format without requiring a PAN', () => {
     expect(PAN_RE.test('ABCPG1234F')).toBe(true);
     expect(PAN_RE.test('ABCPG1234')).toBe(false);
     expect(PAN_RE.test('abcpg1234f')).toBe(false);
-  });
-
-  it('needs a revenue stamp only for cash above ₹5,000', () => {
-    expect(stampRequired('cash', 5_000)).toBe(false);
-    expect(stampRequired('cash', 5_001)).toBe(true);
-    expect(stampRequired('upi', 50_000)).toBe(false);
   });
 });
 
