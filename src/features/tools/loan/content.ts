@@ -52,7 +52,7 @@ export const LOAN_PAGE = {
     howTitle: 'How this scenario works',
     how: 'The calculator assigns 50% of income after entered expenses to all EMIs, then subtracts current EMIs. This fixed share is a model assumption, not a lender rule.',
     formula1: 'Available EMI in this scenario = max(0, (income − expenses) × 50% − current EMIs)',
-    formula2: 'Loan amount = eligible EMI × ((1 + r)^n − 1) ÷ (r × (1 + r)^n)',
+    formula2: 'Loan amount = available EMI in this scenario × ((1 + r)^n − 1) ÷ (r × (1 + r)^n)',
     formulaNote: 'r is the monthly interest rate and n is the number of monthly instalments.',
     tipsTitle: 'What to confirm with a lender',
     tips: [
@@ -76,7 +76,7 @@ export const LOAN_PAGE = {
     howTitle: 'यह परिदृश्य कैसे काम करता है',
     how: 'कैलकुलेटर दर्ज किए गए खर्च के बाद की आय का 50% सभी EMI के लिए मानता है, फिर मौजूदा EMI घटाता है। यह एक तय मॉडल-धारणा है, बैंक का नियम नहीं।',
     formula1: 'इस परिदृश्य में उपलब्ध EMI = max(0, (आय − खर्च) × 50% − मौजूदा EMI)',
-    formula2: 'लोन राशि = पात्र EMI × ((1 + r)^n − 1) ÷ (r × (1 + r)^n)',
+    formula2: 'लोन राशि = इस परिदृश्य में उपलब्ध EMI × ((1 + r)^n − 1) ÷ (r × (1 + r)^n)',
     formulaNote: 'r मासिक ब्याज दर है और n मासिक किस्तों की संख्या है।',
     tipsTitle: 'लेंडर से क्या पुष्टि करें',
     tips: [

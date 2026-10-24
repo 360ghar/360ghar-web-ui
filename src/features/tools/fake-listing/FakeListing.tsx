@@ -18,7 +18,7 @@ function Checker({ locale }: Props) {
   const done = result && result.kind !== 'invalid' ? result : null;
   const portal = done?.kind === 'portal' ? PORTALS.find((p) => p.key === done.portal)! : null;
   const look = done?.kind === 'unknown' && done.lookalikeOf ? PORTALS.find((p) => p.key === done.lookalikeOf)! : null;
-  const flagged = Boolean(done?.flags.length);
+  const flagged = Boolean(done?.flags.some((f) => f !== 'notSecure'));
   const title = !done ? '' : flagged ? t.careTitle : done.kind === 'ours' ? t.oursTitle : portal ? t.portalTitle(portal.name) : t.unknownTitle;
   const sub = !done ? '' : flagged ? t.careSub : done.kind === 'ours' ? t.oursSub : portal ? t.portalSub(portal.name) : t.unknownSub;
 

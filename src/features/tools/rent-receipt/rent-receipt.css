@@ -49,18 +49,6 @@
   object-fit: contain;
 }
 
-.rr-notice {
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-start;
-  padding: 0.75rem;
-  border-radius: var(--radius-md);
-  background: var(--color-haldi-100);
-  color: var(--color-haldi-700);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
 @media (min-width: 64rem) {
   .rr-side {
     position: sticky;
@@ -150,25 +138,9 @@
 }
 
 /* The box where the physical ₹1 stamp goes. */
-.rr-stamp {
-  display: grid;
-  place-content: center;
-  width: 5.5rem;
-  height: 6rem;
-  border: 1.5px dashed var(--color-ink-600);
-  border-radius: var(--radius-xs);
-  color: var(--color-ink-800);
-  font-size: 0.75rem;
-  line-height: 1.3;
-  text-align: center;
-}
-
-.rr-stamp strong {
-  font-size: 1rem;
-}
-
 .rr-sign {
   display: grid;
+  margin-left: auto;
   justify-items: center;
   min-width: 10rem;
   color: var(--color-ink-800);
@@ -221,11 +193,6 @@
     border-color: #000;
     break-inside: avoid;
     font-size: 11pt;
-    color: #000;
-  }
-
-  .rr-print .rr-stamp {
-    border-color: #000;
     color: #000;
   }
 }
