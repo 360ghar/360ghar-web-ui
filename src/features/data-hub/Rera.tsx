@@ -15,6 +15,7 @@ import { fmtDate } from './format';
 import { Island } from './Island';
 import { CountBar, ListBody, RowsSkeleton, useCursorList, useSearchFilter } from './list';
 import { activeFilters, RERA, type ReraFilters } from './params';
+import { projectBySlug } from '@/features/projects/catalog';
 import { validSlug } from './route';
 import { Status } from './Status';
 import { label, text } from './text';
@@ -63,9 +64,10 @@ function Projects({ locale, initialFilters, initialPage }: ListProps) {
                 {/* The slug is the public URL key of the project-intelligence page.
                     A row whose filing named no project name has none, and that page
                     would 404, so the title stays plain text for those rows, and for a slug
-                    the route itself would reject. */}
+                    the route itself would reject, or for a slug of an old catalog page (the
+                    route shows that page held, as the sitemap does). */}
                 <h3 className="dh-row-title">
-                  {validSlug(p.slug ?? undefined) ? <a href={localizePath(`/project/${p.slug}`, locale)}>{p.project_name}</a> : p.project_name}
+                  {validSlug(p.slug ?? undefined) && !projectBySlug(p.slug!) ? <a href={localizePath(`/project/${p.slug}`, locale)}>{p.project_name}</a> : p.project_name}
                 </h3>
                 <Status value={p.status} locale={locale} />
               </div>

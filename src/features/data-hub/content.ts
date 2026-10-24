@@ -368,7 +368,7 @@ export const STEPS = {
     },
     {
       "name": "Verify RERA Registration",
-      "text": "Use the Quick RERA Verify tool to instantly check if a registration number is valid. Cross-verify that the number matches the pattern the register issues (for example RERA-GRG-PROJ-1540-2024 from HRERA, or DLRERA2026P0011 from Delhi RERA) and check the project status on the official HRERA portal."
+      "text": "Use the Quick RERA Verify tool to instantly check if a registration number is valid. Cross-verify that the number matches the pattern the register issues (for example RERA-GRG-PROJ-1540-2024 from HRERA, or DLRERA2026P0011 from Delhi RERA) and check the project status on the official portal of the register that issued it."
     },
     {
       "name": "Review Project Details",

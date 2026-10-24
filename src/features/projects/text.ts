@@ -460,7 +460,7 @@ const hi: Text = {
   wlAddedLabel: 'जोड़ा',
   wlRemove: 'हटाएँ',
 
-  mapLead: (n) => `इस दृश्य में ${formatNum(n, 'hi')} प्रोजेक्ट दिख रहे हैं। बड़े दृश्य में और भी हो सकते हैं; उन्हें देखने के लिए ज़ूम इन करें।`,
+  mapLead: (n) => `इस दृश्य में ${formatNum(n, 'hi')} प्रोजेक्ट ${n === 1 ? 'दिख रहा है' : 'दिख रहे हैं'}। बड़े दृश्य में और भी हो सकते हैं; उन्हें देखने के लिए ज़ूम इन करें।`,
   mapZoomIn: 'ज़ूम इन',
   mapZoomOut: 'ज़ूम आउट',
   mapReset: 'सब दिखाएँ',
@@ -531,7 +531,7 @@ export function toneOf(value: string | null | undefined): 'is-good' | 'is-bad' |
   const v = (value ?? '').toLowerCase();
   if (v === 'completed' || v === 'registered' || v === 'approved') return 'is-good';
   if (v === 'lapsed' || v === 'revoked' || v === 'rejected') return 'is-bad';
-  if (v === 'under_construction' || v === 'new_launch' || v === 'delayed' || v === 'pending') return 'is-wait';
+  if (v === 'under_construction' || v === 'new_launch' || v === 'pre_launch' || v === 'near_possession' || v === 'delayed' || v === 'pending') return 'is-wait';
   return 'is-plain';
 }
 
