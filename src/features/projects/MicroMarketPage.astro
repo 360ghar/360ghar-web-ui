@@ -32,7 +32,7 @@ const heading = market.name;
 <DataHubPage
   title={tt('projects:seo.microMarket.titleTemplate', { market: market.name, city: market.city })}
   description={tt('projects:seo.microMarket.descriptionTemplate', { market: market.name, city: market.city })}
-  keywords={`${market.name} property market, ${market.city} micro-market, ${market.name} price per sq ft, ${market.district ?? market.city} RERA projects`}
+  keywords={`${market.name} property market, ${market.city} micro-market, ${market.district ?? market.city} RERA projects`}
   path={path}
   heading={heading}
   lead={tt('projects:page.microMarket.lead')}
@@ -47,7 +47,7 @@ const heading = market.name;
       ...(typeof market.latitude === 'number' && typeof market.longitude === 'number'
         ? { geo: { '@type': 'GeoCoordinates', latitude: market.latitude, longitude: market.longitude } }
         : {}),
-      description: `${market.name} in ${market.city}: projects, average price per sq ft and the stage mix, from the 360Ghar data hub.`,
+      description: `${market.name} in ${market.city}: projects and the stage mix, from the 360Ghar data hub.`,
     },
   ]}
   related={['marketPulse', 'projectMap', 'rera']}

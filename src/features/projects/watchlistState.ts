@@ -42,23 +42,30 @@ export function setSaved(projectId: number, on: boolean, local = true) {
 }
 
 let loading: Promise<void> | null = null;
+/** Bumped when the account changes: a load started for an older account must not write. */
+let generation = 0;
 
 /** Loads the saved ids once per page. A failure leaves every project unsaved. */
 export function loadSaved(): Promise<void> {
   loading ??= (async () => {
+    const mine = generation;
     try {
       await initAuth();
       if (useAuthStore.getState().status !== 'authed') return;
-      for (const item of await watchlist()) saved.add(item.project_id);
+      const items = await watchlist();
+      if (mine !== generation) return;
+      for (const item of items) saved.add(item.project_id);
     } catch {
       // Signed out, offline, or the route failed: nothing is known to be saved.
     } finally {
-      for (const [id, on] of mutated) {
-        if (on) saved.add(id);
-        else saved.delete(id);
+      if (mine === generation) {
+        for (const [id, on] of mutated) {
+          if (on) saved.add(id);
+          else saved.delete(id);
+        }
+        ready = true;
+        emit();
       }
-      ready = true;
-      emit();
     }
   })();
   return loading;
@@ -66,8 +73,12 @@ export function loadSaved(): Promise<void> {
 
 // Another account signed in, or the session ended: the last account's list is not theirs.
 useAuthStore.subscribe((state, previous) => {
-  const was = previous.session?.user.id;
-  if (!was || was === state.session?.user.id) return;
+  const was = previous.session?.user.id ?? null;
+  const now = state.session?.user.id ?? null;
+  if (was === now) return;
+  // The first session to settle on a page: the pending load reads it after initAuth.
+  if (!was && !ready && loading) return;
+  generation += 1;
   loading = null;
   mutated.clear();
   saved.clear();

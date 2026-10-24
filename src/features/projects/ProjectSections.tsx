@@ -219,7 +219,7 @@ export function ProjectSections({ locale, project: p }: ProjectSectionsProps) {
           <DataTable
             caption={t.expenditureTitle}
             head={[t.colYear, t.colQuarter, t.colCategory, t.colParticular, t.colAmount]}
-            rows={expenditure.map((r) => [num(r.year), s(r.quarter), s(r.category), s(r.particular), money(r.amount)])}
+            rows={expenditure.map((r) => [num(r.year, { useGrouping: false }), s(r.quarter), s(r.category), s(r.particular), money(r.amount)])}
           />
         </Section>
       ) : null}

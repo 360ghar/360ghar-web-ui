@@ -15,4 +15,4 @@ const points = await safe(() => mapProjects(DEFAULT_BOUNDS));
 settleList(Astro, 'day', points);
 ---
 
-<MapDiscoveryPage locale={locale} points={points.data ?? []} bounds={DEFAULT_BOUNDS} />
+<MapDiscoveryPage locale={locale} points={points.data ?? []} bounds={DEFAULT_BOUNDS} down={Boolean(points.error)} />

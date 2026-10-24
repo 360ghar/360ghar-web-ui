@@ -8,8 +8,10 @@
  */
 import type { SitemapEntry } from '@/features/feeds/xml';
 import { allProjects } from '@/features/projects/api';
+import { projectBySlug } from '@/features/projects/catalog';
 import { memo } from '@/lib/memo';
 import { allBuilders, safe } from './api';
+import { validSlug } from './route';
 
 const FIXED: SitemapEntry[] = [
   { path: '/verify-ownership', changefreq: 'monthly', priority: '0.7' },
@@ -50,6 +52,8 @@ export async function datahubSitemap(): Promise<{ entries: SitemapEntry[]; skipp
     skipped.push('/builder-reputation/*');
   } else {
     for (const b of builders.data) {
+      // The route 404s a slug that fails its own check, so the sitemap must not list it.
+      if (!validSlug(b.slug)) continue;
       entries.push({ path: `/builder-reputation/${b.slug}`, changefreq: 'weekly', priority: '0.6' });
     }
   }
@@ -61,7 +65,8 @@ export async function datahubSitemap(): Promise<{ entries: SitemapEntry[]; skipp
     skipped.push('/project/*');
   } else {
     for (const p of projects.data) {
-      if (p.slug) entries.push({ path: `/project/${p.slug}`, lastmod: p.updated_at, changefreq: 'weekly', priority: '0.7' });
+      // A legacy catalog slug renders the noindex hold page, not this project: leave it out.
+      if (validSlug(p.slug ?? undefined) && !projectBySlug(p.slug!)) entries.push({ path: `/project/${p.slug}`, lastmod: p.updated_at, changefreq: 'weekly', priority: '0.7' });
     }
   }
 
@@ -69,5 +74,8 @@ export async function datahubSitemap(): Promise<{ entries: SitemapEntry[]; skipp
 }
 
 export async function datahubEntries(): Promise<SitemapEntry[]> {
-  return (await datahubSitemap()).entries;
+  const { entries, skipped } = await datahubSitemap();
+  // A failed list leaves its detail pages out of this response: say so in the server log.
+  if (skipped.length) console.warn(`sitemap-datahub: incomplete, skipped ${skipped.join(', ')}`);
+  return entries;
 }

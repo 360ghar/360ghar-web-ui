@@ -11,4 +11,4 @@ const rows = await safe(() => allMarketPulse());
 settleList(Astro, 'day', rows);
 ---
 
-<MarketPulsePage locale={locale} rows={rows.data ?? []} />
+<MarketPulsePage locale={locale} rows={rows.data ?? []} down={Boolean(rows.error)} />

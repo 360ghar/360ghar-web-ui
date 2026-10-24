@@ -61,8 +61,11 @@ export function PriceHistoryChart({ locale, points }: PriceHistoryChartProps) {
   const lowest = rows.reduce((a, b) => (b.value < a.value ? b : a));
   const highest = rows.reduce((a, b) => (b.value > a.value ? b : a));
   const mid = median(values);
-  const first = rows[0];
-  const changePct = first && first.value > 0 && latest ? ((latest.value - first.value) / first.value) * 100 : null;
+  // The change is read within one unit type (the latest one), and only when it has two or more periods.
+  const same = rows.filter((r) => r.unitType === latest.unitType).sort((a, b) => periods.indexOf(a.period) - periods.indexOf(b.period));
+  const first = same[0];
+  const last = same[same.length - 1];
+  const changePct = same.length >= 2 && first && last && first.value > 0 ? ((last.value - first.value) / first.value) * 100 : null;
 
   const summary = [
     `${t.phHighest}: ${rupees(highest.value, locale)} (${highest.period})`,
@@ -80,7 +83,7 @@ export function PriceHistoryChart({ locale, points }: PriceHistoryChartProps) {
       <figure className="pj-chart-fig">
         <div className="pj-chart-plot">
           {guides.map((g, i) => (
-            <span className="pj-chart-guide" key={i} style={{ top: `${((H - y(g)) / H) * 100}%` }}>
+            <span className="pj-chart-guide" key={i} style={{ top: `${(y(g) / H) * 100}%` }}>
               <i>{rupees(Math.round(g), locale)}</i>
             </span>
           ))}

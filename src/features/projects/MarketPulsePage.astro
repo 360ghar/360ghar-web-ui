@@ -10,8 +10,9 @@ import { faqs, text } from './text';
 import type { MarketPulse } from './types';
 import './projects.css';
 
-type Props = { locale: Locale; rows: MarketPulse[] };
-const { locale, rows } = Astro.props;
+/** `down`: the data hub did not answer, so an empty list is not "no readings". */
+type Props = { locale: Locale; rows: MarketPulse[]; down?: boolean };
+const { locale, rows, down = false } = Astro.props;
 const t = text(locale);
 const tt = getT(locale);
 const path = '/market-pulse';
@@ -49,6 +50,8 @@ const lead = rows.length ? tt('projects:page.marketPulse.leadCount', { count: fo
   {
     rows.length ? (
       <MarketPulsePanel locale={locale} rows={rows} />
+    ) : down ? (
+      <p class="dh-meta" role="status">{t.down.title}. {t.down.body}</p>
     ) : (
       <p class="dh-meta">{t.mpNone}</p>
     )

@@ -34,8 +34,8 @@ const address = p.location || p.district ? { '@type': 'PostalAddress', addressLo
 const facts = [
   p.rera_number ? { '@type': 'PropertyValue', name: 'RERA number', value: p.rera_number } : null,
   p.stage ? { '@type': 'PropertyValue', name: 'Stage', value: p.stage } : null,
-  p.total_units !== null ? { '@type': 'PropertyValue', name: 'Units', value: p.total_units } : null,
-  p.current_price_per_sqft !== null ? { '@type': 'PropertyValue', name: 'Price per sq ft', value: p.current_price_per_sqft, unitText: 'INR' } : null,
+  p.total_units !== null && p.total_units !== undefined ? { '@type': 'PropertyValue', name: 'Units', value: p.total_units } : null,
+  p.current_price_per_sqft !== null && p.current_price_per_sqft !== undefined ? { '@type': 'PropertyValue', name: 'Price per sq ft', value: p.current_price_per_sqft, unitText: 'INR' } : null,
 ].filter(Boolean);
 ---
 

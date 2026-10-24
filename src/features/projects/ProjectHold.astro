@@ -1,44 +1,23 @@
 ---
+/** The hold page for the legacy catalog project slugs (editorial hold). */
 import { localizer } from '@/lib/i18n/locale';
 import Page from '@/layouts/Page.astro';
-import NotFoundState from '@/ui/states/NotFoundState.astro';
 
-type Props = { notFound?: boolean };
-const { notFound = false } = Astro.props;
 const locale = Astro.locals.locale;
 const hi = locale === 'hi';
 const L = localizer(locale);
-const title = notFound
-  ? hi
-    ? 'यह प्रोजेक्ट नहीं मिला'
-    : 'Project not found'
-  : hi
-    ? 'प्रोजेक्ट की जानकारी की समीक्षा चल रही है'
-    : 'Project details are under review';
-const description = notFound
-  ? hi
-    ? 'यह प्रोजेक्ट पेज उपलब्ध नहीं है।'
-    : 'This project page is not available.'
-  : hi
-    ? 'इन प्रोजेक्ट की जानकारी की समीक्षा हो रही है, क्योंकि इनके स्रोत दर्ज नहीं हैं।'
-    : 'We are reviewing these project details because their sources are not documented.';
+const title = hi ? 'प्रोजेक्ट की जानकारी की समीक्षा चल रही है' : 'Project details are under review';
+const description = hi
+  ? 'इन प्रोजेक्ट की जानकारी की समीक्षा हो रही है, क्योंकि इनके स्रोत दर्ज नहीं हैं।'
+  : 'We are reviewing these project details because their sources are not documented.';
 ---
 
 <Page title={`${title} | 360Ghar`} description={description} noindex bare>
-  {
-    notFound ? (
-      <NotFoundState
-        title={title}
-        action={{ href: L('/properties'), label: hi ? 'घर खोजें' : 'Search properties' }}
-      />
-    ) : (
-      <section class="container-page project-hold" aria-labelledby="project-hold-title">
-        <h1 id="project-hold-title">{title}</h1>
-        <p>{description}</p>
-        <a class="btn btn-primary" href={L('/properties')}>{hi ? 'घर खोजें' : 'Search properties'}</a>
-      </section>
-    )
-  }
+  <section class="container-page project-hold" aria-labelledby="project-hold-title">
+    <h1 id="project-hold-title">{title}</h1>
+    <p>{description}</p>
+    <a class="btn btn-primary" href={L('/properties')}>{hi ? 'घर खोजें' : 'Search properties'}</a>
+  </section>
 </Page>
 
 <style>

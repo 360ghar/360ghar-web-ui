@@ -27,6 +27,22 @@ describe('price history chart', () => {
     expect(hindi).toContain(text('hi').priceHistoryTitle);
   });
 
+  it('puts the highest guide at the top of the plot', () => {
+    const points = [point({ period_start: '2024-Q1', unit_type: '3 BHK', price_per_sqft: 9_000 }), point({ period_start: '2025-Q1', unit_type: '3 BHK', price_per_sqft: 11_000 })];
+    const html = renderToStaticMarkup(<PriceHistoryChart locale="en" points={points} />);
+    const tops = [...html.matchAll(/class="pj-chart-guide" style="top:([\d.]+)%"/g)].map((m) => Number(m[1]));
+    expect(tops).toEqual([100, 50, 0]);
+  });
+
+  it('reads the change within one unit type, and only with two periods', () => {
+    const one = renderToStaticMarkup(<PriceHistoryChart locale="en" points={[point({ period_start: '2024-Q1', unit_type: '3 BHK', price_per_sqft: 9_000 })]} />);
+    expect(one).not.toContain(text('en').phChange);
+    const mixed = [point({ period_start: '2024-Q1', unit_type: '2 BHK', price_per_sqft: 5_000 }), point({ period_start: '2025-Q1', unit_type: '3 BHK', price_per_sqft: 11_000 })];
+    expect(renderToStaticMarkup(<PriceHistoryChart locale="en" points={mixed} />)).not.toContain(text('en').phChange);
+    const same = [point({ period_start: '2024-Q1', unit_type: '3 BHK', price_per_sqft: 10_000 }), point({ period_start: '2025-Q1', unit_type: '3 BHK', price_per_sqft: 11_000 })];
+    expect(renderToStaticMarkup(<PriceHistoryChart locale="en" points={same} />)).toContain('+10%');
+  });
+
   it('drops a period it cannot place on the axis', () => {
     const html = renderToStaticMarkup(<PriceHistoryChart locale="en" points={[point({ unit_type: '3 BHK', price_per_sqft: 9_000 })]} />);
     expect(html).toBe('');

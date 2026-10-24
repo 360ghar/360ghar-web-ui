@@ -65,13 +65,15 @@ function Button({ locale, projectId }: WatchlistButtonProps) {
     <button
       type="button"
       className="btn pj-watch"
+      // One constant name; `aria-pressed` carries the saved state.
+      aria-label={known ? t.wlSave : t.wlChecking}
       aria-pressed={known ? on : undefined}
       aria-busy={pending || !known || undefined}
       disabled={!known}
       onClick={() => void onClick()}
     >
       <Icon name={on ? 'star' : 'heart'} size={18} className={on ? 'text-kesar-600' : undefined} />
-      <span>{known ? (on ? t.wlLabel : t.wlSave) : t.wlChecking}</span>
+      <span aria-hidden="true">{known ? (on ? t.wlLabel : t.wlSave) : t.wlChecking}</span>
     </button>
   );
 }

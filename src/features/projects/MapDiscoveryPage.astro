@@ -10,12 +10,14 @@ import type { Locale } from '@/lib/i18n/locale';
 import { canonicalFor } from '@/lib/seo/site';
 import DataHubPage from '@/features/data-hub/DataHubPage.astro';
 import MapDiscovery from './MapDiscovery';
-import { faqs } from './text';
+import { faqs, text } from './text';
 import type { MapBounds, ProjectMapPoint } from './types';
 import './projects.css';
 
-type Props = { locale: Locale; points: ProjectMapPoint[]; bounds: MapBounds };
-const { locale, points, bounds } = Astro.props;
+/** `down`: the map route did not answer, so an empty list is not "no coordinates". */
+type Props = { locale: Locale; points: ProjectMapPoint[]; bounds: MapBounds; down?: boolean };
+const { locale, points, bounds, down = false } = Astro.props;
+const t = text(locale);
 const tt = getT(locale);
 const path = '/map-discovery';
 const heading = tt('projects:page.mapDiscovery.heading');
@@ -44,5 +46,11 @@ const lead = points.length ? tt('projects:page.mapDiscovery.leadCount', { count:
   ]}
   related={['marketPulse', 'rera', 'builders']}
 >
-  <MapDiscovery client:visible locale={locale} points={points} bounds={bounds} />
+  {
+    down ? (
+      <p class="dh-meta" role="status">{t.down.title}. {t.down.body}</p>
+    ) : (
+      <MapDiscovery client:visible locale={locale} points={points} bounds={bounds} />
+    )
+  }
 </DataHubPage>

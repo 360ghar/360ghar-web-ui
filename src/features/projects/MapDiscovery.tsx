@@ -25,7 +25,7 @@ import { QueryProvider } from '@/lib/query';
 import { Icon } from '@/ui/icons/Icon';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { mapProjects } from './api';
-import { text, toneOf } from './text';
+import { label, text, toneOf } from './text';
 import type { MapBounds, ProjectMapPoint } from './types';
 
 export type MapDiscoveryProps = {
@@ -97,7 +97,10 @@ function Overlay({ locale, points, bounds }: MapDiscoveryProps & { bounds: MapBo
     retry: false,
   });
 
-  const shown = moved ? query.data ?? points : points;
+  // A failed box falls back to the last box that loaded, not to the first one.
+  const [lastGood, setLastGood] = useState<ProjectMapPoint[] | null>(null);
+  if (moved && query.data && query.data !== lastGood) setLastGood(query.data);
+  const shown = moved ? (query.data ?? lastGood ?? points) : points;
   const placed = shown.filter((p) => typeof p.latitude === 'number' && typeof p.longitude === 'number');
   // A point with no coordinates is inside no box, so the list under the overlay
   // stays the one the page was built with.
@@ -133,6 +136,7 @@ function Overlay({ locale, points, bounds }: MapDiscoveryProps & { bounds: MapBo
           onClick={() => {
             setView(bounds);
             setMoved(false);
+            setLastGood(null);
           }}
           aria-label={t.mapReset}
         >
@@ -155,6 +159,8 @@ function Overlay({ locale, points, bounds }: MapDiscoveryProps & { bounds: MapBo
               <a href={localizePath(`/project/${p.slug}`, locale)}>
                 <span className="pj-map-dot" aria-hidden="true" />
                 <span className="pj-map-name">{p.project_name}</span>
+                {/* The dot colour is not the only signal: the stage is in the link text too. */}
+                {p.stage ? <span className="visually-hidden">, {label(t.stageNames, p.stage)}</span> : null}
               </a>
             </li>
           ))}

@@ -25,12 +25,20 @@ import type { WatchlistItem } from './types';
 
 export type WatchlistListProps = { locale: Locale };
 
-const KEY = ['projects', 'watchlist'] as const;
+/** The list belongs to one account: the key carries the user id, so a cached list never shows to the next account. */
+const ROOT = ['projects', 'watchlist'] as const;
 
 function List({ locale }: WatchlistListProps) {
   const t = text(locale);
   const client = useQueryClient();
   const status = useAuthStore((s) => s.status);
+  const userId = useAuthStore((s) => s.session?.user.id ?? null);
+  const KEY = [...ROOT, userId] as const;
+
+  // Drop the lists of other accounts (the last one signed out, or switched).
+  useEffect(() => {
+    client.removeQueries({ queryKey: ROOT, predicate: (q) => q.queryKey[2] !== userId });
+  }, [client, userId]);
 
   useEffect(() => {
     void initAuth();
@@ -39,7 +47,7 @@ function List({ locale }: WatchlistListProps) {
   const query = useQuery({
     queryKey: KEY,
     queryFn: watchlist,
-    enabled: status === 'authed',
+    enabled: status === 'authed' && userId !== null,
     staleTime: 30_000,
     retry: false,
   });

@@ -23,7 +23,7 @@
       "notFoundTitle": "Micro-market Not Found | 360Ghar",
       "errorTitle": "Micro-market Data Unavailable | 360Ghar",
       "titleTemplate": "{{market}}, {{city}} Property Market Data | 360Ghar",
-      "descriptionTemplate": "Projects, the stage mix and the unit counts of {{market}} in {{city}}, from the 360Ghar data hub."
+      "descriptionTemplate": "Projects and the stage mix of {{market}} in {{city}}, from the 360Ghar data hub."
     },
     "watchlist": {
       "title": "My Watchlist | Saved Projects | 360Ghar",
@@ -50,7 +50,7 @@
       "leadCount": "{{count}} projects with filed coordinates are drawn below."
     },
     "microMarket": {
-      "lead": "Projects, the stage mix and the unit counts of this micro-market, from the 360Ghar data hub.",
+      "lead": "Projects and the stage mix of this micro-market, from the 360Ghar data hub.",
       "missing": "We have no micro-market record at this link. It may have been renamed, or the address may be mistyped.",
       "fallbackHeading": "Micro-market record"
     },

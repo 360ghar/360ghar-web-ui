@@ -111,6 +111,18 @@ describe('data hub sitemap paths', () => {
     expect(up.skipped).toEqual([]);
   });
 
+  it('leaves out slugs the routes would 404 or hold', async () => {
+    get.mockReset();
+    get.mockResolvedValue({
+      data: { items: [{ slug: 'Bad Slug', builder_name: 'X' }, { slug: 'luxury-apartments-in-sector-62', builder_name: 'Y' }, { slug: 'ok-one', builder_name: 'Z' }], has_more: false, next_cursor: null, limit: 20, total: 3 },
+    });
+    const paths = (await datahubSitemap()).entries.map((entry) => entry.path);
+    expect(paths).not.toContain('/builder-reputation/Bad Slug');
+    expect(paths).not.toContain('/project/Bad Slug');
+    expect(paths).not.toContain('/project/luxury-apartments-in-sector-62');
+    expect(paths).toContain('/project/ok-one');
+  });
+
   it('does not include any held or noindex data pages', async () => {
     get.mockReset();
     get.mockResolvedValue({ data: { items: [], has_more: false, next_cursor: null, limit: 20, total: 0 } });

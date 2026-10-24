@@ -19,12 +19,24 @@ export type DeveloperDossierProps = { locale: Locale; developer: DeveloperDetail
 
 const BAND_TONE = { good: 'is-good', average: 'is-wait', poor: 'is-bad' } as const;
 
+export function safeHttpUrl(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  try {
+    const u = new URL(raw);
+    return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : null;
+  } catch {
+    return null;
+  }
+}
+
 export function DeveloperDossier({ locale, developer: d }: DeveloperDossierProps) {
   const t = text(locale);
   const score = d.score ?? null;
   const total = score?.total_score ?? d.total_score ?? null;
   const computed = fmtDate(score?.computed_at ?? null, locale, 'long');
   const projects = d.projects ?? [];
+  // Only an http(s) address becomes a link: a `javascript:` or other scheme from the API is not followed.
+  const website = safeHttpUrl(d.website_url);
 
   const pillars = score
     ? ([
@@ -51,7 +63,7 @@ export function DeveloperDossier({ locale, developer: d }: DeveloperDossierProps
     [
       [t.ddCin, d.cin],
       [t.ddHeadquarters, d.headquarters],
-      [t.ddFounded, d.founded_year === null ? null : String(d.founded_year)],
+      [t.ddFounded, d.founded_year === null || d.founded_year === undefined ? null : String(d.founded_year)],
       [t.ddListed, d.is_listed === null || d.is_listed === undefined ? null : d.is_listed ? t.yes : t.no],
       [t.ddGeographies, d.geographies?.length ? d.geographies.join(', ') : null],
     ] as [string, string | null][]
@@ -75,6 +87,11 @@ export function DeveloperDossier({ locale, developer: d }: DeveloperDossierProps
                 <span className="text-xl font-bold">{label(t.bands, scoreBand(total))}</span>
               </div>
             </div>
+          </div>
+        )}
+
+        {counts.length > 0 ? (
+          <div className="sheet dh-slip pj-dossier-slip mt-4">
             {counts.map(([key, value]) => (
               <div className="dh-fig" key={key}>
                 <span className="dh-fig-label">{key}</span>
@@ -82,7 +99,7 @@ export function DeveloperDossier({ locale, developer: d }: DeveloperDossierProps
               </div>
             ))}
           </div>
-        )}
+        ) : null}
 
         {pillars.length > 0 ? (
           <>
@@ -109,7 +126,7 @@ export function DeveloperDossier({ locale, developer: d }: DeveloperDossierProps
         </p>
       </section>
 
-      {d.summary || d.dossier || facts.length > 0 ? (
+      {d.summary || d.dossier || facts.length > 0 || website ? (
         <section className="dh-section" aria-labelledby="pj-dossier-about">
           <h2 id="pj-dossier-about" className="dh-h2">
             {t.ddSummary}
@@ -121,9 +138,9 @@ export function DeveloperDossier({ locale, developer: d }: DeveloperDossierProps
               {facts.flatMap(([k, v]) => [<dt key={`${k}-dt`}>{k}</dt>, <dd key={`${k}-dd`}>{v}</dd>])}
             </dl>
           ) : null}
-          {d.website_url ? (
+          {website ? (
             <p className="mt-3">
-              <a className="link" href={d.website_url} target="_blank" rel="noopener noreferrer">
+              <a className="link" href={website} target="_blank" rel="noopener noreferrer">
                 {t.ddWebsite}
                 <Icon name="arrow-up-right" size={16} className="arrow" />
               </a>

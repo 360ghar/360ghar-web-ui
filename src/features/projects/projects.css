@@ -45,6 +45,8 @@
   }
 
   .pj-chip.is-link {
+    /* A link: the 44px touch target. */
+    min-height: 44px;
     color: var(--color-ink-950);
     text-decoration: underline;
     text-decoration-color: var(--color-ink-200);

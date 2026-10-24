@@ -38,7 +38,7 @@ export const DATA_HUB: NavGroup = {
     { key: 'site:links.zoneChecker', href: '/zone-checker', icon: 'layers', desc: { en: 'Sector records are under review', hi: 'सेक्टर रिकॉर्ड समीक्षा के अधीन हैं' } },
     { key: 'site:links.regulatoryUpdates', href: '/regulatory-updates', icon: 'news', desc: { en: 'Notification records are under review', hi: 'अधिसूचना रिकॉर्ड समीक्षा के अधीन हैं' } },
     { key: 'site:links.builderReputation', href: '/builder-reputation', icon: 'crane', desc: { en: 'Delivery record and complaints', hi: 'डिलीवरी रिकॉर्ड और शिकायतें' } },
-    { key: 'projects:nav.marketPulse', href: '/market-pulse', icon: 'compare', desc: { en: 'Price, registrations and complaints by city', hi: 'शहर के हिसाब से कीमत, रजिस्ट्री और शिकायतें' } },
+    { key: 'projects:nav.marketPulse', href: '/market-pulse', icon: 'compare', desc: { en: 'Registrations and complaints recorded by city', hi: 'शहर के हिसाब से दर्ज रजिस्ट्री और शिकायतें' } },
     { key: 'projects:nav.projectMap', href: '/map-discovery', icon: 'map', desc: { en: 'Projects at the coordinates in their filings', hi: 'प्रोजेक्ट उनकी फ़ाइलिंग में दर्ज निर्देशांक पर' } },
     { key: 'projects:nav.watchlist', href: '/account/watchlist', icon: 'star', desc: { en: 'Projects you saved, on your 360Ghar account', hi: 'आपके सेव किए प्रोजेक्ट, आपके 360Ghar अकाउंट पर' } },
   ],

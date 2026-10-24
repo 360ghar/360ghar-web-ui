@@ -69,6 +69,8 @@ const en = {
     lapsed: 'Lapsed',
     revoked: 'Revoked',
     delayed: 'Delayed',
+    pre_launch: 'Pre-launch',
+    near_possession: 'Near possession',
   } as Record<string, string>,
 
   // Sections
@@ -133,6 +135,11 @@ const en = {
     chartered_accountant: 'Chartered accountant',
     lawyer: 'Lawyer',
     land_owner: 'Land owner',
+    chairman: 'Chairman',
+    managing_director: 'Managing director',
+    director: 'Director',
+    authorised_representative: 'Authorised representative',
+    licensee: 'Licensee',
     other: 'Other',
   } as Record<string, string>,
   loiNumber: 'LOI number',
@@ -191,7 +198,7 @@ const en = {
   mmAvgPrice: 'Average price',
   mmStageMix: 'Stage mix',
   mmNoStages: 'No stage breakdown is on our records for this micro-market.',
-  mmOnMap: 'Open on the discovery map',
+  mmOnMap: 'Open the project discovery map',
 
   // Market pulse
   mpLead: (n: number) => `The latest reading for ${formatNum(n, 'en')} ${n === 1 ? 'city' : 'cities'}, from the data hub.`,
@@ -227,7 +234,8 @@ const en = {
   wlRemove: 'Remove',
 
   // Map discovery
-  mapLead: (n: number) => `${formatNum(n, 'en')} ${n === 1 ? 'project' : 'projects'} in this view.`,
+  // The map route caps how many points one box returns, so the count is what is shown, not a full total.
+  mapLead: (n: number) => `Showing ${formatNum(n, 'en')} ${n === 1 ? 'project' : 'projects'} in this view. A wide view can hold more; zoom in to see them.`,
   mapZoomIn: 'Zoom in',
   mapZoomOut: 'Zoom out',
   mapReset: 'Show all',
@@ -297,6 +305,8 @@ const hi: Text = {
     lapsed: 'समाप्त',
     revoked: 'रद्द',
     delayed: 'विलंबित',
+    pre_launch: 'प्री-लॉन्च',
+    near_possession: 'कब्ज़े के क़रीब',
   },
 
   overviewTitle: 'प्रोजेक्ट का अवलोकन',
@@ -360,6 +370,11 @@ const hi: Text = {
     chartered_accountant: 'चार्टर्ड अकाउंटेंट',
     lawyer: 'वकील',
     land_owner: 'ज़मीन का मालिक',
+    chairman: 'चेयरमैन',
+    managing_director: 'मैनेजिंग डायरेक्टर',
+    director: 'डायरेक्टर',
+    authorised_representative: 'अधिकृत प्रतिनिधि',
+    licensee: 'लाइसेंसधारी',
     other: 'अन्य',
   },
   loiNumber: 'LOI नंबर',
@@ -414,7 +429,7 @@ const hi: Text = {
   mmAvgPrice: 'औसत कीमत',
   mmStageMix: 'चरणों का मेल',
   mmNoStages: 'इस माइक्रो-मार्केट के लिए हमारे रिकॉर्ड में चरणों का बँटवारा नहीं है।',
-  mmOnMap: 'डिस्कवरी मैप पर खोलें',
+  mmOnMap: 'प्रोजेक्ट डिस्कवरी मैप खोलें',
 
   mpLead: (n) => `${formatNum(n, 'hi')} ${n === 1 ? 'शहर' : 'शहरों'} की ताज़ा रीडिंग, डेटा हब से।`,
   mpCity: 'शहर',
@@ -445,7 +460,7 @@ const hi: Text = {
   wlAddedLabel: 'जोड़ा',
   wlRemove: 'हटाएँ',
 
-  mapLead: (n) => `इस दृश्य में ${formatNum(n, 'hi')} ${n === 1 ? 'प्रोजेक्ट' : 'प्रोजेक्ट'}।`,
+  mapLead: (n) => `इस दृश्य में ${formatNum(n, 'hi')} प्रोजेक्ट दिख रहे हैं। बड़े दृश्य में और भी हो सकते हैं; उन्हें देखने के लिए ज़ूम इन करें।`,
   mapZoomIn: 'ज़ूम इन',
   mapZoomOut: 'ज़ूम आउट',
   mapReset: 'सब दिखाएँ',
@@ -479,7 +494,7 @@ const FAQS: Record<Locale, Record<FaqPage, Faq[]>> = {
     ],
     microMarket: [
       { q: 'What is a micro-market?', a: 'A small area inside a city that the filing data is grouped by, usually a set of sectors or a corridor. It is smaller than the district and larger than one locality.' },
-      { q: 'Why is there no price per sq ft?', a: 'The RERA registers publish no rate per sq ft on any filing, so this figure has no source and is left empty. It is never an estimate or a valuation of any one project.' },
+      { q: 'Why is there no price per sq ft?', a: 'This page shows no average price per sq ft for the micro-market: the RERA registers publish no area rate, so an average has no source and is left empty. A project page shows a price only when a record for that project carries one, and it names the source of each price.' },
       { q: 'What is the stage mix?', a: 'How many projects in the micro-market sit at each stage of construction, from new launch to completed.' },
     ],
   },
@@ -497,7 +512,7 @@ const FAQS: Record<Locale, Record<FaqPage, Faq[]>> = {
     ],
     microMarket: [
       { q: 'माइक्रो-मार्केट क्या है?', a: 'शहर के अंदर का एक छोटा इलाका जिसके हिसाब से फ़ाइलिंग का डेटा बाँटा जाता है, आम तौर पर कुछ सेक्टर या एक कॉरिडोर। यह ज़िले से छोटा और एक लोकेलिटी से बड़ा होता है।' },
-      { q: 'प्रति वर्ग फ़ुट कोई कीमत क्यों नहीं है?', a: 'RERA रजिस्टर किसी भी फ़ाइलिंग पर प्रति वर्ग फ़ुट दर प्रकाशित नहीं करते, इसलिए इस आँकड़े का कोई स्रोत ही नहीं है और यह खाली छोड़ा गया है। यह कभी अनुमान या किसी एक प्रोजेक्ट का मूल्यांकन नहीं है।' },
+      { q: 'प्रति वर्ग फ़ुट कोई कीमत क्यों नहीं है?', a: 'यह पेज माइक्रो-मार्केट की औसत प्रति वर्ग फ़ुट कीमत नहीं दिखाता: RERA रजिस्टर इलाक़े की कोई दर प्रकाशित नहीं करते, इसलिए औसत का कोई स्रोत नहीं है और यह खाली छोड़ा गया है। प्रोजेक्ट पेज कीमत तभी दिखाता है जब उस प्रोजेक्ट के रिकॉर्ड में कीमत हो, और हर कीमत का स्रोत बताता है।' },
       { q: 'चरणों का मेल क्या है?', a: 'माइक्रो-मार्केट के कितने प्रोजेक्ट निर्माण के किस चरण में हैं, नई लॉन्चिंग से लेकर पूरा होने तक।' },
     ],
   },
