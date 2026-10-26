@@ -15,7 +15,6 @@ import Diorama from '@/features/home/diorama/Diorama.astro';
 import { COPY } from '@/features/home/copy';
 import type { HomeData } from '@/features/home/load';
 import HeroSearch from '@/features/search/HeroSearch';
-import { PostLink } from '@/features/search/PostLink';
 import { getT } from '@/i18n';
 import type { Locale } from '@/lib/i18n/locale';
 
@@ -57,13 +56,11 @@ const art = ART[variant];
   <div class="container-page home-hero-stack">
     <div class="home-search-lift">
       <div class="home-search-sheet">
-        <h1 id="home-title" class="home-title">{t('site:home.title')}</h1>
+        {/* The page keeps one h1 for search engines and screen readers. The card
+            itself is just the search now, and the owner CTA lives in its own band
+            further down the page. */}
+        <h1 id="home-title" class="visually-hidden">{t('site:home.title')}</h1>
         <HeroSearch client:load locale={locale} postLink="none" />
-        {/* The owner link sits on the card: over the street the art is dark
-            under the fold, and a link out there would not hold its contrast. */}
-        <p class="home-search-post">
-          <PostLink locale={locale} />
-        </p>
       </div>
     </div>
   </div>
@@ -142,21 +139,5 @@ const art = ART[variant];
     .home-search-sheet {
       padding: 1.25rem 1.5rem;
     }
-  }
-
-  /* Small and quiet: a caption on the card, not a headline over the scene. */
-  .home-title {
-    margin: 0 0 0.875rem;
-    font-size: clamp(1.0625rem, 0.9rem + 0.5vw, 1.375rem);
-    font-weight: 500;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-    color: var(--color-ink-800);
-    text-wrap: balance;
-  }
-
-  .home-search-post {
-    margin: 0.75rem 0 0;
-    text-align: center;
   }
 </style>
