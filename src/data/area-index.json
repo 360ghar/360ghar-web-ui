@@ -1,0 +1,1746 @@
+{
+  "v": 1,
+  "popular": [
+    "Sector 56",
+    "DLF Phase 1",
+    "Golf Course Road",
+    "Sohna Road",
+    "Sector 54",
+    "Sushant Lok 1"
+  ],
+  "areas": [
+    {
+      "n": "10A",
+      "t": "locality"
+    },
+    {
+      "n": "37A",
+      "t": "locality"
+    },
+    {
+      "n": "37B",
+      "t": "locality"
+    },
+    {
+      "n": "37C",
+      "t": "locality"
+    },
+    {
+      "n": "37D",
+      "t": "locality"
+    },
+    {
+      "n": "82A",
+      "t": "locality"
+    },
+    {
+      "n": "88A",
+      "t": "locality"
+    },
+    {
+      "n": "88B",
+      "t": "locality"
+    },
+    {
+      "n": "89A",
+      "t": "locality"
+    },
+    {
+      "n": "95A",
+      "t": "locality"
+    },
+    {
+      "n": "95B",
+      "t": "locality"
+    },
+    {
+      "n": "99A",
+      "t": "locality"
+    },
+    {
+      "n": "102A",
+      "t": "locality"
+    },
+    {
+      "n": "103A",
+      "t": "locality"
+    },
+    {
+      "n": "104A",
+      "t": "locality"
+    },
+    {
+      "n": "107A",
+      "t": "locality"
+    },
+    {
+      "n": "Adani Lushlands",
+      "t": "society"
+    },
+    {
+      "n": "Adani Oyster Grande",
+      "t": "society"
+    },
+    {
+      "n": "Adani Samsara",
+      "t": "society"
+    },
+    {
+      "n": "Adani Samsara Ivana",
+      "t": "society"
+    },
+    {
+      "n": "Adani Samsara Vilasa",
+      "t": "society"
+    },
+    {
+      "n": "Adani Tatva Estates",
+      "t": "society"
+    },
+    {
+      "n": "Adani Veris",
+      "t": "society"
+    },
+    {
+      "n": "Adani Watermark",
+      "t": "society"
+    },
+    {
+      "n": "Ambience Mall",
+      "t": "locality"
+    },
+    {
+      "n": "Apex Apartments",
+      "t": "society"
+    },
+    {
+      "n": "Apex Our Homes",
+      "t": "society"
+    },
+    {
+      "n": "Apex Our Homes 1",
+      "t": "society"
+    },
+    {
+      "n": "Ardee City",
+      "t": "locality"
+    },
+    {
+      "n": "ATS Grandstand",
+      "t": "society"
+    },
+    {
+      "n": "ATS Kocoon",
+      "t": "society"
+    },
+    {
+      "n": "ATS Marigold",
+      "t": "society"
+    },
+    {
+      "n": "ATS Tourmaline",
+      "t": "society"
+    },
+    {
+      "n": "ATS Triumph",
+      "t": "society"
+    },
+    {
+      "n": "Aura World",
+      "t": "society"
+    },
+    {
+      "n": "Badshahpur",
+      "t": "village"
+    },
+    {
+      "n": "Basai",
+      "t": "village"
+    },
+    {
+      "n": "Bestech Altura",
+      "t": "society"
+    },
+    {
+      "n": "Bestech Park View Ananda",
+      "t": "society"
+    },
+    {
+      "n": "Bestech Park View City",
+      "t": "society"
+    },
+    {
+      "n": "Bestech Park View City 1",
+      "t": "society"
+    },
+    {
+      "n": "Bestech Park View City 2",
+      "t": "society"
+    },
+    {
+      "n": "Bestech Park View Grand Spa",
+      "t": "society"
+    },
+    {
+      "n": "Bestech Park View Sanskruti",
+      "t": "society"
+    },
+    {
+      "n": "Bestech Park View Spa",
+      "t": "society"
+    },
+    {
+      "n": "Bhondsi",
+      "t": "village"
+    },
+    {
+      "n": "Bindapur",
+      "t": "village"
+    },
+    {
+      "n": "BPTP Amstoria",
+      "t": "society"
+    },
+    {
+      "n": "BPTP Astaire Gardens",
+      "t": "society"
+    },
+    {
+      "n": "BPTP Centra One",
+      "t": "society"
+    },
+    {
+      "n": "BPTP Gaia Residences",
+      "t": "society"
+    },
+    {
+      "n": "BPTP Park Generations",
+      "t": "society"
+    },
+    {
+      "n": "BPTP Park Prime",
+      "t": "society"
+    },
+    {
+      "n": "BPTP Park Serene",
+      "t": "society"
+    },
+    {
+      "n": "BPTP Visionnaire",
+      "t": "society"
+    },
+    {
+      "n": "Budhera",
+      "t": "village"
+    },
+    {
+      "n": "Carterpuri",
+      "t": "village"
+    },
+    {
+      "n": "Central Park 1",
+      "t": "society"
+    },
+    {
+      "n": "Central Park 2",
+      "t": "society"
+    },
+    {
+      "n": "Central Park 3",
+      "t": "society"
+    },
+    {
+      "n": "Central Park Flower Valley",
+      "t": "township"
+    },
+    {
+      "n": "Central Park Resorts",
+      "t": "society"
+    },
+    {
+      "n": "Chakkarpur",
+      "t": "village"
+    },
+    {
+      "n": "Civil Lines",
+      "t": "locality"
+    },
+    {
+      "n": "Conscient Heritage Max",
+      "t": "society"
+    },
+    {
+      "n": "Conscient Heritage One",
+      "t": "society"
+    },
+    {
+      "n": "Conscient Hines Elevate",
+      "t": "society"
+    },
+    {
+      "n": "Cyber City",
+      "t": "locality"
+    },
+    {
+      "n": "Cyber Hub",
+      "t": "locality"
+    },
+    {
+      "n": "Dayanand Colony",
+      "t": "locality"
+    },
+    {
+      "n": "Delhi-Alwar Expressway",
+      "t": "road"
+    },
+    {
+      "n": "Delhi-Gurgaon Expressway",
+      "t": "road"
+    },
+    {
+      "n": "DLF Alameda",
+      "t": "phase"
+    },
+    {
+      "n": "DLF Aralias",
+      "t": "society",
+      "a": [
+        "DLF The Aralias"
+      ]
+    },
+    {
+      "n": "DLF Beverly Park",
+      "t": "locality"
+    },
+    {
+      "n": "DLF Camellias",
+      "t": "society",
+      "a": [
+        "DLF The Camellias"
+      ]
+    },
+    {
+      "n": "DLF Downtown",
+      "t": "locality"
+    },
+    {
+      "n": "DLF Galleria",
+      "t": "locality"
+    },
+    {
+      "n": "DLF Garden City",
+      "t": "phase"
+    },
+    {
+      "n": "DLF Garden City Enclave",
+      "t": "locality"
+    },
+    {
+      "n": "DLF Garden Estate",
+      "t": "society"
+    },
+    {
+      "n": "DLF Magnolias",
+      "t": "society",
+      "a": [
+        "DLF The Magnolias"
+      ]
+    },
+    {
+      "n": "DLF Park Place",
+      "t": "society"
+    },
+    {
+      "n": "DLF Phase 1",
+      "t": "phase"
+    },
+    {
+      "n": "DLF Phase 2",
+      "t": "phase"
+    },
+    {
+      "n": "DLF Phase 3",
+      "t": "phase"
+    },
+    {
+      "n": "DLF Phase 4",
+      "t": "phase"
+    },
+    {
+      "n": "DLF Phase 5",
+      "t": "phase"
+    },
+    {
+      "n": "DLF Privana",
+      "t": "society"
+    },
+    {
+      "n": "DLF Privana South",
+      "t": "society"
+    },
+    {
+      "n": "DLF Privana West",
+      "t": "society"
+    },
+    {
+      "n": "DLF Regal Gardens",
+      "t": "society"
+    },
+    {
+      "n": "DLF Skycourt",
+      "t": "society"
+    },
+    {
+      "n": "DLF The Arbour",
+      "t": "society"
+    },
+    {
+      "n": "DLF The Belaire",
+      "t": "society"
+    },
+    {
+      "n": "DLF The Crest",
+      "t": "society"
+    },
+    {
+      "n": "DLF The Primus",
+      "t": "society"
+    },
+    {
+      "n": "DLF The Summit",
+      "t": "society"
+    },
+    {
+      "n": "DLF Ultima",
+      "t": "society"
+    },
+    {
+      "n": "Dundahera",
+      "t": "village"
+    },
+    {
+      "n": "Dwarka Expressway",
+      "t": "road"
+    },
+    {
+      "n": "Emaar Digi Homes",
+      "t": "society"
+    },
+    {
+      "n": "Emaar Emerald Hills",
+      "t": "society"
+    },
+    {
+      "n": "Emaar Gurgaon Greens",
+      "t": "society"
+    },
+    {
+      "n": "Emaar Imperial Gardens",
+      "t": "society"
+    },
+    {
+      "n": "Emaar Marbella",
+      "t": "society"
+    },
+    {
+      "n": "Emaar MGF Emerald Estate",
+      "t": "society"
+    },
+    {
+      "n": "Emaar MGF Emerald Hills",
+      "t": "society"
+    },
+    {
+      "n": "Emaar MGF Imperial Gardens",
+      "t": "society"
+    },
+    {
+      "n": "Emaar MGF Marvel",
+      "t": "society"
+    },
+    {
+      "n": "Emaar MGF The Enclave",
+      "t": "society"
+    },
+    {
+      "n": "Emaar MGF The Palm Drive",
+      "t": "society"
+    },
+    {
+      "n": "Emaar Palm Drive",
+      "t": "society"
+    },
+    {
+      "n": "Emaar Palm Gardens",
+      "t": "society"
+    },
+    {
+      "n": "Emaar Palm Heights",
+      "t": "society"
+    },
+    {
+      "n": "Emaar Palm Springs",
+      "t": "society"
+    },
+    {
+      "n": "Experion The Heartsong",
+      "t": "society"
+    },
+    {
+      "n": "Experion Windchants",
+      "t": "society"
+    },
+    {
+      "n": "Faridabad Road",
+      "t": "road"
+    },
+    {
+      "n": "Fazilpur",
+      "t": "village"
+    },
+    {
+      "n": "Gadaipur",
+      "t": "village"
+    },
+    {
+      "n": "Galleria Market",
+      "t": "locality"
+    },
+    {
+      "n": "Gharaoli",
+      "t": "village"
+    },
+    {
+      "n": "Gharat Pur Bas",
+      "t": "village"
+    },
+    {
+      "n": "Global F City",
+      "t": "locality"
+    },
+    {
+      "n": "Godrej 39",
+      "t": "society"
+    },
+    {
+      "n": "Godrej 101",
+      "t": "society"
+    },
+    {
+      "n": "Godrej 103",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Air",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Aria",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Aristocrat",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Frontier",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Habitat",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Horizon",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Icon",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Mark",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Meridien",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Nature Plus",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Oasis",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Summit",
+      "t": "society"
+    },
+    {
+      "n": "Godrej Zenith",
+      "t": "society"
+    },
+    {
+      "n": "Golf Course Extension Road",
+      "t": "road"
+    },
+    {
+      "n": "Golf Course Road",
+      "t": "road"
+    },
+    {
+      "n": "Greenwood City",
+      "t": "locality"
+    },
+    {
+      "n": "Gwal Pahari",
+      "t": "road"
+    },
+    {
+      "n": "Iffco Chowk",
+      "t": "locality"
+    },
+    {
+      "n": "Infocity",
+      "t": "locality"
+    },
+    {
+      "n": "IREO City",
+      "t": "township"
+    },
+    {
+      "n": "Ireo Corridors",
+      "t": "society"
+    },
+    {
+      "n": "IREO Grand Arch",
+      "t": "locality"
+    },
+    {
+      "n": "Ireo Gurgaon Hills",
+      "t": "society"
+    },
+    {
+      "n": "Ireo Skyon",
+      "t": "society"
+    },
+    {
+      "n": "IREO The Corridors",
+      "t": "locality"
+    },
+    {
+      "n": "IREO Uptown",
+      "t": "locality"
+    },
+    {
+      "n": "IREO Victory Valley",
+      "t": "locality"
+    },
+    {
+      "n": "Islampur",
+      "t": "village"
+    },
+    {
+      "n": "Jacobpura",
+      "t": "village"
+    },
+    {
+      "n": "Jamalpur",
+      "t": "village"
+    },
+    {
+      "n": "Jharsa",
+      "t": "village"
+    },
+    {
+      "n": "Kadarpur",
+      "t": "village"
+    },
+    {
+      "n": "Kanhai",
+      "t": "village"
+    },
+    {
+      "n": "Kankrola",
+      "t": "village"
+    },
+    {
+      "n": "Khandsa",
+      "t": "village"
+    },
+    {
+      "n": "Kingdom of Dreams",
+      "t": "locality"
+    },
+    {
+      "n": "KMP Expressway",
+      "t": "road"
+    },
+    {
+      "n": "Leisure Valley Park",
+      "t": "locality"
+    },
+    {
+      "n": "M2K Aura",
+      "t": "society"
+    },
+    {
+      "n": "M3M 65th Avenue",
+      "t": "society"
+    },
+    {
+      "n": "M3M Antalya Hills",
+      "t": "society"
+    },
+    {
+      "n": "M3M Aura",
+      "t": "society"
+    },
+    {
+      "n": "M3M Broadway",
+      "t": "society"
+    },
+    {
+      "n": "M3M Capital",
+      "t": "society"
+    },
+    {
+      "n": "M3M City of Dreams",
+      "t": "township"
+    },
+    {
+      "n": "M3M Corner Walk",
+      "t": "society"
+    },
+    {
+      "n": "M3M Crown",
+      "t": "society"
+    },
+    {
+      "n": "M3M Escala",
+      "t": "society"
+    },
+    {
+      "n": "M3M Golf Hills",
+      "t": "society"
+    },
+    {
+      "n": "M3M Golfestate",
+      "t": "society"
+    },
+    {
+      "n": "M3M Gurgaon International City",
+      "t": "township"
+    },
+    {
+      "n": "M3M Heights",
+      "t": "society"
+    },
+    {
+      "n": "M3M IKONIC",
+      "t": "society"
+    },
+    {
+      "n": "M3M Latitude",
+      "t": "society"
+    },
+    {
+      "n": "M3M Mansion",
+      "t": "society"
+    },
+    {
+      "n": "M3M Marina",
+      "t": "society"
+    },
+    {
+      "n": "M3M Merlin",
+      "t": "society"
+    },
+    {
+      "n": "M3M My Den",
+      "t": "society"
+    },
+    {
+      "n": "M3M Polo Suites",
+      "t": "society"
+    },
+    {
+      "n": "M3M Sierra",
+      "t": "society"
+    },
+    {
+      "n": "M3M Sky Lofts",
+      "t": "society"
+    },
+    {
+      "n": "M3M Skycity",
+      "t": "society"
+    },
+    {
+      "n": "M3M Urbana",
+      "t": "society"
+    },
+    {
+      "n": "M3M Woodshire",
+      "t": "society"
+    },
+    {
+      "n": "Mahindra Aura",
+      "t": "society"
+    },
+    {
+      "n": "Mahindra Luminare",
+      "t": "society"
+    },
+    {
+      "n": "Mahira Homes",
+      "t": "society"
+    },
+    {
+      "n": "Malibu Town",
+      "t": "locality"
+    },
+    {
+      "n": "Manesar",
+      "t": "locality"
+    },
+    {
+      "n": "Mayfield Garden",
+      "t": "locality"
+    },
+    {
+      "n": "MG Road",
+      "t": "locality"
+    },
+    {
+      "n": "MGF Metropolitan Mall",
+      "t": "locality"
+    },
+    {
+      "n": "Mulahera",
+      "t": "village"
+    },
+    {
+      "n": "Nathupur",
+      "t": "village"
+    },
+    {
+      "n": "New Colony",
+      "t": "locality"
+    },
+    {
+      "n": "NH-8",
+      "t": "road"
+    },
+    {
+      "n": "Nirvana Country",
+      "t": "locality"
+    },
+    {
+      "n": "Nirvana Country 2",
+      "t": "locality"
+    },
+    {
+      "n": "Northern Peripheral Road (NPR)",
+      "t": "road"
+    },
+    {
+      "n": "Nuh",
+      "t": "locality"
+    },
+    {
+      "n": "Old Delhi Road",
+      "t": "road"
+    },
+    {
+      "n": "Omaxe City",
+      "t": "society"
+    },
+    {
+      "n": "Omaxe Gurgaon Mall",
+      "t": "society"
+    },
+    {
+      "n": "Omaxe Nile",
+      "t": "society"
+    },
+    {
+      "n": "Palam Vihar",
+      "t": "locality"
+    },
+    {
+      "n": "Palam Vihar Extension",
+      "t": "locality"
+    },
+    {
+      "n": "Paras Dews",
+      "t": "society"
+    },
+    {
+      "n": "Paras Irene",
+      "t": "society"
+    },
+    {
+      "n": "Paras Quartier",
+      "t": "society"
+    },
+    {
+      "n": "Pataudi",
+      "t": "locality"
+    },
+    {
+      "n": "Pataudi Road",
+      "t": "road"
+    },
+    {
+      "n": "Pioneer Araya",
+      "t": "society"
+    },
+    {
+      "n": "Pioneer Park",
+      "t": "society"
+    },
+    {
+      "n": "Pioneer Presidia",
+      "t": "society"
+    },
+    {
+      "n": "Prestige City",
+      "t": "township"
+    },
+    {
+      "n": "Puri Emerald Bay",
+      "t": "society"
+    },
+    {
+      "n": "Puri The Aravallis",
+      "t": "society"
+    },
+    {
+      "n": "Raheja Atharva",
+      "t": "society"
+    },
+    {
+      "n": "Raheja Maheshwara",
+      "t": "society"
+    },
+    {
+      "n": "Raheja Navodaya",
+      "t": "society"
+    },
+    {
+      "n": "Raheja Revanta",
+      "t": "society"
+    },
+    {
+      "n": "Raheja Vedaanta",
+      "t": "society"
+    },
+    {
+      "n": "Rajesh Pilot Marg",
+      "t": "road"
+    },
+    {
+      "n": "Rajiv Nagar",
+      "t": "locality"
+    },
+    {
+      "n": "Rosewood City",
+      "t": "locality"
+    },
+    {
+      "n": "Satya Hermitage",
+      "t": "society"
+    },
+    {
+      "n": "Satya Levante Residences",
+      "t": "society"
+    },
+    {
+      "n": "Satya Merano Greens",
+      "t": "society"
+    },
+    {
+      "n": "Satya Platina",
+      "t": "society"
+    },
+    {
+      "n": "Satya The Hive",
+      "t": "society"
+    },
+    {
+      "n": "Satya The Legend",
+      "t": "society"
+    },
+    {
+      "n": "Sector 1",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 2",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 3",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 4",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 5",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 6",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 7",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 8",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 9",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 10",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 10A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 11",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 12",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 13",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 14",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 15",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 16",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 17",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 18",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 19",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 20",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 21",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 22",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 23",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 24",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 25",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 26",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 27",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 28",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 29",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 30",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 31",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 32",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 33",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 34",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 35",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 36",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 37",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 37A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 37B",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 37C",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 37D",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 38",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 39",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 40",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 41",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 42",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 43",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 44",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 45",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 46",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 47",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 48",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 49",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 50",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 51",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 52",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 53",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 54",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 55",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 56",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 57",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 58",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 59",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 60",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 61",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 62",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 63",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 64",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 65",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 66",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 67",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 68",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 69",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 70",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 71",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 72",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 73",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 74",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 75",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 76",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 77",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 78",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 79",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 80",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 81",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 82",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 82A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 83",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 84",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 85",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 86",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 87",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 88",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 88A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 88B",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 89",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 89A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 90",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 91",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 92",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 93",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 94",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 95",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 95A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 95B",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 96",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 97",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 98",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 99",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 99A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 100",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 101",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 102",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 102A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 103",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 103A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 104",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 104A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 105",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 106",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 107",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 107A",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 108",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 109",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 110",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 111",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 112",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 113",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 114",
+      "t": "sector"
+    },
+    {
+      "n": "Sector 115",
+      "t": "sector"
+    },
+    {
+      "n": "Shapoorji Pallonji Joyville",
+      "t": "society"
+    },
+    {
+      "n": "Shapoorji Pallonji The Dualis",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global City 37D",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global City 81",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global City 92",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global Cloverdale SPR",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global Elite DXP",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global Park 4 & 5",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global Superbia",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global Titanium SPR",
+      "t": "society"
+    },
+    {
+      "n": "Signature Global Twin Tower DXP",
+      "t": "society"
+    },
+    {
+      "n": "Sikanderpur",
+      "t": "village"
+    },
+    {
+      "n": "Sirhaul",
+      "t": "village"
+    },
+    {
+      "n": "Sobha Aranya",
+      "t": "society"
+    },
+    {
+      "n": "Sobha City",
+      "t": "society"
+    },
+    {
+      "n": "Sobha International City",
+      "t": "society"
+    },
+    {
+      "n": "Sobha Smriti",
+      "t": "society"
+    },
+    {
+      "n": "Sohna",
+      "t": "locality"
+    },
+    {
+      "n": "Sohna Road",
+      "t": "road"
+    },
+    {
+      "n": "South City 1",
+      "t": "locality"
+    },
+    {
+      "n": "South City 2",
+      "t": "locality"
+    },
+    {
+      "n": "Southern Peripheral Road (SPR)",
+      "t": "road"
+    },
+    {
+      "n": "Spaze Kalistaa",
+      "t": "society"
+    },
+    {
+      "n": "Sun City",
+      "t": "locality"
+    },
+    {
+      "n": "Suncity",
+      "t": "township"
+    },
+    {
+      "n": "Sushant Lok 1",
+      "t": "locality"
+    },
+    {
+      "n": "Sushant Lok 2",
+      "t": "locality"
+    },
+    {
+      "n": "Sushant Lok 3",
+      "t": "locality"
+    },
+    {
+      "n": "Sushant Lok Phase 1",
+      "t": "phase"
+    },
+    {
+      "n": "Sushant Lok Phase 2",
+      "t": "phase"
+    },
+    {
+      "n": "Sushant Lok Phase 3",
+      "t": "phase"
+    },
+    {
+      "n": "Tata Gurgaon Gateway",
+      "t": "society"
+    },
+    {
+      "n": "Tata La Vida",
+      "t": "society"
+    },
+    {
+      "n": "Tata Primanti",
+      "t": "society"
+    },
+    {
+      "n": "Tata Raisina Residency",
+      "t": "society"
+    },
+    {
+      "n": "TDI City",
+      "t": "township"
+    },
+    {
+      "n": "Tigda",
+      "t": "village"
+    },
+    {
+      "n": "Tigra",
+      "t": "village"
+    },
+    {
+      "n": "Tulip Grand",
+      "t": "society"
+    },
+    {
+      "n": "Tulip Ivory",
+      "t": "society"
+    },
+    {
+      "n": "Tulip Leaf",
+      "t": "society"
+    },
+    {
+      "n": "Tulip Lemon",
+      "t": "society"
+    },
+    {
+      "n": "Tulip Orange",
+      "t": "society"
+    },
+    {
+      "n": "Tulip Petals",
+      "t": "society"
+    },
+    {
+      "n": "Tulip Violet",
+      "t": "society"
+    },
+    {
+      "n": "Tulip White",
+      "t": "society"
+    },
+    {
+      "n": "Udyog Vihar",
+      "t": "locality"
+    },
+    {
+      "n": "Ullasawas",
+      "t": "village"
+    },
+    {
+      "n": "Unitech Cyber Park",
+      "t": "locality"
+    },
+    {
+      "n": "Uppal Southend",
+      "t": "locality"
+    },
+    {
+      "n": "Vatika Business Park",
+      "t": "locality"
+    },
+    {
+      "n": "Vatika City",
+      "t": "society"
+    },
+    {
+      "n": "Vatika India Next",
+      "t": "society"
+    },
+    {
+      "n": "Vatika Infotech City",
+      "t": "society"
+    },
+    {
+      "n": "Vatika INXT",
+      "t": "society"
+    },
+    {
+      "n": "Vatika Lifestyle Homes",
+      "t": "society"
+    },
+    {
+      "n": "Vatika Seven Elements",
+      "t": "society"
+    },
+    {
+      "n": "Vatika Sovereign",
+      "t": "society"
+    },
+    {
+      "n": "Vipul World",
+      "t": "locality"
+    },
+    {
+      "n": "Vyapar Kendra",
+      "t": "locality"
+    },
+    {
+      "n": "Wazirabad",
+      "t": "village"
+    }
+  ]
+}

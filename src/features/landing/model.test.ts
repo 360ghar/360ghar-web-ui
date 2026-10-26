@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { askPrice } from '@/lib/format';
-import { amenitySlug, budgetsFor, isIndexable, landingFilters, landingStats, parseBand, parseBhk, parseLanding } from './model';
+import { amenitySlug, budgetsFor, isIndexable, landingFilters, landingStats, parseBhk, parseLanding } from './model';
 
 describe('landing model', () => {
   it('parses canonical landing paths only', () => {
@@ -43,16 +43,6 @@ describe('landing model', () => {
 });
 
 describe('landing numbers', () => {
-  it('reads the price bands of the context file', () => {
-    expect(parseBand('65L-1.2Cr')).toEqual([6.5e6, 1.2e7]);
-    expect(parseBand('1.5-3.5Cr')).toEqual([1.5e7, 3.5e7]);
-    expect(parseBand('3.5Cr+')).toEqual([3.5e7, null]);
-    expect(parseBand('10K-25K/mo')).toEqual([1e4, 2.5e4]);
-    expect(parseBand('60K-1.5L/mo')).toEqual([6e4, 1.5e5]);
-    expect(parseBand('55K+/mo')).toEqual([5.5e4, null]);
-    expect(parseBand('about 2 crore')).toBeNull();
-  });
-
   it('computes live numbers from the listed homes, without the stand-in price', () => {
     const s = landingStats([
       { purpose: 'buy', base_price: 2e7, area_sqft: 2000, price_per_sqft: 10000, locality: 'Palam Vihar' },

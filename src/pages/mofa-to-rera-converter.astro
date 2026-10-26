@@ -2,16 +2,13 @@
 import { getT } from '@/i18n';
 import ToolPage from '@/features/tools/ToolPage.astro';
 import MofaConverter from '@/features/tools/area/MofaConverter';
-import { jsonFaqs, jsonHowTo, noDash, PAGES, SHORT } from '@/features/tools/area/content';
-import { convertCarpet } from '@/features/tools/area/mofa';
-import { fmtArea } from '@/features/tools/area/units';
+import { jsonFaqs, jsonHowTo, noDash, PAGES } from '@/features/tools/area/content';
 
 export const prerender = true;
 
 const locale = Astro.locals.locale;
 const t = getT(locale);
 const c = PAGES.mofaToRera[locale];
-const sqft = SHORT[locale].sq_ft;
 ---
 
 <ToolPage
@@ -34,30 +31,5 @@ const sqft = SHORT[locale].sq_ft;
     <p>{noDash(t('tools:mofaToRera.explanationWhy'))}</p>
     <h2>{t('tools:mofaToRera.formulaTitle')}</h2>
     <p>{noDash(t('tools:mofaToRera.formulaDesc'))}</p>
-    <div class="tool-scroll" tabindex="0" role="region" aria-label={t('tools:mofaToRera.tableTitle')}>
-      <table class="tool-table">
-        <caption>{t('tools:mofaToRera.tableTitle').replace('→', '-')}</caption>
-        <thead>
-          <tr>
-            <th scope="col">{t('tools:mofaToRera.unitCol')}</th>
-            <th scope="col">{t('tools:mofaToRera.reraCol')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            [1000, 2000, 5000, 10000].map((v) => (
-              <tr>
-                <th scope="row">
-                  {fmtArea(v, locale)} {sqft}
-                </th>
-                <td>
-                  {fmtArea(convertCarpet(v, 'mofa_to_rera').result, locale)} {sqft}
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
   </Fragment>
 </ToolPage>

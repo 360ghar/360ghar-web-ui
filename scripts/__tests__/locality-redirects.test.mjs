@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { ALL_LOCALITIES, isScrapedName, isThinLocality, resolveLocality } from '@/features/localities/data';
 import { legacyRedirect } from '@/lib/redirects';
-import { isScrapedName as aiScraped, isThinLocalityName } from '../../src/lib/seo/aiDiscovery.ts';
+import { isScrapedName as nameScraped, isThinLocalityName } from '../../src/features/localities/thin.ts';
 import { baseName, buildRedirects, checkRedirects, findTwin, fullSlug } from '../data/lib/locality-redirects.mjs';
 
 const map = JSON.parse(readFileSync('src/data/locality-redirects.json', 'utf8'));
@@ -104,9 +104,9 @@ describe('twin matching', () => {
 });
 
 describe('the script copies of the predicate', () => {
-  it('aiDiscovery.ts (used by the script) agrees with data.ts on every row', () => {
+  it('thin.ts (used by the script) agrees with data.ts on every row', () => {
     for (const l of ALL_LOCALITIES) {
-      expect(aiScraped(l.name), l.name).toBe(isScrapedName(l));
+      expect(nameScraped(l.name), l.name).toBe(isScrapedName(l));
       expect(isThinLocalityName(l.name), l.name).toBe(isThinLocality(l));
     }
   });

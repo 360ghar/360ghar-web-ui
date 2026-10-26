@@ -54,8 +54,8 @@ const BASE_TOOLS: Tool[] = [
     icon: 'rupee',
     name: { en: 'EMI calculator', hi: 'EMI कैलकुलेटर' },
     desc: {
-      en: 'Monthly EMI, total interest, a yearly schedule and the effect of a prepayment.',
-      hi: 'मासिक EMI, कुल ब्याज, सालाना शेड्यूल और प्रीपेमेंट का असर।',
+      en: 'Estimate EMI, interest and a prepayment scenario from entered values; not a lender quote or affordability check.',
+      hi: 'दर्ज मानों से EMI, ब्याज और प्रीपेमेंट का अनुमान; लेंडर का ऑफर या भुगतान-क्षमता की जाँच नहीं।',
     },
   },
   {
@@ -64,10 +64,10 @@ const BASE_TOOLS: Tool[] = [
     group: 'money',
     schema: 'loanEligibility',
     icon: 'key',
-    name: { en: 'Loan eligibility calculator', hi: 'लोन पात्रता कैलकुलेटर' },
+    name: { en: 'Home loan estimate', hi: 'होम लोन अनुमान' },
     desc: {
-      en: 'How much home loan your income supports, with an estimate per bank.',
-      hi: 'आपकी आय पर कितना होम लोन मिल सकता है, हर बैंक का अनुमान।',
+      en: 'Illustrative amount from entered values and a fixed 50% income-share assumption; not a lender offer or approval.',
+      hi: 'दर्ज मानों और आय के हिस्से की तय 50% धारणा से उदाहरण; लेंडर का ऑफ़र या मंज़ूरी नहीं।',
     },
   },
   {
@@ -76,10 +76,10 @@ const BASE_TOOLS: Tool[] = [
     group: 'money',
     schema: 'capitalGains',
     icon: 'compare',
-    name: { en: 'Capital gains tax calculator', hi: 'कैपिटल गेन्स टैक्स कैलकुलेटर' },
+    name: { en: 'Property sale gain worksheet', hi: 'प्रॉपर्टी बिक्री लाभ वर्कशीट' },
     desc: {
-      en: 'Tax on a property sale: 12.5% without indexation or 20% with it, and Section 54 savings.',
-      hi: 'प्रॉपर्टी बेचने पर टैक्स: बिना इंडेक्सेशन 12.5% या इंडेक्सेशन के साथ 20%, और धारा 54 की बचत।',
+      en: 'Pre-tax arithmetic on entered sale price, purchase price and transfer expenses; does not estimate income tax.',
+      hi: 'दर्ज बिक्री मूल्य, खरीद मूल्य और ट्रांसफ़र खर्च की कर-पूर्व गणना; आयकर का अनुमान नहीं।',
     },
   },
   {
@@ -88,10 +88,10 @@ const BASE_TOOLS: Tool[] = [
     group: 'money',
     schema: 'stampDutyCalculator',
     icon: 'building',
-    name: { en: 'Stamp duty calculator', hi: 'स्टैंप ड्यूटी कैलकुलेटर' },
+    name: { en: 'Stamp duty estimate unavailable', hi: 'स्टैंप ड्यूटी अनुमान उपलब्ध नहीं' },
     desc: {
-      en: 'Stamp duty and registration charges for a property in Haryana.',
-      hi: 'हरियाणा में प्रॉपर्टी पर स्टैंप ड्यूटी और रजिस्ट्रेशन शुल्क।',
+      en: 'Rates are withheld until an official schedule and effective date are verified.',
+      hi: 'आधिकारिक दर-सूची और लागू होने की तारीख सत्यापित होने तक दरें उपलब्ध नहीं हैं।',
     },
   },
   {
@@ -102,8 +102,8 @@ const BASE_TOOLS: Tool[] = [
     icon: 'print',
     name: { en: 'Rent receipt generator', hi: 'किराया रसीद जनरेटर' },
     desc: {
-      en: 'Rent receipts for HRA, one month or a full year, ready to print or save as PDF.',
-      hi: 'HRA के लिए किराया रसीद, एक महीने या पूरे साल की, प्रिंट या PDF के लिए तैयार।',
+      en: 'Create a receipt from entered details. The tool does not determine HRA eligibility or confirm tax, employer or legal requirements.',
+      hi: 'दर्ज जानकारी से रसीद बनाएँ। यह टूल HRA पात्रता या टैक्स, नियोक्ता और कानूनी ज़रूरतें तय नहीं करता।',
     },
   },
   {
@@ -114,8 +114,8 @@ const BASE_TOOLS: Tool[] = [
     icon: 'area',
     name: { en: 'Area converter', hi: 'एरिया कनवर्टर' },
     desc: {
-      en: 'Convert between 12 units: sq ft, gaj, acre, bigha, marla, kanal and more.',
-      hi: '12 इकाइयों में बदलें: वर्ग फ़ुट, गज, एकड़, बीघा, मरला, कनाल और अन्य।',
+      en: 'Convert with this tool’s displayed factors; check local-unit definitions against your source document.',
+      hi: 'इस टूल के मानों से रूपांतरण करें; स्थानीय इकाइयों की परिभाषा अपने दस्तावेज़ से जाँचें।',
     },
   },
   {
@@ -126,8 +126,8 @@ const BASE_TOOLS: Tool[] = [
     icon: 'home',
     name: { en: 'Carpet area calculator', hi: 'कार्पेट एरिया कैलकुलेटर' },
     desc: {
-      en: 'Carpet, built-up and super built-up area from the loading factor.',
-      hi: 'लोडिंग फ़ैक्टर से कार्पेट, बिल्ट-अप और सुपर बिल्ट-अप एरिया।',
+      en: 'Illustrative area scenario from entered assumptions; not a measurement or official figure.',
+      hi: 'दर्ज धारणाओं से एरिया का उदाहरण; माप या आधिकारिक मान नहीं।',
     },
   },
   {
@@ -162,8 +162,8 @@ const BASE_TOOLS: Tool[] = [
     icon: 'list',
     name: { en: 'MOFA to RERA converter', hi: 'MOFA से RERA कनवर्टर' },
     desc: {
-      en: 'Convert MOFA carpet area to RERA carpet area, and back.',
-      hi: 'MOFA कार्पेट एरिया को RERA कार्पेट एरिया में बदलें, और उल्टा।',
+      en: 'Compare entered MOFA and RERA area figures using your own assumption; not a legal conversion.',
+      hi: 'अपनी धारणा से दर्ज MOFA और RERA एरिया की तुलना करें; कानूनी रूपांतरण नहीं।',
     },
   },
   {
@@ -172,10 +172,10 @@ const BASE_TOOLS: Tool[] = [
     group: 'checks',
     schema: 'propertyChecklist',
     icon: 'check',
-    name: { en: 'Property document checklist', hi: 'प्रॉपर्टी दस्तावेज़ चेकलिस्ट' },
+    name: { en: 'Property document prompts', hi: 'प्रॉपर्टी दस्तावेज़ संकेत' },
     desc: {
-      en: 'The 13 papers to check before you buy. Your ticks stay on this device.',
-      hi: 'खरीदने से पहले जाँचने वाले 13 कागज़। आपके निशान इसी डिवाइस पर रहते हैं।',
+      en: '13 non-exhaustive document prompts. Requirements vary; this tool does not review or verify documents.',
+      hi: '13 गैर-सम्पूर्ण दस्तावेज़ संकेत। ज़रूरतें बदलती हैं; टूल दस्तावेज़ों की समीक्षा या पुष्टि नहीं करता।',
     },
   },
   {
@@ -184,10 +184,10 @@ const BASE_TOOLS: Tool[] = [
     group: 'checks',
     schema: 'fakeListingChecker',
     icon: 'alert',
-    name: { en: 'Fake listing checker', hi: 'फ़र्ज़ी लिस्टिंग चेकर' },
+    name: { en: 'Listing URL checker', hi: 'लिस्टिंग URL जाँच' },
     desc: {
-      en: 'Paste a listing link and see the common warning signs for that portal.',
-      hi: 'लिस्टिंग का लिंक डालें और उस पोर्टल के आम चेतावनी संकेत देखें।',
+      en: 'Checks the URL host and a few patterns; it does not verify a listing or property.',
+      hi: 'URL होस्ट और कुछ पैटर्न जाँचता है; लिस्टिंग या प्रॉपर्टी सत्यापित नहीं करता।',
     },
   },
   {
@@ -196,7 +196,7 @@ const BASE_TOOLS: Tool[] = [
     group: 'checks',
     schema: 'verifyOwnership',
     icon: 'user',
-    name: { en: 'Verify ownership', hi: 'मालिकाना हक़ जाँचें' },
+    name: { en: 'Jamabandi record lookup', hi: 'जमाबंदी रिकॉर्ड खोज' },
     desc: {
       en: 'Look up the owner in Haryana Jamabandi land records.',
       hi: 'हरियाणा जमाबंदी भूमि रिकॉर्ड में मालिक देखें।',
@@ -210,8 +210,8 @@ const BASE_TOOLS: Tool[] = [
     icon: 'camera',
     name: { en: 'AI Design Studio', hi: 'AI डिज़ाइन स्टूडियो' },
     desc: {
-      en: 'Free AI room redesign. Describe a room or upload a photo. No sign-up.',
-      hi: 'मुफ़्त AI कमरा डिज़ाइन। कमरे का वर्णन करें या फ़ोटो डालें। साइन-अप नहीं।',
+      en: 'Explore AI-generated room-design concepts from a prompt or photo. Results may differ from the source image.',
+      hi: 'प्रॉम्प्ट या फ़ोटो से AI कमरे के डिज़ाइन विकल्प देखें। नतीजे मूल तस्वीर से अलग हो सकते हैं।',
     },
   },
   {

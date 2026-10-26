@@ -12,7 +12,7 @@ const block = (over: Record<string, unknown> = {}) => ({
 
 describe('parseGenerated', () => {
   it('keeps only valid fields and safe source links', () => {
-    expect(parseGenerated(block())).toEqual({
+    expect(parseGenerated(block({ data_as_of: '2026-09-30' }))).toEqual({
       summary: 'A sector.',
       highlights: ['One'],
       faqs: [{ q: 'Q?', a: 'A.' }],
@@ -20,9 +20,12 @@ describe('parseGenerated', () => {
       pros: [],
       cons: [],
       metaDescription: 'Meta',
-      date: '2026-10-01T00:00:00Z',
+      date: '2026-09-30',
       sources: [{ label: 'HSVP', href: 'https://hsvp.gov.in' }, { label: 'RERA' }],
     });
+  });
+  it('does not treat a content-block update time as a source date', () => {
+    expect(parseGenerated(block())).toBeNull();
   });
   it('gives null for missing, thin or empty blocks', () => {
     expect(parseGenerated(null)).toBeNull();

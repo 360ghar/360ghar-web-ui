@@ -24,3 +24,17 @@ export function settleList(astro: Pick<AstroGlobal, 'response'>, tier: CacheTier
 
 /** Slugs are lower-case words joined by hyphens. Anything else is a 404 without an API call. */
 export const validSlug = (s: string | undefined): s is string => Boolean(s && /^[a-z0-9][a-z0-9-]{0,119}$/.test(s));
+
+/**
+ * The URL segment for a city. A canonical city keeps the spaces its register filed — Delhi's
+ * districts are "New Delhi" and "South West Delhi" — and a path segment cannot hold a space
+ * without percent-encoding it, so the words are joined with hyphens. `validSlug` then accepts
+ * the result, which it would not accept for the space form. The backend matches either spelling,
+ * so this only decides which one the site links and puts in the canonical URL.
+ */
+export const citySlug = (city: string): string =>
+  city
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');

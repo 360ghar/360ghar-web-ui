@@ -64,7 +64,7 @@ const heroGroups = [
 
 <Page
   title={title}
-  description={lm ? `${NEAR_EN[lm.slug] ?? lm.description} Verified homes for sale and rent within 5 km of ${lm.name}.` : ''}
+  description={lm ? `${NEAR_EN[lm.slug] ?? lm.description} Browse nearby property listings around ${lm.name}.` : ''}
   path={lm ? `/near/${lm.slug}` : Astro.url.pathname}
   noindex={!lm}
   jsonLd={lm && first

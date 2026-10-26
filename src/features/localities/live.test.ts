@@ -4,7 +4,7 @@ import type { Property } from '@/lib/api/types';
 vi.mock('@/features/feeds/data', () => ({ allProperties: async () => [] }));
 
 const { ALL_LOCALITIES, isThinLocality, landmarksFor, resolveLocality } = await import('./data');
-const { bestPhoto, homesIn, listedPlaces, summarize } = await import('./live');
+const { bestPhoto, homesIn, listedPlaces, localityTitle, summarize } = await import('./live');
 const { placeScene } = await import('./vignette');
 
 let id = 0;
@@ -58,6 +58,20 @@ describe('summarize', () => {
     const big = summarize([home({ base_price: 1e8, area_sqft: 4850 }), home({ base_price: 9e7, area_sqft: 4000 }), home({ base_price: 8e7, area_sqft: 3900 })]);
     expect(big.buy?.hi).toBeGreaterThan(8.9e7);
     expect(summarize([home({ base_price: 1e8, area_sqft: 1560 })]).buy).toEqual({ n: 1, min: null, lo: null, hi: null });
+  });
+});
+
+describe('localityTitle', () => {
+  it('labels prices from current homes as listing prices', () => {
+    const title = localityTitle(
+      'S',
+      'G',
+      [home({ purpose: 'buy', bedrooms: 2, base_price: 10_000_000 })],
+      'Oct 2026',
+    );
+
+    expect(title).toContain('listed prices');
+    expect(title).toContain('2 BHK listed prices');
   });
 });
 

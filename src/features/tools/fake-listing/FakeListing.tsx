@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { Locale } from '@/lib/i18n/locale';
-import { localizePath } from '@/lib/i18n/locale';
 import { Icon } from '@/ui/icons/Icon';
 import { TextField } from '@/ui/react/Field';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
@@ -8,19 +7,9 @@ import { FAKE_UI } from './content';
 import { checkListingUrl, PORTALS, type Check } from './rules';
 import './fake.css';
 
-/** Strings reused from common.json (fakeListingChecker.*), passed by the page. */
-type OldText = {
-  placeholder: string;
-  redFlagsTitle: string;
-  redFlags: string[];
-  preferVerified: string;
-  preferVerifiedDesc: string;
-  browse: string;
-};
+type Props = { locale: Locale };
 
-type Props = { locale: Locale; old: OldText };
-
-function Checker({ locale, old }: Props) {
+function Checker({ locale }: Props) {
   const t = FAKE_UI[locale];
   const [url, setUrl] = useState('');
   const [result, setResult] = useState<Check | null>(null);
@@ -29,9 +18,9 @@ function Checker({ locale, old }: Props) {
   const done = result && result.kind !== 'invalid' ? result : null;
   const portal = done?.kind === 'portal' ? PORTALS.find((p) => p.key === done.portal)! : null;
   const look = done?.kind === 'unknown' && done.lookalikeOf ? PORTALS.find((p) => p.key === done.lookalikeOf)! : null;
-  const danger = done ? done.flags.some((f) => f !== 'notSecure') : false;
-  const title = !done ? '' : done.kind === 'ours' ? t.oursTitle : portal ? t.portalTitle(portal.name) : danger ? t.careTitle : t.unknownTitle;
-  const sub = !done ? '' : done.kind === 'ours' ? t.oursSub : portal ? t.portalSub(portal.name) : danger ? t.careSub : t.unknownSub;
+  const flagged = Boolean(done?.flags.some((f) => f !== 'notSecure'));
+  const title = !done ? '' : flagged ? t.careTitle : done.kind === 'ours' ? t.oursTitle : portal ? t.portalTitle(portal.name) : t.unknownTitle;
+  const sub = !done ? '' : flagged ? t.careSub : done.kind === 'ours' ? t.oursSub : portal ? t.portalSub(portal.name) : t.unknownSub;
 
   return (
     <div className="tool-desk">
@@ -50,7 +39,7 @@ function Checker({ locale, old }: Props) {
             inputMode="url"
             autoComplete="off"
             spellCheck={false}
-            placeholder={old.placeholder}
+            placeholder={t.placeholder}
             value={url}
             error={invalid ? t.invalid : undefined}
             onChange={(e) => {
@@ -92,36 +81,13 @@ function Checker({ locale, old }: Props) {
           </section>
 
           <section className="tool-sheet" aria-labelledby="fake-points">
-            {portal ? (
-              <div>
-                <h2 id="fake-points" className="tool-sheet-title">
-                  {t.pointsTitle(portal.name)}
-                </h2>
-                <ul className="fake-list">
-                  {t.portals[portal.key].map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
             <div>
-              <h2 id={portal ? undefined : 'fake-points'} className={portal ? 'fake-h3' : 'tool-sheet-title'}>
-                {old.redFlagsTitle}
-              </h2>
+              <h2 id="fake-points" className="tool-sheet-title">{t.checklistTitle}</h2>
               <ul className="fake-list">
-                {old.redFlags.map((line) => (
+                {t.checklist.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
               </ul>
-            </div>
-            <div className="fake-verified">
-              <p>
-                <strong>{old.preferVerified}.</strong> {old.preferVerifiedDesc}
-              </p>
-              <a className="link" href={localizePath('/properties', locale)}>
-                {old.browse}
-                <Icon name="arrow-up-right" size={16} className="arrow" />
-              </a>
             </div>
           </section>
         </div>

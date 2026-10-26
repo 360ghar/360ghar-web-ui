@@ -1,84 +1,24 @@
 ---
-/** /circle-rates: page 1 of the table on the server, the filter island, the stamp-duty calculator. */
-import { getT } from '@/i18n';
-import type { CircleRatePage } from '@/features/data-hub/api';
-import type { ApiError } from '@/lib/api/errors';
+/** /circle-rates: unavailable until a dated official schedule is verified. */
 import type { Locale } from '@/lib/i18n/locale';
-import { canonicalFor } from '@/lib/seo/site';
-import { generateToolSchema, toolSchemas } from '@/lib/seo/legacy/toolSchemas.js';
-import type { CircleRate } from './api';
 import CircleRates from './CircleRates';
-import { FAQ, STEPS } from './content';
 import DataHubPage from './DataHubPage.astro';
-import RateSkyline from './RateSkyline.astro';
 import { hubName } from './pages';
-import { fmtDate } from './format';
-import type { CircleFilters } from './params';
-import StampDuty from './StampDuty';
-import Vignette from '@/ui/paper/Vignette.astro';
 import { text } from './text';
 
-/** `all`: every rate (all types), for the sector skyline. Empty when that call failed. */
-type Props = { locale: Locale; filters: CircleFilters; page: CircleRatePage | null; error: ApiError | null; sectors: string[]; all: CircleRate[] };
-const { locale, filters, page, error, sectors, all } = Astro.props;
+type Props = { locale: Locale };
+const { locale } = Astro.props;
 const t = text(locale);
-const tt = getT(locale);
-const hi = locale === 'hi';
-const items = page?.items ?? [];
-const year = items.reduce((y, r) => Math.max(y, r.revision_year), 0) || null;
-const effective = items.find((r) => r.effective_date)?.effective_date ?? null;
 ---
 
 <DataHubPage
   art="circleRates"
-  title={year ? `Gurugram Circle Rates ${year} | Sector-wise DLC Rates | 360Ghar` : tt('seo:circleRateDirectory.title')}
-  description={tt('seo:circleRateDirectory.description')}
-  keywords="Gurugram circle rates, DLC rates Gurugram, IGRS Haryana rates, stamp duty circle rate, sector wise circle rate Gurgaon"
+  title={t.crUnavailableTitle}
+  description={t.crUnavailableBody}
   path="/circle-rates"
-  heading={t.crH1}
-  lead={tt('data-hub:circleRates.description')}
+  noindex
+  heading={t.crUnavailableTitle}
   crumbs={[{ name: hubName('circleRates', locale), path: '/circle-rates' }]}
-  faqs={FAQ.circleRates}
-  howTo={{ name: 'How to Look Up Circle Rates in Haryana', description: 'Step-by-step guide to finding circle rates for your property and calculating stamp duty obligations.', steps: STEPS.circleRates }}
-  jsonLd={[
-    generateToolSchema(toolSchemas.circleRates),
-    {
-      '@type': 'ItemList',
-      name: 'Gurugram Circle Rates (DLC Rates)',
-      description: 'Official circle rates for all sectors in Gurugram.',
-      url: canonicalFor('/circle-rates', locale),
-      numberOfItems: page?.total ?? items.length,
-      itemListElement: items.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: `${r.sector} ${r.property_type}`, url: canonicalFor(`/circle-rate/${r.slug}`, locale) })),
-    },
-  ]}
-  related={['stampDuty', 'zones', 'gazette', 'priceIndex']}
 >
-  {year && <p slot="head" class="dh-meta">{t.crEffective(year, fmtDate(effective, locale, 'long'))}</p>}
-
-  <CircleRates client:load locale={locale} initialFilters={filters} initialPage={error ? null : page} sectors={sectors} />
-
-  <RateSkyline locale={locale} rows={all} type="residential" compare="commercial" headingId="cr-sky" />
-
-  <section class="dh-section" aria-label={t.sdTitle}>
-    <StampDuty client:idle locale={locale} sectors={sectors} title={tt('data-hub:circleRates.quickCalc')}>
-      <Vignette tool="stampDuty" />
-    </StampDuty>
-  </section>
-
-  <div slot="prose">
-    <h2>{hi ? 'सर्कल रेट क्या है' : 'What a circle rate is'}</h2>
-    {
-      hi ? (
-        <>
-          <p>सर्कल रेट (DLC रेट या कलेक्टर रेट) हर सेक्टर और कॉलोनी के लिए सरकार की तय की हुई न्यूनतम कीमत है। रजिस्ट्रेशन इससे कम कीमत पर नहीं होता।</p>
-          <p>स्टैंप ड्यूटी सौदे की कीमत और सर्कल रेट वाली कीमत में से जो ज़्यादा हो, उस पर लगती है। बैंक लोन की वैल्यूएशन और कैपिटल गेन टैक्स (धारा 50C) में भी सर्कल रेट देखा जाता है।</p>
-        </>
-      ) : (
-        <>
-          <p>A circle rate (also called a DLC rate or collector rate) is the lowest value the Haryana government accepts for property in a sector or colony. A sale cannot be registered below it.</p>
-          <p>Stamp duty is charged on the higher of the deal value and the circle-rate value. Banks use circle rates when they value a property for a loan, and Section 50C of the Income Tax Act uses them for capital gains.</p>
-        </>
-      )
-    }
-  </div>
+  <CircleRates locale={locale} />
 </DataHubPage>

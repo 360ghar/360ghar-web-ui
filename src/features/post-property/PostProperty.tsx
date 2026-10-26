@@ -925,12 +925,21 @@ function Wizard({ locale }: { locale: Locale }) {
                   name="place"
                   label={t.search}
                   placeholder={t.locality}
+                  locale={locale}
+                  areas
                   defaultValue={v.locality ?? ''}
                   onPlace={(p) => {
                     if (!p) return;
                     form.setValue('latitude', p.lat);
                     form.setValue('longitude', p.lng);
                     if (!v.locality) form.setValue('locality', p.name);
+                  }}
+                  onArea={(area) => {
+                    // An area carries no coordinates: replace an earlier Google pick.
+                    if (!area) return;
+                    form.setValue('locality', area.name, { shouldDirty: true, shouldValidate: true });
+                    form.setValue('latitude', undefined);
+                    form.setValue('longitude', undefined);
                   }}
                 />
               </div>

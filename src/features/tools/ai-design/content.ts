@@ -1,8 +1,7 @@
 /**
  * AI Design Studio text. Most island strings come from tools.json
  * (tools:aiDesignStudio) through pick(); AID_KEYS lists the ones used.
- * The FAQ is the old page FAQ, shortened, with Hindi added. Generation is free
- * and needs no sign-in: the backend runs Agnes AI.
+ * The FAQ and HowTo describe the current image-generation flow and its limits.
  */
 import type { Faq, HowTo } from '../seo';
 
@@ -85,7 +84,7 @@ export const AID_KEYS = [
 
 export const AID_UI = {
   en: {
-    free: 'Free. No sign-up. Made by Agnes AI image models on 360Ghar servers, so nothing is charged to you.',
+    note: 'Generated images are design concepts. They may change room details and do not show measured dimensions.',
     elapsed: (t: string) => `Time so far: ${t}`,
     photo: 'Room photo',
     choose: 'Choose a photo',
@@ -100,7 +99,7 @@ export const AID_UI = {
     chars: (n: number, max: number) => `${n}/${max} characters`,
   },
   hi: {
-    free: 'मुफ़्त। साइन-अप नहीं। डिज़ाइन 360Ghar के सर्वर पर Agnes AI इमेज मॉडल बनाते हैं, आपसे कोई शुल्क नहीं।',
+    note: 'बनी हुई इमेज डिज़ाइन के विचार हैं। उनमें कमरे की बातें बदल सकती हैं और वे नाप नहीं दिखातीं।',
     elapsed: (t: string) => `अब तक का समय: ${t}`,
     photo: 'कमरे की फ़ोटो',
     choose: 'फ़ोटो चुनें',
@@ -119,16 +118,16 @@ export const AID_UI = {
 export const AID_PAGE = {
   en: {
     heading: 'AI Design Studio',
-    lead: 'Describe a room or upload a photo, pick a style, and get a new interior or exterior design in about half a minute. Free, with no sign-up.',
+    lead: 'Describe a room or upload a photo, choose a style, and explore an AI-generated design concept. Results may change the layout and do not show measured dimensions.',
     howToName: 'How to generate AI room designs',
-    howToDesc: 'Step-by-step guide to creating photorealistic room designs with AI.',
+    howToDesc: 'Steps to create an AI-generated room design concept from a prompt or photo.',
     faqTitle: 'AI Design Studio: questions people ask',
   },
   hi: {
     heading: 'AI डिज़ाइन स्टूडियो',
-    lead: 'कमरे का वर्णन करें या फ़ोटो डालें, स्टाइल चुनें, और लगभग आधे मिनट में नया इंटीरियर या एक्सटीरियर डिज़ाइन पाएँ। मुफ़्त, साइन-अप नहीं।',
+    lead: 'कमरे का विवरण लिखें या फ़ोटो अपलोड करें, स्टाइल चुनें और AI से बना डिज़ाइन विचार देखें। नतीजे लेआउट बदल सकते हैं और नाप नहीं दिखाते।',
     howToName: 'AI से कमरे का डिज़ाइन कैसे बनाएँ',
-    howToDesc: 'AI से असली जैसे दिखने वाले कमरे के डिज़ाइन बनाने का आसान तरीका।',
+    howToDesc: 'प्रॉम्प्ट या फ़ोटो से AI डिज़ाइन विचार बनाने के चरण।',
     faqTitle: 'AI डिज़ाइन स्टूडियो: अक्सर पूछे जाने वाले सवाल',
   },
 };
@@ -137,15 +136,15 @@ export const AID_FAQ: Record<'en' | 'hi', Faq[]> = {
   en: [
     {
       q: 'How does AI Design Studio work?',
-      a: 'It uses image generation models to create interior and exterior designs. Describe your idea in text, or upload a photo of an existing room to see it in a different style.',
+      a: 'It sends a prompt or uploaded room photo to an image-generation service. The result is a design concept and may change the layout, objects, or dimensions.',
     },
     {
-      q: 'Is AI Design Studio free to use?',
-      a: 'Yes. It is free and needs no sign-up or account. 360Ghar runs the Agnes AI image models on its own servers and pays for them. To keep it fast for everyone, one device can make about 10 designs a minute.',
+      q: 'Can I use a generated image as a measured floor plan?',
+      a: 'No. It is an image concept, not a measured floor plan or construction drawing. Check dimensions and building requirements against suitable plans and professional advice.',
     },
     {
       q: 'Can I upload my own room photo?',
-      a: 'Yes. Choose "Reimagine Photo" and upload a JPEG, PNG or WebP photo up to 5 MB. The AI keeps the layout and changes colours, materials and decor.',
+      a: 'Yes. Choose "Reimagine Photo" and upload a JPEG, PNG or WebP photo up to 5 MB. The generated image may change the layout, objects, or other details.',
     },
     {
       q: 'What design styles are available?',
@@ -153,21 +152,21 @@ export const AID_FAQ: Record<'en' | 'hi', Faq[]> = {
     },
     {
       q: 'Where are my saved designs kept?',
-      a: 'Saved designs stay in this browser only (up to 20). They are not uploaded to 360Ghar. Download a design to keep it anywhere else.',
+      a: 'The gallery stores up to 20 designs in this browser. Download a copy to keep it elsewhere.',
     },
   ],
   hi: [
     {
       q: 'AI डिज़ाइन स्टूडियो कैसे काम करता है?',
-      a: 'यह इमेज बनाने वाले AI मॉडल से इंटीरियर और एक्सटीरियर डिज़ाइन बनाता है। अपना आइडिया लिखें, या मौजूदा कमरे की फ़ोटो डालकर उसे नई स्टाइल में देखें।',
+      a: 'यह प्रॉम्प्ट या डाली गई कमरे की फ़ोटो को इमेज बनाने वाली सेवा तक भेजता है। नतीजा डिज़ाइन का विचार है और लेआउट, चीज़ें या नाप बदल सकता है।',
     },
     {
-      q: 'क्या AI डिज़ाइन स्टूडियो मुफ़्त है?',
-      a: 'हाँ। यह मुफ़्त है और इसके लिए साइन-अप या खाते की ज़रूरत नहीं। 360Ghar अपने सर्वर पर Agnes AI इमेज मॉडल चलाता है और उनका खर्च खुद उठाता है। सबके लिए तेज़ रखने के लिए एक डिवाइस से एक मिनट में लगभग 10 डिज़ाइन बन सकते हैं।',
+      q: 'क्या बनी हुई इमेज को नाप वाले फ़्लोर प्लान की तरह इस्तेमाल कर सकते हैं?',
+      a: 'नहीं। यह इमेज का विचार है, नाप वाला फ़्लोर प्लान या निर्माण ड्रॉइंग नहीं। नाप और निर्माण की ज़रूरतें सही प्लान और विशेषज्ञ की सलाह से जाँचें।',
     },
     {
       q: 'क्या मैं अपने कमरे की फ़ोटो डाल सकता हूँ?',
-      a: 'हाँ। "फोटो पुनर्कल्पना" चुनें और 5 MB तक की JPEG, PNG या WebP फ़ोटो डालें। AI कमरे का ढाँचा वही रखता है और रंग, मटीरियल और सजावट बदलता है।',
+      a: 'हाँ। "फोटो पुनर्कल्पना" चुनें और 5 MB तक की JPEG, PNG या WebP फ़ोटो डालें। बनी हुई इमेज में लेआउट, चीज़ें या अन्य विवरण बदल सकते हैं।',
     },
     {
       q: 'कौन-सी डिज़ाइन स्टाइल मिलती हैं?',
@@ -175,7 +174,7 @@ export const AID_FAQ: Record<'en' | 'hi', Faq[]> = {
     },
     {
       q: 'मेरे सहेजे डिज़ाइन कहाँ रहते हैं?',
-      a: 'सहेजे डिज़ाइन सिर्फ़ इसी ब्राउज़र में रहते हैं (20 तक)। वे 360Ghar पर अपलोड नहीं होते। कहीं और रखने के लिए डिज़ाइन डाउनलोड करें।',
+      a: 'गैलरी में 20 तक डिज़ाइन इसी ब्राउज़र में सेव होते हैं। कहीं और रखने के लिए कॉपी डाउनलोड करें।',
     },
   ],
 };

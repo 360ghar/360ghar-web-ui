@@ -1,11 +1,10 @@
 ---
 /**
  * Locality guide. A paper vignette of the kind of place, the live homes
- * matched exactly to this place, distances to landmarks, circle rates,
- * a checklist for this kind of place, FAQs and nearby places.
+ * matched exactly to this place, listing prices, a checklist for this kind
+ * of place, FAQs and nearby places.
  */
-import priceContext from '@/data/priceContext.json';
-import { compactPrice, formatDate, formatNum, rupees } from '@/lib/format';
+import { compactPrice, formatNum, rupees } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizer } from '@/lib/i18n/locale';
 import FavouriteButton from '@/features/favourites/FavouriteButton';
@@ -19,8 +18,7 @@ import CutBand from '@/ui/CutBand.astro';
 import Faq from '@/ui/Faq.astro';
 import Icon from '@/ui/icons/Icon.astro';
 import StateBlock from '@/ui/states/StateBlock.astro';
-import { citySlug, displayName, INTENT_TYPES, landmarksFor, localitySlug, nearbyLocalities, TYPE_LABEL, type Locality } from './data';
-import LandmarkList from './LandmarkList.astro';
+import { citySlug, displayName, INTENT_TYPES, localitySlug, nearbyLocalities, TYPE_LABEL, type Locality } from './data';
 import ListedPlaces from './ListedPlaces.astro';
 import { PRICE_ON_REQUEST } from '@/features/search/prices';
 import { summarize, type Range } from './live';
@@ -32,7 +30,7 @@ import { kindForEntity } from './vignette';
 type Props = { locality: Locality; data: LocalityData; faqs: { q: string; a: string }[]; generated?: Generated | null; locale: Locale };
 
 const { locality: l, data, faqs, generated = null, locale } = Astro.props;
-const { homes, listed, nearbyCounts, circle, failed } = data;
+const { homes, listed, nearbyCounts, failed } = data;
 const hi = locale === 'hi';
 const L = localizer(locale);
 const name = displayName(l.name);
@@ -41,32 +39,24 @@ const meta = CITY_META[city];
 const cityName = city === 'gurgaon' ? (hi ? 'गुरुग्राम' : 'Gurugram') : displayName(l.city);
 const type = TYPE_LABEL[l.entityType]?.[hi ? 1 : 0] ?? l.type;
 const slug = localitySlug(l);
-const landmarks = landmarksFor(l);
 const nearby = nearbyLocalities(l);
-const prices = (priceContext as Record<string, { buy?: Record<string, string>; rent?: Record<string, string>; pg?: Record<string, string> }>)[city];
 const hasIntent = INTENT_TYPES.has(l.entityType);
 const sum = summarize(homes);
-const km = (s: string) => Number.parseFloat(s.replace(/[^0-9.]/g, '')) || 0;
-const nearest = (t: string) => landmarks.filter((m) => m.type === t).sort((a, b) => km(a.distance) - km(b.distance))[0];
-const metro = nearest('metro');
-const hospital = nearest('hospital');
-const verified = l.lastVerifiedAt ? formatDate(l.lastVerifiedAt, locale, { day: 'numeric', month: 'long', year: 'numeric' }) : null;
 const n = (x: number) => formatNum(x, 'en');
-const circleLabel: Record<string, [string, string]> = { residential: ['Residential', 'रिहायशी'], commercial: ['Commercial', 'कमर्शियल'], plot: ['Plot', 'प्लॉट'] };
 const money = (v: number) => compactPrice(v, locale);
 const rent = (v: number) => rupees(v, locale);
 
-// Facts in the header: live counts and price ranges, then the nearest landmarks.
+// Facts in the header use only live listing counts and asking prices.
 const roundRent = (v: number) => Math.round(v / 100) * 100;
 const priceLine = (r: Range, count: string, f: (v: number) => string, per = '') =>
   r.lo !== null && r.hi !== null
     ? hi
-      ? `${count} · ज़्यादातर घर ${f(r.lo)} से ${f(r.hi)}${per}`
-      : `${count} · most homes ${f(r.lo)} to ${f(r.hi)}${per}`
+      ? `${count} · लिस्टिंग की कीमतें ${f(r.lo)} से ${f(r.hi)}${per}`
+      : `${count} · listed prices ${f(r.lo)} to ${f(r.hi)}${per}`
     : r.min !== null
       ? hi
-        ? `${count} · ${f(r.min)}${per} से`
-        : `${count} · from ${f(r.min)}${per}`
+        ? `${count} · लिस्टिंग की कीमत ${f(r.min)}${per} से`
+        : `${count} · listed price from ${f(r.min)}${per}`
       : `${count} · ${PRICE_ON_REQUEST[hi ? 'hi' : 'en'].toLowerCase()}`;
 const live: FactRow[] = failed
   ? [{ text: hi ? 'लाइव घर अभी लोड नहीं हो सके' : 'Live homes could not load right now', strong: true }]
@@ -78,16 +68,8 @@ const live: FactRow[] = failed
         ...(sum.rent ? [{ text: priceLine(sum.rent, hi ? `${sum.rent.n} किराये पर` : `${sum.rent.n} for rent`, (v) => rent(roundRent(v)), hi ? ' माह' : ' a month') }] : []),
         ...(sum.stay ? [{ text: priceLine({ ...sum.stay, lo: null, hi: null }, hi ? `${sum.stay.n} कम समय के लिए` : `${sum.stay.n} short ${sum.stay.n === 1 ? 'stay' : 'stays'}`, rent, hi ? ' रात' : ' a night') }] : []),
       ];
-const kmText = (s: string) => (hi ? s.replace('km', 'किमी') : s);
-const nearestRows: FactRow[] = [...landmarks]
-  .sort((a, b) => km(a.distance) - km(b.distance))
-  .slice(0, 3)
-  .map((m) => ({ text: m.name, value: kmText(m.distance), glyph: m.type }));
-const circleRows: FactRow[] = !nearestRows.length && circle.length ? circle.slice(0, 3).map((c) => ({ text: circleLabel[c.property_type]?.[hi ? 1 : 0] ?? c.property_type, value: `${rupees(c.rate_per_sqft, locale)}/${hi ? 'वर्ग फ़ुट' : 'sq ft'}` })) : [];
 const heroGroups = [
   { title: hi ? '360Ghar पर अभी' : 'Live on 360Ghar', rows: live },
-  { title: hi ? 'सबसे पास' : 'Nearest', rows: nearestRows },
-  { title: hi ? 'सर्कल रेट' : 'Circle rates', rows: circleRows },
 ];
 
 // A short summary built only from facts on this page.
@@ -105,8 +87,6 @@ const word = WORD[l.entityType]?.[hi ? 1 : 0] ?? (hi ? 'एक जगह' : 'a p
 const state = meta ? (hi ? meta.stateHi : meta.state) : '';
 const summary = [
   hi ? `${name} ${cityName}${state && state !== cityName ? `, ${state}` : ''} में ${word} है।` : `${name} is ${word} in ${cityName}${state && state !== cityName ? `, ${state}` : ''}.`,
-  metro && (hi ? `सबसे पास का मेट्रो स्टेशन ${metro.name} है (${metro.distance.replace('km', 'किमी')})।` : `The nearest metro station is ${metro.name}, ${metro.distance} away.`),
-  hospital && (hi ? `सबसे पास का बड़ा अस्पताल ${hospital.name} है (${hospital.distance.replace('km', 'किमी')})।` : `The nearest large hospital on our list is ${hospital.name}, ${hospital.distance} away.`),
   !failed && (sum.total ? (hi ? `अभी 360Ghar पर यहाँ ${n(sum.total)} घर लिस्ट हैं।` : `${n(sum.total)} ${sum.total === 1 ? 'home is' : 'homes are'} listed here on 360Ghar now.`) : hi ? 'अभी 360Ghar पर यहाँ कोई घर लिस्ट नहीं है।' : 'No homes are listed here on 360Ghar yet.'),
 ]
   .filter(Boolean)
@@ -115,8 +95,7 @@ const summary = [
 // What to check for this kind of place (from the old site's sidebar), with the tools that help.
 const CHECKS: Record<string, [string, string][]> = {
   area: [
-    ['Check the circle rate before you agree a price. Stamp duty is paid on the higher of the deal value and the circle rate.', 'कीमत तय करने से पहले सर्कल रेट देखें। स्टैंप ड्यूटी सौदे की कीमत और सर्कल रेट में से जो ज़्यादा हो, उस पर लगती है।'],
-    ['Check that the plot or building is in an approved layout: an HSVP sector or a DTCP-licensed colony.', 'जाँचें कि प्लॉट या बिल्डिंग मंज़ूर लेआउट में है: HSVP सेक्टर या DTCP लाइसेंस वाली कॉलोनी।'],
+    ['Check official records for the approvals that apply to the property. This page does not verify them.', 'प्रॉपर्टी पर लागू मंज़ूरियों के आधिकारिक रिकॉर्ड देखें। यह पेज उनकी पुष्टि नहीं करता।'],
     ['Visit at peak hours to see the traffic, the parking and the water supply.', 'भीड़ के समय जाकर ट्रैफ़िक, पार्किंग और पानी की सप्लाई देखें।'],
     ['Ask for the title papers and the latest property tax receipt.', 'मालिकाना काग़ज़ और ताज़ा प्रॉपर्टी टैक्स की रसीद माँगें।'],
   ],
@@ -127,9 +106,9 @@ const CHECKS: Record<string, [string, string][]> = {
     ['Ask how old the society is and which large repairs are planned.', 'पूछें कि सोसाइटी कितनी पुरानी है और कौन-सी बड़ी मरम्मत होनी है।'],
   ],
   project: [
-    ['Check the H-RERA registration on the official portal.', 'आधिकारिक पोर्टल पर H-RERA रजिस्ट्रेशन देखें।'],
-    ['Compare the approved building plan with what is built.', 'मंज़ूर नक्शे की तुलना बनी हुई इमारत से करें।'],
-    ['Look up the builder’s delivery record on other projects.', 'बिल्डर के दूसरे प्रोजेक्ट का डिलीवरी रिकॉर्ड देखें।'],
+    ['Check official project records with the relevant authority. This page does not verify registration or approved plans.', 'संबंधित प्राधिकरण के आधिकारिक प्रोजेक्ट रिकॉर्ड देखें। यह पेज रजिस्ट्रेशन या मंज़ूर नक्शों की पुष्टि नहीं करता।'],
+    ['Compare the documents provided with the property and phase you plan to buy.', 'मिले दस्तावेज़ों की तुलना उस प्रॉपर्टी और फ़ेज़ से करें जिसे आप खरीदना चाहते हैं।'],
+    ['Ask for the builder and project details in writing.', 'बिल्डर और प्रोजेक्ट की जानकारी लिखित में माँगें।'],
     ['Compare the full cost: base price, PLC, EDC and IDC, club and maintenance deposit.', 'पूरी लागत की तुलना करें: बेस कीमत, PLC, EDC और IDC, क्लब और मेंटेनेंस डिपॉज़िट।'],
   ],
   township: [
@@ -153,25 +132,10 @@ const CHECKS: Record<string, [string, string][]> = {
 };
 const checkKey = ({ sector: 'area', locality: 'area', phase: 'township', society: 'society', project: 'project', township: 'township', road: 'road', village: 'village' } as Record<string, string>)[l.entityType] ?? 'area';
 const checks = CHECKS[checkKey]!.map((c) => c[hi ? 1 : 0]);
-const residential = circle.find((c) => c.property_type === 'residential') ?? circle[0];
 const tools = [
-  circle.length
-    ? { href: `/circle-rate/${residential!.slug}`, label: hi ? `${name} के सर्कल रेट` : `Circle rates in ${name}` }
-    : city === 'gurgaon' && ['area', 'road'].includes(checkKey) && { href: '/circle-rates', label: hi ? 'सर्कल रेट' : 'Circle rates' },
-  ['project', 'society', 'township'].includes(checkKey) && { href: '/rera-projects', label: hi ? 'RERA प्रोजेक्ट' : 'RERA projects' },
   checkKey === 'village' && { href: '/verify-ownership', label: hi ? 'मालिकाना हक जाँचें' : 'Verify ownership' },
-  { href: '/stamp-duty-calculator', label: hi ? 'स्टैंप ड्यूटी' : 'Stamp duty calculator' },
   { href: '/emi-calculator', label: hi ? 'EMI कैलकुलेटर' : 'EMI calculator' },
 ].filter(Boolean) as { href: string; label: string }[];
-
-const priceRows = prices
-  ? ([
-      [hi ? 'फ़्लैट खरीदें' : 'Buy a flat', prices.buy?.apartment],
-      [hi ? 'बिल्डर फ़्लोर खरीदें' : 'Buy a builder floor', prices.buy?.builder_floor],
-      [hi ? 'फ़्लैट किराये पर' : 'Rent a flat', prices.rent?.apartment],
-      [hi ? 'पीजी' : 'PG', prices.pg?.default],
-    ].filter(([, v]) => v) as [string, string][])
-  : [];
 const shown = homes.slice(0, 6);
 // The main action goes where the homes are: rent first when a place has homes for rent only.
 const first = !sum.buy && sum.rent ? 'rent' : 'buy';
@@ -248,8 +212,8 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
         <>
           <h2 id="loc-homes" class="loc-h2">{hi ? `${name} में अभी कोई घर लिस्ट नहीं है` : `No homes are listed in ${name} yet`}</h2>
           <p class="loc-note">
-            {hi ? 'इन जगहों पर अभी घर लिस्ट हैं। या ' : 'These places have homes listed now. Or '}
-            <a class="link" href={L('/post-property')}>{hi ? `${name} में अपना घर मुफ़्त लिस्ट करें` : `list your own home in ${name} free`}</a>
+            {hi ? 'दूसरे लोकैलिटी पेज देखें, या ' : 'Browse other locality pages, or '}
+            <a class="link" href={L('/post-property')}>{hi ? 'अपनी प्रॉपर्टी की जानकारी दें' : 'share your property details'}</a>
             {hi ? '।' : '.'}
           </p>
           {listed.length > 0 && <ListedPlaces places={listed} locale={locale} />}
@@ -273,33 +237,8 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
             </ul>
           )
         }
-        {
-          circle.length > 0 && (
-            <div class="loc-circle">
-              <h3 class="loc-h3">{hi ? `सर्कल रेट${residential?.revision_year ? ` (${residential.revision_year})` : ''}` : `Circle rates${residential?.revision_year ? ` (${residential.revision_year})` : ''}`}</h3>
-              <dl class="loc-dl tabular">
-                {circle.map((c) => (
-                  <>
-                    <dt>{circleLabel[c.property_type]?.[hi ? 1 : 0] ?? c.property_type}</dt>
-                    <dd>
-                      {rupees(c.rate_per_sqft, locale)} {hi ? 'प्रति वर्ग फ़ुट' : 'per sq ft'}
-                    </dd>
-                  </>
-                ))}
-              </dl>
-            </div>
-          )
-        }
-        {generated ? <div class="loc-verified"><Provenance date={generated.date} sources={generated.sources} /></div> : verified && <p class="loc-verified">{hi ? `जानकारी जाँची गई: ${verified}` : `Details checked on ${verified}`}</p>}
+        {generated && <div class="loc-verified"><Provenance date={generated.date} sources={generated.sources} /></div>}
       </div>
-      {
-        landmarks.length > 0 && (
-          <div>
-            <h3 class="loc-h3">{hi ? 'कितनी दूर' : 'How far things are'}</h3>
-            <LandmarkList items={landmarks} locale={locale} />
-          </div>
-        )
-      }
     </div>
   </div>
 </CutBand>
@@ -325,22 +264,6 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
           ))
         }
       </ul>
-      {
-        priceRows.length > 0 && (
-          <div class="loc-prices-box">
-            <h3 class="loc-h3">{hi ? `${cityName} में आम कीमतें` : `Typical prices in ${cityName}`}</h3>
-            <dl class="loc-dl tabular">
-              {priceRows.map(([k, v]) => (
-                <>
-                  <dt>{k}</dt>
-                  <dd>₹{v}</dd>
-                </>
-              ))}
-            </dl>
-            <p class="loc-small">{hi ? 'पूरे शहर की अनुमानित रेंज। असली कीमत घर, सोसाइटी और मंज़िल पर निर्भर करती है।' : 'City-wide ranges. The real price depends on the home, the society and the floor.'}</p>
-          </div>
-        )
-      }
     </div>
   </section>
 
@@ -434,13 +357,6 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
     margin-bottom: 1rem;
   }
 
-  .loc-h3 {
-    font-family: var(--font-sans);
-    font-size: 1.0625rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-  }
-
   .loc-note {
     margin: -0.25rem 0 1.5rem;
     color: var(--color-ink-800);
@@ -491,24 +407,6 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
     font-size: 1.0625rem;
     color: var(--color-ink-950);
     max-width: 58ch;
-  }
-
-  .loc-circle {
-    margin-top: 1.5rem;
-  }
-
-  .loc-dl {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 0.375rem 1.5rem;
-  }
-
-  .loc-dl dt {
-    color: var(--color-ink-800);
-  }
-
-  .loc-dl dd {
-    font-weight: 700;
   }
 
   .loc-verified {
@@ -582,12 +480,6 @@ const rentCount = homes.filter((p) => p.purpose === 'rent').length;
 
   .loc-tools a:hover :global(.arrow) {
     translate: 2px -2px;
-  }
-
-  .loc-small {
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
-    color: var(--color-ink-600);
   }
 
   .loc-links {

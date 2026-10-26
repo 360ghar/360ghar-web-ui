@@ -1,19 +1,26 @@
 import type { Locale } from '@/lib/i18n/locale';
 import { Segmented } from '@/ui/react/Segmented';
-import { num, NumberField, numParam, oneOf, RangeField, ToolActions, ToolShell, useShareState } from '../ui';
+import { TextField } from '@/ui/react/Field';
+import { num, NumberField, numParam, oneOf, ToolActions, ToolShell, useShareState } from '../ui';
 import { MOFA_UI } from './content';
 import { convertCarpet, type Direction } from './mofa';
 import './area.css';
 
 const DIRS = ['mofa_to_rera', 'rera_to_mofa'] as const;
-const DEFAULTS = { v: 1000, dir: 'mofa_to_rera' as Direction, pct: 6 };
-const PARSE = { v: numParam(0, 1e7), dir: oneOf(DIRS), pct: numParam(5, 8) };
+const DEFAULTS = { v: 1000, dir: 'mofa_to_rera' as Direction, pct: '' };
+const PARSE = {
+  v: numParam(0, 1e7),
+  dir: oneOf(DIRS),
+  pct: (raw: string) => (raw.trim() && Number.isFinite(Number(raw)) && Number(raw) >= 0 && Number(raw) <= 100 ? raw : undefined),
+};
 
 function Mofa({ locale }: { locale: Locale }) {
   const t = MOFA_UI[locale];
   const { state, set, reset, link } = useShareState(DEFAULTS, PARSE);
   const { v, dir, pct } = state;
-  const { result, delta } = convertCarpet(v, dir, pct);
+  const pctValue = pct === '' ? undefined : Number(pct);
+  const validPct = pctValue !== undefined && Number.isFinite(pctValue) && pctValue >= 0 && pctValue <= 100;
+  const converted = validPct ? convertCarpet(v, dir, pctValue) : null;
   const toRera = dir === 'mofa_to_rera';
   const sqft = (n: number) => `${num(n, locale, 0)} ${t.sqft}`;
 
@@ -38,33 +45,52 @@ function Mofa({ locale }: { locale: Locale }) {
             />
           </div>
           <NumberField label={toRera ? t.mofa : t.rera} suffix={t.sqft} decimals={false} value={v} min={0} max={1e7} onChange={(n) => set({ v: n })} />
-          <RangeField label={t.uplift} value={pct} min={5} max={8} step={0.5} suffix="%" format={(n) => `${n}%`} hint={t.upliftHint} onChange={(n) => set({ pct: n })} />
+          <TextField
+            label={t.uplift}
+            type="number"
+            inputMode="decimal"
+            min={0}
+            max={100}
+            step="any"
+            value={pct}
+            hint={t.upliftHint}
+            error={pct && !validPct ? t.assumptionError : undefined}
+            onChange={(e) => set({ pct: e.target.value })}
+          />
           <ToolActions locale={locale} link={link} onReset={reset} />
         </section>
 
         <section className="tool-result" aria-live="polite" aria-labelledby="mofa-result">
           <div>
             <h2 id="mofa-result" className="tool-result-label">
-              {toRera ? t.rera : t.mofa}
+              {t.result}
             </h2>
             <output className="tool-figure" data-testid="mofa-result">
-              {num(result, locale, 0)}
-              <span className="tool-figure-unit">{t.sqft}</span>
+              {converted ? (
+                <>
+                  {num(converted.result, locale, 0)}
+                  <span className="tool-figure-unit">{t.sqft}</span>
+                </>
+              ) : (
+                t.enterAssumption
+              )}
             </output>
           </div>
-          <dl className="tool-stats">
-            <div>
-              <dt>{toRera ? t.mofa : t.rera}</dt>
-              <dd>{sqft(v)}</dd>
-            </div>
-            <div>
-              <dt>{t.delta}</dt>
-              <dd>
-                {delta > 0 ? '+' : ''}
-                {sqft(delta)}
-              </dd>
-            </div>
-          </dl>
+          {converted ? (
+            <dl className="tool-stats">
+              <div>
+                <dt>{t.inputArea}</dt>
+                <dd>{sqft(v)}</dd>
+              </div>
+              <div>
+                <dt>{t.delta}</dt>
+                <dd>
+                  {converted.delta > 0 ? '+' : ''}
+                  {sqft(converted.delta)}
+                </dd>
+              </div>
+            </dl>
+          ) : null}
           <p className="tool-result-sub">{t.estimate}</p>
         </section>
       </div>

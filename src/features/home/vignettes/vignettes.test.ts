@@ -26,3 +26,27 @@ describe('app vignette artboard', () => {
     expect(TOP.app! + SIZE.app[1]).toBe(420);
   });
 });
+
+describe('homepage vignette evidence', () => {
+  it('uses a neutral document scene instead of a verification seal', () => {
+    expect(SIZE).toHaveProperty('review');
+
+    const ids = vignetteLayers('review').map((layer) => layer.id);
+    expect(ids).toContain('review-paper');
+    expect(ids).toContain('review-empty-checklist');
+    expect(ids).not.toContain('review-verification-seal');
+  });
+
+  it('shows a property listing preview instead of rent status', () => {
+    const ids = vignetteLayers('owners').map((layer) => layer.id);
+    expect(ids).toContain('owner-listing-preview');
+    expect(ids).not.toContain('owner-rent-ledger');
+  });
+
+  it('keeps the app illustration to property discovery details', () => {
+    const ids = vignetteLayers('app').map((layer) => layer.id);
+    expect(ids).toContain('app-listing-card');
+    expect(ids).not.toContain('app-manager-chat');
+    expect(ids).not.toContain('app-verification-seal');
+  });
+});

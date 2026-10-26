@@ -2,7 +2,15 @@
  * Content ported from the old site (360ghar-web-ui/src/pages/data-hub/*.jsx and
  * src/pages/geo/*.jsx): FAQs, HowTo steps, the auction portal list, the tehsil
  * list and the three static geo datasets. Generated once from the old source;
- * em dashes and emojis were removed, the values are unchanged. English only, as on the old site.
+ * em dashes and emojis were removed. English only, as on the old site.
+ *
+ * Corrections applied after a copy audit (2026-10): the old site linked the HRERA
+ * portal at a domain that now 301-redirects to an unrelated commercial site, so
+ * every link points at `haryanarera.gov.in` instead; the example RERA number
+ * format was replaced with the formats the registers actually issue; and the
+ * builder-score answers now state the score the site computes rather than an
+ * algorithm it does not run. `BUILDERS`, `AREAS` and `SECTORS` are unchanged and
+ * are 360Ghar's own 2026 editorial estimates, not register figures.
  */
 export type Faq = { q: string; a: string };
 export type Step = { name: string; text: string };
@@ -87,7 +95,7 @@ export const FAQ = {
     },
     {
       "q": "How can I verify a RERA project in Haryana?",
-      "a": "You can verify a RERA project on the HRERA website (hrera.org.in) by searching the project name or registration number. Check that the registration number format matches the official pattern (e.g., HRERA-PKL-GGM-XXXX-XXX). You can also use our Quick RERA Verify tool above to instantly check any registration number. Always cross-verify the project status, developer details, and possession dates on the HRERA portal."
+      "a": "You can verify a RERA project on the HRERA website (haryanarera.gov.in) by searching the project name or registration number. Check that the registration number matches the pattern the register issues (for example RERA-GRG-PROJ-1540-2024 from HRERA, or DLRERA2026P0011 from Delhi RERA). You can also use our Quick RERA Verify tool above to instantly check any registration number. Always cross-verify the project status, developer details, and possession dates on the HRERA portal."
     },
     {
       "q": "What rights do buyers have under RERA in Haryana?",
@@ -95,7 +103,7 @@ export const FAQ = {
     },
     {
       "q": "How do I file a RERA complaint in Haryana?",
-      "a": "File a complaint on the HRERA website (hrera.org.in) by registering as a complainant, filling out the complaint form, paying the fee (Rs. 1,000 for individuals), and uploading supporting documents (allotment letter, payment receipts, communication with the developer). HRERA benches in Panchkula and Gurugram hear cases. The authority aims to dispose of complaints within 60 days of the hearing."
+      "a": "File a complaint on the HRERA website (haryanarera.gov.in) by registering as a complainant, filling out the complaint form, paying the fee (Rs. 1,000 for individuals), and uploading supporting documents (allotment letter, payment receipts, communication with the developer). HRERA benches in Panchkula and Gurugram hear cases. The authority aims to dispose of complaints within 60 days of the hearing."
     },
     {
       "q": "What is the difference between RERA and HRERA?",
@@ -239,7 +247,7 @@ export const FAQ = {
     },
     {
       "q": "Where can I find official Haryana real estate regulations?",
-      "a": "Official Haryana real estate regulations can be found on the Department of Town and Country Planning (DTCP) website (tcpharyana.gov.in), the HRERA website (hrera.org.in), the Haryana Revenue Department for stamp duty and circle rates, and the India E-Gazette portal (egazette.nic.in). You can also check our Regulatory Updates page for curated notifications specific to Gurugram real estate."
+      "a": "Official Haryana real estate regulations can be found on the Department of Town and Country Planning (DTCP) website (tcpharyana.gov.in), the HRERA website (haryanarera.gov.in), the Haryana Revenue Department for stamp duty and circle rates, and the India E-Gazette portal (egazette.nic.in). You can also check our Regulatory Updates page for curated notifications specific to Gurugram real estate."
     },
     {
       "q": "How can I stay updated on Haryana real estate regulatory changes?",
@@ -253,7 +261,7 @@ export const FAQ = {
     },
     {
       "q": "How is the builder reputation score calculated?",
-      "a": "The builder reputation score is calculated using data from HRERA (Haryana Real Estate Regulatory Authority) records. Key factors include the number of RERA-registered projects, complaint history, project completion status, on-time delivery record, and any penalties or regulatory actions. The scoring algorithm weights recent data more heavily to reflect current performance."
+      "a": "The score on this page is 100 minus 15 for each complaint per project, capped at 0, from the RERA projects and complaints on 360Ghar's records. A builder with no projects on record scores 50. It uses no other input: the delivery record, the completion status and any penalties do not enter this figure. A separate five-pillar score (delivery, regulatory, complaints, financials, market reception) is shown on a builder's own page where the filing data supports it."
     },
     {
       "q": "Why is it important to check a builder's reputation before buying?",
@@ -265,17 +273,17 @@ export const FAQ = {
     },
     {
       "q": "How do I file a complaint against a builder in Haryana?",
-      "a": "You can file a complaint with HRERA through their official website (hrera.org.in) or by visiting the HRERA office in Panchkula or Gurugram. You need to fill out the complaint form, pay the prescribed fee (currently Rs. 1,000), and provide supporting documents like the allotment letter, payment receipts, and evidence of the grievance. HRERA typically disposes of complaints within 60 days."
+      "a": "You can file a complaint with HRERA through their official website (haryanarera.gov.in) or by visiting the HRERA office in Panchkula or Gurugram. You need to fill out the complaint form, pay the prescribed fee (currently Rs. 1,000), and provide supporting documents like the allotment letter, payment receipts, and evidence of the grievance. HRERA typically disposes of complaints within 60 days."
     }
   ],
   "builderScore": [
     {
       "q": "Which builders have the best reputation in Gurugram?",
-      "a": "DLF Limited, Emaar India, Sobha Limited, and Godrej Properties consistently score above 80 in reputation. These builders have strong HRERA compliance records, fewer complaints, and mostly on-time delivery histories in Gurugram."
+      "a": "The eight builders on this guide are the large Gurugram developers 360Ghar ranked in its own 2026 research. The score and the project and complaint counts beside each name are that research's figures, not the live register counts: they were compiled from public sources and the developer's own disclosures, and 360Ghar has not published the sample behind them. For the figures the site computes today from the RERA registers, open the builder reputation directory."
     },
     {
       "q": "How do I check if a builder is RERA registered in Haryana?",
-      "a": "Visit hrera.org.in, the official Haryana Real Estate Regulatory Authority website. Search by builder name or project name to see RERA registration status, project details, quarterly progress reports, and complaint history. All builders operating in Haryana must register projects above 500 sq m."
+      "a": "Visit haryanarera.gov.in, the official Haryana Real Estate Regulatory Authority website. Search by builder name or project name to see RERA registration status, project details, quarterly progress reports, and complaint history. All builders operating in Haryana must register projects above 500 sq m."
     },
     {
       "q": "What is a safe minimum reputation score before buying from a builder?",
@@ -360,7 +368,7 @@ export const STEPS = {
     },
     {
       "name": "Verify RERA Registration",
-      "text": "Use the Quick RERA Verify tool to instantly check if a registration number is valid. Cross-verify the number format (e.g., HRERA-PKL-GGM-XXXX-XXX) and check the project status on the official HRERA portal."
+      "text": "Use the Quick RERA Verify tool to instantly check if a registration number is valid. Cross-verify that the number matches the pattern the register issues (for example RERA-GRG-PROJ-1540-2024 from HRERA, or DLRERA2026P0011 from Delhi RERA) and check the project status on the official portal of the register that issued it."
     },
     {
       "name": "Review Project Details",
@@ -368,7 +376,7 @@ export const STEPS = {
     },
     {
       "name": "File a Complaint if Needed",
-      "text": "If you encounter issues with a RERA-registered project, file a complaint on hrera.org.in. Pay the Rs. 1,000 fee, upload supporting documents, and HRERA aims to resolve disputes within 60 days."
+      "text": "If you encounter issues with a RERA-registered project, file a complaint on haryanarera.gov.in. Pay the Rs. 1,000 fee, upload supporting documents, and HRERA aims to resolve disputes within 60 days."
     }
   ],
   "auctions": [

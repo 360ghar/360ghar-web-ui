@@ -1,0 +1,47 @@
+---
+/**
+ * /project/[slug]: a RERA project page.
+ *
+ * The legacy project catalog in `features/projects/catalog.ts` owns eight slugs
+ * that this route would otherwise take over (both `[slug].astro` and the older
+ * `[title].astro` match one segment, and Astro picks `[slug]` first). Those
+ * slugs keep their existing hold page, unchanged.
+ */
+import { getT } from '@/i18n';
+import { cachePage } from '@/lib/cache';
+import { safe, project } from '@/features/projects/api';
+import { projectBySlug } from '@/features/projects/catalog';
+import ProjectDetail from '@/features/projects/ProjectDetail.astro';
+import ProjectHold from '@/features/projects/ProjectHold.astro';
+import DetailState from '@/features/data-hub/DetailState.astro';
+import { settle, stateOf, validSlug } from '@/features/data-hub/route';
+import { text } from '@/features/projects/text';
+
+export const prerender = false;
+
+const locale = Astro.locals.locale;
+const t = getT(locale);
+const slug = Astro.params.slug;
+const legacy = Boolean(slug && projectBySlug(slug));
+const res = !legacy && validSlug(slug) ? await safe(() => project(slug)) : null;
+const state = stateOf(res);
+if (legacy) cachePage(Astro, 'hour');
+else settle(Astro, state, 'day');
+---
+
+{
+  legacy ? (
+    <ProjectHold />
+  ) : res?.data ? (
+    <ProjectDetail locale={locale} project={res.data} />
+  ) : (
+    <DetailState
+      state={state === 'ok' ? 'missing' : state}
+      locale={locale}
+      title={state === 'down' ? t('projects:seo.projectDetail.errorTitle') : t('projects:seo.projectDetail.notFoundTitle')}
+      missingTitle={text(locale).nf.project}
+      missingBody={t('projects:page.project.missing')}
+      back={{ path: '/rera-projects', label: t('site:links.reraProjects') }}
+    />
+  )
+}

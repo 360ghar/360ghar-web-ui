@@ -8,15 +8,16 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parseRange } from '@/features/data-hub/charts';
 import { ALL_LOCALITIES, landmarksFor, localitySlug, resolveLocality } from '@/features/localities/data';
-import { parseBand } from '@/features/landing/model';
-import { INDEX_KEYS, checkLandingTypeContext, checkLandmarks, checkLocalities, checkLocalitiesIndex, checkOfficeLandmarks, checkPriceContext } from '../data/lib/schema.mjs';
+import { displayName, isThinLocalityName } from '@/features/localities/thin';
+import { buildAreaIndex } from '../data/lib/area-index.mjs';
+import { INDEX_KEYS, checkAreaIndex, checkLandingTypeContext, checkLandmarks, checkLocalities, checkLocalitiesIndex, checkOfficeLandmarks, checkPriceContext } from '../data/lib/schema.mjs';
 
 const dir = path.join(process.cwd(), 'src', 'data');
 const read = (name) => JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8'));
 
 describe('src/data files', () => {
   it('covers every json file in the folder', () => {
-    const known = ['landingTypeContext.json', 'localities-index.json', 'localities.json', 'locality-landmarks.json', 'locality-redirects.json', 'office-landmarks.json', 'priceContext.json'];
+    const known = ['area-index.json', 'landingTypeContext.json', 'localities-index.json', 'localities.json', 'locality-landmarks.json', 'locality-redirects.json', 'office-landmarks.json', 'priceContext.json'];
     const files = fs.readdirSync(dir).filter((f) => f.endsWith('.json'));
     // A new data file needs a check in scripts/data/lib/schema.mjs and a line here (locality-redirects.json: locality-redirects.test.mjs).
     expect(files.sort()).toEqual(known);
@@ -30,12 +31,20 @@ describe('src/data files', () => {
     expect(checkLocalitiesIndex(read('localities-index.json'), read('localities.json'))).toEqual([]);
   });
 
+  it('area-index.json is valid and matches its source', () => {
+    expect(checkAreaIndex(read('area-index.json'), read('localities.json'), isThinLocalityName)).toEqual([]);
+  });
+
+  it('area-index.json is up to date with localities.json', () => {
+    expect(buildAreaIndex(read('localities.json'), { isThin: isThinLocalityName, display: displayName })).toEqual(read('area-index.json'));
+  });
+
   it('priceContext.json is valid and every range is readable by the charts', () => {
     expect(checkPriceContext(read('priceContext.json'), parseRange)).toEqual([]);
   });
 
-  it('landingTypeContext.json is valid and every band is readable by the landing page', () => {
-    expect(checkLandingTypeContext(read('landingTypeContext.json'), parseBand)).toEqual([]);
+  it('landingTypeContext.json is valid and carries no withheld price bands', () => {
+    expect(checkLandingTypeContext(read('landingTypeContext.json'))).toEqual([]);
   });
 
   it('the landmark files are valid', () => {

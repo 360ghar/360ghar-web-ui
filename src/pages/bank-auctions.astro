@@ -1,15 +1,9 @@
 ---
-import { settleList } from '@/features/data-hub/route';
-import { auctionOptions, auctionsPage, safe } from '@/features/data-hub/api';
 import AuctionsPage from '@/features/data-hub/AuctionsPage.astro';
-import { AUCTION, readParams } from '@/features/data-hub/params';
 
 export const prerender = false;
 
 const locale = Astro.locals.locale;
-const filters = readParams(Astro.url.searchParams, AUCTION);
-const [page, options] = await Promise.all([safe(() => auctionsPage(filters, null)), auctionOptions()]);
-settleList(Astro, 'hour', page);
 ---
 
-<AuctionsPage locale={locale} filters={filters} page={page.data} error={page.error} banks={options.banks} cities={options.cities} />
+<AuctionsPage locale={locale} />

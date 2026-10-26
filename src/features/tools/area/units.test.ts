@@ -27,6 +27,7 @@ describe('fmtArea', () => {
     expect(fmtArea(107_639)).toBe('1,07,639');
     expect(fmtArea(266.666666)).toBe('266.6667');
     expect(fmtArea(0)).toBe('0');
+    expect(fmtArea(Number.NaN)).toBe('–');
   });
 
   it('keeps small values readable', () => {

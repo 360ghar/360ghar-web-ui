@@ -9,6 +9,11 @@
  * time from fixed seeds, so the output is static SVG and the same on every
  * render. Clouds, kite and train have their own layers, so CSS can move them.
  *
+ * Colours and shadows come from `--color-dio-*` and `--dio-sh-*`, so a hero
+ * variant can repaint the whole street without touching this file. The shadow
+ * values are `rgb()` strings, not bare triples: they go into `flood-color`,
+ * where a plain `var()` is the form every browser resolves.
+ *
  * Coordinate space: 1600 x 960. The street level is y = 800. The road below
  * the kerb gives the phone crop room: the street stays above the search sheet.
  * The chai stall, the auto and the cow sit in the middle third, the part a
@@ -60,7 +65,7 @@ function clouds(): Layer {
     id: 'clouds',
     fill: 'var(--color-dio-cloud)',
     depth: 0.05,
-    shadow: 'rgb(38 78 68 / 0.16)',
+    shadow: 'var(--dio-sh-cloud)',
     cut: [
       // In the gaps between towers: top right by the sun, and the open sky on the left.
       cloud(1430, 250, [[0, 22], [32, 32], [66, 24], [92, 14]]),
@@ -158,7 +163,7 @@ function towers(): Layer {
     // Glass towers get tall, thin window strips.
     cut.push(t.path(outline) + t.grid(x + 10, winTop, cols, rows, 7, 12, 10, 12, 0.35));
   }
-  return { id: 'towers', fill: 'var(--color-dio-tower)', depth: 0.15, shadow: 'rgb(38 78 68 / 0.32)', cut, solid: [] };
+  return { id: 'towers', fill: 'var(--color-dio-tower)', depth: 0.15, shadow: 'var(--dio-sh-tower)', cut, solid: [] };
 }
 
 /* ------------------------------------------------------------------ */
@@ -210,7 +215,7 @@ function blocks(): Layer {
     }
     cut.push(d);
   }
-  return { id: 'blocks', fill: 'var(--color-dio-block)', depth: 0.3, shadow: 'rgb(120 58 34 / 0.34)', cut, solid: [] };
+  return { id: 'blocks', fill: 'var(--color-dio-block)', depth: 0.3, shadow: 'var(--dio-sh-block)', cut, solid: [] };
 }
 
 /* ------------------------------------------------------------------ */
@@ -246,7 +251,7 @@ function metro(): Layer {
       ]),
     );
   }
-  return { id: 'metro', fill: 'var(--color-dio-metro)', depth: 0.5, shadow: 'rgb(84 38 22 / 0.4)', cut, solid: [] };
+  return { id: 'metro', fill: 'var(--color-dio-metro)', depth: 0.5, shadow: 'var(--dio-sh-metro)', cut, solid: [] };
 }
 
 /** The Rapid Metro train: three coaches, the front one with a sloped nose. Its own layer, so it can run. */
@@ -282,7 +287,7 @@ function train(): Layer {
   };
   return {
     id: 'train',
-    fill: 'var(--color-kesar-500)',
+    fill: 'var(--color-dio-train)',
     depth: 0.5,
     shadow: 'rgb(138 51 0 / 0.4)',
     cut: [coach(380, 200, false) + coach(588, 200, false) + coach(796, 214, true)],
@@ -296,8 +301,14 @@ function train(): Layer {
 
 function kite(): Layer {
   const t = makeTools('kite', 0.4);
-  // Left of centre: the centred headline sits over the middle of the sky.
-  const kx = 250;
+  /*
+   * Left of centre, and inside the band a full-screen hero always shows: a
+   * tall frame on this 1600-wide scene crops the sides, and the visible window
+   * runs from about x 570 to x 1030 on a phone. A kite drawn outside that band
+   * is sliced by the frame edge at some widths and missing at others; here it
+   * is whole at every width, and a phone finally sees it.
+   */
+  const kx = 640;
   const ky = 300;
   // Diamond with the spine and the bow cut as thin slits.
   const body =
@@ -324,7 +335,7 @@ function kite(): Layer {
     ]);
   return {
     id: 'kite',
-    fill: 'var(--color-kesar-600)',
+    fill: 'var(--color-dio-kite)',
     depth: 0.2,
     shadow: 'rgb(138 51 0 / 0.3)',
     cut: [body],
@@ -555,7 +566,7 @@ function street(): Layer {
     t.path(dome),
   );
 
-  return { id: 'street', fill: 'var(--color-dio-street)', depth: 0.75, shadow: 'rgb(48 24 14 / 0.45)', cut, solid };
+  return { id: 'street', fill: 'var(--color-dio-street)', depth: 0.75, shadow: 'var(--dio-sh-street)', cut, solid };
 }
 
 /* ------------------------------------------------------------------ */
@@ -611,7 +622,7 @@ function kerb(): Layer {
   // Hedge on the right, and two bollards.
   solid.push(t.blob(1520, k - 6, 110, 34, 22, 0.3));
   solid.push(t.rect(1146, k - 38, 12, 40), t.rect(1196, k - 38, 12, 40));
-  return { id: 'kerb', fill: 'var(--color-dio-kerb)', depth: 1, shadow: 'rgb(24 12 8 / 0.5)', cut, solid };
+  return { id: 'kerb', fill: 'var(--color-dio-kerb)', depth: 1, shadow: 'var(--dio-sh-kerb)', cut, solid };
 }
 
 let cache: Layer[] | undefined;

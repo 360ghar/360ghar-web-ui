@@ -1,22 +1,16 @@
 ---
 /**
- * /ai-agent. Tool names come from the backend MCP server (see ./mcp.ts). The
- * old page listed 8 tools that do not exist and showed unsourced stats
- * (50K+, 10K+, 99%) and invented chat results; those are removed.
+ * /ai-agent lists the MCP tool definitions maintained in ./mcp.ts.
+ * It does not confirm live server availability or property information.
  */
 import { getT } from '@/i18n';
 import Page from '@/layouts/Page.astro';
-import { localizer, byLocale } from '@/lib/i18n/locale';
-import { faqPage, SITE_URL } from '@/lib/seo/site';
+import { byLocale } from '@/lib/i18n/locale';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
-import Faq from '@/ui/Faq.astro';
-import Icon from '@/ui/icons/Icon.astro';
 import Paper from '@/ui/Paper.astro';
 import CopyButton from '@/features/content/shared/CopyButton';
 import { trail } from '@/features/content/shared/schema';
-import Steps from '@/features/content/shared/Steps.astro';
-import { shared } from '@/features/content/shared/text';
-import { MCP_GROUPS, MCP_TOOLS, MCP_URL } from './mcp';
+import { MCP_GROUPS, MCP_URL } from './mcp';
 import TableScroll from '@/features/content/shared/TableScroll.astro';
 import PageArt from '@/features/content/shared/PageArt.astro';
 
@@ -24,96 +18,45 @@ const locale = Astro.locals.locale;
 const t = getT(locale);
 const a = (k: string) => t(`policies:aiAgent.${k}`);
 const hi = locale === 'hi';
-const L = localizer(locale);
 const PATH = '/ai-agent';
-const openCount = MCP_TOOLS.filter((x) => x.open).length;
 
 const H = byLocale(locale, {
   en: {
-    name: 'AI Agent',
-    count: `tools your AI assistant can call. ${openCount} of them work without signing in.`,
+    name: '360Ghar MCP tools',
     copy: 'Copy server URL',
     copied: 'Copied',
-    tool: 'Tool',
-    does: 'What it does',
-    signIn: 'Sign-in',
-    yes: 'Needed',
-    no: 'Not needed',
+    tool: 'Tool name',
+    does: 'Description',
+    signIn: 'Sign-in requirement',
+    yes: 'Required',
+    no: 'Not marked as required',
     groups: { discovery: 'Search and discovery', visits: 'Visits', stays: 'Short-stay bookings', listings: 'Owners: listings', rentals: 'Owners: rent, leases and maintenance', tenant: 'Tenants', system: 'System' },
-    try: 'Things you can ask',
-    setup: 'Read the setup notes',
+    limitations: 'This directory reflects the tool definitions and sign-in notes shown here. It does not confirm live availability or verify property information. Confirm important details with the relevant parties.',
   },
   hi: {
-    name: 'AI एजेंट',
-    count: `टूल जिन्हें आपका AI सहायक चला सकता है। इनमें से ${openCount} बिना साइन-इन काम करते हैं।`,
+    name: '360Ghar MCP टूल',
     copy: 'सर्वर URL कॉपी करें',
     copied: 'कॉपी हो गया',
     tool: 'टूल',
-    does: 'क्या करता है',
-    signIn: 'साइन-इन',
+    does: 'विवरण',
+    signIn: 'साइन-इन आवश्यकता',
     yes: 'ज़रूरी',
-    no: 'ज़रूरी नहीं',
+    no: 'ज़रूरी होना सूची में नहीं दिखाया गया',
     groups: { discovery: 'खोज', visits: 'विज़िट', stays: 'शॉर्ट स्टे बुकिंग', listings: 'मालिक: लिस्टिंग', rentals: 'मालिक: किराया, लीज़ और मेंटेनेंस', tenant: 'किरायेदार', system: 'सिस्टम' },
-    try: 'आप यह कह सकते हैं',
-    setup: 'सेटअप नोट्स पढ़ें',
+    limitations: 'यह सूची यहाँ दिखाए गए टूल विवरण और साइन-इन नोट पर आधारित है। यह लाइव उपलब्धता या प्रॉपर्टी की जानकारी की पुष्टि नहीं करती। ज़रूरी विवरण संबंधित पक्षों से पुष्टि करें।',
   },
 });
 
-// Old AIAgentData.jsx (English only). Examples keep the prompt, not the invented results.
-const steps = [
-  { name: 'Connect your AI', text: 'Add the 360Ghar MCP server to Claude, ChatGPT or any assistant that supports the Model Context Protocol.' },
-  { name: 'Ask naturally', text: 'Type or speak what you need, for example "Find 3BHK rentals near Cyber City under 50k" or "Show me properties with power backup on Sohna Road".' },
-  { name: 'The AI does the rest', text: 'The assistant searches verified listings, filters by your criteria and compares options. Sign in to book visits or manage your rentals in the same conversation.' },
-];
-const examples = [
-  { who: 'Home buyer', say: "I'm looking to buy a 3BHK apartment in the Golf Course Road area, preferably in a gated society with amenities. What options do you have under 2 crores?" },
-  { who: 'Tenant', say: 'Need a single room in a PG near MG Road metro, with WiFi and meals included. Budget around 15k.' },
-  { who: 'Landlord', say: "List all my properties and show me this month's rent collection. Any pending maintenance requests?" },
-];
-const faqs = [
-  { q: "What is 360Ghar's AI Agent?", a: "360Ghar's AI Agent is an assistant powered by our MCP server that helps you find properties, book visits and manage rentals through conversation. Connect it to Claude, ChatGPT or any AI assistant to use 360Ghar services in chat." },
-  { q: 'How do I connect my AI assistant to 360Ghar?', a: `Add ${MCP_URL} as an MCP server (a connector) in your AI assistant. Search tools work without an account. When a tool needs your account, for example to schedule a visit, the assistant asks you to sign in to 360Ghar and approve access. The connection stays until you revoke it.` },
-  { q: 'Is MCP server access free?', a: 'Yes. Connecting your AI assistant through MCP is free for all 360Ghar users. You can search properties and view listings at no cost.' },
-  { q: 'Which AI assistants can connect to 360Ghar?', a: 'Any AI assistant that supports the Model Context Protocol, including Claude and ChatGPT, and custom AI implementations. You can also build your own integrations using our API.' },
-  { q: 'Is my data secure when using AI?', a: 'The assistant reaches your 360Ghar account only after you sign in and approve access. Tools that read or change your account data, such as visits, bookings, rent and leases, need that sign-in.' },
-  { q: 'Can the AI help me with property management?', a: 'Yes. Owners can see a dashboard, check rent status and payment history, record a rent payment, view and end leases, and update maintenance requests. Tenants can check rent dues, their lease and their maintenance requests. Just ask: "Show me this month\'s rent status" or "List all open maintenance requests".' },
-  { q: 'What can I search for using natural language?', a: "Try: '2BHK furnished flat near Cyber City under 30k', '3BHK apartment in DLF Phase 5 with power backup', or 'PG in Sector 22 with WiFi and meals'. The AI understands context and preferences." },
-  { q: 'How accurate are the AI property recommendations?', a: 'Recommendations use your preferences and the listings you like. All property data is verified by our on-site team, so recommendations are based on accurate, current listings.' },
-];
-
 const { crumbs, ld } = trail(locale, [{ name: H.name, path: PATH }]);
-const jsonLd = [
-  {
-    '@type': 'Service',
-    name: 'AI-Powered Real Estate Assistant',
-    description: 'AI assistant that helps find properties, book visits and manage rentals through conversation, through an MCP server.',
-    provider: { '@type': 'Organization', name: '360Ghar', url: SITE_URL },
-    areaServed: 'Gurgaon, Delhi NCR, India',
-    serviceType: 'AI Real Estate Assistant',
-  },
-  {
-    '@type': 'SoftwareApplication',
-    name: '360Ghar MCP Server',
-    description: 'Model Context Protocol server that lets AI assistants such as Claude and ChatGPT use 360Ghar real estate services.',
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web-based',
-    url: MCP_URL,
-    featureList: MCP_TOOLS.map((x) => x.name).join(', '),
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-    provider: { '@type': 'Organization', name: '360Ghar' },
-  },
-  faqPage(faqs),
-  ld,
-];
 ---
 
-<Page title={t('seo:aiAgent.title')} description={t('seo:aiAgent.description')} path={PATH} jsonLd={jsonLd}>
+<Page title={t('seo:aiAgent.title')} description={t('seo:aiAgent.description')} path={PATH} jsonLd={[ld]}>
   <div class="container-page agent">
     <Breadcrumbs items={crumbs} />
     <div class="agent-top">
       <header class="agent-head">
         <h1 class="agent-h1">{a('heroTitle')} {a('heroTitleGradient')}</h1>
-        <p class="agent-lead">{a('heroDesc').replace(/\s*—\s*/g, ': ')}</p>
+        <p class="agent-lead">{a('heroDesc')}</p>
         <PageArt scene="chat" seed="ai-agent" />
       </header>
 
@@ -124,25 +67,10 @@ const jsonLd = [
           <p class="agent-server-body">{a('mcpInfoText')}</p>
           <div class="agent-server-actions">
             <CopyButton client:load locale={locale} text={MCP_URL} label={H.copy} done={H.copied} primary />
-            <a class="agent-server-link" href={L('/for-ai')}>
-              {H.setup}
-              <Icon name="arrow-up-right" size={16} class="arrow" />
-            </a>
           </div>
         </Paper>
       </div>
     </div>
-
-    <div class="agent-count">
-      <p class="agent-count-num tabular" aria-hidden="true">{MCP_TOOLS.length}</p>
-      <p class="agent-count-text"><span class="visually-hidden">{MCP_TOOLS.length} </span>{H.count}</p>
-    </div>
-
-    <section class="agent-block" aria-labelledby="agent-how">
-      <h2 id="agent-how" class="agent-h2">{a('howTitle')}</h2>
-      <p class="agent-sub">{a('howDesc')}</p>
-      <div lang={hi ? 'en' : undefined}><Steps items={steps} cols={3} /></div>
-    </section>
 
     <section class="agent-block" aria-labelledby="agent-tools">
       <h2 id="agent-tools" class="agent-h2">{a('toolsAvailableTitle')}</h2>
@@ -178,25 +106,7 @@ const jsonLd = [
           </div>
         ))
       }
-    </section>
-
-    <section class="agent-block" aria-labelledby="agent-try">
-      <h2 id="agent-try" class="agent-h2">{H.try}</h2>
-      <ul class="agent-examples" role="list" lang={hi ? 'en' : undefined}>
-        {
-          examples.map((e) => (
-            <li>
-              <p class="agent-who">{e.who}</p>
-              <p class="chat-user agent-say">{e.say}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <section class="agent-block" aria-labelledby="agent-faq">
-      <h2 id="agent-faq" class="agent-h2">{shared(locale).faqs}</h2>
-      <div lang={hi ? 'en' : undefined}><Faq items={faqs} /></div>
+      <p class="agent-note">{H.limitations}</p>
     </section>
   </div>
 </Page>
@@ -269,45 +179,6 @@ const jsonLd = [
     align-items: center;
     gap: 0.75rem 1.25rem;
     margin-top: 0.25rem;
-  }
-
-  .agent-server-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    min-height: 44px;
-    font-weight: 700;
-    color: var(--color-kesar-100);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  .agent-server-link:hover {
-    color: var(--color-paper);
-  }
-
-  .agent-count {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.5rem 1.25rem;
-    align-items: end;
-    margin-top: clamp(3rem, 7vw, 5rem);
-  }
-
-  .agent-count-num {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(5rem, 3rem + 9vw, 9rem);
-    line-height: 0.85;
-    color: var(--color-kesar-600);
-  }
-
-  .agent-count-text {
-    max-width: 28ch;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.25rem, 1rem + 1.2vw, 2rem);
-    line-height: 1.15;
   }
 
   .agent-block {
@@ -384,29 +255,9 @@ const jsonLd = [
     font-weight: 700;
   }
 
-  .agent-examples {
-    display: grid;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-  }
-
-  @media (min-width: 64rem) {
-    .agent-examples {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .agent-examples li {
-    display: grid;
-    gap: 0.5rem;
-    align-content: start;
-  }
-
-  .agent-who {
-    font-weight: 800;
-  }
-
-  .agent-say {
-    justify-self: start;
+  .agent-note {
+    max-width: 72ch;
+    margin-top: 2rem;
+    color: var(--color-ink-600);
   }
 </style>

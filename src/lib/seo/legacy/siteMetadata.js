@@ -3,21 +3,19 @@ export const siteMetadata = {
   siteUrl: 'https://360ghar.com',
   siteName: '360Ghar',
   defaultTitle:
-    "360Ghar – VR Home Tours & Property in Gurugram",
+    'Property Search and Real-Estate Tools | 360Ghar',
   // Keep under ~155 chars for SERP display; SEO.jsx is the per-page source of truth.
   defaultDescription:
-    "Explore verified properties in Gurugram with immersive virtual tours. 360Ghar is India's AI + VR real estate platform. Zero fees. No fake listings.",
+    'Search property listings and use real-estate tools. Availability and details vary by market and page.',
   defaultKeywords: [
     '360Ghar',
     'Gurugram real estate',
-    'verified properties',
-    '360 virtual tours',
-    'AI property search',
+    'property listings',
+    'real-estate tools',
+    'property search',
     'property in Gurugram',
     'flat for rent Gurgaon',
     'flat for sale Gurgaon',
-    'verified flats Gurugram',
-    'no broker property Gurgaon',
     'मकान खरीदें गुड़गाँव',
     'किराये पर मकान गुड़गाँव',
     'गुड़गाँव प्रॉपर्टी',
@@ -25,8 +23,6 @@ export const siteMetadata = {
     'property in gurgaon',
     'flat rent gurugram',
     'real estate gurgaon',
-    '360 degree virtual tour property',
-    'VR property tour India',
   ].join(', '),
   defaultOgImage: 'https://360ghar.com/og-image-home.jpg', // updated based on the required schema
   twitterCard: 'summary_large_image',

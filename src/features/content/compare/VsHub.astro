@@ -1,52 +1,42 @@
 ---
-/** /vs (new hub). Lists the 10 comparisons and the 5 truth pages. /truth redirects here (lib/redirects.ts). */
 import { getT } from '@/i18n';
 import Content from '@/layouts/Content.astro';
-import { localizer, byLocale } from '@/lib/i18n/locale';
+import { localizer } from '@/lib/i18n/locale';
 import { canonicalFor } from '@/lib/seo/site';
-import Icon from '@/ui/icons/Icon.astro';
 import { trail, webPage } from '@/features/content/shared/schema';
 import { COMPETITORS } from './competitors';
-import { TRUTH_PAGES } from './truth';
 import PageArt from '@/features/content/shared/PageArt.astro';
 
 const locale = Astro.locals.locale;
 const t = getT(locale);
-const hi = locale === 'hi';
 const L = localizer(locale);
 const PATH = '/vs';
 const vs = t('compare:hero.vs');
+const profiles = COMPETITORS.filter((competitor) => !competitor.noindex);
 
-const H = byLocale(locale, {
-  en: {
-    title: '360Ghar vs Other Property Platforms | Comparisons | 360Ghar',
-    description: 'Feature-by-feature comparisons of 360Ghar with NoBroker, MagicBricks, 99acres, Housing.com and others, plus balanced reviews of the issues users report.',
-    h1: '360Ghar vs other platforms',
-    lead: 'Feature-by-feature comparisons with 10 property platforms, and balanced reviews of the issues users report on 5 of them.',
-    compare: 'Comparisons',
-    truth: 'Balanced reviews',
-  },
-  hi: {
-    title: '360Ghar बनाम दूसरे प्रॉपर्टी प्लेटफ़ॉर्म | तुलना | 360Ghar',
-    description: 'NoBroker, MagicBricks, 99acres, Housing.com और दूसरे प्लेटफ़ॉर्म से 360Ghar की फीचर-दर-फीचर तुलना, और उपयोगकर्ताओं की बताई समस्याओं पर संतुलित समीक्षाएँ।',
-    h1: '360Ghar बनाम दूसरे प्लेटफ़ॉर्म',
-    lead: '10 प्रॉपर्टी प्लेटफ़ॉर्म से फीचर-दर-फीचर तुलना, और 5 प्लेटफ़ॉर्म पर उपयोगकर्ताओं की बताई समस्याओं की समीक्षा। तुलना की जानकारी अंग्रेज़ी में है।',
-    compare: 'तुलनाएँ',
-    truth: 'संतुलित समीक्षाएँ',
-  },
-});
+const k = (key: string) => t(`compare:${key}`);
+const H = {
+  title: k('hub.title'),
+  description: k('hub.description'),
+  h1: k('hub.h1'),
+  lead: k('hub.lead'),
+  profiles: k('hub.profiles'),
+  profileWord: k('hub.profile'),
+  serviceProfilePrefix: k('hub.serviceProfilePrefix'),
+};
+const categoryLabel = (category: string) => k(`categories.${category}`);
 
-const { crumbs, ld } = trail(locale, [{ name: t('compare:breadcrumb.compare'), path: PATH }]);
+const { crumbs, ld } = trail(locale, [{ name: k('breadcrumb.compare'), path: PATH }]);
 const jsonLd = [
   {
     ...webPage({ name: H.title, description: H.description, path: PATH, locale, type: 'CollectionPage' }),
     mainEntity: {
       '@type': 'ItemList',
-      itemListElement: [...COMPETITORS.map((c) => ({ name: `360Ghar vs ${c.name}`, path: `/vs/${c.slug}` })), ...TRUTH_PAGES.map((p) => ({ name: p.title, path: `/truth/${p.slug}` }))].map((x, i) => ({
+      itemListElement: profiles.map((competitor, index) => ({
         '@type': 'ListItem',
-        position: i + 1,
-        name: x.name,
-        url: canonicalFor(x.path, locale),
+        position: index + 1,
+        name: `${competitor.name} profile`,
+        url: canonicalFor(`/vs/${competitor.slug}`, locale),
       })),
     },
   },
@@ -57,37 +47,22 @@ const jsonLd = [
 <Content title={H.title} description={H.description} path={PATH} heading={H.h1} lead={H.lead} crumbs={crumbs} wide jsonLd={jsonLd}>
   <PageArt slot="head" scene="scale" />
   <section aria-labelledby="vs-compare">
-    <h2 id="vs-compare">{H.compare}</h2>
+    <h2 id="vs-compare">{H.profiles}</h2>
     <ul class="hub-vs" role="list">
       {
-        COMPETITORS.map((c) => (
+        profiles.map((competitor) => (
           <li>
-            <a href={L(`/vs/${c.slug}`)}>
-              <span class="hub-vs-word" aria-hidden="true">{vs}</span>
+            <a href={L(`/vs/${competitor.slug}`)}>
+              <span class="hub-vs-word" aria-hidden="true">
+                {competitor.category === 'property-marketplace' ? vs : H.profileWord}
+              </span>
               <span class="hub-vs-name">
-                <span class="visually-hidden">360Ghar {vs} </span>
-                {c.name}
+                <span class="visually-hidden">
+                  {competitor.category === 'property-marketplace' ? `360Ghar ${vs} ` : H.serviceProfilePrefix}
+                </span>
+                {competitor.name}
               </span>
-              <span class="hub-vs-tag" lang={hi ? 'en' : undefined}>{c.tagline}</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-
-  <section aria-labelledby="vs-truth" class="hub-truth-block">
-    <h2 id="vs-truth">{H.truth}</h2>
-    <ul class="hub-truth" role="list" lang={hi ? 'en' : undefined}>
-      {
-        TRUTH_PAGES.map((p) => (
-          <li>
-            <a href={L(`/truth/${p.slug}`)}>
-              <span class="hub-truth-title">
-                {p.title}
-                <Icon name="arrow-up-right" size={18} class="arrow" />
-              </span>
-              <span class="hub-truth-intro">{p.intro}</span>
+              <span class="hub-vs-tag">{categoryLabel(competitor.category)}</span>
             </a>
           </li>
         ))
@@ -147,64 +122,5 @@ const jsonLd = [
     margin-top: 0.25rem;
     font-size: 0.875rem;
     color: var(--color-ink-600);
-  }
-
-  .hub-truth-block {
-    margin-top: 1rem;
-  }
-
-  ul.hub-truth {
-    display: grid;
-    gap: 0 2.5rem;
-    padding: 0;
-    list-style: none;
-  }
-
-  @media (min-width: 56rem) {
-    ul.hub-truth {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  .hub-truth > li {
-    max-width: none;
-    margin: 0;
-  }
-
-  .hub-truth a {
-    display: grid;
-    gap: 0.375rem;
-    padding: 1rem 0 1.25rem;
-    border-top: 1px solid var(--color-ink-200);
-    color: inherit;
-    font-weight: 400;
-    text-decoration: none;
-  }
-
-  .hub-truth-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    font-weight: 800;
-    font-size: 1.125rem;
-  }
-
-  .hub-truth a:hover .hub-truth-title {
-    color: var(--color-kesar-700);
-  }
-
-  .hub-truth-title :global(.arrow) {
-    flex: none;
-    color: var(--color-kesar-700);
-    transition: translate 160ms var(--ease-paper);
-  }
-
-  .hub-truth a:hover :global(.arrow) {
-    translate: 2px -2px;
-  }
-
-  .hub-truth-intro {
-    color: var(--color-ink-800);
   }
 </style>

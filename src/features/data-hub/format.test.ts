@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { countdownText, daysUntil, duty, dutyBase, exactSector, farArea, fmtDate, parseAmount, scoreBand, todayIst } from './format';
+import { countdownText, daysUntil, exactSector, farArea, fmtDate, parseAmount, scoreBand, todayIst } from './format';
 import { AUCTION, CIRCLE, GAZETTE, readParams, writeParams } from './params';
 
 describe('exactSector', () => {
@@ -36,24 +36,6 @@ describe('dates in IST', () => {
     expect(countdownText(1, 'en')).toBe('1 day to go');
     expect(countdownText(12, 'hi')).toBe('12 दिन बाकी');
     expect(countdownText(null, 'en')).toBeNull();
-  });
-});
-
-describe('stamp duty base', () => {
-  it('uses the deal value when no circle value is given', () => {
-    expect(dutyBase(8_500_000)).toEqual({ value: 8_500_000, byCircle: false, circleValue: null });
-  });
-
-  it('uses the circle-rate value when it is higher', () => {
-    expect(dutyBase(5_000_000, 100, 60_000)).toEqual({ value: 6_000_000, byCircle: true, circleValue: 6_000_000 });
-  });
-
-  it('keeps the deal value when it is higher', () => {
-    expect(dutyBase(9_000_000, 100, 60_000)).toEqual({ value: 9_000_000, byCircle: false, circleValue: 6_000_000 });
-  });
-
-  it('rounds duty to whole rupees', () => {
-    expect(duty(8_500_001, 7)).toBe(595_000);
   });
 });
 

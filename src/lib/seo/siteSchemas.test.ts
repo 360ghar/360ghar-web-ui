@@ -48,9 +48,11 @@ describe('siteBlocks', () => {
     const [ghar, flat] = [blocks[4]!, flatmatesApplicationBlock()];
     // 360Ghar is not on the App Store yet: Play only, Android only.
     expect(APPS.ghar360.ios).toBeNull();
-    expect(ghar).toMatchObject({ operatingSystem: 'Android', downloadUrl: APPS.ghar360.play, offers: { price: '0' } });
+    expect(ghar).toMatchObject({ operatingSystem: 'Android', downloadUrl: APPS.ghar360.play });
+    expect(ghar).not.toHaveProperty('offers');
     expect(JSON.stringify(ghar)).not.toContain('apps.apple.com');
     expect(flat).toMatchObject({ operatingSystem: 'Android, iOS', downloadUrl: [APPS.flatmates.play, APPS.flatmates.ios], applicationCategory: 'LifestyleApplication' });
+    expect(flat).not.toHaveProperty('offers');
     expect(validateBlocks([withContext(flat)], 'flatmates').errors).toEqual([]);
   });
 

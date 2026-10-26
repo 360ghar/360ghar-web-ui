@@ -313,15 +313,19 @@ test('acre in gaj: convert, swap, reset', async ({ page }) => {
   await w.check();
 });
 
-test('mofa to rera: direction, uplift, area, reset', async ({ page }) => {
+test('mofa to rera: no default assumption, direction, assumption, area, reset', async ({ page }) => {
   const w = await open(page, '/mofa-to-rera-converter');
   const result = page.getByTestId('mofa-result');
+  // No assumption is built in: the result waits for the visitor's own percentage.
+  await expect(result).toHaveText('Enter an assumption to see an illustrative result.');
+  const pct = page.getByRole('spinbutton', { name: 'Your assumed difference (%)' });
+  await pct.fill('6');
   await expect(result).toHaveText('1,060sq ft');
   await page.getByRole('radio', { name: 'RERA to MOFA' }).click();
   await expect(page.getByRole('radio', { name: 'RERA to MOFA' })).toHaveAttribute('aria-checked', 'true');
   await expect(result).toHaveText('943sq ft');
   await page.getByRole('radio', { name: 'MOFA to RERA' }).click();
-  await page.getByRole('slider', { name: 'RERA is larger by' }).fill('8');
+  await pct.fill('8');
   await expect(result).toHaveText('1,080sq ft');
   const area = page.getByRole('textbox', { name: 'MOFA carpet area' });
   await area.click();
@@ -331,7 +335,7 @@ test('mofa to rera: direction, uplift, area, reset', async ({ page }) => {
   await expect(page.getByText('+160 sq ft')).toBeVisible();
   await expect(page).toHaveURL(/pct=8/);
   await copyAndReset(page);
-  await expect(result).toHaveText('1,060sq ft');
+  await expect(result).toHaveText('Enter an assumption to see an illustrative result.');
   await axe(page);
   await w.check();
 });
@@ -370,7 +374,7 @@ test('area tools: Hindi pages render and convert', async ({ page }) => {
 
 // ---------- Loans, tax and rent ----------
 
-test('loan eligibility: inputs, URL restore, zero case, bank table, share, reset', async ({ page, context }) => {
+test('loan eligibility: inputs, URL restore, zero case, share, reset', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {});
   const w = await open(page, '/loan-eligibility-calculator');
   const value = page.getByTestId('loan-value');
@@ -379,7 +383,7 @@ test('loan eligibility: inputs, URL restore, zero case, bank table, share, reset
   const income = page.getByRole('textbox', { name: 'Net monthly income' });
   await typeNumber(income, '100000');
   await expect(value).not.toHaveText('₹23,04,617');
-  await expect(page.getByText('55%').first()).toBeVisible();
+  await expect(page.getByText('50%').first()).toBeVisible();
   await page.getByRole('slider', { name: 'Loan tenure' }).fill('30');
   await page.getByRole('slider', { name: 'Interest rate (per year)' }).fill('9');
   const changed = await value.textContent();
@@ -391,11 +395,10 @@ test('loan eligibility: inputs, URL restore, zero case, bank table, share, reset
   await expect(value).toHaveText(changed!);
   await expect(page.getByRole('slider', { name: 'Loan tenure' })).toHaveValue('30');
   await expect(income).toHaveValue('1,00,000');
-  await expect(page.getByRole('table').locator('tbody tr')).toHaveCount(5);
 
   await page.getByRole('slider', { name: 'EMIs you already pay' }).fill('100000');
   await expect(value).toHaveText('₹0');
-  await expect(page.getByText(/already use the part of your income/)).toBeVisible();
+  await expect(page.getByText('This scenario leaves no monthly amount for another EMI.')).toBeVisible();
 
   await page.getByRole('button', { name: 'Copy link' }).click();
   await expect(page.getByText(/Link copied|Could not copy/)).toBeVisible();
@@ -407,59 +410,31 @@ test('loan eligibility: inputs, URL restore, zero case, bank table, share, reset
   await w.check();
 });
 
-test('capital gains: both rules, dates, short term, exemptions, CII, share, reset', async ({ page, context }) => {
+test('capital gains: pre-tax gain worksheet, URL restore, share, reset', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {});
   const w = await open(page, '/capital-gains-tax-calculator');
   const value = page.getByTestId('cg-value');
-  await expect(value).toHaveText('₹3,68,750');
-  await expect(page.getByTestId('cg-plain')).toHaveText('₹3,68,750');
-  await expect(page.getByTestId('cg-indexed')).toHaveText('₹3,97,874');
-  await expect(page.getByText(/pays the lower of the two\. Here that is 12\.5% without indexation/)).toBeVisible();
-
-  // Exemptions reduce the tax.
-  const bonds = page.getByRole('textbox', { name: 'Section 54EC: capital gain bonds' });
-  await typeNumber(bonds, '1000000');
-  await expect(value).toHaveText('₹1,97,874');
-  await expect(page.getByText(/Here that is 20% with indexation/)).toBeVisible();
-  await expect(page.getByText('Tax saved by exemptions')).toBeVisible();
-  await page.getByRole('radio', { name: 'Land, a plot or a shop' }).click();
-  await expect(page.getByText('Section 54F: money put into a new house')).toBeVisible();
-  await page.getByRole('radio', { name: 'A house or flat' }).click();
-
-  // Sold before 23 July 2024: only 20% with indexation.
-  await page.getByLabel('Date of sale').fill('2024-06-01');
-  await expect(page.getByText('You sold before 23 July 2024, so 20% with indexation applies.')).toBeVisible();
-  await expect(page.getByTestId('cg-plain')).toHaveText('–');
-
-  // Held 24 months or less: slab rate.
-  await page.getByLabel('Date of purchase').fill('2023-06-01');
-  await expect(page.getByTestId('cg-value').locator('..').getByText(/gain is short term/)).toBeVisible();
-  await page.getByRole('combobox', { name: 'Your income tax slab' }).selectOption('20');
-  await expect(value).toHaveText('₹5,90,000');
-
-  // Sale before purchase.
-  await page.getByLabel('Date of purchase').fill('2025-01-01');
-  await expect(page.getByText('The sale date must be after the purchase date.').first()).toBeVisible();
-
-  // A sale year without a CII yet asks for it.
-  await page.getByLabel('Date of purchase').fill('2015-06-01');
-  await page.getByLabel('Date of sale').fill('2026-08-01');
-  await expect(page.getByRole('textbox', { name: 'Cost Inflation Index for FY 2026-27' })).toBeVisible();
+  // Sale 50,00,000 minus purchase 20,00,000 minus expenses 50,000. No tax rate is applied.
+  await expect(value).toHaveText('₹29,50,000');
+  await typeNumber(page.getByRole('textbox', { name: 'Sale price' }), '6000000');
+  await expect(value).toHaveText('₹39,50,000');
+  await expect(page).toHaveURL(/sale=6000000/);
+  await page.reload();
+  await hydrated(page);
+  await expect(value).toHaveText('₹39,50,000');
 
   await page.getByRole('button', { name: 'Copy link' }).click();
   await expect(page.getByText(/Link copied|Could not copy/)).toBeVisible();
   await page.getByRole('button', { name: 'Reset' }).click();
-  await expect(value).toHaveText('₹3,68,750');
+  await expect(value).toHaveText('₹29,50,000');
 
   await axe(page);
   await w.check();
 });
 
-test('capital gains: old financial-year links still work', async ({ page }) => {
+test('capital gains: old links with tax fields still load', async ({ page }) => {
   const w = await open(page, '/capital-gains-tax-calculator?sale=12000000&purchase=3000000&expenses=0&py=2010-2011&sy=2024-2025&slab=30');
-  await expect(page.getByTestId('cg-value')).toHaveText('₹10,95,808');
-  await expect(page).not.toHaveURL(/py=/);
-  await expect(page.getByLabel('Date of purchase')).toHaveValue('2010-04-01');
+  await expect(page.getByTestId('cg-value')).toHaveText('₹90,00,000');
   await w.check();
 });
 

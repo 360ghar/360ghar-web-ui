@@ -1,0 +1,29 @@
+---
+import type { Locale } from '@/lib/i18n/locale';
+import DataHubPage from './DataHubPage.astro';
+
+type Copy = {
+  title: string;
+  description: string;
+  heading: string;
+  crumb: string;
+  lead: string;
+  notice: string;
+};
+
+type Props = { locale: Locale; path: string; en: Copy; hi: Copy };
+const { locale, path, en, hi } = Astro.props;
+const copy = locale === 'hi' ? hi : en;
+---
+
+<DataHubPage
+  title={copy.title}
+  description={copy.description}
+  path={path}
+  noindex
+  heading={copy.heading}
+  lead={copy.lead}
+  crumbs={[{ name: copy.crumb, path }]}
+>
+  <p>{copy.notice}</p>
+</DataHubPage>

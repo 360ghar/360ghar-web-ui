@@ -8,7 +8,7 @@ import { useIsClient } from '@/ui/react/useClient';
 import { fyLabel } from '../capital-gains/math';
 import { inr, ScrollArea, ToolShell } from '../ui';
 import { RR_UI } from './content';
-import { batch, formatDate, fyStart, monthPeriod, MODES, PAN_RE, panRequired, receiptBase, rupeesInWords, stampRequired, todayIso, type Mode } from './receipt';
+import { batch, formatDate, fyStart, monthPeriod, MODES, PAN_RE, receiptBase, rupeesInWords, todayIso, type Mode } from './receipt';
 import './rent-receipt.css';
 
 type Form = { landlord: string; pan: string; tenant: string; address: string; rent: string; from: string; to: string; mode: Mode; ref: string; date: string };
@@ -31,68 +31,66 @@ function fresh(): Form {
   return { ...EMPTY, from: p.start, to: p.end, date: todayIso(now) };
 }
 
-type Receipt = Omit<Form, 'rent'> & { rent: number; number: string; sig: string; stamp: boolean };
+type Receipt = Omit<Form, 'rent'> & { rent: number; number: string; sig: string };
 
-const MODE_EN: Record<Mode, string> = { upi: 'UPI', bank_transfer: 'Bank transfer', cheque: 'Cheque', cash: 'Cash' };
 const BLANK = '________________';
 
-/** The receipt as printed. English, like the old site, because employers ask for it. */
-function PaperView({ r }: { r: Receipt }) {
-  const words = rupeesInWords(r.rent);
+function PaperView({ r, locale }: { r: Receipt; locale: Locale }) {
+  const t = RR_UI[locale];
+  const words = locale === 'en' ? rupeesInWords(r.rent) : '';
   return (
-    <article className="rr-paper" lang="en" aria-label={`Rent receipt ${r.number}`}>
+    <article className="rr-paper" lang={locale} aria-label={`${t.receiptAria} ${r.number}`}>
       <header className="rr-head">
-        <h3 className="rr-title">Rent receipt</h3>
+        <h3 className="rr-title">{t.paperTitle}</h3>
         <p className="rr-meta">
           <span>
-            Receipt no. <strong>{r.number || '…'}</strong>
+            {t.receiptNoLabel} <strong>{r.number || '…'}</strong>
           </span>
           <span>
-            Date <strong>{formatDate(r.date) || BLANK}</strong>
+            {t.dateLabel} <strong>{formatDate(r.date, locale) || BLANK}</strong>
           </span>
         </p>
       </header>
-      <p className="rr-body">
-        Received a sum of <strong>{r.rent > 0 ? inr(r.rent) : '₹______'}</strong>
-        {words ? ` (${words})` : ''} from <strong>{r.tenant || BLANK}</strong> towards the rent of the property at{' '}
-        <strong>{r.address || BLANK}</strong> for the period from <strong>{formatDate(r.from) || BLANK}</strong> to{' '}
-        <strong>{formatDate(r.to) || BLANK}</strong>.
-      </p>
+      {locale === 'hi' ? (
+        <p className="rr-body">
+          {t.received} <strong>{r.rent > 0 ? inr(r.rent, locale) : '₹______'}</strong>। {t.fromLabel}: <strong>{r.tenant || BLANK}</strong>। {t.propertyLabel}: <strong>{r.address || BLANK}</strong>। {t.periodLabel}:{' '}
+          <strong>{formatDate(r.from, locale) || BLANK}</strong> {t.periodFrom} <strong>{formatDate(r.to, locale) || BLANK}</strong> {t.periodTo}।
+        </p>
+      ) : (
+        <p className="rr-body">
+          {t.received} <strong>{r.rent > 0 ? inr(r.rent, locale) : '₹______'}</strong>
+          {words ? ` (${words})` : ''} {t.fromLabel} <strong>{r.tenant || BLANK}</strong> {t.propertyLabel}{' '}
+          <strong>{r.address || BLANK}</strong> {t.periodLabel} {t.periodFrom} <strong>{formatDate(r.from, locale) || BLANK}</strong> {t.periodTo}{' '}
+          <strong>{formatDate(r.to, locale) || BLANK}</strong>.
+        </p>
+      )}
       <dl className="rr-lines">
         <div>
-          <dt>Mode of payment</dt>
-          <dd>{MODE_EN[r.mode]}</dd>
+          <dt>{t.modeLabel}</dt>
+          <dd>{t.modes[r.mode]}</dd>
         </div>
         {r.ref && r.mode !== 'cash' ? (
           <div>
-            <dt>{r.mode === 'cheque' ? 'Cheque no.' : 'Transaction ref.'}</dt>
+            <dt>{r.mode === 'cheque' ? t.chequeNoLabel : t.transactionRefLabel}</dt>
             <dd>{r.ref}</dd>
           </div>
         ) : null}
         <div>
-          <dt>Landlord</dt>
+          <dt>{t.landlordLabel}</dt>
           <dd>{r.landlord || BLANK}</dd>
         </div>
         {r.pan ? (
           <div>
-            <dt>Landlord PAN</dt>
+            <dt>{t.panLabel}</dt>
             <dd>{r.pan}</dd>
           </div>
         ) : null}
       </dl>
       <footer className="rr-foot">
-        {r.stamp ? (
-          <div className="rr-stamp">
-            Revenue stamp
-            <strong>₹1</strong>
-          </div>
-        ) : (
-          <span />
-        )}
         <div className="rr-sign">
           {r.sig ? <img src={r.sig} alt="Landlord signature" className="rr-sign-img" /> : null}
           <span className="rr-sign-line" />
-          Landlord signature
+          {t.signatureLabel}
         </div>
       </footer>
     </article>
@@ -100,7 +98,7 @@ function PaperView({ r }: { r: Receipt }) {
 }
 
 // r is rebuilt on every keystroke: compare its fields, so a paper only draws when its own text changes.
-const Paper = memo(PaperView, (a, b) => (Object.keys(a.r) as (keyof Receipt)[]).every((k) => a.r[k] === b.r[k]));
+const Paper = memo(PaperView, (a, b) => a.locale === b.locale && (Object.keys(a.r) as (keyof Receipt)[]).every((k) => a.r[k] === b.r[k]));
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -133,18 +131,17 @@ function RentReceiptForm({ locale }: { locale: Locale }) {
 
   const set = (patch: Partial<Form>) => setF((v) => ({ ...v, ...patch }));
   const rent = Number(f.rent) || 0;
-  const stamp = stampRequired(f.mode, rent);
   const errors = {
     landlord: f.landlord.trim() ? '' : t.required,
     tenant: f.tenant.trim() ? '' : t.required,
     address: f.address.trim() ? '' : t.required,
     rent: rent > 0 ? '' : t.rentRequired,
     to: !yearMode && f.from && f.to && f.to < f.from ? t.periodError : '',
-    pan: f.pan && !PAN_RE.test(f.pan) ? t.panInvalid : panRequired(rent) && !f.pan ? t.panNeeded : '',
+    pan: f.pan && !PAN_RE.test(f.pan) ? t.panInvalid : '',
   };
-  const show = (k: keyof typeof errors) => (tried || k === 'to' || (k === 'pan' && (errors.pan === t.panNeeded || f.pan.length >= 10)) ? errors[k] || undefined : undefined);
+  const show = (k: keyof typeof errors) => (tried || k === 'to' || (k === 'pan' && f.pan.length >= 10) ? errors[k] || undefined : undefined);
 
-  const common = { ...f, rent, sig, stamp };
+  const common = { ...f, rent, sig };
   const receipts: Receipt[] = yearMode
     ? batch(number, fy).map((b) => ({ ...common, number: b.number, from: b.start, to: b.end, date: b.date }))
     : [{ ...common, number }];
@@ -177,7 +174,7 @@ function RentReceiptForm({ locale }: { locale: Locale }) {
             <TextField label={t.landlordName} placeholder={t.landlordPh} autoComplete="off" value={f.landlord} error={show('landlord')} onChange={(e) => set({ landlord: e.target.value })} />
             <TextField
               label={t.pan}
-              optional={panRequired(rent) ? undefined : t.optional}
+              optional={t.optional}
               placeholder="ABCDE1234F"
               autoComplete="off"
               autoCapitalize="characters"
@@ -240,12 +237,6 @@ function RentReceiptForm({ locale }: { locale: Locale }) {
                 </option>
               ))}
             </SelectField>
-            {stamp ? (
-              <p className="rr-notice">
-                <Icon name="alert" size={18} />
-                {t.stampNote}
-              </p>
-            ) : null}
             {f.mode === 'cash' ? null : (
               <TextField
                 label={f.mode === 'cheque' ? t.chequeNo : t.txnRef}
@@ -290,12 +281,12 @@ function RentReceiptForm({ locale }: { locale: Locale }) {
               <ScrollArea label={t.previewYear(fyLabel(fy))} tall>
                 <div className="rr-batch">
                   {receipts.map((r) => (
-                    <Paper key={r.number} r={r} />
+                    <Paper key={r.number} r={r} locale={locale} />
                   ))}
                 </div>
               </ScrollArea>
             ) : (
-              <Paper r={receipts[0]!} />
+              <Paper r={receipts[0]!} locale={locale} />
             )}
             <div className="tool-actions">
               <button type="button" className="btn btn-primary" onClick={print}>
@@ -334,7 +325,7 @@ function RentReceiptForm({ locale }: { locale: Locale }) {
         ? createPortal(
             <div className="rr-print" aria-hidden="true">
               {receipts.map((r) => (
-                <Paper key={r.number} r={r} />
+                <Paper key={r.number} r={r} locale={locale} />
               ))}
             </div>,
             document.body,

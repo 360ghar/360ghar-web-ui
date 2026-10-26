@@ -249,22 +249,49 @@ function Results(props: SearchResultsProps) {
             name="q"
             label={t.searchLabel}
             placeholder={t.search}
-            defaultValue={filters.place ?? filters.q ?? ''}
+            locale={locale}
+            areas
+            defaultValue={filters.place ?? filters.q ?? filters.locality ?? ''}
             className="results-where"
             onPlace={(p) => {
-              if (p) window.clearTimeout(textTimer.current);
-              if (p) setFilters({ ...filters, q: undefined, lat: p.lat, lng: p.lng, radius: filters.radius ?? 10, place: p.name, sort_by: 'distance' });
+              if (!p) return;
+              window.clearTimeout(textTimer.current);
+              // A place replaces the old area: its locality must not keep constraining results.
+              const next: Filters = { ...filters, q: undefined, lat: p.lat, lng: p.lng, radius: filters.radius ?? 10, place: p.name, sort_by: 'distance' };
+              delete next.locality;
+              setFilters(next);
+            }}
+            onArea={(area) => {
+              if (!area) return;
+              window.clearTimeout(textTimer.current);
+              // A local pick applies at once: no 450 ms wait and no stale constraints.
+              const next: Filters = { ...filters };
+              delete next.q;
+              delete next.locality;
+              delete next.lat;
+              delete next.lng;
+              delete next.radius;
+              delete next.place;
+              if (next.sort_by === 'distance') delete next.sort_by;
+              if (area.filter === 'locality') {
+                next.locality = area.name;
+                // "Best match" has no keyword to rank once the area replaces it.
+                if (next.sort_by === 'relevance') delete next.sort_by;
+              } else next.q = area.name;
+              setFilters(next);
             }}
             onText={(text) => {
               window.clearTimeout(textTimer.current);
               textTimer.current = window.setTimeout(() => {
                 // New text replaces the picked place: the old area must not keep constraining results.
                 const next = { ...filters, q: text.trim() || undefined };
+                delete next.locality;
                 delete next.lat;
                 delete next.lng;
                 delete next.radius;
                 delete next.place;
                 if (next.sort_by === 'distance') delete next.sort_by;
+                if (!next.q && next.sort_by === 'relevance') delete next.sort_by;
                 setFilters(next);
               }, 450);
             }}

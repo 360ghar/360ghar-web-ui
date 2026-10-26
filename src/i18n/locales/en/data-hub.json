@@ -45,9 +45,9 @@
     }
   },
   "rera": {
-    "title": "RERA Projects Directory \u2014 Gurugram",
-    "description": "Verified real estate projects registered under HRERA (Haryana Real Estate Regulatory Authority).",
-    "placeholder": "e.g. HRERA-PKL-GGM-2024-001",
+    "title": "RERA Projects Directory \u2014 Delhi and Haryana",
+    "description": "Projects registered under the Delhi RERA and HRERA (Haryana Real Estate Regulatory Authority) registers. Sources are not yet verified.",
+    "placeholder": "e.g. RERA-GRG-PROJ-1540-2024",
     "verify": "Verify",
     "verified": "Verified \u2014 {{name}}",
     "notFound": "Not Found \u2014 No RERA project found with that registration number.",
@@ -93,23 +93,23 @@
     }
   },
   "verifyOwnership": {
-    "title": "Verify Property Ownership",
-    "description": "Verify property ownership using Haryana land records (Jamabandi). Enter the Tehsil, Village, and Khasra Number to look up the official record.",
-    "important": "<strong>Important:</strong> You must solve the CAPTCHA yourself. We do not bypass security mechanisms of the Haryana Jamabandi portal.",
+    "title": "Haryana Jamabandi Record Lookup",
+    "description": "Use this record lookup to view a Haryana Jamabandi entry by tehsil, village, and khasra number. It does not verify legal title, possession, or ownership.",
+    "important": "<strong>Important:</strong> Solve the CAPTCHA yourself. This lookup does not independently verify legal title, possession, or ownership. Confirm the current record with the official service and seek legal advice before a purchase.",
     "tehsil": "Tehsil",
     "village": "Village",
     "notFound": "No land record found for the given Tehsil, Village, and Khasra Number.",
     "owners": "Owner(s)",
     "area": "Area",
-    "dataSourced": "Data sourced from the <strong>Haryana Jamabandi portal</strong>. Always verify with official records before making property decisions.",
+    "dataSourced": "When available, lookup data is returned by the <strong>Haryana Jamabandi service</strong>. Check the current record directly before making a decision.",
     "aboutJamabandi": {
-      "title": "About Jamabandi Land Records",
-      "description": "Jamabandi is the official land record maintained by the Revenue Department of Haryana. It contains details of ownership, cultivation rights, and encumbrances on agricultural and non-agricultural land parcels identified by Khasra numbers.",
+      "title": "Limits of this lookup",
+      "description": "The tool requests a Jamabandi record using tehsil, village, and khasra number. Returned fields may include recorded names, area, mutation status, and encumbrance details. It does not independently verify legal title, title deeds, possession, disputes, or ownership.",
       "tips": [
-        "Verify ownership before buying a plot or agricultural land",
-        "Check for any pending litigations or encumbrances",
-        "Confirm mutation (intkal) has been completed after purchase",
-        "Official data is periodically updated by Patwaris"
+        "Use the returned record as one reference, not proof of title.",
+        "Check the current record directly with the official service.",
+        "Confirm that the record matches the land parcel and supporting documents.",
+        "Ask a qualified lawyer to review title and encumbrance questions."
       ]
     },
     "plotsCta": {
@@ -166,8 +166,8 @@
     }
   },
   "builderReputation": {
-    "title": "Builder Reputation Directory \u2014 Gurugram",
-    "description": "Scores based on HRERA registered projects and complaints. Higher is better.",
+    "title": "Builder Reputation Directory \u2014 Delhi and Haryana",
+    "description": "Score = 100 minus 15 for each complaint per project, from the RERA projects and complaints on our records. A builder with no projects on record scores 50. Higher is better.",
     "search": "Search",
     "scoreLegend": {
       "good": "70+ \u2014 Good",
@@ -184,7 +184,7 @@
       "projects": "Projects",
       "complaints": "Complaints"
     },
-    "disclaimer": "Scores based on HRERA registered projects and complaints. Higher is better. Data sourced from publicly available HRERA records. 360Ghar does not guarantee accuracy of regulatory data.",
+    "disclaimer": "Score = 100 minus 15 for each complaint per project, from the RERA projects and complaints on our records. A builder with no projects on record scores 50. Higher is better. Projects come from the Delhi and Haryana RERA registers. 360Ghar does not guarantee accuracy of regulatory data.",
     "cta": {
       "title": "Looking for Trusted Properties?",
       "description": "Browse verified properties from reputable builders in Gurugram.",
@@ -202,7 +202,7 @@
       },
       "noProjects": "No RERA projects found for this builder.",
       "unknown": "Unknown",
-      "disclaimer": "Data sourced from publicly available HRERA records. 360Ghar does not guarantee accuracy or completeness of regulatory data.",
+      "disclaimer": "Projects come from the Delhi and Haryana RERA registers. 360Ghar does not guarantee accuracy or completeness of regulatory data.",
       "cta": {
         "title": "Looking for Verified Properties?",
         "description": "Explore our curated listings from trusted developers in Gurugram.",

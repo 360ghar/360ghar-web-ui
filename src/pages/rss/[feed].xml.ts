@@ -27,7 +27,6 @@ const ITEMS: Record<Slug, (hi: boolean) => Promise<RssItem[]> | RssItem[]> = {
       title: displayName(l.name),
       link: `${base(hi)}/locality/${localitySlug(l)}`,
       description: `${l.type} in ${l.city}`,
-      date: l.lastVerifiedAt,
     })),
 };
 

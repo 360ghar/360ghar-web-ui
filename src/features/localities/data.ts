@@ -5,6 +5,9 @@
  */
 import raw from '@/data/localities.json';
 import landmarksRaw from '@/data/locality-landmarks.json';
+import { displayName, isGeneratedSeedName, isScrapedName as isScrapedNameOf } from './thin';
+
+export { displayName };
 
 export type Locality = {
   name: string;
@@ -14,7 +17,6 @@ export type Locality = {
   type: string;
   parentLocality?: string;
   geo?: { lat: number; lng: number } | null;
-  lastVerifiedAt?: string;
   seo?: { title?: string; description?: string; keywords?: string };
   description?: string;
   contentBlocks?: { overview?: string; connectivity?: string; marketSignals?: string; nearby?: string[] };
@@ -87,11 +89,8 @@ export function nearbyLocalities(l: Locality, n = 8): Locality[] {
  * (444 are localities), 289 have a real twin in the same city ("dlf phase 1"; src/data/locality-redirects.json).
  * Pages exist for all of them (their URLs are old and indexed); see isThinLocality for how they are treated.
  */
-export const isScrapedName = (l: Pick<Locality, 'name'>) => /^projects in /i.test(l.name);
+export const isScrapedName = (l: Pick<Locality, 'name'>) => isScrapedNameOf(l.name);
 
-const ADJ = 'royal|green|silver|golden|platinum|diamond|pearl|coral|emerald|ruby|sapphire|opal|jade|crystal|gems|crown|majestic|grand|elite|premium|luxury|signature|pinnacle|apex|zenith|summit';
-const NOUN = 'apartments|residency|heights|view|enclave|estate|villas|homes|court|park|plaza|towers|terraces|meadows|woods|greens|gardens|valley|hills|springs|waters|breeze|winds';
-const GENERATED = new RegExp(`^(housing board colony sector \\d+|huda sector \\d+|rwa sector \\d+|block [a-d] sector \\d+|sector \\d+ extension|(${ADJ}) (${NOUN}) sector \\d+)$`, 'i');
 
 /**
  * Entries that the old site's seed script made up (scripts/generate_localities.js of the old repo: loops over
@@ -99,7 +98,7 @@ const GENERATED = new RegExp(`^(housing board colony sector \\d+|huda sector \\d
  * their overview text is one template. No source backs them. Pages exist for all of them; this lets a caller
  * treat them as unverified (noindex, out of the sitemap, or removed once the owner decides).
  */
-export const isGeneratedSeed = (l: Pick<Locality, 'name'>) => GENERATED.test(l.name);
+export const isGeneratedSeed = (l: Pick<Locality, 'name'>) => isGeneratedSeedName(l.name);
 
 /**
  * Thin rows: scraped or seed-invented (owner decision 2026-09-29). Their pages still answer 200 (or 301 to the
@@ -127,12 +126,6 @@ export const TYPE_LABEL: Record<string, [string, string]> = {
   township: ['Township', 'टाउनशिप'],
   phase: ['Phase', 'फ़ेज़'],
 };
-
-/** Title case for names stored in lower case ("1000 trees sai kripa" -> "1000 Trees Sai Kripa"). */
-export function displayName(name: string): string {
-  if (/[A-Z]/.test(name)) return name;
-  return name.replace(/\b([a-z])/g, (m) => m.toUpperCase()).replace(/\bDlf\b/g, 'DLF').replace(/\bM3m\b/g, 'M3M').replace(/\bIreo\b/g, 'IREO');
-}
 
 /** Listing query for an entity: localities and sectors match the locality field, others match by text. */
 export function listingMatch(l: Locality): { locality?: string; q?: string } {

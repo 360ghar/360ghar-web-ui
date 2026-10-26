@@ -1,7 +1,4 @@
-/**
- * Area units, converted through square feet. Same rates as the old site.
- * Bigha differs by state; 27,000 sq ft is the value the old tool used.
- */
+/** Conversion factors used by this tool, with square feet as the base unit. */
 import { formatNum } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/locale';
 
@@ -32,7 +29,8 @@ export function convert(value: number, from: Unit, to: Unit): number {
  * 4 significant digits, so 1 sq ft in hectares is not shown as 0.
  */
 export function fmtArea(n: number, locale: Locale = 'en'): string {
-  if (!Number.isFinite(n) || n === 0) return '0';
+  if (!Number.isFinite(n)) return '–';
+  if (n === 0) return '0';
   const opts: Intl.NumberFormatOptions = Math.abs(n) < 1 ? { maximumSignificantDigits: 4 } : { maximumFractionDigits: 4 };
   return formatNum(n, locale, opts);
 }

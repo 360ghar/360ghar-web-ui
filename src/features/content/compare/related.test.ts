@@ -7,7 +7,7 @@ describe('compare data', () => {
   it('has the 10 route slugs, and every truth page points to a competitor', () => {
     expect(COMPETITORS.map((c) => c.slug)).toEqual(['nobroker', 'magicbricks', '99acres', 'housing', 'commonfloor', 'proptiger', 'squareyards', 'nestaway', 'zolo', 'stanza-living']);
     for (const t of TRUTH_PAGES) expect(competitorBySlug(t.competitor)?.truth).toBe(t.slug);
-    for (const c of COMPETITORS) expect(c.claims.every((x) => x.claim && x.reality)).toBe(true);
+    for (const c of COMPETITORS) expect(c.source.url).toBe(c.website);
   });
 
   it('links the next three comparisons, wrapping around', () => {

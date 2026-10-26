@@ -11,18 +11,37 @@ import { sharedShadowId, SHADOW_SIZES } from '@/lib/paper/defs';
 import { compactPath } from '@/ui/paper/compact';
 import { gurugramLayers, H, W } from './gurugram';
 
-type Props = { class?: string; label?: string };
-const { class: className, label = 'Paper-cut Gurugram street: Cyber City towers, a kite, apartment blocks, the Rapid Metro, a chai stall, an auto-rickshaw, a cow and a vegetable cart.' } = Astro.props;
-// Layers use the page's shared large paper shadows (PaperDefs); a tint outside the kit (the pale clouds) keeps its own filter.
+type Props = {
+  class?: string;
+  label?: string;
+  /**
+   * Layer ids to leave out, far to near: sky, clouds, towers, kite, blocks,
+   * metro, train, street, kerb. A quieter hero drops the near, dark layers
+   * (street and kerb) and keeps the pale sky and the far buildings.
+   */
+  omit?: string[];
+  /**
+   * The part of the scene to frame, in the scene's own 1600 x 960 units:
+   * `[x, y, width, height]`. Defaults to the whole scene. A narrower box
+   * brings one part of the street closer; `slice` still crops to fill.
+   */
+  view?: [number, number, number, number];
+};
+const { class: className, label = 'Paper-cut Gurugram street: Cyber City towers, a kite, apartment blocks, the Rapid Metro, a chai stall, an auto-rickshaw, a cow and a vegetable cart.', omit = [], view = [0, 0, W, H] } = Astro.props;
+// Each layer draws its own shadow filter: the scene's tints are its own (sage
+// and clay), not the shared paper kit's kesar tones, and a hero variant
+// repaints them through `--dio-sh-*`, which the build cannot know.
 // Paths are written in short relative form. The towers and the blocks (most of the bytes) are rounded to whole
 // units, less than half a pixel at 1600 px, and each goes in one path: their buildings never overlap, so one
 // even-odd path cuts the same windows.
 const WHOLE = new Set(['towers', 'blocks']);
-const layers = gurugramLayers().map((l) => {
-  const shared = l.shadow === 'transparent' ? null : sharedShadowId(l.shadow, SHADOW_SIZES.l);
-  const cut = WHOLE.has(l.id) ? [compactPath(l.cut.join(''), 0)] : l.cut.map((d) => compactPath(d));
-  return { ...l, cut, solid: l.solid.map((d) => compactPath(d)), shared, filter: l.shadow === 'transparent' ? null : (shared ?? `dio-${l.id}`) };
-});
+const layers = gurugramLayers()
+  .filter((l) => !omit.includes(l.id))
+  .map((l) => {
+    const shared = l.shadow === 'transparent' ? null : sharedShadowId(l.shadow, SHADOW_SIZES.l);
+    const cut = WHOLE.has(l.id) ? [compactPath(l.cut.join(''), 0)] : l.cut.map((d) => compactPath(d));
+    return { ...l, cut, solid: l.solid.map((d) => compactPath(d)), shared, filter: l.shadow === 'transparent' ? null : (shared ?? `dio-${l.id}`) };
+  });
 ---
 
 <div class:list={['diorama grain', className]} data-diorama role="img" aria-label={label}>
@@ -31,7 +50,7 @@ const layers = gurugramLayers().map((l) => {
       <svg
         class={`layer layer-${layer.id}`}
         style={`--d:${layer.depth}; z-index:${i}`}
-        viewBox={`0 0 ${W} ${H}`}
+        viewBox={`${view[0]} ${view[1]} ${view[2]} ${view[3]}`}
         preserveAspectRatio="xMidYMax slice"
         aria-hidden="true"
         focusable="false"
