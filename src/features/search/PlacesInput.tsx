@@ -177,6 +177,12 @@ export function PlacesInput({
           search(next);
         }}
         onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            window.clearTimeout(timer.current);
+            seq.current++;
+            setOpen(false);
+            return;
+          }
           if (!open || options.length === 0) return;
           if (e.key === 'ArrowDown') {
             e.preventDefault();
@@ -188,10 +194,6 @@ export function PlacesInput({
             e.preventDefault();
             const option = options[active];
             if (option) choose(option);
-          } else if (e.key === 'Escape') {
-            window.clearTimeout(timer.current);
-            seq.current++;
-            setOpen(false);
           }
         }}
         onBlur={() => {
