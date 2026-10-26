@@ -3,8 +3,8 @@ import { localizePath } from '@/lib/i18n/locale';
 import { Icon } from '@/ui/icons/Icon';
 
 const T = {
-  en: 'Own a home? List it free',
-  hi: 'घर के मालिक हैं? मुफ़्त लिस्ट करें',
+  en: 'Own a home? List it with 360Ghar',
+  hi: 'घर के मालिक हैं? 360Ghar पर लिस्ट करें',
 };
 
 /**

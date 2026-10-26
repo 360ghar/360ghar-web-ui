@@ -20,6 +20,20 @@ const PLURAL: Partial<Record<PropertyType, [string, string]>> = {
   pg: ['PG', 'पीजी'],
 };
 
+// Hindi oblique plural, for phrases where a postposition follows the noun
+// (`दुकानों की कीमत`, not `दुकानें की कीमत`). Loanwords that do not inflect
+// keep their direct form.
+const OBLIQUE: Partial<Record<PropertyType, string>> = {
+  apartment: 'फ़्लैटों',
+  house: 'स्वतंत्र मकानों',
+  builder_floor: 'बिल्डर फ़्लोरों',
+  villa: 'विलाओं',
+  plot: 'प्लॉटों',
+  office: 'ऑफ़िस स्पेस',
+  shop: 'दुकानों',
+  pg: 'पीजी',
+};
+
 export function landingCopy(l: Landing, facet: Facet | undefined, locale: Locale) {
   const hi = locale === 'hi';
   const t = getT(locale);
@@ -28,6 +42,7 @@ export function landingCopy(l: Landing, facet: Facet | undefined, locale: Locale
   const plural = (x: PropertyType) => PLURAL[x]?.[hi ? 1 : 0] ?? x;
   const facetCap = plural(l.type);
   const facetLower = hi ? facetCap : facetCap.toLowerCase();
+  const facetOblique = hi ? (OBLIQUE[l.type] ?? facetCap) : facetLower;
   const verbEn = l.intent === 'rent' ? 'renting' : l.intent === 'pg' ? 'staying in a PG in' : 'buying';
   const intentLabel = l.intent === 'rent' ? 'Rent' : l.intent === 'pg' ? 'PG' : 'Sale';
   const bhk = facet?.kind === 'bhk' ? `${facet.bhk}${facet.bhk >= 4 ? '+' : ''} BHK ` : '';
@@ -83,6 +98,7 @@ export function landingCopy(l: Landing, facet: Facet | undefined, locale: Locale
   function baseFaqs() {
     const vars = {
       facetLower,
+      facetTextOblique: facetOblique,
       city,
       searchAction: hi ? (l.intent === 'buy' ? 'घर खरीदते समय' : l.intent === 'rent' ? 'घर किराये पर लेते समय' : 'PG खोजते समय') : (l.intent === 'buy' ? 'buying' : l.intent === 'rent' ? 'renting' : 'looking for'),
       hindiAction: l.intent === 'buy' ? 'kharidne' : 'kiraye par lene',
@@ -99,6 +115,7 @@ export function landingCopy(l: Landing, facet: Facet | undefined, locale: Locale
     const vars = {
       bhkPrefix: bhk,
       facetTextLower: facetLower,
+      facetTextOblique: facetOblique,
       facetPreposition: l.intent === 'pg' ? 'in' : `for ${l.intent === 'rent' ? 'rent' : 'sale'} in`,
       city,
       budgetSuffix: budget,
@@ -135,6 +152,7 @@ export function landingCopy(l: Landing, facet: Facet | undefined, locale: Locale
     crumbs,
     facetCap,
     facetLower,
+    facetOblique,
     typePlural: plural,
     intentLink: (i: Intent) =>
       hi
