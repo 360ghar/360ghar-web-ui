@@ -89,8 +89,9 @@ export function PlacesInput({
         setOpen(res.length > 0 || localRef.current.length > 0);
         setActive(-1);
       } catch {
+        if (n !== seq.current) return; // Escape or blur already cancelled this lookup.
         setFailed(true); // No key or network: the local suggestions still work.
-        if (n === seq.current) setOpen(localRef.current.length > 0);
+        setOpen(localRef.current.length > 0);
       }
     }, 250);
   };
