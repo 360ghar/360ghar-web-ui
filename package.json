@@ -27,6 +27,7 @@
     "images:optimize": "node scripts/optimize-images.mjs",
     "data:ingest": "node scripts/data/ingest-entities.mjs",
     "data:build": "node scripts/data/build-localities.mjs",
+    "data:areas": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/data/build-area-index.mjs",
     "data:price-context": "node scripts/data/build-price-context.mjs",
     "data:locality-redirects": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/data/build-locality-redirects.mjs",
     "check:built": "node scripts/check-built-routes.mjs",

@@ -5,6 +5,7 @@
  * (empty list = valid). The pipeline runs them before any `--write`; the unit
  * test scripts/__tests__/data-schema.test.mjs runs them on the files in src/data.
  */
+import { AREA_CITY, AREA_INDEX_VERSION, AREA_TYPES, MAX_AREA_ALIASES } from './area-index.mjs';
 import { ENTITY_TYPES, citySlug } from './entities.mjs';
 
 export const CITY_SLUGS = ['gurgaon', 'delhi', 'noida', 'faridabad', 'ghaziabad'];
@@ -73,6 +74,62 @@ export function checkLocalitiesIndex(index, localities) {
     for (const k of ['name', 'city', 'entityType', 'type']) if (r[k] !== l[k]) bad('field', `${at}: ${k} differs from localities.json`);
     if (i > 0 && index[i - 1].name.localeCompare(r.name) > 0) bad('order', `${at}: not sorted by name`);
   });
+  return out;
+}
+
+/**
+ * The area index the search boxes ship to the browser. With `localities` and
+ * `isThin`, it also checks every entry against its source row.
+ */
+export function checkAreaIndex(index, localities, isThin = () => false) {
+  const out = [];
+  if (!isObj(index)) return ['area-index: not an object'];
+  if (index.v !== AREA_INDEX_VERSION) out.push(`area-index.v: expected ${AREA_INDEX_VERSION}`);
+  if (!Array.isArray(index.areas) || index.areas.length === 0) return [...out, 'area-index.areas: not a non-empty list'];
+  if (!Array.isArray(index.popular)) out.push('area-index.popular: not a list');
+  const seen = new Set();
+  const byName = new Map();
+  index.areas.forEach((a, i) => {
+    const at = `area-index.areas[${i}] (${a?.n})`;
+    if (!isObj(a)) {
+      out.push(`${at}: not an object`);
+      return;
+    }
+    if (!isStr(a.n)) out.push(`${at}: name missing`);
+    if (!AREA_TYPES.includes(a.t)) out.push(`${at}: unknown type "${a.t}"`);
+    if (a.a !== undefined && !(Array.isArray(a.a) && a.a.length > 0 && a.a.length <= MAX_AREA_ALIASES && a.a.every(isStr))) out.push(`${at}: aliases must be 1-${MAX_AREA_ALIASES} strings`);
+    if (isStr(a.n)) {
+      const key = a.n.toLowerCase();
+      if (seen.has(key)) out.push(`${at}: duplicate name`);
+      seen.add(key);
+      byName.set(key, a);
+      const prev = index.areas[i - 1]?.n;
+      if (isStr(prev) && prev.localeCompare(a.n, 'en', { numeric: true }) > 0) out.push(`${at}: not sorted by name`);
+    }
+  });
+  if (Array.isArray(index.popular)) {
+    if (index.popular.length > 6) out.push('area-index.popular: at most 6 names');
+    for (const name of index.popular) {
+      if (!isStr(name)) out.push('area-index.popular: entries must be strings');
+      else if (!byName.has(name.toLowerCase())) out.push(`area-index.popular: "${name}" is not in areas`);
+    }
+  }
+  if (Array.isArray(localities)) {
+    const source = new Map();
+    for (const row of localities) {
+      if (row?.city !== AREA_CITY || !AREA_TYPES.includes(row.entityType)) continue;
+      if (isThin(String(row.name ?? ''))) continue;
+      // The builder keeps the first row for a name, so the check does too.
+      const key = String(row.name).trim().toLowerCase();
+      if (!source.has(key)) source.set(key, row);
+    }
+    for (const a of index.areas) {
+      if (!isStr(a?.n)) continue;
+      const row = source.get(a.n.toLowerCase());
+      if (!row) out.push(`area-index: "${a.n}" is not a clean Gurugram area in localities.json`);
+      else if (row.entityType !== a.t) out.push(`area-index: "${a.n}" has type ${a.t}, localities has ${row.entityType}`);
+    }
+  }
   return out;
 }
 

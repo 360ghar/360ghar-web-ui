@@ -925,12 +925,18 @@ function Wizard({ locale }: { locale: Locale }) {
                   name="place"
                   label={t.search}
                   placeholder={t.locality}
+                  locale={locale}
+                  areas
                   defaultValue={v.locality ?? ''}
                   onPlace={(p) => {
                     if (!p) return;
                     form.setValue('latitude', p.lat);
                     form.setValue('longitude', p.lng);
                     if (!v.locality) form.setValue('locality', p.name);
+                  }}
+                  onArea={(area) => {
+                    // A local area fills the locality; latitude/longitude stay optional.
+                    if (area && !v.locality) form.setValue('locality', area.name, { shouldDirty: true, shouldValidate: true });
                   }}
                 />
               </div>

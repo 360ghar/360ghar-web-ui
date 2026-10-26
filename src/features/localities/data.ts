@@ -5,7 +5,9 @@
  */
 import raw from '@/data/localities.json';
 import landmarksRaw from '@/data/locality-landmarks.json';
-import { isGeneratedSeedName, isScrapedName as isScrapedNameOf } from './thin';
+import { displayName, isGeneratedSeedName, isScrapedName as isScrapedNameOf } from './thin';
+
+export { displayName };
 
 export type Locality = {
   name: string;
@@ -124,12 +126,6 @@ export const TYPE_LABEL: Record<string, [string, string]> = {
   township: ['Township', 'टाउनशिप'],
   phase: ['Phase', 'फ़ेज़'],
 };
-
-/** Title case for names stored in lower case ("1000 trees sai kripa" -> "1000 Trees Sai Kripa"). */
-export function displayName(name: string): string {
-  if (/[A-Z]/.test(name)) return name;
-  return name.replace(/\b([a-z])/g, (m) => m.toUpperCase()).replace(/\bDlf\b/g, 'DLF').replace(/\bM3m\b/g, 'M3M').replace(/\bIreo\b/g, 'IREO');
-}
 
 /** Listing query for an entity: localities and sectors match the locality field, others match by text. */
 export function listingMatch(l: Locality): { locality?: string; q?: string } {

@@ -4,6 +4,8 @@ import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
 import { Icon } from '@/ui/icons/Icon';
 import { PlacesInput } from './PlacesInput';
+import { exactArea, type AreaSuggestion } from './areaSearch';
+import { searchHref, type Purpose } from './href';
 import { PostLink } from './PostLink';
 import { isSentence, sentenceHref } from './nl';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
@@ -11,8 +13,6 @@ import { ForgetLocation, LocationNotice } from '@/features/location/LocationNoti
 import { locationCopy } from '@/features/location/copy';
 import { FALLBACK_CENTER } from '@/features/location/logic';
 import { useLocationMemory, useLocationStore } from '@/features/location/store';
-
-type Purpose = 'rent' | 'buy' | 'pg';
 
 const T = {
   en: {
@@ -39,23 +39,6 @@ const T = {
   },
 };
 
-/** Builds the listing URL for a search. PG is rent with property_type=pg. */
-export function searchHref(locale: Locale, purpose: Purpose, text: string, place: Place | null): string {
-  const q = new URLSearchParams();
-  q.set('purpose', purpose === 'pg' ? 'rent' : purpose);
-  if (purpose === 'pg') q.set('property_type', 'pg');
-  if (place) {
-    q.set('lat', place.lat.toFixed(5));
-    q.set('lng', place.lng.toFixed(5));
-    q.set('radius', '10');
-    q.set('place', place.name);
-    q.set('sort_by', 'distance');
-  } else if (text.trim()) {
-    q.set('q', text.trim());
-  }
-  return `${localizePath('/properties', locale)}?${q}`;
-}
-
 /**
  * The home search. Server-rendered as a GET form, so it works before the
  * island loads; with JavaScript it adds place suggestions and "Near me".
@@ -67,10 +50,11 @@ function Search({ locale = 'en', postLink = 'foot' }: { locale?: Locale; postLin
   const [purpose, setPurpose] = useState<Purpose>('rent');
   const [text, setText] = useState('');
   const [place, setPlace] = useState<Place | null>(null);
+  const [area, setArea] = useState<AreaSuggestion | null>(null);
   const busy = useLocationStore((s) => s.status === 'busy');
   useLocationMemory();
 
-  const go = (p: Place | null) => window.location.assign(searchHref(locale, purpose, text, p));
+  const go = (p: Place | null, picked: AreaSuggestion | null = area) => window.location.assign(searchHref(locale, purpose, text, p, picked));
 
   const [thinking, setThinking] = useState(false);
   // Back from the results (the page comes from the back-forward cache): search again.
@@ -81,13 +65,15 @@ function Search({ locale = 'en', postLink = 'foot' }: { locale?: Locale; postLin
   }, []);
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Typing "sec 56" and pressing Search should land on the sector, not on a keyword FTS cannot match.
+    const picked = area ?? exactArea(text, locale);
     // A typed sentence ("2 BHK for rent in Sector 57 under 50k") is read by the backend; any failure searches the words.
-    if (!place && isSentence(text)) {
+    if (!place && !picked && isSentence(text)) {
       setThinking(true);
       window.location.assign((await sentenceHref(text, locale, purpose === 'pg' ? { purpose: 'rent', property_type: 'pg' } : { purpose })).href);
       return;
     }
-    go(place);
+    go(place, picked);
   };
 
   // A saved fresh fix is used at once. Without one the browser is asked. If that
@@ -115,8 +101,11 @@ function Search({ locale = 'en', postLink = 'foot' }: { locale?: Locale; postLin
           name="q"
           label={t.whereLabel}
           placeholder={t.where}
+          locale={locale}
+          areas
           onPlace={setPlace}
           onText={setText}
+          onArea={setArea}
           className="hero-search-field"
           inputClassName="hero-search-input"
         />

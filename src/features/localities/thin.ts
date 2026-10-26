@@ -1,8 +1,13 @@
 /**
- * Name predicates for thin locality rows, with no imports, so the Node data script
- * (`scripts/data/build-locality-redirects.mjs`, which cannot read the "@/" alias)
- * and `data.ts` use the same code.
+ * Name helpers for locality rows, with no imports, so the Node data scripts
+ * (which cannot read the "@/" alias) and `data.ts` use the same code.
  */
+
+/** Title case for names stored in lower case ("1000 trees sai kripa" -> "1000 Trees Sai Kripa"). */
+export function displayName(name: string): string {
+  if (/[A-Z]/.test(name)) return name;
+  return name.replace(/\b([a-z])/g, (m) => m.toUpperCase()).replace(/\bDlf\b/g, 'DLF').replace(/\bM3m\b/g, 'M3M').replace(/\bIreo\b/g, 'IREO');
+}
 
 /** Names scraped from search pages: "projects in dlf phase 1". */
 export const isScrapedName = (name: string) => /^projects in /i.test(name);
