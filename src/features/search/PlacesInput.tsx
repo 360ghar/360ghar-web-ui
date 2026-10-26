@@ -90,7 +90,7 @@ export function PlacesInput({
         setActive(-1);
       } catch {
         setFailed(true); // No key or network: the local suggestions still work.
-        setOpen(localRef.current.length > 0);
+        if (n === seq.current) setOpen(localRef.current.length > 0);
       }
     }, 250);
   };

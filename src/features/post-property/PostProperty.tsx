@@ -935,8 +935,11 @@ function Wizard({ locale }: { locale: Locale }) {
                     if (!v.locality) form.setValue('locality', p.name);
                   }}
                   onArea={(area) => {
-                    // A local area fills the locality; latitude/longitude stay optional.
-                    if (area && !v.locality) form.setValue('locality', area.name, { shouldDirty: true, shouldValidate: true });
+                    // An area carries no coordinates: replace an earlier Google pick.
+                    if (!area) return;
+                    form.setValue('locality', area.name, { shouldDirty: true, shouldValidate: true });
+                    form.setValue('latitude', undefined);
+                    form.setValue('longitude', undefined);
                   }}
                 />
               </div>
