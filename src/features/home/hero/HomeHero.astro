@@ -15,6 +15,7 @@ import Diorama from '@/features/home/diorama/Diorama.astro';
 import { COPY } from '@/features/home/copy';
 import type { HomeData } from '@/features/home/load';
 import HeroSearch from '@/features/search/HeroSearch';
+import { cutBandPath } from '@/lib/paper/cut';
 import { getT } from '@/i18n';
 import type { Locale } from '@/lib/i18n/locale';
 
@@ -42,17 +43,41 @@ const c = COPY[locale];
  * just above the tallest tower, and stays at x 0 so the towers run off both
  * sides. The sun is whole above 1024px and cropped by the viewport edge below
  * that, which is what a full-bleed scene does at any edge.
+ *
+ * `street` frames the scene 100 units lower than the scene's own origin, so the
+ * frame's bottom edge (y 860) lands on the brown street sheet, just above the
+ * road edge at y 858. The hero then ends on solid ground at every width: the
+ * dark road never reaches the fold, and the page below starts at the pavement
+ * instead of under a band of road. The 100 units this reveals at the top are the
+ * container's own sky colour, the same pale mint the scene paints.
  */
 const ART: Record<HeroArt, { omit: string[]; view: [number, number, number, number]; label: string }> = {
-  street: { omit: [], view: [0, 0, 1600, 960], label: c.diorama },
+  street: { omit: [], view: [0, -100, 1600, 960], label: c.diorama },
   skyline: { omit: ['kite', 'blocks', 'metro', 'train', 'street', 'kerb'], view: [0, 160, 1600, 640], label: c.dioramaSkyline },
   homes: { omit: ['towers', 'kite', 'metro', 'train'], view: [0, 400, 1600, 560], label: c.dioramaHomes },
 };
 const art = ART[variant];
+// The fold. The scene is clipped by the hero's box, so the street would end on a
+// ruler-straight line against the page. This strip is a hand-cut paper edge in
+// the street's own colour, the same idiom as `CutBand`, so the hero meets the
+// page below the way the other bands do.
+const fold = cutBandPath('home-hero-fold', 1440, 22, 44);
 ---
 
 <section class="home-hero" data-hero={variant} aria-labelledby="home-title">
   <Diorama class="home-diorama" label={art.label} omit={art.omit} view={art.view} />
+  {/* The filter lives on this HTML wrapper: on an SVG root the CSS filter is
+      clipped to the element's filter region, which cuts the shadow off. */}
+  <div class="home-hero-edge" aria-hidden="true">
+    <svg viewBox="0 0 1440 22" preserveAspectRatio="none" focusable="false">
+      {/* The helper cuts its wavy edge at the top. Flipping it here, inside the
+          SVG, puts the cut at the bottom and keeps the shadow pointing down: a
+          transform on the element would flip the shadow too. */}
+      <g transform="translate(0 22) scale(1 -1)">
+        <path d={fold} fill="var(--color-dio-street)" />
+      </g>
+    </svg>
+  </div>
   <div class="container-page home-hero-stack">
     <div class="home-search-lift">
       <div class="home-search-sheet">
@@ -79,34 +104,32 @@ const art = ART[variant];
   .home-hero :global(.home-diorama) {
     grid-area: 1 / 1;
     align-self: stretch;
-    /* The road dissolves into the page at the fold instead of stopping on a
-       hard horizontal line. Twenty-one stops on a smoothstep curve, so the
-       fade eases: no pair of stops is steep enough to read as a band. */
-    mask-image: linear-gradient(
-      to bottom,
-      rgb(0 0 0 / 1) 0%,
-      rgb(0 0 0 / 1) 84%,
-      rgb(0 0 0 / 0.9928) 84.8%,
-      rgb(0 0 0 / 0.972) 85.6%,
-      rgb(0 0 0 / 0.9393) 86.4%,
-      rgb(0 0 0 / 0.896) 87.2%,
-      rgb(0 0 0 / 0.8438) 88%,
-      rgb(0 0 0 / 0.784) 88.8%,
-      rgb(0 0 0 / 0.7183) 89.6%,
-      rgb(0 0 0 / 0.648) 90.4%,
-      rgb(0 0 0 / 0.5748) 91.2%,
-      rgb(0 0 0 / 0.5) 92%,
-      rgb(0 0 0 / 0.4253) 92.8%,
-      rgb(0 0 0 / 0.352) 93.6%,
-      rgb(0 0 0 / 0.2818) 94.4%,
-      rgb(0 0 0 / 0.216) 95.2%,
-      rgb(0 0 0 / 0.1563) 96%,
-      rgb(0 0 0 / 0.104) 96.8%,
-      rgb(0 0 0 / 0.0608) 97.6%,
-      rgb(0 0 0 / 0.028) 98.4%,
-      rgb(0 0 0 / 0.0073) 99.2%,
-      transparent 100%
-    );
+  }
+
+  /*
+   * The cut edge at the fold, drawn in the street's own colour so the join
+   * disappears. The path is flipped inside the SVG, so the cut faces the page
+   * below and the straight edge butts up under the street. The box starts 6px
+   * above the fold and runs 16px past it: the cut's highest point lands 0.5px
+   * above the fold, under the street, and its lowest hangs 10px onto the page.
+   * No white sliver can open between the street and its edge, and the shadow
+   * falls on the page as the soft shift to the next section.
+   */
+  .home-hero-edge {
+    grid-area: 1 / 1;
+    align-self: end;
+    z-index: 5;
+    width: 100%;
+    height: 22px;
+    margin-bottom: -16px;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 7px rgb(var(--tint) / 0.3));
+  }
+
+  .home-hero-edge svg {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .home-hero-stack {

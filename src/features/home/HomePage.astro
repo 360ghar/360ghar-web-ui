@@ -67,9 +67,7 @@ const pmFeatures = c.owner;
 
 ---
 
-{/* Lab pages (src/pages/lab) pass their own hero and the sections that follow it. */}
-{Astro.slots.has('hero') ? <slot name="hero" /> : <HomeHero locale={locale} data={data} />}
-<slot name="after-hero" />
+<HomeHero locale={locale} data={data} />
 
 <section class="home-block home-homes" aria-labelledby="home-homes" data-rail>
   <div class="container-page home-count">
