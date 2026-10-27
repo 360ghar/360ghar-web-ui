@@ -11,6 +11,8 @@ export type Layer = {
   depth: number;
   /** Colour of the shadow this layer casts on the layer behind it. */
   shadow: string;
+  /** Draw a light cut edge on this layer's paths. */
+  rim?: boolean;
   /** Paths with fill-rule evenodd: cut-outs (windows) are holes. */
   cut: string[];
   /** Paths with fill-rule nonzero: overlapping solids (trees, vehicles). */

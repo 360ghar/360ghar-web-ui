@@ -1,9 +1,7 @@
 /** New home page strings (round 3). Older strings stay in `site:home.*`. */
 export const COPY = {
   en: {
-    diorama: 'Paper-cut Gurugram street: Cyber City towers, a kite, sector apartment blocks, the Rapid Metro, a chai stall, gulmohar trees, an auto-rickshaw, a cow and a vegetable cart.',
-    dioramaSkyline: 'Paper-cut Cyber City skyline: glass towers with window strips, drifting clouds and a cut-paper sun.',
-    dioramaHomes: 'Paper-cut Gurugram at street level: sector apartment blocks with water tanks and balcony bands, a chai stall, gulmohar trees, an auto-rickshaw, a cow and a vegetable cart.',
+    diorama: 'Paper-cut golden-hour Gurugram street: a layered paper sun, the Aravalli ridge, Cyber City towers, a kite, the Rapid Metro, a lit apartment window, gulmohar trees, a chai stall and a cow.',
     photos: (n: number) => `${n} photos of this home`,
     photoAlt: (i: number, n: number, name: string) => `${name}, photo ${i} of ${n}`,
     open: 'Open this home',
@@ -61,9 +59,7 @@ export const COPY = {
     ],
   },
   hi: {
-    diorama: 'कागज़ से कटी गुरुग्राम की गली: साइबर सिटी के टावर, एक पतंग, सेक्टर के अपार्टमेंट, रैपिड मेट्रो, चाय की दुकान, गुलमोहर के पेड़, ऑटो-रिक्शा, एक गाय और सब्ज़ी का ठेला।',
-    dioramaSkyline: 'कागज़ से कटा साइबर सिटी का क्षितिज: खिड़कियों की पट्टियों वाले काँच के टावर, बहते बादल और कागज़ का सूरज।',
-    dioramaHomes: 'ज़मीन के स्तर पर कागज़ से कटी गुरुग्राम: पानी की टंकियों और बालकनी की पट्टियों वाले सेक्टर के अपार्टमेंट, चाय की दुकान, गुलमोहर के पेड़, ऑटो-रिक्शा, एक गाय और सब्ज़ी का ठेला।',
+    diorama: 'कागज़ से कटी गुरुग्राम की सुनहरी शाम: कागज़ का सूरज, अरावली की पहाड़ियाँ, साइबर सिटी के टावर, एक पतंग, रैपिड मेट्रो, अपार्टमेंट की एक रोशन खिड़की, गुलमोहर के पेड़, चाय की दुकान और एक गाय।',
     photos: (n: number) => `इस घर की ${n} फ़ोटो`,
     photoAlt: (i: number, n: number, name: string) => `${name}, फ़ोटो ${i} / ${n}`,
     open: 'यह घर खोलें',

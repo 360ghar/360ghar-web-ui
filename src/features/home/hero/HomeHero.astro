@@ -1,62 +1,26 @@
 ---
 /**
- * The home hero: the paper street filling the first screen, with the search
- * sheet resting on it.
+ * The home hero: the Golden Hour paper street filling the first screen, with
+ * the search sheet resting on it.
  *
  * The art is anchored to the bottom and the layers keep the diorama's own
  * sizing, so the scene covers the whole first screen. On a tall screen
  * `preserveAspectRatio="xMidYMax slice"` crops the sides and shows the middle
  * third, which is the part the scene is drawn for.
- *
- * `variant` picks the artwork, not the palette: the same paper street, framed
- * three ways. Layout is the same for all of them.
  */
 import Diorama from '@/features/home/diorama/Diorama.astro';
 import { COPY } from '@/features/home/copy';
-import type { HomeData } from '@/features/home/load';
 import HeroSearch from '@/features/search/HeroSearch';
 import { cutBandPath } from '@/lib/paper/cut';
 import { getT } from '@/i18n';
 import type { Locale } from '@/lib/i18n/locale';
+import Icon from '@/ui/icons/Icon.astro';
 
-export type HeroArt = 'street' | 'skyline' | 'homes';
-
-type Props = { locale: Locale; data: HomeData; variant?: HeroArt };
-const { locale, variant = 'street' } = Astro.props;
+type Props = { locale: Locale };
+const { locale } = Astro.props;
 const t = getT(locale);
 const c = COPY[locale];
 
-/**
- * The three studies, far to near:
- * `street` is the whole scene. `skyline` climbs to the towers and drops the
- * ground, so the frame is all glass and sky. `homes` comes down to street level
- * and drops the towers and the metro, so the apartment blocks, the chai stall,
- * the auto and the cow carry the frame.
- *
- * `skyline` also drops the kite. The string is a long diagonal from the kite to
- * a roof, so at any width where the kite itself is off frame the string alone
- * crosses the edge as a line to nowhere. Without it the study reads as a clean
- * skyline, and the kite stays where it belongs, in the two street scenes.
- *
- * The frames keep the artwork reaching both edges of the frame, so no study
- * leaves a dead band of sky where the scene stopped. `skyline` starts at y 160,
- * just above the tallest tower, and stays at x 0 so the towers run off both
- * sides. The sun is whole above 1024px and cropped by the viewport edge below
- * that, which is what a full-bleed scene does at any edge.
- *
- * `street` frames the scene 100 units lower than the scene's own origin, so the
- * frame's bottom edge (y 860) lands on the brown street sheet, just above the
- * road edge at y 858. The hero then ends on solid ground at every width: the
- * dark road never reaches the fold, and the page below starts at the pavement
- * instead of under a band of road. The 100 units this reveals at the top are the
- * container's own sky colour, the same pale mint the scene paints.
- */
-const ART: Record<HeroArt, { omit: string[]; view: [number, number, number, number]; label: string }> = {
-  street: { omit: [], view: [0, -100, 1600, 960], label: c.diorama },
-  skyline: { omit: ['kite', 'blocks', 'metro', 'train', 'street', 'kerb'], view: [0, 160, 1600, 640], label: c.dioramaSkyline },
-  homes: { omit: ['towers', 'kite', 'metro', 'train'], view: [0, 400, 1600, 560], label: c.dioramaHomes },
-};
-const art = ART[variant];
 // The fold. The scene is clipped by the hero's box, so the street would end on a
 // ruler-straight line against the page. This strip is a hand-cut paper edge in
 // the street's own colour, the same idiom as `CutBand`, so the hero meets the
@@ -64,8 +28,8 @@ const art = ART[variant];
 const fold = cutBandPath('home-hero-fold', 1440, 22, 44);
 ---
 
-<section class="home-hero" data-hero={variant} aria-labelledby="home-title">
-  <Diorama class="home-diorama" label={art.label} omit={art.omit} view={art.view} />
+<section class="home-hero" aria-labelledby="home-title">
+  <Diorama class="home-diorama" label={c.diorama} />
   {/* The filter lives on this HTML wrapper: on an SVG root the CSS filter is
       clipped to the element's filter region, which cuts the shadow off. */}
   <div class="home-hero-edge" aria-hidden="true">
@@ -79,12 +43,18 @@ const fold = cutBandPath('home-hero-fold', 1440, 22, 44);
     </svg>
   </div>
   <div class="container-page home-hero-stack">
+    {/* The headline fills the empty sky on the left; the search stays on the
+        street below. The lead inherits the stack's pointer-events: none, so the
+        diorama still receives pointer movement. */}
+    <div class="home-hero-lead">
+      <p class="home-hero-eyebrow">
+        <Icon name="pin" size={16} />
+        {t('site:home.eyebrow')}
+      </p>
+      <h1 id="home-title" class="home-hero-title">{t('site:home.title')}</h1>
+    </div>
     <div class="home-search-lift">
       <div class="home-search-sheet">
-        {/* The page keeps one h1 for search engines and screen readers. The card
-            itself is just the search now, and the owner CTA lives in its own band
-            further down the page. */}
-        <h1 id="home-title" class="visually-hidden">{t('site:home.title')}</h1>
         <HeroSearch client:load locale={locale} postLink="none" />
       </div>
     </div>
@@ -137,11 +107,49 @@ const fold = cutBandPath('home-hero-fold', 1440, 22, 44);
     z-index: 10;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: space-between;
+    gap: clamp(1.5rem, 4vh, 3rem);
     padding-block: clamp(2rem, 6vh, 4rem) clamp(2rem, 8vh, 5rem);
     /* The stack lies over the whole scene, so it must not swallow the pointer:
        the layers ease toward the cursor. Only the sheet is a real surface. */
     pointer-events: none;
+  }
+
+  .home-hero-lead {
+    max-width: 46rem;
+  }
+
+  .home-hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-ink-600);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .home-hero-eyebrow:lang(hi) {
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .home-hero-title {
+    max-width: 16ch;
+    color: var(--color-ink-950);
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 1.4rem + 4.2vw, 5.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  .home-hero-title:lang(hi) {
+    line-height: 1.25;
   }
 
   .home-search-lift {

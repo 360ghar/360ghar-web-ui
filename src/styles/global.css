@@ -45,11 +45,14 @@
   --color-dio-sky: #cbddd6;
   --color-dio-cloud: #f2f7f4;
   --color-dio-tower: #8fb0a6;
+  --color-dio-tower-far: #a9c4bb;
+  --color-dio-tower-deep: #5f8278;
   --color-dio-block: #d9a385;
   --color-dio-metro: #b9694a;
   --color-dio-street: #7a4a36;
   --color-dio-kerb: #3a2219;
   --color-dio-train: var(--color-kesar-500);
+  --color-dio-train-body: #a55b42;
   --color-dio-kite: var(--color-kesar-600);
 
   /* Diorama shadows, far layer to near. Full `rgb()` values, because the scene

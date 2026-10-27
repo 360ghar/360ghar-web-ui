@@ -1,18 +1,20 @@
 /**
  * The Gurugram street diorama, built as paper layers.
  *
- * Layers of card stock, far to near: sky, clouds, the Cyber City towers, a
- * kite, sector apartment blocks, the Rapid Metro line and its train, the
- * street, and the kerb with the road. Each layer is one flat tone (cool sage and
- * teal far away, warm clay and brown near, the train in brand kesar) and
- * is cut by hand (small jitter on every vertex). All shapes are made at build
- * time from fixed seeds, so the output is static SVG and the same on every
- * render. Clouds, kite and train have their own layers, so CSS can move them.
+ * Layers of card stock, far to near: the sun and its halo, the Aravalli ridge,
+ * clouds, three depths of Cyber City towers, birds, a kite, a lit apartment
+ * window, sector blocks, the Rapid Metro line and its train, the street, and
+ * the kerb with the road. Each layer is one flat tone (cool sage and teal far
+ * away, warm clay and brown near, the train, kite and lit window in brand
+ * kesar) and is cut by hand (small jitter on every vertex). All shapes are made
+ * at build time from fixed seeds, so the output is static SVG and the same on
+ * every render. Clouds, kite, sun halo, birds and train have their own layers,
+ * so CSS can move them.
  *
- * Colours and shadows come from `--color-dio-*` and `--dio-sh-*`, so a hero
- * variant can repaint the whole street without touching this file. The shadow
- * values are `rgb()` strings, not bare triples: they go into `flood-color`,
- * where a plain `var()` is the form every browser resolves.
+ * Colours and shadows come from `--color-dio-*` and `--dio-sh-*`, so the theme
+ * can repaint the whole street without touching this file. The shadow values
+ * are `rgb()` strings, not bare triples: they go into `flood-color`, where a
+ * plain `var()` is the form every browser resolves.
  *
  * Coordinate space: 1600 x 960. The street level is y = 800. The road below
  * the kerb gives the phone crop room: the street stays above the search sheet.
@@ -29,19 +31,20 @@ export type { Layer };
 export const W = 1600;
 export const H = 960;
 
+/** A hand-cut circle in the scene's units. */
+const circlePts = (cx: number, cy: number, r: number, n = 40): Pt[] =>
+  Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2;
+    return [cx + Math.cos(a) * r, cy + Math.sin(a) * r] as Pt;
+  });
+
+/** A thin strip of paper along a polyline, `w` wide. */
+const stripPath = (t: ReturnType<typeof makeTools>, pts: Pt[], w: number): string =>
+  t.path([...pts, ...pts.map(([x, y]) => [x + w, y] as Pt).reverse()]);
+
 /* ------------------------------------------------------------------ */
 /* Layer 0: sky with a cut-paper sun and two cloud strips.             */
 /* ------------------------------------------------------------------ */
-
-function sky(): Layer {
-  const t = makeTools('sky', 0.6);
-  const sun: Pt[] = [];
-  for (let i = 0; i < 40; i += 1) {
-    const a = (i / 40) * Math.PI * 2;
-    sun.push([1200 + Math.cos(a) * 112, 330 + Math.sin(a) * 112]);
-  }
-  return { id: 'sky', fill: 'var(--color-dio-cloud)', depth: 0, shadow: 'transparent', cut: [t.path(sun)], solid: [] };
-}
 
 /** Paper clouds: a flat cut base and a top made of overlapping round bumps. */
 function clouds(): Layer {
@@ -96,74 +99,105 @@ const TOWERS: Tower[] = [
   { x: 1522, w: 96, top: 400, crown: 'step' },
 ];
 
-function towers(): Layer {
-  const t = makeTools('towers');
+function towerOutline(tw: Tower): Pt[] {
+  const { x, w, top } = tw;
+  const b = H + 10;
+  switch (tw.crown) {
+    case 'slantL':
+      return [[x, top + 40], [x + w, top], [x + w, b], [x, b]];
+    case 'slantR':
+      return [[x, top], [x + w, top + 36], [x + w, b], [x, b]];
+    case 'step':
+      return [
+        [x + w * 0.3, top - 34],
+        [x + w * 0.7, top - 34],
+        [x + w * 0.7, top],
+        [x + w, top],
+        [x + w, b],
+        [x, b],
+        [x, top],
+        [x + w * 0.3, top],
+      ];
+    case 'spire':
+      return [
+        [x + w / 2 - 2, top - 70],
+        [x + w / 2 + 2, top - 70],
+        [x + w / 2 + 3, top - 18],
+        [x + w, top],
+        [x + w, b],
+        [x, b],
+        [x, top],
+        [x + w / 2 - 3, top - 18],
+      ];
+    case 'notch':
+      return [
+        [x, top],
+        [x + w * 0.38, top],
+        [x + w * 0.5, top + 22],
+        [x + w * 0.62, top],
+        [x + w, top],
+        [x + w, b],
+        [x, b],
+      ];
+    default:
+      return [
+        [x + w * 0.62, top - 44],
+        [x + w * 0.66, top - 44],
+        [x + w * 0.66, top],
+        [x + w, top],
+        [x + w, b],
+        [x, b],
+        [x, top],
+        [x + w * 0.62, top],
+      ];
+  }
+}
+
+function towersFrom(
+  id: string,
+  list: Tower[],
+  fill: string,
+  depth: number,
+  shadow: string,
+  seed: string,
+  rim = false,
+): Layer {
+  const t = makeTools(seed);
   const cut: string[] = [];
-  for (const tw of TOWERS) {
+  for (const tw of list) {
     const { x, w, top } = tw;
-    const b = H + 10;
-    let outline: Pt[];
-    switch (tw.crown) {
-      case 'slantL':
-        outline = [[x, top + 40], [x + w, top], [x + w, b], [x, b]];
-        break;
-      case 'slantR':
-        outline = [[x, top], [x + w, top + 36], [x + w, b], [x, b]];
-        break;
-      case 'step':
-        outline = [
-          [x + w * 0.3, top - 34],
-          [x + w * 0.7, top - 34],
-          [x + w * 0.7, top],
-          [x + w, top],
-          [x + w, b],
-          [x, b],
-          [x, top],
-          [x + w * 0.3, top],
-        ];
-        break;
-      case 'spire':
-        outline = [
-          [x + w / 2 - 2, top - 70],
-          [x + w / 2 + 2, top - 70],
-          [x + w / 2 + 3, top - 18],
-          [x + w, top],
-          [x + w, b],
-          [x, b],
-          [x, top],
-          [x + w / 2 - 3, top - 18],
-        ];
-        break;
-      case 'notch':
-        outline = [
-          [x, top],
-          [x + w * 0.38, top],
-          [x + w * 0.5, top + 22],
-          [x + w * 0.62, top],
-          [x + w, top],
-          [x + w, b],
-          [x, b],
-        ];
-        break;
-      default:
-        outline = [
-          [x + w * 0.62, top - 44],
-          [x + w * 0.66, top - 44],
-          [x + w * 0.66, top],
-          [x + w, top],
-          [x + w, b],
-          [x, b],
-          [x, top],
-          [x + w * 0.62, top],
-        ];
-    }
     const cols = Math.max(2, Math.floor((w - 18) / 17));
     const winTop = top + (tw.crown === 'slantL' || tw.crown === 'slantR' ? 52 : 22);
     const rows = Math.floor((640 - winTop) / 24);
     // Glass towers get tall, thin window strips.
-    cut.push(t.path(outline) + t.grid(x + 10, winTop, cols, rows, 7, 12, 10, 12, 0.35));
+    cut.push(t.path(towerOutline(tw)) + t.grid(x + 10, winTop, cols, rows, 7, 12, 10, 12, 0.35));
   }
-  return { id: 'towers', fill: 'var(--color-dio-tower)', depth: 0.15, shadow: 'var(--dio-sh-tower)', cut, solid: [] };
+  return { id, fill, depth, shadow, cut, solid: [], ...(rim ? { rim: true } : {}) };
+}
+
+const NEAR_TOWER_X = [836, 1040, 1180];
+
+function towersMid(): Layer {
+  return towersFrom(
+    'towersMid',
+    TOWERS.filter((tw) => !NEAR_TOWER_X.includes(tw.x)),
+    'var(--color-dio-tower)',
+    0.14,
+    'var(--dio-sh-tower)',
+    'towersMid',
+  );
+}
+
+function towersNear(): Layer {
+  return towersFrom(
+    'towersNear',
+    TOWERS.filter((tw) => NEAR_TOWER_X.includes(tw.x)),
+    'var(--color-dio-tower-deep)',
+    0.16,
+    'var(--dio-sh-tower)',
+    'towersNear',
+    true,
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -171,6 +205,10 @@ function towers(): Layer {
 /* ------------------------------------------------------------------ */
 
 type Block = { x: number; w: number; top: number; tanks: number };
+type LitHole = { x: number; y: number; w: number; h: number };
+
+const overlaps = (x: number, y: number, w: number, h: number, hole: LitHole): boolean =>
+  x < hole.x + hole.w && x + w > hole.x && y < hole.y + hole.h && y + h > hole.y;
 
 const BLOCKS: Block[] = [
   { x: -20, w: 170, top: 610, tanks: 2 },
@@ -184,11 +222,12 @@ const BLOCKS: Block[] = [
   { x: 1530, w: 110, top: 590, tanks: 1 },
 ];
 
-function blocks(): Layer {
+function blocks(lit?: LitHole): Layer {
   const t = makeTools('blocks');
   const cut: string[] = [];
   for (const bl of BLOCKS) {
     const { x, w, top } = bl;
+    const inBlock = Boolean(lit && lit.x >= x && lit.x + lit.w <= x + w);
     let d = t.rect(x, top, w, H + 10 - top);
     // Water tanks on the roof, on short legs.
     for (let i = 0; i < bl.tanks; i += 1) {
@@ -210,8 +249,26 @@ function blocks(): Layer {
     const rows = Math.floor((800 - top - 20) / 30);
     for (let r = 0; r < rows; r += 1) {
       const y = top + 18 + r * 30;
-      d += t.rect(x + 12, y, w - 24, 5);
-      d += t.grid(x + 18, y + 11, Math.floor((w - 30) / 26), 1, 12, 10, 14, 0, 0.3);
+      const bandHitsLit = Boolean(inBlock && lit && y >= lit.y - 6 && y <= lit.y + lit.h + 6);
+      if (!bandHitsLit) d += t.rect(x + 12, y, w - 24, 5);
+      if (!lit) {
+        d += t.grid(x + 18, y + 11, Math.floor((w - 30) / 26), 1, 12, 10, 14, 0, 0.3);
+      } else {
+        const cols = Math.floor((w - 30) / 26);
+        for (let c = 0; c < cols; c += 1) {
+          if (t.rand() < 0.3) continue;
+          const wx = x + 18 + c * 26;
+          const wy = y + 11;
+          if (inBlock && lit && overlaps(wx, wy, 12, 10, lit)) continue;
+          d += t.rect(wx, wy, 12, 10);
+        }
+      }
+    }
+    // One home is awake. The hole is backed by a warm layer, and the balcony
+    // rail is a solid strip across its bottom edge.
+    if (inBlock && lit) {
+      d += t.rect(lit.x, lit.y, lit.w, lit.h);
+      d += t.rect(lit.x - 5, lit.y + lit.h, lit.w + 10, 4);
     }
     cut.push(d);
   }
@@ -252,47 +309,6 @@ function metro(): Layer {
     );
   }
   return { id: 'metro', fill: 'var(--color-dio-metro)', depth: 0.5, shadow: 'var(--dio-sh-metro)', cut, solid: [] };
-}
-
-/** The Rapid Metro train: three coaches, the front one with a sloped nose. Its own layer, so it can run. */
-function train(): Layer {
-  const t = makeTools('train');
-  const trainY = 612 - 70;
-  const coach = (x: number, w: number, nose: boolean) => {
-    const y = trainY - (x / W) * 8;
-    const outline: Pt[] = nose
-      ? [
-          [x, y],
-          [x + w - 34, y],
-          [x + w - 6, y + 22],
-          [x + w, y + 56],
-          [x, y + 56],
-        ]
-      : [
-          [x, y + 4],
-          [x + 4, y],
-          [x + w - 4, y],
-          [x + w, y + 4],
-          [x + w, y + 56],
-          [x, y + 56],
-        ];
-    let d = t.path(outline);
-    d += t.grid(x + 16, y + 12, Math.floor((w - (nose ? 60 : 30)) / 30), 1, 20, 18, 10, 0);
-    // Doors.
-    d += t.rect(x + w * 0.32, y + 10, 12, 38);
-    if (!nose) d += t.rect(x + w * 0.7, y + 10, 12, 38);
-    // Stripe under the windows.
-    d += t.rect(x + 8, y + 40, w - (nose ? 30 : 16), 3);
-    return d;
-  };
-  return {
-    id: 'train',
-    fill: 'var(--color-dio-train)',
-    depth: 0.5,
-    shadow: 'rgb(138 51 0 / 0.4)',
-    cut: [coach(380, 200, false) + coach(588, 200, false) + coach(796, 214, true)],
-    solid: [],
-  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -340,12 +356,12 @@ function kite(): Layer {
     shadow: 'rgb(138 51 0 / 0.3)',
     cut: [body],
     solid: [
-      // Tail with three bows, and the string down to a roof out of sight.
+      // Tail with three bows. The string is its own layer so it can land on
+      // the lit window in front of the train.
       strip([[kx - 0.7, ky + 38], [kx + 5, ky + 62], [kx - 2, ky + 86], [kx + 6, ky + 108]], 1.4),
       bow(kx + 5, ky + 64),
       bow(kx - 2, ky + 88),
       bow(kx + 6, ky + 110),
-      strip([[kx + 2, ky + 4], [kx + 60, ky + 70], [kx + 130, ky + 150], [kx + 210, ky + 250], [kx + 280, ky + 360]], 1.5),
     ],
   };
 }
@@ -566,7 +582,7 @@ function street(): Layer {
     t.path(dome),
   );
 
-  return { id: 'street', fill: 'var(--color-dio-street)', depth: 0.75, shadow: 'var(--dio-sh-street)', cut, solid };
+  return { id: 'street', fill: 'var(--color-dio-street)', depth: 0.75, shadow: 'var(--dio-sh-street)', cut, solid, rim: true };
 }
 
 /* ------------------------------------------------------------------ */
@@ -625,9 +641,196 @@ function kerb(): Layer {
   return { id: 'kerb', fill: 'var(--color-dio-kerb)', depth: 1, shadow: 'var(--dio-sh-kerb)', cut, solid };
 }
 
+/* ------------------------------------------------------------------ */
+/* Golden Hour: the live hero scene, with deeper paper and warmer light. */
+/* ------------------------------------------------------------------ */
+
+const BG_LIT: LitHole = { x: 976, y: 612, w: 52, h: 62 };
+
+function sunHalo(): Layer {
+  const t = makeTools('sunHalo', 0.8);
+  return {
+    id: 'sunHalo',
+    fill: 'rgb(255 190 135 / 0.5)',
+    depth: 0.01,
+    shadow: 'transparent',
+    cut: [t.path(circlePts(1200, 330, 170))],
+    solid: [],
+  };
+}
+
+function goldenSun(): Layer {
+  const t = makeTools('sun', 0.6);
+  return {
+    id: 'sun',
+    fill: 'var(--color-kesar-50)',
+    depth: 0.02,
+    shadow: 'rgb(138 51 0 / 0.18)',
+    cut: [t.path(circlePts(1200, 330, 112))],
+    solid: [],
+  };
+}
+
+function haze(): Layer {
+  const t = makeTools('haze', 0.8);
+  const top: Pt[] = [[-20, 392]];
+  for (let x = 0; x < W; x += 80) top.push([x, 380 + t.rand() * 18]);
+  top.push([W + 20, 392], [W + 20, 560], [-20, 560]);
+  return {
+    id: 'haze',
+    fill: 'rgb(255 205 168 / 0.55)',
+    depth: 0.03,
+    shadow: 'transparent',
+    cut: [t.path(top)],
+    solid: [],
+  };
+}
+
+function ridge(): Layer {
+  const t = makeTools('ridge', 1.2);
+  const pts: Pt[] = [[-20, 640], [0, 588], [160, 604], [330, 548], [520, 590], [700, 532], [900, 574], [1100, 540], [1280, 580], [1440, 556], [W + 20, 600], [W + 20, 680], [-20, 680]];
+  return { id: 'ridge', fill: 'var(--color-dio-tower)', depth: 0.045, shadow: 'var(--dio-sh-cloud)', cut: [t.path(pts)], solid: [] };
+}
+
+function towersFar(): Layer {
+  const t = makeTools('towersFar', 1.1);
+  const heights = Array.from({ length: 58 }, (_, i) => 90 + ((i * 47) % 150));
+  const d = t.skyline(660, { heights, slant: true, drop: 300, inset: 10 });
+  return { id: 'towersFar', fill: 'var(--color-dio-tower-far)', depth: 0.07, shadow: 'var(--dio-sh-cloud)', cut: [d], solid: [] };
+}
+
+function birds(): Layer {
+  const t = makeTools('birds', 0.5);
+  const bird = (x: number, y: number, s: number) =>
+    t.path([
+      [x - s, y],
+      [x, y + s * 0.6],
+      [x + s, y],
+      [x, y + s * 0.24],
+    ]);
+  return {
+    id: 'birds',
+    fill: 'var(--color-ink-800)',
+    depth: 0.08,
+    shadow: 'transparent',
+    cut: [bird(800, 160, 10) + bird(870, 190, 7) + bird(950, 150, 9) + bird(1030, 205, 6)],
+    solid: [],
+  };
+}
+
+function litWindow(): Layer {
+  const t = makeTools('litWindow', 0.3);
+  return {
+    id: 'litWindow',
+    fill: 'var(--color-kesar-200)',
+    depth: 0.32,
+    shadow: 'transparent',
+    cut: [t.rect(BG_LIT.x - 4, BG_LIT.y - 4, BG_LIT.w + 8, BG_LIT.h + 8)],
+    solid: [],
+  };
+}
+
+function litWindowFrame(): Layer {
+  const t = makeTools('litWindowFrame', 0.4);
+  return {
+    id: 'litWindowFrame',
+    fill: 'var(--color-kesar-50)',
+    depth: 0.34,
+    shadow: 'transparent',
+    cut: [
+      t.rect(BG_LIT.x - 6, BG_LIT.y - 6, BG_LIT.w + 12, BG_LIT.h + 12) +
+        t.rect(BG_LIT.x, BG_LIT.y, BG_LIT.w, BG_LIT.h),
+    ],
+    solid: [],
+  };
+}
+
+function kiteString(): Layer {
+  const t = makeTools('kiteString', 0.3);
+  const end: Pt = [BG_LIT.x + BG_LIT.w / 2, BG_LIT.y + 26];
+  const pts: Pt[] = [[642, 304], [690, 390], [735, 480], [780, 560], end];
+  return { id: 'kiteString', fill: 'var(--color-dio-kite)', depth: 0.52, shadow: 'transparent', cut: [], solid: [stripPath(t, pts, 1.6)] };
+}
+
+function blossoms(): Layer {
+  const t = makeTools('blossoms', 0.5);
+  const clusters: [number, number, number, number][] = [
+    [426, 520, 9, 7], [444, 508, 8, 7], [464, 500, 7, 6], [486, 510, 9, 7], [505, 524, 8, 6],
+    [470, 530, 9, 7], [448, 536, 7, 6], [514, 540, 6, 5], [490, 548, 7, 6], [432, 542, 6, 5],
+    [1218, 505, 8, 6], [1236, 494, 7, 6], [1254, 486, 8, 6], [1272, 496, 7, 5], [1290, 508, 8, 6],
+    [1250, 518, 9, 7], [1228, 524, 6, 5], [1272, 530, 7, 5], [1240, 542, 6, 5], [1300, 520, 6, 5],
+  ];
+  return {
+    id: 'blossoms',
+    fill: 'var(--color-dio-train)',
+    depth: 0.78,
+    shadow: 'rgb(138 51 0 / 0.25)',
+    cut: clusters.map(([x, y, rx, ry]) => t.blob(x, y, rx, ry, 4, 0.4)),
+    solid: [],
+  };
+}
+
+function trainPair(bodyFill = 'var(--color-dio-train-body)', bodyShadow = 'rgb(84 38 22 / 0.4)'): Layer[] {
+  const t = makeTools('trainPair');
+  const y = 612 - 70;
+  const coach = (x: number, w: number, nose: boolean) => {
+    const outline: Pt[] = [
+      [x + 14, y + 10], [x + 24, y], [x + w - 30, y], [x + w - 8, y + 18], [x + w, y + 42],
+      [x + w - 4, y + 58], [x + 18, y + 58], [x + 6, y + 50], [x, y + 34], [x + 2, y + 20],
+    ];
+    let body = t.path(outline);
+    for (let i = 0; i < 7; i += 1) body += t.rect(x + 24 + i * 22, y + 13, 16, 19);
+    body += t.rect(x + w - 44, y + 12, 18, 44);
+    body += t.rect(x + 8, y + 40, w - (nose ? 30 : 16), 3);
+    let accent = '';
+    if (nose) {
+      accent += t.path([
+        [x + w - 34, y],
+        [x + w - 6, y + 22],
+        [x + w, y + 56],
+        [x + w - 18, y + 56],
+        [x + w - 34, y + 12],
+      ]);
+    }
+    accent += t.rect(x + 8, y + 40, w - (nose ? 30 : 16), 3);
+    return { body, accent };
+  };
+  const a = coach(380, 200, false);
+  const b = coach(588, 200, false);
+  const c = coach(796, 214, true);
+  return [
+    { id: 'trainBody', fill: bodyFill, depth: 0.5, shadow: bodyShadow, rim: true, cut: [a.body + b.body + c.body], solid: [] },
+    { id: 'trainAccent', fill: 'var(--color-dio-train)', depth: 0.5, shadow: 'transparent', cut: [a.accent + b.accent + c.accent], solid: [] },
+  ];
+}
+
+function goldenLayers(): Layer[] {
+  return [
+    sunHalo(),
+    goldenSun(),
+    haze(),
+    ridge(),
+    clouds(),
+    towersFar(),
+    towersMid(),
+    towersNear(),
+    birds(),
+    kite(),
+    litWindow(),
+    blocks(BG_LIT),
+    litWindowFrame(),
+    metro(),
+    ...trainPair(),
+    kiteString(),
+    street(),
+    blossoms(),
+    kerb(),
+  ];
+}
+
 let cache: Layer[] | undefined;
 
 export function gurugramLayers(): Layer[] {
-  cache ??= [sky(), clouds(), towers(), kite(), blocks(), metro(), train(), street(), kerb()];
+  cache ??= goldenLayers();
   return cache;
 }

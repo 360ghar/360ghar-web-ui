@@ -14,34 +14,20 @@ import { gurugramLayers, H, W } from './gurugram';
 type Props = {
   class?: string;
   label?: string;
-  /**
-   * Layer ids to leave out, far to near: sky, clouds, towers, kite, blocks,
-   * metro, train, street, kerb. A quieter hero drops the near, dark layers
-   * (street and kerb) and keeps the pale sky and the far buildings.
-   */
-  omit?: string[];
-  /**
-   * The part of the scene to frame, in the scene's own 1600 x 960 units:
-   * `[x, y, width, height]`. Defaults to the whole scene. A narrower box
-   * brings one part of the street closer; `slice` still crops to fill.
-   */
-  view?: [number, number, number, number];
 };
-const { class: className, label = 'Paper-cut Gurugram street: Cyber City towers, a kite, apartment blocks, the Rapid Metro, a chai stall, an auto-rickshaw, a cow and a vegetable cart.', omit = [], view = [0, 0, W, H] } = Astro.props;
+const { class: className, label = 'Paper-cut golden-hour Gurugram street: a layered paper sun, the Aravalli ridge, Cyber City towers, a kite, the Rapid Metro, a lit apartment window, gulmohar trees, a chai stall and a cow.' } = Astro.props;
 // Each layer draws its own shadow filter: the scene's tints are its own (sage
 // and clay), not the shared paper kit's kesar tones, and a hero variant
 // repaints them through `--dio-sh-*`, which the build cannot know.
-// Paths are written in short relative form. The towers and the blocks (most of the bytes) are rounded to whole
+// Paths are written in short relative form. The blocks (most of the bytes) are rounded to whole
 // units, less than half a pixel at 1600 px, and each goes in one path: their buildings never overlap, so one
 // even-odd path cuts the same windows.
-const WHOLE = new Set(['towers', 'blocks']);
-const layers = gurugramLayers()
-  .filter((l) => !omit.includes(l.id))
-  .map((l) => {
-    const shared = l.shadow === 'transparent' ? null : sharedShadowId(l.shadow, SHADOW_SIZES.l);
-    const cut = WHOLE.has(l.id) ? [compactPath(l.cut.join(''), 0)] : l.cut.map((d) => compactPath(d));
-    return { ...l, cut, solid: l.solid.map((d) => compactPath(d)), shared, filter: l.shadow === 'transparent' ? null : (shared ?? `dio-${l.id}`) };
-  });
+const WHOLE = new Set(['blocks']);
+const layers = gurugramLayers().map((l) => {
+  const shared = l.shadow === 'transparent' ? null : sharedShadowId(l.shadow, SHADOW_SIZES.l);
+  const cut = WHOLE.has(l.id) ? [compactPath(l.cut.join(''), 0)] : l.cut.map((d) => compactPath(d));
+  return { ...l, cut, solid: l.solid.map((d) => compactPath(d)), shared, filter: l.shadow === 'transparent' ? null : (shared ?? `dio-${l.id}`) };
+});
 ---
 
 <div class:list={['diorama grain', className]} data-diorama role="img" aria-label={label}>
@@ -50,7 +36,7 @@ const layers = gurugramLayers()
       <svg
         class={`layer layer-${layer.id}`}
         style={`--d:${layer.depth}; z-index:${i}`}
-        viewBox={`${view[0]} ${view[1]} ${view[2]} ${view[3]}`}
+        viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="xMidYMax slice"
         aria-hidden="true"
         focusable="false"
@@ -62,7 +48,13 @@ const layers = gurugramLayers()
             </filter>
           </defs>
         )}
-        <g fill={layer.fill} filter={layer.filter ? `url(#${layer.filter})` : undefined}>
+        <g
+          fill={layer.fill}
+          filter={layer.filter ? `url(#${layer.filter})` : undefined}
+          stroke={layer.rim ? 'var(--dio-rim)' : undefined}
+          stroke-width={layer.rim ? 1.2 : undefined}
+          stroke-linejoin="round"
+        >
           {layer.cut.map((d) => (
             <path fill-rule="evenodd" d={d} />
           ))}
@@ -81,10 +73,23 @@ const layers = gurugramLayers()
     position: relative;
     overflow: hidden;
     isolation: isolate;
-    background-color: var(--color-dio-sky);
+    background: linear-gradient(180deg, #f7e8d9 0%, #f3d3b7 54%, #efc19d 100%);
     --px: 0;
     --py: 0;
     --sy: 0;
+    --dio-rim: rgb(255 248 235 / 0.26);
+  }
+
+  /* Printed paper, not vector fill. */
+  .diorama::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background-image: var(--grain);
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+    pointer-events: none;
   }
 
   .layer {
@@ -109,13 +114,41 @@ const layers = gurugramLayers()
       animation: dio-drift 80s ease-in-out infinite alternate;
     }
 
-    .layer-kite {
+    .layer-kite,
+    .layer-kiteString {
       animation: dio-kite 6s ease-in-out infinite alternate;
     }
 
     /* Waits at the station, leaves to the right, comes back from the left. */
-    .layer-train {
+    .layer-trainBody,
+    .layer-trainAccent {
       animation: dio-train 30s infinite;
+    }
+
+    .layer-sunHalo {
+      animation: dio-sun 18s ease-in-out infinite alternate;
+    }
+
+    .layer-birds {
+      animation: dio-birds 26s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes dio-sun {
+    from {
+      opacity: 0.72;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dio-birds {
+    from {
+      translate: -14px 0;
+    }
+    to {
+      translate: 20px -4px;
     }
   }
 

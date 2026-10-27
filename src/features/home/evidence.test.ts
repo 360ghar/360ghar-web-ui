@@ -14,6 +14,7 @@ const visibleHomeCopy = (locale: 'en' | 'hi') => {
     footer: { tagline: string };
     home: {
       title: string;
+      eyebrow: string;
       countLead: string;
       countFallback: string;
       howTitle: string;
@@ -30,6 +31,7 @@ const visibleHomeCopy = (locale: 'en' | 'hi') => {
   return [
     footer.tagline,
     home.title,
+    home.eyebrow,
     home.countLead,
     home.countFallback,
     home.howTitle,
