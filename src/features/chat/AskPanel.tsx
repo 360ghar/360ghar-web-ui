@@ -10,7 +10,7 @@ import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
 import { useAuth } from '@/features/auth/useAuth';
 import { currentToken } from '@/lib/api/client';
 import { ApiError } from '@/lib/api/errors';
-import { tFrom } from '@/i18n';
+import { tFrom } from '@/i18n/tFrom';
 import type { Locale } from '@/lib/i18n/locale';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { Bubble } from './Bubble';

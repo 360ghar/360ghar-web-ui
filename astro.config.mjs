@@ -27,7 +27,7 @@ const API_ORIGIN = process.env.API_ORIGIN ?? 'https://api.360ghar.com';
 export default defineConfig({
   site: 'https://360ghar.com',
   trailingSlash: 'never',
-  build: { format: 'file', inlineStylesheets: 'always' },
+  build: { format: 'file' },
   adapter: netlify({
     imageCDN: false,
     // Local dev uses the Vite proxy; the Netlify emulation proxied /api via netlify.toml and broke gzip bodies.

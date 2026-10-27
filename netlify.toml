@@ -69,6 +69,12 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Diorama layers: the HTML links them with ?v=<content hash>.
+[[headers]]
+  for = "/diorama/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [[headers]]
   for = "/fonts/*"
   [headers.values]

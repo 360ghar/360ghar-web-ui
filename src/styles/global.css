@@ -63,6 +63,7 @@
   --dio-sh-metro: rgb(84 38 22 / 0.4);
   --dio-sh-street: rgb(48 24 14 / 0.45);
   --dio-sh-kerb: rgb(24 12 8 / 0.5);
+  --dio-rim: rgb(255 248 235 / 0.26);
 
   /* Ink: green-neutral near-black and its steps. Used for text. */
   --color-ink-950: #0f1d19;

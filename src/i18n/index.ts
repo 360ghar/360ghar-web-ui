@@ -5,8 +5,9 @@
  * in development and an empty string in production, so users never see raw keys.
  */
 import type { Locale } from '@/lib/i18n/locale';
+import { fill, lookup, walk, type Dict, type Vars } from './tFrom';
 
-type Dict = { [k: string]: string | Dict };
+export { tFrom } from './tFrom';
 
 const files = import.meta.glob<Dict>('./locales/*/*.json', { eager: true, import: 'default' });
 
@@ -14,27 +15,6 @@ const dicts: Record<Locale, Record<string, Dict>> = { en: {}, hi: {} };
 for (const [path, dict] of Object.entries(files)) {
   const m = path.match(/\.\/locales\/(en|hi)\/(.+)\.json$/);
   if (m) dicts[m[1] as Locale][m[2]!] = dict;
-}
-
-function walk(dict: Dict | undefined, path: string): string | Dict | undefined {
-  let cur: string | Dict | undefined = dict;
-  for (const part of path.split('.')) {
-    if (!cur || typeof cur === 'string') return undefined;
-    cur = cur[part];
-  }
-  return cur;
-}
-
-function lookup(dict: Dict | undefined, path: string): string | undefined {
-  const v = walk(dict, path);
-  return typeof v === 'string' ? v : undefined;
-}
-
-type Vars = Record<string, string | number>;
-
-function fill(text: string, vars?: Vars): string {
-  if (!vars) return text;
-  return text.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, k: string) => (vars[k] === undefined ? '' : String(vars[k])));
 }
 
 export function translate(locale: Locale, key: string, vars?: Vars): string {
@@ -75,9 +55,4 @@ function deepMerge(base: Dict, over: Dict): Dict {
     out[k] = typeof v !== 'string' && b && typeof b !== 'string' ? deepMerge(b, v) : v;
   }
   return out;
-}
-
-/** Translator over a picked subtree (used inside islands). */
-export function tFrom(dict: Dict) {
-  return (path: string, vars?: Vars) => fill(lookup(dict, path) ?? '', vars);
 }
