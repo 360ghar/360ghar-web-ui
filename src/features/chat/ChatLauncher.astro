@@ -122,6 +122,16 @@ const label = typeof strings.openAssistant === 'string' ? strings.openAssistant 
     document.addEventListener('focusout', schedule);
     // Late content (islands, images) can move controls under it without a scroll.
     window.setTimeout(schedule, 1500);
+    // Start the panel download when the pointer or focus reaches the button, so the click finds it ready.
+    let panel: Promise<typeof import('./mount')> | undefined;
+    // A failed download is not kept, so the next click tries again.
+    const load = () =>
+      (panel ??= import('./mount').catch((e: unknown) => {
+        panel = undefined;
+        throw e;
+      }));
+    const warm = () => void load().catch(() => {});
+    for (const type of ['pointerenter', 'focus', 'touchstart']) launcher.addEventListener(type, warm, { once: true, passive: true });
     launcher.addEventListener('click', async () => {
       if (!host.hidden) {
         host.hidden = true;
@@ -129,7 +139,7 @@ const label = typeof strings.openAssistant === 'string' ? strings.openAssistant 
         return;
       }
       launcher.setAttribute('aria-busy', 'true');
-      const { openChat } = await import('./mount');
+      const { openChat } = await load();
       const strings = JSON.parse(document.getElementById('chat-strings')?.textContent ?? '{}');
       openChat(host, (launcher.dataset.locale as 'en' | 'hi') ?? 'en', strings, launcher);
       launcher.removeAttribute('aria-busy');

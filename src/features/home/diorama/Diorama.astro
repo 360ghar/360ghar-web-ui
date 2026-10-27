@@ -7,62 +7,20 @@
  * kite bobs, and the metro leaves and comes back. All of it animates
  * `translate` only (compositor), and stops for reduced motion.
  */
-import { sharedShadowId, SHADOW_SIZES } from '@/lib/paper/defs';
-import { compactPath } from '@/ui/paper/compact';
-import { gurugramLayers, H, W } from './gurugram';
+import { DIORAMA_LAYERS } from './layers';
 
 type Props = {
   class?: string;
   label?: string;
 };
 const { class: className, label = 'Paper-cut golden-hour Gurugram street: a layered paper sun, the Aravalli ridge, Cyber City towers, a kite, the Rapid Metro, a lit apartment window, gulmohar trees, a chai stall and a cow.' } = Astro.props;
-// Each layer draws its own shadow filter: the scene's tints are its own (sage
-// and clay), not the shared paper kit's kesar tones, and a hero variant
-// repaints them through `--dio-sh-*`, which the build cannot know.
-// Paths are written in short relative form. The blocks (most of the bytes) are rounded to whole
-// units, less than half a pixel at 1600 px, and each goes in one path: their buildings never overlap, so one
-// even-odd path cuts the same windows.
-const WHOLE = new Set(['blocks']);
-const layers = gurugramLayers().map((l) => {
-  const shared = l.shadow === 'transparent' ? null : sharedShadowId(l.shadow, SHADOW_SIZES.l);
-  const cut = WHOLE.has(l.id) ? [compactPath(l.cut.join(''), 0)] : l.cut.map((d) => compactPath(d));
-  return { ...l, cut, solid: l.solid.map((d) => compactPath(d)), shared, filter: l.shadow === 'transparent' ? null : (shared ?? `dio-${l.id}`) };
-});
+// Each layer is a cached SVG file (layers.ts), not inline paths: the HTML stays small.
 ---
 
 <div class:list={['diorama grain', className]} data-diorama role="img" aria-label={label}>
   {
-    layers.map((layer, i) => (
-      <svg
-        class={`layer layer-${layer.id}`}
-        style={`--d:${layer.depth}; z-index:${i}`}
-        viewBox={`0 0 ${W} ${H}`}
-        preserveAspectRatio="xMidYMax slice"
-        aria-hidden="true"
-        focusable="false"
-      >
-        {layer.filter && !layer.shared && (
-          <defs>
-            <filter id={`dio-${layer.id}`} x="-5%" y="-10%" width="112%" height="125%">
-              <feDropShadow dx="3" dy="4" stdDeviation="1.6" flood-color={layer.shadow} />
-            </filter>
-          </defs>
-        )}
-        <g
-          fill={layer.fill}
-          filter={layer.filter ? `url(#${layer.filter})` : undefined}
-          stroke={layer.rim ? 'var(--dio-rim)' : undefined}
-          stroke-width={layer.rim ? 1.2 : undefined}
-          stroke-linejoin="round"
-        >
-          {layer.cut.map((d) => (
-            <path fill-rule="evenodd" d={d} />
-          ))}
-          {layer.solid.map((d) => (
-            <path d={d} />
-          ))}
-        </g>
-      </svg>
+    DIORAMA_LAYERS.map((layer, i) => (
+      <img class={`layer layer-${layer.id}`} style={`--d:${layer.depth}; z-index:${i}`} src={layer.src} alt="" width="1600" height="960" />
     ))
   }
   <slot />
@@ -77,7 +35,6 @@ const layers = gurugramLayers().map((l) => {
     --px: 0;
     --py: 0;
     --sy: 0;
-    --dio-rim: rgb(255 248 235 / 0.26);
   }
 
   /* Printed paper, not vector fill. */
@@ -97,7 +54,12 @@ const layers = gurugramLayers().map((l) => {
     inset: -24px -36px -14px -36px;
     width: calc(100% + 72px);
     height: calc(100% + 38px);
+    /* The base img rule (max-width: 100%) would cut the 72 px of bleed. */
+    max-width: none;
     pointer-events: none;
+    /* Same crop as the SVG's xMidYMax slice. */
+    object-fit: cover;
+    object-position: 50% 100%;
     transform: translate3d(
       calc(var(--px) * var(--d) * 1px),
       calc((var(--py) * var(--d) + var(--sy) * (1 - var(--d))) * 1px),

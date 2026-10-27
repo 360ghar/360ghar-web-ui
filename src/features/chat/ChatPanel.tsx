@@ -4,7 +4,7 @@ import { currentToken } from '@/lib/api/client';
 import { ApiError } from '@/lib/api/errors';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
-import { tFrom } from '@/i18n';
+import { tFrom } from '@/i18n/tFrom';
 import { Icon } from '@/ui/icons/Icon';
 import { sendFailure, streamChat } from './stream';
 import { applyEvent, chatRequest, updateMessage, useChat, type Message } from './store';
