@@ -37,7 +37,8 @@
     "policies": "All policies"
   },
   "home": {
-    "title": "Search property listings",
+    "title": "Find a home.",
+    "eyebrow": "Gurgaon",
     "countLead": "property listings in Gurugram",
     "countFallback": "Search property listings in Gurugram",
     "seeAll": "See property listings",

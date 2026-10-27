@@ -36,7 +36,7 @@ async function scrollThrough(page: Page) {
 test('home: sections render with live data, no sideways scroll, axe clean', async ({ page }) => {
   const w = watch(page);
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Walk in before you visit.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find a home.');
   await scrollThrough(page);
   const m = main(page);
   await expect(m.locator('#home-homes')).toContainText(/\d+ verified homes/);
@@ -303,7 +303,7 @@ test('home: works with the backend down in the browser, rail still scrolls', asy
 test('home: the Hindi page renders in Hindi', async ({ page }) => {
   const w = watch(page);
   await page.goto('/hi');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('विज़िट से पहले घर घूमिए।');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('घर खोजें।');
   await scrollThrough(page);
   const m = main(page);
   await expect(m.getByRole('heading', { name: 'घर कहाँ हैं' })).toBeVisible();

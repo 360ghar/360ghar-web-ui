@@ -9,7 +9,11 @@ import Footer from '@/features/layout/Footer.astro';
 import Header from '@/features/layout/Header.astro';
 import Base from './Base.astro';
 
-type Props = ComponentProps<typeof Base> & { overHero?: boolean; mainClass?: string; chrome?: boolean };
+type Props = ComponentProps<typeof Base> & {
+  overHero?: boolean;
+  mainClass?: string;
+  chrome?: boolean;
+};
 
 const { overHero = false, mainClass, chrome = true, ...rest } = Astro.props;
 ---
