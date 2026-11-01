@@ -10,24 +10,33 @@ import { describe, expect, it, vi } from 'vitest';
 const source = readFileSync(new URL('../../../public/sw.js', import.meta.url), 'utf8');
 
 type Listener = (event: Record<string, unknown>) => void;
+type Req = { method: string; mode: string; destination: string; url: string };
 type Sw = {
   KILL_SWITCH: boolean;
   OFFLINE_CACHE: string;
+  RUNTIME_CACHE: string;
+  RUNTIME_MAX: number;
   staleCacheNames: (names: string[], kill: boolean) => string[];
   legacyCacheNames: (names: string[]) => string[];
   isPageNavigation: (r: Req) => boolean;
+  isPrivatePath: (p: string) => boolean;
   isOfflineEligible: (p: string) => boolean;
   shouldGuard: (r: Req, kill: boolean) => boolean;
+  shouldCachePage: (r: Req, kill: boolean) => boolean;
+  runtimeCacheFor: (r: Req) => string | null;
+  cacheable: (r: unknown) => boolean;
+  requestKey: (r: Req) => string;
+  evictKeys: (keys: string[], max: number) => string[];
 };
-type Req = { method: string; mode: string; destination: string; url: string };
 
 function load(prefix = source) {
   const listeners: Record<string, Listener> = {};
   const deleted: string[] = [];
   const store: Record<string, Map<string, unknown>> = {};
   const navigated: string[] = [];
-  const state = { claimed: false, skipped: false, unregistered: false, names: [] as string[], fetchFails: false };
+  const state = { claimed: false, skipped: false, unregistered: false, names: [] as string[], fetchFails: false, netResponse: null as unknown, storageFails: false };
   const self = {
+    location: { origin: 'https://360ghar.com' },
     addEventListener: (type: string, fn: Listener) => void (listeners[type] = fn),
     skipWaiting: async () => void (state.skipped = true),
     clients: {
@@ -38,21 +47,42 @@ function load(prefix = source) {
   };
   const caches = {
     keys: async () => state.names,
-    delete: async (n: string) => void deleted.push(n),
+    delete: async (n: string) => {
+      deleted.push(n);
+      delete store[n];
+    },
     open: async (n: string) => {
+      if (state.storageFails) throw new Error('storage blocked');
       const m = (store[n] ??= new Map());
-      return { add: async (r: { url: string }) => void m.set(new URL(r.url, 'https://360ghar.com').pathname, 'OFFLINE PAGE'), match: async (u: string) => m.get(u) };
+      return {
+        add: async (r: { url: string }) => void m.set(new URL(r.url, 'https://360ghar.com').pathname, 'OFFLINE PAGE'),
+        match: async (u: unknown) => m.get(String(u)),
+        put: async (k: unknown, v: unknown) => {
+          m.delete(String(k));
+          m.set(String(k), v);
+        },
+        keys: async () => [...m.keys()],
+        delete: async (k: unknown) => void m.delete(String(k)),
+      };
     },
   };
   class FakeResponse {
+    status: number;
+    type: string;
     constructor(
       public body: string,
-      public init: { status?: number },
-    ) {}
+      init: { status?: number; type?: string } = {},
+    ) {
+      this.status = init.status ?? 200;
+      this.type = init.type ?? 'basic';
+    }
+    clone() {
+      return new FakeResponse(this.body, { status: this.status, type: this.type });
+    }
   }
   const network = vi.fn(async () => {
     if (state.fetchFails) throw new TypeError('Failed to fetch');
-    return 'NETWORK';
+    return state.netResponse ?? 'NETWORK';
   });
   const module = { exports: {} as Sw };
   runInNewContext(prefix, { self, caches, module, URL, Request: class { constructor(public url: string) {} }, Response: FakeResponse, fetch: network });
@@ -79,7 +109,7 @@ describe('sw.js helpers', () => {
   });
 
   it('deletes every cache but its own (old Workbox, api, image, font, older versions)', () => {
-    const names = ['workbox-precache-v2-https://360ghar.com/', 'api-cache', 'image-cache', 'font-cache', '360ghar-offline-v0', sw.OFFLINE_CACHE];
+    const names = ['workbox-precache-v2-https://360ghar.com/', 'api-cache', 'image-cache', 'font-cache', '360ghar-offline-v0', sw.OFFLINE_CACHE, sw.RUNTIME_CACHE];
     expect(sw.staleCacheNames(names, false)).toEqual(names.slice(0, 5));
     expect(sw.staleCacheNames(names, true)).toEqual(names);
   });
@@ -106,6 +136,54 @@ describe('sw.js helpers', () => {
     expect(sw.isOfflineEligible('/_astro/index.abc123.js')).toBe(false);
     expect(sw.isOfflineEligible('/rss.xml')).toBe(false);
     expect(sw.isOfflineEligible('/apiary')).toBe(true); // only the /api prefix as a whole segment
+  });
+
+  it('calls signed-in and auth screens private', () => {
+    for (const p of ['/account', '/account/properties', '/login', '/register', '/auth/callback', '/forgot-password', '/reset-password', '/add-phone', '/delete-account', '/profile-completion', '/logout'])
+      expect(sw.isPrivatePath(p), p).toBe(true);
+    for (const p of ['/', '/properties', '/contact', '/login-tips', '/accounts', '/hi/account'])
+      expect(sw.isPrivatePath(p), p).toBe(false);
+  });
+
+  it('stores public navigations only: never private pages, API paths or killed workers', () => {
+    expect(sw.shouldCachePage(nav('https://360ghar.com/properties'), false)).toBe(true);
+    expect(sw.shouldCachePage(nav('https://360ghar.com/hi/property/182?utm_source=x'), false)).toBe(true);
+    expect(sw.shouldCachePage(nav('https://360ghar.com/account'), false)).toBe(false);
+    expect(sw.shouldCachePage(nav('https://360ghar.com/api/v1/properties'), false)).toBe(false);
+    expect(sw.shouldCachePage(nav('https://360ghar.com/properties'), true)).toBe(false);
+    expect(sw.shouldCachePage(nav('https://360ghar.com/_astro/a.js', { mode: 'cors', destination: '' }), false)).toBe(false);
+  });
+
+  it('serves hashed assets, fonts and Cloudinary images cache-first', () => {
+    expect(sw.runtimeCacheFor(nav('https://360ghar.com/_astro/a.abc.js', { mode: 'cors', destination: 'script' }))).toBe(sw.RUNTIME_CACHE);
+    expect(sw.runtimeCacheFor(nav('https://360ghar.com/fonts/sentient-var.woff2', { mode: 'cors', destination: 'font' }))).toBe(sw.RUNTIME_CACHE);
+    expect(sw.runtimeCacheFor(nav('https://res.cloudinary.com/demo/image/upload/w_400/pic.jpg', { mode: 'no-cors', destination: 'image' }))).toBe(sw.RUNTIME_CACHE);
+    expect(sw.runtimeCacheFor(nav('https://res.cloudinary.com/demo/video/upload/v.mp4', { mode: 'no-cors', destination: 'video' }))).toBe(null);
+    expect(sw.runtimeCacheFor(nav('https://evil.example/image/upload/x.jpg', { mode: 'no-cors', destination: 'image' }))).toBe(null);
+    expect(sw.runtimeCacheFor(nav('https://360ghar.com/uploads/room.jpg', { mode: 'no-cors', destination: 'image' }))).toBe(null);
+    expect(sw.runtimeCacheFor(nav('https://360ghar.com/_astro/a.js', { method: 'POST' }))).toBe(null);
+    expect(sw.runtimeCacheFor(nav('https://360ghar.com/properties'))).toBe(null); // navigations take the page path
+  });
+
+  it('keeps real 200s and opaque images, nothing else', () => {
+    expect(sw.cacheable({ status: 200, type: 'basic' })).toBe(true);
+    expect(sw.cacheable({ status: 0, type: 'opaque' })).toBe(true);
+    expect(sw.cacheable({ status: 404, type: 'basic' })).toBe(false);
+    expect(sw.cacheable({ status: 0, type: 'opaqueredirect' })).toBe(false);
+    expect(sw.cacheable(undefined)).toBe(false);
+    expect(sw.cacheable('NETWORK')).toBe(false);
+  });
+
+  it('keys pages by path (query dropped) and assets by full URL', () => {
+    expect(sw.requestKey(nav('https://360ghar.com/properties?utm_source=x'))).toBe('/properties');
+    expect(sw.requestKey(nav('https://360ghar.com/'))).toBe('/');
+    expect(sw.requestKey(nav('https://res.cloudinary.com/demo/image/upload/pic.jpg', { mode: 'no-cors', destination: 'image' }))).toBe('https://res.cloudinary.com/demo/image/upload/pic.jpg');
+  });
+
+  it('drops the oldest keys beyond the cap', () => {
+    expect(sw.evictKeys(['a', 'b'], 3)).toEqual([]);
+    expect(sw.evictKeys(['a', 'b', 'c', 'd'], 2)).toEqual(['a', 'b']);
+    expect(sw.evictKeys([], 5)).toEqual([]);
   });
 
   it('turns everything off when killed', () => {
@@ -143,15 +221,17 @@ describe('sw.js events', () => {
 
   it('with the kill switch on, activate deletes all caches and unregisters; it reloads tabs only for old-site caches', async () => {
     const w = load(source.replace('const KILL_SWITCH = false;', 'const KILL_SWITCH = true;'));
-    w.state.names = ['api-cache', w.sw.OFFLINE_CACHE];
+    w.state.names = ['api-cache', w.sw.OFFLINE_CACHE, w.sw.RUNTIME_CACHE];
     await runWait(w.listeners.install!);
     expect(w.store[w.sw.OFFLINE_CACHE]).toBeUndefined(); // no offline page cached
     await runWait(w.listeners.activate!);
-    expect(w.deleted).toEqual(['api-cache', w.sw.OFFLINE_CACHE]);
+    expect(w.deleted).toEqual(['api-cache', w.sw.OFFLINE_CACHE, w.sw.RUNTIME_CACHE]);
     expect(w.navigated.length).toBe(1); // 'api-cache' is an old-site cache
     expect(w.state.unregistered).toBe(true);
     expect(w.state.claimed).toBe(false);
     expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/'))).toBeUndefined();
+    expect(w.network).not.toHaveBeenCalled();
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/_astro/a.js', { mode: 'cors', destination: 'script' }))).toBeUndefined();
     expect(w.network).not.toHaveBeenCalled();
   });
 
@@ -169,27 +249,111 @@ describe('sw.js events', () => {
     expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties'))).toBe('NETWORK');
   });
 
-  it('fetch answers a failed navigation with the offline page', async () => {
+  it('fetch saves a public page and answers a failed revisit from the saved copy', async () => {
+    const w = load();
+    // The worker's network answer must look like a Response: status 200 with a clone().
+    const response = { status: 200, type: 'basic', clone: () => response };
+    w.state.netResponse = response;
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties?utm_source=x'))).toBe(response);
+    expect(w.store[w.sw.RUNTIME_CACHE]?.get('/properties')).toBe(response); // query string dropped
+    w.state.fetchFails = true;
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties'))).toBe(response);
+  });
+
+  it('a never-seen page still gets the offline fallback', async () => {
     const w = load();
     await runWait(w.listeners.install!);
     w.state.fetchFails = true;
-    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties'))).toBe('OFFLINE PAGE');
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/never-seen'))).toBe('OFFLINE PAGE');
   });
 
   it('fetch uses the inline page when the offline page was never cached', async () => {
     const w = load();
     w.state.fetchFails = true;
-    const res = (await runFetch(w.listeners.fetch!, nav('https://360ghar.com/'))) as { init: { status: number } };
-    expect(res.init.status).toBe(503);
+    const res = (await runFetch(w.listeners.fetch!, nav('https://360ghar.com/'))) as { status: number };
+    expect(res.status).toBe(503);
   });
 
-  it('fetch never touches API calls, assets or non-navigations', async () => {
+  it('never stores a private page, but still answers it with the offline fallback', async () => {
+    const w = load();
+    const response = { status: 200, type: 'basic', clone: () => response };
+    w.state.netResponse = response;
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/account'))).toBe(response);
+    expect(w.store[w.sw.RUNTIME_CACHE]?.get('/account')).toBeUndefined();
+    w.state.fetchFails = true;
+    await runWait(w.listeners.install!);
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/account'))).toBe('OFFLINE PAGE');
+  });
+
+  it('does not keep error answers or opaque redirects', async () => {
+    const w = load();
+    w.state.netResponse = { status: 404, type: 'basic', clone: () => w.state.netResponse };
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/missing-page'))).toBe(w.state.netResponse);
+    expect(w.store[w.sw.RUNTIME_CACHE]?.size ?? 0).toBe(0);
+  });
+
+  it('assets are cache-first: the second ask never touches the network', async () => {
+    const w = load();
+    const image = { status: 0, type: 'opaque', clone: () => image };
+    w.state.netResponse = image;
+    const asset = nav('https://res.cloudinary.com/demo/image/upload/w_400/pic.jpg', { mode: 'no-cors', destination: 'image' });
+    expect(await runFetch(w.listeners.fetch!, asset)).toBe(image);
+    expect(w.network).toHaveBeenCalledTimes(1);
+    w.state.netResponse = { status: 500, type: 'basic', clone: () => w.state.netResponse };
+    expect(await runFetch(w.listeners.fetch!, asset)).toBe(image); // served from the cache
+    expect(w.network).toHaveBeenCalledTimes(1);
+    expect(w.store[w.sw.RUNTIME_CACHE]?.get('https://res.cloudinary.com/demo/image/upload/w_400/pic.jpg')).toBe(image);
+  });
+
+  it('evicts the oldest entries beyond the runtime cap', async () => {
+    const w = load(source.replace('const RUNTIME_MAX = 150;', 'const RUNTIME_MAX = 2;'));
+    const html = { status: 200, type: 'basic', clone: () => html };
+    w.state.netResponse = html;
+    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/a'));
+    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/b'));
+    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/c'));
+    const cache = w.store[w.sw.RUNTIME_CACHE]!;
+    expect(cache.has('/a')).toBe(false);
+    expect([...cache.keys()]).toEqual(['/b', '/c']);
+  });
+
+  it('survives broken storage: a good page load is never turned into the offline page', async () => {
+    const w = load();
+    w.state.storageFails = true;
+    const response = { status: 200, type: 'basic', clone: () => response };
+    w.state.netResponse = response;
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties'))).toBe(response);
+    expect(w.network).toHaveBeenCalledTimes(1);
+  });
+
+  it('survives broken storage offline: the inline fallback page still answers', async () => {
+    const w = load();
+    w.state.storageFails = true;
+    w.state.fetchFails = true;
+    const res = (await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties'))) as { status: number };
+    expect(res.status).toBe(503);
+  });
+
+  it('survives broken storage for assets: the network answer passes through', async () => {
+    const w = load();
+    w.state.storageFails = true;
+    const image = { status: 0, type: 'opaque', clone: () => image };
+    w.state.netResponse = image;
+    const asset = nav('https://360ghar.com/_astro/a.abc.js', { mode: 'cors', destination: 'script' });
+    expect(await runFetch(w.listeners.fetch!, asset)).toBe(image);
+    expect(w.network).toHaveBeenCalledTimes(1);
+    expect(await runFetch(w.listeners.fetch!, asset)).toBe(image); // no cache, so the network again
+    expect(w.network).toHaveBeenCalledTimes(2);
+  });
+
+  it('fetch never touches API calls, third-party assets or non-navigations', async () => {
     const w = load();
     w.state.fetchFails = true;
     for (const r of [
       nav('https://api.360ghar.com/api/v1/properties', { mode: 'cors', destination: '' }),
       nav('https://360ghar.com/api/v1/properties'),
-      nav('https://360ghar.com/_astro/a.abc.js', { mode: 'no-cors', destination: 'script' }),
+      nav('https://360ghar.com/dev-api/api/v1/users/profile'),
+      nav('https://example.com/x.js', { mode: 'no-cors', destination: 'script' }),
       nav('https://360ghar.com/properties', { method: 'POST' }),
     ])
       expect(await runFetch(w.listeners.fetch!, r)).toBeUndefined();

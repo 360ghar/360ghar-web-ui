@@ -14,5 +14,31 @@
     { "src": "/assets/images/logo/favicon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/assets/images/logo/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "/assets/images/logo/favicon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse properties",
+      "short_name": "Properties",
+      "url": "/properties",
+      "icons": [{ "src": "/assets/images/logo/favicon.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Map discovery",
+      "short_name": "Map",
+      "url": "/map-discovery",
+      "icons": [{ "src": "/assets/images/logo/favicon.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Tools & calculators",
+      "short_name": "Tools",
+      "url": "/tools",
+      "icons": [{ "src": "/assets/images/logo/favicon.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "List property free",
+      "short_name": "List free",
+      "url": "/list-property-free",
+      "icons": [{ "src": "/assets/images/logo/favicon.png", "sizes": "192x192", "type": "image/png" }]
+    }
   ]
 }

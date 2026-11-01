@@ -13,6 +13,7 @@ const manifest = JSON.parse(readFileSync(new URL('manifest.webmanifest', publicD
   theme_color: string;
   background_color: string;
   icons: { src: string; sizes: string; type: string; purpose?: string }[];
+  shortcuts?: { name: string; short_name: string; url: string; icons: { src: string; sizes: string; type: string }[] }[];
 };
 
 /** Width and height from the PNG IHDR chunk (bytes 16 to 24). */
@@ -54,6 +55,20 @@ describe('web app manifest', () => {
       expect(icon.type).toBe('image/png');
       const { w, h } = pngSize(file);
       expect(`${w}x${h}`, icon.src).toBe(icon.sizes);
+    }
+  });
+
+  it('offers app shortcuts inside the scope, each reusing a declared icon file', () => {
+    expect(manifest.shortcuts?.length ?? 0).toBeGreaterThan(0);
+    for (const shortcut of manifest.shortcuts ?? []) {
+      expect(shortcut.name, shortcut.url).toBeTruthy();
+      expect(shortcut.short_name, shortcut.url).toBeTruthy();
+      expect(shortcut.url.startsWith(manifest.scope), shortcut.url).toBe(true);
+      expect(shortcut.icons.length, shortcut.url).toBeGreaterThan(0);
+      for (const icon of shortcut.icons) {
+        expect(manifest.icons.some((i) => i.src === icon.src), icon.src).toBe(true); // reuse a declared icon, no new asset
+        expect(existsSync(new URL(icon.src.replace(/^\//, ''), publicDir)), icon.src).toBe(true);
+      }
     }
   });
 
