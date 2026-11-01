@@ -39,9 +39,9 @@ test('home: sections render with live data, no sideways scroll, axe clean', asyn
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find a home.');
   await scrollThrough(page);
   const m = main(page);
-  await expect(m.locator('#home-homes')).toContainText(/\d+ verified homes/);
-  await expect(m.getByRole('heading', { name: 'More verified homes' })).toBeVisible();
-  await expect(m.getByRole('heading', { name: 'Shortlist from your sofa. Visit once.' })).toBeVisible();
+  await expect(m.locator('#home-homes')).toContainText(/\d+ property listings in Gurugram/);
+  await expect(m.getByRole('heading', { name: 'More property listings' })).toBeVisible();
+  await expect(m.getByRole('heading', { name: 'Browse listings and decide what to check next' })).toBeVisible();
   await expect(m.locator('.home-steps > li')).toHaveCount(3);
   await expect(m.locator('.home-step-art')).toHaveCount(3);
   await expect(m.getByRole('heading', { name: 'Where the homes are' })).toBeVisible();
@@ -159,11 +159,11 @@ test('home: locality, search, tool and owner links go to live pages', async ({ p
   await follow(page, () => m.getByRole('link', { name: /EMI calculator/ }).click(), /\/emi-calculator$/);
   await page.goBack();
 
-  await follow(page, () => m.getByRole('link', { name: /Post your property free/ }).click(), /\/post-property$/);
+  await follow(page, () => m.getByRole('link', { name: /Send a listing request/ }).click(), /\/post-property$/);
   await page.goBack();
 
-  await expect(m.getByRole('link', { name: /All [\d,]+ localities/ })).toHaveAttribute('href', '/localities');
-  await expect(m.getByRole('link', { name: 'Get the owner app' })).toHaveAttribute('href', '/app');
+  await expect(m.getByRole('link', { name: 'Browse locality pages' })).toHaveAttribute('href', '/localities');
+  await expect(m.getByRole('link', { name: 'Get the 360Ghar app' })).toHaveAttribute('href', '/app');
   await expect(m.getByRole('link', { name: /Read reviews on Google/ })).toHaveAttribute('href', /google\.com\/search/);
   await w.check();
 });
@@ -238,7 +238,7 @@ test('home: tools in three groups, each tool with its own icon', async ({ page }
     .evaluateAll((ps) => ps.map((p) => p.getAttribute('d')));
   expect(icons).toHaveLength(10);
   expect(new Set(icons).size).toBe(10);
-  await expect(main(page).getByRole('link', { name: /Capital gains tax calculator/ })).toHaveAttribute('href', '/capital-gains-tax-calculator');
+  await expect(main(page).getByRole('link', { name: /Property sale gain worksheet/ })).toHaveAttribute('href', '/capital-gains-tax-calculator');
 });
 
 test('home: search by PG, by text, and Near me without location', async ({ page, context }) => {
@@ -260,7 +260,8 @@ test('home: search by PG, by text, and Near me without location', async ({ page,
   await form.getByRole('combobox').or(form.getByRole('textbox')).first().fill('Sector 85');
   await form.getByRole('button', { name: 'Search' }).click();
   await page.waitForURL(/\/properties\?/, { waitUntil: 'commit' });
-  expect(new URL(page.url()).searchParams.get('q')).toBe('Sector 85');
+  // A typed sector reads as the exact locality filter (areaSearch.exactArea), not a keyword.
+  expect(new URL(page.url()).searchParams.get('locality')).toBe('Sector 85');
   await page.goBack();
   await hydrated(page);
   await page.evaluate(() => {
@@ -280,7 +281,7 @@ test('home: the scene moves only without reduced motion', async ({ browser }) =>
     const ctx = await browser.newContext({ reducedMotion, viewport: { width: 1440, height: 900 } });
     const page = await ctx.newPage();
     await page.goto('/');
-    const running = await page.evaluate(() => ['.layer-train', '.layer-clouds', '.layer-kite'].map((s) => document.querySelector(s)!.getAnimations().length));
+    const running = await page.evaluate(() => ['.layer-trainBody', '.layer-clouds', '.layer-kite'].map((s) => document.querySelector(s)!.getAnimations().length));
     if (reducedMotion === 'reduce') expect(running).toEqual([0, 0, 0]);
     else expect(running).toEqual([1, 1, 1]);
     await ctx.close();
@@ -307,7 +308,7 @@ test('home: the Hindi page renders in Hindi', async ({ page }) => {
   await scrollThrough(page);
   const m = main(page);
   await expect(m.getByRole('heading', { name: 'घर कहाँ हैं' })).toBeVisible();
-  await expect(m.getByRole('heading', { name: 'कमरा-दर-कमरा देखिए' })).toBeVisible();
+  await expect(m.getByRole('heading', { name: 'और प्रॉपर्टी लिस्टिंग' })).toBeVisible();
   await expect(m.getByRole('button', { name: 'अगले घर' })).toBeVisible();
   await expect(m.locator('.home-places a').first()).toHaveAttribute('href', /^\/hi\/locality\//);
   await axe(page);
@@ -320,13 +321,13 @@ test('home: free AI tools band compares and links', async ({ page }) => {
   await hydrated(page);
   const band = page.locator('section[aria-labelledby="home-fai"]');
   await band.scrollIntoViewIfNeeded();
-  await expect(band.getByRole('heading', { name: /furnished in half a minute/ })).toBeVisible();
-  const slider = band.getByRole('slider', { name: /empty flat or the AI redesign/ });
+  await expect(band.getByRole('heading', { name: 'Explore property tools' })).toBeVisible();
+  const slider = band.getByRole('slider', { name: 'Compare the starting room with the design example' });
   await slider.fill('25');
   await expect(band.locator('.fai-stage')).toHaveAttribute('style', /--cmp: 25%/);
-  await expect(band.getByRole('link', { name: 'Design a room' })).toHaveAttribute('href', '/ai-design-studio');
-  await expect(band.getByRole('link', { name: 'Check a plan' })).toHaveAttribute('href', '/vastu-checker');
-  await band.getByRole('button', { name: 'Start a chat' }).click();
+  await expect(band.locator('a[href="/ai-design-studio"]')).toBeVisible();
+  await expect(band.locator('a[href="/vastu-checker"]')).toBeVisible();
+  await band.getByRole('button', { name: 'Open chat' }).click();
   await expect(page.locator('[data-chat-launcher]')).toHaveAttribute('aria-expanded', 'true');
   await w.check();
 });
