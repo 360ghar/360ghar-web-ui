@@ -87,7 +87,7 @@ function load(prefix = source) {
     return state.netResponse ?? 'NETWORK';
   });
   const module = { exports: {} as Sw };
-  runInNewContext(prefix, { self, caches, module, URL, Request: class { constructor(public url: string) {} }, Response: FakeResponse, fetch: network });
+  runInNewContext(prefix, { self, caches, module, URL, URLSearchParams, Request: class { constructor(public url: string) {} }, Response: FakeResponse, fetch: network });
   return { listeners, deleted, store, navigated, state, network, sw: module.exports };
 }
 
@@ -191,7 +191,11 @@ describe('sw.js helpers', () => {
     expect(sw.isTrackingParam('purpose')).toBe(false);
     expect(sw.cleanSearch(new URL('https://360ghar.com/properties?purpose=rent&bhk=3&utm_source=x&fbclid=y'))).toBe('?purpose=rent&bhk=3');
     expect(sw.cleanSearch(new URL('https://360ghar.com/properties'))).toBe('');
-    expect(sw.cleanSearch(new URL('https://360ghar.com/compare?ids=1,2'))).toBe('?ids=1,2');
+    expect(sw.cleanSearch(new URL('https://360ghar.com/compare?ids=1,2'))).toBe('?ids=1%2C2'); // values stay encoded
+    // Encoded delimiters never collapse two server-rendered searches into one key.
+    expect(sw.cleanSearch(new URL('https://360ghar.com/properties?q=DLF%26purpose%3Drent'))).toBe('?q=DLF%26purpose%3Drent');
+    expect(sw.cleanSearch(new URL('https://360ghar.com/properties?q=DLF&purpose=rent'))).toBe('?q=DLF&purpose=rent');
+    expect(sw.requestKey(nav('https://360ghar.com/properties?q=DLF%26purpose%3Drent'))).not.toBe(sw.requestKey(nav('https://360ghar.com/properties?q=DLF&purpose=rent')));
     expect(sw.requestKey(nav('https://360ghar.com/properties?purpose=rent'))).toBe('/properties?purpose=rent');
     expect(sw.requestKey(nav('https://360ghar.com/properties?purpose=rent&utm_source=newsletter'))).toBe('/properties?purpose=rent');
     expect(sw.requestKey(nav('https://360ghar.com/hi/property/182?src=share'))).toBe('/hi/property/182?src=share');

@@ -332,7 +332,8 @@ test.describe('service worker (production build, SW_E2E=1)', () => {
     expect(await page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
     const caches = await cacheContents(page);
     expect(caches[OFFLINE_CACHE]).toEqual(['/offline.html']);
-    expect(caches[RUNTIME_CACHE]).toContain('/'); // the controlled reload is itself a cached public page
+    // The write runs in the fetch event's waitUntil: poll until the reload's copy lands.
+    await expect.poll(async () => (await cacheContents(page))[RUNTIME_CACHE], { timeout: 15_000 }).toContain('/');
     await w.check();
   });
 
@@ -358,7 +359,8 @@ test.describe('service worker (production build, SW_E2E=1)', () => {
     await page.evaluate(() => fetch('/api/v1/amenities').catch(() => null));
     const caches = await cacheContents(page);
     expect(caches[OFFLINE_CACHE]).toEqual(['/offline.html']);
-    expect(caches[RUNTIME_CACHE]).toEqual(expect.arrayContaining(['/', '/properties']));
+    // Background writes: poll until both visited pages have landed in the runtime cache.
+    await expect.poll(async () => (await cacheContents(page))[RUNTIME_CACHE], { timeout: 15_000 }).toEqual(expect.arrayContaining(['/', '/properties']));
     expect(Object.values(caches).flat()).not.toContain('/api/v1/amenities');
     await context.setOffline(true);
     const result = await page.evaluate(() => fetch('/api/v1/amenities').then(() => 'answered', () => 'failed'));

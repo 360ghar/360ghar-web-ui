@@ -143,13 +143,14 @@ function isTrackingParam(key) {
   return /^(utm_.+|fbclid|gclid|msclkid|mc_cid|mc_eid|ref)$/i.test(key);
 }
 
-/** The search string with tracking parameters removed, in a stable order. */
+/** The search string with tracking parameters removed, serialised so values stay encoded (`?q=a%26b` never collides with `?q=a&b`). */
 function cleanSearch(url) {
-  var keep = [];
+  var out = new URLSearchParams();
   url.searchParams.forEach(function (value, key) {
-    if (!isTrackingParam(key)) keep.push(key + '=' + value);
+    if (!isTrackingParam(key)) out.append(key, value);
   });
-  return keep.length ? '?' + keep.join('&') : '';
+  var search = out.toString();
+  return search ? '?' + search : '';
 }
 
 /**
@@ -166,14 +167,6 @@ function requestKey(request) {
 /** Oldest entries to drop so at most `max` remain (cache.keys() is in insertion order). */
 function evictKeys(keys, max) {
   return keys.length > max ? keys.slice(0, keys.length - max) : [];
-}
-
-async function saveToRuntime(key, response) {
-  var cache = await caches.open(RUNTIME_CACHE);
-  await cache.put(key, response.clone());
-  var keys = await cache.keys();
-  var old = evictKeys(keys, RUNTIME_MAX);
-  for (var i = 0; i < old.length; i += 1) await cache.delete(old[i]);
 }
 
 /** Store a copy, best effort: broken storage can never fail a request. Clones now, before the browser locks the body. */
