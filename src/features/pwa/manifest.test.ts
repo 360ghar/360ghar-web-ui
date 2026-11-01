@@ -13,6 +13,7 @@ const manifest = JSON.parse(readFileSync(new URL('manifest.webmanifest', publicD
   theme_color: string;
   background_color: string;
   icons: { src: string; sizes: string; type: string; purpose?: string }[];
+  shortcuts?: { name: string; short_name: string; url: string; icons: { src: string; sizes: string; type: string }[] }[];
 };
 
 /** Width and height from the PNG IHDR chunk (bytes 16 to 24). */
@@ -54,6 +55,27 @@ describe('web app manifest', () => {
       expect(icon.type).toBe('image/png');
       const { w, h } = pngSize(file);
       expect(`${w}x${h}`, icon.src).toBe(icon.sizes);
+    }
+  });
+
+  it('offers app shortcuts inside the scope, each reusing a declared icon file', () => {
+    expect(manifest.shortcuts?.length ?? 0).toBeGreaterThan(0);
+    for (const shortcut of manifest.shortcuts ?? []) {
+      expect(shortcut.name, shortcut.url).toBeTruthy();
+      expect(shortcut.short_name, shortcut.url).toBeTruthy();
+      // Resolve against the site origin: a protocol-relative "//evil.example" must not pass a prefix check.
+      const target = new URL(shortcut.url, 'https://360ghar.com');
+      expect(target.origin, shortcut.url).toBe('https://360ghar.com');
+      expect(target.pathname.startsWith(manifest.scope), shortcut.url).toBe(true);
+      expect(shortcut.icons.length, shortcut.url).toBeGreaterThan(0);
+      for (const icon of shortcut.icons) {
+        const declared = manifest.icons.find((i) => i.src === icon.src);
+        // Reuse a declared icon, with its real size and type, not a new or mislabelled asset.
+        expect(declared, icon.src).toBeTruthy();
+        expect(icon.sizes, icon.src).toBe(declared!.sizes);
+        expect(icon.type, icon.src).toBe(declared!.type);
+        expect(existsSync(new URL(icon.src.replace(/^\//, ''), publicDir)), icon.src).toBe(true);
+      }
     }
   });
 

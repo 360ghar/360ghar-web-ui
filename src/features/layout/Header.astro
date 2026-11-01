@@ -112,6 +112,10 @@ const spriteIcons: IconName[] = ['chevron-down', ...[...PRIMARY, ...groups.flatM
       <a class="btn btn-primary post" href={L('/post-property')}>{t('site:nav.postProperty')}</a>
       <!-- The chat button: in this bar below 1024 px, a tab at the bottom right from 1024 px (.chat-launcher in global.css). -->
       <ChatLauncher part="button" />
+      <!-- Chrome install button: hidden until beforeinstallprompt fires (see features/pwa/install.ts). -->
+      <button type="button" class="btn btn-quiet btn-icon" data-install hidden aria-label={t('site:nav.installApp')}>
+        <Icon name="download" size={22} />
+      </button>
       <a class="btn btn-quiet btn-icon search-button" href={L('/properties')} aria-label={t('site:nav.search')}>
         <Icon name="search" size={22} />
       </a>
@@ -730,6 +734,7 @@ const spriteIcons: IconName[] = ['chevron-down', ...[...PRIMARY, ...groups.flatM
 
 <script>
   import { peekStoredUser } from '@/features/auth/supabase';
+  import { wireInstallButton } from '@/features/pwa/install';
 
   const header = document.querySelector<HTMLElement>('[data-header]');
   if (header) {
@@ -806,6 +811,16 @@ const spriteIcons: IconName[] = ['chevron-down', ...[...PRIMARY, ...groups.flatM
       const first = (user.name ?? user.email ?? '').split(/[\s@]/)[0];
       const label = header.querySelector('[data-account-label]');
       if (label && first) label.textContent = first;
+    }
+
+    // Chrome install button: stays hidden until the browser reports the site installable.
+    const install = header.querySelector<HTMLElement>('[data-install]');
+    if (install) {
+      wireInstallButton(
+        install,
+        () => install.removeAttribute('hidden'),
+        () => install.setAttribute('hidden', ''),
+      );
     }
   }
 </script>

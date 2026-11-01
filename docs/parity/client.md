@@ -13,17 +13,19 @@ Progress file. Updated after each task.
 
 ## E2. Offline notice and conservative service worker: DONE in code and unit tests; browser checks are for QA
 
-Files: `public/sw.js`, `public/offline.html`, `src/features/pwa/{register.ts,OfflineNotice.astro,sw.test.ts,register.test.ts}`, one added import and one added tag in `src/layouts/Base.astro`. `public/registerSW.js` and `manifest.webmanifest` are unchanged (registerSW.js stays empty on purpose: old cached v1 pages that load it must not register anything).
+Files: `public/sw.js`, `public/offline.html`, `src/features/pwa/{register.ts,OfflineNotice.astro,install.ts,sw.test.ts,install.test.ts,register.test.ts}`, one added import and one added tag in `src/layouts/Base.astro`. `public/registerSW.js` stays empty on purpose: old cached v1 pages that load it must not register anything.
 
-Worker rules (see the header of `public/sw.js`):
+Worker rules (see the header of `public/sw.js`), since the v2 update (install button, app shortcuts, offline page copies):
 
-1. On activate it deletes every cache except its own `360ghar-offline-v1` (old Workbox precache, `api-cache`, `image-cache`, `font-cache`, older versions).
+1. On activate it deletes every cache except its own versioned set, `360ghar-offline-v2-*` (offline + runtime; old Workbox precache, `api-cache`, `image-cache`, `font-cache`, v1 and older versions all go).
 2. Only when old-site caches existed does it reload open tabs once. It never reloads for another reason (a reload while the kill switch is on would loop, because pages re-register the file).
-3. It answers a FAILED top-level GET page navigation with `/offline.html`. Nothing else is intercepted: no API (`/api`, `/dev-api`), no assets, no files such as `/rss.xml`, no POST, no iframes. A page that loads is passed through untouched, so signed-in pages are never stored.
-4. `/_astro/*` cache-first was skipped: `netlify.toml` already serves those files as `immutable`, so the HTTP cache does the job with no risk.
-5. `skipWaiting` + `clients.claim`: used. The worker holds no pages or API data, so an open page can never meet a cache from another version. Without them a visitor with the old worker keeps the old site until every tab closes. The old worker used `autoUpdate`.
+3. Pages are network-first. A public page's HTML is stored in the runtime cache under its path plus its result-defining query (only tracking parameters are dropped, because `/properties` and `/compare` render different HTML per query), and a FAILED navigation to a page seen before answers from that copy; anything else falls back to `/offline.html`. Private pages (`/account`, `/hi/account`, `/auth`, `/login`, `/register`, password/phone/account screens) are never stored; they still get `/offline.html` when the network fails. No API (`/api`, `/dev-api`), no files such as `/rss.xml`, no POST, no iframes, no answers marked `no-store`.
+4. Cache-first for `/_astro/*` and `/fonts/*` (same origin) and Cloudinary `/image/upload/*` images. They are immutable or per-property, so the cache copy is the answer; this is what makes revisited pages render offline (`netlify.toml` still serves `/_astro/*` as `immutable`). The runtime cache holds at most 150 entries; the oldest go first. Every cache write is best effort: broken storage (quota, `Vary: *`, private mode) never fails a request or turns a good page load into the offline page.
+5. `skipWaiting` + `clients.claim`: used. The worker holds no API data, so an open page can never meet a cache from another version. Without them a visitor with the old worker keeps the old site until every tab closes. The old worker used `autoUpdate`.
 6. Kill switch: `const KILL_SWITCH = false` in `public/sw.js`. Set it to `true` and deploy: the worker deletes all caches and unregisters. Also set `ENABLE_SW = false` in `src/features/pwa/register.ts`, or new page loads register it again.
-7. `VERSION` in `public/sw.js`: raise it when `public/offline.html` changes.
+7. `VERSION` in `public/sw.js`: raise it when `public/offline.html` changes (every own cache name carries it, so a bump also empties the runtime cache).
+
+Install button: `src/features/pwa/install.ts` wires a hidden `data-install` button in the header to `beforeinstallprompt` (Chromium only; iOS and Firefox never see it). Click calls `prompt()` once (a second call would throw), an accepted choice hides on `appinstalled`, a dismissed choice hides and is remembered for the tab session (`360ghar-install-dismissed` in `sessionStorage`). Manifest shortcuts: `/properties`, `/map-discovery`, `/tools`, `/list-property-free` (tested in `manifest.test.ts`).
 
 Registration: only in a production build, after the `load` event, scope `/`, `updateViaCache: 'none'`.
 
@@ -33,9 +35,9 @@ OfflineNotice: an Astro component (no React added to every page). A status regio
 
 Run `tests/e2e/parity-client.spec.ts`. The dev group runs on `astro dev`. The production group needs `SW_E2E=1` and `BASE_URL` set to a production build (the worker registers only in production).
 
-1. Install: after load, `navigator.serviceWorker.ready` resolves with `/sw.js`; after one reload the tab is controlled; `caches` holds only `360ghar-offline-v1` with `/offline.html`.
+1. Install: after load, `navigator.serviceWorker.ready` resolves with `/sw.js`; after one reload the tab is controlled; `caches` holds only the `360ghar-offline-v2-*` caches: offline with `/offline.html`, and runtime with at least the reloaded `/` (its eligible assets land there too).
 2. Offline navigation: `setOffline(true)`, open `/properties`: the offline page shows (heading "You are offline", Hindi block, axe clean). Online again: the page loads.
-3. No stored pages or API answers: after browsing, the cache list is unchanged; an offline `fetch('/api/v1/amenities')` fails.
+3. Stored pages: after browsing public pages, the runtime cache holds their cache keys, path plus result-defining query (tracking parameters dropped); `/account`, `/hi/account`, `/login` and any `/api` answer are absent from it; an offline `fetch('/api/v1/amenities')` fails; an offline revisit of a seen page renders its saved copy, an unseen page gets `/offline.html`.
 4. Migration from the old worker: a stand-in old worker plus old caches (`workbox-precache-*`, `api-cache`, `image-cache`, `font-cache`) is replaced on `registration.update()`; caches end as only the new one; the tab reloads once. Also check by hand with a real v1 build if one is available (the stand-in is not the real Workbox script).
 5. Kill switch: the modified worker (`KILL_SWITCH = true`) unregisters and leaves no caches.
 6. Offline notice at 360, 768, 1440 px: appears offline, hidden online, header does not move, no horizontal scroll, axe clean.
@@ -123,7 +125,7 @@ Setup: a production build served over `http://localhost` or HTTPS (`astro dev` n
 
 1. Install from a v1-style worker with old caches
    - Automated: spec "migration". Manual with a real v1 build: serve the old site (`360ghar-web-ui` build with its Workbox worker) at the same origin, open it, wait for the worker and the precache; then deploy or serve the v2 build at that origin. Reload once.
-   - Expect: DevTools, Application, Cache Storage lists only `360ghar-offline-v1` (with `/offline.html`); no `workbox-*`, `api-cache`, `image-cache`, `font-cache`; the worker script is the v2 `/sw.js`; an open old tab reloaded once and shows the v2 site; no reload loop (watch Network for three seconds).
+   - Expect: DevTools, Application, Cache Storage lists only the `360ghar-offline-v2-*` caches; no `workbox-*`, `api-cache`, `image-cache`, `font-cache`, no `360ghar-offline-v1-*`; the worker script is the v2 `/sw.js`; an open old tab reloaded once and shows the v2 site; no reload loop (watch Network for three seconds).
 2. Offline navigation
    - Load `/`, reload once so the tab is controlled, set DevTools Network to Offline, open `/properties`, `/hi`, and a `/property/<id>`.
    - Expect: the offline page (English heading, Hindi block, "Try again" button, no console errors, no failed requests other than the page). The offline notice strip shows on pages that were already open. Back online: "Try again" and the `online` event reload the page.
