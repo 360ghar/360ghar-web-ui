@@ -13,13 +13,17 @@
  *   2. If it found old-site caches, it reloads open tabs once, so a tab that
  *      still shows the old site loads the new one. It reloads for no other
  *      reason.
- *   3. Pages are network-first: the network answer is what the visitor sees.
- *      A public page's HTML is kept in the runtime cache (query strings are
- *      dropped, so ?utm=... does not fork entries), and when the device is
+ *   3. Pages are network-first: the network answer is what the visitor sees,
+ *      and it returns at once (the cache write runs in the fetch event's
+ *      waitUntil, so streamed HTML is never held back). A public page's HTML
+ *      is kept in the runtime cache under its path plus its result-defining
+ *      query (only tracking parameters are dropped, because /properties and
+ *      /compare render different HTML per query), and when the device is
  *      offline a page the visitor saw before opens from that copy. A page
  *      never seen offline falls back to /offline.html. Signed-in pages
- *      (/account, /login, ...) are never stored. API calls (/api, /dev-api)
- *      are never stored and never answered from cache.
+ *      (/account, /login, ... in every supported locale) and answers marked
+ *      `no-store` are never stored. API calls (/api, /dev-api) are never
+ *      stored and never answered from cache.
  *   4. Same-origin /_astro/* and /fonts/* and Cloudinary /image/upload/* URLs
  *      are cache-first: they are immutable or per-property, so the cache copy
  *      is the answer. Cloudinary images are opaque no-cors responses, stored
@@ -91,10 +95,10 @@ function isPageNavigation(request) {
   return ['iframe', 'frame', 'embed', 'object'].indexOf(request.destination) === -1;
 }
 
-/** Session pages whose HTML must never be stored: signed-in or auth screens. */
+/** Session pages whose HTML must never be stored: signed-in or auth screens, in every supported locale. */
 function isPrivatePath(pathname) {
   return /^(account|auth|login|register|logout|forgot-password|reset-password|add-phone|delete-account|profile-completion)(\/|$)/.test(
-    pathname.replace(/^\//, ''),
+    pathname.replace(/^\/(?:hi\/)?/, ''),
   );
 }
 
@@ -126,16 +130,37 @@ function runtimeCacheFor(request) {
   return null;
 }
 
-/** Worth keeping: a real 200, or an opaque image (no-cors hides its status). */
+/** Worth keeping: a real 200 without `no-store`, or an opaque image (no-cors hides its status). */
 function cacheable(response) {
   if (!response) return false;
-  return response.status === 200 || response.type === 'opaque';
+  if (response.status !== 200) return response.type === 'opaque';
+  var control = response.headers && typeof response.headers.get === 'function' ? response.headers.get('cache-control') : null;
+  return !control || !/no-store/i.test(control);
 }
 
-/** Cache identity: a page's path without its query (so tracking params do not fork entries), otherwise the full URL. */
+/** Tracking parameters never change what a page renders, so they leave the cache key. */
+function isTrackingParam(key) {
+  return /^(utm_.+|fbclid|gclid|msclkid|mc_cid|mc_eid|ref)$/i.test(key);
+}
+
+/** The search string with tracking parameters removed, in a stable order. */
+function cleanSearch(url) {
+  var keep = [];
+  url.searchParams.forEach(function (value, key) {
+    if (!isTrackingParam(key)) keep.push(key + '=' + value);
+  });
+  return keep.length ? '?' + keep.join('&') : '';
+}
+
+/**
+ * Cache identity. Navigations keep their result-defining query (properties.astro
+ * renders /properties?purpose=rent differently from ?purpose=buy), minus
+ * tracking parameters; everything else is keyed by its full URL.
+ */
 function requestKey(request) {
   var url = new URL(request.url);
-  return isPageNavigation(request) ? url.pathname : url.href;
+  if (!isPageNavigation(request)) return url.href;
+  return url.pathname + cleanSearch(url);
 }
 
 /** Oldest entries to drop so at most `max` remain (cache.keys() is in insertion order). */
@@ -151,35 +176,47 @@ async function saveToRuntime(key, response) {
   for (var i = 0; i < old.length; i += 1) await cache.delete(old[i]);
 }
 
-async function saveToRuntime(key, response) {
+/** Store a copy, best effort: broken storage can never fail a request. Clones now, before the browser locks the body. */
+function saveToRuntime(key, response) {
+  var copy;
   try {
-    var cache = await caches.open(RUNTIME_CACHE);
-    await cache.put(key, response.clone());
-    var keys = await cache.keys();
-    var old = evictKeys(keys, RUNTIME_MAX);
-    for (var i = 0; i < old.length; i += 1) await cache.delete(old[i]);
+    copy = response.clone();
   } catch (e) {
-    // Storage refused the write (quota full, Vary: *, private mode): keep the network answer.
+    return Promise.resolve(); // Body already in use: nothing to store.
   }
+  return (async function () {
+    try {
+      var cache = await caches.open(RUNTIME_CACHE);
+      await cache.put(key, copy);
+      var keys = await cache.keys();
+      var old = evictKeys(keys, RUNTIME_MAX);
+      for (var i = 0; i < old.length; i += 1) await cache.delete(old[i]);
+    } catch (e) {
+      // Storage refused the write (quota full, Vary: *, private mode): keep the network answer.
+    }
+  })();
 }
 
 /** Cache-first for immutable assets and images: the cache copy is the answer. */
-async function cacheFirst(request) {
-  var cache;
+async function cacheFirst(request, event) {
+  var key = requestKey(request);
   try {
-    cache = await caches.open(RUNTIME_CACHE);
-    var hit = await cache.match(requestKey(request));
+    var cache = await caches.open(RUNTIME_CACHE);
+    var hit = await cache.match(key);
     if (hit) return hit;
   } catch (e) {
     return fetch(request); // Storage off: pass the request through.
   }
   var response = await fetch(request);
-  if (cacheable(response)) await saveToRuntime(requestKey(request), response);
+  if (cacheable(response)) {
+    var saved = saveToRuntime(key, response);
+    if (event && event.waitUntil) event.waitUntil(saved); // The answer returns at once; the write settles in the background.
+  }
   return response;
 }
 
-/** Network-first for pages: save public HTML, fall back to the saved copy, then to /offline.html. */
-async function navigationResponse(request) {
+/** Network-first for pages: the network answer returns at once; the copy lands in the cache in the background. */
+async function navigationResponse(request, event) {
   var response;
   try {
     response = await fetch(request);
@@ -193,7 +230,10 @@ async function navigationResponse(request) {
     }
     return saved || (await offlineFallback());
   }
-  if (shouldCachePage(request, KILL_SWITCH) && cacheable(response)) await saveToRuntime(requestKey(request), response);
+  if (shouldCachePage(request, KILL_SWITCH) && cacheable(response)) {
+    var writing = saveToRuntime(requestKey(request), response);
+    if (event && event.waitUntil) event.waitUntil(writing);
+  }
   return response;
 }
 
@@ -225,6 +265,8 @@ if (typeof module !== 'undefined') {
     runtimeCacheFor: runtimeCacheFor,
     cacheable: cacheable,
     requestKey: requestKey,
+    cleanSearch: cleanSearch,
+    isTrackingParam: isTrackingParam,
     evictKeys: evictKeys,
   };
 }
@@ -273,10 +315,10 @@ self.addEventListener('fetch', function (event) {
   const request = event.request;
   if (KILL_SWITCH) return;
   if (runtimeCacheFor(request)) {
-    event.respondWith(cacheFirst(request));
+    event.respondWith(cacheFirst(request, event));
     return;
   }
   // Not ours: the browser handles it as if no worker existed.
   if (!shouldGuard(request, false)) return;
-  event.respondWith(navigationResponse(request));
+  event.respondWith(navigationResponse(request, event));
 });

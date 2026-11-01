@@ -16,7 +16,8 @@ export type InstallPrompt = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 };
 
-export function isDismissed(session: Pick<Storage, 'getItem'> = sessionStorage): boolean {
+export function isDismissed(session?: Session | null): boolean {
+  if (!session) return false;
   try {
     return session.getItem(DISMISS_KEY) === '1';
   } catch {
@@ -24,11 +25,25 @@ export function isDismissed(session: Pick<Storage, 'getItem'> = sessionStorage):
   }
 }
 
-export function dismiss(session: Pick<Storage, 'setItem'> = sessionStorage): void {
+export function dismiss(session?: Session | null): void {
+  if (!session) return;
   try {
     session.setItem(DISMISS_KEY, '1');
   } catch {
     // Storage off: the dismiss lasts until the next navigation.
+  }
+}
+
+/**
+ * sessionStorage access itself throws where storage is blocked (cookies off,
+ * some private modes). Resolving it lazily keeps `wireInstallButton` from
+ * throwing before it registers its listeners.
+ */
+function defaultSession(): Session | null {
+  try {
+    return sessionStorage;
+  } catch {
+    return null;
   }
 }
 
@@ -47,7 +62,7 @@ export function wireInstallButton(
   reveal: () => void,
   hide: () => void,
   win: ListenerWindow = window,
-  session: Session = sessionStorage,
+  session: Session | null | undefined = defaultSession(),
 ): () => void {
   let offer: InstallPrompt | null = null;
 
@@ -65,17 +80,15 @@ export function wireInstallButton(
     const pending = offer;
     if (!pending) return;
     offer = null; // One prompt per event: a second prompt() call throws InvalidStateError.
-    pending.prompt().catch(() => {
-      // The dialog failed to open (rare): userChoice decides below, or stays pending.
-    });
+    // The offer is spent either way, so every failure hides the button; a
+    // fresh beforeinstallprompt event reveals it again.
+    pending.prompt().catch(hide);
     pending.userChoice.then(
       (choice) => {
         if (choice.outcome === 'dismissed') dismiss(session);
         hide();
       },
-      () => {
-        // The prompt failed (rare): the button stays for another try.
-      },
+      hide,
     );
   };
 

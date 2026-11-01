@@ -63,10 +63,17 @@ describe('web app manifest', () => {
     for (const shortcut of manifest.shortcuts ?? []) {
       expect(shortcut.name, shortcut.url).toBeTruthy();
       expect(shortcut.short_name, shortcut.url).toBeTruthy();
-      expect(shortcut.url.startsWith(manifest.scope), shortcut.url).toBe(true);
+      // Resolve against the site origin: a protocol-relative "//evil.example" must not pass a prefix check.
+      const target = new URL(shortcut.url, 'https://360ghar.com');
+      expect(target.origin, shortcut.url).toBe('https://360ghar.com');
+      expect(target.pathname.startsWith(manifest.scope), shortcut.url).toBe(true);
       expect(shortcut.icons.length, shortcut.url).toBeGreaterThan(0);
       for (const icon of shortcut.icons) {
-        expect(manifest.icons.some((i) => i.src === icon.src), icon.src).toBe(true); // reuse a declared icon, no new asset
+        const declared = manifest.icons.find((i) => i.src === icon.src);
+        // Reuse a declared icon, with its real size and type, not a new or mislabelled asset.
+        expect(declared, icon.src).toBeTruthy();
+        expect(icon.sizes, icon.src).toBe(declared!.sizes);
+        expect(icon.type, icon.src).toBe(declared!.type);
         expect(existsSync(new URL(icon.src.replace(/^\//, ''), publicDir)), icon.src).toBe(true);
       }
     }

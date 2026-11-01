@@ -35,9 +35,9 @@ OfflineNotice: an Astro component (no React added to every page). A status regio
 
 Run `tests/e2e/parity-client.spec.ts`. The dev group runs on `astro dev`. The production group needs `SW_E2E=1` and `BASE_URL` set to a production build (the worker registers only in production).
 
-1. Install: after load, `navigator.serviceWorker.ready` resolves with `/sw.js`; after one reload the tab is controlled; `caches` holds only the `360ghar-offline-v2-*` caches (offline with `/offline.html`, runtime starts empty).
+1. Install: after load, `navigator.serviceWorker.ready` resolves with `/sw.js`; after one reload the tab is controlled; `caches` holds only the `360ghar-offline-v2-*` caches: offline with `/offline.html`, and runtime with at least the reloaded `/` (its eligible assets land there too).
 2. Offline navigation: `setOffline(true)`, open `/properties`: the offline page shows (heading "You are offline", Hindi block, axe clean). Online again: the page loads.
-3. Stored pages: after browsing public pages, the runtime cache holds their paths (without query strings); `/account`, `/login` and any `/api` answer are absent from it; an offline `fetch('/api/v1/amenities')` fails; an offline revisit of a seen page renders its saved copy, an unseen page gets `/offline.html`.
+3. Stored pages: after browsing public pages, the runtime cache holds their cache keys, path plus result-defining query (tracking parameters dropped); `/account`, `/hi/account`, `/login` and any `/api` answer are absent from it; an offline `fetch('/api/v1/amenities')` fails; an offline revisit of a seen page renders its saved copy, an unseen page gets `/offline.html`.
 4. Migration from the old worker: a stand-in old worker plus old caches (`workbox-precache-*`, `api-cache`, `image-cache`, `font-cache`) is replaced on `registration.update()`; caches end as only the new one; the tab reloads once. Also check by hand with a real v1 build if one is available (the stand-in is not the real Workbox script).
 5. Kill switch: the modified worker (`KILL_SWITCH = true`) unregisters and leaves no caches.
 6. Offline notice at 360, 768, 1440 px: appears offline, hidden online, header does not move, no horizontal scroll, axe clean.

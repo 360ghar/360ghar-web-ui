@@ -26,6 +26,8 @@ type Sw = {
   runtimeCacheFor: (r: Req) => string | null;
   cacheable: (r: unknown) => boolean;
   requestKey: (r: Req) => string;
+  cleanSearch: (u: URL) => string;
+  isTrackingParam: (k: string) => boolean;
   evictKeys: (keys: string[], max: number) => string[];
 };
 
@@ -95,9 +97,9 @@ const runWait = async (l: Listener) => {
   l({ waitUntil: (x: Promise<unknown>) => void (p = x) });
   await p;
 };
-const runFetch = async (l: Listener, request: Req) => {
+const runFetch = async (l: Listener, request: Req, waited: Promise<unknown>[] = []) => {
   let responded: Promise<unknown> | null = null;
-  l({ request, respondWith: (p: Promise<unknown>) => void (responded = p) });
+  l({ request, respondWith: (p: Promise<unknown>) => void (responded = p), waitUntil: (p: Promise<unknown>) => void waited.push(p) });
   return responded ? await (responded as Promise<unknown>) : undefined;
 };
 
@@ -138,10 +140,10 @@ describe('sw.js helpers', () => {
     expect(sw.isOfflineEligible('/apiary')).toBe(true); // only the /api prefix as a whole segment
   });
 
-  it('calls signed-in and auth screens private', () => {
-    for (const p of ['/account', '/account/properties', '/login', '/register', '/auth/callback', '/forgot-password', '/reset-password', '/add-phone', '/delete-account', '/profile-completion', '/logout'])
+  it('calls signed-in and auth screens private, in every locale', () => {
+    for (const p of ['/account', '/account/properties', '/login', '/register', '/auth/callback', '/forgot-password', '/reset-password', '/add-phone', '/delete-account', '/profile-completion', '/logout', '/hi/account', '/hi/login', '/hi/register'])
       expect(sw.isPrivatePath(p), p).toBe(true);
-    for (const p of ['/', '/properties', '/contact', '/login-tips', '/accounts', '/hi/account'])
+    for (const p of ['/', '/properties', '/contact', '/login-tips', '/accounts', '/hi', '/hi/properties'])
       expect(sw.isPrivatePath(p), p).toBe(false);
   });
 
@@ -149,6 +151,7 @@ describe('sw.js helpers', () => {
     expect(sw.shouldCachePage(nav('https://360ghar.com/properties'), false)).toBe(true);
     expect(sw.shouldCachePage(nav('https://360ghar.com/hi/property/182?utm_source=x'), false)).toBe(true);
     expect(sw.shouldCachePage(nav('https://360ghar.com/account'), false)).toBe(false);
+    expect(sw.shouldCachePage(nav('https://360ghar.com/hi/account'), false)).toBe(false);
     expect(sw.shouldCachePage(nav('https://360ghar.com/api/v1/properties'), false)).toBe(false);
     expect(sw.shouldCachePage(nav('https://360ghar.com/properties'), true)).toBe(false);
     expect(sw.shouldCachePage(nav('https://360ghar.com/_astro/a.js', { mode: 'cors', destination: '' }), false)).toBe(false);
@@ -174,8 +177,24 @@ describe('sw.js helpers', () => {
     expect(sw.cacheable('NETWORK')).toBe(false);
   });
 
-  it('keys pages by path (query dropped) and assets by full URL', () => {
-    expect(sw.requestKey(nav('https://360ghar.com/properties?utm_source=x'))).toBe('/properties');
+  it('never stores an answer marked no-store', () => {
+    const noStore = { status: 200, type: 'basic', headers: { get: (n: string) => (n.toLowerCase() === 'cache-control' ? 'private, no-store' : null) } };
+    const ok = { status: 200, type: 'basic', headers: { get: (n: string) => (n.toLowerCase() === 'cache-control' ? 'public, max-age=0, must-revalidate' : null) } };
+    expect(sw.cacheable(noStore)).toBe(false);
+    expect(sw.cacheable(ok)).toBe(true);
+    expect(sw.cacheable({ status: 200, type: 'basic', headers: undefined })).toBe(true); // no headers to read: keep it
+  });
+
+  it('drops tracking parameters from the cache key, keeps result-defining ones', () => {
+    expect(sw.isTrackingParam('utm_source')).toBe(true);
+    expect(sw.isTrackingParam('fbclid')).toBe(true);
+    expect(sw.isTrackingParam('purpose')).toBe(false);
+    expect(sw.cleanSearch(new URL('https://360ghar.com/properties?purpose=rent&bhk=3&utm_source=x&fbclid=y'))).toBe('?purpose=rent&bhk=3');
+    expect(sw.cleanSearch(new URL('https://360ghar.com/properties'))).toBe('');
+    expect(sw.cleanSearch(new URL('https://360ghar.com/compare?ids=1,2'))).toBe('?ids=1,2');
+    expect(sw.requestKey(nav('https://360ghar.com/properties?purpose=rent'))).toBe('/properties?purpose=rent');
+    expect(sw.requestKey(nav('https://360ghar.com/properties?purpose=rent&utm_source=newsletter'))).toBe('/properties?purpose=rent');
+    expect(sw.requestKey(nav('https://360ghar.com/hi/property/182?src=share'))).toBe('/hi/property/182?src=share');
     expect(sw.requestKey(nav('https://360ghar.com/'))).toBe('/');
     expect(sw.requestKey(nav('https://res.cloudinary.com/demo/image/upload/pic.jpg', { mode: 'no-cors', destination: 'image' }))).toBe('https://res.cloudinary.com/demo/image/upload/pic.jpg');
   });
@@ -249,15 +268,18 @@ describe('sw.js events', () => {
     expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties'))).toBe('NETWORK');
   });
 
-  it('fetch saves a public page and answers a failed revisit from the saved copy', async () => {
+  it('fetch saves a public page in the background and answers a failed revisit from the saved copy', async () => {
     const w = load();
+    const waited: Promise<unknown>[] = [];
     // The worker's network answer must look like a Response: status 200 with a clone().
-    const response = { status: 200, type: 'basic', clone: () => response };
+    const response = { status: 200, type: 'basic', clone: () => response, headers: undefined };
     w.state.netResponse = response;
-    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties?utm_source=x'))).toBe(response);
-    expect(w.store[w.sw.RUNTIME_CACHE]?.get('/properties')).toBe(response); // query string dropped
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties?purpose=rent&utm_source=x'), waited)).toBe(response);
+    expect(waited).toHaveLength(1); // the write runs in waitUntil: the answer is not held back
+    await Promise.all(waited);
+    expect(w.store[w.sw.RUNTIME_CACHE]?.get('/properties?purpose=rent')).toBe(response); // result query kept, tracking dropped
     w.state.fetchFails = true;
-    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties'))).toBe(response);
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/properties?purpose=rent'))).toBe(response);
   });
 
   it('a never-seen page still gets the offline fallback', async () => {
@@ -276,10 +298,13 @@ describe('sw.js events', () => {
 
   it('never stores a private page, but still answers it with the offline fallback', async () => {
     const w = load();
-    const response = { status: 200, type: 'basic', clone: () => response };
+    const waited: Promise<unknown>[] = [];
+    const response = { status: 200, type: 'basic', clone: () => response, headers: undefined };
     w.state.netResponse = response;
-    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/account'))).toBe(response);
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/hi/account'), waited)).toBe(response);
+    await Promise.all(waited);
     expect(w.store[w.sw.RUNTIME_CACHE]?.get('/account')).toBeUndefined();
+    expect(w.store[w.sw.RUNTIME_CACHE]?.get('/hi/account')).toBeUndefined();
     w.state.fetchFails = true;
     await runWait(w.listeners.install!);
     expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/account'))).toBe('OFFLINE PAGE');
@@ -287,19 +312,23 @@ describe('sw.js events', () => {
 
   it('does not keep error answers or opaque redirects', async () => {
     const w = load();
-    w.state.netResponse = { status: 404, type: 'basic', clone: () => w.state.netResponse };
-    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/missing-page'))).toBe(w.state.netResponse);
+    const waited: Promise<unknown>[] = [];
+    w.state.netResponse = { status: 404, type: 'basic', clone: () => w.state.netResponse, headers: undefined };
+    expect(await runFetch(w.listeners.fetch!, nav('https://360ghar.com/missing-page'), waited)).toBe(w.state.netResponse);
+    await Promise.all(waited);
     expect(w.store[w.sw.RUNTIME_CACHE]?.size ?? 0).toBe(0);
   });
 
   it('assets are cache-first: the second ask never touches the network', async () => {
     const w = load();
-    const image = { status: 0, type: 'opaque', clone: () => image };
+    const waited: Promise<unknown>[] = [];
+    const image = { status: 0, type: 'opaque', clone: () => image, headers: undefined };
     w.state.netResponse = image;
     const asset = nav('https://res.cloudinary.com/demo/image/upload/w_400/pic.jpg', { mode: 'no-cors', destination: 'image' });
-    expect(await runFetch(w.listeners.fetch!, asset)).toBe(image);
+    expect(await runFetch(w.listeners.fetch!, asset, waited)).toBe(image);
     expect(w.network).toHaveBeenCalledTimes(1);
-    w.state.netResponse = { status: 500, type: 'basic', clone: () => w.state.netResponse };
+    await Promise.all(waited); // the background write lands before the next ask
+    w.state.netResponse = { status: 500, type: 'basic', clone: () => w.state.netResponse, headers: undefined };
     expect(await runFetch(w.listeners.fetch!, asset)).toBe(image); // served from the cache
     expect(w.network).toHaveBeenCalledTimes(1);
     expect(w.store[w.sw.RUNTIME_CACHE]?.get('https://res.cloudinary.com/demo/image/upload/w_400/pic.jpg')).toBe(image);
@@ -307,11 +336,13 @@ describe('sw.js events', () => {
 
   it('evicts the oldest entries beyond the runtime cap', async () => {
     const w = load(source.replace('const RUNTIME_MAX = 150;', 'const RUNTIME_MAX = 2;'));
-    const html = { status: 200, type: 'basic', clone: () => html };
+    const waited: Promise<unknown>[] = [];
+    const html = { status: 200, type: 'basic', clone: () => html, headers: undefined };
     w.state.netResponse = html;
-    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/a'));
-    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/b'));
-    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/c'));
+    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/a'), waited);
+    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/b'), waited);
+    await runFetch(w.listeners.fetch!, nav('https://360ghar.com/c'), waited);
+    await Promise.all(waited);
     const cache = w.store[w.sw.RUNTIME_CACHE]!;
     expect(cache.has('/a')).toBe(false);
     expect([...cache.keys()]).toEqual(['/b', '/c']);

@@ -24,10 +24,10 @@ function button() {
 }
 
 /** A BeforeInstallPromptEvent stub whose userChoice the test resolves later. */
-function promptEvent(outcome: Promise<{ outcome: 'accepted' | 'dismissed' }> = Promise.resolve({ outcome: 'accepted' })) {
+function promptEvent(outcome: Promise<{ outcome: 'accepted' | 'dismissed' }> = Promise.resolve({ outcome: 'accepted' }), promptRejects = false) {
   return {
     preventDefault: vi.fn(),
-    prompt: vi.fn(async () => undefined),
+    prompt: vi.fn(() => (promptRejects ? Promise.reject(new Error('dialog failed')) : Promise.resolve())),
     userChoice: outcome,
   } as unknown as InstallPrompt & { preventDefault: ReturnType<typeof vi.fn>; prompt: ReturnType<typeof vi.fn> };
 }
@@ -50,6 +50,12 @@ describe('dismissal storage', () => {
     const broken = { getItem: () => { throw new Error('blocked'); }, setItem: () => { throw new Error('blocked'); } };
     expect(isDismissed(broken)).toBe(false);
     expect(() => dismiss(broken)).not.toThrow();
+  });
+
+  it('tolerates a null session (storage access threw in the browser)', () => {
+    expect(isDismissed(null)).toBe(false);
+    expect(isDismissed(undefined)).toBe(false);
+    expect(() => dismiss(null)).not.toThrow();
   });
 });
 
@@ -117,15 +123,35 @@ describe('wireInstallButton', () => {
     expect(hide).toHaveBeenCalled();
   });
 
-  it('keeps the button when the choice never resolves (prompt failed)', async () => {
+  it('hides the button when the dialog fails to open, and reveals it again on a fresh event', async () => {
+    const w = win();
+    const b = button();
+    const reveal = vi.fn();
+    const hide = vi.fn();
+    wireInstallButton(b.el, reveal, hide, w as never, freshSession());
+    w.listeners.beforeinstallprompt!(promptEvent(new Promise(() => {}), true)); // prompt() rejects, choice never comes
+    b.handlers[0]?.({});
+    await flush();
+    expect(hide).toHaveBeenCalled();
+    const fresh = promptEvent();
+    w.listeners.beforeinstallprompt!(fresh);
+    expect(reveal).toHaveBeenCalledTimes(2);
+    b.handlers[0]?.({});
+    expect(fresh.prompt).toHaveBeenCalled(); // the new offer is usable
+  });
+
+  it('hides the button when the choice lookup fails (the spent offer is a dead control)', async () => {
     const w = win();
     const b = button();
     const hide = vi.fn();
     wireInstallButton(b.el, vi.fn(), hide, w as never, freshSession());
-    w.listeners.beforeinstallprompt!(promptEvent(Promise.reject(new Error('no prompt'))));
+    w.listeners.beforeinstallprompt!(promptEvent(Promise.reject(new Error('no choice'))));
     b.handlers[0]?.({});
     await flush();
-    expect(hide).not.toHaveBeenCalled();
+    expect(hide).toHaveBeenCalled();
+    b.handlers[0]?.({}); // later clicks do nothing and do not throw
+    await flush();
+    expect(hide).toHaveBeenCalledTimes(1);
   });
 
   it('hides the button when appinstalled fires', () => {

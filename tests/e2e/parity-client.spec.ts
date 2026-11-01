@@ -297,7 +297,9 @@ test.describe('offline', () => {
 /* ------------------------------ E2: service worker ------------------------------ */
 
 const SW_E2E = Boolean(process.env.SW_E2E);
-const OFFLINE_CACHE = '360ghar-offline-v1';
+const CACHE_ROOT = '360ghar-offline-v2-';
+const OFFLINE_CACHE = `${CACHE_ROOT}offline`;
+const RUNTIME_CACHE = `${CACHE_ROOT}runtime`;
 
 const cacheContents = (page: Page) =>
   page.evaluate(async () => {
@@ -320,7 +322,7 @@ test.describe('service worker (development server)', () => {
 test.describe('service worker (production build, SW_E2E=1)', () => {
   test.skip(!SW_E2E, 'Set SW_E2E=1 and BASE_URL to a production build');
 
-  test('registers after load; caches only the offline page; controls the tab', async ({ page }) => {
+  test('registers after load; caches the offline page and the visited home; controls the tab', async ({ page }) => {
     const w = watch(page);
     await page.goto('/');
     await hydrated(page);
@@ -328,7 +330,9 @@ test.describe('service worker (production build, SW_E2E=1)', () => {
     expect(script).toMatch(/\/sw\.js$/);
     await page.reload();
     expect(await page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
-    expect(await cacheContents(page)).toEqual({ [OFFLINE_CACHE]: ['/offline.html'] });
+    const caches = await cacheContents(page);
+    expect(caches[OFFLINE_CACHE]).toEqual(['/offline.html']);
+    expect(caches[RUNTIME_CACHE]).toContain('/'); // the controlled reload is itself a cached public page
     await w.check();
   });
 
@@ -345,14 +349,17 @@ test.describe('service worker (production build, SW_E2E=1)', () => {
     await expect(page.getByRole('heading', { level: 1 })).not.toHaveText('You are offline');
   });
 
-  test('it never stores pages or API answers, and offline API calls fail instead of returning old data', async ({ page, context }) => {
+  test('it stores public pages but not API answers, and offline API calls fail instead of returning old data', async ({ page, context }) => {
     await page.goto('/');
     await page.evaluate(() => navigator.serviceWorker.ready);
     await page.reload();
     await page.goto('/properties');
     await hydrated(page);
     await page.evaluate(() => fetch('/api/v1/amenities').catch(() => null));
-    expect(await cacheContents(page)).toEqual({ [OFFLINE_CACHE]: ['/offline.html'] });
+    const caches = await cacheContents(page);
+    expect(caches[OFFLINE_CACHE]).toEqual(['/offline.html']);
+    expect(caches[RUNTIME_CACHE]).toEqual(expect.arrayContaining(['/', '/properties']));
+    expect(Object.values(caches).flat()).not.toContain('/api/v1/amenities');
     await context.setOffline(true);
     const result = await page.evaluate(() => fetch('/api/v1/amenities').then(() => 'answered', () => 'failed'));
     expect(result).toBe('failed');
@@ -377,7 +384,7 @@ test.describe('service worker (production build, SW_E2E=1)', () => {
     const reloaded = page.waitForEvent('load', { timeout: 30_000 });
     await page.evaluate(async () => void (await navigator.serviceWorker.getRegistration())?.update());
     await reloaded; // legacy caches found: open tabs reload once
-    await expect.poll(async () => Object.keys(await cacheContents(page)), { timeout: 30_000 }).toEqual([OFFLINE_CACHE]);
+    await expect.poll(async () => Object.keys(await cacheContents(page)).sort(), { timeout: 30_000 }).toEqual([OFFLINE_CACHE, RUNTIME_CACHE]);
     expect(await page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await expect(page.locator('body')).not.toContainText('OLD SITE');
@@ -386,7 +393,7 @@ test.describe('service worker (production build, SW_E2E=1)', () => {
   test('kill switch: with KILL_SWITCH true the worker deletes every cache and unregisters', async ({ page }) => {
     await page.goto('/');
     await page.evaluate(() => navigator.serviceWorker.ready);
-    expect(Object.keys(await cacheContents(page))).toEqual([OFFLINE_CACHE]);
+    expect(Object.keys(await cacheContents(page)).sort()).toEqual([OFFLINE_CACHE]);
     await page.route('**/sw.js', async (route) => {
       const real = await (await route.fetch()).text();
       expect(real).toContain('const KILL_SWITCH = false;');
