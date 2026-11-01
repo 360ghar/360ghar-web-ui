@@ -361,7 +361,8 @@ test.describe('service worker (production build, SW_E2E=1)', () => {
     expect(caches[OFFLINE_CACHE]).toEqual(['/offline.html']);
     // Background writes: poll until both visited pages have landed in the runtime cache.
     await expect.poll(async () => (await cacheContents(page))[RUNTIME_CACHE], { timeout: 15_000 }).toEqual(expect.arrayContaining(['/', '/properties']));
-    expect(Object.values(caches).flat()).not.toContain('/api/v1/amenities');
+    // Re-read after the poll: writes that landed while waiting must not carry the API answer.
+    expect(Object.values(await cacheContents(page)).flat()).not.toContain('/api/v1/amenities');
     await context.setOffline(true);
     const result = await page.evaluate(() => fetch('/api/v1/amenities').then(() => 'answered', () => 'failed'));
     expect(result).toBe('failed');
