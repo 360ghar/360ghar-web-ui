@@ -29,7 +29,8 @@ const fold = cutBandPath('home-hero-fold', 1440, 22, 44);
 ---
 
 <section class="home-hero" aria-labelledby="home-title">
-  <Diorama class="home-diorama" label={c.diorama} />
+  {/* priority: this scene is the homepage's LCP element (docs/perf/baseline.md). */}
+  <Diorama class="home-diorama" label={c.diorama} priority />
   {/* The filter lives on this HTML wrapper: on an SVG root the CSS filter is
       clipped to the element's filter region, which cuts the shadow off. */}
   <div class="home-hero-edge" aria-hidden="true">

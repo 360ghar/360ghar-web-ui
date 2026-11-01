@@ -7,20 +7,31 @@
  * kite bobs, and the metro leaves and comes back. All of it animates
  * `translate` only (compositor), and stops for reduced motion.
  */
+import { LCP_LAYER_ID } from './gurugram';
 import { DIORAMA_LAYERS } from './layers';
 
 type Props = {
   class?: string;
   label?: string;
+  /** The page's LCP hero instance: the LCP layer's img gets fetchpriority="high" (auth and styleguide dioramas are decorative and stay off). */
+  priority?: boolean;
 };
-const { class: className, label = 'Paper-cut golden-hour Gurugram street: a layered paper sun, the Aravalli ridge, Cyber City towers, a kite, the Rapid Metro, a lit apartment window, gulmohar trees, a chai stall and a cow.' } = Astro.props;
+const { class: className, label = 'Paper-cut golden-hour Gurugram street: a layered paper sun, the Aravalli ridge, Cyber City towers, a kite, the Rapid Metro, a lit apartment window, gulmohar trees, a chai stall and a cow.', priority = false } = Astro.props;
 // Each layer is a cached SVG file (layers.ts), not inline paths: the HTML stays small.
 ---
 
 <div class:list={['diorama grain', className]} data-diorama role="img" aria-label={label}>
   {
     DIORAMA_LAYERS.map((layer, i) => (
-      <img class={`layer layer-${layer.id}`} style={`--d:${layer.depth}; z-index:${i}`} src={layer.src} alt="" width="1600" height="960" />
+      <img
+        class={`layer layer-${layer.id}`}
+        style={`--d:${layer.depth}; z-index:${i}`}
+        src={layer.src}
+        alt=""
+        width="1600"
+        height="960"
+        fetchpriority={priority && layer.id === LCP_LAYER_ID ? 'high' : undefined}
+      />
     ))
   }
   <slot />

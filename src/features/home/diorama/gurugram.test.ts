@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { gurugramLayers } from './gurugram';
+import { HERO_PRELOAD_IDS, LCP_LAYER_ID, gurugramLayers } from './gurugram';
 
 const GOLDEN_IDS = [
   'sunHalo',
@@ -48,5 +48,18 @@ describe('gurugramLayers', () => {
 
   it('caches the scene', () => {
     expect(gurugramLayers()).toBe(gurugramLayers());
+  });
+
+  it('marks the measured hero LCP layer', () => {
+    // The homepage LCP element measured in docs/perf/baseline.md.
+    expect(LCP_LAYER_ID).toBe('towersFar');
+    expect(HERO_PRELOAD_IDS[0]).toBe(LCP_LAYER_ID);
+  });
+
+  it('preloads at most two first-painted layers, all real layer ids', () => {
+    const ids = gurugramLayers().map((layer) => layer.id);
+    expect(HERO_PRELOAD_IDS.length).toBeGreaterThanOrEqual(1);
+    expect(HERO_PRELOAD_IDS.length).toBeLessThanOrEqual(2);
+    for (const id of HERO_PRELOAD_IDS) expect(ids).toContain(id);
   });
 });
