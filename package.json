@@ -31,7 +31,8 @@
     "data:price-context": "node scripts/data/build-price-context.mjs",
     "data:locality-redirects": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/data/build-locality-redirects.mjs",
     "check:built": "node scripts/check-built-routes.mjs",
-    "check:pseo": "node scripts/data/pseo-quality-check.mjs"
+    "check:pseo": "node scripts/data/pseo-quality-check.mjs",
+    "perf:lighthouse": "node scripts/perf/lighthouse.mjs"
   },
   "dependencies": {
     "@astrojs/netlify": "^8.2.6",

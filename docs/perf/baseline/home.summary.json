@@ -1,0 +1,48 @@
+{
+  "url": "https://360ghar.com/",
+  "engine": "lighthouse@13.6.0, mobile emulation, headless Chrome",
+  "runs": 3,
+  "median": {
+    "score": 95,
+    "fcp_ms": 1791,
+    "lcp_ms": 2622,
+    "si_ms": 3591,
+    "tbt_ms": 17,
+    "cls": 0.001
+  },
+  "perRun": [
+    {
+      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/home.run1.json",
+      "score": 72,
+      "fcp_ms": 1791,
+      "lcp_ms": 6282,
+      "si_ms": 5241,
+      "tbt_ms": 17,
+      "cls": 0,
+      "lcpElement": "<img class=\"layer layer-towersFar\" style=\"--d:0.07; z-index:5\" src=\"/diorama/towersFar.svg?v=dfb61987\" alt=\"\" width=\"1600\" height=\"960\" data-astro-cid-iqr3xziu=\"\">",
+      "lcpDiscoveryScore": 0
+    },
+    {
+      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/home.run2.json",
+      "score": 95,
+      "fcp_ms": 1747,
+      "lcp_ms": 2622,
+      "si_ms": 2940,
+      "tbt_ms": 33,
+      "cls": 0.001,
+      "lcpElement": "<img class=\"layer layer-towersFar\" style=\"--d:0.07; z-index:5\" src=\"/diorama/towersFar.svg?v=dfb61987\" alt=\"\" width=\"1600\" height=\"960\" data-astro-cid-iqr3xziu=\"\">",
+      "lcpDiscoveryScore": 0
+    },
+    {
+      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/home.run3.json",
+      "score": 96,
+      "fcp_ms": 1838,
+      "lcp_ms": 2300,
+      "si_ms": 3591,
+      "tbt_ms": 3,
+      "cls": 0.001,
+      "lcpElement": "<img class=\"layer layer-towersFar\" style=\"--d:0.07; z-index:5\" src=\"/diorama/towersFar.svg?v=dfb61987\" alt=\"\" width=\"1600\" height=\"960\" data-astro-cid-iqr3xziu=\"\">",
+      "lcpDiscoveryScore": 0
+    }
+  ]
+}

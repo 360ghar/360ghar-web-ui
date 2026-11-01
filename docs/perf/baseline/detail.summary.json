@@ -1,0 +1,48 @@
+{
+  "url": "https://360ghar.com/property/118",
+  "engine": "lighthouse@13.6.0, mobile emulation, headless Chrome",
+  "runs": 3,
+  "median": {
+    "score": 95,
+    "fcp_ms": 1712,
+    "lcp_ms": 2676,
+    "si_ms": 3575,
+    "tbt_ms": 2,
+    "cls": 0.001
+  },
+  "perRun": [
+    {
+      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/detail.run1.json",
+      "score": 94,
+      "fcp_ms": 1811,
+      "lcp_ms": 2676,
+      "si_ms": 3603,
+      "tbt_ms": 0,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 768px) 50vw, 86vw\" alt=\"Ompee Drona Floors, 3BHK Builder Floor in Palam Vihar, photo 1 of 9\" width=\"1024\" height=\"584\" fetchpriority=\"high\" decoding=\"async\">",
+      "lcpDiscoveryScore": 1
+    },
+    {
+      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/detail.run2.json",
+      "score": 95,
+      "fcp_ms": 1711,
+      "lcp_ms": 2716,
+      "si_ms": 2991,
+      "tbt_ms": 3,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 768px) 50vw, 86vw\" alt=\"Ompee Drona Floors, 3BHK Builder Floor in Palam Vihar, photo 1 of 9\" width=\"1024\" height=\"584\" fetchpriority=\"high\" decoding=\"async\">",
+      "lcpDiscoveryScore": 1
+    },
+    {
+      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/detail.run3.json",
+      "score": 95,
+      "fcp_ms": 1712,
+      "lcp_ms": 2451,
+      "si_ms": 3575,
+      "tbt_ms": 2,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 768px) 50vw, 86vw\" alt=\"Ompee Drona Floors, 3BHK Builder Floor in Palam Vihar, photo 1 of 9\" width=\"1024\" height=\"584\" fetchpriority=\"high\" decoding=\"async\">",
+      "lcpDiscoveryScore": 1
+    }
+  ]
+}
