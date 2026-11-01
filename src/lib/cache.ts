@@ -1,6 +1,9 @@
 /**
- * CDN caching for on-demand pages. Browsers always revalidate; the Netlify
- * edge keeps the page for `ttl` seconds and serves it stale while it refreshes.
+ * CDN caching for on-demand pages. Browsers always revalidate; the edge keeps
+ * the page for `ttl` seconds and serves it stale while it refreshes. Each CDN
+ * gets its own directive header (Netlify strips Netlify-CDN-Cache-Control;
+ * Cloudflare Workers Cache reads Cloudflare-CDN-Cache-Control and strips it),
+ * so the browser-facing Cache-Control is identical on both hosts.
  * Pages that hit an API error use a short TTL so a broken render does not stick.
  */
 import type { AstroGlobal } from 'astro';
@@ -10,8 +13,10 @@ export type CacheTier = keyof typeof TTL;
 
 export function cachePage(astro: Pick<AstroGlobal, 'response'>, tier: CacheTier, opts: { error?: boolean } = {}) {
   const ttl = opts.error ? 60 : TTL[tier];
+  const swr = opts.error ? 60 : 86400;
   astro.response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
-  astro.response.headers.set('Netlify-CDN-Cache-Control', `public, durable, s-maxage=${ttl}, stale-while-revalidate=${opts.error ? 60 : 86400}`);
+  astro.response.headers.set('Netlify-CDN-Cache-Control', `public, durable, s-maxage=${ttl}, stale-while-revalidate=${swr}`);
+  astro.response.headers.set('Cloudflare-CDN-Cache-Control', `public, s-maxage=${ttl}, stale-while-revalidate=${swr}`);
 }
 
 /**

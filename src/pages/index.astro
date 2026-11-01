@@ -12,7 +12,7 @@ export const prerender = false;
 const locale = Astro.locals.locale;
 const t = getT(locale);
 const data = await loadHome(locale);
-cachePage(Astro, 'medium', { error: data.failed });
+cachePage(Astro, 'hour', { error: data.failed });
 ---
 
 <Page
