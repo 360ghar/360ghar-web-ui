@@ -56,7 +56,9 @@ const fold = cutBandPath('home-hero-fold', 1440, 22, 44);
     </div>
     <div class="home-search-lift">
       <div class="home-search-sheet">
-        <HeroSearch client:load locale={locale} postLink="none" />
+        {/* Idle, not load: the form is a server-rendered GET form, so it works
+            without JS; hydration only adds suggestions (docs/perf/baseline.md). */}
+        <HeroSearch client:idle locale={locale} postLink="none" />
       </div>
     </div>
   </div>
