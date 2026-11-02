@@ -64,11 +64,16 @@ jobs:
           OG_FROM_API: 'true'
 
   e2e:
-    name: Playwright (one dev server)
-    needs: checks
+    name: Playwright (shard ${{ matrix.shard }}/4)
+    # Runs in parallel with the checks job: the e2e shards are the long pole,
+    # and a failing checks job still fails the PR on its own.
     if: ${{ vars.E2E_DISABLED != 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     env:
       # Same names as .env.example. The two Supabase values are public, so they are variables, not secrets. Without them the tests use a fake project: they mock every Supabase call.
       PUBLIC_API_BASE: /dev-api
@@ -113,9 +118,11 @@ jobs:
             curl -fsS -o /dev/null --max-time 120 -w "%{http_code} $p\n" "http://127.0.0.1:4321$p"
           done
 
-      # Retries come from playwright.config.ts (not overridden). --output keeps results out of test-results/.
+      # Sharded across the 4 matrix runners; workers=3 is the same per-box load
+      # as before sharding. Retries come from playwright.config.ts (not
+      # overridden). --output keeps results out of test-results/.
       - name: Playwright
-        run: pnpm exec playwright test --output="$RUNNER_TEMP/pw-output" --workers=3
+        run: pnpm exec playwright test --shard=${{ matrix.shard }}/4 --output="$RUNNER_TEMP/pw-output" --workers=3
 
       - name: Stop the dev server
         if: always()
@@ -125,7 +132,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-failure
+          name: e2e-failure-shard-${{ matrix.shard }}
           path: |
             ${{ runner.temp }}/astro-dev.log
             ${{ runner.temp }}/pw-output
