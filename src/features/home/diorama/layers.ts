@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto';
 import css from '@/styles/global.css?raw';
 import { SHADOW_SIZES, SHARED_SHADOWS, sharedShadowId } from '@/lib/paper/defs';
 import { compactPath } from '@/ui/paper/compact';
-import { gurugramLayers, H, W } from './gurugram';
+import { HERO_PRELOAD_IDS, gurugramLayers, H, W } from './gurugram';
 
 const VARS = new Map([...css.matchAll(/(--[\w-]+):\s*([^;{}]+);/g)].reverse().map((m) => [m[1]!, m[2]!.trim()]));
 
@@ -50,3 +50,6 @@ export const DIORAMA_LAYERS = gurugramLayers().map((l) => {
   const svg = layerSvg(l);
   return { id: l.id, depth: l.depth, svg, src: `/diorama/${l.id}.svg?v=${createHash('sha1').update(svg).digest('hex').slice(0, 8)}` };
 });
+
+/** The first-painted hero layers as versioned URLs, for the homepage head preload (Seo.astro `preloadImages`). */
+export const HERO_PRELOAD_SRCS = DIORAMA_LAYERS.filter((l) => HERO_PRELOAD_IDS.includes(l.id)).map((l) => l.src);

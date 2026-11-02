@@ -1,0 +1,4 @@
+# Netlify leftovers must never ship as static assets (the worker entry and
+# its route map are Netlify-adapter build artifacts).
+_worker.js
+_routes.json

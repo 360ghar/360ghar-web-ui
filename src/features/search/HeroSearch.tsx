@@ -1,4 +1,4 @@
-import { useEffect, useState, type SyntheticEvent } from 'react';
+import { useEffect, useRef, useState, type SyntheticEvent } from 'react';
 import type { Place } from '@/lib/maps';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
@@ -47,14 +47,21 @@ const T = {
  */
 function Search({ locale = 'en', postLink = 'foot' }: { locale?: Locale; postLink?: 'foot' | 'none' }) {
   const t = T[locale];
-  const [purpose, setPurpose] = useState<Purpose>('rent');
   const [text, setText] = useState('');
   const [place, setPlace] = useState<Place | null>(null);
   const [area, setArea] = useState<AreaSuggestion | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const busy = useLocationStore((s) => s.status === 'busy');
   useLocationMemory();
 
-  const go = (p: Place | null, picked: AreaSuggestion | null = area) => window.location.assign(searchHref(locale, purpose, text, p, picked));
+  // The chips are uncontrolled native radios (hydration must not undo a click
+  // made before idle), so the live selection is read from the form itself:
+  // pre-hydration the GET submit needs it, and React never owns the state.
+  const purpose = (): Purpose => {
+    const v = (formRef.current?.elements.namedItem('purpose') as RadioNodeList | null)?.value;
+    return v === 'buy' || v === 'pg' ? v : 'rent';
+  };
+  const go = (p: Place | null, picked: AreaSuggestion | null = area) => window.location.assign(searchHref(locale, purpose(), text, p, picked));
 
   const [thinking, setThinking] = useState(false);
   // Back from the results (the page comes from the back-forward cache): search again.
@@ -65,12 +72,13 @@ function Search({ locale = 'en', postLink = 'foot' }: { locale?: Locale; postLin
   }, []);
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const intent = purpose();
     // Typing "sec 56" and pressing Search should land on the sector, not on a keyword FTS cannot match.
     const picked = area ?? exactArea(text, locale);
     // A typed sentence ("2 BHK for rent in Sector 57 under 50k") is read by the backend; any failure searches the words.
     if (!place && !picked && isSentence(text)) {
       setThinking(true);
-      window.location.assign((await sentenceHref(text, locale, purpose === 'pg' ? { purpose: 'rent', property_type: 'pg' } : { purpose })).href);
+      window.location.assign((await sentenceHref(text, locale, intent === 'pg' ? { purpose: 'rent', property_type: 'pg' } : { purpose: intent })).href);
       return;
     }
     go(place, picked);
@@ -85,17 +93,18 @@ function Search({ locale = 'en', postLink = 'foot' }: { locale?: Locale; postLin
   };
 
   return (
-    <form className="hero-search" role="search" action={localizePath('/properties', locale)} method="get" onSubmit={onSubmit} aria-label={t.label}>
+    <form ref={formRef} className="hero-search" role="search" action={localizePath('/properties', locale)} method="get" onSubmit={onSubmit} aria-label={t.label}>
       <div className="hero-search-rows">
         <fieldset className="hero-purpose">
           <legend className="visually-hidden">{t.label}</legend>
           {(['rent', 'buy', 'pg'] as const).map((p) => (
             <label key={p} className="hero-purpose-opt">
-              <input type="radio" name="purpose" value={p === 'pg' ? 'rent' : p} checked={purpose === p} onChange={() => setPurpose(p)} />
+              {/* value="pg": a no-JS submit encodes PG directly (the results page
+                  parses purpose=pg as rent + property_type=pg). */}
+              <input type="radio" name="purpose" value={p} defaultChecked={p === 'rent'} />
               <span>{t[p]}</span>
             </label>
           ))}
-          {purpose === 'pg' ? <input type="hidden" name="property_type" value="pg" /> : null}
         </fieldset>
         <PlacesInput
           name="q"

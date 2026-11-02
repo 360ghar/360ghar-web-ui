@@ -1,7 +1,10 @@
 /**
- * PostHog and gtag, loaded when the browser is idle. Same events as the old
- * site: $pageview, web_vitals, identify, reset. Autocapture stays off.
+ * PostHog and gtag, started past the largest contentful paint once the
+ * browser is idle (see ./scheduler). Same events as the old site: $pageview,
+ * web_vitals, identify, reset. Autocapture stays off.
  */
+import { scheduleAnalyticsStart } from './scheduler';
+
 type PostHog = typeof import('posthog-js').default;
 
 let ph: Promise<PostHog | null> | null = null;
@@ -35,25 +38,13 @@ function withPh(fn: (p: PostHog) => void) {
 }
 
 /**
- * Starts when the browser is idle after the load event, or at the first
- * interaction. About 370 KB of analytics code then never competes with the
- * first paint or the main photo. web-vitals reads buffered entries, so late
- * loading loses no metric.
+ * Starts when the LCP candidates settle and the browser is idle, or at the
+ * first interaction (see ./scheduler). About 370 KB of analytics code then
+ * never competes with the first paint or the main photo. web-vitals reads
+ * buffered entries, so late loading loses no metric.
  */
 export function startAnalytics() {
-  let done = false;
-  const events = ['pointerdown', 'keydown', 'scroll'] as const;
-  const go = () => {
-    if (done) return;
-    done = true;
-    for (const e of events) window.removeEventListener(e, go);
-    // Idle, but never later than 2 s after load.
-    if (window.requestIdleCallback) window.requestIdleCallback(begin, { timeout: 2000 });
-    else window.setTimeout(begin, 1);
-  };
-  for (const e of events) window.addEventListener(e, go, { once: true, passive: true });
-  if (document.readyState === 'complete') go();
-  else window.addEventListener('load', go, { once: true });
+  scheduleAnalyticsStart(begin);
 }
 
 function begin() {

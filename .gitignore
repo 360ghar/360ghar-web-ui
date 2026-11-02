@@ -5,6 +5,10 @@ dist/
 .env
 .env.*
 !.env.example
+# Wrangler local secrets and dev state (never commit credentials).
+.dev.vars
+.dev.vars.*
+.wrangler/
 src/pages/hi/
 test-results/
 playwright-report/

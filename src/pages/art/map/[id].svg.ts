@@ -25,6 +25,7 @@ export const GET: APIRoute = ({ params }) => {
       'Content-Type': 'image/svg+xml; charset=utf-8',
       'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
       'Netlify-CDN-Cache-Control': 'public, durable, s-maxage=31536000',
+      'Cloudflare-CDN-Cache-Control': 'public, s-maxage=31536000',
     },
   });
 };

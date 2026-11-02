@@ -1,5 +1,6 @@
 ---
 import HomePage from '@/features/home/HomePage.astro';
+import { HERO_PRELOAD_SRCS } from '@/features/home/diorama/layers';
 import { loadHome } from '@/features/home/load';
 import { getT } from '@/i18n';
 import Page from '@/layouts/Page.astro';
@@ -11,7 +12,7 @@ export const prerender = false;
 const locale = Astro.locals.locale;
 const t = getT(locale);
 const data = await loadHome(locale);
-cachePage(Astro, 'medium', { error: data.failed });
+cachePage(Astro, 'hour', { error: data.failed });
 ---
 
 <Page
@@ -21,6 +22,7 @@ cachePage(Astro, 'medium', { error: data.failed });
   overHero
   image="/og-image-home.jpg"
   jsonLd={[data.faqSchema, data.facts.jsonLd]}
+  preloadImages={HERO_PRELOAD_SRCS}
 >
   <HomePage locale={locale} data={data} />
   <Toaster client:idle />

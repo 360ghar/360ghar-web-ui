@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "360ghar-web-ui",
+  // Adapter-generated worker entry (Astro 6+ unified package entrypoint).
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-11-02",
+  "compatibility_flags": [
+    // Node.js API compat for the SSR bundle.
+    "nodejs_compat",
+    // fetch() behaves as from the public internet: the well-known proxies to
+    // api.360ghar.com (same zone) are not intercepted by this Worker.
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
+  // Edge cache in front of the Worker: honors s-maxage + stale-while-revalidate
+  // (RFC 9111) on SSR HTML, cache hits skip the Worker entirely.
+  "cache": { "enabled": true },
+  "observability": { "enabled": true },
+  "upload_source_maps": true
+}

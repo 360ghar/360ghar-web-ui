@@ -54,9 +54,10 @@ jobs:
       - name: Structured data
         run: pnpm seo:schemas
 
-      # Builds the Netlify function and runs it without require(esm), as Netlify does (scripts/check-built-routes.mjs).
-      - name: Build and check built routes
-        run: pnpm build && pnpm check:built
+      # Production build with the Cloudflare adapter (the built-output route checks
+      # run against the staging deploy, see docs/perf/staging-parity.md).
+      - name: Build
+        run: pnpm build
         env:
           # Same as netlify.toml: the production build has the owner tools and API OG cards on.
           PUBLIC_AI_OWNER_TOOLS: 'true'

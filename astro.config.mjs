@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
-import netlify from '@astrojs/netlify';
+import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
 
 // The old site's Netlify variables (VITE_*) still work: copy them to the new names.
@@ -17,31 +17,37 @@ for (const [name, old] of Object.entries(OLD_NAMES)) {
   const legacy = [old].flat().map((k) => process.env[k]).find(Boolean);
   if (!process.env[name] && legacy) process.env[name] = legacy;
 }
-// Without these keys sign-in, the account and post property fail with no error on the page.
-if (process.env.NETLIFY === 'true' && (!process.env.PUBLIC_SUPABASE_URL || !process.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY)) {
-  throw new Error('Set PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_PUBLISHABLE_KEY (or the old VITE_SUPABASE_* names) in Netlify.');
-}
 
 const API_ORIGIN = process.env.API_ORIGIN ?? 'https://api.360ghar.com';
+
+// Vitest loads this config through astro/config's getViteConfig, and the Cloudflare
+// Vite plugin rejects Vitest's default `ssr` resolve.external list. Tests are unit
+// tests and never exercise the adapter, so it is omitted under Vitest only.
+const isVitest = process.env.VITEST === 'true';
 
 export default defineConfig({
   site: 'https://360ghar.com',
   trailingSlash: 'never',
   build: { format: 'file' },
-  adapter: netlify({
-    imageCDN: false,
-    // Local dev uses the Vite proxy; the Netlify emulation proxied /api via netlify.toml and broke gzip bodies.
-    devFeatures: false,
-  }),
+  // Nothing reads Astro.session, so sessions are switched off entirely: the
+  // adapter would otherwise wire its default KV session driver on deploy.
+  session: false,
+  adapter: isVitest
+    ? undefined
+    : cloudflare({
+        // Images stay on Cloudinary: 'passthrough' avoids the Cloudflare Images binding.
+        imageService: 'passthrough',
+      }),
   integrations: [react()],
   devToolbar: { enabled: false },
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   vite: {
     plugins: [
       tailwindcss(),
-      // sanitize-html is CommonJS and requires htmlparser2, which is ESM only. Netlify runs functions with
-      // --no-experimental-require-module, so loading it from node_modules throws and /blog/<slug> fell through to the 404 route.
-      // Build only: in dev the bundled CommonJS copy fails to load, and dev runs on plain Node where require(esm) works.
+      // sanitize-html is CommonJS and requires htmlparser2, which is ESM only. Leaving it
+      // external breaks the SSR bundle at runtime (workerd cannot require an ESM-only
+      // package from CJS), and /blog/<slug> falls through to the 404 route. Build only:
+      // in dev the bundled CommonJS copy fails to load, and dev resolves it fine.
       { name: 'bundle-sanitize-html', config: (_, { command }) => (command === 'build' ? { ssr: { noExternal: ['sanitize-html'] } } : {}) },
     ],
     // Dev only: pre-bundle modules that load lazily, so Vite does not re-optimise mid-session.
@@ -65,7 +71,7 @@ export default defineConfig({
       hmr: process.env.CI ? { overlay: false } : undefined,
       proxy: {
         // Local dev only: the browser calls /dev-api/api/v1/... (PUBLIC_API_BASE=/dev-api).
-        // A separate prefix keeps the Netlify dev plugin's netlify.toml proxy out of the way.
+        // A separate prefix keeps the Vite proxy out of the production API origin's way.
         '/dev-api': {
           target: API_ORIGIN,
           changeOrigin: true,

@@ -834,3 +834,17 @@ export function gurugramLayers(): Layer[] {
   cache ??= goldenLayers();
   return cache;
 }
+
+/**
+ * The homepage hero's LCP layer, per measurement (docs/perf/baseline.md): the
+ * far Cyber City sheet is the hero's largest image and had no priority hint.
+ * Diorama.astro raises its img with fetchpriority="high" for hero instances.
+ */
+export const LCP_LAYER_ID = 'towersFar';
+
+/**
+ * First-painted layers the homepage head preloads: the LCP sheet and the
+ * tower sheet directly in front of it, the scene's two largest files. Never
+ * the whole 20-layer stack.
+ */
+export const HERO_PRELOAD_IDS: readonly string[] = [LCP_LAYER_ID, 'towersMid'];
