@@ -24,14 +24,17 @@
  *                    (no browser, no Lighthouse run)
  *
  * Files written: <out>/<label>.run<i>.json and <out>/<label>.summary.json.
- * Prints a metrics table and the median to stdout. Runs are serial: never
- * launch two of these at once (concurrent Chrome skews the metrics).
+ * perRun.file paths in the summary are recorded repo-relative (no /Users/... leakage
+ * in committed summaries). Prints a metrics table and the median to stdout. Runs are
+ * serial: never launch two of these at once (concurrent Chrome skews the metrics).
  */
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const LH_VERSION = '13.6.0';
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 function arg(flag) {
@@ -151,7 +154,7 @@ if (resummarize) {
 const runsData = reports.map((report, i) => {
   const n = (audit) => report.audits[audit]?.numericValue;
   return {
-    file: runFiles[i],
+    file: relative(REPO_ROOT, runFiles[i]),
     score: Math.round((report.categories?.performance?.score ?? 0) * 100),
     fcp_ms: Math.round(n('first-contentful-paint') ?? 0),
     lcp_ms: Math.round(n('largest-contentful-paint') ?? 0),

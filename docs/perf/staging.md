@@ -25,11 +25,19 @@ four levers delivered their mechanisms, each verified in-trace.
 
 ## Protocol
 
-- Contract engine: local Lighthouse **13.6.0**, mobile emulation, `--headless=new`,
-  serial runs (no concurrent Chrome). `node scripts/perf/lighthouse.mjs <URL> --runs 3`.
+- Contract engine: local Lighthouse **13.6.0**, mobile emulation (runner screen mode
+  **`--screen canonical-mobile`**), `--headless=new`,
+  serial runs (no concurrent Chrome).
+  `node scripts/perf/lighthouse.mjs <URL> --runs 3 --screen canonical-mobile`.
+  The runner now defaults to `--screen faithful`; this table is canonical-mobile, so the
+  flag is required to extend or reproduce it (mode comparison rules:
+  `docs/perf/hero-delay.md`).
 - Staging runs warmed the edge first (`cf-cache-status: HIT`, `age` > 1500 s on arrival;
-  fresh-TLS warm TTFB 0.59 s via curl — see the PoP caveat in `library/environment.md`:
-  this machine routes to colo MRS, ~150 ms RTT).
+  fresh-TLS warm TTFB 0.59 s via curl). PoP caveat (in-repo evidence:
+  `docs/perf/staging-parity.md` §4 "Warm edge cache", "Network context"): this machine
+  routes to Cloudflare PoP **MRS (Marseille)** despite India egress, RTT ≈ 130-170 ms, so
+  fresh-connection TTFB reads ~450-530 ms even on edge HITs — warm latency must be
+  measured on a reused connection.
 - Same-hour **production control** (pre-lever Netlify build on `360ghar.com`) re-run
   immediately after the staging runs to isolate machine/network drift from the platform
   delta. Production was not modified; control runs are diagnostic only.
@@ -157,7 +165,7 @@ not obviously target the post-`load` render delay either — measure before assu
 
 ```bash
 node scripts/perf/lighthouse.mjs https://360ghar-web-ui.360ghar.workers.dev/ --runs 3 \
-  --label staging-home --out docs/perf/staging
+  --label staging-home --out docs/perf/staging --screen canonical-mobile
 node scripts/perf/lighthouse.mjs https://360ghar.com/ --runs 3 \
-  --label prod-control-home --out docs/perf/staging
+  --label prod-control-home --out docs/perf/staging --screen canonical-mobile
 ```

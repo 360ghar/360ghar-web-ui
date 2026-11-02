@@ -1,6 +1,6 @@
 {
   "url": "https://360ghar.com/",
-  "engine": "lighthouse@13.6.0, mobile emulation, headless Chrome",
+  "engine": "lighthouse@13.6.0, mobile UA emulation, headless Chrome, screen=canonical-mobile",
   "runs": 3,
   "median": {
     "score": 95,
@@ -12,7 +12,7 @@
   },
   "perRun": [
     {
-      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/home.run1.json",
+      "file": "docs/perf/baseline/home.run1.json",
       "score": 72,
       "fcp_ms": 1791,
       "lcp_ms": 6282,
@@ -23,7 +23,7 @@
       "lcpDiscoveryScore": 0
     },
     {
-      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/home.run2.json",
+      "file": "docs/perf/baseline/home.run2.json",
       "score": 95,
       "fcp_ms": 1747,
       "lcp_ms": 2622,
@@ -34,7 +34,7 @@
       "lcpDiscoveryScore": 0
     },
     {
-      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/home.run3.json",
+      "file": "docs/perf/baseline/home.run3.json",
       "score": 96,
       "fcp_ms": 1838,
       "lcp_ms": 2300,

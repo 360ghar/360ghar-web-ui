@@ -1,6 +1,6 @@
 {
   "url": "https://360ghar.com/locality/palam-vihar-gurgaon",
-  "engine": "lighthouse@13.6.0, mobile emulation, headless Chrome",
+  "engine": "lighthouse@13.6.0, mobile UA emulation, headless Chrome, screen=canonical-mobile",
   "runs": 3,
   "median": {
     "score": 92,
@@ -12,7 +12,7 @@
   },
   "perRun": [
     {
-      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/locality.run1.json",
+      "file": "docs/perf/baseline/locality.run1.json",
       "score": 92,
       "fcp_ms": 1771,
       "lcp_ms": 3008,
@@ -23,7 +23,7 @@
       "lcpDiscoveryScore": 0
     },
     {
-      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/locality.run2.json",
+      "file": "docs/perf/baseline/locality.run2.json",
       "score": 96,
       "fcp_ms": 1777,
       "lcp_ms": 2457,
@@ -34,7 +34,7 @@
       "lcpDiscoveryScore": 0
     },
     {
-      "file": "/Users/sakshammittal/Documents/360ghar/github/360ghar/360ghar-web-ui/docs/perf/baseline/locality.run3.json",
+      "file": "docs/perf/baseline/locality.run3.json",
       "score": 74,
       "fcp_ms": 1745,
       "lcp_ms": 5917,

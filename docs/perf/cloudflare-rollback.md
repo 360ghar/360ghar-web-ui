@@ -33,8 +33,9 @@ after the merge it cannot. Do not let this distinction blur — the artifact fre
 Zone `360ghar.com`: status `active`, Cloudflare nameservers
 `matias.ns.cloudflare.com`, `sandra.ns.cloudflare.com` (registrar original NS:
 `*.ns.porkbun.com` — registrar panel untouched by this migration).
-Zone ID: `CLOUDFLARE_ZONE_ID` from the out-of-repo env file
-(`/Users/sakshammittal/Documents/360ghar/github/360ghar/.env`).
+Zone ID: `CLOUDFLARE_ZONE_ID` from the out-of-repo credentials env file (path is
+machine-specific — the same file supplies `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
+and `CLOUDFLARE_ZONE_ID`; see `ENV_FILE` in the rollback steps below).
 
 ### Records that serve production web traffic (the rollback scope)
 
@@ -94,20 +95,44 @@ None of these are affected by attaching or removing the Worker custom domain for
 Trigger: cutover verification fails, or production misbehaves on the Worker and the problem
 is not a single bad Worker version.
 
+Set up credentials once per shell (env does not persist between shells):
+
+```bash
+# ENV_FILE: the out-of-repo file holding CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID /
+# CLOUDFLARE_ZONE_ID. Operator: set this to the credentials file's path ON YOUR MACHINE
+# (never copy that file into the repo, never print or log its values).
+ENV_FILE="$HOME/.secrets/360ghar-cf.env"   # ← operator: replace with the real path
+set -a; . "$ENV_FILE"; set +a
+```
+
 1. **Remove the Worker custom domain** (Cloudflare dashboard → Workers & Pages →
    `360ghar-web-ui` → Settings → **Domains & Routes** → `360ghar.com` → Remove).
    API equivalent (capture `id` from a `GET` first):
    ```bash
-   set -a; . /Users/sakshammittal/Documents/360ghar/github/360ghar/.env; set +a
    curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
      "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/domains"
    # then, with the domain's id:
    curl -s -X DELETE -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
      "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/domains/$DOMAIN_ID"
    ```
-   Removing the custom domain does **not** restore the old DNS records — that is step 2.
-2. **Re-point DNS to the captured Netlify values** (dashboard → 360ghar.com → DNS →
-   Records; delete any Worker-created apex record, then recreate exactly):
+   Removing the custom domain does **not** restore the old DNS records — that is step 3.
+2. **Delete the Worker-created custom-domain DNS record for `360ghar.com`.** Attaching the
+   custom domain made Workers create its own proxied apex record; it is NOT removed by
+   step 1. Recreating the Netlify records while it still exists either hits a
+   duplicate-name conflict (Cloudflare rejects the second apex record) or splits traffic
+   between the Worker and Netlify.
+   - Dashboard: 360ghar.com → DNS → Records → delete the Worker-owned `A`/`AAAA` record
+     for `360ghar.com` (leave the `www` CNAME alone until step 3).
+   - API: look it up, then delete it:
+   ```bash
+   curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+     "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records?name=360ghar.com"
+   # then, with the Worker-created record's id:
+   curl -s -X DELETE -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+     "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records/$RECORD_ID"
+   ```
+3. **Re-point DNS to the captured Netlify values** (dashboard → 360ghar.com → DNS →
+   Records; after the step-2 deletion, recreate exactly):
    - `A` `360ghar.com` → `75.2.60.5`, proxied, TTL auto
    - `A` `360ghar.com` → `99.83.231.61`, proxied, TTL auto
    - `CNAME` `www.360ghar.com` → `360ghar.netlify.com`, proxied, TTL auto
@@ -119,15 +144,15 @@ is not a single bad Worker version.
      --data '{"type":"A","name":"360ghar.com","content":"75.2.60.5","proxied":true}'
    # repeat for 99.83.231.61 and for the www CNAME above
    ```
-3. **Purge the zone cache** so stale Worker-era HTML does not linger at the edge:
+4. **Purge the zone cache** so stale Worker-era HTML does not linger at the edge:
    dashboard → Caching → Purge Everything, or
    `POST /zones/$CLOUDFLARE_ZONE_ID/purge_cache --data '{"purge_everything":true}'`.
-4. **Verify** (all four must hold):
+5. **Verify** (all four must hold):
    - `curl -sI https://360ghar.com/` → `HTTP/2 200`, `x-nf-request-id` present;
    - `curl -sI https://www.360ghar.com/` → `301` → `https://360ghar.com/`;
    - homepage HTML contains the diorama markup (pre-swap build);
    - `admin.`/`api.`/other subdomains still answer (they were never touched).
-5. **Netlify side: do nothing.** The published last-good deploy serves as soon as DNS
+6. **Netlify side: do nothing.** The published last-good deploy serves as soon as DNS
    propagates. Do NOT retrigger a Netlify build of post-swap main (it fails; a failure does
    not unpublish, but never count on a fresh build).
 
@@ -173,7 +198,9 @@ needed in CI. `wrangler` version comes from the repo's devDependency (`^4.156.1`
    from the Netlify site's environment variables or the local `.env`):
    `PUBLIC_API_BASE` (**absolute** `https://api.360ghar.com` — never empty, there is no
    /api proxy on Workers), `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_PUBLISHABLE_KEY`,
-   `PUBLIC_GOOGLE_MAPS_API_KEY`, `PUBLIC_GA_ID`, `PUBLIC_POSTHOG_HOST`,
+   `PUBLIC_GOOGLE_MAPS_API_KEY`, `PUBLIC_GA_ID`, `PUBLIC_POSTHOG_KEY` (**required** —
+   `src/lib/analytics/index.ts` gates `posthog.init` on it; omitting it silently disables
+   PostHog in production), `PUBLIC_POSTHOG_HOST`,
    `PUBLIC_AI_OWNER_TOOLS=true`, `OG_FROM_API=true`, `API_ORIGIN=https://api.360ghar.com`.
    Do **NOT** set `NODE_VERSION=22` (the Netlify value): the preinstalled 22.x in the build
    image is 22.23.2, **below** astro 7.4.4's `>= 22.23.4` floor. Leave Node at the image

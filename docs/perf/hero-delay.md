@@ -46,9 +46,11 @@ All three runs show the identical signature (timestamps from run 1):
 5. **The blackout ends when Lighthouse forces a frame.** At 2516.4 the compositor does
    `RequestMainThreadFrame` (Lighthouse's full-page-screenshot pass, which the
    devtools log places at `networkIdle` + ~650 ms), the queued rAF fires, the Cloudinary
-   lazy images paint (they finished fetching ~1 s earlier), the frame presents at
-   **2524.8 = recorded FCP/LCP**, and the screenshot is captured at 2527.1. FCP was
-   never a paint-metric here — it was the screenshot-scheduling clock.
+   lazy images paint (they finished fetching ~1 s earlier), the presented frame lands at
+   **2524.8 ms** and the screenshot is captured at 2527.1. That is the
+   **screenshot/presentation clock, which was never a paint metric**; the run's recorded
+   paint metrics are separate values — **FCP 1692 ms, LCP 2513 ms** in the same
+   hero-run1.json report.
 
 Lantern then carries the late observed paint into the simulation: late draws → simSI
 4427-4941; the lucky early draws (same override, window revealed before the forced
@@ -95,8 +97,10 @@ measurement. Staging serves the same version as `docs/perf/staging.md`.
 | CLS | 0.001 | 0.002 (run 1 blipped 0.09) | ≤ 0.01 | PASS (staging blip-free) |
 
 Per-run staging: 95/2618/2972/21/0.001, 98/2056/2542/10/0.001, 98/2057/1770/1/0.001.
-Raw: `docs/perf/hero-delay/staging-faithful-home.{run1..3,summary}.json`,
-`prod-control-faithful-home.{run1..3,summary}.json`. LCP element is still
+Raw: `docs/perf/hero-delay/staging-faithful-home.run{1..3}.json` and
+`docs/perf/hero-delay/staging-faithful-home.summary.json`; same file pattern for
+`prod-control-faithful-home` (`...run{1..3}.json` + `...summary.json`).
+LCP element is still
 `layer-towersFar` with discovery score 1 (preloads intact). Production was not modified.
 
 ## Notes for the orchestrator (decisions, not blockers)

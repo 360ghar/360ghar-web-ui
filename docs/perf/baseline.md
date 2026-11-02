@@ -3,18 +3,25 @@
 Measured 2026-11-02, **before** any mission change (pre-mission production `360ghar.com`).
 This file is the regression reference for VAL-REG-001/002/003 and the "before" column for
 VAL-PERF-001..005: the post-cutover bar is **median ≥ baseline − 1 point** per page
-(AGENTS.md), plus the absolute targets (score ≥ 99, LCP ≤ 2.5 s, SI ≤ 3.5 s) on the homepage.
+(the regression rule, applied per page), plus the absolute targets
+(score ≥ 99, LCP ≤ 2.5 s, SI ≤ 3.5 s) on the homepage.
 
 ## Engine and protocol
 
-- Local Lighthouse **13.6.0**, `--only-categories=performance`, `--form-factor=mobile`
-  `--screenEmulation.mobile`, headless (`--headless=new`), Chrome at
-  `/Applications/Google Chrome.app`. Same engine as PageSpeed; anonymous PSI API is
+- Local Lighthouse **13.6.0**, `--only-categories=performance`, `--form-factor=mobile`,
+  screen mode **canonical-mobile** (runner flag `--screen canonical-mobile`, which passes
+  `--screenEmulation.mobile` — the pre-2026-11-02 protocol), headless (`--headless=new`),
+  Chrome at `/Applications/Google Chrome.app`. Same engine as PageSpeed; anonymous PSI API is
   quota-dead (429, `quota_limit_value: 0`) and is never used.
+- ⚠️ The runner now **defaults to `--screen faithful`** (trace proof of why:
+  `docs/perf/hero-delay.md`). Every command that extends or reproduces THIS table must pass
+  `--screen canonical-mobile` — omitting it measures the faithful protocol and produces
+  non-comparable numbers.
 - **Median of 3 fresh runs** per page (score contract). Raw JSON per run and a computed
   median summary live in `docs/perf/baseline/` (`<label>.run<i>.json`, `<label>.summary.json`).
-- Runner: `node scripts/perf/lighthouse.mjs <URL> --runs 3 --label <name>` (serialized
-  runs; never two Lighthouses at once). `pnpm perf:lighthouse -- <URL>` is the same thing.
+- Runner: `node scripts/perf/lighthouse.mjs <URL> --runs 3 --label <name>
+  --screen canonical-mobile` (serialized runs; never two Lighthouses at once).
+  `pnpm perf:lighthouse -- <URL> --screen canonical-mobile` is the same thing.
 - Machine/network caveat: runs come from one local connection, so absolute values include
   that environment's variance (see run spreads below); medians are the contract numbers.
 
@@ -77,8 +84,12 @@ VAL-PERF-005 warm-edge bar is ≤ 300 ms post-cutover.
 ## Reproduce
 
 ```bash
-node scripts/perf/lighthouse.mjs https://360ghar.com/ --runs 3 --label home
-# → docs/perf/baseline/home.run{1..3}.json + home.summary.json (median + per-run table)
-node scripts/perf/lighthouse.mjs <URL> --runs 3 --label <name> --resummarize
+node scripts/perf/lighthouse.mjs https://360ghar.com/ --runs 3 --label home \
+  --screen canonical-mobile
+# → docs/perf/baseline/home.run{1..3}.json + home.summary.json (median + per-run table);
+#   --screen canonical-mobile is REQUIRED here — the committed baseline is canonical-mobile
+#   and the runner default (faithful) would overwrite it with the other protocol
+node scripts/perf/lighthouse.mjs <URL> --runs 3 --label <name> \
+  --screen canonical-mobile --resummarize
 # → recompute summary.json from existing run JSONs without re-running the browser
 ```
