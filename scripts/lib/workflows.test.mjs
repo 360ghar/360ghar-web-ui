@@ -50,7 +50,8 @@ describe('workflows', () => {
   it('runs the e2e job sharded 4x with one dev server per shard, an --output folder and a variable switch', () => {
     const ci = read('ci.yml');
     expect(ci.match(/pnpm dev\b/g)).toHaveLength(1); // exactly one dev server per shard runner
-    expect(ci).toMatch(/playwright test --shard=\$\{\{ matrix\.shard \}\}\/4 --output=/);
+    expect(ci).toContain('shard: [1, 2, 3, 4]'); // the matrix is the single source of truth for the count
+    expect(ci).toMatch(/playwright test --shard=\$\{\{ matrix\.shard \}\}\/\$\{\{ strategy\.job-total \}\} --output=/);
     expect(ci).toContain('fail-fast: false'); // a red shard must not cancel the others
     expect(ci).toContain('playwright install --with-deps chrome');
     expect(ci).toContain("vars.E2E_DISABLED != 'true'");
