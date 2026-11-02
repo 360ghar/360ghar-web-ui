@@ -16,13 +16,12 @@ describe('APPS', () => {
 });
 
 describe('deep-link files', () => {
-  // The files live on the backend. Netlify must proxy them as-is (status 200, force), or the apps cannot verify the domain.
-  const toml = readFileSync(new URL('../../netlify.toml', import.meta.url), 'utf8');
-  it.each(['assetlinks.json', 'apple-app-site-association'])('proxies /.well-known/%s to the API', (file) => {
-    const block = toml.split('[[redirects]]').find((b) => b.includes(`from = "/.well-known/${file}"`));
-    expect(block).toBeDefined();
-    expect(block).toContain(`to = "https://api.360ghar.com/.well-known/${file}"`);
-    expect(block).toContain('status = 200');
-    expect(block).toContain('force = true');
+  // The files live on the backend. The Worker serves them through SSR endpoints
+  // that proxy the API as-is (the old netlify.toml 200-rewrites; Workers
+  // _redirects cannot proxy external hosts), or the apps cannot verify the domain.
+  it.each(['assetlinks.json.ts', 'apple-app-site-association.ts'])('has a src/pages/.well-known/%s endpoint proxying the API', (file) => {
+    const src = readFileSync(new URL(`../pages/.well-known/${file}`, import.meta.url), 'utf8');
+    expect(src).toContain('prerender = false');
+    expect(src).toMatch(/proxyWellKnown\('(assetlinks\.json|apple-app-site-association)'\)/);
   });
 });
