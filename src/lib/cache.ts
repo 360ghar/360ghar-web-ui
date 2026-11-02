@@ -16,7 +16,10 @@ export function cachePage(astro: Pick<AstroGlobal, 'response'>, tier: CacheTier,
   const swr = opts.error ? 60 : 86400;
   astro.response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
   astro.response.headers.set('Netlify-CDN-Cache-Control', `public, durable, s-maxage=${ttl}, stale-while-revalidate=${swr}`);
-  astro.response.headers.set('Cloudflare-CDN-Cache-Control', `public, s-maxage=${ttl}, stale-while-revalidate=${swr}`);
+  // Cloudflare (cache/concepts/cache-control): s-maxage implies proxy-revalidate,
+  // which disables stale serving — so the stale-while-revalidate window needs
+  // max-age, not s-maxage. This header is edge-only (stripped before browsers).
+  astro.response.headers.set('Cloudflare-CDN-Cache-Control', `public, max-age=${ttl}, stale-while-revalidate=${swr}`);
 }
 
 /**

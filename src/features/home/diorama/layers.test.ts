@@ -19,10 +19,10 @@ describe('diorama layers', () => {
     }
   });
 
-  it('preloads only the first-painted hero layers, LCP layer first', () => {
-    const srcs = new Map(DIORAMA_LAYERS.map((layer) => [layer.id, layer.src]));
-    expect(HERO_PRELOAD_SRCS).toHaveLength(HERO_PRELOAD_IDS.length);
-    expect(HERO_PRELOAD_SRCS[0]).toBe(srcs.get(LCP_LAYER_ID));
-    expect([...srcs.values()]).toEqual(expect.arrayContaining(HERO_PRELOAD_SRCS));
+  it('preloads exactly the first-painted hero layers mapped from HERO_PRELOAD_IDS, LCP layer first', () => {
+    expect(HERO_PRELOAD_SRCS).toEqual(
+      DIORAMA_LAYERS.filter((layer) => HERO_PRELOAD_IDS.includes(layer.id)).map((layer) => layer.src),
+    );
+    expect(HERO_PRELOAD_SRCS[0]).toBe(DIORAMA_LAYERS.find((layer) => layer.id === LCP_LAYER_ID)?.src);
   });
 });

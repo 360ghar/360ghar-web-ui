@@ -5,8 +5,32 @@ assertions inherited from the deleted Netlify `check:built` script (`scripts/che
 
 - **Staging URL:** `https://360ghar-web-ui.360ghar.workers.dev`
 - **Deployed:** 2026-11-02, `wrangler deploy`, worker `360ghar-web-ui`, first version `5c0a702c-6dfc-4248-8a2b-a2c70429d27d`, compat date `2026-11-02`
-- **Re-run the whole suite:** `bash scripts/verify-parity.sh https://360ghar-web-ui.360ghar.workers.dev` (exits non-zero on any failure; 57 checks)
+- **Re-run the whole suite:** `bash scripts/verify-parity.sh https://360ghar-web-ui.360ghar.workers.dev` (exits non-zero on any failure; 72 checks)
 - The account had **no workers.dev subdomain** before this deploy; subdomain **`360ghar`** was registered via the Workers API (2026-11-02) to unblock the staging URL.
+
+## Re-run evidence — 2026-11-03 (PR #31 review fixes)
+
+Full suite re-run after the review-fix deploy (version `f1beca2e-92d8-473e-95f2-e06e2c86607e`):
+**72/72 PASS, 0 FAIL, exit 0** (`bash scripts/verify-parity.sh https://360ghar-web-ui.360ghar.workers.dev`).
+The suite itself was hardened in the same pass, so the re-run is fail-closed where the
+2026-11-02 version could silently pass:
+
+- the `cdn-cache-control` presence check now observes its match (awk `print; exit`) instead of
+  always passing on an empty capture;
+- `absent()` distinguishes a curl transport failure from an absent header;
+- body needles are literal (`grep -F`), `BASE` strips a trailing `/`;
+- the blueprint3d entry check asserts the `var BP3D` token (an empty JS body can no longer pass);
+- new checks inherited from the deleted `check:built` script: `/app` + `/hi/app` store-badge hrefs
+  (Play/App/FlatMates), every manifest icon file 200, generated `/hi` locality FAQPage, and the
+  fixed-locality case (Sector 57 renders the fixed FAQs) — 57 → 72 checks.
+
+`/offline.html` re-verified on this deploy: **200 at its own URL** with the offline page content
+(`data-retry` present), `cf-cache-status` MISS→HIT across the suite run — the `sw.js`
+`cache.add('/offline.html')` install path gets a directly cacheable 200. (A review suggested an
+explicit `/offline.html /offline.html 200` rule before the wildcard; deployed and tested: the
+self-referential rewrite target is itself canonicalized and the URL answers **307 → /offline**,
+so the rule was reverted — the `/*.html → /:splat` 200 rewrite already serves the file directly
+at the original URL, verified with fresh cache keys before and after.)
 
 ## 1. Surface checklist (VAL-CF-001)
 
@@ -15,7 +39,7 @@ All URLs 200 with the expected content type and recognizably correct content.
 | URL | Status | Content-Type | Content spot-check |
 |---|---|---|---|
 | `/` | 200 | text/html | SSR homepage: `/diorama/towersFar.svg` markup, RealEstateAgent JSON-LD, hero `<form>` |
-| `/hi` | 200 | text/html | `lang="hi"`, Devanagari title `गुरुग्राम और चुने हुए NCR बाज़ारों में प्रॉपर्टी खोजें`, 20/20 diorama layers loaded |
+| `/hi` | 200 | text/html | `lang="hi-IN"`, Devanagari title `गुरुग्राम और चुने हुए NCR बाज़ारों में प्रॉपर्टी खोजें`, 20/20 diorama layers loaded |
 | `/diorama/{birds,blocks,blossoms,clouds,haze,kerb,kite,kiteString,litWindow,litWindowFrame,metro,ridge,street,sun,sunHalo,towersFar,towersMid,towersNear,trainAccent,trainBody}.svg` (20 URLs) | 200 ×20 | image/svg+xml | `<svg` body each; homepage + `/hi` load all 20 (verified in real browser: `dioramaLoaded: 20`) |
 | `/sitemap.xml` | 200 | application/xml | `<sitemapindex>` listing 7 sitemaps |
 | `/sitemap-static.xml` (Hindi URL set) | 200 | application/xml | contains `<loc>https://360ghar.com/hi</loc>` — the Hindi URLs live inside the sitemaps (no separate hi-sitemap endpoint; `/hi/sitemap.xml` is 404 by design) |
@@ -134,6 +158,10 @@ domain; re-measure TTFB at the production-cutover checkpoint.
 | `/locality/palam-vihar-gurgaon` | 200, generated content + `"@type":"FAQPage"` JSON-LD, `s-maxage` tier present |
 | `/rent-agreement-drafter` (AI-tools flag off in this build) | **404** |
 | `/legal-notice-drafter` (AI-tools flag off in this build) | **404** |
+| `/app` + `/hi/app` badge hrefs (was a dist-file check in the deleted script) | 200 each; all three store links present per page: Play `com.the360ghar.ghar360`, Play `com.the360ghar.flatmates360`, App Store `360-flatmates/id6771899300` |
+| manifest icon files (declared in `manifest.webmanifest`) | 200 ×3: `/assets/images/logo/favicon.png`, `favicon-512.png`, `favicon-maskable-512.png` |
+| `/hi/locality/palam-vihar-gurgaon` (generated Hindi locality route) | 200, `"@type":"FAQPage"` JSON-LD present |
+| `/locality/sector-57-gurgaon` (fixed-locality case: no generated block) | 200, renders the fixed FAQs ("How can I see current listings in Sector 57?") |
 
 The original script asserted these against a mocked Netlify function; here they run against the
 live Worker with the real backend — a strictly stronger check (the workerd sanitize-html bundling

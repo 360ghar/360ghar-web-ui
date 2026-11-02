@@ -173,7 +173,7 @@ const zone = (t1ms, t2ms) => {
 const wake = () => {
   const t2 = navTs + m.observedFirstPaint * 1000;
   const ev = trace
-    .filter((e) => e.ts <= t2 && (e.ph === 'X' || e.ph === 'I' || e.ph === 'R') && (e.dur ?? 0) > 0 || e.name === 'FireIdleCallback')
+    .filter((e) => (e.ts <= t2 && (e.ph === 'X' || e.ph === 'I' || e.ph === 'R') && (e.dur ?? 0) > 0) || (e.name === 'FireIdleCallback' && e.ts <= t2))
     .filter((e) => e.ts > t2 - 12_000)
     .sort((a, b) => b.ts - a.ts)
     .slice(0, 25)

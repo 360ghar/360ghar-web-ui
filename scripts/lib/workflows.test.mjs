@@ -40,7 +40,7 @@ describe('workflows', () => {
 
   it('use the pnpm version of package.json and Node 22', () => {
     expect(pkg.packageManager).toMatch(/^pnpm@/);
-    expect(pkg.engines.node).toBe('>=22.12.0');
+    expect(pkg.engines.node).toBe('>=22.23.4');
     const ci = read('ci.yml');
     expect(ci).toContain('pnpm/action-setup@v4'); // v4 reads "packageManager"; it fails if a version is also given
     expect(ci).not.toMatch(/pnpm\/action-setup@v4\n\s+with:\n\s+version:/);

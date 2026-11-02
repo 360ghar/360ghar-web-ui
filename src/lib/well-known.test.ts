@@ -16,7 +16,7 @@ describe('proxyWellKnown', () => {
     expect(res.headers.get('Content-Type')).toBe('application/json; charset=utf-8');
     expect(res.headers.get('Access-Control-Allow-Origin')).toBe('*');
     expect(res.headers.get('Cache-Control')).toBe('public, max-age=3600');
-    expect(res.headers.get('Cloudflare-CDN-Cache-Control')).toBe('public, s-maxage=3600');
+    expect(res.headers.get('Cloudflare-CDN-Cache-Control')).toBe('public, max-age=3600');
     expect(fetch).toHaveBeenCalledWith('https://api.360ghar.com/.well-known/assetlinks.json');
   });
 
@@ -25,5 +25,16 @@ describe('proxyWellKnown', () => {
     const res = await proxyWellKnown('apple-app-site-association');
     expect(res.status).toBe(502);
     expect(res.headers.get('Content-Type')).toContain('text/plain');
+    expect(res.headers.get('Cache-Control')).toBe('no-store');
+  });
+
+  it('does not cache an upstream error status', async () => {
+    for (const status of [404, 500, 503]) {
+      vi.stubGlobal('fetch', vi.fn(async () => new Response('nope', { status })));
+      const res = await proxyWellKnown('assetlinks.json');
+      expect(res.status, `status ${status}`).toBe(status);
+      expect(res.headers.get('Cache-Control'), `status ${status}`).toBe('no-store');
+      expect(res.headers.has('Cloudflare-CDN-Cache-Control'), `status ${status}`).toBe(false);
+    }
   });
 });

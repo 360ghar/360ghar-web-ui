@@ -56,10 +56,9 @@ describe('gurugramLayers', () => {
     expect(HERO_PRELOAD_IDS[0]).toBe(LCP_LAYER_ID);
   });
 
-  it('preloads at most two first-painted layers, all real layer ids', () => {
+  it('preloads exactly the LCP layer and the tower sheet in front of it', () => {
     const ids = gurugramLayers().map((layer) => layer.id);
-    expect(HERO_PRELOAD_IDS.length).toBeGreaterThanOrEqual(1);
-    expect(HERO_PRELOAD_IDS.length).toBeLessThanOrEqual(2);
+    expect(HERO_PRELOAD_IDS).toEqual([LCP_LAYER_ID, 'towersMid']);
     for (const id of HERO_PRELOAD_IDS) expect(ids).toContain(id);
   });
 });

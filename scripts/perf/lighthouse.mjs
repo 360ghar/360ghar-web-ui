@@ -49,17 +49,23 @@ if (!/^[\w./:&#%?=-]+$/.test(url)) {
   process.exit(2);
 }
 
-const runs = Math.max(1, Number(arg('--runs') ?? 3));
+const runsArg = arg('--runs');
+const runs = runsArg === undefined ? 3 : Number(runsArg);
+if (!Number.isInteger(runs) || runs < 1) {
+  console.error(`--runs must be a finite positive integer (got ${runsArg})`);
+  process.exit(2);
+}
 const outDir = resolve(arg('--out') ?? 'docs/perf/baseline');
 const label = arg('--label') ?? 'run';
-const screen = arg('--screen') ?? 'faithful';
+const screenArg = arg('--screen');
+const screen = screenArg ?? 'faithful';
 if (!['faithful', 'canonical-mobile'].includes(screen)) {
   console.error(`--screen must be "faithful" or "canonical-mobile" (got ${screen})`);
   process.exit(2);
 }
 const screenFlags = screen === 'faithful'
-  ? ['--screenEmulation.disabled', '--chrome-flags="--headless=new --window-size=412,823"']
-  : ['--screenEmulation.mobile', '--chrome-flags="--headless=new"'];
+  ? ['--screenEmulation.disabled', '--chrome-flags=--headless=new --window-size=412,823']
+  : ['--screenEmulation.mobile', '--chrome-flags=--headless=new'];
 const resummarize = process.argv.includes('--resummarize');
 mkdirSync(outDir, { recursive: true });
 
@@ -118,11 +124,34 @@ const lcpSnippet = (report) => {
   return null;
 };
 
-const runsData = runFiles.map((file) => {
-  const report = JSON.parse(readFileSync(file, 'utf8'));
+/** The screen mode a report actually ran under, from its own config. */
+const screenModeOf = (report) => {
+  const se = report.configSettings?.screenEmulation;
+  if (!se) return null;
+  if (se.disabled) return 'faithful';
+  if (se.mobile) return 'canonical-mobile';
+  return null;
+};
+
+const reports = runFiles.map((file) => JSON.parse(readFileSync(file, 'utf8')));
+
+// Resummarize labels runs by their recorded provenance, never the current default:
+// an operator resummarizing canonical-mobile-era reports without --screen must not
+// get them relabeled faithful.
+let screenLabel = screen;
+if (resummarize) {
+  const modes = [...new Set(reports.map(screenModeOf))];
+  if (modes.length === 1 && modes[0]) screenLabel = modes[0];
+  else if (!screenArg) {
+    console.error('--resummarize: screen mode not derivable from the reports (configSettings.screenEmulation); pass --screen explicitly.');
+    process.exit(2);
+  }
+}
+
+const runsData = reports.map((report, i) => {
   const n = (audit) => report.audits[audit]?.numericValue;
   return {
-    file: file,
+    file: runFiles[i],
     score: Math.round((report.categories?.performance?.score ?? 0) * 100),
     fcp_ms: Math.round(n('first-contentful-paint') ?? 0),
     lcp_ms: Math.round(n('largest-contentful-paint') ?? 0),
@@ -136,7 +165,7 @@ const runsData = runFiles.map((file) => {
 
 const summary = {
   url,
-  engine: `lighthouse@${LH_VERSION}, mobile UA emulation, headless Chrome, screen=${screen}`,
+  engine: `lighthouse@${LH_VERSION}, mobile UA emulation, headless Chrome, screen=${screenLabel}`,
   runs: runsData.length,
   median: Object.fromEntries(
     ['score', 'fcp_ms', 'lcp_ms', 'si_ms', 'tbt_ms', 'cls'].map((k) => [k, median(runsData.map((r) => r[k]))]),

@@ -69,9 +69,17 @@ function automatic(beginOnce: () => void): () => void {
     idle(beginOnce, 2000);
   };
 
+  // The hard cap fires this: analytics must not slip past the cap by another
+  // idle hop (an idle callback's own timeout can add seconds to the wait).
+  const goNow = () => {
+    if (stopped) return;
+    stop();
+    beginOnce();
+  };
+
   const start = () => {
     if (stopped) return; // interaction won before load; nothing to watch
-    cap = window.setTimeout(go, ANALYTICS_MAX_WAIT_MS);
+    cap = window.setTimeout(goNow, ANALYTICS_MAX_WAIT_MS);
     const supported =
       typeof PerformanceObserver !== 'undefined' &&
       PerformanceObserver.supportedEntryTypes?.includes('largest-contentful-paint');

@@ -15,6 +15,7 @@
 # Prints one [PASS]/[FAIL] line per check and exits non-zero when any check fails.
 set -u
 BASE="${1:?Usage: verify-parity.sh <base-url>}"
+BASE="${BASE%/}" # a trailing slash would double every constructed path's slash
 FAILS=0
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
@@ -31,7 +32,7 @@ check() {
   code="${code%% *}"
   if [ "$code" != "$want" ]; then fail "$name: status $code, want $want"; return; fi
   if [ -n "$ct" ] && [[ "$ctype" != *"$ct"* ]]; then fail "$name: content-type '$ctype', want '*$ct*'"; return; fi
-  if [ -n "$needle" ] && ! grep -q "$needle" "$TMP/body"; then fail "$name: body missing '$needle'"; return; fi
+  if [ -n "$needle" ] && ! grep -Fq -- "$needle" "$TMP/body"; then fail "$name: body missing '$needle'"; return; fi
   pass "$name ($code, $ctype)"
 }
 
@@ -57,8 +58,13 @@ header() {
 }
 
 absent() { # absent <name> <path> <header-name>
-  local name="$1" path="$2" h="$3"
-  if curl -sI "$BASE$path" | tr -d '\r' | awk -v h="$(echo "$h" | tr 'A-Z' 'a-z')" 'tolower($0) ~ "^" h ":" { found=1 } END { exit !found }'; then
+  local name="$1" path="$2" h="$3" out err="$TMP/absent.err"
+  # curl errors here must fail loudly, not read as "header absent".
+  if ! out=$(curl -sS -I "$BASE$path" 2>"$err"); then
+    fail "$name (curl transport error: $(tr '\n' ' ' <"$err" | head -c 120))"
+    return
+  fi
+  if printf '%s\n' "$out" | tr -d '\r' | awk -v h="$(echo "$h" | tr 'A-Z' 'a-z')" 'tolower($0) ~ "^" h ":" { found=1 } END { exit !found }'; then
     fail "$name: header '$h' present, must be absent"
   else
     pass "$name: no $h"
@@ -85,7 +91,7 @@ for feed in blog hi-blog properties hi-properties localities hi-localities; do
   check "rss/$feed.xml" "$BASE/rss/$feed.xml" 200 xml '<rss'
 done
 check 'blueprint3d entry page' "$BASE/blueprint3d/" 200 text/html 'blueprint3d.js'
-check 'blueprint3d JS entry' "$BASE/blueprint3d/js/blueprint3d.js" 200 javascript ''
+check 'blueprint3d JS entry' "$BASE/blueprint3d/js/blueprint3d.js" 200 javascript 'var BP3D'
 check '/.well-known/assetlinks.json' "$BASE/.well-known/assetlinks.json" 200 json 'com.the360ghar.ghar360'
 check '/.well-known/apple-app-site-association' "$BASE/.well-known/apple-app-site-association" 200 json 'com.the360ghar'
 check '/properties' "$BASE/properties" 200 text/html 'Property'
@@ -118,7 +124,7 @@ header 'font ACAO *' '/fonts/sentient-var.woff2' 'Access-Control-Allow-Origin' '
 header 'font immutable' '/fonts/sentient-var.woff2' 'Cache-Control' 'immutable'
 header 'homepage edge tier s-maxage=3600+SWR (passthrough)' '/' 'Netlify-CDN-Cache-Control' 's-maxage=3600, stale-while-revalidate=86400'
 header 'homepage browser cache-control' '/' 'Cache-Control' 'public, max-age=0, must-revalidate'
-CC=$(curl -sI "$BASE/" | tr -d '\r' | awk 'tolower($0) ~ /^cdn-cache-control:/ { found=1 } END { exit !found }')
+CC=$(curl -sI "$BASE/" | tr -d '\r' | awk 'tolower($0) ~ /^cdn-cache-control:/ { print; exit }')
 if [ -n "$CC" ]; then fail 'homepage: generic cdn-cache-control header present (adapter override?)'; else pass 'homepage: no generic cdn-cache-control (finalize flag resolved: emitted tier stands)'; fi
 curl -s -o /dev/null "$BASE/"
 if curl -sI "$BASE/" | tr -d '\r' | awk 'tolower($0) ~ /^cf-cache-status: *hit/ { found=1 } END { exit !found }'; then pass 'homepage: cf-cache-status HIT after re-request (edge serving)'; else fail 'homepage: cf-cache-status not HIT'; fi
@@ -165,6 +171,29 @@ header 'locality s-maxage (passthrough)' '/locality/palam-vihar-gurgaon' 'Netlif
 check 'locality generated content' "$BASE/locality/palam-vihar-gurgaon" 200 text/html '"@type":"FAQPage"'
 check 'AI-tools flag off: /rent-agreement-drafter' "$BASE/rent-agreement-drafter" 404 text/html ''
 check 'AI-tools flag off: /legal-notice-drafter' "$BASE/legal-notice-drafter" 404 text/html ''
+
+# /app + /hi/app badge links (the deleted script checked the built files; here live SSR).
+# Needles avoid '&', which live HTML encodes as &amp;.
+for prefix in '' '/hi'; do
+  check "app page SSR$prefix" "$BASE$prefix/app" 200 text/html ''
+  BADGE_OK=0; BADGE_BAD=0
+  curl -s -o "$TMP/body" "$BASE$prefix/app"
+  for badge in 'store/apps/details?id=com.the360ghar.ghar360' 'store/apps/details?id=com.the360ghar.flatmates360' 'apps.apple.com/in/app/360-flatmates/id6771899300'; do
+    if grep -Fq -- "$badge" "$TMP/body"; then BADGE_OK=$((BADGE_OK + 1)); else BADGE_BAD=$((BADGE_BAD + 1)); echo "    missing badge: $badge"; fi
+  done
+  if [ "$BADGE_BAD" -eq 0 ]; then pass "app badges$prefix (play ghar360 + play flatmates360 + apple flatmates): $BADGE_OK/3"; else fail "app badges$prefix: $BADGE_OK/3 found"; fi
+done
+
+# Manifest icon files: every icon the webmanifest declares must exist.
+curl -s -o "$TMP/manifest" "$BASE/manifest.webmanifest"
+for icon in $(grep -o '"src": *"[^"]*"' "$TMP/manifest" | sed 's/"src": *"//; s/"$//' | tr -d '\r'); do
+  code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$icon")
+  if [ "$code" = 200 ]; then pass "manifest icon $icon"; else fail "manifest icon $icon: status $code"; fi
+done
+
+# Generated /hi locality route and the fixed-locality case (no generated content).
+check 'hi locality generated content' "$BASE/hi/locality/palam-vihar-gurgaon" 200 text/html '"@type":"FAQPage"'
+check 'locality fixed FAQs (no generated block)' "$BASE/locality/sector-57-gurgaon" 200 text/html 'How can I see current listings in Sector 57?'
 
 echo
 if [ "$FAILS" -eq 0 ]; then echo "ALL CHECKS PASSED against $BASE"; else echo "$FAILS CHECK(S) FAILED against $BASE"; fi

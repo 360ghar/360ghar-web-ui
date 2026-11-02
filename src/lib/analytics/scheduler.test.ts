@@ -150,9 +150,28 @@ describe('analytics scheduler', () => {
     env.install();
     const begin = vi.fn();
     scheduleAnalyticsStart(begin);
+    env.runTimers(ANALYTICS_MAX_WAIT_MS - 1);
+    env.flushIdle();
+    expect(begin).not.toHaveBeenCalled();
     env.runTimers(ANALYTICS_MAX_WAIT_MS);
+    // The cap starts analytics directly: no further idle callback may be needed.
+    expect(begin).toHaveBeenCalledTimes(1);
+    expect(env.pendingTimers()).toEqual([]);
     env.flushIdle();
     expect(begin).toHaveBeenCalledTimes(1);
+  });
+
+  it('the cap bound holds when the quiet window never settles before it', () => {
+    const env = makeEnv('complete');
+    env.install();
+    const begin = vi.fn();
+    scheduleAnalyticsStart(begin);
+    // A candidate arrived but the quiet window has not fired when the cap hits:
+    // the cap wins directly, without another idle hop.
+    env.deliverLcp([1300]);
+    env.runTimers(ANALYTICS_MAX_WAIT_MS);
+    expect(begin).toHaveBeenCalledTimes(1);
+    expect(env.pendingTimers()).toEqual([]);
   });
 
   it('engines without LCP support fall back to load + idle', () => {

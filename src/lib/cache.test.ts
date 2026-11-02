@@ -14,7 +14,7 @@ describe('cachePage', () => {
     cachePage({ response: page }, 'hour');
     expect(page.headers.get('cache-control')).toBe('public, max-age=0, must-revalidate');
     expect(page.headers.get('netlify-cdn-cache-control')).toBe('public, durable, s-maxage=3600, stale-while-revalidate=86400');
-    expect(page.headers.get('cloudflare-cdn-cache-control')).toBe('public, s-maxage=3600, stale-while-revalidate=86400');
+    expect(page.headers.get('cloudflare-cdn-cache-control')).toBe('public, max-age=3600, stale-while-revalidate=86400');
   });
 
   it('keeps every other tier at its current TTL on both CDNs', () => {
@@ -23,7 +23,9 @@ describe('cachePage', () => {
       const page = res();
       cachePage({ response: page }, tier);
       expect(page.headers.get('netlify-cdn-cache-control'), tier).toContain(`s-maxage=${ttl}, stale-while-revalidate=86400`);
-      expect(page.headers.get('cloudflare-cdn-cache-control'), tier).toContain(`s-maxage=${ttl}, stale-while-revalidate=86400`);
+      // Cloudflare edge tier: max-age (not s-maxage), whose proxy-revalidate
+      // semantics would disable the stale-while-revalidate window.
+      expect(page.headers.get('cloudflare-cdn-cache-control'), tier).toContain(`max-age=${ttl}, stale-while-revalidate=86400`);
     }
   });
 
@@ -31,7 +33,7 @@ describe('cachePage', () => {
     const page = res();
     cachePage({ response: page }, 'hour', { error: true });
     expect(page.headers.get('netlify-cdn-cache-control')).toBe('public, durable, s-maxage=60, stale-while-revalidate=60');
-    expect(page.headers.get('cloudflare-cdn-cache-control')).toBe('public, s-maxage=60, stale-while-revalidate=60');
+    expect(page.headers.get('cloudflare-cdn-cache-control')).toBe('public, max-age=60, stale-while-revalidate=60');
   });
 });
 
@@ -40,7 +42,7 @@ describe('respond', () => {
     const page = res();
     respond({ response: page }, 'hour', { notFound: true });
     expect(page.status).toBe(404);
-    expect(page.headers.get('cloudflare-cdn-cache-control')).toContain('s-maxage=3600');
+    expect(page.headers.get('cloudflare-cdn-cache-control')).toContain('max-age=3600');
   });
 
   it('uses the error TTL on a 503', () => {

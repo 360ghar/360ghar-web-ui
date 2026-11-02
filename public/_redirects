@@ -20,5 +20,8 @@
 # Direct .html URLs serve with 200, as Netlify did. Workers Assets would otherwise
 # canonicalize them with a 307, and the service worker caches /offline.html at
 # install time: redirected responses cannot go into the Cache API, so the PWA
-# offline fallback would silently break.
+# offline fallback would silently break. The rewrite target /:splat is the
+# EXTENSIONLESS path, whose asset lookup resolves back to the .html file, so the
+# response stays 200 at the original URL (a rewrite straight to /offline.html
+# would itself be canonicalized 307 — verified live 2026-11-03).
 /*.html /:splat 200

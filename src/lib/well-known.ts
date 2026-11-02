@@ -12,12 +12,20 @@ export async function proxyWellKnown(file: string): Promise<Response> {
   try {
     upstream = await fetch(`${API_ORIGIN}/.well-known/${file}`);
   } catch {
-    return new Response('The deep-link file is unavailable.', { status: 502, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+    return new Response('The deep-link file is unavailable.', {
+      status: 502,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' },
+    });
   }
   const headers = new Headers();
   headers.set('Content-Type', upstream.headers.get('Content-Type') ?? 'application/json');
   headers.set('Access-Control-Allow-Origin', '*');
-  headers.set('Cache-Control', 'public, max-age=3600');
-  headers.set('Cloudflare-CDN-Cache-Control', 'public, s-maxage=3600');
+  // A transient upstream failure must never stick in a CDN or browser cache.
+  if (upstream.ok) {
+    headers.set('Cache-Control', 'public, max-age=3600');
+    headers.set('Cloudflare-CDN-Cache-Control', 'public, max-age=3600');
+  } else {
+    headers.set('Cache-Control', 'no-store');
+  }
   return new Response(upstream.body, { status: upstream.status, headers });
 }

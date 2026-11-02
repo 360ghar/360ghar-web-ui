@@ -248,8 +248,6 @@ test('home: search by PG, by text, and Near me without location', async ({ page,
   await hydrated(page);
   const form = page.getByRole('search', { name: 'Find a home' });
   await form.locator('label', { hasText: 'PG' }).click();
-  // The island adds the PG type field; wait for it, so the click is not lost to a reload.
-  await expect(form.locator('input[name="property_type"]')).toHaveCount(1);
   await form.getByRole('button', { name: 'Search' }).click();
   await page.waitForURL(/\/properties\?/, { waitUntil: 'commit' });
   const q = new URL(page.url()).searchParams;
@@ -325,9 +323,53 @@ test('home: free AI tools band compares and links', async ({ page }) => {
   const slider = band.getByRole('slider', { name: 'Compare the starting room with the design example' });
   await slider.fill('25');
   await expect(band.locator('.fai-stage')).toHaveAttribute('style', /--cmp: 25%/);
-  await expect(band.locator('a[href="/ai-design-studio"]')).toBeVisible();
-  await expect(band.locator('a[href="/vastu-checker"]')).toBeVisible();
+  const toolLinks = band.getByRole('link', { name: 'Open the tool' });
+  await expect(toolLinks).toHaveCount(2);
+  await expect(toolLinks.nth(0)).toHaveAttribute('href', '/ai-design-studio');
+  await expect(toolLinks.nth(1)).toHaveAttribute('href', '/vastu-checker');
   await band.getByRole('button', { name: 'Open chat' }).click();
   await expect(page.locator('[data-chat-launcher]')).toHaveAttribute('aria-expanded', 'true');
   await w.check();
+});
+
+test.describe('home: without JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('the hero form encodes the PG chip in the GET submit', async ({ page }) => {
+    await page.goto('/');
+    const form = page.getByRole('search', { name: 'Find a home' });
+    // The chips are native radios: selectable and visible-checked without JS.
+    const pg = form.locator('input[name="purpose"][value="pg"]');
+    await expect(pg).toHaveCount(1);
+    await pg.check({ force: true }); // the visible control is the label's styled span
+    await expect(pg).toBeChecked();
+    await form.getByRole('button', { name: 'Search' }).click();
+    await page.waitForURL(/\/properties\?/, { waitUntil: 'commit' });
+    // purpose=pg parses to rent + property_type=pg on the results page.
+    const q = new URL(page.url()).searchParams;
+    expect(q.get('purpose')).toBe('pg');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  });
+});
+
+test.describe('home: before the hero island hydrates', () => {
+  // Idle hydration never fires, so the interaction runs against the server HTML.
+  test('a PG selection made pre-hydration submits the PG search natively', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.requestIdleCallback = () => {
+        const id = setTimeout(() => {}, 600_000);
+        return id as unknown as number;
+      };
+      window.cancelIdleCallback = (id: number) => clearTimeout(id as unknown as number);
+    });
+    await page.goto('/');
+    const form = page.getByRole('search', { name: 'Find a home' });
+    const pg = form.locator('input[name="purpose"][value="pg"]');
+    await pg.check({ force: true });
+    await expect(pg).toBeChecked(); // hydration cannot undo the click (uncontrolled)
+    await form.getByRole('button', { name: 'Search' }).click();
+    await page.waitForURL(/\/properties\?/, { waitUntil: 'commit' });
+    expect(new URL(page.url()).searchParams.get('purpose')).toBe('pg');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  });
 });
