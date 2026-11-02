@@ -47,10 +47,11 @@ describe('workflows', () => {
     for (const f of files.filter((x) => /setup-node/.test(read(x)))) expect(read(f), f).toMatch(/node-version: '22'/);
   });
 
-  it('runs the e2e job with one dev server, an --output folder and a variable switch', () => {
+  it('runs the e2e job sharded 4x with one dev server per shard, an --output folder and a variable switch', () => {
     const ci = read('ci.yml');
-    expect(ci.match(/pnpm dev\b/g)).toHaveLength(1);
-    expect(ci).toMatch(/playwright test --output=/);
+    expect(ci.match(/pnpm dev\b/g)).toHaveLength(1); // exactly one dev server per shard runner
+    expect(ci).toMatch(/playwright test --shard=\$\{\{ matrix\.shard \}\}\/4 --output=/);
+    expect(ci).toContain('fail-fast: false'); // a red shard must not cancel the others
     expect(ci).toContain('playwright install --with-deps chrome');
     expect(ci).toContain("vars.E2E_DISABLED != 'true'");
     expect(ci).toContain('pnpm check:pseo'); // after the unit tests
