@@ -124,6 +124,13 @@
     scroll-padding-block: 5rem 5rem;
   }
 
+  /* The nowrap refer figure ("Up to ₹10,000") is wider than its grid track.
+     clip — never hidden, which would make main a scroll container — keeps it
+     from widening the document past the viewport. */
+  main {
+    overflow-x: clip;
+  }
+
   body {
     min-height: 100dvh;
     background-color: var(--color-paper);
