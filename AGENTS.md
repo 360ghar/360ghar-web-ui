@@ -4,7 +4,7 @@ The 360Ghar website (360ghar.com). Astro 7 with React 19 islands, TypeScript str
 
 ## Setup
 
-- pnpm 12 (`packageManager` in `package.json`) and Node 22.12 or newer. Do not use npm or yarn.
+- pnpm 12 (`packageManager` in `package.json`) and Node 22.23.4 or newer (astro 7.4.4's floor; the Workers Builds image's default Node 24 satisfies it, its preinstalled 22.23.2 does not). Do not use npm or yarn.
 - Copy `.env.example` to `.env`. Variables the browser reads start with `PUBLIC_`.
 - `pnpm install --frozen-lockfile`
 
