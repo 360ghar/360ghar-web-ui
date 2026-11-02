@@ -1,6 +1,6 @@
 # 360ghar-web-ui
 
-The 360Ghar website (360ghar.com). Astro 7 with React 19 islands, TypeScript strict, Tailwind v4, TanStack Query, Zustand, openapi-fetch, React Hook Form with Zod. Netlify adapter.
+The 360Ghar website (360ghar.com). Astro 7 with React 19 islands, TypeScript strict, Tailwind v4, TanStack Query, Zustand, openapi-fetch, React Hook Form with Zod. Cloudflare Workers adapter (`@astrojs/cloudflare`, `wrangler.jsonc`); `netlify.toml` stays in the repo until the production cutover.
 
 ## Setup
 
@@ -26,7 +26,7 @@ The 360Ghar website (360ghar.com). Astro 7 with React 19 islands, TypeScript str
 
 1. Run one dev server only. Stop it before `pnpm build`.
 2. If Vite dependencies go stale, restart with `pnpm exec astro dev --force`.
-3. Do not use `astro preview` to check the Netlify adapter. Use a dev server or the deploy preview.
+3. Prod-shape local checks: `pnpm build && pnpm preview` (workerd) or `pnpm build && pnpm exec wrangler dev --port 8787`. `astro dev` also runs on workerd since the Cloudflare adapter swap.
 4. API types come from the backend contract: `openapi/openapi.json` is a copy of `360ghar-backend/docs/openapi.json`. Run `pnpm api:sync && pnpm api:types` after the backend changes, and commit both files. Do not hand-edit `schema.d.ts`.
 5. Where the site and the backend disagree, the backend wins. Log gaps in `docs/backend-gaps.md`.
 6. Production deploys through Netlify's own git build (`pnpm build`, Node 22, `netlify.toml`) when `main` changes. There is no GitHub deploy workflow.
