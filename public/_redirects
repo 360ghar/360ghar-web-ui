@@ -1,0 +1,24 @@
+# Static 301 redirects for Cloudflare Workers Assets. Runs before asset serving
+# and before the Worker. Legacy path rules stay in src/lib/redirects.ts (they run
+# in middleware on Worker-served paths); the www -> apex redirect needs a
+# zone-level rule at cutover (_redirects cannot match a different hostname).
+#
+# Without these, Workers Assets answers trailing-slash variants of static pages
+# with a 307; these explicit rules keep the SEO-parity 301 that Netlify sent.
+/hi/ /hi 301
+/properties/ /properties 301
+/locality/palam-vihar-gurgaon/ /locality/palam-vihar-gurgaon 301
+/property/118/ /property/118 301
+
+# The blueprint3d legacy app is entered by its literal index.html on Netlify (200
+# there). Specific rule before the /*.html splat below: _redirects is
+# first-match-wins, and the splat would rewrite to the extensionless
+# /blueprint3d/index, which is not a file, and fall back to the 307
+# canonicalization.
+/blueprint3d/index.html /blueprint3d/ 200
+
+# Direct .html URLs serve with 200, as Netlify did. Workers Assets would otherwise
+# canonicalize them with a 307, and the service worker caches /offline.html at
+# install time: redirected responses cannot go into the Cache API, so the PWA
+# offline fallback would silently break.
+/*.html /:splat 200
