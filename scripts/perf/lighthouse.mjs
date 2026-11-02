@@ -9,6 +9,17 @@
  *   --runs <n>       Number of runs (default 3; median of 3 is the score contract)
  *   --out <dir>      Output directory (default docs/perf/baseline)
  *   --label <name>   File label (default "run"; e.g. home, properties, locality)
+ *   --screen <mode>  `faithful` (default) | `canonical-mobile`.
+ *                    faithful: no screen-metrics override; the headless window is
+ *                    pre-sized 412x823 CSS px and the mobile UA still applies.
+ *                    canonical-mobile: the pre-2026-11-02 protocol
+ *                    (`--screenEmulation.mobile`). KEEP for comparisons with the
+ *                    baseline/early-mission tables. On this machine it triggers a
+ *                    nondeterministic presentation blackout in headless Chrome that
+ *                    delays first paint by ~0.7-1.8 s with an idle CPU (trace proof
+ *                    and the isolation matrix: docs/perf/hero-delay.md). SI/LCP
+ *                    medians from that mode are inflated whenever the blackout
+ *                    fires (6 of 9 runs on 2026-11-02).
  *   --resummarize    Re-read existing run JSONs and rewrite the summary only
  *                    (no browser, no Lighthouse run)
  *
@@ -41,6 +52,14 @@ if (!/^[\w./:&#%?=-]+$/.test(url)) {
 const runs = Math.max(1, Number(arg('--runs') ?? 3));
 const outDir = resolve(arg('--out') ?? 'docs/perf/baseline');
 const label = arg('--label') ?? 'run';
+const screen = arg('--screen') ?? 'faithful';
+if (!['faithful', 'canonical-mobile'].includes(screen)) {
+  console.error(`--screen must be "faithful" or "canonical-mobile" (got ${screen})`);
+  process.exit(2);
+}
+const screenFlags = screen === 'faithful'
+  ? ['--screenEmulation.disabled', '--chrome-flags="--headless=new --window-size=412,823"']
+  : ['--screenEmulation.mobile', '--chrome-flags="--headless=new"'];
 const resummarize = process.argv.includes('--resummarize');
 mkdirSync(outDir, { recursive: true });
 
@@ -60,8 +79,7 @@ if (resummarize) {
         url,
         '--only-categories=performance',
         '--form-factor=mobile',
-        '--screenEmulation.mobile',
-        '--chrome-flags="--headless=new"',
+        ...screenFlags,
         '--output=json',
         `--output-path=${file}`,
         '--quiet',
@@ -118,7 +136,7 @@ const runsData = runFiles.map((file) => {
 
 const summary = {
   url,
-  engine: `lighthouse@${LH_VERSION}, mobile emulation, headless Chrome`,
+  engine: `lighthouse@${LH_VERSION}, mobile UA emulation, headless Chrome, screen=${screen}`,
   runs: runsData.length,
   median: Object.fromEntries(
     ['score', 'fcp_ms', 'lcp_ms', 'si_ms', 'tbt_ms', 'cls'].map((k) => [k, median(runsData.map((r) => r[k]))]),

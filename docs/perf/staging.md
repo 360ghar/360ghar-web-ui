@@ -12,6 +12,17 @@ the diagnosis below shows it is bounded by a pre-existing, host-independent hero
 first-paint lottery — **not** by the Workers platform or by any of the four levers. All
 four levers delivered their mechanisms, each verified in-trace.
 
+> **2026-11-02 resolution (`hero-render-delay-investigation`):** the "render-delay
+> lottery" above was traced to its mechanism and is **not a page property** — it is a
+> nondeterministic presentation blackout in headless Chrome's mobile screen emulation
+> on the measurement machine (`mobile: true` metrics override; the page paints and
+> presents at 645-745 ms without it; trace proof + isolation matrix:
+> `docs/perf/hero-delay.md`). The SI miss in this file is a measurement artifact of the
+> canonical protocol. Re-measured the same hour under the corrected faithful protocol:
+> staging median **score 98 / LCP 2057 ms / SI 2542 ms / TBT 10 ms / CLS 0.001** vs
+> production control 97 / 2327 / 3320 / 20 / 0.002. Tables in this file remain valid
+> as canonical-mode records; do not compare medians across modes.
+
 ## Protocol
 
 - Contract engine: local Lighthouse **13.6.0**, mobile emulation, `--headless=new`,
