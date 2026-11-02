@@ -44,7 +44,7 @@ describe('workflows', () => {
     const ci = read('ci.yml');
     expect(ci).toContain('pnpm/action-setup@v4'); // v4 reads "packageManager"; it fails if a version is also given
     expect(ci).not.toMatch(/pnpm\/action-setup@v4\n\s+with:\n\s+version:/);
-    for (const f of files.filter((x) => /setup-node/.test(read(x)))) expect(read(f), f).toMatch(/node-version: '22'/);
+    for (const f of files.filter((x) => /setup-node/.test(read(x)))) expect(read(f), f).toMatch(/node-version-file: package\.json/);
   });
 
   it('runs the e2e job sharded 4x with one dev server per shard, an --output folder and a variable switch', () => {
