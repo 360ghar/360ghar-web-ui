@@ -59,7 +59,7 @@ Rollback: Workers version rollback is the primary path — runbook in `docs/perf
 
 ## Performance
 
-Homepage after the cutover, median of 3 local mobile Lighthouse 13.6.0 runs in `faithful` mode (2026-11-03): score 97, LCP 2258 ms, SI 3170 ms, TBT 43 ms, CLS 0.001; warm-edge TTFB 136-193 ms on a reused connection (397-488 ms on a fresh one). Key pages score 95-97. Evidence: `docs/perf/after/home.summary.json` and `docs/perf/after/REPORT.md`. PageSpeed Insights work (mobile 97 to 100): `docs/perf/psi-100.md`. Protocol: `docs/perf/baseline.md`, `docs/perf/hero-delay.md`.
+Homepage after the cutover, median of 3 local mobile Lighthouse 13.6.0 runs in `faithful` mode (2026-11-03): score 97, LCP 2258 ms, SI 3170 ms, TBT 43 ms, CLS 0.001; warm-edge TTFB 136-193 ms on a reused connection (397-488 ms on a fresh one). Key pages score 95-97. Evidence: `docs/perf/after/home.summary.json` and `docs/perf/after/REPORT.md`. Protocol: `docs/perf/baseline.md`, `docs/perf/hero-delay.md`.
 
 Runner: `node scripts/perf/lighthouse.mjs <url> --runs 3`. It defaults to the `faithful` screen mode; do not use `--screen canonical-mobile` for score runs (it inflates SI/LCP when the headless presentation blackout fires — `docs/perf/hero-delay.md`).
 
