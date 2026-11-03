@@ -32,8 +32,8 @@ The public website of 360Ghar (https://360ghar.com), rebuilt with Astro and Reac
 
 | Name | Where | Value |
 |---|---|---|
-| `PUBLIC_SUPABASE_URL` | Browser | Supabase project URL. Required: the production build fails without it |
-| `PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Browser | Supabase publishable key. Required |
+| `PUBLIC_SUPABASE_URL` | Browser | Supabase project URL. Required for browser sign-in: when it is missing, auth is off and the browser logs a warning (the build does not fail) |
+| `PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Browser | Supabase publishable key. Required for browser sign-in, same as `PUBLIC_SUPABASE_URL` |
 | `PUBLIC_POSTHOG_KEY` | Browser | PostHog project key. Without it, no analytics |
 | `PUBLIC_POSTHOG_HOST` | Browser | `https://us.i.posthog.com` (set in the deploy environment) |
 | `PUBLIC_GA_ID` | Browser | Google Analytics id (set in the deploy environment) |
@@ -47,7 +47,7 @@ The old site's names (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VIT
 
 ## Deploy
 
-Production `360ghar.com` serves from a Cloudflare Worker custom domain (worker `360ghar-web-ui`, config in `wrangler.jsonc`). The Worker serves the site and the same-origin `/api` proxy. Deploy with the Cloudflare credentials in the environment (`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`):
+Production `360ghar.com` serves from a Cloudflare Worker custom domain (worker `360ghar-web-ui`, config in `wrangler.jsonc`). The Worker serves the site only: it has no same-origin `/api` proxy, and browser API calls go to `https://api.360ghar.com` directly, so in production `PUBLIC_API_BASE` must be unset or exactly that origin. Deploy with the Cloudflare credentials in the environment (`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`):
 
     pnpm build && npx wrangler deploy
 
@@ -59,7 +59,7 @@ Rollback: Workers version rollback is the primary path — runbook in `docs/perf
 
 ## Performance
 
-Homepage, median of 3 mobile Lighthouse runs: score 97, LCP 2258 ms, SI 3170 ms, TBT 43 ms, CLS 0.001; warm-edge TTFB ~150 ms. Key pages score 95-97, all at or above their pre-mission baselines. Protocol and evidence: `docs/perf/` (`baseline.md`, `hero-delay.md`).
+Homepage after the cutover, median of 3 local mobile Lighthouse 13.6.0 runs in `faithful` mode (2026-11-03): score 97, LCP 2258 ms, SI 3170 ms, TBT 43 ms, CLS 0.001; warm-edge TTFB 136-193 ms on a reused connection (397-488 ms on a fresh one). Key pages score 95-97. Evidence: `docs/perf/after/home.summary.json` and `docs/perf/after/REPORT.md`. PageSpeed Insights work (mobile 97 to 100): `docs/perf/psi-100.md`. Protocol: `docs/perf/baseline.md`, `docs/perf/hero-delay.md`.
 
 Runner: `node scripts/perf/lighthouse.mjs <url> --runs 3`. It defaults to the `faithful` screen mode; do not use `--screen canonical-mobile` for score runs (it inflates SI/LCP when the headless presentation blackout fires — `docs/perf/hero-delay.md`).
 
