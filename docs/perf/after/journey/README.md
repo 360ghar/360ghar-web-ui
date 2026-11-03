@@ -1,8 +1,9 @@
 # Cold-visitor journey evidence — production, 2026-11-03
 
 VAL-CROSS-001 + production re-check of VAL-ANAL-001/002. Fresh Chrome profile (own
-agent-browser session `09a528538141__u1`, Factory CDP env removed), **iPhone 12 device
-emulation**, `https://360ghar.com`. A document-start init script installed buffered
+agent-browser session `09a528538141__u1`, Factory CDP env removed), `https://360ghar.com`. The run
+was meant to use iPhone 12 emulation, but the HAR records **desktop Chrome** (macOS
+`HeadlessChrome` UA, `sec-ch-ua-mobile: ?0` on every request): read this as desktop evidence. A document-start init script installed buffered
 `largest-contentful-paint` + `longtask` observers (`window.__perf`) and un-headlessed the
 UA only if `HeadlessChrome` was still JS-visible (posthog `_is_bot()` silently drops sends
 on headless UAs — see `library/analytics-defer.md`).
@@ -23,16 +24,18 @@ Files: `home-load-perf.json` (instrumented homepage load), `network-log-analytic
 log, 515 requests, no response bodies).
 
 - Homepage (instrumented): first analytics request at `timeOrigin` + **2707 ms**.
-  Gate math: `loadEventEnd` 1115 + `ANALYTICS_QUIET_MS` 1500 counted from the last LCP
-  candidate 952 → earliest 2452, + 255 ms idle handoff = 2707. **Exact.**
+  Estimate: `scheduler.ts` creates the LCP observer on the load event (1115 ms) and its
+  buffered callback arms the `ANALYTICS_QUIET_MS` 1500 ms timer then, so the earliest start
+  is about 2615 ms, leaving ~90 ms for the idle callback. The callback timestamp was not
+  recorded, so this split is inferred, not measured.
 - Every navigated page (`/properties` ×2, `/property/182`, `/login`): first analytics
   request of that page's window lands well after its load+idle gate (+1.5-3.3 s after each
-  document request start). Zero analytics requests begin inside any load window.
-- **All analytics requests succeeded**: gtag.js 200, GA `g/collect` 204, posthog
-  config/recorder/surveys 200, posthog `/e/` + `/i/v0/e/` batches 200.
+  document request start). No requests initiated by a page begin inside its own load window; the noted previous-page batch overlaps the buy-results load.
+- Analytics requests with recorded success responses: gtag.js 200, GA `g/collect` 204, posthog
+  config/recorder/surveys 200, and posthog `/e/` + `/i/v0/e/` batches 200; `/s/` has no recorded successful response.
 - Zero long tasks on the instrumented homepage load (so none attributable to analytics
   before LCP), zero console errors across the whole session.
 - Honest note: one posthog batch (`/i/v0/e/` + `/s/`) from the second homepage visit
-  flushed 286 ms after the buy-results page's document request — it belongs to the
+  flushed about 1 s after the buy-results page's document request — it belongs to the
   previous page (its gate had fired at +1584 ms) and crossed the navigation boundary;
   not a violation of the new page's gate.

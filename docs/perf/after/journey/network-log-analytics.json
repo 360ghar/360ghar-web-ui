@@ -1,20 +1,20 @@
 {
   "captured": "2026-11-03",
-  "session": "agent-browser 09a528538141__u1, own Chrome, iPhone 12 device emulation, UA un-headlessed at document start",
-  "note": "Distilled from the full session request log (515 requests, full timing in journey.har). Document entries delimit per-page windows; all analytics hosts: googletagmanager.com, google-analytics.com/g/collect, us-assets.i.posthog.com, us.i.posthog.com. Every analytics request succeeded (200/204). Per-page first-analytics offsets below are relative to that page document request start; the instrumented homepage pass (see journey/home-load-perf.json) pins gate math exactly: first analytics at timeOrigin+2707ms = loadEventEnd 1115 + quiet 1500 after last LCP 952 (=2452) + 255ms idle handoff.",
+  "session": "agent-browser 09a528538141__u1, own Chrome, UA un-headlessed at document start. Intended iPhone 12 emulation; the HAR records desktop Chrome (macOS HeadlessChrome UA, sec-ch-ua-mobile ?0).",
+  "note": "Distilled from the full session request log (515 requests, full timing in journey.har). All ts values are epoch milliseconds; document ts values are the HAR startedDateTime of each document request, and they delimit the per-page windows. Analytics hosts: googletagmanager.com, google-analytics.com/g/collect, us-assets.i.posthog.com, us.i.posthog.com. Requests with a recorded status succeeded (200/204); the posthog /s/ request has no recorded success (HAR status 0). Instrumented homepage pass (journey/home-load-perf.json): first analytics at timeOrigin+2707 ms. Estimate: the LCP observer is created on the load event (1115 ms) and its buffered callback arms the 1500 ms quiet timer then, so the earliest start is about 2615 ms plus the idle callback.",
   "documents": [
     {
-      "ts": 1793665379818,
+      "ts": 1793665378687,
       "url": "https://360ghar.com/",
       "status": 200
     },
     {
-      "ts": 1793665484873,
+      "ts": 1793665484872,
       "url": "https://360ghar.com/properties?purpose=rent&locality=Palam+Vihar",
       "status": 200
     },
     {
-      "ts": 1793665504910,
+      "ts": 1793665504578,
       "url": "https://360ghar.com/",
       "status": 200
     },
@@ -24,7 +24,7 @@
       "status": 200
     },
     {
-      "ts": 1793665530237,
+      "ts": 1793665527570,
       "url": "https://360ghar.com/property/182",
       "status": 200
     },

@@ -1,4 +1,7 @@
 # headers of 3 sequential reused-connection requests — cf-cache-status + age
+# Captured 2026-11-03T00:20Z from the same reused-connection pass as ttfb-reused.txt (runs 1-3,
+# new_connections=0), URL https://360ghar.com/ (root document). Only status, cf-cache-status and
+# age were kept; the exact command line was not recorded.
 HTTP/2 200 
 cf-cache-status: HIT
 age: 2508

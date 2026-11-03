@@ -25,17 +25,15 @@ and the data behind the pick are at the bottom.
   Cloudflare-served URL. This inflates machine-local LCP/TTFB vs a Google-vantage run.
   **The user's pagespeed.web.dev run remains the authoritative external check.**
 - Protocol-mode note: the committed baseline table (`docs/perf/baseline.md`) was measured
-  in the pre-2026-11-02 `canonical-mobile` mode; per the canonized protocol (repo
-  AGENTS.md "Lighthouse protocol"), score assertions now run `faithful`, which does not
-  suffer the blackout and therefore reads slightly FASTER than canonical on this machine.
-  The regression comparison below is faithful-post vs canonical-pre — favorable-direction
-  mode skew, stated honestly.
+  in the pre-2026-11-02 `canonical-mobile` mode. This report uses the runner's `faithful`
+  default, as documented in `docs/perf/hero-delay.md`; comparisons to the baseline therefore
+  have a favorable-direction mode skew, stated here for clarity.
 
 ## Homepage vs the approved bar (medians of 3, faithful)
 
 | Metric | Median | Bar | Verdict |
 |---|---|---|---|
-| Performance score | **97** | ≥ 99 | **MISS — stop-rule (97-98 + LCP < 2.5 s)** |
+| Performance score | **97** | ≥ 97 (accepted 2026-11-03; original target ≥ 99) | **PASS at accepted bar; 99-point target not met** |
 | LCP | 2258 ms | ≤ 2500 ms | PASS |
 | Speed Index | 3170 ms | ≤ 3500 ms | PASS |
 | TBT | 43 ms | ≤ 50 ms | PASS |
@@ -56,15 +54,22 @@ moved LCP −69 ms and SI −150 ms but not the rounded score; the residual gap 
 
 ## Regression sweep (medians of 3, faithful; bar = baseline − 1)
 
-| Page | Post-cutover | Pre-mission baseline (canonical) | Bar | Verdict |
+| Page | Post-cutover (faithful) | Pre-mission baseline (canonical) | Bar | Verdict |
 |---|---|---|---|---|
-| `/properties` | **95** | 94 | ≥ 93 | PASS (+1) |
-| `/locality/palam-vihar-gurgaon` | **97** | 92 | ≥ 91 | PASS (+5) |
-| `/property/118` | **97** | 95 | ≥ 94 | PASS (+2) |
+| `/properties` | **95** | 94 | ≥ 93 | above bar; not like-for-like |
+| `/locality/palam-vihar-gurgaon` | **97** | 92 | ≥ 91 | above bar; not like-for-like |
+| `/property/118` | **97** | 95 | ≥ 94 | above bar; not like-for-like |
+
+The two columns use different screen modes, which `docs/perf/baseline.md` says are not
+comparable. `docs/perf/hero-delay.md` puts the canonical-mode skew at about 2 s of SI, so
+most of the +1 to +5 is the mode, not a page gain. A like-for-like regression check needs
+faithful re-runs of the pre-cutover pages; until then these verdicts show only that each
+page sits above its bar.
 
 Per-run spreads in the respective `*.summary.json` files. LCP elements on all three are
-above-fold Cloudinary card/gallery images (same as baseline; locality still
-`loading="lazy"` with discovery score 0 — unchanged from baseline, not a regression).
+above-fold Cloudinary card/gallery images. **Open item:** the locality LCP image is still
+`loading="lazy"` with `lcpDiscoveryScore` 0 in every run; lazy-loading an above-fold LCP
+image delays it, so this is a likely LCP cost to fix, not a neutral carry-over.
 
 ## TTFB (VAL-PERF-005)
 
@@ -77,14 +82,18 @@ Reused-connection warm-edge pass (the ≤ 300 ms bar; method per
 - `cf-cache-status: HIT` on all three sequential requests, `age` 2508 → 2509 → 2509
   (`ttfb-reused.txt`, `ttfb-reused-headers.txt`)
 
-Fresh-connection passes, recorded honestly as context (`ttfb-fresh.txt`): 449 / 397 /
-488 ms — entirely `tcp+tls` handshake budget (≈ 0.25-0.34 s each) from the MRS PoP
-penalty, not server time. Baseline root-doc TTFB (Netlify double-hop) was ~609 ms; real
-visitors on normal connections now get the warm-edge number (136-193 ms from this vantage).
+Fresh-connection passes, recorded as context (`ttfb-fresh.txt`): 449 / 397 / 488 ms. Of
+each, 0.25-0.34 s is DNS + TCP + TLS setup (`time_appconnect`, cumulative from request
+start) on the MRS route; the remaining ~0.14-0.15 s is one request round trip plus edge
+time. Baseline root-doc TTFB (Netlify double-hop, fresh connection) was ~609 ms, so the
+like-for-like comparison is 397-488 ms against 609 ms. A first visit pays the handshake;
+the 136-193 ms warm-edge figure reuses a connection and is not a first-visit TTFB.
 
 ## Cold-visitor journey (VAL-CROSS-001) — PASS
 
-Fresh Chrome profile, iPhone 12 device emulation, production. Evidence + screenshots:
+Fresh Chrome profile, production. The run was intended as iPhone 12 emulation, but the HAR
+records desktop Chrome (macOS `HeadlessChrome` UA, `sec-ch-ua-mobile: ?0` on every request),
+so treat it as desktop evidence. Evidence + screenshots:
 `journey/` (this dir) — `README.md` narrates, `journey.har` is the full request log,
 `network-log-analytics.json` the analytics timeline, `home-load-perf.json` the
 instrumented homepage load.
@@ -100,14 +109,17 @@ instrumented homepage load.
    %2Fproperty%2F182` sign-in page (the accepted signed-out functional evidence;
    full favourite persistence needs auth, no test credentials exist here).
 
-**Deferred analytics verified on every page:** first analytics request always after that
-page's load+idle handoff, all requests succeeded (200/204). Instrumented homepage pass:
-first analytics at `timeOrigin` + **2707 ms** = load 1115 + quiet 1500 after last LCP 952
-(= 2452) + 255 ms idle wait — gate math exact; gtag.js, GA collect (204), posthog
-config/recorder/surveys + `/e/` batch all 200. Zero console errors for the whole session.
-One honest note: a posthog flush from the homepage landed 286 ms after the next page's
-document request (previous page's batch crossing the navigation; its own gate had already
-fired at +1584 ms — not a new-page violation). Details: `journey/network-log-analytics.json`.
+**Deferred analytics on every page:** each page's first analytics request comes after that
+page's load+idle handoff. Requests with a recorded success response: gtag.js 200, GA collect
+204, posthog config/recorder/surveys and `/e/` + `/i/v0/e/` batches 200; posthog `/s/` has no
+recorded successful response (HAR status 0). Instrumented homepage pass: first analytics at
+`timeOrigin` + **2707 ms**. Estimate, not exact: `scheduler.ts` creates the LCP observer on
+the load event (1115 ms) and its buffered callback arms the 1500 ms quiet timer then, so the
+earliest start is about 2615 ms and the idle callback took the remaining ~90 ms (the callback
+timestamp was not recorded). Zero console errors for the whole session. One note: a posthog
+batch from the homepage started about 0.95 s after the buy-results page's document request
+(the previous page's batch crossing the navigation; its own gate had already fired at
++1584 ms). Details: `journey/network-log-analytics.json`.
 
 ## Stop-rule decision — measured basis and lever recommendation
 
@@ -118,9 +130,9 @@ Score needs +2 points (97 → 99). Where the points are:
 - **LCP (25 %): passing but volatile** — median 2258 ms is inside the bar, yet the run-1
   draw (3769 ms → score 87) shows the hero layer still races other above-fold fetches;
   the scoring curve wants ~1.9 s for comfortable 99 territory.
-- **SI (10 %): the weakest banked-ish metric** (3170 ms ≈ 0.74-0.78) — bounded by visual
-  completion of the 20-layer diorama plus the below-fold Cloudinary card flush.
-- **FCP (10 %): already ~0.9** (1768 ms).
+- **SI (10 %): 3170 ms ≈ 0.92** — bounded by visual completion of the 20-layer diorama
+  plus the below-fold Cloudinary card flush.
+- **FCP (10 %): ~0.9** (1768 ms; 0.89-0.91 across runs) — the lowest-scoring metric.
 
 Pre-agreed levers, ranked against that data:
 

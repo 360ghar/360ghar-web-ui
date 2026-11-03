@@ -1,4 +1,7 @@
 # Fresh-connection sequential curls (new TCP+TLS each run) — 2026-11-03T00:20Z
-fresh run 1: status=200 ttfb=0.448832s (dns=0.013213 tcp=0.147301 tls=0.295009)
-fresh run 2: status=200 ttfb=0.396995s (dns=0.001855 tcp=0.125182 tls=0.253592)
-fresh run 3: status=200 ttfb=0.488493s (dns=0.001962 tcp=0.130422 tls=0.337171)
+# URL: https://360ghar.com/ (root document). curl write-out variables: time_starttransfer (ttfb),
+# time_namelookup, time_connect, time_appconnect — all cumulative from request start, not per-stage
+# durations. The exact command line was not recorded.
+fresh run 1: status=200 ttfb=0.448832s (time_namelookup=0.013213s time_connect=0.147301s time_appconnect=0.295009s)
+fresh run 2: status=200 ttfb=0.396995s (time_namelookup=0.001855s time_connect=0.125182s time_appconnect=0.253592s)
+fresh run 3: status=200 ttfb=0.488493s (time_namelookup=0.001962s time_connect=0.130422s time_appconnect=0.337171s)
