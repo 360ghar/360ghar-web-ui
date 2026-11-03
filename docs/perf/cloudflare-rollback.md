@@ -10,7 +10,9 @@ this repo changes production traffic until the user explicitly says go at cutove
 
 ## POST-CUTOVER STATUS (2026-11-03, production-cutover) — READ THIS FIRST
 
-**The cutover was EXECUTED and production now serves from the Worker.** Timeline (UTC):
+**The cutover was EXECUTED and production now serves from the Worker.** Timeline (UTC;
+the 2026-11-03 heading date is IST local — the events below ran 22:38–23:58Z on
+2026-11-02):
 
 - `2026-11-02T22:38Z` — PR #31 (feat/cf-migration → main) merged (`a2951e7`).
 - Between the merge and the attach: **`https://360ghar.com/` answered `404` from the
@@ -41,9 +43,10 @@ this repo changes production traffic until the user explicitly says go at cutove
    site. The DNS flip is now the SECONDARY path and **requires re-publishing a known-good
    pre-swap deploy from the Netlify dashboard first** (Deploys → ⋯ on a pre-merge deploy →
    **Publish deploy**) — a user action. Only then follow the DNS-flip procedure below.
-3. The workers.dev URL (`https://360ghar-web-ui.360ghar.workers.dev`) stays enabled as the
-   permanent staging URL (recommended option; disabling it later is a one-click user
-   action in Worker → Settings → Domains & Routes).
+3. The workers.dev URL (`https://360ghar-web-ui.360ghar.workers.dev`) stays enabled as a
+   secondary production/diagnostic URL (recommended option) — it is the same Worker as
+   `360ghar.com`, so every deploy or rollback changes it too; it is not pre-production.
+   Disabling it later is a one-click user action in Worker → Settings → Domains & Routes.
 4. Workers Builds connection could not be confirmed via API (the token lacks the Builds
    scope — `10000 Authentication error` on `/builds/*`). Until it is connected in the
    dashboard, deploys ship via `npx wrangler deploy` with the env token.
@@ -61,10 +64,12 @@ this repo changes production traffic until the user explicitly says go at cutove
 After `feat/cf-migration` merges to `main`, **Netlify cannot rebuild main** — the Cloudflare
 adapter swap removes `@astrojs/netlify` from `package.json`, so the Netlify build fails.
 
-- A **failed Netlify build does not unpublish** the current deploy. The last good deploy
-  keeps serving production untouched.
-- Therefore the rollback artifact is **Netlify's LAST GOOD (pre-swap) deploy**, and rollback
-  is a **DNS flip to that deploy** — not a rebuild.
+- ~~A **failed Netlify build does not unpublish** the current deploy. The last good deploy
+  keeps serving production untouched.~~ **Did not hold** (2026-11-03): the published state
+  broke anyway (404) after the merge.
+- ~~Rollback is a **DNS flip** to the last-good deploy, not a rebuild.~~ Post-cutover the
+  published deploy is broken: **re-publish a known-good pre-swap deploy from the Netlify
+  dashboard first**, then follow the DNS-flip procedure — see POST-CUTOVER STATUS above.
 - **Never rely on a fresh Netlify build of post-swap main. It will not succeed.**
 - If the published deploy is ever replaced by a broken one, re-publish an older artifact from
   the Netlify deploys list (**Deploys → ⋯ on a good deploy → Publish deploy**) — that serves
@@ -225,8 +230,8 @@ a good Netlify deploy (procedure B above):
 
 - Dashboard: Workers & Pages → `360ghar-web-ui` → **Deployments** → ⋯ on the previous
   (good) version → **Rollback**. Instant; no DNS change.
-- CLI: `npx wrangler versions list` then `npx wrangler versions rollback` (credentials via
-  the out-of-repo env file; never commit or log them).
+- CLI: `npx wrangler versions list` then `npx wrangler rollback <VERSION_ID>` (credentials
+  via the out-of-repo env file; never commit or log them).
 - Note: Workers Cache is version-partitioned, so a rolled-back version starts with a cold
   edge cache (first hits re-warm it). Deploys have the same effect.
 
@@ -309,6 +314,7 @@ decommissioned, replicate this as a zone Redirect Rule before deleting the site.
 ## Decision recorded at cutover
 
 - **workers.dev exposure: KEPT.** `https://360ghar-web-ui.360ghar.workers.dev` remains
-  enabled as the permanent staging URL (zero cost, keeps parity checks easy). Disabling
+  enabled as a secondary production/diagnostic URL (zero cost, keeps parity checks easy;
+  same Worker as `360ghar.com` — every deploy changes it too). Disabling
   it later is a one-click user action (Worker → Settings → Domains & Routes → workers.dev
   → Disable).

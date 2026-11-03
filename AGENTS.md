@@ -1,6 +1,6 @@
 # 360ghar-web-ui
 
-The 360Ghar website (360ghar.com). Astro 7 with React 19 islands, TypeScript strict, Tailwind v4, TanStack Query, Zustand, openapi-fetch, React Hook Form with Zod. Cloudflare Workers adapter (`@astrojs/cloudflare`, `wrangler.jsonc`); `netlify.toml` stays in the repo until the production cutover.
+The 360Ghar website (360ghar.com). Astro 7 with React 19 islands, TypeScript strict, Tailwind v4, TanStack Query, Zustand, openapi-fetch, React Hook Form with Zod. Cloudflare Workers adapter (`@astrojs/cloudflare`, `wrangler.jsonc`); `netlify.toml` stays in the repo as the Netlify rollback reference (the production cutover to the Worker happened 2026-11-03; Netlify no longer serves production).
 
 ## Setup
 
