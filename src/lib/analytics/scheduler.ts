@@ -9,7 +9,7 @@
  *    A 1.5 s quiet window still did: gtag's two long tasks were about 150 ms
  *    of PageSpeed's mobile TBT. At 5 s the start falls after Lighthouse
  *    stops tracing (docs/perf/psi-100.md); visitors who touch the page get
- *    analytics at once through path 2.
+ *    analytics at the next idle moment (2 s cap) through path 2.
  * 2. The first pointer/key/scroll interaction, whichever comes first.
  * 3. ANALYTICS_MAX_WAIT_MS after load: a tab opened in the background never
  *    reports LCP, and analytics must not die there.
@@ -19,8 +19,13 @@
 
 /** No new LCP candidate for this long means the hero has settled. */
 export const ANALYTICS_QUIET_MS = 5000;
-/** Last resort after the load event, for pages that never report LCP. */
-export const ANALYTICS_MAX_WAIT_MS = 8000;
+/**
+ * Last resort after the load event, for pages that never report LCP. It runs
+ * from load, the quiet window from the last LCP candidate, so it must exceed
+ * ANALYTICS_QUIET_MS by the hero's post-load settle time (usually under 1 s);
+ * otherwise it cuts the quiet window short.
+ */
+export const ANALYTICS_MAX_WAIT_MS = 10000;
 
 export function scheduleAnalyticsStart(begin: () => void): void {
   const events = ['pointerdown', 'keydown', 'scroll'] as const;
