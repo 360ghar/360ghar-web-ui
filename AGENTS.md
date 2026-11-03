@@ -30,13 +30,13 @@ The 360Ghar website (360ghar.com). Astro 7 with React 19 islands, TypeScript str
 4. API types come from the backend contract: `openapi/openapi.json` is a copy of `360ghar-backend/docs/openapi.json`. Run `pnpm api:sync && pnpm api:types` after the backend changes, and commit both files. Do not hand-edit `schema.d.ts`.
 5. Where the site and the backend disagree, the backend wins. Log gaps in `docs/backend-gaps.md`.
 6. Production pipeline: production `360ghar.com` serves from the Worker custom domain (attached 2026-11-03 to Worker `360ghar-web-ui`, proxy on, domain live within ~90 s). `main` auto-deploys to the Worker via Cloudflare Workers Builds (`npx wrangler deploy`, Node 24 build image) once connected (one-time dashboard step; connection still unconfirmed 2026-11-03 — the API token lacks the Builds scope) — until then, deploy by hand with rule 7. Netlify no longer serves production: its post-merge publish is broken (404), so the rollback path starts with a Workers version rollback, and restoring Netlify requires re-publishing a known-good deploy from the Netlify dashboard. Runbook: `docs/perf/cloudflare-rollback.md`.
-7. Deploy by hand (until Workers Builds is connected). The Cloudflare credentials are in the workspace `.env` one level above this repo (`../.env`, not in git): `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Export only those two; never print them or copy them into this repo. Build with the absolute API base, because this repo's `.env` sets `PUBLIC_API_BASE=/dev-api` (dev only). Use Node 24. Then warm the cache, because each deploy starts a new, empty cache:
+7. Deploy by hand (until Workers Builds is connected). The Cloudflare credentials are in the workspace `.env` one level above this repo (`../.env`, not in git): `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Export only those two; never print them or copy them into this repo. Build with both API origins set explicitly: `.env` copied from `.env.example` has the dev-only `PUBLIC_API_BASE=/dev-api` (browser calls) and `API_ORIGIN=http://localhost:3600` (server-side calls). Use Node 24. Then warm the cache, because each deploy starts a new, empty cache:
 
    ```bash
    export $(grep -E '^CLOUDFLARE_(API_TOKEN|ACCOUNT_ID)=' ../.env | xargs)
-   npx wrangler deployments list | tail -5     # note the live version ID for rollback
-   PUBLIC_API_BASE=https://api.360ghar.com pnpm build && npx wrangler deploy
-   curl -s -o /dev/null https://360ghar.com/ && curl -s -o /dev/null https://360ghar.com/hi
+   npx wrangler deployments status     # note the live (100%) version ID for rollback
+   PUBLIC_API_BASE=https://api.360ghar.com API_ORIGIN=https://api.360ghar.com pnpm build && npx wrangler deploy
+   curl -fsS -o /dev/null https://360ghar.com/ && curl -fsS -o /dev/null https://360ghar.com/hi
    ```
 
    Deploy only from an up-to-date `main` with a clean tree: a deploy updates production at once. Roll back with `npx wrangler rollback <version-id>`.
