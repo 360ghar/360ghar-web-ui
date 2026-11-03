@@ -1,17 +1,11 @@
 /** /price-index, /authors, /editorial-policy and /methodology: render, link and pass the a11y scan. */
 import { expect, test } from '@playwright/test';
-import { axe, hydrated, watch } from './helpers';
+import { axe, watch } from './helpers';
 
-test('price index lists the five cities and links to each', async ({ page }) => {
+test('/price-index is on editorial hold', async ({ page }) => {
   const w = watch(page);
   expect((await page.goto('/price-index'))?.status()).toBe(200);
-  await hydrated(page);
-  await expect(page.getByRole('heading', { level: 1, name: 'Property price index' })).toBeVisible();
-  await expect(page.getByRole('row')).toHaveCount(6);
-  await expect(page.getByText('Updated 4 May 2026')).toBeVisible();
-  await page.getByRole('link', { name: 'Delhi price index' }).click();
-  await expect(page).toHaveURL(/\/price-index\/delhi$/);
-  await expect(page.getByText('Updated 4 May 2026').first()).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Property price data under review' })).toBeVisible();
   await axe(page);
   await w.check();
 });
@@ -21,7 +15,7 @@ for (const [path, h1] of [
   ['/editorial-policy', 'Editorial policy'],
   ['/methodology', 'Methodology and data sources'],
   ['/hi/methodology', 'पद्धति और डेटा स्रोत'],
-  ['/hi/price-index', 'प्रॉपर्टी प्राइस इंडेक्स'],
+  ['/hi/price-index', 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन'],
 ] as const) {
   test(`${path} renders`, async ({ page }) => {
     const w = watch(page);

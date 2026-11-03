@@ -172,7 +172,9 @@ test.describe('saved location', () => {
     await form.getByRole('button', { name: 'Search' }).click();
     await page.waitForURL(/\/properties\?/, { waitUntil: 'commit' });
     const q = new URL(page.url()).searchParams;
-    expect(q.get('q')).toBe('Sector 85');
+    // A typed sector resolves to the exact-area filter, not the old keyword q.
+    expect(q.get('locality')).toBe('Sector 85');
+    expect(q.get('q')).toBeNull();
     expect(q.get('lat')).toBeNull();
   });
 

@@ -33,8 +33,8 @@ test('header: desktop menus open, close and navigate', async ({ page }) => {
   await dataHub.click();
   const panel = page.locator('[data-menu][open] [data-menu-panel]');
   await expect(panel).toBeVisible();
-  await expect(panel.locator('.menu-item')).toHaveCount(8);
-  await expect(panel.getByRole('link', { name: /Circle rates.*Government rates by sector/ })).toBeVisible();
+  await expect(panel.locator('.menu-item')).toHaveCount(11);
+  await expect(panel.getByRole('link', { name: /Circle rates.*under review/ })).toBeVisible();
   // The menu vignette is a cached file (src/pages/art); it loads when the menu opens.
   await expect(panel.locator('img.menu-art')).toBeVisible();
   await expect.poll(() => panel.locator('img.menu-art').evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth)).toBeGreaterThan(0);
@@ -64,7 +64,7 @@ test('header: desktop menus open, close and navigate', async ({ page }) => {
   await dataHub.focus();
   await page.keyboard.press('Enter');
   await expect(panel).toBeVisible();
-  for (let i = 0; i < 9; i += 1) await page.keyboard.press('Tab');
+  for (let i = 0; i < 13; i += 1) await page.keyboard.press('Tab');
   await expect(page.locator('[data-menu]').first()).not.toHaveAttribute('open', '');
 
   // A menu link goes to its page, and the page marks its group by weight.
@@ -199,7 +199,7 @@ test('chrome: Hindi labels, menus and the language switch', async ({ page }) => 
   await expect(page.locator('html')).toHaveAttribute('lang', 'hi-IN');
   if (wide(page)) {
     await page.locator('[data-menu] summary', { hasText: 'डेटा हब' }).click();
-    await expect(page.locator('[data-menu][open]').getByRole('link', { name: /सेक्टर के हिसाब से सरकारी रेट/ })).toBeVisible();
+    await expect(page.locator('[data-menu][open]').getByRole('link', { name: /सर्कल रेट.*समीक्षा/ })).toBeVisible();
     await page.keyboard.press('Escape');
     await page.getByRole('link', { name: 'English' }).first().click();
   } else {

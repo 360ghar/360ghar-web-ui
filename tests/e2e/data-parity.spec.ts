@@ -8,39 +8,26 @@ async function open(page: Page, path: string) {
   await hydrated(page);
 }
 
-test('zone checker: the empty state points to real pages', async ({ page }) => {
+test('zone checker is on editorial hold, English and Hindi', async ({ page }) => {
   const w = watch(page);
   await open(page, '/zone-checker');
-  await page.getByRole('searchbox', { name: 'Sector' }).fill('Sector 999');
-  const empty = page.locator('section', { has: page.getByRole('heading', { name: /No zoning data for/ }) });
-  await expect(empty).toBeVisible();
-  await expect(empty.getByRole('link', { name: 'RERA projects' })).toHaveAttribute('href', '/rera-projects');
-  await expect(empty.getByRole('link', { name: 'Verify ownership' })).toHaveAttribute('href', '/verify-ownership');
-  await expect(empty.getByRole('link', { name: 'See circle rates' })).toHaveAttribute('href', /\/circle-rates\?sector=Sector%20999/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Zoning data under review' })).toBeVisible();
+  await axe(page);
+  await open(page, '/hi/zone-checker');
+  await expect(page.getByRole('heading', { level: 1, name: 'ज़ोनिंग डेटा समीक्षा के अधीन' })).toBeVisible();
   await axe(page);
   await w.check();
-  // Both pages exist.
+  // The pages the old empty state linked to still exist.
   for (const href of ['/rera-projects', '/verify-ownership']) expect((await page.request.get(href)).status(), href).toBe(200);
 });
 
-test('zone checker (Hindi): the empty state links stay in Hindi', async ({ page }) => {
-  await open(page, '/hi/zone-checker');
-  await page.getByRole('searchbox', { name: 'सेक्टर' }).fill('Sector 999');
-  const empty = page.locator('section', { has: page.getByRole('heading', { name: /का ज़ोनिंग डेटा नहीं मिला/ }) });
-  await expect(empty.getByRole('link', { name: 'RERA प्रोजेक्ट' })).toHaveAttribute('href', '/hi/rera-projects');
-  await expect(empty.getByRole('link', { name: 'मालिकाना हक जाँचें' })).toHaveAttribute('href', '/hi/verify-ownership');
-});
-
-test('celebrity homes: every link on the page resolves, and names without a post are not links', async ({ page }) => {
+test('celebrity homes is on editorial hold, English and Hindi', async ({ page }) => {
   const w = watch(page);
   await open(page, '/celebrity-homes');
-  // All 16 names show. A name is a link only when its blog post exists.
-  await expect(page.locator('.celeb-list > li')).toHaveCount(16);
-  const links = await page.locator('.celeb-list a').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-  for (const href of links) expect((await page.request.get(href!)).status(), href!).toBe(200);
-  const plain = await page.locator('.celeb-list > li > p.celeb-name').count();
-  expect(plain + links.length).toBe(16);
-  if (plain) await expect(page.locator('.celeb-note')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Celebrity home details under review' })).toBeVisible();
+  await axe(page);
+  await open(page, '/hi/celebrity-homes');
+  await expect(page.getByRole('heading', { level: 1, name: 'सेलिब्रिटी घरों की जानकारी समीक्षा के अधीन' })).toBeVisible();
   await axe(page);
   await w.check();
 });
