@@ -8,7 +8,55 @@ this repo changes production traffic until the user explicitly says go at cutove
 
 ---
 
+## POST-CUTOVER STATUS (2026-11-03, production-cutover) — READ THIS FIRST
+
+**The cutover was EXECUTED and production now serves from the Worker.** Timeline (UTC):
+
+- `2026-11-02T22:38Z` — PR #31 (feat/cf-migration → main) merged (`a2951e7`).
+- Between the merge and the attach: **`https://360ghar.com/` answered `404` from the
+  Netlify origin through the Cloudflare proxy** (`cache-status: "Netlify Edge";
+  fwd-status=404`; `x-nf-request-id` present). Netlify cannot build post-swap main (the
+  Cloudflare adapter replaced `@astrojs/netlify`), and its *published* state broke — the
+  pre-swap last-good deploy stopped serving.
+- `2026-11-02T23:57Z` — custom domain `360ghar.com` **attached to Worker
+  `360ghar-web-ui`** via API (domain id `7284e47dfa7a1c1076cc4c2a2f476843d6f71714`,
+  certificate `d065c5ad-06ca-44e5-9429-7d8a4f006ad8`, environment `production`, proxy on).
+  The attach first failed with `100117` (externally managed records exist); the two
+  captured Netlify apex `A` records (`5723fa53…` → `75.2.60.5`, `f18ba2fc…` →
+  `99.83.231.61`) were deleted, then the attach succeeded. Cloudflare created the
+  Worker-owned proxied apex record (`AAAA 360ghar.com → 100::`). Email (MX/TXT) and all
+  other subdomains were untouched.
+- `2026-11-02T23:58Z` — **production LIVE**: `https://360ghar.com/` → `200`, homepage
+  content present, `cf-cache-status: HIT` (Workers Cache), `s-maxage=3600, swr=86400`
+  tier standing, no `x-nf-request-id`. Full parity suite (57 checks) passed against
+  production; warm-edge TTFB 145–150 ms. `www` still 301s → apex (Netlify-issued,
+  unchanged).
+
+**Consequences for this runbook:**
+
+1. **PRIMARY rollback is the Workers version rollback** (§ below): bad Worker version →
+   roll back in the dashboard/CLI. No DNS change, instant.
+2. **The "DNS flip to Netlify last-good" premise is COMPROMISED.** The published Netlify
+   state is broken (404) — flipping DNS back alone would serve the outage, not a working
+   site. The DNS flip is now the SECONDARY path and **requires re-publishing a known-good
+   pre-swap deploy from the Netlify dashboard first** (Deploys → ⋯ on a pre-merge deploy →
+   **Publish deploy**) — a user action. Only then follow the DNS-flip procedure below.
+3. The workers.dev URL (`https://360ghar-web-ui.360ghar.workers.dev`) stays enabled as the
+   permanent staging URL (recommended option; disabling it later is a one-click user
+   action in Worker → Settings → Domains & Routes).
+4. Workers Builds connection could not be confirmed via API (the token lacks the Builds
+   scope — `10000 Authentication error` on `/builds/*`). Until it is connected in the
+   dashboard, deploys ship via `npx wrangler deploy` with the env token.
+
+---
+
+
 ## READ FIRST: the rollback artifact is Netlify's LAST GOOD deploy
+
+> **Superseded in one respect (2026-11-03):** this section predicted "a failed Netlify
+> build does not unpublish the current deploy". That did not hold: the published state
+> broke anyway (404) after the merge. The Netlify artifact is only a rollback target
+> after a known-good deploy is re-published from the dashboard — see POST-CUTOVER STATUS.
 
 After `feat/cf-migration` merges to `main`, **Netlify cannot rebuild main** — the Cloudflare
 adapter swap removes `@astrojs/netlify` from `package.json`, so the Netlify build fails.
@@ -90,10 +138,17 @@ None of these are affected by attaching or removing the Worker custom domain for
 
 ---
 
-## Rollback procedure: DNS flip to Netlify (≈5 minutes, no rebuild)
+## Rollback procedure B (SECONDARY, post-cutover): DNS flip to Netlify (≈5 minutes, no rebuild)
+
+**Prerequisite (user action in the Netlify dashboard): re-publish a known-good PRE-swap
+deploy first** — Netlify → site `360ghar` → Deploys → ⋯ on a pre-merge deploy →
+**Publish deploy**. Without this, the flip serves the broken 404 state (see POST-CUTOVER
+STATUS). Verify the re-published artifact answers 200 with pre-swap homepage content
+before touching DNS.
 
 Trigger: cutover verification fails, or production misbehaves on the Worker and the problem
-is not a single bad Worker version.
+is not a single bad Worker version. For a single bad version, use the PRIMARY rollback
+(Workers version rollback) instead.
 
 Set up credentials once per shell (env does not persist between shells):
 
@@ -161,10 +216,12 @@ throughout — useful for comparing "Netlify artifact vs Worker" during diagnosi
 
 ---
 
-## Worker version rollback (bad deploy, DNS untouched)
+## PRIMARY rollback (post-cutover): Workers version rollback (bad deploy, DNS untouched)
 
 When a specific Worker version is the problem (bad code reached the Worker), roll the
-Worker back instead of touching DNS:
+Worker back instead of touching DNS. **After the 2026-11-03 cutover this is the
+first-line rollback** — the DNS flip to Netlify is secondary and gated on re-publishing
+a good Netlify deploy (procedure B above):
 
 - Dashboard: Workers & Pages → `360ghar-web-ui` → **Deployments** → ⋯ on the previous
   (good) version → **Rollback**. Instant; no DNS change.
@@ -211,18 +268,25 @@ needed in CI. `wrangler` version comes from the repo's devDependency (`^4.156.1`
    (exactly how the staging deploys in this mission were done). Workers Builds is
    convenience, not a dependency.
 
-⚠️ **After the custom domain is attached**, every push to `main` auto-deploys **production**.
-Gate any main push accordingly, and never commit the custom-domain route config (below)
-into `wrangler.jsonc` ahead of the user's explicit go — the next Workers Builds run would
-attach it automatically.
+⚠️ **Now that the custom domain is attached (2026-11-03)**, every push to `main`
+auto-deploys **production** (via Workers Builds once connected; until then any `wrangler
+deploy` with the env token updates the same production Worker). Gate main pushes and
+deploys accordingly.
 
 ---
 
-## Custom-domain route config — PREPARED, NOT APPLIED
+## Custom-domain route config — APPLIED 2026-11-03 (via API; NOT via wrangler.jsonc)
 
-Do **not** add this to `wrangler.jsonc` before cutover: with Workers Builds connected, a
-push containing it attaches the domain and cuts over traffic without a human gate. Apply
-at cutover, on the user's explicit go, either via the API or as one deliberate deploy:
+Applied at cutover on the recorded GO, via the API below. Record: domain
+`7284e47dfa7a1c1076cc4c2a2f476843d6f71714`, certificate `d065c5ad-06ca-44e5-9429-7d8a4f006ad8`.
+The two Netlify apex `A` records had to be deleted first (error `100117`, externally
+managed records exist); Cloudflare then created the Worker-owned proxied apex record
+(`AAAA 360ghar.com → 100::`). `wrangler.jsonc` still carries **no** routes — an
+API-attached custom domain persists across `wrangler deploy`s, so Workers Builds deploys
+will not detach or re-attach it. Adding the `routes` block is optional and would be a
+no-op today; if it is ever added, keep in mind a deploy applies it as config.
+
+The now-applied config (kept for reference):
 
 ```jsonc
 // wrangler.jsonc — cutover only
@@ -237,12 +301,14 @@ curl -s -X PUT -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
   --data '{"zone_id":"'"$CLOUDFLARE_ZONE_ID"'","hostname":"360ghar.com","service":"360ghar-web-ui","environment":"production"}'
 ```
 
-`www` stays pointed at Netlify (captured record above) so www → apex 301s keep coming from
-Netlify unless the cutover feature explicitly changes that.
+`www` stays pointed at Netlify (`360ghar.netlify.com`, proxied): it still answers
+`301 → https://360ghar.com/` after the cutover (the redirect is Netlify's domain-level
+one, unchanged) — the pre-cutover convention is preserved. If Netlify is ever fully
+decommissioned, replicate this as a zone Redirect Rule before deleting the site.
 
-## Decision to record at cutover (user call)
+## Decision recorded at cutover
 
-- **workers.dev exposure:** the account-wide subdomain makes the Worker reachable at
-  `https://360ghar-web-ui.360ghar.workers.dev`. After the custom domain is live, either
-  keep it as a permanent staging URL (recommended: zero cost, keeps parity checks easy) or
-  disable it (Worker → Settings → Domains & Routes → workers.dev → Disable).
+- **workers.dev exposure: KEPT.** `https://360ghar-web-ui.360ghar.workers.dev` remains
+  enabled as the permanent staging URL (zero cost, keeps parity checks easy). Disabling
+  it later is a one-click user action (Worker → Settings → Domains & Routes → workers.dev
+  → Disable).
