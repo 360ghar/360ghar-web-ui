@@ -1,0 +1,48 @@
+{
+  "url": "https://360ghar.com/",
+  "engine": "lighthouse@13.6.0, mobile UA emulation, headless Chrome, screen=faithful",
+  "runs": 3,
+  "median": {
+    "score": 97,
+    "fcp_ms": 1768,
+    "lcp_ms": 2258,
+    "si_ms": 3170,
+    "tbt_ms": 43,
+    "cls": 0.001
+  },
+  "perRun": [
+    {
+      "file": "docs/perf/after/home.run1.json",
+      "score": 87,
+      "fcp_ms": 1759,
+      "lcp_ms": 3769,
+      "si_ms": 3312,
+      "tbt_ms": 43,
+      "cls": 0.001,
+      "lcpElement": "<img class=\"layer layer-towersFar\" style=\"--d:0.07; z-index:5\" src=\"/diorama/towersFar.svg?v=dfb61987\" alt=\"\" width=\"1600\" height=\"960\" fetchpriority=\"high\" data-astro-cid-iqr3xziu=\"\">",
+      "lcpDiscoveryScore": 1
+    },
+    {
+      "file": "docs/perf/after/home.run2.json",
+      "score": 98,
+      "fcp_ms": 1768,
+      "lcp_ms": 2187,
+      "si_ms": 2162,
+      "tbt_ms": 34,
+      "cls": 0.001,
+      "lcpElement": "<img class=\"layer layer-towersFar\" style=\"--d:0.07; z-index:5\" src=\"/diorama/towersFar.svg?v=dfb61987\" alt=\"\" width=\"1600\" height=\"960\" fetchpriority=\"high\" data-astro-cid-iqr3xziu=\"\">",
+      "lcpDiscoveryScore": 1
+    },
+    {
+      "file": "docs/perf/after/home.run3.json",
+      "score": 97,
+      "fcp_ms": 1834,
+      "lcp_ms": 2258,
+      "si_ms": 3170,
+      "tbt_ms": 54,
+      "cls": 0.002,
+      "lcpElement": "<img class=\"layer layer-towersFar\" style=\"--d:0.07; z-index:5\" src=\"/diorama/towersFar.svg?v=dfb61987\" alt=\"\" width=\"1600\" height=\"960\" fetchpriority=\"high\" data-astro-cid-iqr3xziu=\"\">",
+      "lcpDiscoveryScore": 1
+    }
+  ]
+}

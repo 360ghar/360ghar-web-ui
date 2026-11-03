@@ -1,0 +1,48 @@
+{
+  "url": "https://360ghar.com/properties",
+  "engine": "lighthouse@13.6.0, mobile UA emulation, headless Chrome, screen=faithful",
+  "runs": 3,
+  "median": {
+    "score": 95,
+    "fcp_ms": 1734,
+    "lcp_ms": 2675,
+    "si_ms": 2925,
+    "tbt_ms": 17,
+    "cls": 0.001
+  },
+  "perRun": [
+    {
+      "file": "docs/perf/after/properties.run1.json",
+      "score": 90,
+      "fcp_ms": 1734,
+      "lcp_ms": 3304,
+      "si_ms": 3296,
+      "tbt_ms": 21,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 1280px) 22rem, (min-width: 768px) 45vw, 92vw\" alt=\"\" width=\"640\" height=\"480\" loading=\"eager\" fetchpriority=\"high\" decoding=\"async\" class=\"h-full w-full object-cover\">",
+      "lcpDiscoveryScore": 1
+    },
+    {
+      "file": "docs/perf/after/properties.run2.json",
+      "score": 96,
+      "fcp_ms": 1673,
+      "lcp_ms": 2565,
+      "si_ms": 2816,
+      "tbt_ms": 17,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 1280px) 22rem, (min-width: 768px) 45vw, 92vw\" alt=\"\" width=\"640\" height=\"480\" loading=\"eager\" fetchpriority=\"high\" decoding=\"async\" class=\"h-full w-full object-cover\">",
+      "lcpDiscoveryScore": 1
+    },
+    {
+      "file": "docs/perf/after/properties.run3.json",
+      "score": 95,
+      "fcp_ms": 1898,
+      "lcp_ms": 2675,
+      "si_ms": 2925,
+      "tbt_ms": 0,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 1280px) 22rem, (min-width: 768px) 45vw, 92vw\" alt=\"\" width=\"640\" height=\"480\" loading=\"eager\" fetchpriority=\"high\" decoding=\"async\" class=\"h-full w-full object-cover\">",
+      "lcpDiscoveryScore": 1
+    }
+  ]
+}

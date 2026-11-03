@@ -1,0 +1,228 @@
+{
+  "captured": "2026-11-03",
+  "session": "agent-browser 09a528538141__u1, own Chrome, UA un-headlessed at document start. Intended iPhone 12 emulation; the HAR records desktop Chrome (macOS HeadlessChrome UA, sec-ch-ua-mobile ?0).",
+  "note": "Distilled from the full session request log (515 requests, full timing in journey.har). All ts values are epoch milliseconds; document ts values are the HAR startedDateTime of each document request, and they delimit the per-page windows. Analytics hosts: googletagmanager.com, google-analytics.com/g/collect, us-assets.i.posthog.com, us.i.posthog.com. Requests with a recorded status succeeded (200/204); the posthog /s/ request has no recorded success (HAR status 0). Instrumented homepage pass (journey/home-load-perf.json): first analytics at timeOrigin+2707 ms. Estimate: the LCP observer is created on the load event (1115 ms) and its buffered callback arms the 1500 ms quiet timer then, so the earliest start is about 2615 ms plus the idle callback.",
+  "documents": [
+    {
+      "ts": 1793665378687,
+      "url": "https://360ghar.com/",
+      "status": 200
+    },
+    {
+      "ts": 1793665484872,
+      "url": "https://360ghar.com/properties?purpose=rent&locality=Palam+Vihar",
+      "status": 200
+    },
+    {
+      "ts": 1793665504578,
+      "url": "https://360ghar.com/",
+      "status": 200
+    },
+    {
+      "ts": 1793665514708,
+      "url": "https://360ghar.com/properties?purpose=buy&locality=Palam+Vihar",
+      "status": 200
+    },
+    {
+      "ts": 1793665527570,
+      "url": "https://360ghar.com/property/182",
+      "status": 200
+    },
+    {
+      "ts": 1793665545670,
+      "url": "https://360ghar.com/login?next=%2Fproperty%2F182",
+      "status": 200
+    }
+  ],
+  "analyticsRequests": [
+    {
+      "ts": 1793665381393,
+      "status": 200,
+      "url": "https://www.googletagmanager.com/gtag/js"
+    },
+    {
+      "ts": 1793665381593,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/array/phc_engbgk9i51Y6VtKWQEeqdAKdUVdKwrBS65vMGesTrWC/config.js"
+    },
+    {
+      "ts": 1793665381692,
+      "status": 204,
+      "url": "https://www.google-analytics.com/g/collect"
+    },
+    {
+      "ts": 1793665382692,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/surveys.js"
+    },
+    {
+      "ts": 1793665382692,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/posthog-recorder.js"
+    },
+    {
+      "ts": 1793665384593,
+      "status": 200,
+      "url": "https://us.i.posthog.com/e/"
+    },
+    {
+      "ts": 1793665488194,
+      "status": 200,
+      "url": "https://www.googletagmanager.com/gtag/js"
+    },
+    {
+      "ts": 1793665488194,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/posthog-recorder.js"
+    },
+    {
+      "ts": 1793665488194,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/array/phc_engbgk9i51Y6VtKWQEeqdAKdUVdKwrBS65vMGesTrWC/config.js"
+    },
+    {
+      "ts": 1793665488294,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/surveys.js"
+    },
+    {
+      "ts": 1793665491194,
+      "status": 200,
+      "url": "https://us.i.posthog.com/e/"
+    },
+    {
+      "ts": 1793665493293,
+      "status": 204,
+      "url": "https://www.google-analytics.com/g/collect"
+    },
+    {
+      "ts": 1793665506494,
+      "status": 200,
+      "url": "https://www.googletagmanager.com/gtag/js"
+    },
+    {
+      "ts": 1793665506494,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/posthog-recorder.js"
+    },
+    {
+      "ts": 1793665506494,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/array/phc_engbgk9i51Y6VtKWQEeqdAKdUVdKwrBS65vMGesTrWC/config.js"
+    },
+    {
+      "ts": 1793665506494,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/surveys.js"
+    },
+    {
+      "ts": 1793665509494,
+      "status": 200,
+      "url": "https://us.i.posthog.com/e/"
+    },
+    {
+      "ts": 1793665511494,
+      "status": 204,
+      "url": "https://www.google-analytics.com/g/collect"
+    },
+    {
+      "ts": 1793665515694,
+      "status": 200,
+      "url": "https://us.i.posthog.com/i/v0/e/"
+    },
+    {
+      "ts": 1793665515694,
+      "url": "https://us.i.posthog.com/s/"
+    },
+    {
+      "ts": 1793665518194,
+      "status": 200,
+      "url": "https://www.googletagmanager.com/gtag/js"
+    },
+    {
+      "ts": 1793665518194,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/posthog-recorder.js"
+    },
+    {
+      "ts": 1793665518194,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/array/phc_engbgk9i51Y6VtKWQEeqdAKdUVdKwrBS65vMGesTrWC/config.js"
+    },
+    {
+      "ts": 1793665518294,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/surveys.js"
+    },
+    {
+      "ts": 1793665521193,
+      "status": 200,
+      "url": "https://us.i.posthog.com/e/"
+    },
+    {
+      "ts": 1793665523194,
+      "status": 204,
+      "url": "https://www.google-analytics.com/g/collect"
+    },
+    {
+      "ts": 1793665531794,
+      "status": 200,
+      "url": "https://www.googletagmanager.com/gtag/js"
+    },
+    {
+      "ts": 1793665531794,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/posthog-recorder.js"
+    },
+    {
+      "ts": 1793665531794,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/array/phc_engbgk9i51Y6VtKWQEeqdAKdUVdKwrBS65vMGesTrWC/config.js"
+    },
+    {
+      "ts": 1793665531894,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/surveys.js"
+    },
+    {
+      "ts": 1793665534794,
+      "status": 200,
+      "url": "https://us.i.posthog.com/e/"
+    },
+    {
+      "ts": 1793665536794,
+      "status": 204,
+      "url": "https://www.google-analytics.com/g/collect"
+    },
+    {
+      "ts": 1793665548294,
+      "status": 200,
+      "url": "https://www.googletagmanager.com/gtag/js"
+    },
+    {
+      "ts": 1793665548294,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/posthog-recorder.js"
+    },
+    {
+      "ts": 1793665548294,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/array/phc_engbgk9i51Y6VtKWQEeqdAKdUVdKwrBS65vMGesTrWC/config.js"
+    },
+    {
+      "ts": 1793665548294,
+      "status": 200,
+      "url": "https://us-assets.i.posthog.com/static/1.434.15/surveys.js"
+    },
+    {
+      "ts": 1793665551294,
+      "status": 200,
+      "url": "https://us.i.posthog.com/e/"
+    },
+    {
+      "ts": 1793665553294,
+      "status": 204,
+      "url": "https://www.google-analytics.com/g/collect"
+    }
+  ]
+}
