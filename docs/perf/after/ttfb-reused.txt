@@ -1,0 +1,7 @@
+# Reused-connection warm-edge pass — 2026-11-03T00:20Z
+# one curl invocation, 4 URLs, connection set up on request 0 (unmeasured)
+# new_connections=0 proves the connection was reused; bar: runs 1-3 ttfb <= 300ms
+ttfb=0.469655s new_connections=1
+ttfb=0.136071s new_connections=0
+ttfb=0.144424s new_connections=0
+ttfb=0.192626s new_connections=0

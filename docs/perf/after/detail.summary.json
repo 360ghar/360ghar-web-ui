@@ -1,0 +1,48 @@
+{
+  "url": "https://360ghar.com/property/118",
+  "engine": "lighthouse@13.6.0, mobile UA emulation, headless Chrome, screen=faithful",
+  "runs": 3,
+  "median": {
+    "score": 97,
+    "fcp_ms": 1692,
+    "lcp_ms": 2473,
+    "si_ms": 2489,
+    "tbt_ms": 3,
+    "cls": 0.001
+  },
+  "perRun": [
+    {
+      "file": "docs/perf/after/detail.run1.json",
+      "score": 97,
+      "fcp_ms": 1653,
+      "lcp_ms": 2458,
+      "si_ms": 2183,
+      "tbt_ms": 3,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 768px) 50vw, 86vw\" alt=\"Ompee Drona Floors, 3BHK Builder Floor in Palam Vihar, photo 1 of 9\" width=\"1024\" height=\"584\" fetchpriority=\"high\" decoding=\"async\">",
+      "lcpDiscoveryScore": 1
+    },
+    {
+      "file": "docs/perf/after/detail.run2.json",
+      "score": 96,
+      "fcp_ms": 1755,
+      "lcp_ms": 2529,
+      "si_ms": 3136,
+      "tbt_ms": 28,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 768px) 50vw, 86vw\" alt=\"Ompee Drona Floors, 3BHK Builder Floor in Palam Vihar, photo 1 of 9\" width=\"1024\" height=\"584\" fetchpriority=\"high\" decoding=\"async\">",
+      "lcpDiscoveryScore": 1
+    },
+    {
+      "file": "docs/perf/after/detail.run3.json",
+      "score": 97,
+      "fcp_ms": 1692,
+      "lcp_ms": 2473,
+      "si_ms": 2489,
+      "tbt_ms": 0,
+      "cls": 0.001,
+      "lcpElement": "<img src=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" srcset=\"https://res.cloudinary.com/ddbhzlzy1/image/upload/f_auto,q_auto,c_limit,w_…\" sizes=\"(min-width: 768px) 50vw, 86vw\" alt=\"Ompee Drona Floors, 3BHK Builder Floor in Palam Vihar, photo 1 of 9\" width=\"1024\" height=\"584\" fetchpriority=\"high\" decoding=\"async\">",
+      "lcpDiscoveryScore": 1
+    }
+  ]
+}
