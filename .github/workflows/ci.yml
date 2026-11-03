@@ -30,7 +30,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          # Resolves engines.node from package.json: runner images drift, and one
+          # shard shipped 22.23.3, below astro 7.4.4's floor (>=22.23.4).
+          node-version-file: package.json
           cache: pnpm
 
       - name: Install
@@ -64,11 +66,16 @@ jobs:
           OG_FROM_API: 'true'
 
   e2e:
-    name: Playwright (one dev server)
-    needs: checks
+    name: Playwright (shard ${{ matrix.shard }}/${{ strategy.job-total }})
+    # Runs in parallel with the checks job: the e2e shards are the long pole,
+    # and a failing checks job still fails the PR on its own.
     if: ${{ vars.E2E_DISABLED != 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     env:
       # Same names as .env.example. The two Supabase values are public, so they are variables, not secrets. Without them the tests use a fake project: they mock every Supabase call.
       PUBLIC_API_BASE: /dev-api
@@ -85,7 +92,9 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          # Resolves engines.node from package.json: runner images drift, and one
+          # shard shipped 22.23.3, below astro 7.4.4's floor (>=22.23.4).
+          node-version-file: package.json
           cache: pnpm
 
       - name: Install
@@ -96,15 +105,23 @@ jobs:
         run: pnpm exec playwright install --with-deps chrome
 
       # Rule: one astro dev per folder. This job starts exactly one and stops it at the end.
+      # Two boot attempts: one shard lost its whole run to a hung first boot.
       - name: Start the dev server
         run: |
-          nohup pnpm dev --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/astro-dev.log" 2>&1 &
-          echo $! > "$RUNNER_TEMP/astro-dev.pid"
-          for i in $(seq 1 90); do
-            if curl -fsS -o /dev/null http://127.0.0.1:4321/; then echo "dev server ready after ${i}s"; exit 0; fi
-            sleep 2
+          for attempt in 1 2; do
+            nohup pnpm dev --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/astro-dev.log" 2>&1 &
+            echo $! > "$RUNNER_TEMP/astro-dev.pid"
+            ok=""
+            for i in $(seq 1 60); do
+              if curl -fsS -o /dev/null http://127.0.0.1:4321/; then echo "dev server ready (attempt $attempt, after ${i}s)"; ok=1; break; fi
+              sleep 2
+            done
+            [ -n "$ok" ] && exit 0
+            echo "boot attempt $attempt failed:"; tail -50 "$RUNNER_TEMP/astro-dev.log"
+            kill "$(cat "$RUNNER_TEMP/astro-dev.pid")" 2>/dev/null || true
+            sleep 5
           done
-          echo "dev server did not start"; cat "$RUNNER_TEMP/astro-dev.log"; exit 1
+          echo "dev server did not start after 2 attempts"; cat "$RUNNER_TEMP/astro-dev.log"; exit 1
 
       # Vite compiles each page on its first request. Request the main routes once so the tests do not time out on cold compiles.
       - name: Warm the dev server
@@ -113,9 +130,12 @@ jobs:
             curl -fsS -o /dev/null --max-time 120 -w "%{http_code} $p\n" "http://127.0.0.1:4321$p"
           done
 
-      # Retries come from playwright.config.ts (not overridden). --output keeps results out of test-results/.
+      # Sharded across the matrix runners; workers=3 is the same per-box load as
+      # before sharding. job-total keeps the shard count in one place (the matrix).
+      # Retries come from playwright.config.ts (not overridden). --output keeps
+      # results out of test-results/.
       - name: Playwright
-        run: pnpm exec playwright test --output="$RUNNER_TEMP/pw-output" --workers=3
+        run: pnpm exec playwright test --shard=${{ matrix.shard }}/${{ strategy.job-total }} --output="$RUNNER_TEMP/pw-output" --workers=3
 
       - name: Stop the dev server
         if: always()
@@ -125,7 +145,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-failure
+          name: e2e-failure-shard-${{ matrix.shard }}
           path: |
             ${{ runner.temp }}/astro-dev.log
             ${{ runner.temp }}/pw-output

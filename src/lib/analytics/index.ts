@@ -65,16 +65,20 @@ function begin() {
     w.gtag('js', new Date());
     w.gtag('config', ga);
   }
-  void import('web-vitals').then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {
-    const send = (m: { name: string; value: number; id: string; rating: string }) => {
-      withPh((p) => p.capture('web_vitals', { metric_name: m.name, value: m.value, metric_id: m.id, rating: m.rating }));
-    };
-    onCLS(send);
-    onINP(send);
-    onLCP(send);
-    onFCP(send);
-    onTTFB(send);
-  });
+  void import('web-vitals')
+    .then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {
+      const send = (m: { name: string; value: number; id: string; rating: string }) => {
+        withPh((p) => p.capture('web_vitals', { metric_name: m.name, value: m.value, metric_id: m.id, rating: m.rating }));
+      };
+      onCLS(send);
+      onINP(send);
+      onLCP(send);
+      onFCP(send);
+      onTTFB(send);
+    })
+    // Analytics must never surface as a page error: the import can fail when
+    // the tab went offline before this late start (the module is fetched then).
+    .catch(() => {});
 }
 
 export function identify(id: string, props: Record<string, string | undefined>) {

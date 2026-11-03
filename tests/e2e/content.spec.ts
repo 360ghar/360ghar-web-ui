@@ -148,8 +148,8 @@ test('content: JSON-LD uses real data (founder, jobs, fixed dates, MCP tools)', 
   expect((await ld()).some((b) => b['@type'] === 'JobPosting')).toBe(false);
 
   await page.goto('/truth/nobroker-listings');
-  const art = (await ld()).find((b) => b['@type'] === 'Article');
-  expect(art?.datePublished).toBe('2026-06-20');
+  // The evidence note no longer carries Article structured data; the breadcrumb stays.
+  expect((await ld()).some((b) => b['@type'] === 'Article')).toBe(false);
   const crumbs = (await ld()).find((b) => b['@type'] === 'BreadcrumbList');
   expect(crumbs.itemListElement.map((i: { item: string }) => i.item)).toEqual(['https://360ghar.com/', 'https://360ghar.com/vs', 'https://360ghar.com/truth/nobroker-listings']);
 
@@ -340,30 +340,25 @@ test('paper art: the about story has four scenes, and each content page has its 
   const steps = page.locator('.story-step');
   await expect(steps).toHaveCount(4);
   for (let i = 0; i < 4; i += 1) await expect(steps.nth(i).locator('svg[data-scene]')).toBeVisible();
-  for (const path of ['/faq', '/contact', '/policies', '/careers', '/vs', '/vs/nobroker', '/truth/zolo-issues', '/glossary', '/gurugram-real-estate-guide', '/property-investment-gurugram', '/nri-property-guide', '/landlord-not-returning-security-deposit', '/list-property-free', '/links', '/for-ai', '/ai-agent', '/refer-and-earn', '/celebrity-homes', '/hi/faq']) {
+  // Guide and listing-service pages are on editorial hold and render no art strip.
+  for (const path of ['/faq', '/contact', '/policies', '/careers', '/vs', '/vs/nobroker', '/truth/zolo-issues', '/glossary', '/links', '/for-ai', '/ai-agent', '/refer-and-earn', '/hi/faq']) {
     await page.goto(path);
     await expect(page.locator('.page-art svg[data-scene]'), path).toHaveCount(1);
   }
 });
 
-test('security deposit guide: the contents list jumps to its section', async ({ page }, info) => {
+test('security deposit guide: on editorial hold', async ({ page }) => {
   await page.goto('/landlord-not-returning-security-deposit');
-  const desktop = info.project.name === 'desktop';
-  if (!desktop) await page.locator('.page-toc-small summary').click();
-  const toc = page.locator(desktop ? '.page-toc-wide' : '.page-toc-small');
-  await toc.getByRole('link', { name: 'State-wise rules' }).click();
-  await expect(page).toHaveURL(/#sd-states$/);
-  await expect(page.getByRole('heading', { name: 'State-wise deposit rules' })).toBeInViewport();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Security deposit guide under review');
+  await page.goto('/hi/landlord-not-returning-security-deposit');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('सिक्योरिटी डिपॉज़िट गाइड समीक्षा के अधीन');
 });
 
-test('NRI guide: the contents list jumps to its section', async ({ page }, info) => {
+test('NRI guide: on editorial hold', async ({ page }) => {
   await page.goto('/nri-property-guide');
-  const desktop = info.project.name === 'desktop';
-  if (!desktop) await page.locator('.page-toc-small summary').click();
-  const toc = page.locator(desktop ? '.page-toc-wide' : '.page-toc-small');
-  await toc.getByRole('link', { name: 'Tax rules' }).click();
-  await expect(page).toHaveURL(/#nri-tax$/);
-  await expect(page.getByRole('heading', { name: 'Tax implications for NRI property transactions' })).toBeInViewport();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('NRI property guide under review');
+  await page.goto('/hi/nri-property-guide');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('NRI प्रॉपर्टी गाइड समीक्षा के अधीन');
 });
 
 test('newsletter: validation and a mocked sign-up', async ({ page }) => {
