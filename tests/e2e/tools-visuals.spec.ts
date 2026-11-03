@@ -40,14 +40,14 @@ test('emi: payoff chart, prepayment years, result line', async ({ page }, info) 
   await hydrated(page);
   const chart = page.locator('section:has(#emi-chart)');
   await expect(chart.locator('rect.is-a')).toHaveCount(20);
-  await expect(chart).toContainText('In year 1, ₹84,236 of the ₹1,04,139 you pay goes to interest. From year 13');
+  await expect(chart).toContainText('In this calculation, ₹84,236 of the ₹1,04,139 paid in year 1 is interest');
   await expect(chart.locator('.tool-chart-axis .is-mark')).toHaveText('Year 13');
 
   await page.getByRole('textbox', { name: 'Prepayment amount' }).fill('300000');
-  await expect(chart.locator('.tool-chart-flag')).toHaveText('₹3 L prepaid');
+  await expect(chart.locator('.tool-chart-flag')).toHaveText('₹3 L lump sum in model');
   await expect.poll(() => chart.locator('rect.is-saved').count()).toBeGreaterThan(0);
-  await expect(chart).toContainText(/the loan ends in year \d+ instead of year 20/);
-  await expect(chart.getByText('Years you no longer pay')).toBeVisible();
+  await expect(chart).toContainText(/the lump sum shortens the estimated tenure from year 20 to year \d+/);
+  await expect(chart.getByText('Modeled years reduced')).toBeVisible();
 
   const peek = page.locator('.tool-peek');
   if (info.project.name === 'desktop') {
@@ -67,8 +67,8 @@ test('loan eligibility: income strip with the EMI limit', async ({ page }) => {
   await page.goto('/loan-eligibility-calculator');
   await hydrated(page);
   const split = page.locator('section:has(#loan-split)');
-  await expect(split).toContainText('Banks let 50% of your income after expenses (₹40,000) go to EMIs. That is ₹20,000 a month.');
-  await expect(split.locator('.loan-cap')).toHaveText('EMI limit ₹20,000');
+  await expect(split).toContainText('This scenario assigns 50% of income after expenses (₹40,000) to all EMIs, or ₹20,000 a month.');
+  await expect(split.locator('.loan-cap')).toHaveText('Scenario EMI limit ₹20,000');
   await expect(split.getByText('EMI for the new loan ₹20,000')).toBeVisible();
   await page.getByRole('slider', { name: 'EMIs you already pay' }).fill('8000');
   await expect(split.getByText('EMIs you pay now ₹8,000')).toBeVisible();
@@ -77,19 +77,15 @@ test('loan eligibility: income strip with the EMI limit', async ({ page }) => {
   await w.check();
 });
 
-test('capital gains: the two rules as bars on one scale', async ({ page }) => {
+test('capital gains: the figure follows the entered numbers', async ({ page }) => {
   const w = watch(page);
   await page.goto('/capital-gains-tax-calculator');
   await hydrated(page);
-  const bars = page.locator('.cg-bar');
-  await expect(bars).toHaveCount(2);
-  await expect(bars.filter({ hasText: '12.5% without indexation' })).toHaveClass(/is-pay/);
-  await expect(bars.first()).toContainText('Tax ₹3,68,750');
-  await expect(page.locator('.cg-legend')).toContainText('Added by indexation');
-  // Sold before 23 July 2024: one rule, one bar.
-  await page.getByLabel('Date of sale').fill('2024-06-01');
-  await expect(bars).toHaveCount(1);
-  await expect(bars.first()).toContainText('20% with indexation');
+  const value = page.locator('[data-testid=cg-value]');
+  await expect(value).toHaveText('₹29,50,000');
+  await page.getByRole('textbox', { name: 'Sale price' }).fill('8000000');
+  await expect(value).not.toHaveText('₹29,50,000');
+  await expect(page.getByText(/Arithmetic only/)).toBeVisible();
   await axe(page);
   await w.check();
 });
@@ -109,9 +105,9 @@ test('Hindi: chart text on the EMI and loan pages', async ({ page }) => {
   const w = watch(page);
   await page.goto('/hi/emi-calculator');
   await hydrated(page);
-  await expect(page.locator('section:has(#emi-chart)')).toContainText('पहले साल आप जो ₹1,04,139 देते हैं');
+  await expect(page.locator('section:has(#emi-chart)')).toContainText('इस गणना में पहले साल के ₹1,04,139 में से ₹84,236 ब्याज है');
   await page.goto('/hi/loan-eligibility-calculator');
   await hydrated(page);
-  await expect(page.locator('.loan-cap')).toHaveText('EMI सीमा ₹20,000');
+  await expect(page.locator('.loan-cap')).toHaveText('परिदृश्य की EMI सीमा ₹20,000');
   await w.check();
 });

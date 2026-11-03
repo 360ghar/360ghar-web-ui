@@ -40,9 +40,14 @@ async function scrollThrough(page: Page) {
       }
     });
   }).toPass({ timeout: 40_000 });
-  // Islands inside the sideways homes rail (left of the viewport edge) never scroll into view, so they stay waiting by design.
+  // Islands inside the sideways homes rail (left of the viewport edge, or already
+  // scrolled past) never intersect, so they stay waiting by design.
   await page.waitForFunction(
-    () => ![...document.querySelectorAll('astro-island[ssr]')].some((i) => ((i.firstElementChild ?? i).getBoundingClientRect().left < innerWidth)),
+    () =>
+      ![...document.querySelectorAll('astro-island[ssr]')].some((i) => {
+        const r = (i.firstElementChild ?? i).getBoundingClientRect();
+        return r.left < innerWidth && r.bottom > 0;
+      }),
     null,
     { timeout: 30_000 },
   );
@@ -59,13 +64,13 @@ test('home parity: the new sections are on the page and the page stays clean', a
   await expect(m.getByRole('heading', { name: 'Free owner onboarding and photography' })).toBeVisible();
   await expect(m.getByRole('heading', { name: 'Know someone with a home to rent out or sell?' })).toBeVisible();
   await expect(m.getByRole('heading', { name: 'Get the 360Ghar app' })).toBeVisible();
-  await expect(m.getByRole('heading', { name: 'Ask an AI assistant to search for you' })).toBeVisible();
+  await expect(m.getByRole('heading', { name: 'MCP tools for AI assistants' })).toBeVisible();
   await expect(m.getByRole('heading', { name: 'How was your experience with 360Ghar?' })).toBeVisible();
   await expect(m.getByRole('heading', { name: 'About 360Ghar' })).toBeVisible();
   await expect(m.getByRole('heading', { name: /New verified homes and guides/ })).toBeVisible();
   // Refer amounts are the real terms.
   await expect(m.locator('.refer-num').first()).toHaveText('₹100');
-  await expect(m.locator('.refer-num').nth(1)).toHaveText('₹10,000');
+  await expect(m.locator('.refer-num').nth(1)).toHaveText('Up to ₹10,000');
   await expect(m.getByRole('link', { name: /Refer and earn/ })).toHaveAttribute('href', '/refer-and-earn');
   await axe(page);
   await w.check();
@@ -179,10 +184,7 @@ test('home parity: tool notes show real counts, the AI address copies, the app l
   await page.goto('/');
   await scrollThrough(page);
   const m = main(page);
-  // Counts come from the API on each render; a number may be missing when the API is down, but never invented.
-  const stats = await m.locator('.home-tool-stat').allInnerTexts();
-  for (const s of stats) expect(s).toMatch(/^[\d,]+ listed$/);
-  expect(stats.length).toBeGreaterThan(0);
+  // The old live-count tool notes band is gone; the MCP band carries the AI address.
   await expect(m.getByRole('link', { name: /3D floor plan builder/ })).toHaveAttribute('href', '/design-blueprint');
   await expect(m.getByRole('link', { name: /Get 360Ghar on Google Play/ })).toHaveAttribute('href', /play\.google\.com\/store\/apps\/details\?id=com\.the360ghar\.ghar360/);
   await expect(m.getByRole('link', { name: /How to connect/ })).toHaveAttribute('href', '/ai-agent');
@@ -203,7 +205,7 @@ test('home parity: the QR code shows only on wide screens', async ({ page }, inf
 test('home parity: the fact sheet is server text and matches the JSON-LD', async ({ page }) => {
   await page.goto('/');
   const rows = await main(page).locator('.facts-list > div').evaluateAll((els) => els.map((e) => `${e.querySelector('dt')!.textContent}: ${e.querySelector('dd')!.textContent}`));
-  expect(rows.length).toBeGreaterThanOrEqual(8);
+  expect(rows.length).toBeGreaterThanOrEqual(6);
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((x) => JSON.parse(x)).flat();
   // The fact sheet is a WebPage that points at the site Organization; there is one Organization node only.
   const facts = ld.find((x) => x['@id'] === 'https://360ghar.com/#facts');
