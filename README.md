@@ -53,7 +53,7 @@ Production `360ghar.com` serves from a Cloudflare Worker custom domain (worker `
 
 A Workers Builds dashboard connection (auto-deploy on push to `main`) is planned but not yet confirmed. SSR HTML is cached at the edge for one hour (`s-maxage=3600` + stale-while-revalidate).
 
-A local deploy reads `.env` at build time: make sure `PUBLIC_API_BASE` is not `/dev-api` in it (that value works only against the dev server).
+A local deploy reads `.env` at build time, and the `.env.example` values (`PUBLIC_API_BASE=/dev-api`, `API_ORIGIN=http://localhost:3600`) work only against the dev server. Set both to `https://api.360ghar.com` for the build: the exact steps are AGENTS.md rule 7.
 
 Rollback: Workers version rollback is the primary path — runbook in `docs/perf/cloudflare-rollback.md`. `netlify.toml` stays in the repo as a frozen rollback artifact; Netlify can no longer build this code (the adapter swap removed `@astrojs/netlify`).
 
