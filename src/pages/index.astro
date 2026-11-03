@@ -24,6 +24,11 @@ cachePage(Astro, 'hour', { error: data.failed });
   jsonLd={[data.faqSchema, data.facts.jsonLd]}
   preloadImages={HERO_PRELOAD_SRCS}
 >
+  {/* Astro's island scripts sit inside the search sheet; while they wait for the
+      stylesheets the parser stops mid-hero, and a first frame without the search
+      form made the bottom-pinned search box jump (PageSpeed CLS 0.072,
+      docs/perf/psi-100.md). Hold the first render until the whole hero is parsed. */}
+  <link slot="head" rel="expect" href="#after-hero" blocking="render" />
   <HomePage locale={locale} data={data} />
   <Toaster client:idle />
 </Page>

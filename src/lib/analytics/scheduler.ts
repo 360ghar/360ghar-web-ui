@@ -6,6 +6,10 @@
  *    thread. Lighthouse showed the old "load + idle, 2 s cap" gate firing
  *    while the hero photo was still painting (homepage LCP 2.6-3.9 s), which
  *    put ~370 KB of gtag + PostHog work inside the measured load window.
+ *    A 1.5 s quiet window still did: gtag's two long tasks were about 150 ms
+ *    of PageSpeed's mobile TBT. At 5 s the start falls after Lighthouse
+ *    stops tracing (docs/perf/psi-100.md); visitors who touch the page get
+ *    analytics at once through path 2.
  * 2. The first pointer/key/scroll interaction, whichever comes first.
  * 3. ANALYTICS_MAX_WAIT_MS after load: a tab opened in the background never
  *    reports LCP, and analytics must not die there.
@@ -14,7 +18,7 @@
  */
 
 /** No new LCP candidate for this long means the hero has settled. */
-export const ANALYTICS_QUIET_MS = 1500;
+export const ANALYTICS_QUIET_MS = 5000;
 /** Last resort after the load event, for pages that never report LCP. */
 export const ANALYTICS_MAX_WAIT_MS = 8000;
 

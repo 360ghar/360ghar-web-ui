@@ -50,6 +50,16 @@ the 2026-11-03 heading date is IST local — the events below ran 22:38–23:58Z
 4. Workers Builds connection could not be confirmed via API (the token lacks the Builds
    scope — `10000 Authentication error` on `/builds/*`). Until it is connected in the
    dashboard, deploys ship via `npx wrangler deploy` with the env token.
+5. **Warm the edge cache after every deploy or rollback.** The Workers cache is
+   partitioned by version, so the first request for each page renders cold (2-3 s TTFB:
+   the backend API calls). One request fills the upper tier for every data center:
+
+   ```bash
+   curl -s -o /dev/null -w '%{http_code} %{time_starttransfer}s\n' https://360ghar.com/
+   curl -s -o /dev/null -w '%{http_code} %{time_starttransfer}s\n' https://360ghar.com/hi
+   ```
+
+   Run PageSpeed only after this; a cold render puts its 2-3 s TTFB into the lab FCP and LCP.
 
 ---
 

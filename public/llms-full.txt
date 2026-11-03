@@ -32,52 +32,52 @@
 
 ## Important Pages
 
-- Home: https://360ghar.com/
-- Properties: https://360ghar.com/properties
-- Localities: https://360ghar.com/localities
-- Blog: https://360ghar.com/blog
-- For AI Assistants: https://360ghar.com/for-ai
-- AI Agent: https://360ghar.com/ai-agent
-- Home Loan EMI Estimate: https://360ghar.com/emi-calculator
-- Contact: https://360ghar.com/contact
-- 360Ghar vs NoBroker: https://360ghar.com/vs/nobroker
-- 360Ghar vs MagicBricks: https://360ghar.com/vs/magicbricks
-- 360Ghar vs 99acres: https://360ghar.com/vs/99acres
-- 360Ghar vs Housing.com: https://360ghar.com/vs/housing
-- 360Ghar vs PropTiger: https://360ghar.com/vs/proptiger
-- 360Ghar vs SquareYards: https://360ghar.com/vs/squareyards
-- 360Ghar vs Zolo: https://360ghar.com/vs/zolo
-- 360Ghar vs Stanza Living: https://360ghar.com/vs/stanza-living
-- Area Converter: https://360ghar.com/area-converter
-- Area Calculator: https://360ghar.com/area-calculator
-- Home Loan Estimate: https://360ghar.com/loan-eligibility-calculator
-- Property Sale Gain Worksheet: https://360ghar.com/capital-gains-tax-calculator
-- Property Document Prompts: https://360ghar.com/property-document-checklist
-- Vastu Checker: https://360ghar.com/vastu-checker
-- 3D Blueprint Designer: https://360ghar.com/design-blueprint
-- AI Design Studio: https://360ghar.com/ai-design-studio
-- Haryana Jamabandi Record Lookup: https://360ghar.com/verify-ownership
-- MOFA to RERA Converter: https://360ghar.com/mofa-to-rera-converter
-- Sq Ft Calculator: https://360ghar.com/sq-ft-calculator
-- Acre to Gaj Converter: https://360ghar.com/acre-in-gaj
-- Flats for Sale in Gurgaon: https://360ghar.com/gurgaon/buy/flats
-- Flats for Rent in Gurgaon: https://360ghar.com/gurgaon/rent/flats
-- PG in Gurgaon: https://360ghar.com/gurgaon/pg/flats
-- Delhi Real Estate Hub: https://360ghar.com/delhi
-- Noida Real Estate Hub: https://360ghar.com/noida
-- Faridabad Real Estate Hub: https://360ghar.com/faridabad
-- Ghaziabad Real Estate Hub: https://360ghar.com/ghaziabad
-- DLF Phase 1, Gurgaon: https://360ghar.com/locality/dlf-phase-1-gurgaon
-- Golf Course Road, Gurgaon: https://360ghar.com/locality/golf-course-road-gurgaon
-- Sushant Lok 1, Gurgaon: https://360ghar.com/locality/sushant-lok-1-gurgaon
-- Sohna Road, Gurgaon: https://360ghar.com/locality/sohna-road-gurgaon
-- Sector 49, Gurgaon: https://360ghar.com/locality/sector-49-gurgaon
-- मुख्य पृष्ठ (Hindi): https://360ghar.com/hi
-- प्रॉपर्टी (Hindi): https://360ghar.com/hi/properties
-- लोकैलिटी (Hindi): https://360ghar.com/hi/localities
-- ब्लॉग (Hindi): https://360ghar.com/hi/blog
-- EMI कैलकुलेटर (Hindi): https://360ghar.com/hi/emi-calculator
-- संपर्क करें (Hindi): https://360ghar.com/hi/contact
+- [Home](https://360ghar.com/)
+- [Properties](https://360ghar.com/properties)
+- [Localities](https://360ghar.com/localities)
+- [Blog](https://360ghar.com/blog)
+- [For AI Assistants](https://360ghar.com/for-ai)
+- [AI Agent](https://360ghar.com/ai-agent)
+- [Home Loan EMI Estimate](https://360ghar.com/emi-calculator)
+- [Contact](https://360ghar.com/contact)
+- [360Ghar vs NoBroker](https://360ghar.com/vs/nobroker)
+- [360Ghar vs MagicBricks](https://360ghar.com/vs/magicbricks)
+- [360Ghar vs 99acres](https://360ghar.com/vs/99acres)
+- [360Ghar vs Housing.com](https://360ghar.com/vs/housing)
+- [360Ghar vs PropTiger](https://360ghar.com/vs/proptiger)
+- [360Ghar vs SquareYards](https://360ghar.com/vs/squareyards)
+- [360Ghar vs Zolo](https://360ghar.com/vs/zolo)
+- [360Ghar vs Stanza Living](https://360ghar.com/vs/stanza-living)
+- [Area Converter](https://360ghar.com/area-converter)
+- [Area Calculator](https://360ghar.com/area-calculator)
+- [Home Loan Estimate](https://360ghar.com/loan-eligibility-calculator)
+- [Property Sale Gain Worksheet](https://360ghar.com/capital-gains-tax-calculator)
+- [Property Document Prompts](https://360ghar.com/property-document-checklist)
+- [Vastu Checker](https://360ghar.com/vastu-checker)
+- [3D Blueprint Designer](https://360ghar.com/design-blueprint)
+- [AI Design Studio](https://360ghar.com/ai-design-studio)
+- [Haryana Jamabandi Record Lookup](https://360ghar.com/verify-ownership)
+- [MOFA to RERA Converter](https://360ghar.com/mofa-to-rera-converter)
+- [Sq Ft Calculator](https://360ghar.com/sq-ft-calculator)
+- [Acre to Gaj Converter](https://360ghar.com/acre-in-gaj)
+- [Flats for Sale in Gurgaon](https://360ghar.com/gurgaon/buy/flats)
+- [Flats for Rent in Gurgaon](https://360ghar.com/gurgaon/rent/flats)
+- [PG in Gurgaon](https://360ghar.com/gurgaon/pg/flats)
+- [Delhi Real Estate Hub](https://360ghar.com/delhi)
+- [Noida Real Estate Hub](https://360ghar.com/noida)
+- [Faridabad Real Estate Hub](https://360ghar.com/faridabad)
+- [Ghaziabad Real Estate Hub](https://360ghar.com/ghaziabad)
+- [DLF Phase 1, Gurgaon](https://360ghar.com/locality/dlf-phase-1-gurgaon)
+- [Golf Course Road, Gurgaon](https://360ghar.com/locality/golf-course-road-gurgaon)
+- [Sushant Lok 1, Gurgaon](https://360ghar.com/locality/sushant-lok-1-gurgaon)
+- [Sohna Road, Gurgaon](https://360ghar.com/locality/sohna-road-gurgaon)
+- [Sector 49, Gurgaon](https://360ghar.com/locality/sector-49-gurgaon)
+- [मुख्य पृष्ठ (Hindi)](https://360ghar.com/hi)
+- [प्रॉपर्टी (Hindi)](https://360ghar.com/hi/properties)
+- [लोकैलिटी (Hindi)](https://360ghar.com/hi/localities)
+- [ब्लॉग (Hindi)](https://360ghar.com/hi/blog)
+- [EMI कैलकुलेटर (Hindi)](https://360ghar.com/hi/emi-calculator)
+- [संपर्क करें (Hindi)](https://360ghar.com/hi/contact)
 
 ## Data Hub Tools
 

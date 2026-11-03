@@ -85,6 +85,13 @@ describe('the committed files are the generator output', () => {
     expect(read('.well-known/api-catalog')).toBe(`${JSON.stringify(gen.apiCatalog, null, 2)}\n`);
   });
 
+  it('llms.txt passes the Lighthouse llms-txt audit rules (H1, a Markdown link, 50+ characters)', () => {
+    // The same three checks as lighthouse core/audits/agentic/llms-txt.js.
+    expect(gen.llmsTxt).toMatch(/^\s*#\s+.+/m);
+    expect(gen.llmsTxt).toMatch(/\[.+\]\(.+\)/);
+    expect(gen.llmsTxt.length).toBeGreaterThanOrEqual(50);
+  });
+
   it('the feed and llms-full.txt carry the same important pages', () => {
     const feed = JSON.parse(read('data/llm-feed.json')) as { important_pages: { url: string }[] };
     expect(feed.important_pages.map((p) => p.url)).toEqual(gen.llmFeed.important_pages.map((p) => p.url));
@@ -190,8 +197,8 @@ describe('generator output', () => {
   });
 
   it('uses /hi and /locality/{slug}-{city}', () => {
-    expect(gen.llmsTxt).toContain('https://360ghar.com/hi\n');
-    expect(gen.llmsTxt).not.toContain('/hi/\n');
+    expect(gen.llmsTxt).toContain('(https://360ghar.com/hi)\n');
+    expect(gen.llmsTxt).not.toContain('/hi/)\n');
     const localityPages = gen.llmFeed.important_pages.filter((page) => page.category === 'locality');
     expect(localityPages).toHaveLength(5);
     for (const page of localityPages) expect(page.url).toMatch(/^https:\/\/360ghar\.com\/locality\/[a-z0-9-]+-[a-z-]+$/);

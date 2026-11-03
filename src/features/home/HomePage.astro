@@ -69,7 +69,8 @@ const pmFeatures = c.owner;
 
 <HomeHero locale={locale} />
 
-<section class="home-block home-homes" aria-labelledby="home-homes" data-rail>
+{/* id: the first element after the hero; index.astro holds the first render until it is parsed. */}
+<section id="after-hero" class="home-block home-homes" aria-labelledby="home-homes" data-rail>
   <div class="container-page home-count">
     {
       count ? (
