@@ -6,6 +6,10 @@ VAL-PERF-001..005: the post-cutover bar is **median ≥ baseline − 1 point** p
 (the regression rule, applied per page), plus the absolute targets
 (score ≥ 99, LCP ≤ 2.5 s, SI ≤ 3.5 s) on the homepage.
 
+**Post-cutover "after" column:** `docs/perf/after/REPORT.md` (final validation,
+2026-11-03, faithful protocol). Homepage medians 97 / LCP 2258 ms / SI 3170 ms / TBT 43 ms /
+CLS 0.001 — the 97-98 stop-rule is live; all three regression pages ≥ baseline.
+
 ## Engine and protocol
 
 - Local Lighthouse **13.6.0**, `--only-categories=performance`, `--form-factor=mobile`,

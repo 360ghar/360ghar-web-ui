@@ -1,0 +1,10 @@
+# headers of 3 sequential reused-connection requests — cf-cache-status + age
+HTTP/2 200 
+cf-cache-status: HIT
+age: 2508
+HTTP/2 200 
+cf-cache-status: HIT
+age: 2509
+HTTP/2 200 
+cf-cache-status: HIT
+age: 2509

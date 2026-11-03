@@ -1,0 +1,4 @@
+# Fresh-connection sequential curls (new TCP+TLS each run) — 2026-11-03T00:20Z
+fresh run 1: status=200 ttfb=0.448832s (dns=0.013213 tcp=0.147301 tls=0.295009)
+fresh run 2: status=200 ttfb=0.396995s (dns=0.001855 tcp=0.125182 tls=0.253592)
+fresh run 3: status=200 ttfb=0.488493s (dns=0.001962 tcp=0.130422 tls=0.337171)
