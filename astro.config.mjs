@@ -40,7 +40,8 @@ export default defineConfig({
       }),
   integrations: [react()],
   devToolbar: { enabled: false },
-  prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
+  // No prefetch: no link opts in (data-astro-prefetch), and its page script scanned every
+  // <a> on load, a 60-100 ms main-thread task on PageSpeed's mobile CPU (docs/perf/psi-100.md).
   vite: {
     plugins: [
       tailwindcss(),
