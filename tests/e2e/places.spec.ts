@@ -53,15 +53,14 @@ test('directory: type buttons, search, letters and the places with homes', async
   await w.check();
 });
 
-test('locality: vignette, facts, landmarks, checklist, FAQ and links', async ({ page, request }) => {
+test('locality: vignette, facts, checklist, FAQ and links', async ({ page, request }) => {
   const w = watch(page);
   await page.goto('/locality/sector-56-gurgaon');
   await expect(page.getByRole('heading', { level: 1, name: 'Sector 56' })).toBeVisible();
   await expect(page.getByRole('img', { name: /Paper-cut sector street/ })).toBeVisible();
   await expect(page.locator('.ph-aside')).toContainText(/No homes listed yet|homes? listed|could not load/);
-  await expect(page.locator('.ph-aside')).toContainText('Sector 55-56 Metro');
-  await expect(page.getByRole('heading', { name: 'How far things are' })).toBeVisible();
-  await expect(page.locator('.lm-row')).toHaveCount(4);
+  // Static landmark distances were removed deliberately (locality evidence gate).
+  await expect(page.getByRole('heading', { name: 'How far things are' })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'Check before you decide' })).toBeVisible();
   await axe(page);
 
@@ -94,8 +93,8 @@ test('locality: a place with live homes shows them, matched exactly', async ({ p
   const cards = page.locator('.loc-grid > li');
   if (await cards.count()) {
     await expect(page.locator('.ph-aside .pf-text.is-strong').first()).toHaveText(/^\d+ homes? listed$/);
-    // With 3 or more real prices the hero gives the middle half; otherwise "from".
-    await expect(page.locator('.ph-aside')).toContainText(/for sale · (most homes ₹[\d.,]+ (L|Cr) to ₹[\d.,]+ (L|Cr)|from ₹)/);
+    // With 3 or more real prices the hero gives the listed range; otherwise "from".
+    await expect(page.locator('.ph-aside')).toContainText(/for sale · (most homes|listed prices) ₹[\d.,]+ (L|Cr) to ₹[\d.,]+ (L|Cr)|from ₹/);
     for (const card of await cards.all()) await expect(card).toContainText('Palam Vihar');
     const sale = page.getByRole('link', { name: /^All \d+ for sale$/ });
     if (await sale.count()) {
@@ -111,7 +110,8 @@ test('locality: Hindi page and a place with no landmarks', async ({ page }) => {
   await page.goto('/hi/locality/sector-56-gurgaon');
   await expect(page.getByRole('heading', { level: 1, name: 'Sector 56' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'फ़ैसले से पहले जाँचें' })).toBeVisible();
-  await expect(page.getByText('Sector 56 में सर्कल रेट क्या हैं?')).toBeVisible();
+  // The circle-rate FAQ is gone while rate data is on editorial hold.
+  await expect(page.getByText('Sector 56 में सर्कल रेट क्या हैं?')).toHaveCount(0);
   await axe(page);
   await page.goto('/locality/ansal-plaza-gurgaon');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();

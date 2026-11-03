@@ -44,13 +44,15 @@ describe('workflows', () => {
     const ci = read('ci.yml');
     expect(ci).toContain('pnpm/action-setup@v4'); // v4 reads "packageManager"; it fails if a version is also given
     expect(ci).not.toMatch(/pnpm\/action-setup@v4\n\s+with:\n\s+version:/);
-    for (const f of files.filter((x) => /setup-node/.test(read(x)))) expect(read(f), f).toMatch(/node-version: '22'/);
+    for (const f of files.filter((x) => /setup-node/.test(read(x)))) expect(read(f), f).toMatch(/node-version-file: package\.json/);
   });
 
-  it('runs the e2e job with one dev server, an --output folder and a variable switch', () => {
+  it('runs the e2e job sharded 4x with one dev server per shard, an --output folder and a variable switch', () => {
     const ci = read('ci.yml');
-    expect(ci.match(/pnpm dev\b/g)).toHaveLength(1);
-    expect(ci).toMatch(/playwright test --output=/);
+    expect(ci.match(/pnpm dev\b/g)).toHaveLength(1); // exactly one dev server per shard runner
+    expect(ci).toContain('shard: [1, 2, 3, 4]'); // the matrix is the single source of truth for the count
+    expect(ci).toMatch(/playwright test --shard=\$\{\{ matrix\.shard \}\}\/\$\{\{ strategy\.job-total \}\} --output=/);
+    expect(ci).toContain('fail-fast: false'); // a red shard must not cancel the others
     expect(ci).toContain('playwright install --with-deps chrome');
     expect(ci).toContain("vars.E2E_DISABLED != 'true'");
     expect(ci).toContain('pnpm check:pseo'); // after the unit tests

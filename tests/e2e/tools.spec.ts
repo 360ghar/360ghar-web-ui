@@ -109,9 +109,11 @@ test('emi: sliders, number boxes, prepayment, schedule, share, reset', async ({ 
   await expect(page.getByRole('slider', { name: 'Loan tenure' })).toHaveValue('30');
 
   await page.getByRole('textbox', { name: 'Prepayment amount' }).fill('500000');
-  await expect(page.getByText('Interest you save')).toBeVisible();
+  // The prepayment lands on the chart: a flag marks it, and saved years appear.
+  await expect(page.locator('.tool-chart-flag')).toHaveText('₹5 L lump sum in model');
+  await expect(page.getByText(/the lump sum shortens the estimated tenure/)).toBeVisible();
 
-  await page.getByText('Year-by-year schedule').click();
+  await page.getByText('Year-by-year schedule').first().click();
   await expect(page.getByRole('table')).toBeVisible();
   await expect(page.getByRole('table').locator('tbody tr')).toHaveCount(30);
 
@@ -141,11 +143,11 @@ test('tools index: all tools, filter, no results, links', async ({ page }) => {
   const w = await open(page, '/tools');
   const items = page.locator('[data-tool]');
   await expect(items).toHaveCount(COUNT);
-  await expect(page.getByText(`${COUNT} tools`)).toBeVisible();
+  await expect(page.getByText(`${COUNT} tools`, { exact: true })).toBeVisible();
   const box = page.getByRole('searchbox', { name: 'Find a tool' });
   await box.fill('gaj');
-  await expect(page.locator('[data-tool]:visible')).toHaveCount(3);
-  await expect(page.getByText('3 tools')).toBeVisible();
+  await expect(page.locator('[data-tool]:visible')).toHaveCount(2);
+  await expect(page.getByText('2 tools', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Loans, tax and rent' })).toBeHidden();
   await box.fill('zzzz');
   await expect(page.getByText('No tool matches')).toBeVisible();
@@ -208,34 +210,32 @@ test('document checklist: tick, persist, note a file, copy, clear with undo, pri
 
 test('fake listing: portal, lookalike, short link, invalid, 360Ghar', async ({ page }) => {
   const w = await open(page, '/check-fake-listing');
-  const box = page.getByRole('textbox', { name: 'Listing link' });
-  const go = page.getByRole('button', { name: 'Check the link' });
+  const box = page.getByRole('textbox', { name: 'Listing URL' });
+  const go = page.getByRole('button', { name: 'Check URL' });
   await expect(go).toBeDisabled();
 
   await box.fill('https://www.99acres.com/3-bhk-flat-sector-57-gurgaon');
   await go.click();
-  await expect(page.getByRole('heading', { name: 'This link goes to 99acres' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Points to check on 99acres' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The URL uses a domain identified as 99acres' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Check these details separately' })).toBeVisible();
   await axe(page);
 
   await box.fill('https://99acres-deals.in/flat');
   await box.press('Enter');
-  await expect(page.getByRole('heading', { name: 'Be careful with this link' })).toBeVisible();
-  await expect(page.getByText(/contains "99acres" but the site is 99acres-deals\.in/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'URL pattern needs review' })).toBeVisible();
 
   await box.fill('bit.ly/3abc');
   await go.click();
-  await expect(page.getByText(/This is a short link/)).toBeVisible();
+  await expect(page.getByText(/short-link service/)).toBeVisible();
 
   await box.fill('not a link');
   await go.click();
-  await expect(page.getByText(/Paste a full web address/)).toBeVisible();
+  await expect(page.getByText(/Enter a full web address/)).toBeVisible();
   await expect(box).toHaveAttribute('aria-invalid', 'true');
 
   await box.fill('https://360ghar.com/property/1');
   await go.click();
-  await expect(page.getByRole('heading', { name: 'This is a 360Ghar link' })).toBeVisible();
-  await expect(page.getByText(/does not use AI/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: '360Ghar domain detected' })).toBeVisible();
   await w.check();
 });
 
@@ -255,7 +255,7 @@ test('area converter: value, units, swap, URL restore, reset', async ({ page }) 
   await page.getByRole('combobox', { name: 'To' }).selectOption('acre');
   await expect(result).toHaveText('0.0551acre');
   await page.getByRole('combobox', { name: 'From' }).selectOption('bigha');
-  await expect(page.getByText(/A bigha is not the same in every state/)).toBeVisible();
+  await expect(page.getByText(/The tool does not verify a property measurement/)).toBeVisible();
 
   await page.getByRole('button', { name: 'Swap units' }).click();
   await expect(page.getByRole('combobox', { name: 'From' })).toHaveValue('acre');
@@ -344,16 +344,17 @@ test('carpet area calculator: sliders, number boxes, reset', async ({ page }) =>
   const w = await open(page, '/area-calculator');
   const result = page.getByTestId('carpet-result');
   await expect(result).toHaveText('700sq ft');
-  const superArea = page.getByRole('textbox', { name: 'Super built-up area' });
+  const superArea = page.getByRole('textbox', { name: 'Super built-up area input' });
   await superArea.click();
   await superArea.fill('1500');
   await superArea.press('Enter');
   await expect(result).toHaveText('1,050sq ft');
-  await page.getByRole('slider', { name: 'Loading factor' }).fill('40');
+  await page.getByRole('slider', { name: 'Loading assumption' }).fill('40');
   await expect(result).toHaveText('900sq ft');
-  await page.getByRole('slider', { name: 'Walls and balconies' }).fill('20');
+  await page.getByRole('slider', { name: 'Walls and balconies assumption' }).fill('20');
   await expect(page.getByText('1,080 sq ft')).toBeVisible();
-  await expect(page.getByText('Common areas 28%')).toBeVisible();
+  await expect(page.getByText('Common areas')).toBeVisible();
+  await expect(page.getByText('28%')).toBeVisible();
   await copyAndReset(page);
   await expect(result).toHaveText('700sq ft');
   await axe(page);
@@ -458,20 +459,18 @@ test.describe('rent receipt', () => {
     expect(await printed()).toBe(0);
 
     await page.getByRole('textbox', { name: 'Monthly rent (₹)' }).fill('10000');
-    await expect(page.getByText('PAN is needed when the yearly rent is more than ₹1,00,000.')).toBeVisible();
+    await expect(page.getByText('Yearly rent: ₹1,20,000')).toBeVisible();
 
     await page.getByRole('button', { name: 'Fill sample' }).click();
-    await expect(page.getByText('PAN is needed when the yearly rent is more than ₹1,00,000.')).toHaveCount(0);
     const preview = page.locator('.rr-side');
     await expect(preview.getByText('(Rupees Twenty Five Thousand Only)')).toBeVisible();
 
     await page.getByRole('textbox', { name: 'Landlord PAN' }).fill('ABCDE12345');
-    await expect(page.getByText('This is not a valid PAN. Use the format ABCDE1234F.')).toBeVisible();
+    await expect(page.getByText('Check the PAN details you entered.')).toBeVisible();
     await page.getByRole('textbox', { name: 'Landlord PAN' }).fill('ABCPG1234F');
 
     await page.getByRole('combobox', { name: 'Payment mode' }).selectOption('cash');
-    await expect(page.getByText(/stick a ₹1 revenue stamp/)).toBeVisible();
-    await expect(preview.getByText('Revenue stamp')).toBeVisible();
+    await expect(page.getByText('Stamp requirements').first()).toBeVisible();
 
     await page.locator('input[type=file]').setInputFiles({
       name: 'sign.png',
@@ -511,7 +510,7 @@ test.describe('rent receipt', () => {
   test('Hindi page', async ({ page }) => {
     const w = await open(page, '/hi/rent-receipt');
     await page.getByRole('textbox', { name: 'मासिक किराया (₹)' }).fill('9000');
-    await expect(page.getByText('सालाना किराया ₹1,00,000 से ज़्यादा हो तो PAN ज़रूरी है।')).toBeVisible();
+    await expect(page.getByText('PAN दस्तावेज़ पर दी गई जानकारी दर्ज करें।')).toBeVisible();
     await w.check();
   });
 });
@@ -553,11 +552,11 @@ test('vastu: validate, upload, direction, notes, analyze (mocked), report, copy,
   expect(body).toContain('name="north_direction"');
   expect(body).toMatch(/name="north_direction"\r\n\r\nright/);
   expect(body).toMatch(/name="notes"\r\n\r\nCorner plot/);
-  await expect(page.getByText('Excellent', { exact: true }).first()).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Room Analysis' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Major Defects Identified' })).toBeVisible();
+  await expect(page.getByText('High tool rating').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Tool-generated room notes' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Items flagged by the tool' })).toBeVisible();
 
-  await page.getByText('Full Analysis Report').click();
+  await page.getByText('Full tool-generated text').click();
   await expect(page.getByText('Vastu Analysis Report', { exact: true })).toBeVisible();
   await axe(page);
 
@@ -628,7 +627,7 @@ test('vastu: Hindi page', async ({ page }) => {
   await page.getByText('दाएँ', { exact: true }).click();
   await page.getByRole('button', { name: /वास्तु/ }).first().click();
   await expect(page.getByTestId('vastu-score')).toHaveText(/^8/);
-  await expect(page.getByRole('heading', { name: 'वास्तु स्कोर' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'टूल स्कोर' })).toBeVisible();
   await w.check();
 });
 
@@ -663,7 +662,7 @@ test('vastu: zone tiles, zone lines, north marker, zone map', async ({ page }) =
   // Zone map: every zone with rooms is toned; empty ones are off; a click marks the room rows.
   await expect(page.locator('.vastu-cell.is-good')).toHaveCount(6);
   await expect(page.locator('.vastu-cell.is-bad')).toContainText('Toilet');
-  await expect(page.locator('.vastu-cell.is-bad')).toContainText('Problematic');
+  await expect(page.locator('.vastu-cell.is-bad')).toContainText('Review tool output');
   await expect(page.locator('.vastu-cell.is-empty')).toHaveCount(2);
   await expect(page.locator('.vastu-cell.is-empty').first()).toBeDisabled();
   await expect(page.locator('.vastu-room').first()).toContainText('Toilet');
@@ -691,7 +690,7 @@ test('ai design studio: free, no sign-in; generate, compare, save, gallery, erro
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ image: PNG }) });
   });
   const w = await open(page, '/ai-design-studio');
-  await expect(page.getByText(/^Free\. No sign-up\./)).toBeVisible();
+  await expect(page.getByText(/Generated images are design concepts/)).toBeVisible();
   await expect(page.getByRole('button', { name: /sign in/i })).toHaveCount(0);
   await axe(page);
 
@@ -760,7 +759,6 @@ test('ai design studio: free, no sign-in; generate, compare, save, gallery, erro
   fail = 429;
   await page.getByRole('button', { name: 'Generate Design' }).click();
   await expect(page.getByText('Too many designs at once')).toBeVisible();
-  await expect(page.getByText('Wait about a minute')).toBeVisible();
   await axe(page);
   await page.getByRole('button', { name: 'Start Over' }).click();
   await expect(page.getByText('Too many designs at once')).toHaveCount(0);

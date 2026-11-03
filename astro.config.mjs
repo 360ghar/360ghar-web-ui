@@ -65,6 +65,14 @@ export default defineConfig({
         'posthog-js',
         '@supabase/supabase-js',
       ],
+      // CI only: runtime discovery re-optimises deps when a cold route imports
+      // something new, which bumps the ?v= hash on .vite/deps and fails the
+      // dynamic imports of every page loaded before the bump (the e2e burst of
+      // "Failed to fetch ... web-vitals.js?v=..."). The include list already
+      // covers every client dependency, so discovery has nothing to add there;
+      // disabling it keeps the hash stable for the whole run. Local dev keeps
+      // discovery.
+      noDiscovery: process.env.CI === 'true',
     },
     server: {
       // CI e2e: a late dependency re-optimisation raises the error overlay, which blocks clicks. Page errors still fail the tests (watch()).

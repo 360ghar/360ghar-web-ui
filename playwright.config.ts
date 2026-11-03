@@ -24,9 +24,11 @@ export default defineConfig({
   reporter: [['list']],
   // Booking windows and "In 2 days" depend on the clock zone; fix it so a UTC runner matches a developer laptop in India.
   use: { baseURL, channel: 'chrome', trace: 'retain-on-failure', timezoneId: 'Asia/Kolkata' },
+  // CI runs phone + desktop: no test requires tablet, and its one
+  // viewport-specific check is skipped on Linux (fonts). Tablet stays local.
   projects: [
     { name: 'phone', use: { ...devices['Pixel 7'], viewport: { width: 360, height: 780 } } },
-    { name: 'tablet', use: { viewport: { width: 768, height: 1024 } } },
+    ...(process.env.CI ? [] : [{ name: 'tablet', use: { viewport: { width: 768, height: 1024 } } }]),
     { name: 'desktop', use: { viewport: { width: 1440, height: 900 } } },
   ],
 });
