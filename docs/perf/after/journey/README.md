@@ -29,7 +29,7 @@ log, 515 requests, no response bodies).
   is about 2615 ms, leaving ~90 ms for the idle callback. The callback timestamp was not
   recorded, so this split is inferred, not measured.
 - Every navigated page (`/properties` ×2, `/property/182`, `/login`): first analytics
-  request of that page's window lands well after its load+idle gate (+1.5-3.3 s after each
+  request of that page's window lands well after its load+idle gate (+1.8-4.2 s after each
   document request start). No requests initiated by a page begin inside its own load window; the noted previous-page batch overlaps the buy-results load.
 - Analytics requests with recorded success responses: gtag.js 200, GA `g/collect` 204, posthog
   config/recorder/surveys 200, and posthog `/e/` + `/i/v0/e/` batches 200; `/s/` has no recorded successful response.
@@ -37,5 +37,5 @@ log, 515 requests, no response bodies).
   before LCP), zero console errors across the whole session.
 - Honest note: one posthog batch (`/i/v0/e/` + `/s/`) from the second homepage visit
   flushed about 1 s after the buy-results page's document request — it belongs to the
-  previous page (its gate had fired at +1584 ms) and crossed the navigation boundary;
+  previous page (its gate had fired at +1820 ms) and crossed the navigation boundary;
   not a violation of the new page's gate.

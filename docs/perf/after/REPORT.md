@@ -119,7 +119,7 @@ earliest start is about 2615 ms and the idle callback took the remaining ~90 ms 
 timestamp was not recorded). Zero console errors for the whole session. One note: a posthog
 batch from the homepage started about 0.95 s after the buy-results page's document request
 (the previous page's batch crossing the navigation; its own gate had already fired at
-+1584 ms). Details: `journey/network-log-analytics.json`.
++1820 ms). Details: `journey/network-log-analytics.json`.
 
 ## Stop-rule decision — measured basis and lever recommendation
 
