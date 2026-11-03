@@ -8,7 +8,9 @@ VAL-PERF-001..005: the post-cutover bar is **median ≥ baseline − 1 point** p
 
 **Post-cutover "after" column:** `docs/perf/after/REPORT.md` (final validation,
 2026-11-03, faithful protocol). Homepage medians 97 / LCP 2258 ms / SI 3170 ms / TBT 43 ms /
-CLS 0.001 — the 97-98 stop-rule is live; all three regression pages ≥ baseline.
+CLS 0.001 — the 97-98 stop-rule is live; all three regression pages are above their bar,
+but the after runs are faithful mode and this table is canonical-mobile, so the comparison is
+not like-for-like until the baseline pages are re-run in faithful mode.
 
 ## Engine and protocol
 

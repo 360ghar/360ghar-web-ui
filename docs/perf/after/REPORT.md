@@ -89,7 +89,7 @@ time. Baseline root-doc TTFB (Netlify double-hop, fresh connection) was ~609 ms,
 like-for-like comparison is 397-488 ms against 609 ms. A first visit pays the handshake;
 the 136-193 ms warm-edge figure reuses a connection and is not a first-visit TTFB.
 
-## Cold-visitor journey (VAL-CROSS-001) — PASS
+## Cold-visitor journey (VAL-CROSS-001) — PASS on desktop evidence only
 
 Fresh Chrome profile, production. The run was intended as iPhone 12 emulation, but the HAR
 records desktop Chrome (macOS `HeadlessChrome` UA, `sec-ch-ua-mobile: ?0` on every request),
@@ -109,8 +109,9 @@ instrumented homepage load.
    %2Fproperty%2F182` sign-in page (the accepted signed-out functional evidence;
    full favourite persistence needs auth, no test credentials exist here).
 
-**Deferred analytics on every page:** each page's first analytics request comes after that
-page's load+idle handoff. Requests with a recorded success response: gtag.js 200, GA collect
+**Deferred analytics:** the first analytics request of each page starts +1.8-4.2 s after its
+document request (HAR). Gate compliance is verified only for the instrumented homepage; the
+navigated pages have no recorded load-event times, so it is unverified there. Requests with a recorded success response: gtag.js 200, GA collect
 204, posthog config/recorder/surveys and `/e/` + `/i/v0/e/` batches 200; posthog `/s/` has no
 recorded successful response (HAR status 0). Instrumented homepage pass: first analytics at
 `timeOrigin` + **2707 ms**. Estimate, not exact: `scheduler.ts` creates the LCP observer on
@@ -145,9 +146,10 @@ Pre-agreed levers, ranked against that data:
 3. **Inline critical CSS** — least headroom: FCP is already ~0.9 banked, and the gain to
    SI is indirect; highest build complexity (CSP/inline budget) for the fewest points.
 
-Also worth stating plainly: cutover already banked the hosting win — warm-edge TTFB
-136-193 ms vs 609 ms Netlify baseline, and the local faithful numbers match the pre-cutover
-production control within noise. The remaining 2 points live in the page, not the platform.
+Also worth stating plainly: cutover already banked the hosting win — first-visit TTFB
+397-488 ms vs the 609 ms Netlify baseline (fresh connection both; 136-193 ms on a reused
+warm-edge connection), and the local faithful numbers match the pre-cutover production
+control within noise. The remaining 2 points live in the page, not the platform.
 And per the PSI caveat (`docs/perf/hero-delay.md`): the user's pagespeed.web.dev run is the
 external cross-check; if its SI/LCP read materially different from these faithful numbers,
 compare its trace artifacts before touching the page.
