@@ -87,12 +87,32 @@ function uuidv7(): string {
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
 }
 
+type Persisted = { distinct_id?: string; $sesid?: [number, string, number] };
+
+/** The SDK's saved state: localStorage, merged with the cookie (which holds $sesid). */
+function persisted(): Persisted {
+  const name = `ph_${KEY}_posthog`;
+  let out: Persisted = {};
+  try {
+    out = { ...(JSON.parse(localStorage.getItem(name) ?? '{}') as Persisted) };
+  } catch {
+    // Unreadable: try the cookie.
+  }
+  try {
+    const raw = document.cookie.split('; ').find((c) => c.startsWith(`${name}=`));
+    if (raw) out = { ...out, ...(JSON.parse(decodeURIComponent(raw.slice(name.length + 1))) as Persisted) };
+  } catch {
+    // Unreadable cookie: keep what localStorage gave.
+  }
+  return out;
+}
+
 /** The SDK's persisted id when it has one, else ours (created once, kept for later visits). */
 function anonId(): string {
+  const saved = persisted().distinct_id;
+  if (saved) return saved;
   try {
     const s = window.localStorage;
-    const saved = JSON.parse(s.getItem(`ph_${KEY}_posthog`) ?? 'null') as { distinct_id?: string } | null;
-    if (saved?.distinct_id) return saved.distinct_id;
     let id = s.getItem(ANON_KEY);
     if (!id) {
       id = uuidv7();
@@ -123,8 +143,10 @@ function campaign(): Record<string, string> {
  */
 function beaconPageview() {
   // `ready`, not `ph`: the SDK chunk can still be downloading when the visitor leaves.
-  if (ready || beaconSent || navigator.webdriver || BOT_UA.test(navigator.userAgent) || !navigator.sendBeacon) return;
-  const session = uuidv7();
+  if (ready || beaconSent || optedOut() || navigator.webdriver || BOT_UA.test(navigator.userAgent) || !navigator.sendBeacon) return;
+  // Continue the visit's session: the SDK's (from an earlier page), else an earlier beacon's, else a new one.
+  const sdk = persisted().$sesid;
+  const session = (sdk && Date.now() - sdk[0] < SESSION_IDLE_MS ? sdk[1] : undefined) ?? beaconSessionId() ?? uuidv7();
   const ua = navigator.userAgent;
   const body = JSON.stringify({
     api_key: KEY,
@@ -154,6 +176,15 @@ function beaconPageview() {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify({ id: session, t: Date.now() }));
   } catch {
     // Storage blocked: the next page starts a new session.
+  }
+}
+
+/** The SDK keeps an opt-out here (default localStorage persistence); the beacon must honour it too. */
+function optedOut(): boolean {
+  try {
+    return ['0', 'false'].includes(localStorage.getItem(`__ph_opt_in_out_${KEY}`) ?? '');
+  } catch {
+    return false;
   }
 }
 

@@ -45,3 +45,15 @@ describe('proxyPostHog', () => {
     expect((calls[0]!.init.headers as Headers).get('authorization')).toBe('Bearer phc_x');
   });
 });
+
+describe('proxyPostHog with a trailing slash in the host', () => {
+  it('does not build a double slash', async () => {
+    vi.stubEnv('PUBLIC_POSTHOG_HOST', 'https://eu.i.posthog.com/');
+    vi.resetModules();
+    const { proxyPostHog: proxy } = await import('./proxy');
+    const calls = capture();
+    await proxy(new Request('https://360ghar.com/rel/e', { method: 'POST', body: 'x' }), '/rel/e', '');
+    await proxy(new Request('https://360ghar.com/rel/static/a.js'), '/rel/static/a.js', '');
+    expect(calls.map((c) => c.url)).toEqual(['https://eu.i.posthog.com/e/', 'https://eu-assets.i.posthog.com/static/a.js']);
+  });
+});

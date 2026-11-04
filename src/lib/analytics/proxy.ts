@@ -5,7 +5,8 @@
  */
 export const PH_PROXY = '/rel';
 
-const HOST = (import.meta.env.PUBLIC_POSTHOG_HOST as string | undefined) ?? 'https://us.i.posthog.com';
+// No trailing slash: paths are appended as '/e/', and '//e/' is a different target.
+const HOST = ((import.meta.env.PUBLIC_POSTHOG_HOST as string | undefined) ?? 'https://us.i.posthog.com').replace(/\/+$/, '');
 /** PostHog Cloud serves the SDK, toolbar and remote config from a separate assets host. */
 const ASSET_HOST = HOST.replace(/\/\/(\w+)\.i\.posthog\.com/, '//$1-assets.i.posthog.com');
 /** The app (toolbar, links in the SDK) lives on <region>.posthog.com. */
