@@ -7,6 +7,7 @@
  *    visible "Virtually staged" band), staged: true, watermark }. 5 per minute per IP.
  * Replies are read defensively; a reply without the text or the image is a failure.
  */
+import { track } from '@/lib/analytics';
 import { api, call, multipart, timeoutMs, UPLOAD_TIMEOUT_MS } from '@/lib/api/client';
 import { FURNISHING_LEVELS, PROPERTY_TYPES } from '@/lib/api/enums';
 import type { components } from '@/lib/api/schema';
@@ -161,6 +162,7 @@ export async function stagePhoto(imageUrl: string, room: StageRoom, style: Stage
     fd.append('visibility', 'public');
     const data = await call(api.POST('/api/v1/upload/batch', { ...multipart(fd), ...timeoutMs(UPLOAD_TIMEOUT_MS) }));
     const url = data.items.find((i) => i.status === 'uploaded' && i.result)?.result?.public_url;
+    if (url) track('images_uploaded', { source: 'design_studio_staged', count: 1, urls: [url] });
     return url ? { url } : { failure: 'failed' };
   } catch {
     return { failure: 'failed' };

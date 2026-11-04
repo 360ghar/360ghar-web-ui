@@ -35,7 +35,7 @@ The public website of 360Ghar (https://360ghar.com), rebuilt with Astro and Reac
 | `PUBLIC_SUPABASE_URL` | Browser | Supabase project URL. Required for browser sign-in: when it is missing, auth is off and the browser logs a warning (the build does not fail) |
 | `PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Browser | Supabase publishable key. Required for browser sign-in, same as `PUBLIC_SUPABASE_URL` |
 | `PUBLIC_POSTHOG_KEY` | Browser | PostHog project key. Without it, no analytics |
-| `PUBLIC_POSTHOG_HOST` | Browser | `https://us.i.posthog.com` (set in the deploy environment) |
+| `PUBLIC_POSTHOG_HOST` | Browser | `https://us.i.posthog.com` (set in the deploy environment). The browser sends events to `/rel/*` on this site; the Worker forwards them to this host (`src/lib/analytics/proxy.ts`), so ad blockers do not drop them |
 | `PUBLIC_GA_ID` | Browser | Google Analytics id (set in the deploy environment) |
 | `PUBLIC_GOOGLE_MAPS_API_KEY` | Browser | Maps JavaScript and Places API key. The old key has expired: the map view shows a fallback until a valid key is set |
 | `PUBLIC_API_BASE` | Browser | Local dev: `/dev-api` (Vite proxy). Production: leave unset (`https://api.360ghar.com`) |

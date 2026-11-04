@@ -29,6 +29,7 @@ import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { StateBlock } from '@/ui/states/StateBlock';
 import { KITCHEN_TYPES, SHARING_TYPES, VENTILATION_TYPES } from '@/lib/api/enums';
 import { AI_OWNER_TOOLS } from '@/lib/flags';
+import { track } from '@/lib/analytics';
 import { listingDetails, type ListingDraft } from './ai';
 import { ListingWriter, StageControl, stageNote } from './OwnerAi';
 import { NO_ROOMS, RENT_ONLY, STEPS, TYPES, crossIssues, formSchema, makeFormSchema, formNum, suggestTitle, toCard, toPayload, toUpdatePayload, type FormIn, type FormOut } from './schema';
@@ -669,6 +670,7 @@ function Wizard({ locale }: { locale: Locale }) {
       const data = await call(api.POST('/api/v1/upload/batch', { ...multipart(fd), ...timeoutMs(UPLOAD_TIMEOUT_MS) }));
       // One item per file. A file that fails shows no URL; the others are kept.
       const urls = data.items.flatMap((i) => (i.status === 'uploaded' && i.result ? [i.result.public_url] : []));
+      track('images_uploaded', { source: 'post_property', count: urls.length, failed: data.items.length - urls.length, urls });
       form.setValue('images', [...(form.getValues('images') ?? []), ...urls].slice(0, MAX_PHOTOS), { shouldDirty: true });
       const failed = data.items.length - urls.length;
       if (failed > 0) setUploadNote([notes.join(' '), t.someFailed(failed)].filter(Boolean).join(' '));
