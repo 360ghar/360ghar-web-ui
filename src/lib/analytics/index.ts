@@ -17,12 +17,16 @@ const KEY = import.meta.env.PUBLIC_POSTHOG_KEY as string | undefined;
 const ENABLED = typeof window !== 'undefined' && !!KEY && import.meta.env.PROD;
 /** Anonymous id for the beacon, handed to the SDK as its bootstrap id so both agree. */
 const ANON_KEY = 'gh_ph_anon';
-const SECRET_AUTOCOMPLETE = /^(one-time-code|cc-)/;
+/** Autocomplete tokens of secrets (anywhere in the list, any case: "section-pay CC-Number"). */
+const SECRET_AUTOCOMPLETE = /(^|\s)(one-time-code|cc-)/i;
+/** The beacon's session, kept for the tab so the next page's SDK continues it (PostHog's 30 min idle rule). */
+const SESSION_KEY = 'gh_ph_sid';
+const SESSION_IDLE_MS = 30 * 60 * 1000;
 
 let ph: Promise<PostHog | null> | null = null;
+/** True once posthog.init has run: from then on the SDK records the pageview itself. */
+let ready = false;
 let beaconSent = false;
-/** Session id of the beacon's view; the SDK continues it when it starts later in the same tab. */
-let beaconSession: string | undefined;
 const pending: ((p: PostHog) => void)[] = [];
 
 function load(): Promise<PostHog | null> {
@@ -37,7 +41,7 @@ function load(): Promise<PostHog | null> {
         if (url.pathname.startsWith(`${PH_PROXY}/`)) url.pathname = url.pathname.replace(/\/+$/, '');
         return url;
       },
-      bootstrap: { distinctID: anonId(), ...(beaconSession ? { sessionID: beaconSession } : {}) },
+      bootstrap: { distinctID: anonId(), ...(beaconSessionId() ? { sessionID: beaconSessionId() } : {}) },
       person_profiles: 'always',
       autocapture: true,
       // The beacon already counted this view: skip the SDK's initial one.
@@ -45,14 +49,15 @@ function load(): Promise<PostHog | null> {
       capture_pageleave: true,
       persistence: 'localStorage+cookie',
       session_recording: {
-        maskAllInputs: false,
-        maskInputOptions: { password: true },
-        // Same rule as `sensitive` below: one-time codes and card fields stay hidden in replays.
-        maskInputFn: (text, el) => (el instanceof HTMLInputElement && SECRET_AUTOCOMPLETE.test(el.autocomplete) ? '*'.repeat(text.length) : text),
+        // maskInputFn runs only for inputs selected for masking, so select all of
+        // them and show every value except secrets (same rule as `sensitive`).
+        maskAllInputs: true,
+        maskInputFn: (text, el) => (el && isSecret(el) ? '*'.repeat(text.length) : text),
         maskTextSelector: '.ph-mask',
         blockSelector: '.ph-no-capture',
       },
     });
+    ready = true;
     for (const fn of pending.splice(0)) fn(posthog);
     return posthog;
   });
@@ -117,9 +122,9 @@ function campaign(): Record<string, string> {
  * count, so one $pageview goes out as a beacon at that moment instead.
  */
 function beaconPageview() {
-  if (ph || beaconSent || navigator.webdriver || BOT_UA.test(navigator.userAgent) || !navigator.sendBeacon) return;
-  beaconSent = true;
-  beaconSession = uuidv7();
+  // `ready`, not `ph`: the SDK chunk can still be downloading when the visitor leaves.
+  if (ready || beaconSent || navigator.webdriver || BOT_UA.test(navigator.userAgent) || !navigator.sendBeacon) return;
+  const session = uuidv7();
   const ua = navigator.userAgent;
   const body = JSON.stringify({
     api_key: KEY,
@@ -132,7 +137,7 @@ function beaconPageview() {
       $pathname: location.pathname,
       $referrer: document.referrer || '$direct',
       $referring_domain: document.referrer ? new URL(document.referrer).host : '$direct',
-      $session_id: beaconSession,
+      $session_id: session,
       $raw_user_agent: ua,
       $device_type: /iPad|Tablet/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua)) ? 'Tablet' : /Mobi|iPhone|Android/i.test(ua) ? 'Mobile' : 'Desktop',
       ...campaign(),
@@ -142,7 +147,24 @@ function beaconPageview() {
       $lib: 'beacon',
     },
   });
-  navigator.sendBeacon(`${PH_PROXY}/i/v0/e`, new Blob([body], { type: 'application/json' }));
+  // Only a queued beacon counts: otherwise the SDK must still send its own pageview.
+  if (!navigator.sendBeacon(`${PH_PROXY}/i/v0/e`, new Blob([body], { type: 'application/json' }))) return;
+  beaconSent = true;
+  try {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ id: session, t: Date.now() }));
+  } catch {
+    // Storage blocked: the next page starts a new session.
+  }
+}
+
+/** The beacon's session id if a beacon in this tab sent one in the last 30 minutes. */
+function beaconSessionId(): string | undefined {
+  try {
+    const s = JSON.parse(sessionStorage.getItem(SESSION_KEY) ?? 'null') as { id: string; t: number } | null;
+    return s && Date.now() - s.t < SESSION_IDLE_MS ? s.id : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 /**
@@ -164,9 +186,13 @@ export function startAnalytics() {
   scheduleAnalyticsStart(begin);
 }
 
-/** Passwords, one-time codes and card fields never leave the page. */
+/** Passwords, one-time codes and card fields: never sent, masked in replays. */
+function isSecret(el: HTMLElement): boolean {
+  return (el instanceof HTMLInputElement && el.type === 'password') || SECRET_AUTOCOMPLETE.test(el.getAttribute('autocomplete') ?? '');
+}
+
 function sensitive(el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement): boolean {
-  return (el instanceof HTMLInputElement && el.type === 'password') || SECRET_AUTOCOMPLETE.test(el.autocomplete) || !!el.closest('.ph-no-capture');
+  return isSecret(el) || !!el.closest('.ph-no-capture');
 }
 
 function field(el: Element) {
@@ -185,7 +211,7 @@ function onChange(e: Event) {
   const el = e.target;
   if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) || sensitive(el)) return;
   if (el instanceof HTMLInputElement && el.type === 'file') {
-    for (const f of el.files ?? []) void trackFile(f, { ...field(el), via: 'picker' });
+    for (const f of el.files ?? []) trackFile(f, { ...field(el), via: 'picker' });
     return;
   }
   const value = el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio') ? (el.checked ? el.value : '') : el.value;
@@ -194,13 +220,22 @@ function onChange(e: Event) {
 
 function onDrop(e: DragEvent) {
   if (!e.defaultPrevented) return;
-  for (const f of e.dataTransfer?.files ?? []) void trackFile(f, { via: 'drop', $pathname: location.pathname });
+  for (const f of e.dataTransfer?.files ?? []) trackFile(f, { via: 'drop', $pathname: location.pathname });
 }
 
+/** Larger images go without a preview: a full decode of a huge photo can stall a phone. */
+const PREVIEW_MAX_BYTES = 20_000_000;
+/** One decode at a time, so a 30-photo pick does not hold 30 full bitmaps at once. */
+let decodes: Promise<unknown> = Promise.resolve();
+
 /** File details, plus a small JPEG preview of images so the upload can be seen in PostHog. */
-async function trackFile(f: File, props: Record<string, unknown>) {
+function trackFile(f: File, props: Record<string, unknown>) {
+  decodes = decodes.then(() => trackFileNow(f, props));
+}
+
+async function trackFileNow(f: File, props: Record<string, unknown>) {
   let thumbnail: string | undefined;
-  if (f.type.startsWith('image/')) {
+  if (f.type.startsWith('image/') && f.size <= PREVIEW_MAX_BYTES) {
     try {
       const img = await createImageBitmap(f);
       const scale = Math.min(1, 320 / Math.max(img.width, img.height));

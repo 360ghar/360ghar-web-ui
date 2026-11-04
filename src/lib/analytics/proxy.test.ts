@@ -1,7 +1,15 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { proxyPostHog } from './proxy';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+
+// The proxy reads the host at import time: pin it so a local .env for another region cannot change the result.
+let proxyPostHog: typeof import('./proxy').proxyPostHog;
+beforeAll(async () => {
+  vi.stubEnv('PUBLIC_POSTHOG_HOST', 'https://us.i.posthog.com');
+  vi.resetModules();
+  ({ proxyPostHog } = await import('./proxy'));
+});
 
 afterEach(() => vi.unstubAllGlobals());
+afterAll(() => vi.unstubAllEnvs());
 
 function capture() {
   const calls: { url: string; init: RequestInit }[] = [];

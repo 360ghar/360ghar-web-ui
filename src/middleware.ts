@@ -34,7 +34,7 @@ function withResponseHeaders(response: Response, pathname: string): Response {
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname, search } = context.url;
-  if (pathname.startsWith(`${PH_PROXY}/`)) return proxyPostHog(context.request, pathname, search);
+  if (pathname.startsWith(`${PH_PROXY}/`)) return withResponseHeaders(await proxyPostHog(context.request, pathname, search), pathname);
   if (!context.isPrerendered && !pathname.startsWith('/_') && !pathname.startsWith('/api/')) {
     const location = redirectLocation(pathname, search);
     if (location) return withResponseHeaders(context.redirect(location, 301), pathname);

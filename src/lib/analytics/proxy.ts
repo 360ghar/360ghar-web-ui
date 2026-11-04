@@ -30,6 +30,6 @@ export async function proxyPostHog(request: Request, pathname: string, search: s
     headers,
     body: hasBody ? await request.arrayBuffer() : undefined,
   });
-  // A fresh Response: the upstream one has immutable headers, and the middleware adds its own.
+  // A fresh Response: the upstream one has immutable headers, and the middleware adds the security headers.
   return new Response(res.body, { status: res.status, headers: res.headers });
 }
