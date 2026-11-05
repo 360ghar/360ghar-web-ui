@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
 import { localeFromPath } from '@/lib/i18n/locale';
 import { redirectLocation } from '@/lib/redirects';
+import { PH_PROXY, proxyPostHog } from '@/lib/analytics/proxy';
 
 // Security headers every response carried on Netlify (the /* rule in
 // netlify.toml). Workers _headers applies only to static files, so Worker
@@ -33,6 +34,7 @@ function withResponseHeaders(response: Response, pathname: string): Response {
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname, search } = context.url;
+  if (pathname.startsWith(`${PH_PROXY}/`)) return withResponseHeaders(await proxyPostHog(context.request, pathname, search), pathname);
   if (!context.isPrerendered && !pathname.startsWith('/_') && !pathname.startsWith('/api/')) {
     const location = redirectLocation(pathname, search);
     if (location) return withResponseHeaders(context.redirect(location, 301), pathname);
