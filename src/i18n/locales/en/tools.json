@@ -1,7 +1,7 @@
 {
   "emi": {
     "title": "Home Loan EMI Estimate | 360Ghar",
-    "description": "Estimate monthly EMI, total interest and yearly payments for a home loan. A calculation only: not a lender quote or loan approval, and fees are not included.",
+    "description": "Estimate home loan EMI, total interest and yearly payments. A calculation only: not a lender quote, loan approval or affordability check; fees are not included.",
     "keywords": "home loan EMI estimate, housing loan calculation, mortgage payment estimate, principal and interest schedule, prepayment scenario, Gurugram property finance",
     "years": "Years",
     "reset": "Reset",
@@ -201,7 +201,7 @@
   },
   "loanEligibility": {
     "title": "Home Loan Estimate Calculator | Scenario tool | 360Ghar",
-    "description": "See an illustrative home loan amount from your income, current EMIs, expenses, rate and tenure, at a fixed 50% income share. Not a lender offer or approval.",
+    "description": "See an illustrative home loan amount from your income, EMIs, expenses, rate and tenure, at a fixed 50% share of income after expenses. Not a lender offer or approval.",
     "keywords": "home loan estimate scenario, illustrative loan calculation, income-share assumption, 360ghar",
     "faqs": {
       "q1": {
@@ -249,7 +249,7 @@
   },
   "propertyChecklist": {
     "title": "Property Document Prompts | 360Ghar",
-    "description": "A non-exhaustive set of 13 property-document prompts. Requirements vary by deal and location; the tool does not review documents or confirm title.",
+    "description": "A non-exhaustive set of 13 property-document prompts. Needs vary by transaction and location; the tool does not review documents or confirm title or legal compliance.",
     "keywords": "property document prompts, property transaction checklist, documents to review, 360ghar",
     "faqs": {
       "q1": {

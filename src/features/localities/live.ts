@@ -146,7 +146,7 @@ export function localityTitle(name: string, city: string, homes: Property[], mon
   const priced = (p: Property) => (p.purpose === 'buy' ? !isPlaceholderPrice(p) && (p.base_price ?? 0) > 0 : (p.monthly_rent ?? 0) > 0);
   const parts = [
     ...(homes.some(priced) ? [hi ? 'लिस्टेड कीमतें' : 'listed prices'] : []),
-    ...(homes.some((p) => p.bedrooms === 2 && priced(p)) ? [hi ? '2 BHK की लिस्टेड कीमतें' : '2 BHK listed prices'] : []),
+    ...(homes.some((p) => p.bedrooms === 2 && priced(p)) ? [hi ? '2 BHK की कीमतें' : '2 BHK listed prices'] : []),
     ...(homes.length && !homes.some(priced) ? [hi ? 'लिस्टिंग' : 'listings'] : []),
   ];
   if (!parts.length) return null;

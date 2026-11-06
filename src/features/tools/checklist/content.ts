@@ -52,7 +52,7 @@ export const CHECKLIST_PAGE = {
     heading: 'Property document prompts',
     lead: 'Use these 13 prompts to organize a review with a qualified professional or relevant authority. This list is not complete and does not verify documents, title or legal compliance.',
     description:
-      'A non-exhaustive set of 13 property-document prompts. Requirements vary by deal and location; the tool does not review documents or confirm title.',
+      'A non-exhaustive set of 13 property-document prompts. Needs vary by transaction and location; the tool does not review documents or confirm title or legal compliance.',
     lawyerTitle: 'Review requirements for your transaction',
     faqTitle: 'About these document prompts',
   },
@@ -60,7 +60,7 @@ export const CHECKLIST_PAGE = {
     heading: 'प्रॉपर्टी दस्तावेज़ के संकेत',
     lead: 'योग्य पेशेवर या संबंधित प्राधिकरण के साथ समीक्षा व्यवस्थित करने के लिए इन 13 संकेतों का उपयोग करें। यह पूरी सूची नहीं है और दस्तावेज़, टाइटल या कानूनी अनुपालन सत्यापित नहीं करती।',
     description:
-      'प्रॉपर्टी दस्तावेज़ों के 13 गैर-सम्पूर्ण संकेत। ज़रूरतें लेन-देन और स्थान के अनुसार बदलती हैं; टूल दस्तावेज़ों की समीक्षा नहीं करता।',
+      'प्रॉपर्टी दस्तावेज़ों के 13 गैर-सम्पूर्ण संकेत। ज़रूरतें लेन-देन और स्थान के अनुसार बदलती हैं; टूल दस्तावेज़ों की समीक्षा या टाइटल की पुष्टि नहीं करता।',
     lawyerTitle: 'अपने लेन-देन की ज़रूरतें जाँचें',
     faqTitle: 'दस्तावेज़ संकेतों के बारे में',
   },

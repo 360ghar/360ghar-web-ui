@@ -18,11 +18,18 @@ describe('property meta', () => {
     expect(propertyMeta({ ...onRequest, area_sqft: 1540 } as Property, 'en').title).not.toBe(propertyMeta({ ...onRequest, area_sqft: 1580 } as Property, 'en').title);
   });
 
-  it('keeps identical listings apart by ID', () => {
-    const a = propertyMeta({ ...base, id: 143 } as Property, 'en');
-    const b = propertyMeta({ ...base, id: 106 } as Property, 'en');
-    expect(a.title).not.toBe(b.title);
-    expect(a.description).not.toBe(b.description);
+  it('keeps the price in a priced title, and names the area of a rental with no rent', () => {
+    expect(propertyMeta(base, 'en').title).toContain('| ₹1.86 Cr |');
+    expect(propertyMeta({ ...base, purpose: 'rent', monthly_rent: null } as Property, 'en').title).toContain('| 1,850 sq ft |');
+  });
+
+  it('keeps identical listings apart by ID, in both languages', () => {
+    for (const locale of ['en', 'hi'] as const) {
+      const a = propertyMeta({ ...base, id: 143 } as Property, locale);
+      const b = propertyMeta({ ...base, id: 106 } as Property, locale);
+      expect(a.title).not.toBe(b.title);
+      expect(a.description).not.toBe(b.description);
+    }
   });
 
   it('names a tour only when the listing has one', () => {

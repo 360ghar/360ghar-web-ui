@@ -53,7 +53,7 @@
  * In a browser `module` does not exist and nothing is exported.
  */
 const KILL_SWITCH = false;
-const VERSION = 2;
+const VERSION = 3;
 
 const CACHE_PREFIX = '360ghar-offline-';
 const CACHE_ROOT = CACHE_PREFIX + 'v' + VERSION + '-';

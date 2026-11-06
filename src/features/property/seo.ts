@@ -4,7 +4,7 @@
  * "verified" (no such field, docs/backend-gaps.md R12).
  */
 import type { Property } from '@/lib/api/types';
-import { areaSqft, homeKind } from '@/lib/format';
+import { areaSqft, homeKind, purposePrice } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/locale';
 import { headlinePrice, tidy } from './facts';
 
@@ -18,9 +18,9 @@ export function propertyMeta(p: Property, locale: Locale) {
   const hi = locale === 'hi';
   const heading = homeKind(p, locale);
   const where = p.locality ?? p.city;
-  // A listing with no real price names its area instead of "Price on request" (on request implies an area).
+  // A listing with no real price names its area instead of "Price on request", when it has one.
   const price = headlinePrice(p, locale);
-  const second = price.onRequest ? areaSqft(p.area_sqft, locale)! : price.amount;
+  const second = (price.onRequest || purposePrice(p) === null) && p.area_sqft ? areaSqft(p.area_sqft, locale)! : price.amount;
   // Many listings share type, locality, price and description text, so the listing ID keeps each title and description unique.
   const id = `ID ${p.id}`;
   const title = [`${heading} ${PURPOSE[p.purpose][hi ? 1 : 0]}${where ? (hi ? `, ${where}` : ` in ${where}`) : ''}`, second, id, '360Ghar'].join(' | ');

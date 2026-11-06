@@ -39,9 +39,10 @@ const image = post ? (post.og_image_url ?? post.cover_image_url ?? null) : null;
 // The seed posts carry a generated excerpt ("A comprehensive guide covering <lowercased title> — ..."). It is
 // cut mid-word and repeats the title in lower case, so a description built from the title is used instead.
 const rawDesc = post ? (post.meta_description || post.excerpt || '').replace(/\s+/g, ' ').trim() : '';
-const seedDesc = /^A comprehensive guide covering /i.test(rawDesc);
+const seedDesc = !post?.meta_description && /^A comprehensive guide covering /i.test(rawDesc);
+const text = post && seedDesc ? `${post.title}${/[.?!]$/.test(post.title) ? '' : '.'} A 360Ghar guide for people who buy or rent a home in India.` : rawDesc;
 const description = post
-  ? (seedDesc ? `${post.title}${/[.?!]$/.test(post.title) ? '' : '.'} A 360Ghar guide for people who buy or rent a home in India.` : rawDesc.length > 155 ? `${rawDesc.slice(0, 152).trim()}...` : rawDesc) || post.title
+  ? (text.length > 155 ? `${text.slice(0, 152).trim()}...` : text) || post.title
   : hi
     ? 'यह पोस्ट नहीं मिली।'
     : 'This post was not found.';
@@ -90,7 +91,7 @@ const jsonLd = post
         wordCount: post.word_count ?? body!.words,
         inLanguage: 'en-IN',
       },
-      breadcrumbs(crumbs, locale),
+      breadcrumbs(crumbs, 'en'),
     ]
   : [];
 const heading = notFound ? (hi ? 'यह पोस्ट नहीं मिली' : 'This post is not here') : hi ? 'अभी यह पोस्ट लोड नहीं हो सकी' : 'We could not load this post';

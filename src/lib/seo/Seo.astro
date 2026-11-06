@@ -102,8 +102,8 @@ const all = [...site, voice, ...blocks].filter(Boolean).map(withContext);
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={og} />
 <meta property="og:image:alt" content={imageAlt} />
-<meta property="og:locale" content={locale === 'hi' ? 'hi_IN' : 'en_IN'} />
-<meta property="og:locale:alternate" content={locale === 'hi' ? 'en_IN' : 'hi_IN'} />
+<meta property="og:locale" content={locale === 'hi' && !enOnly ? 'hi_IN' : 'en_IN'} />
+{!enOnly && <meta property="og:locale:alternate" content={locale === 'hi' ? 'en_IN' : 'hi_IN'} />}
 {video && <meta property="og:video" content={video} />}
 {
   type === 'article' && article && (
