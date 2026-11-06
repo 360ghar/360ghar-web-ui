@@ -33,10 +33,19 @@ const tags = (post?.tags ?? []).filter((x): x is typeof x & { slug: string; name
 // The API types sources as plain objects; they follow BlogSource.
 const sources = (post?.sources ?? []) as components['schemas']['BlogSource'][];
 const path = post ? `/blog/${post.slug}` : Astro.url.pathname;
-const url = absoluteUrl(L(path));
+// Blog posts are English only and /hi/blog/<slug> canonicalises to /blog/<slug>, so the JSON-LD and share URL use it too.
+const url = absoluteUrl(path);
 const image = post ? (post.og_image_url ?? post.cover_image_url ?? null) : null;
+// The seed posts carry a generated excerpt ("A comprehensive guide covering <lowercased title> — ..."). It is
+// cut mid-word and repeats the title in lower case, so a description built from the title is used instead.
 const rawDesc = post ? (post.meta_description || post.excerpt || '').replace(/\s+/g, ' ').trim() : '';
-const description = post ? (rawDesc.length > 155 ? `${rawDesc.slice(0, 152).trim()}...` : rawDesc) || post.title : hi ? 'यह पोस्ट नहीं मिली।' : 'This post was not found.';
+const seedDesc = !post?.meta_description && /^A comprehensive guide covering /i.test(rawDesc);
+const text = post && seedDesc ? `${post.title}${/[.?!]$/.test(post.title) ? '' : '.'} A 360Ghar guide for people who buy or rent a home in India.` : rawDesc;
+const description = post
+  ? (text.length > 155 ? `${text.slice(0, 152).trim()}...` : text) || post.title
+  : hi
+    ? 'यह पोस्ट नहीं मिली।'
+    : 'This post was not found.';
 const title = post ? post.meta_title || (post.title.includes('360Ghar') ? post.title : `${post.title} | 360Ghar`) : hi ? 'पोस्ट नहीं मिली | 360Ghar' : 'Post not found | 360Ghar';
 
 // Tools that match the post's words and category.
@@ -82,7 +91,7 @@ const jsonLd = post
         wordCount: post.word_count ?? body!.words,
         inLanguage: 'en-IN',
       },
-      breadcrumbs(crumbs, locale),
+      breadcrumbs(crumbs, 'en'),
     ]
   : [];
 const heading = notFound ? (hi ? 'यह पोस्ट नहीं मिली' : 'This post is not here') : hi ? 'अभी यह पोस्ट लोड नहीं हो सकी' : 'We could not load this post';
@@ -94,6 +103,7 @@ const heading = notFound ? (hi ? 'यह पोस्ट नहीं मिल�
       title={title}
       description={description}
       path={path}
+      enOnly
       type="article"
       image={image}
       keywords={[post.focus_keyword, category?.name, 'real estate blog', 'property tips', '360Ghar'].filter(Boolean).join(', ')}

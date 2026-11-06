@@ -2,11 +2,8 @@
   "seo": {
     "titleBuyRent": "{{facet}} for {{verb}} in {{city}} | {{city}} Real Estate | 360Ghar",
     "titlePg": "PG in {{city}} | {{city}} Paying Guest & Co-living | 360Ghar",
-    "descPg": "Browse {{facetLower}} and co-living listings in {{city}}. Review the details provided on each listing and contact us with questions.{{gurgaonHindi}}",
-    "descPgGurgaon": " Browse PG listings in Gurugram and review the details shown on each listing.",
-    "descBuyRent": "Browse {{facetLower}} listings in {{city}} to {{intent}}. Review the details provided on each listing and contact us with questions.{{gurgaonHindi}}",
-    "descBuyRentGurgaonBuy": " Browse {{facetLower}} listings to buy in {{city}} and review the details provided.",
-    "descBuyRentGurgaonRent": " Browse {{facetLower}} listings to rent in {{city}} and review the details provided."
+    "descPg": "Browse {{facetLower}} and co-living listings in {{city}}. Review the details provided on each listing and contact us with questions.",
+    "descBuyRent": "Browse {{facetLower}} listings in {{city}} to {{intent}}. Review the details provided on each listing and contact us with questions."
   },
   "facetSeo": {
     "titlePg": "{{bhk}}{{facetText}} in {{city}}{{budget}}{{amenity}} | 360Ghar",

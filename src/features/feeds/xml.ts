@@ -9,7 +9,8 @@ export const esc = (s: unknown) =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
 
-export type SitemapEntry = { path: string; lastmod?: string | null; changefreq?: 'daily' | 'weekly' | 'monthly'; priority?: string };
+/** `enOnly`: the page has no Hindi version (the /hi URL canonicalises to English), so list the English URL alone. */
+export type SitemapEntry = { path: string; lastmod?: string | null; changefreq?: 'daily' | 'weekly' | 'monthly'; priority?: string; enOnly?: boolean };
 
 const day = (d?: string | null) => (d && !Number.isNaN(Date.parse(d)) ? new Date(d).toISOString().slice(0, 10) : null);
 
@@ -22,15 +23,17 @@ export const SITEMAP_MAX_BYTES = 45 * 1024 * 1024;
 const OPEN = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n';
 const CLOSE = '\n</urlset>\n';
 
-/** The English and the Hindi <url> of one path, each with hreflang alternates. */
+/** The English and the Hindi <url> of one path, each with hreflang alternates. An `enOnly` path gets one <url> and no alternates. */
 function entryXml(e: SitemapEntry): string[] {
+  const lastmod = day(e.lastmod);
+  const meta = `${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}${e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>\n` : ''}${e.priority ? `    <priority>${e.priority}</priority>\n` : ''}`;
+  if (e.enOnly) return [`  <url>\n    <loc>${esc(SITE_URL + e.path)}</loc>\n${meta}  </url>`];
   const alts = [
     `    <xhtml:link rel="alternate" hreflang="en" href="${esc(SITE_URL + e.path)}"/>`,
     `    <xhtml:link rel="alternate" hreflang="hi" href="${esc(SITE_URL + hiPath(e.path))}"/>`,
     `    <xhtml:link rel="alternate" hreflang="x-default" href="${esc(SITE_URL + e.path)}"/>`,
   ].join('\n');
-  const lastmod = day(e.lastmod);
-  const inner = `${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}${e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>\n` : ''}${e.priority ? `    <priority>${e.priority}</priority>\n` : ''}${alts}`;
+  const inner = `${meta}${alts}`;
   return [e.path, hiPath(e.path)].map((p) => `  <url>\n    <loc>${esc(SITE_URL + p)}</loc>\n${inner}\n  </url>`);
 }
 

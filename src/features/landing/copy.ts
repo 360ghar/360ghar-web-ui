@@ -62,27 +62,21 @@ export function landingCopy(l: Landing, facet: Facet | undefined, locale: Locale
   const typeSingular = t(`properties:taxonomy.propertyType.${l.type}`) || facetCap;
   let title: string;
   let description: string;
+  // Hindi pages get Hindi intent words; the English templates take the English ones.
+  const intentWord = hi ? (l.intent === 'buy' ? 'खरीदने' : 'किराये') : l.intent;
   if (!facet) {
-    title = l.intent === 'pg' ? t('landing:seo.titlePg', { city }) : t('landing:seo.titleBuyRent', { facet: typeSingular, verb: verbEn, city });
-    const gurgaon = l.city === 'gurgaon';
+    title = l.intent === 'pg' ? t('landing:seo.titlePg', { city }) : t('landing:seo.titleBuyRent', { facet: typeSingular, verb: hi ? intentWord : verbEn, city });
     description =
       l.intent === 'pg'
-        ? t('landing:seo.descPg', { facetLower: typeSingular.toLowerCase(), city, gurgaonHindi: gurgaon ? t('landing:seo.descPgGurgaon') : '' })
-        : t('landing:seo.descBuyRent', {
-            facetLower: typeSingular.toLowerCase(),
-            city,
-            intent: l.intent,
-            gurgaonHindi: gurgaon
-              ? t(l.intent === 'buy' ? 'landing:seo.descBuyRentGurgaonBuy' : 'landing:seo.descBuyRentGurgaonRent', { city, facetLower: typeSingular.toLowerCase() })
-              : '',
-          });
+        ? t('landing:seo.descPg', { facetLower: typeSingular.toLowerCase(), city })
+        : t('landing:seo.descBuyRent', { facetLower: typeSingular.toLowerCase(), city, intent: intentWord });
   } else {
-    const vars = { bhk, facetText: facetCap, intentLabel, city, budget, amenity };
+    const vars = { bhk, facetText: facetCap, intentLabel: hi ? (l.intent === 'rent' ? 'किराये' : 'बिक्री') : intentLabel, city, budget, amenity };
     title = l.intent === 'pg' ? t('landing:facetSeo.titlePg', vars) : t('landing:facetSeo.titleBuyRent', vars);
     description = [
       l.intent === 'pg'
         ? t('landing:facetSeo.descPg', { facetTextLower: facetLower, city })
-        : t('landing:facetSeo.descBuyRent', { facetTextLower: facetLower, city, validIntent: l.intent }),
+        : t('landing:facetSeo.descBuyRent', { facetTextLower: facetLower, city, validIntent: intentWord }),
       facet.kind === 'bhk' ? t('landing:facetSeo.descBhk', { bhkText: bhk.trim() }) : '',
       facet.kind === 'budget' ? t('landing:facetSeo.descBudget', { budgetText: budgetLabel(facet.key, hi) }) : '',
       facet.kind === 'amenity' ? t('landing:facetSeo.descAmenity', { amenityPretty: facet.title }) : '',

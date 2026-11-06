@@ -11,7 +11,7 @@ export const SITEMAPS: Record<string, () => Promise<SitemapEntry[]> | SitemapEnt
   landing: landingEntries,
   localities: localityEntries,
   datahub: datahubEntries,
-  blog: async () => (await allPosts()).filter((p) => p.slug).map((p) => ({ path: `/blog/${p.slug}`, lastmod: p.updated_at ?? p.published_at ?? p.created_at, changefreq: 'weekly', priority: '0.7' })),
+  blog: async () => (await allPosts()).filter((p) => p.slug).map((p) => ({ path: `/blog/${p.slug}`, lastmod: p.updated_at ?? p.published_at ?? p.created_at, changefreq: 'weekly', priority: '0.7', enOnly: true })),
   projects: projectEntries,
   properties: async () => (await allProperties()).map((p) => ({ path: `/property/${p.id}`, lastmod: p.updated_at ?? p.created_at, changefreq: 'weekly', priority: '0.8' })),
 };

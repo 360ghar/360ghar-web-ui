@@ -459,7 +459,7 @@ test('property: a stand-in ₹10 Cr price shows "Price on request" everywhere', 
   await expect(costs.locator('.prop-cost-rows dd')).toHaveText(['Price on request', 'Price on request', /^₹/]);
   await expect(costs.getByText('₹10,00,00,000')).toHaveCount(0);
   await expect(costs.getByRole('link', { name: 'Work out the EMI' })).toHaveAttribute('href', '/emi-calculator');
-  await expect(page).toHaveTitle(/\| Price on request \| 360Ghar$/);
+  await expect(page).toHaveTitle(/\| [\d,]+ sq ft \| ID 129 \| 360Ghar$/);
   if (info.project.name !== 'desktop') await expect(page.locator('[data-dock] .prop-dock-price')).toHaveText('Price on request');
   // JSON-LD keeps the offer but gives no price.
   const offers = await page.locator('script[type="application/ld+json"]').evaluateAll((els) =>

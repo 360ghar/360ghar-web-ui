@@ -12,6 +12,26 @@ describe('property meta', () => {
     expect(propertyMeta(base, 'en').title).not.toContain(' in ');
   });
 
+  it('names the area in the title when the price is on request, so listings in one project differ', () => {
+    const onRequest = { ...base, base_price: 100_000_000, locality: 'Sector 85' } as Property;
+    expect(propertyMeta({ ...onRequest, area_sqft: 1580 } as Property, 'en').title).toBe('3 BHK Apartment for Sale in Sector 85 | 1,580 sq ft | ID 1 | 360Ghar');
+    expect(propertyMeta({ ...onRequest, area_sqft: 1540 } as Property, 'en').title).not.toBe(propertyMeta({ ...onRequest, area_sqft: 1580 } as Property, 'en').title);
+  });
+
+  it('keeps the price in a priced title, and names the area of a rental with no rent', () => {
+    expect(propertyMeta(base, 'en').title).toContain('| ₹1.86 Cr |');
+    expect(propertyMeta({ ...base, purpose: 'rent', monthly_rent: null } as Property, 'en').title).toContain('| 1,850 sq ft |');
+  });
+
+  it('keeps identical listings apart by ID, in both languages', () => {
+    for (const locale of ['en', 'hi'] as const) {
+      const a = propertyMeta({ ...base, id: 143 } as Property, locale);
+      const b = propertyMeta({ ...base, id: 106 } as Property, locale);
+      expect(a.title).not.toBe(b.title);
+      expect(a.description).not.toBe(b.description);
+    }
+  });
+
   it('names a tour only when the listing has one', () => {
     expect(propertyMeta(base, 'en').description).not.toContain('360°');
     expect(propertyMeta({ ...base, virtual_tour_url: 'https://x.test/t' } as Property, 'en').description).toContain('A 360° tour is available.');
@@ -20,9 +40,9 @@ describe('property meta', () => {
   it('cuts a long description at a word, with an ellipsis', () => {
     const description = 'A practical park-facing home in New Gurgaon with good light, efficient planning and a quiet lane that most buyers in this sector ask for first, close to the metro.';
     const d = propertyMeta({ ...base, description } as Property, 'en').description;
-    expect(d).toBe('A practical park-facing home in New Gurgaon with good light, efficient planning and a quiet lane that most buyers in this sector ask for first, close… 1,850 sq ft.');
+    expect(d).toBe('A practical park-facing home in New Gurgaon with good light, efficient planning and a quiet lane that most buyers in this sector ask for first, close… 1,850 sq ft. Listing ID 1.');
     expect(d).not.toMatch(/\w\.\s1,850/);
-    expect(propertyMeta({ ...base, description: 'Short and done.' } as Property, 'en').description).toBe('Short and done. 1,850 sq ft.');
+    expect(propertyMeta({ ...base, description: 'Short and done.' } as Property, 'en').description).toBe('Short and done. 1,850 sq ft. Listing ID 1.');
   });
 
   it('never says verified and labels short stays', () => {

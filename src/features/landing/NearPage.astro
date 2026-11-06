@@ -64,7 +64,7 @@ const heroGroups = [
 
 <Page
   title={title}
-  description={lm ? `${NEAR_EN[lm.slug] ?? lm.description} Browse nearby property listings around ${lm.name}.` : ''}
+  description={lm ? (hi ? `${about} ${name} के आस-पास की प्रॉपर्टी लिस्टिंग्स देखें।` : `${about} Browse nearby property listings around ${lm.name}.`) : hi ? 'यह जगह नहीं मिली।' : 'This place was not found.'}
   path={lm ? `/near/${lm.slug}` : Astro.url.pathname}
   noindex={!lm}
   jsonLd={lm && first

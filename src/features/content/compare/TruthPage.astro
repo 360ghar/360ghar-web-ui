@@ -23,7 +23,7 @@ const { crumbs, ld } = trail(locale, [
   { name: title, path },
 ]);
 
-const description = k('truth.description');
+const description = t('compare:truth.description', { name: c.name });
 ---
 
 <Content

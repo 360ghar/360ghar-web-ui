@@ -8,12 +8,24 @@ import Page from '@/layouts/Page.astro';
 import Diorama from '@/features/home/diorama/Diorama.astro';
 import AuthFlows, { type Mode } from './AuthFlows';
 
-type Props = { mode: Mode; title: string };
-const { mode, title } = Astro.props;
+type Props = { mode: Mode };
+const { mode } = Astro.props;
 const locale = Astro.locals.locale;
+
+/** Title and description per page and locale. Every sign-in page has its own pair. */
+const META: Record<Mode, Record<'en' | 'hi', [string, string]>> = {
+  login: { en: ['Sign in | 360Ghar', 'Sign in to 360Ghar with your mobile number, email or Google to see saved homes and visits.'], hi: ['साइन इन | 360Ghar', 'सेव किए घर और विज़िट देखने के लिए मोबाइल नंबर, ईमेल या Google से 360Ghar में साइन इन करें।'] },
+  register: { en: ['Create an account | 360Ghar', 'Create a free 360Ghar account to save homes, book visits and post your property.'], hi: ['अकाउंट बनाएँ | 360Ghar', 'घर सेव करने, विज़िट बुक करने और प्रॉपर्टी पोस्ट करने के लिए मुफ़्त 360Ghar अकाउंट बनाएँ।'] },
+  forgot: { en: ['Reset your password | 360Ghar', 'Enter your mobile number or email and 360Ghar sends you a code to reset your password.'], hi: ['पासवर्ड रीसेट करें | 360Ghar', 'अपना मोबाइल नंबर या ईमेल डालें, 360Ghar पासवर्ड रीसेट करने का कोड भेजेगा।'] },
+  reset: { en: ['Choose a new password | 360Ghar', 'Set a new password for your 360Ghar account.'], hi: ['नया पासवर्ड चुनें | 360Ghar', 'अपने 360Ghar अकाउंट के लिए नया पासवर्ड सेट करें।'] },
+  callback: { en: ['Signing in | 360Ghar', 'Finishing your sign-in to 360Ghar.'], hi: ['साइन इन हो रहा है | 360Ghar', '360Ghar में आपका साइन इन पूरा हो रहा है।'] },
+  'add-phone': { en: ['Add your phone | 360Ghar', 'Add your mobile number so owners and your 360Ghar relationship manager can reach you about visits.'], hi: ['अपना फ़ोन जोड़ें | 360Ghar', 'अपना मोबाइल नंबर जोड़ें, ताकि मालिक और आपके 360Ghar रिलेशनशिप मैनेजर विज़िट के बारे में आपसे संपर्क कर सकें।'] },
+  profile: { en: ['Complete your profile | 360Ghar', 'Add your name and details to finish your 360Ghar profile.'], hi: ['अपनी प्रोफ़ाइल पूरी करें | 360Ghar', 'अपनी 360Ghar प्रोफ़ाइल पूरी करने के लिए नाम और जानकारी जोड़ें।'] },
+};
+const [title, description] = META[mode][locale === 'hi' ? 'hi' : 'en'];
 ---
 
-<Page title={title} description="Sign in to 360Ghar" noindex>
+<Page title={title} description={description} noindex>
   <div class="auth-wrap">
     <div class="container-page auth-grid">
       <div class="auth-art" aria-hidden="true">

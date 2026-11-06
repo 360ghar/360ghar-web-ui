@@ -73,6 +73,12 @@ describe('localityTitle', () => {
     expect(title).toContain('listed prices');
     expect(title).toContain('2 BHK listed prices');
   });
+
+  it('uses Hindi labels on Hindi pages and fits a sector name in the length cap', () => {
+    const priced = localityTitle('Sector 8', 'Gurugram', [home({ purpose: 'buy', bedrooms: 2, base_price: 10_000_000 })], 'अक्टू॰ 2026', true);
+    expect(priced).toBe('Sector 8, Gurugram: लिस्टेड कीमतें, 2 BHK की कीमतें (अक्टू॰ 2026)');
+    expect(localityTitle('S', 'G', [home({ purpose: 'buy', base_price: 0 })], 'अक्टू॰ 2026', true)).toBe('S, G: लिस्टिंग (अक्टू॰ 2026)');
+  });
 });
 
 describe('bestPhoto', () => {

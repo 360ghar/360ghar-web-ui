@@ -1,12 +1,9 @@
 {
   "seo": {
-    "titleBuyRent": "{{city}} mein {{verb}} ke liye {{facet}} | {{city}} रियल एस्टेट | 360Ghar",
-    "titlePg": "{{city}} mein PG | {{city}} पेइंग गेस्ट और को-लिविंग | 360Ghar",
+    "titleBuyRent": "{{city}} में {{verb}} के लिए {{facet}} | {{city}} रियल एस्टेट | 360Ghar",
+    "titlePg": "{{city}} में PG | {{city}} पेइंग गेस्ट और को-लिविंग | 360Ghar",
     "descPg": "{{city}} में {{facetLower}} और को-लिविंग लिस्टिंग्स ब्राउज़ करें। हर लिस्टिंग में दी गई जानकारी देखें और सवालों के लिए संपर्क करें।",
-    "descPgGurgaon": " गुरुग्राम में PG लिस्टिंग्स देखें और हर लिस्टिंग की जानकारी जाँचें।",
-    "descBuyRent": "{{city}} में {{intent}} के लिए {{facetLower}} लिस्टिंग्स ब्राउज़ करें। हर लिस्टिंग में दी गई जानकारी देखें और सवालों के लिए संपर्क करें।",
-    "descBuyRentGurgaonBuy": " {{city}} में खरीदने के लिए {{facetLower}} लिस्टिंग्स और दी गई जानकारी देखें।",
-    "descBuyRentGurgaonRent": " {{city}} में किराये के लिए {{facetLower}} लिस्टिंग्स और दी गई जानकारी देखें।"
+    "descBuyRent": "{{city}} में {{intent}} के लिए {{facetLower}} लिस्टिंग्स ब्राउज़ करें। हर लिस्टिंग में दी गई जानकारी देखें और सवालों के लिए संपर्क करें।"
   },
   "facetSeo": {
     "titlePg": "{{city}} में {{bhk}}{{facetText}}{{budget}}{{amenity}} | 360Ghar",

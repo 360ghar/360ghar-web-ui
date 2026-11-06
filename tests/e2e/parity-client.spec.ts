@@ -299,7 +299,7 @@ test.describe('offline', () => {
 /* ------------------------------ E2: service worker ------------------------------ */
 
 const SW_E2E = Boolean(process.env.SW_E2E);
-const CACHE_ROOT = '360ghar-offline-v2-';
+const CACHE_ROOT = '360ghar-offline-v3-';
 const OFFLINE_CACHE = `${CACHE_ROOT}offline`;
 const RUNTIME_CACHE = `${CACHE_ROOT}runtime`;
 

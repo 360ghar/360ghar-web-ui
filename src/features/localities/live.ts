@@ -142,12 +142,12 @@ export function saleBounds(homes: Property[]): { n: number; low: number; high: n
  * Title of a locality page from live listings: the place, asking prices when
  * a listing has a real price, and the month. Null when empty or too long.
  */
-export function localityTitle(name: string, city: string, homes: Property[], month: string): string | null {
+export function localityTitle(name: string, city: string, homes: Property[], month: string, hi = false): string | null {
   const priced = (p: Property) => (p.purpose === 'buy' ? !isPlaceholderPrice(p) && (p.base_price ?? 0) > 0 : (p.monthly_rent ?? 0) > 0);
   const parts = [
-    ...(homes.some(priced) ? ['listed prices'] : []),
-    ...(homes.some((p) => p.bedrooms === 2 && priced(p)) ? ['2 BHK listed prices'] : []),
-    ...(homes.length && !homes.some(priced) ? ['listings'] : []),
+    ...(homes.some(priced) ? [hi ? 'लिस्टेड कीमतें' : 'listed prices'] : []),
+    ...(homes.some((p) => p.bedrooms === 2 && priced(p)) ? [hi ? '2 BHK की कीमतें' : '2 BHK listed prices'] : []),
+    ...(homes.length && !homes.some(priced) ? [hi ? 'लिस्टिंग' : 'listings'] : []),
   ];
   if (!parts.length) return null;
   const t = `${name}, ${city}: ${parts.join(', ')} (${month})`;
