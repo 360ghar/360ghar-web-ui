@@ -35,7 +35,8 @@ export function setAuthProvider(provider: AuthProvider | null) {
   auth = provider;
 }
 
-const SERVER_EDGE_CACHE = { cacheEverything: true, cacheTtlByStatus: { '200-299': 300, '404': 60, '500-599': 0 } };
+// A negative TTL tells Cloudflare not to store the response: rate limits and server errors are never replayed.
+const SERVER_EDGE_CACHE = { cacheEverything: true, cacheTtlByStatus: { '200-299': 300, '404': 60, '429': -1, '500-599': -1 } };
 const RETRY_STATUS = new Set([429, 502, 503, 504]);
 /** A `Retry-After` above this (seconds) is past the retry budget: the caller gets the 429 or 503 and `ApiError.retryAfter`. */
 const MAX_RETRY_WAIT_S = 5;
