@@ -71,24 +71,52 @@ describe('api client', () => {
     expect(url.pathname).toBe('/api/v1/properties');
   });
 
-  it('edge-caches server GETs and never server writes', async () => {
-    const fetchMock = vi.fn(async (_req: Request, _init?: RequestInit & { cf?: unknown }) => ok(page([])));
+  /** A `caches.default` stand-in: a Map keyed by URL that keeps the stored Cache-Control. */
+  const stubEdgeCache = () => {
+    const store = new Map<string, Response>();
+    vi.stubGlobal('caches', {
+      default: {
+        match: vi.fn(async (url: string) => store.get(url)?.clone()),
+        put: vi.fn(async (url: string, res: Response) => void store.set(url, res)),
+      },
+    });
+    return store;
+  };
+
+  it('serves a repeated server GET from the edge cache', async () => {
+    const store = stubEdgeCache();
+    const fetchMock = vi.fn(async () => ok(page([{ id: 1, title: 'Gym' }])));
     vi.stubGlobal('fetch', fetchMock);
     await call(api.GET('/api/v1/amenities'));
-    expect(fetchMock.mock.calls[0]![1]?.cf).toEqual({ cacheEverything: true, cacheTtlByStatus: { '200-299': 300, '404': 60, '429': -1, '500-599': -1 } });
+    const again = await call(api.GET('/api/v1/amenities'));
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(again.items).toHaveLength(1);
+    expect([...store.values()][0]!.headers.get('cache-control')).toBe('public, max-age=300');
+  });
+
+  it('does not store server errors, no-store responses or writes in the edge cache', async () => {
+    const store = stubEdgeCache();
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('boom', { status: 500 })));
+    await attempt(api.GET('/api/v1/amenities'));
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(page([])), { status: 200, headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' } })));
+    await call(api.GET('/api/v1/amenities'));
+    vi.stubGlobal('fetch', vi.fn(async () => ok({})));
     await call(api.POST('/api/v1/swipes', { body: { property_id: 1, is_liked: true } }));
-    expect(fetchMock.mock.calls[1]![1]?.cf).toBeUndefined();
+    expect(store.size).toBe(0);
   });
 
   it('does not edge-cache browser GETs', async () => {
+    const store = stubEdgeCache();
     vi.stubGlobal('window', {});
     vi.stubEnv('PUBLIC_API_BASE', 'https://api.360ghar.com');
     vi.resetModules();
     const browser = await import('./client');
-    const fetchMock = vi.fn(async (_req: Request, _init?: RequestInit & { cf?: unknown }) => ok(page([])));
+    const fetchMock = vi.fn(async () => ok(page([])));
     vi.stubGlobal('fetch', fetchMock);
     await browser.call(browser.api.GET('/api/v1/amenities'));
-    expect(fetchMock.mock.calls[0]![1]?.cf).toBeUndefined();
+    await browser.call(browser.api.GET('/api/v1/amenities'));
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(store.size).toBe(0);
     vi.unstubAllEnvs();
   });
 
