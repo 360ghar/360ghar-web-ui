@@ -35,6 +35,7 @@ export function setAuthProvider(provider: AuthProvider | null) {
   auth = provider;
 }
 
+const SERVER_EDGE_CACHE = { cacheEverything: true, cacheTtlByStatus: { '200-299': 300, '404': 60, '500-599': 0 } };
 const RETRY_STATUS = new Set([429, 502, 503, 504]);
 /** A `Retry-After` above this (seconds) is past the retry budget: the caller gets the 429 or 503 and `ApiError.retryAfter`. */
 const MAX_RETRY_WAIT_S = 5;
@@ -51,7 +52,11 @@ async function send(request: Request, timeoutMs: number): Promise<Response> {
   const retries = method === 'GET' ? 2 : 0;
   for (let attempt = 0; ; attempt += 1) {
     try {
-      const response = await fetch(request.clone(), { signal: withTimeout(request.signal, timeoutMs) });
+      const init: RequestInit & { cf?: Record<string, unknown> } = { signal: withTimeout(request.signal, timeoutMs) };
+      // Server GETs carry no auth, so the Cloudflare cache can share them across isolates: one
+      // backend call per URL per data center every 5 min, not one per cold isolate. Browsers ignore `cf`.
+      if (isServer && method === 'GET') init.cf = SERVER_EDGE_CACHE;
+      const response = await fetch(request.clone(), init);
       if (attempt < retries && RETRY_STATUS.has(response.status)) {
         const after = Number(response.headers.get('retry-after'));
         // The server said to wait longer than a retry can: a retry now only hits the limit again.

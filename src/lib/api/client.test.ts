@@ -71,6 +71,15 @@ describe('api client', () => {
     expect(url.pathname).toBe('/api/v1/properties');
   });
 
+  it('edge-caches server GETs and never server writes', async () => {
+    const fetchMock = vi.fn(async (_req: Request, _init?: RequestInit & { cf?: unknown }) => ok(page([])));
+    vi.stubGlobal('fetch', fetchMock);
+    await call(api.GET('/api/v1/amenities'));
+    expect(fetchMock.mock.calls[0]![1]?.cf).toMatchObject({ cacheEverything: true });
+    await call(api.POST('/api/v1/swipes', { body: { property_id: 1, is_liked: true } }));
+    expect(fetchMock.mock.calls[1]![1]?.cf).toBeUndefined();
+  });
+
   it('does not retry a POST', async () => {
     const fetchMock = vi.fn(async () => new Response('busy', { status: 503 }));
     vi.stubGlobal('fetch', fetchMock);
