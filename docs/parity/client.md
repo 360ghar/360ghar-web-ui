@@ -124,8 +124,8 @@ Use it if the worker causes a problem in production (wrong pages, stale content,
 Setup: a production build served over `http://localhost` or HTTPS (`astro dev` never registers the worker). Then `SW_E2E=1 BASE_URL=<that URL> npx playwright test tests/e2e/parity-client.spec.ts`. Also do the manual steps below.
 
 1. Install from a v1-style worker with old caches
-   - Automated: spec "migration". Manual with a real v1 build: serve the old site (`360ghar-web-ui` build with its Workbox worker) at the same origin, open it, wait for the worker and the precache; then deploy or serve the v2 build at that origin. Reload once.
-   - Expect: DevTools, Application, Cache Storage lists only the `360ghar-offline-v3-*` caches; no `workbox-*`, `api-cache`, `image-cache`, `font-cache`, no `360ghar-offline-v1-*`; the worker script is the v2 `/sw.js`; an open old tab reloaded once and shows the v2 site; no reload loop (watch Network for three seconds).
+   - Automated: spec "migration". Manual with a real v1 build: serve the old site (`360ghar-web-ui` build with its Workbox worker) at the same origin, open it, wait for the worker and the precache; then deploy or serve the current build at that origin. Reload once.
+   - Expect: DevTools, Application, Cache Storage lists only the `360ghar-offline-v3-*` caches; no `workbox-*`, `api-cache`, `image-cache`, `font-cache`, no `360ghar-offline-v1-*`; the worker script is the current `/sw.js`; an open old tab reloaded once and shows the current site; no reload loop (watch Network for three seconds).
 2. Offline navigation
    - Load `/`, reload once so the tab is controlled, set DevTools Network to Offline, open `/properties`, `/hi`, and a `/property/<id>`.
    - Expect: the offline page (English heading, Hindi block, "Try again" button, no console errors, no failed requests other than the page). The offline notice strip shows on pages that were already open. Back online: "Try again" and the `online` event reload the page.
