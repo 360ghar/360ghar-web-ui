@@ -94,10 +94,12 @@ describe('api client', () => {
     expect([...store.values()][0]!.headers.get('cache-control')).toBe('public, max-age=300');
   });
 
-  it('does not store server errors or writes in the edge cache', async () => {
+  it('does not store server errors, no-store responses or writes in the edge cache', async () => {
     const store = stubEdgeCache();
     vi.stubGlobal('fetch', vi.fn(async () => new Response('boom', { status: 500 })));
     await attempt(api.GET('/api/v1/amenities'));
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(page([])), { status: 200, headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' } })));
+    await call(api.GET('/api/v1/amenities'));
     vi.stubGlobal('fetch', vi.fn(async () => ok({})));
     await call(api.POST('/api/v1/swipes', { body: { property_id: 1, is_liked: true } }));
     expect(store.size).toBe(0);

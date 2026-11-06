@@ -62,7 +62,8 @@ async function send(request: Request, timeoutMs: number): Promise<Response> {
   if (hit) return hit;
   const response = await fetchWithRetry(request, timeoutMs);
   const ttl = EDGE_TTL[response.status];
-  if (ttl) {
+  // The origin's own no-store or private wins: never put such a response in a shared cache.
+  if (ttl && !/no-store|private/i.test(response.headers.get('cache-control') ?? '')) {
     const stored = new Response(response.clone().body, response);
     stored.headers.set('Cache-Control', `public, max-age=${ttl}`);
     stored.headers.delete('Vary');
