@@ -35,8 +35,8 @@ export function setAuthProvider(provider: AuthProvider | null) {
   auth = provider;
 }
 
-// A negative TTL tells Cloudflare not to store the response: rate limits and server errors are never replayed.
-const SERVER_EDGE_CACHE = { cacheEverything: true, cacheTtlByStatus: { '200-299': 300, '404': 60, '429': -1, '500-599': -1 } };
+/** Seconds a server-side GET stays in the Worker's data-center cache, by status. Other statuses are not stored. */
+const EDGE_TTL: Record<number, number> = { 200: 300, 404: 60 };
 const RETRY_STATUS = new Set([429, 502, 503, 504]);
 /** A `Retry-After` above this (seconds) is past the retry budget: the caller gets the 429 or 503 and `ApiError.retryAfter`. */
 const MAX_RETRY_WAIT_S = 5;
@@ -48,16 +48,36 @@ function withTimeout(signal: AbortSignal | null, ms: number): AbortSignal {
   return signal ? AbortSignal.any([signal, timeout]) : timeout;
 }
 
+/**
+ * Server GETs carry no auth, so one data center can share them across Worker isolates: one
+ * backend call per URL per data center every 5 min, not one per cold isolate. Uses the Workers
+ * Cache API (`caches.default`). `fetch` `cf` cache options do not apply here: with
+ * `global_fetch_strictly_public` the API is reached as a public host. Node and browsers have no
+ * `caches.default`, so they skip this.
+ */
 async function send(request: Request, timeoutMs: number): Promise<Response> {
+  const cache = isServer && request.method.toUpperCase() === 'GET' ? (globalThis as { caches?: { default?: Cache } }).caches?.default : undefined;
+  if (!cache) return fetchWithRetry(request, timeoutMs);
+  const hit = await cache.match(request.url).catch(() => undefined);
+  if (hit) return hit;
+  const response = await fetchWithRetry(request, timeoutMs);
+  const ttl = EDGE_TTL[response.status];
+  if (ttl) {
+    const stored = new Response(response.clone().body, response);
+    stored.headers.set('Cache-Control', `public, max-age=${ttl}`);
+    stored.headers.delete('Vary');
+    stored.headers.delete('Set-Cookie');
+    await cache.put(request.url, stored).catch(() => undefined);
+  }
+  return response;
+}
+
+async function fetchWithRetry(request: Request, timeoutMs: number): Promise<Response> {
   const method = request.method.toUpperCase();
   const retries = method === 'GET' ? 2 : 0;
   for (let attempt = 0; ; attempt += 1) {
     try {
-      const init: RequestInit & { cf?: Record<string, unknown> } = { signal: withTimeout(request.signal, timeoutMs) };
-      // Server GETs carry no auth, so the Cloudflare cache can share them across isolates: one
-      // backend call per URL per data center every 5 min, not one per cold isolate. Browsers ignore `cf`.
-      if (isServer && method === 'GET') init.cf = SERVER_EDGE_CACHE;
-      const response = await fetch(request.clone(), init);
+      const response = await fetch(request.clone(), { signal: withTimeout(request.signal, timeoutMs) });
       if (attempt < retries && RETRY_STATUS.has(response.status)) {
         const after = Number(response.headers.get('retry-after'));
         // The server said to wait longer than a retry can: a retry now only hits the limit again.
