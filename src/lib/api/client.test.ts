@@ -80,6 +80,18 @@ describe('api client', () => {
     expect(fetchMock.mock.calls[1]![1]?.cf).toBeUndefined();
   });
 
+  it('does not edge-cache browser GETs', async () => {
+    vi.stubGlobal('window', {});
+    vi.stubEnv('PUBLIC_API_BASE', 'https://api.360ghar.com');
+    vi.resetModules();
+    const browser = await import('./client');
+    const fetchMock = vi.fn(async (_req: Request, _init?: RequestInit & { cf?: unknown }) => ok(page([])));
+    vi.stubGlobal('fetch', fetchMock);
+    await browser.call(browser.api.GET('/api/v1/amenities'));
+    expect(fetchMock.mock.calls[0]![1]?.cf).toBeUndefined();
+    vi.unstubAllEnvs();
+  });
+
   it('does not retry a POST', async () => {
     const fetchMock = vi.fn(async () => new Response('busy', { status: 503 }));
     vi.stubGlobal('fetch', fetchMock);
