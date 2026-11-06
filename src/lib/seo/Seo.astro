@@ -15,6 +15,8 @@ type Props = {
   /** English path for the canonical. Default: the current path without /hi. */
   path?: string;
   noindex?: boolean;
+  /** The page has no Hindi text: the canonical is the English URL on both locales, and no hreflang tags. */
+  enOnly?: boolean;
   image?: string | null;
   imageAlt?: string;
   type?: 'website' | 'article' | 'product';
@@ -37,6 +39,7 @@ const {
   description,
   path,
   noindex = false,
+  enOnly = false,
   image,
   imageAlt = '360Ghar preview image',
   type = 'website',
@@ -53,7 +56,7 @@ const {
 
 const locale = Astro.locals.locale;
 const enPath = path ?? stripLocale(Astro.url.pathname);
-const canonical = canonicalFor(enPath, locale);
+const canonical = canonicalFor(enPath, enOnly ? 'en' : locale);
 const og = image ? absoluteUrl(image) : DEFAULT_OG_IMAGE;
 const robots = noindex
   ? 'noindex,follow'
@@ -78,9 +81,13 @@ const all = [...site, voice, ...blocks].filter(Boolean).map(withContext);
   !noindex && (
     <>
       <link rel="canonical" href={canonical} />
-      <link rel="alternate" hreflang="en" href={canonicalFor(enPath, 'en')} />
-      <link rel="alternate" hreflang="hi" href={canonicalFor(enPath, 'hi')} />
-      <link rel="alternate" hreflang="x-default" href={canonicalFor(enPath, 'en')} />
+      {!enOnly && (
+        <>
+          <link rel="alternate" hreflang="en" href={canonicalFor(enPath, 'en')} />
+          <link rel="alternate" hreflang="hi" href={canonicalFor(enPath, 'hi')} />
+          <link rel="alternate" hreflang="x-default" href={canonicalFor(enPath, 'en')} />
+        </>
+      )}
     </>
   )
 }

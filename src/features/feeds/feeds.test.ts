@@ -37,6 +37,12 @@ describe('urlset', () => {
     expect(xml).toContain('<lastmod>2026-06-21</lastmod>');
     expect(xml.match(/hreflang="x-default"/g)).toHaveLength(4);
   });
+
+  it('lists an English-only page once, with its dates and no alternates', () => {
+    const urls = parse(urlset([{ path: '/blog/x', lastmod: '2026-06-21T21:37:47Z', priority: '0.7', enOnly: true }]));
+    expect(urls).toEqual([{ loc: 'https://360ghar.com/blog/x', alternates: {} }]);
+    expect(urlset([{ path: '/blog/x', lastmod: '2026-06-21', enOnly: true }])).toContain('<lastmod>2026-06-21</lastmod>');
+  });
 });
 
 describe('rss', () => {

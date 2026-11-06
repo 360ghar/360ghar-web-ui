@@ -1,21 +1,23 @@
 ---
 /** A held data page: the shared hold shell, with the notice once in the body. */
+import { CITIES } from '@/features/landing/model';
 import type { Locale } from '@/lib/i18n/locale';
 import DataHubHold from './DataHubHold.astro';
 
 type Props = { locale: Locale; slug: string };
 const { locale, slug } = Astro.props;
+const city = CITIES[slug] ?? { name: slug, hi: slug };
 const en = {
-  title: 'City property price data under review | 360Ghar',
-  description: 'City property price data is held while its sources are reviewed.',
+  title: `${city.name} property price data under review | 360Ghar`,
+  description: `${city.name} property price data is held while its sources are reviewed.`,
   heading: 'Property price data under review',
   crumb: 'Property price data',
   lead: 'City property price data is held while its sources are reviewed.',
   notice: 'City price ranges are withheld while source samples and reproducible methods are reviewed.',
 };
 const hi = {
-  title: 'शहर का प्रॉपर्टी कीमत डेटा समीक्षा के अधीन | 360Ghar',
-  description: 'शहर का प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',
+  title: `${city.hi} प्रॉपर्टी कीमत डेटा समीक्षा के अधीन | 360Ghar`,
+  description: `${city.hi} का प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।`,
   heading: 'प्रॉपर्टी कीमत डेटा समीक्षा के अधीन',
   crumb: 'प्रॉपर्टी कीमत डेटा',
   lead: 'शहर का प्रॉपर्टी कीमत डेटा स्रोतों की समीक्षा तक रोका गया है।',

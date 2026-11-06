@@ -15,6 +15,7 @@
     "api:sync": "cp \"${BACKEND_DIR:-../360ghar-backend}/docs/openapi.json\" openapi/openapi.json",
     "api:types": "openapi-typescript openapi/openapi.json --default-non-nullable false -o src/lib/api/schema.d.ts",
     "check:api": "cp src/lib/api/schema.d.ts \"${TMPDIR:-/tmp}/schema.d.ts.bak\" && pnpm api:types && diff -q src/lib/api/schema.d.ts \"${TMPDIR:-/tmp}/schema.d.ts.bak\"",
+    "check:meta": "node scripts/check-meta.mjs",
     "typecheck": "node scripts/sync-hi-routes.mjs && astro check && tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",

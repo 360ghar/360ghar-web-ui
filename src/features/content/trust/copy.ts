@@ -12,7 +12,7 @@ type Page = { title: string; description: string; name: string; h1: string; lead
 const EN: Record<TrustKey, Page> = {
   authors: {
     title: 'Authors and editorial team | 360Ghar',
-    description: 'Who writes and answers for the 360Ghar blog, guides and data pages.',
+    description: 'Who writes and answers for the 360Ghar blog, guides, tools and data pages, and how to reach them.',
     name: 'Authors',
     h1: 'Authors and editorial team',
     lead: 'Who writes and answers for what you read on 360Ghar.',

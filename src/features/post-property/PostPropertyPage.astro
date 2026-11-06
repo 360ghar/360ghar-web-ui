@@ -11,7 +11,7 @@ const locale = Astro.locals.locale;
 const hi = locale === 'hi';
 ---
 
-<Page title={hi ? 'प्रॉपर्टी पोस्ट करें | 360Ghar' : 'Post a Property | 360Ghar'} description="Post your property on 360Ghar." path="/post-property" noindex>
+<Page title={hi ? 'प्रॉपर्टी पोस्ट करें | 360Ghar' : 'Post a Property | 360Ghar'} description={hi ? 'अपनी प्रॉपर्टी 360Ghar पर बेचने या किराये पर देने के लिए पोस्ट करें।' : 'Post your property on 360Ghar to sell it or rent it out.'} path="/post-property" noindex>
   <div class="container-page post-wrap">
     <div class="post-head">
       <h1 class="post-h1">{hi ? 'अपनी प्रॉपर्टी लिस्ट करें' : 'List your property'}</h1>

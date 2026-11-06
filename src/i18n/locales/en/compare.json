@@ -49,7 +49,7 @@
   },
   "truth": {
     "titlePrefix": "Evidence note:",
-    "description": "Dated evidence note. No independent service-quality assessment is made.",
+    "description": "Dated evidence note on {{name}}. No independent service-quality assessment of {{name}} is made.",
     "lead": "This page does not independently assess feature availability or service quality. See the comparison profile for dated sources and explicit evidence states.",
     "evidence": "Evidence note",
     "source": "Source",

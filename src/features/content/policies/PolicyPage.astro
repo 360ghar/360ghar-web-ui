@@ -25,7 +25,8 @@ const L = localizer(locale);
 const known = policyBySlug(slug);
 const listName = hi ? 'नीतियाँ' : 'Policies';
 
-const title = page?.title ?? known?.[locale].title ?? (hi ? 'नीति' : 'Policy');
+// The document text is English only; on /hi the known Hindi name titles the page.
+const title = (hi ? known?.hi.title : null) ?? page?.title ?? known?.[locale].title ?? (hi ? 'नीति' : 'Policy');
 const body = page ? renderPolicy(page) : null;
 const description = known ? `${known[locale].description}` : t('seo:policyDetails.description', { title });
 const { crumbs, ld } = trail(locale, [

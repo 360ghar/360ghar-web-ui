@@ -78,8 +78,10 @@ test.describe('sitemaps', () => {
       expect(Buffer.byteLength(xml), file).toBeLessThanOrEqual(50 * 1024 * 1024);
       const locs = new Set(urls.map((u) => u.loc));
       for (const u of urls.slice(0, 500)) {
-        expect(Object.keys(u.alts).sort(), u.loc).toEqual(['en', 'hi', 'x-default']);
-        expect(locs.has(u.alts.en!) && locs.has(u.alts.hi!), `${u.loc} alternates are listed`).toBe(true);
+        // Blog posts have no Hindi text: the English URL is listed alone and /hi/blog/<slug> canonicalises to it.
+        const enOnly = /^\/blog\/[^/]+$/.test(new URL(u.loc).pathname);
+        expect(Object.keys(u.alts).sort(), u.loc).toEqual(enOnly ? [] : ['en', 'hi', 'x-default']);
+        if (!enOnly) expect(locs.has(u.alts.en!) && locs.has(u.alts.hi!), `${u.loc} alternates are listed`).toBe(true);
         const path = new URL(u.loc).pathname;
         expect(path === '/' || !path.endsWith('/'), `${u.loc} has no trailing slash`).toBe(true);
         expect(path.replace(/^\/hi/, '') || '/', u.loc).not.toMatch(/^\/(account|login|register|post-property|compare|property-sidebar|add-new-listing)$/);

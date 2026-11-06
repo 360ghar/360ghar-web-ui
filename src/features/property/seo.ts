@@ -18,11 +18,17 @@ export function propertyMeta(p: Property, locale: Locale) {
   const hi = locale === 'hi';
   const heading = homeKind(p, locale);
   const where = p.locality ?? p.city;
-  const title = [`${heading} ${PURPOSE[p.purpose][hi ? 1 : 0]}${where ? (hi ? `, ${where}` : ` in ${where}`) : ''}`, headlinePrice(p, locale).amount, '360Ghar'].join(' | ');
+  // A listing with no real price names its area instead of "Price on request" (on request implies an area).
+  const price = headlinePrice(p, locale);
+  const second = price.onRequest ? areaSqft(p.area_sqft, locale)! : price.amount;
+  // Many listings share type, locality, price and description text, so the listing ID keeps each title and description unique.
+  const id = `ID ${p.id}`;
+  const title = [`${heading} ${PURPOSE[p.purpose][hi ? 1 : 0]}${where ? (hi ? `, ${where}` : ` in ${where}`) : ''}`, second, id, '360Ghar'].join(' | ');
   const lead = clip(tidy(p.description ?? p.title).replace(/\s+/g, ' ').trim(), 150);
   const tour = p.virtual_tour_url ? (hi ? ' 360° वर्चुअल टूर उपलब्ध है।' : ' A 360° tour is available.') : '';
   const area = p.area_sqft ? ` ${areaSqft(p.area_sqft, locale)}.` : '';
-  return { title, description: `${lead}${/[.।!?…]$/.test(lead) ? '' : hi ? '।' : '.'}${tour}${area}` };
+  const listing = hi ? ` लिस्टिंग ID ${p.id}।` : ` Listing ID ${p.id}.`;
+  return { title, description: `${lead}${/[.।!?…]$/.test(lead) ? '' : hi ? '।' : '.'}${tour}${area}${listing}` };
 }
 
 /** Cut at the last word boundary before `max` and end with "…", so no word is cut in half. */

@@ -5,7 +5,7 @@ import Account from '@/features/account/Account';
 const locale = Astro.locals.locale;
 ---
 
-<Page title={locale === 'hi' ? 'मेरा अकाउंट | 360Ghar' : 'My account | 360Ghar'} description="Your 360Ghar account" noindex>
+<Page title={locale === 'hi' ? 'मेरा अकाउंट | 360Ghar' : 'My account | 360Ghar'} description={locale === 'hi' ? 'आपका 360Ghar अकाउंट: सेव किए घर, विज़िट और सेटिंग्स।' : 'Your 360Ghar account: saved homes, visits and settings.'} noindex>
   <div class="container-page acct py-6">
     <Account client:only="react" locale={locale}>
       <div slot="fallback" class="grid gap-4" aria-busy="true">
