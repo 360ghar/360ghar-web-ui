@@ -44,8 +44,14 @@ describe('dates', () => {
   });
 
   it('keeps the entered day when a local time zone skips it, and years below 100', () => {
-    // Pacific/Apia skipped 30 Dec 2011 in local time; run the suite with TZ=Pacific/Apia to exercise it.
-    expect(formatReceiptDate('2011-12-30')).toBe('30 December 2011');
+    // Pacific/Apia skipped 30 Dec 2011 in local time. Node reads a changed TZ at once, and the suite's setup sets its own, so switch here.
+    const zone = process.env.TZ;
+    process.env.TZ = 'Pacific/Apia';
+    try {
+      expect(formatReceiptDate('2011-12-30')).toBe('30 December 2011');
+    } finally {
+      process.env.TZ = zone;
+    }
     expect(formatReceiptDate('0099-04-01')).toBe('01 April 99');
   });
 });

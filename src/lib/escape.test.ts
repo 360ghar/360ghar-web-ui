@@ -16,4 +16,9 @@ describe('escapers', () => {
     expect(escapeXml('a\u000Bb\u0000c\u001Fd')).toBe('abcd');
     expect(escapeXml('a\tb\nc\rd')).toBe('a\tb\nc\rd');
   });
+
+  it('drops lone surrogates and U+FFFE, and keeps valid pairs such as emoji', () => {
+    expect(escapeXml('a\uD800b\uDC00c\uFFFEd')).toBe('abcd');
+    expect(escapeXml('🏠 Gurugram')).toBe('🏠 Gurugram');
+  });
 });
