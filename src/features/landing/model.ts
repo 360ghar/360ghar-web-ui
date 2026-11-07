@@ -6,7 +6,7 @@
 import type { PropertyType } from '@/lib/api/types';
 import { askPrice } from '@/lib/format';
 import { BUDGETS, emptyFilters, type Filters } from '@/features/search/filters';
-import { isPlaceholderPrice, robustRange } from '@/features/search/prices';
+import { isPlaceholderPrice, robustRange } from '@/lib/listings/prices';
 
 export const CITIES: Record<string, { name: string; hi: string; lat: number; lng: number }> = {
   gurgaon: { name: 'Gurgaon', hi: 'गुड़गाँव', lat: 28.4595, lng: 77.0266 },

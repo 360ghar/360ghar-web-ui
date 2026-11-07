@@ -37,7 +37,8 @@ import { Sheet } from '@/ui/react/Sheet';
 import { Tabs } from '@/ui/react/Tabs';
 import { toast, Toaster } from '@/ui/react/Toaster';
 import { StateBlock } from '@/ui/states/StateBlock';
-import { AcctState, NoPhoto, AccountVignette } from './AccountArt';
+import { AcctState } from './AcctState';
+import { AccountVignette, NoPhoto } from '@/ui/paper/AccountArt';
 import { Notifications, Preferences, SavedAlerts } from './Settings';
 import { visitIcs } from './ics';
 

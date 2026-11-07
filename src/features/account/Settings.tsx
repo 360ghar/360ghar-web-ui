@@ -23,7 +23,7 @@ import { Delayed, Skeleton } from '@/ui/react/Delayed';
 import { Check, SelectField, TextField } from '@/ui/react/Field';
 import { toast } from '@/ui/react/Toaster';
 import { StateBlock } from '@/ui/states/StateBlock';
-import { AcctState } from './AccountArt';
+import { AcctState } from './AcctState';
 import { alertParts, NOTIFICATION_KEYS, prefsToValues, valuesToPatch, type Alert, type PrefValues } from './settingsModel';
 
 type NotificationSettings = components['schemas']['NotificationSettings'];

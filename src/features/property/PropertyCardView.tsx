@@ -14,7 +14,7 @@ import { localizePath } from '@/lib/i18n/locale';
 import { FACT_ICONS } from '@/ui/icons/amenities';
 import { Icon } from '@/ui/icons/Icon';
 import { startPhotoStrips, STRIP_WIDTHS } from '@/ui/photoStrip';
-import { isPlaceholderPrice, PRICE_ON_REQUEST } from '@/features/search/prices';
+import { isPlaceholderPrice, PRICE_ON_REQUEST } from '@/lib/listings/prices';
 import { perSqft } from './facts';
 import { CARD_SIZES, galleryPhotos } from './photos';
 

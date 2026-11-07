@@ -15,7 +15,7 @@ import { useLocationMemory, useLocationStore } from '@/features/location/store';
 import { Icon } from '@/ui/icons/Icon';
 import type { Filters } from './filters';
 import PaperMap from './PaperMap';
-import { isPlaceholderPrice, PRICE_ON_REQUEST } from './prices';
+import { isPlaceholderPrice, PRICE_ON_REQUEST } from '@/lib/listings/prices';
 
 type Props = {
   items: ListingItem[];

@@ -10,8 +10,8 @@ vi.mock('./data', () => ({
   allPosts: async () => {
     throw new Error('backend down');
   },
-  allProperties: async () => [],
 }));
+vi.mock('@/lib/listings/homes', () => ({ allProperties: async () => [] }));
 vi.mock('@/features/data-hub/sitemap', () => ({ datahubEntries: async () => [] }));
 
 const { parseSitemapName, sitemapFileNames, SITEMAPS } = await import('./sitemaps');

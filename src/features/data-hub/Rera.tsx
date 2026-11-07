@@ -15,7 +15,7 @@ import { fmtDate } from './format';
 import { Island } from './Island';
 import { CountBar, ListBody, RowsSkeleton, useCursorList, useSearchFilter } from './list';
 import { activeFilters, RERA, type ReraFilters } from './params';
-import { projectBySlug } from '@/features/projects/catalog';
+import { projectBySlug } from '@/lib/listings/projects';
 import { validSlug } from './route';
 import { Status } from './Status';
 import { label, text } from './text';

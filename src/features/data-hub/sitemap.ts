@@ -8,7 +8,7 @@
  */
 import type { SitemapEntry } from '@/features/feeds/xml';
 import { allProjects } from '@/features/projects/api';
-import { projectBySlug } from '@/features/projects/catalog';
+import { projectBySlug } from '@/lib/listings/projects';
 import { memo } from '@/lib/memo';
 import { allBuilders, safe } from './api';
 import { validSlug } from './route';

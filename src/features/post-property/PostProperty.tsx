@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState, type DragEvent, type ReactNode } from 'react';
 import { useForm, useWatch, type FieldPath } from 'react-hook-form';
-import { HouseProgress, noPhotoUrl, AccountVignette } from '@/features/account/AccountArt';
+import { AccountVignette, HouseProgress, noPhotoUrl } from '@/ui/paper/AccountArt';
 import { Segmented } from '@/ui/react/Segmented';
 import { initAuth, useAuthStore } from '@/features/auth/store';
 import { useAuth } from '@/features/auth/useAuth';
