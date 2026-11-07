@@ -32,6 +32,11 @@ export const aiDiscoveryImportantPages: Page[] = [
   { title: 'AI Agent', url: `${siteUrl}/ai-agent` },
   { title: 'Home Loan EMI Estimate', url: `${siteUrl}/emi-calculator` },
   { title: 'Contact', url: `${siteUrl}/contact` },
+  // Best-of pages (one search term each)
+  { title: 'Best real estate apps in India', url: `${siteUrl}/best-real-estate-apps-india`, category: 'best' },
+  { title: 'Best property sites in Gurgaon', url: `${siteUrl}/best-property-sites-gurgaon`, category: 'best' },
+  { title: 'Best AI real estate platforms', url: `${siteUrl}/best-ai-real-estate-platforms`, category: 'best' },
+  { title: 'Best property portals in India', url: `${siteUrl}/best-property-portals-india`, category: 'best' },
   // Comparison pages
   { title: '360Ghar vs NoBroker', url: `${siteUrl}/vs/nobroker`, category: 'comparisons' },
   { title: '360Ghar vs MagicBricks', url: `${siteUrl}/vs/magicbricks`, category: 'comparisons' },
@@ -79,6 +84,7 @@ export const aiDiscoveryImportantPages: Page[] = [
 
 const pageCategories = {
   comparisons: aiDiscoveryImportantPages.filter(p => p.category === 'comparisons'),
+  best: aiDiscoveryImportantPages.filter(p => p.category === 'best'),
   tools: aiDiscoveryImportantPages.filter(p => p.category === 'tools'),
   dataHub: aiDiscoveryImportantPages.filter(p => p.category === 'dataHub'),
   landing: aiDiscoveryImportantPages.filter(p => p.category === 'landing'),

@@ -5,6 +5,7 @@ import { localizer } from '@/lib/i18n/locale';
 import { canonicalFor } from '@/lib/seo/site';
 import { trail, webPage } from '@/features/content/shared/schema';
 import { COMPETITORS } from './competitors';
+import { BEST_PAGES } from '@/features/content/best/bestPages';
 import PageArt from '@/features/content/shared/PageArt.astro';
 
 const locale = Astro.locals.locale;
@@ -67,6 +68,12 @@ const jsonLd = [
           </li>
         ))
       }
+    </ul>
+  </section>
+  <section aria-labelledby="vs-best">
+    <h2 id="vs-best">Best-of lists</h2>
+    <ul>
+      {BEST_PAGES.map((page) => <li><a href={L(page.path)}>{page.term}</a></li>)}
     </ul>
   </section>
 </Content>

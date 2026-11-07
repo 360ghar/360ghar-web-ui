@@ -3,7 +3,7 @@
   "homepage": "https://360ghar.com/",
   "description": "Property search and related tools for Gurugram and selected NCR markets. Listing availability and data coverage vary by market and page.",
   "metadata": {
-    "last_updated": "2026-10-23",
+    "last_updated": "2026-11-07",
     "target_markets": [
       "Gurugram",
       "Delhi",
@@ -96,6 +96,26 @@
     {
       "title": "Contact",
       "url": "https://360ghar.com/contact"
+    },
+    {
+      "title": "Best real estate apps in India",
+      "url": "https://360ghar.com/best-real-estate-apps-india",
+      "category": "best"
+    },
+    {
+      "title": "Best property sites in Gurgaon",
+      "url": "https://360ghar.com/best-property-sites-gurgaon",
+      "category": "best"
+    },
+    {
+      "title": "Best AI real estate platforms",
+      "url": "https://360ghar.com/best-ai-real-estate-platforms",
+      "category": "best"
+    },
+    {
+      "title": "Best property portals in India",
+      "url": "https://360ghar.com/best-property-portals-india",
+      "category": "best"
     },
     {
       "title": "360Ghar vs NoBroker",
@@ -329,6 +349,28 @@
         "title": "360Ghar vs Stanza Living",
         "url": "https://360ghar.com/vs/stanza-living",
         "category": "comparisons"
+      }
+    ],
+    "best": [
+      {
+        "title": "Best real estate apps in India",
+        "url": "https://360ghar.com/best-real-estate-apps-india",
+        "category": "best"
+      },
+      {
+        "title": "Best property sites in Gurgaon",
+        "url": "https://360ghar.com/best-property-sites-gurgaon",
+        "category": "best"
+      },
+      {
+        "title": "Best AI real estate platforms",
+        "url": "https://360ghar.com/best-ai-real-estate-platforms",
+        "category": "best"
+      },
+      {
+        "title": "Best property portals in India",
+        "url": "https://360ghar.com/best-property-portals-india",
+        "category": "best"
       }
     ],
     "tools": [

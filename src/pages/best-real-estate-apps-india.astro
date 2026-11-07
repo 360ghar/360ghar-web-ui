@@ -1,0 +1,9 @@
+---
+import BestPage from '@/features/content/best/BestPage.astro';
+import { bestPage } from '@/features/content/best/bestPages';
+
+export const prerender = true;
+const page = bestPage('/best-real-estate-apps-india');
+---
+
+<BestPage page={page} />

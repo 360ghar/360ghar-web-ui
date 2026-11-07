@@ -18,7 +18,9 @@ const SITE = 'https://360ghar.com';
 export const ORGANIZATION_ID = `${SITE}/#organization`;
 export const FOUNDER_ID = `${SITE}/#founder`;
 export const APP_ID = `${SITE}/#android-app`;
-export const FLATMATES_APP_ID = `${SITE}/#flatmates-app`;
+/** Sister apps: each one's own host owns its @id, so the same node is named on both sites. */
+export const FLATMATES_APP_ID = 'https://flatmates.360ghar.com/#app';
+export const TOURS_APP_ID = 'https://tours.360ghar.com/#app';
 
 /** The Google Play page of 360Ghar (src/lib/apps.ts). */
 export const PLAY_STORE_URL = APPS.ghar360.play;
@@ -36,6 +38,10 @@ export function organizationBlock(): Block {
     knowsAbout: panel.knowsAbout,
     founder: { '@id': FOUNDER_ID },
     sameAs: uniq([...old.organization.sameAs, ...panel.sameAs]),
+    owns: [
+      { '@type': 'MobileApplication', '@id': FLATMATES_APP_ID, name: '360 Flatmates', url: 'https://flatmates.360ghar.com', publisher: { '@id': ORGANIZATION_ID } },
+      { '@type': 'SoftwareApplication', '@id': TOURS_APP_ID, name: '360 Tours', url: 'https://tours.360ghar.com', publisher: { '@id': ORGANIZATION_ID } },
+    ],
   };
 }
 

@@ -1,0 +1,111 @@
+---
+/**
+ * One "best X" page: the direct answer as the lead, the publisher line and check date,
+ * a ranked table (360Ghar included), the criteria, and the FAQs. JSON-LD: WebPage,
+ * ItemList (one item per row), FAQPage (same text as the visible FAQs) and breadcrumbs.
+ * Data: ./bestPages.ts. English only; the /hi copy canonicalises to this page.
+ */
+import Content from '@/layouts/Content.astro';
+import { localizer } from '@/lib/i18n/locale';
+import { ORGANIZATION_ID } from '@/lib/seo/siteSchemas';
+import { faqPage } from '@/lib/seo/site';
+import Faq from '@/ui/Faq.astro';
+import PageArt from '@/features/content/shared/PageArt.astro';
+import TableScroll from '@/features/content/shared/TableScroll.astro';
+import { longDate } from '@/features/content/shared/text';
+import { trail, webPage } from '@/features/content/shared/schema';
+import { CHECKED_ON, itemList, PUBLISHER_LINE, type BestPageData } from './bestPages';
+
+type Props = { page: BestPageData };
+const { page } = Astro.props;
+const locale = Astro.locals.locale;
+const L = localizer(locale);
+const { crumbs, ld } = trail(locale, [{ name: page.term, path: page.path }]);
+const jsonLd = [
+  ld,
+  { ...webPage({ name: page.title, description: page.description, path: page.path, locale }), publisher: { '@id': ORGANIZATION_ID } },
+  itemList(page),
+  faqPage(page.faqs),
+];
+const checkedOn = longDate(CHECKED_ON, 'en');
+---
+
+<Content
+  title={page.title}
+  description={page.description}
+  path={page.path}
+  heading={page.term}
+  lead={page.answer}
+  crumbs={crumbs}
+  jsonLd={jsonLd}
+  enOnly
+  wide
+>
+  <PageArt slot="head" scene="scale" seed={page.path.slice(1)} />
+  <p class="best-publisher">{PUBLISHER_LINE} Checked on {checkedOn}.</p>
+
+  <section aria-labelledby="best-ranking">
+    <h2 id="best-ranking">Ranked list</h2>
+    <TableScroll label={`Ranked list: ${page.term}`}>
+      <table class="best-table">
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Product</th>
+            <th scope="col">{page.summaryHeading}</th>
+            <th scope="col">Source and check date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            page.rows.map((row, i) => (
+              <tr>
+                <td>{i + 1}</td>
+                <th scope="row">
+                  <a href={L(row.href)}>{row.name}</a>
+                </th>
+                <td>{row.summary}</td>
+                <td>
+                  <a href={row.source.url} rel="noopener noreferrer">{row.source.label}</a>
+                  <span class="best-date">Checked on {longDate(row.source.checkedOn, 'en')}</span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </TableScroll>
+  </section>
+
+  <section aria-labelledby="best-criteria">
+    <h2 id="best-criteria">How we picked</h2>
+    <ol>
+      {page.criteria.map((item) => <li>{item}</li>)}
+    </ol>
+    <p>{page.notIncluded}</p>
+  </section>
+
+  <Faq items={page.faqs} title="Questions" id="best-faq" />
+
+  <p class="page-actions">
+    <a class="link" href={L('/vs')}>Product profiles</a>
+  </p>
+</Content>
+
+<style>
+  .best-publisher {
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  .best-date {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+
+  .best-table td:first-child {
+    width: 3.5rem;
+  }
+</style>
