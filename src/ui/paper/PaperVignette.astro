@@ -14,6 +14,7 @@
  * the default frame and fit, and the theme and seed pair must be listed in
  * src/pages/art/[kind]/[name].svg.ts.
  */
+import { artUrl } from '@/lib/paper/art-url';
 import { VIGNETTE_H, VIGNETTE_W, vignetteArt, type VignetteTheme } from '@/lib/paper/vignettes';
 import PaperArt from './PaperArt.astro';
 
@@ -36,7 +37,7 @@ const { theme, seed = '1', frame = 'cut', fit = 'meet', label, class: className,
   lazy ? (
     <img
       class:list={['paper-vignette', 'is-file', className]}
-      src={`/art/vignette/${theme}-${seed}.svg`}
+      src={artUrl.vignette(theme, seed)}
       alt={label ?? ''}
       width={VIGNETTE_W}
       height={VIGNETTE_H}

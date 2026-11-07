@@ -2,10 +2,11 @@ import type { AstroGlobal } from 'astro';
 import landmarks from '@/data/office-landmarks.json';
 import { cachePage, respond } from '@/lib/cache';
 import { localizePath } from '@/lib/i18n/locale';
+import type { PlaceKind } from '@/features/localities/vignette';
 import { emptyFilters, parseFilters, type Filters } from '@/features/search/filters';
 import { loadFirstPage } from '@/features/search/load';
 
-export type Landmark = { name: string; slug: string; city: string; lat: number; lng: number; type: string; description: string };
+export type Landmark = { name: string; slug: string; city: string; lat: number; lng: number; type: string; kind?: PlaceKind; description: string };
 
 export const LANDMARKS = landmarks as Landmark[];
 

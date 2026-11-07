@@ -17,7 +17,7 @@ export const homeCrumb = (locale: Locale) => ({ name: locale === 'hi' ? 'हो�
 export function toolJsonLd(tool: Tool, locale: Locale, faqs: Faq[], howTo?: HowTo): unknown[] {
   const config = (toolSchemas as Record<string, unknown>)[tool.schema];
   return [
-    config ? generateToolSchema(config) : null,
+    config ? generateToolSchema({ ...config, route: tool.route }) : null,
     breadcrumbs([homeCrumb(locale), toolsCrumb(locale), { name: tool.name[locale], path: tool.route }], locale),
     faqs.length ? faqPage(faqs) : null,
     howTo ? howToLd(howTo.name, howTo.description, howTo.steps) : null,

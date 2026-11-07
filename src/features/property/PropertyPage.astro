@@ -32,6 +32,7 @@ import { floorPlanUrl, galleryPhotos, PHOTO_GROUPS, type PhotoGroup } from './ph
 import Amenities from './Amenities.astro';
 import HomeCard from './HomeCard.astro';
 import MoreDetails from './MoreDetails.astro';
+import { artUrl } from '@/lib/paper/art-url';
 import { MAP_H, MAP_W } from './scenes';
 
 /** `property` is the detail response (it carries `agent`); the other homes are list rows. */
@@ -288,7 +289,7 @@ const emiHref = L(`/emi-calculator${p.purpose === 'buy' && !price.onRequest && p
           <div class="prop-loc-map">
             <div class="prop-map" data-map-src={`https://maps.google.com/maps?q=${mapQ}&z=15&output=embed`} data-map-title={hi ? 'मैप' : 'Map'}>
               {/* Below the first screen: the street plan is a cached file (src/pages/art/map), not inline SVG. */}
-              <img class="prop-map-art" src={`/art/map/${p.id}.svg`} alt="" width={MAP_W} height={MAP_H} loading="lazy" decoding="async" />
+              <img class="prop-map-art" src={artUrl.map(p.id)} alt="" width={MAP_W} height={MAP_H} loading="lazy" decoding="async" />
               <button type="button" class="btn prop-map-btn" data-map-load>
                 <Icon name="map" size={18} />
                 {hi ? 'मैप दिखाएँ' : 'Show the map'}

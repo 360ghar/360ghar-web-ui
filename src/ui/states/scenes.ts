@@ -6,7 +6,7 @@
  * Five layers, far to near: sky (sun and clouds), Cyber City towers, sector
  * blocks and ground, the subject of the scene, and the near kerb.
  */
-import { makeTools, type CloudProfile, type Layer, type Pt } from '@/lib/paper/shapes';
+import { groundPts, layer, makeTools, type CloudProfile, type Layer, type Pt } from '@/lib/paper/shapes';
 
 export type SceneName = 'empty' | 'error' | 'notFound' | 'offline';
 
@@ -21,11 +21,8 @@ const MID = { fill: 'var(--color-kesar-300)', shadow: 'rgb(181 70 0 / 0.34)' };
 const MAIN = { fill: 'var(--color-kesar-600)', shadow: 'rgb(138 51 0 / 0.4)' };
 const NEAR = { fill: 'var(--color-kesar-800)', shadow: 'rgb(47 15 2 / 0.45)' };
 
-const layer = (id: string, tone: { fill: string; shadow: string }, cut: string[], solid: string[] = []): Layer => ({ id, depth: 0, ...tone, cut, solid });
-
 const CLOUD: CloudProfile = [[0, 7], [0.2, 2], [0.38, 4], [0.55, -3], [0.76, 1], [1, 7]];
 
-/** Sun and two cloud strips, cut from pale card. */
 function sky(t: Tools, sx: number, sy: number): Layer {
   const sun: Pt[] = [];
   for (let i = 0; i < 20; i += 1) {
@@ -35,7 +32,6 @@ function sky(t: Tools, sx: number, sy: number): Layer {
   return layer('sky', SKY, [], [t.path(sun), t.cloud(34, 40, 70, CLOUD), t.cloud(sx - 60, sy + 16, 58, CLOUD)]);
 }
 
-/** Far towers with window holes. */
 const SKYLINE = { heights: [34, 58, 44, 76, 50, 38, 66, 46, 30, 56, 40], slant: true, drop: 60, inset: 10 };
 
 /** A sector apartment block: balcony slits, windows and a roof tank. */
@@ -59,13 +55,9 @@ function block(t: Tools, x: number, w: number, top: number, base: number): strin
 }
 
 function ground(t: Tools, y: number, bump = 3): string {
-  const pts: Pt[] = [[-4, y]];
-  for (let x = 20; x < W; x += 30) pts.push([x, y - bump / 2 + t.rand() * bump]);
-  pts.push([W + 4, y], [W + 4, H + 4], [-4, H + 4]);
-  return t.path(pts);
+  return t.path(groundPts(t, { y, bump, from: 20, to: W, step: 30, left: -4, right: W + 4, bottom: H + 4 }));
 }
 
-/** Grass tuft cut with three quick strokes. */
 const tuft = (t: Tools, x: number, y: number) =>
   t.path([
     [x, y],
@@ -88,7 +80,6 @@ function empty(): Layer[] {
       'plot',
       MAIN,
       [
-        // Signboard with two slits where the text would go.
         t.path([
           [116, 82],
           [204, 78],
@@ -105,7 +96,6 @@ function empty(): Layer[] {
       NEAR,
       [
         ground(t, 178, 2) +
-          // Tree guard: a cage of bars around a sapling.
           t.rect(50, 144, 22, 36) +
           t.grid(53, 147, 4, 1, 2.6, 30, 2.6, 0),
       ],
@@ -117,7 +107,6 @@ function empty(): Layer[] {
 /** "Tuta board": a building left half-built, a sign hanging by one chain, a cone and a barricade. */
 function error(): Layer[] {
   const t = makeTools('error-3', 0.6);
-  // A bare concrete frame: columns and slabs, every bay open.
   const frame = t.rect(196, 58, 104, 96) + t.grid(202, 64, 4, 4, 20, 17, 5, 5);
   const crane =
     t.path([
@@ -163,7 +152,6 @@ function error(): Layer[] {
           ]),
       ],
       [
-        // Frame: two posts and a top bar, and the one chain that holds.
         t.rect(70, 54, 6, 104),
         t.rect(160, 54, 6, 104),
         t.rect(66, 50, 104, 6),
@@ -186,7 +174,6 @@ function error(): Layer[] {
       NEAR,
       [
         ground(t, 178, 2) +
-          // Traffic cone with two stripes cut out.
           t.path([
             [226, 178],
             [240, 126],
@@ -205,7 +192,6 @@ function error(): Layer[] {
             [261, 170],
             [229, 170],
           ]),
-        // Barricade: a striped bar on two legs.
         t.rect(14, 150, 84, 12) +
           t.path([
             [22, 152],
@@ -289,7 +275,6 @@ function digit(t: Tools, ch: '4' | '0', x: number, y: number): string {
 function notFound(): Layer[] {
   const t = makeTools('nf-3', 0.6);
   const d = makeTools('nf-digits', 0.2);
-  // Milestone: a slab with an arched top; the top band is a separate cut.
   const stone = (x: number, y: number, w: number, h: number) =>
     t.path([
       [x, y + 14],
@@ -311,7 +296,6 @@ function notFound(): Layer[] {
       MID,
       [
         ground(t, 146, 4) +
-          // The road narrows toward the horizon and stops short of it.
           t.path([
             [-4, 204],
             [128, 150],
@@ -383,10 +367,8 @@ function offline(): Layer[] {
       [110, y1 + sag * 0.8 + 2],
       [34, y1 + 2],
     ]);
-  // A pole with two cross-arms and their insulators.
   const pole = (x: number, top: number) =>
     t.rect(x - 3, top, 6, 160) + t.rect(x - 16, top + 10, 32, 4) + t.rect(x - 12, top + 24, 24, 4) + t.rect(x - 15, top + 4, 3, 6) + t.rect(x + 12, top + 4, 3, 6);
-  // A bird on the wire: body, head and tail in one cut.
   const bird = (x: number, y: number) =>
     t.path([
       [x, y],
@@ -407,7 +389,6 @@ function offline(): Layer[] {
       'kite',
       { fill: 'var(--color-kesar-500)', shadow: 'rgb(138 51 0 / 0.4)' },
       [
-        // The kite, with its spine and spar cut out.
         t.path([
           [178, 30],
           [210, 64],
@@ -428,7 +409,6 @@ function offline(): Layer[] {
           ]),
       ],
       [
-        // Tail ribbons, then the snapped string.
         t.path([
           [176, 110],
           [186, 110],
@@ -449,7 +429,6 @@ function offline(): Layer[] {
       'near',
       NEAR,
       [
-        // Rooftop parapet with drain holes, a water tank and a dish.
         t.path([
           [-4, 168],
           [324, 162],

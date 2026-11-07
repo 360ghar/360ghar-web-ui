@@ -4,10 +4,10 @@ import { vignetteLayers, VIGNETTE_H, VIGNETTE_W } from '@/lib/paper/vignettes';
 import { Icon } from '@/ui/icons/Icon';
 import { PaperArt } from '@/ui/paper/PaperArt';
 import { PaperVignette } from '@/ui/paper/PaperVignette';
-import { HOUSE_H, HOUSE_W, houseLayers, vignette, type VignetteName } from './vignettes';
+import { HOUSE_H, HOUSE_W, houseLayers, vignette, type AccountVignetteName } from './vignettes';
 
 /** An account scene (320 x 200) with a hand-cut edge. */
-export function Vignette({ name, className }: { name: VignetteName; className?: string }) {
+export function Vignette({ name, className }: { name: AccountVignetteName; className?: string }) {
   const s = vignette(name);
   return <PaperArt layers={s.layers} width={s.w} height={s.h} bg="var(--color-kesar-50)" cutEdge={`acct-${name}`} className={className} />;
 }
@@ -72,7 +72,7 @@ export function noPhotoUrl(seed = '1'): string {
 type Action = { label: string; href?: string; onClick?: () => void };
 
 /** Empty state with an account vignette. Same shape as the shared StateBlock. */
-export function AcctState({ name, title, body, action, secondary, children }: { name: VignetteName; title: string; body?: ReactNode; action?: Action; secondary?: Action; children?: ReactNode }) {
+export function AcctState({ name, title, body, action, secondary, children }: { name: AccountVignetteName; title: string; body?: ReactNode; action?: Action; secondary?: Action; children?: ReactNode }) {
   const btn = (a: Action, primary: boolean) => {
     const cls = primary ? 'btn btn-primary' : 'link';
     const icon = primary ? <Icon name="arrow-up-right" size={18} className="arrow" /> : null;

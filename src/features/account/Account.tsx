@@ -946,6 +946,7 @@ function Listings({ locale, t }: { locale: Locale; t: Strings }) {
  * and the card falls back to that one line if they do not load.
  */
 function AssignedAgent({ t }: { t: Strings }) {
+  // No retries: a failed call shows the one-line fallback at once, instead of after the retry delays.
   const q = useQuery({ queryKey: ['assigned-agent'], queryFn: () => call(api.GET('/api/v1/agents/assigned')), retry: false });
   const a = q.data;
   const langs = (a?.languages ?? []).map((l) => l.charAt(0).toUpperCase() + l.slice(1)).join(', ');

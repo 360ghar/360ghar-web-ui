@@ -80,7 +80,7 @@ const heroGroups = [
       <>
         <div class="container-page pt-2">
           <Breadcrumbs items={[{ name: hi ? 'होम' : 'Home', path: '/' }, { name: hi ? 'गुड़गाँव' : 'Gurgaon', path: '/gurgaon' }, { name: heading }]} />
-          <PlaceHero kind={kindForLandmark(lm.type, lm.slug)} seed={lm.slug} locale={locale} titleLength={heading.length}>
+          <PlaceHero kind={kindForLandmark(lm)} seed={lm.slug} locale={locale} titleLength={heading.length}>
             <h1>{heading}</h1>
             <p class="near-lead">{about}</p>
             <PlaceFacts slot="aside" groups={heroGroups} />

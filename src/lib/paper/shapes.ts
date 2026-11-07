@@ -31,6 +31,23 @@ export const cloudPts = (x: number, y: number, w: number, profile: CloudProfile 
 export const trunkPts = (cx: number, g: number, h: number, dx: number[], foot = 0): Pt[] =>
   [0, 0.55, 0.72, 0.76, 0.62, 0.8, 0.78, 0.55, 0].map((f, i): Pt => [cx + dx[i]!, f ? g - h * f : g + foot]);
 
+/** A layer with no parallax, drawn from a tone (`fill` and `shadow`) and its cut and solid paths. */
+export const layer = (id: string, tone: { fill: string; shadow: string }, cut: string[], solid: string[] = []): Layer => ({ id, depth: 0, ...tone, cut, solid });
+
+/**
+ * Points of a ground sheet: a rough top edge at `y` (one point every `step` from `from` up to `to`, each jittered by `bump`),
+ * closed out to `left` and `right` and down to `bottom`. Pass them to `path` or `P`.
+ */
+export const groundPts = (
+  t: { rand: () => number },
+  { y, bump, from, to, step, left, right, bottom }: { y: number; bump: number; from: number; to: number; step: number; left: number; right: number; bottom: number },
+): Pt[] => {
+  const pts: Pt[] = [[left, y]];
+  for (let x = from; x < to; x += step) pts.push([x, y - bump / 2 + t.rand() * bump]);
+  pts.push([right, y], [right, bottom], [left, bottom]);
+  return pts;
+};
+
 type TreeStyle = {
   trunk: number[];
   /** How far the trunk foot sinks below the ground line. */
