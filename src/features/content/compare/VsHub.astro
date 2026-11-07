@@ -23,6 +23,7 @@ const H = {
   lead: k('hub.lead'),
   profiles: k('hub.profiles'),
   profileWord: k('hub.profile'),
+  bestLists: k('hub.bestLists'),
   serviceProfilePrefix: k('hub.serviceProfilePrefix'),
 };
 const categoryLabel = (category: string) => k(`categories.${category}`);
@@ -71,9 +72,9 @@ const jsonLd = [
     </ul>
   </section>
   <section aria-labelledby="vs-best">
-    <h2 id="vs-best">Best-of lists</h2>
+    <h2 id="vs-best">{H.bestLists}</h2>
     <ul>
-      {BEST_PAGES.map((page) => <li><a href={L(page.path)}>{page.term}</a></li>)}
+      {BEST_PAGES.map((page) => <li><a href={page.path}>{page.term}</a></li>)}
     </ul>
   </section>
 </Content>

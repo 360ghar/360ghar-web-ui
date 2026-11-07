@@ -5,6 +5,7 @@ import { STATIC_PATHS, staticEntries } from '@/features/feeds/data';
 import { resolveRoute } from '@/lib/seo/routes';
 import { faqPage } from '@/lib/seo/site';
 import { BEST_PAGES, CHECKED_ON, PUBLISHER_LINE, bestPage, itemList } from './bestPages';
+import { BEST_PATHS } from './paths';
 
 const competitorFor = (href: string) => COMPETITORS.find((c) => href === `/vs/${c.slug}`);
 
@@ -12,18 +13,40 @@ describe('best-X pages', () => {
   it.each(BEST_PAGES.map((page) => [page.path, page] as const))('%s has the exact term in the title and the H1', (path, page) => {
     expect(page.title.startsWith(page.term)).toBe(true);
     expect(page.term).toMatch(/^Best .+ in (India|Gurgaon)$|^Best AI real estate platforms$/);
-    // The layout renders the term as the H1 (heading={page.term}); the route file must use this record.
+    // The layout renders the term as the H1 (heading={page.term}).
     expect(readFileSync(new URL('./BestPage.astro', import.meta.url), 'utf8')).toContain('heading={page.term}');
     expect(resolveRoute(path, { fixed: true })?.file).toBe(`${path.slice(1)}.astro`);
+  });
+
+  it.each(BEST_PAGES.map((page) => [page.path, page] as const))('%s is rendered from its own record by its route file', (path) => {
+    const route = readFileSync(new URL(`../../../pages${path}.astro`, import.meta.url), 'utf8');
+    expect(route).toContain(`bestPage('${path}')`);
+    expect(route).toContain('<BestPage page={page} />');
   });
 
   it.each(BEST_PAGES.map((page) => [page.path, page] as const))('%s answers in two sentences', (_path, page) => {
     expect(page.answer.split(/(?<=[.!?])\s+/)).toHaveLength(2);
   });
 
-  it.each(BEST_PAGES.map((page) => [page.path, page] as const))('%s lists 360Ghar and the publisher line', (_path, page) => {
+  it.each(BEST_PAGES.map((page) => [page.path, page] as const))('%s lists 360Ghar', (_path, page) => {
     expect(page.rows.map((row) => row.name)).toContain('360Ghar');
-    expect(PUBLISHER_LINE).toBe('Published by 360Ghar. We make 360Ghar, which is on this list.');
+  });
+
+  it('renders the publisher line from the shared constant', () => {
+    const layout = readFileSync(new URL('./BestPage.astro', import.meta.url), 'utf8');
+    expect(layout).toContain('{PUBLISHER_LINE}');
+    expect(layout).toMatch(/import \{[^}]*\bPUBLISHER_LINE\b[^}]*\} from '\.\/bestPages'/);
+    expect(PUBLISHER_LINE).toContain('We make 360Ghar, which is on this list.');
+  });
+
+  it('links the Hindi hub to the English paths, with a translated heading', () => {
+    const hub = readFileSync(new URL('../compare/VsHub.astro', import.meta.url), 'utf8');
+    expect(hub).toContain('href={page.path}');
+    const hi = JSON.parse(readFileSync(new URL('../../../i18n/locales/hi/compare.json', import.meta.url), 'utf8'));
+    const en = JSON.parse(readFileSync(new URL('../../../i18n/locales/en/compare.json', import.meta.url), 'utf8'));
+    expect(en.hub.bestLists).toBeTruthy();
+    expect(hi.hub.bestLists).toBeTruthy();
+    expect(hi.hub.bestLists).not.toBe(en.hub.bestLists);
   });
 
   it.each(BEST_PAGES.map((page) => [page.path, page] as const))('%s has 5 to 6 FAQs with the same text in FAQPage JSON-LD', (_path, page) => {
@@ -94,6 +117,10 @@ describe('best-X route wiring', () => {
       expect(STATIC_PATHS).toContain(page.path);
       expect(staticEntries().find((e) => e.path === page.path)).toMatchObject({ enOnly: true });
     }
+  });
+
+  it('keeps the shared English-only path list equal to the page records', () => {
+    expect(BEST_PAGES.map((page) => page.path)).toEqual([...BEST_PATHS]);
   });
 
   it('is found by bestPage()', () => {

@@ -10,7 +10,7 @@ import { memo } from '@/lib/memo';
 import { allProperties } from '@/lib/listings/homes';
 import { CITIES, INTENTS, TYPE_SEGMENTS, budgetsFor, isIndexable, landingFilters, parseLanding, type Facet, type Landing } from '@/features/landing/model';
 import { INTENT_TYPES, LISTED_LOCALITIES, localitySlug, type Locality } from '@/features/localities/data';
-import { BEST_PATHS } from '@/features/content/best/bestPages';
+import { BEST_PATHS } from '@/features/content/best/paths';
 import type { SitemapEntry } from './xml';
 
 export const allPosts = () =>

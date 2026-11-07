@@ -18,12 +18,15 @@ import { CHECKED_ON, itemList, PUBLISHER_LINE, type BestPageData } from './bestP
 
 type Props = { page: BestPageData };
 const { page } = Astro.props;
+// The body is English on both locales and /hi canonicalises to the English URL, so the
+// schema uses English too. Only the link helper follows the request locale.
 const locale = Astro.locals.locale;
 const L = localizer(locale);
-const { crumbs, ld } = trail(locale, [{ name: page.term, path: page.path }]);
+const schemaLocale = 'en' as const;
+const { crumbs, ld } = trail(schemaLocale, [{ name: page.term, path: page.path }]);
 const jsonLd = [
   ld,
-  { ...webPage({ name: page.title, description: page.description, path: page.path, locale }), publisher: { '@id': ORGANIZATION_ID } },
+  { ...webPage({ name: page.title, description: page.description, path: page.path, locale: schemaLocale }), publisher: { '@id': ORGANIZATION_ID } },
   itemList(page),
   faqPage(page.faqs),
 ];

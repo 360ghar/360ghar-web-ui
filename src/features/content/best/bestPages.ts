@@ -72,7 +72,7 @@ export const BEST_PAGES: BestPageData[] = [
     title: 'Best real estate apps in India | 360Ghar',
     description: 'Compare real estate apps in India by product type. Each row links to its source and the date the source was checked.',
     answer:
-      'A real estate app in India lets you search homes to buy, rent or stay short term. This page lists 360Ghar and six property marketplaces, and it orders them by the criteria below, not by a test of listings.',
+      'A real estate app in India lets you search homes to buy, rent or stay short term. This page lists 360Ghar first, then six property marketplaces in the order of our compare list, and it does not test listings.',
     summaryHeading: 'Summary',
     criteria: [
       'The product is a property search app or website for buyers, renters or both, in India.',
@@ -303,8 +303,6 @@ export const BEST_PAGES: BestPageData[] = [
     ],
   },
 ];
-
-export const BEST_PATHS = BEST_PAGES.map((page) => page.path);
 
 export function bestPage(path: string): BestPageData {
   const page = BEST_PAGES.find((p) => p.path === path);

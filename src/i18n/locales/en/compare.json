@@ -26,6 +26,7 @@
     "h1": "Property service profiles",
     "lead": "360Ghar’s product centers on Gurugram home search, with flows for buying, renting and short stays, plus search filters, saved homes, comparisons, visit requests, owner listings and local property-data pages. The profiles below cover different categories and market scopes, so compare the services relevant to each search task. Inventory and some features depend on listing, sign-in, API and data availability.",
     "profiles": "Profiles",
+    "bestLists": "Top lists",
     "profile": "Profile",
     "serviceProfilePrefix": "Service profile: "
   },

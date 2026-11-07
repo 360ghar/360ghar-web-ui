@@ -39,7 +39,7 @@ export function organizationBlock(): Block {
     founder: { '@id': FOUNDER_ID },
     sameAs: uniq([...old.organization.sameAs, ...panel.sameAs]),
     owns: [
-      { '@type': 'MobileApplication', '@id': FLATMATES_APP_ID, name: '360 Flatmates', url: 'https://flatmates.360ghar.com', publisher: { '@id': ORGANIZATION_ID } },
+      { '@type': 'MobileApplication', '@id': FLATMATES_APP_ID, name: APPS.flatmates.name, url: 'https://flatmates.360ghar.com', publisher: { '@id': ORGANIZATION_ID } },
       { '@type': 'SoftwareApplication', '@id': TOURS_APP_ID, name: '360 Tours', url: 'https://tours.360ghar.com', publisher: { '@id': ORGANIZATION_ID } },
     ],
   };
@@ -82,7 +82,7 @@ export function mobileApplicationBlock(): Block {
   return appBlock(APP_ID, APPS.ghar360, { name, applicationCategory, inLanguage, description, featureList });
 }
 
-/** 360 FlatMates, for /app and /links only. Description from the store listing (360-flatmates/docs/app_store_metadata.md). */
+/** 360 Flatmates, for /app and /links only. Description from the store listing (360-flatmates/docs/app_store_metadata.md). */
 export function flatmatesApplicationBlock(): Block {
   return appBlock(FLATMATES_APP_ID, APPS.flatmates, {
     name: APPS.flatmates.name,
