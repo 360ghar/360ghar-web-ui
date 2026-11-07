@@ -4,10 +4,9 @@
  */
 import sanitizeHtml from 'sanitize-html';
 
-export { esc } from './esc';
 
 const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", nbsp: ' ' };
-/** Reverses `esc` (and a few common entities) in one pass, so "&amp;lt;" becomes "&lt;", not "<". */
+/** Reverses `escapeHtml` (and a few common entities) in one pass, so "&amp;lt;" becomes "&lt;", not "<". */
 export const decode = (s: string) => s.replace(/&(amp|lt|gt|quot|#39|nbsp);/g, (_, name: string) => ENTITIES[name]!);
 
 /** Text of an HTML string: tags removed, entities decoded. */
