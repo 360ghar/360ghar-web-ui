@@ -321,7 +321,7 @@ export const generateBlogStructuredData = ({
   inLanguage: inLanguage || ['en-IN', 'hi-IN'],
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': blog.url || `${siteMetadata.siteUrl}/blog/${blog.slug}`,
+    '@id': blog.url || (blog.slug ? `${siteMetadata.siteUrl}/blog/${blog.slug}` : `${siteMetadata.siteUrl}/blog`),
   },
 });
 
@@ -341,7 +341,8 @@ export const generateVideoStructuredData = (video: {
   title?: string;
   description?: string;
   thumbnail?: string;
-  uploadDate?: string;
+  /** Required by Google's VideoObject: callers pass the real upload date. */
+  uploadDate: string;
   duration?: string;
   contentUrl?: string;
   embedUrl?: string;
@@ -350,9 +351,8 @@ export const generateVideoStructuredData = (video: {
   name: video.title || '360° Virtual Tour',
   description: video.description || 'Experience this property through our immersive 360° virtual tour',
   thumbnailUrl: video.thumbnail || siteMetadata.defaultOgImage,
-  // Only emit dates/durations when real values are provided — the previous
-  // `new Date().toISOString()` and 'PT1M' fallbacks fabricated data.
-  ...(video.uploadDate ? { uploadDate: video.uploadDate } : {}),
+  uploadDate: video.uploadDate,
+  // Only emit a duration when a real value is provided: the old 'PT1M' fallback fabricated data.
   ...(video.duration ? { duration: video.duration } : {}),
   contentUrl: video.contentUrl,
   embedUrl: video.embedUrl,

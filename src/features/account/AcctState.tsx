@@ -9,7 +9,7 @@ type Action = { label: string; href?: string; onClick?: () => void };
 export function AcctState({ name, title, body, action, secondary, children }: { name: AccountVignetteName; title: string; body?: ReactNode; action?: Action; secondary?: Action; children?: ReactNode }) {
   const btn = (a: Action, primary: boolean) => {
     const cls = primary ? 'btn btn-primary' : 'link';
-    const icon = primary ? <Icon name="arrow-up-right" size={18} className="arrow" /> : null;
+    const icon = primary ? <Icon name={a.onClick ? 'retry' : 'arrow-up-right'} size={18} className="arrow" /> : null;
     return a.href ? (
       <a className={cls} href={a.href}>
         {a.label}
