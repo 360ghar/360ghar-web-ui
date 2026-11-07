@@ -10,6 +10,7 @@ import { memo } from '@/lib/memo';
 import { allProperties } from '@/lib/listings/homes';
 import { CITIES, INTENTS, TYPE_SEGMENTS, budgetsFor, isIndexable, landingFilters, parseLanding, type Facet, type Landing } from '@/features/landing/model';
 import { INTENT_TYPES, LISTED_LOCALITIES, localitySlug, type Locality } from '@/features/localities/data';
+import { BEST_PATHS } from '@/features/content/best/paths';
 import type { SitemapEntry } from './xml';
 
 export const allPosts = () =>
@@ -31,11 +32,18 @@ export const STATIC_PATHS = [
   '/check-fake-listing', '/rent-receipt', '/near/cyber-city', '/near/udyog-vihar', '/near/golf-course-road-corporate',
   '/near/millennium-city-centre', '/near/medanta', '/near/artemis', '/near/sector-55-56-metro', '/near/dlf-cyber-park', '/near/ambience-mall',
   '/near/hero-honda-chowk',
+  ...BEST_PATHS,
   ...(AI_OWNER_TOOLS ? ['/rent-agreement-drafter', '/legal-notice-drafter'] : []),
 ];
 
+// The best-X pages are English only: list the English URL alone, as the blog does.
 export const staticEntries = (): SitemapEntry[] =>
-  STATIC_PATHS.map((path) => ({ path, changefreq: path === '/' ? 'daily' : 'weekly', priority: path === '/' ? '1.0' : '0.7' }));
+  STATIC_PATHS.map((path) => ({
+    path,
+    changefreq: path === '/' ? 'daily' : 'weekly',
+    priority: path === '/' ? '1.0' : '0.7',
+    ...(BEST_PATHS.includes(path) ? { enOnly: true } : {}),
+  }));
 
 const CITY_NAMES: Record<string, string[]> = { gurgaon: ['gurgaon', 'gurugram'] };
 const inCity = (p: Property, city: string) => (CITY_NAMES[city] ?? [CITIES[city]!.name.toLowerCase()]).some((n) => (p.city ?? '').toLowerCase().includes(n));

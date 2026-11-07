@@ -11,7 +11,7 @@ export const APPS = {
     bundleId: 'com.the360ghar.ghar360',
   },
   flatmates: {
-    name: '360 FlatMates',
+    name: '360 Flatmates',
     play: 'https://play.google.com/store/apps/details?id=com.the360ghar.flatmates360',
     ios: 'https://apps.apple.com/in/app/360-flatmates/id6771899300' as string | null,
     itunesId: '6771899300',

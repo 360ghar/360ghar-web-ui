@@ -10,8 +10,8 @@ test('/app lists a badge only where the app is live', async ({ page }) => {
   await page.goto('/app');
   const main = page.locator('main');
   await expect(main.getByRole('link', { name: 'Get 360Ghar on Google Play' })).toHaveAttribute('href', PLAY_GHAR);
-  await expect(main.getByRole('link', { name: 'Get 360 FlatMates on Google Play' })).toHaveAttribute('href', PLAY_FLAT);
-  await expect(main.getByRole('link', { name: 'Download 360 FlatMates on the App Store' })).toHaveAttribute('href', IOS_FLAT);
+  await expect(main.getByRole('link', { name: 'Get 360 Flatmates on Google Play' })).toHaveAttribute('href', PLAY_FLAT);
+  await expect(main.getByRole('link', { name: 'Download 360 Flatmates on the App Store' })).toHaveAttribute('href', IOS_FLAT);
   await expect(main.getByRole('link', { name: /Download 360Ghar on the App Store/ })).toHaveCount(0);
   await expect(page.locator('meta[name="apple-itunes-app"]')).toHaveAttribute('content', 'app-id=6771899300');
   await expect(page.locator('main img[src$="app-store.svg"]')).toHaveCount(1);

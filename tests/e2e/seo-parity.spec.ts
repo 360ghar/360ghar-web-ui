@@ -4,6 +4,7 @@
  * that added it: the QA phase runs it against the dev server.
  */
 import { expect, test } from '@playwright/test';
+import { BEST_PATHS } from '../../src/features/content/best/paths';
 
 test.beforeEach(({ browserName: _browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'HTTP-only checks run once');
@@ -78,11 +79,11 @@ test.describe('sitemaps', () => {
       expect(Buffer.byteLength(xml), file).toBeLessThanOrEqual(50 * 1024 * 1024);
       const locs = new Set(urls.map((u) => u.loc));
       for (const u of urls.slice(0, 500)) {
-        // Blog posts have no Hindi text: the English URL is listed alone and /hi/blog/<slug> canonicalises to it.
-        const enOnly = /^\/blog\/[^/]+$/.test(new URL(u.loc).pathname);
+        // Blog posts and the best-X pages have no Hindi text: the English URL is listed alone and the /hi copy canonicalises to it.
+        const path = new URL(u.loc).pathname;
+        const enOnly = /^\/blog\/[^/]+$/.test(path) || BEST_PATHS.includes(path);
         expect(Object.keys(u.alts).sort(), u.loc).toEqual(enOnly ? [] : ['en', 'hi', 'x-default']);
         if (!enOnly) expect(locs.has(u.alts.en!) && locs.has(u.alts.hi!), `${u.loc} alternates are listed`).toBe(true);
-        const path = new URL(u.loc).pathname;
         expect(path === '/' || !path.endsWith('/'), `${u.loc} has no trailing slash`).toBe(true);
         expect(path.replace(/^\/hi/, '') || '/', u.loc).not.toMatch(/^\/(account|login|register|post-property|compare|property-sidebar|add-new-listing)$/);
       }
