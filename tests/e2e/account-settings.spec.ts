@@ -195,6 +195,11 @@ test.describe('saved auction alerts', () => {
 test('the new tabs are reachable by click and keep ?tab= in the URL', async ({ page }) => {
   await signedIn(page);
   await page.route(/\/api\/v1\/users\/notification-settings/, (r) => r.fulfill({ json: { push_notifications: true, email_notifications: true, sms_notifications: false, promotional_emails: false } }));
+  // The Overview tab loads these first. Unmocked, they reach the real API, which answers 401 for the
+  // fake token; the 401 starts a refresh that signs the user out, so the tab click can race a redirect.
+  await page.route(/\/api\/v1\/visits\/upcoming/, (r) => r.fulfill({ json: page_([]) }));
+  await page.route(/\/api\/v1\/properties\/me/, (r) => r.fulfill({ json: page_([]) }));
+  await page.route(/\/api\/v1\/swipes/, (r) => r.fulfill({ json: page_([]) }));
   await page.goto('/account');
   await hydrated(page);
   await page.getByRole('tab', { name: 'Notifications' }).click();
