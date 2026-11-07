@@ -22,8 +22,9 @@ export const realEstateStructuredData = {
     logo: {
       '@type': 'ImageObject',
       url: ORGANIZATION_LOGO_URL,
-      width: 512,
-      height: 512,
+      // The file is 2048x2048; declare its real size.
+      width: 2048,
+      height: 2048,
     },
     image: 'https://360ghar.com/og-image-home.jpg',
     telephone: siteMetadata.organization.telephone,
