@@ -1,6 +1,6 @@
 import { api, attempt } from '@/lib/api/client';
 import type { ApiError } from '@/lib/api/errors';
-import { isPlaceholderPrice } from '@/features/search/prices';
+import { isPlaceholderPrice } from '@/lib/listings/prices';
 import type { Property, PropertyDetail } from '@/lib/api/types';
 
 /** `peers`: homes of the same type for sale in the same locality, for the price context. */

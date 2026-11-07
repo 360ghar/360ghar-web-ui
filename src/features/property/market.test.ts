@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isPlaceholderPrice, percentile } from '@/features/search/prices';
+import { isPlaceholderPrice, percentile } from '@/lib/listings/prices';
 import { priceContext } from './market';
 
 let id = 100;

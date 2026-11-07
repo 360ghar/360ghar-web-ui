@@ -8,5 +8,5 @@
   { "name": "Sectors 55-56 Rapid Metro", "slug": "sector-55-56-metro", "city": "gurgaon", "lat": 28.4542, "lng": 77.0839, "type": "transit", "description": "Rapid Metro station serving the residential hub of Sectors 55-56 with direct connectivity to Cyber City." },
   { "name": "DLF Cyber Park", "slug": "dlf-cyber-park", "city": "gurgaon", "lat": 28.4850, "lng": 77.0935, "type": "it_hub", "description": "Premium IT park in DLF Phase 3, home to technology companies and startups." },
   { "name": "Ambience Mall", "slug": "ambience-mall", "city": "gurgaon", "lat": 28.4742, "lng": 77.0865, "type": "commercial", "description": "One of NCR's largest malls on NH-8. Attracts weekend shoppers and drives rental demand in surrounding sectors." },
-  { "name": "Hero Honda Chowk / NH-8", "slug": "hero-honda-chowk", "city": "gurgaon", "lat": 28.4769, "lng": 77.0533, "type": "transit", "description": "Major NH-8 junction connecting Gurgaon to Delhi and the airport. Rapid Metro station nearby." }
+  { "name": "Hero Honda Chowk / NH-8", "slug": "hero-honda-chowk", "city": "gurgaon", "lat": 28.4769, "lng": 77.0533, "type": "transit", "kind": "road", "description": "Major NH-8 junction connecting Gurgaon to Delhi and the airport. Rapid Metro station nearby." }
 ]

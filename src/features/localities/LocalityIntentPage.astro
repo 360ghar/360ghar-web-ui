@@ -10,7 +10,7 @@ import SearchResults from '@/features/search/SearchResults';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import Faq from '@/ui/Faq.astro';
 import NotFoundState from '@/ui/states/NotFoundState.astro';
-import Vignette from './Vignette.astro';
+import PlaceVignette from './PlaceVignette.astro';
 import { kindForEntity } from './vignette';
 
 
@@ -68,7 +68,7 @@ const locked = { purpose: true, locality: true, q: true } as const;
       <>
         <div class="container-page pt-2">
           <Breadcrumbs items={[{ name: hi ? 'होम' : 'Home', path: '/' }, { name: hi ? 'लोकेलिटीज़' : 'Localities', path: '/localities' }, { name, path: `/locality/${slug}` }, { name: heading }]} />
-          <Vignette kind={kindForEntity(l.entityType)} seed={slug} locale={locale} size="strip" sign={l.entityType === 'sector' ? name : undefined} class="mt-2" />
+          <PlaceVignette kind={kindForEntity(l.entityType)} seed={slug} locale={locale} size="strip" sign={l.entityType === 'sector' ? name : undefined} class="mt-2" />
           <h1 class="mt-5 text-3xl md:text-4xl">{heading}</h1>
           <p class="mt-2 text-ink-800">
             <a class="link" href={localizePath(`/locality/${slug}/${intent === 'buy' ? 'rent' : 'buy'}`, locale)}>

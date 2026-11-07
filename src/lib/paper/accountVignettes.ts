@@ -6,34 +6,30 @@
  * Empty states are 320 x 200. The post-property house is 200 x 120 and is
  * built one layer per wizard step.
  */
-import { makeTools, type Layer, type Pt } from '@/lib/paper/shapes';
+import { groundPts, makeTools, type Layer, type Pt } from '@/lib/paper/shapes';
+import * as tones from '@/lib/paper/tones';
 
-export type VignetteName = 'saved' | 'visits' | 'listings' | 'door' | 'posted';
+export type AccountVignetteName = 'saved' | 'visits' | 'listings' | 'door' | 'posted';
 export type Scene = { w: number; h: number; layers: Layer[] };
 
 const W = 320;
 const H = 200;
 const SKY = 'rgb(226 91 0 / 0.3)';
-const MID = 'rgb(181 70 0 / 0.35)';
-const NEAR = 'rgb(94 33 0 / 0.4)';
+const MID = tones.MID.shadow;
+const NEAR = tones.LEAF.shadow;
 
 const SKYLINE = { heights: [30, 52, 40, 66, 46, 34, 60, 42, 28, 50, 38], slant: false, drop: 80, inset: 8 };
 const skyline = (seed: string, base: number) => makeTools(seed, 0.6).skyline(base, SKYLINE);
 
 function ground(seed: string, y: number, bump = 3, w = W, h = H): string {
   const t = makeTools(seed, 0.5);
-  const pts: Pt[] = [[-4, y]];
-  for (let x = 20; x < w; x += 30) pts.push([x, y - bump / 2 + t.rand() * bump]);
-  pts.push([w + 4, y], [w + 4, h + 4], [-4, h + 4]);
-  return t.path(pts);
+  return t.path(groundPts(t, { y, bump, from: 20, to: w, step: 30, left: -4, right: w + 4, bottom: h + 4 }));
 }
 
-/** Grass cut with a few quick strokes. */
 function tuft(t: ReturnType<typeof makeTools>, x: number, y: number): string {
   return t.path([[x, y + 1], [x + 4, y - 14], [x + 8, y - 3], [x + 12, y - 18], [x + 15, y - 3], [x + 20, y - 12], [x + 22, y + 1]]);
 }
 
-/** A heart outline (parametric), for cut-outs and tags. */
 function heart(t: ReturnType<typeof makeTools>, cx: number, cy: number, s: number): string {
   const pts: Pt[] = [];
   for (let i = 0; i < 28; i += 1) {
@@ -45,7 +41,6 @@ function heart(t: ReturnType<typeof makeTools>, cx: number, cy: number, s: numbe
   return t.path(pts);
 }
 
-/** A small house facade: gable roof, windows and a door, as one sheet. */
 function gable(t: ReturnType<typeof makeTools>, x: number, w: number, top: number, peak: number, base: number): string {
   let d = t.path([
     [x, base],
@@ -86,7 +81,6 @@ function saved(): Layer[] {
   ];
 }
 
-/** A wall calendar with the visit day ringed, and a house down the road. */
 function visits(): Layer[] {
   const t = makeTools('acct-visits', 0.6);
   let leaf = t.path([
@@ -95,10 +89,8 @@ function visits(): Layer[] {
     [214, 140],
     [94, 142],
   ]);
-  // Ring holes, the month slit, then a 6 x 3 grid of day windows.
   leaf += t.oct(122, 48, 4) + t.oct(184, 47, 4) + t.rect(112, 60, 82, 8);
   leaf += t.grid(106, 80, 6, 3, 10, 9, 7, 8);
-  // A ring drawn round the visit day in one quick, uneven stroke.
   const ring = t.blob(163, 101, 14, 11.5, 24, 0.05) + t.blob(163, 101, 10.5, 8.5, 24, 0.05);
   const hut = t.path([[250, 180], [250, 152], [244, 152], [270, 132], [296, 152], [290, 152], [290, 180]]) + t.rect(264, 160, 12, 18);
   return [
@@ -122,7 +114,6 @@ function visits(): Layer[] {
   ];
 }
 
-/** A house with a "to let" board hung from a bracket. */
 function listings(): Layer[] {
   const t = makeTools('acct-listings', 0.6);
   let house = t.path([
@@ -184,7 +175,6 @@ function door(): Layer[] {
       depth: 0,
       shadow: NEAR,
       cut: [
-        // Door leaf, turned a little inward, with its handle cut out.
         t.path([
           [137, 93],
           [166, 97],
@@ -196,7 +186,6 @@ function door(): Layer[] {
       solid: [
         t.rect(122, 78, 76, 2),
         ...flags,
-        // Step slab and a potted plant.
         t.rect(124, 160, 72, 6),
         t.path([[98, 162], [118, 162], [116, 148], [100, 148]]),
         t.path([[107, 149], [96, 124], [104, 130], [108, 116], [112, 130], [120, 124], [109, 149]]),
@@ -285,7 +274,6 @@ function posted(): Layer[] {
       cut: [
         ground('acct-posted-kerb', 178, 2),
         flag,
-        // Gulmohar: a wide canopy with a few leaf gaps.
         t.blob(62, 112, 34, 18, 22, 0.34) + t.blob(50, 108, 5, 3, 6, 0.3) + t.blob(74, 116, 4, 3, 6, 0.3) + t.blob(64, 102, 3.5, 2.5, 6, 0.3),
       ],
       solid: [
@@ -297,10 +285,10 @@ function posted(): Layer[] {
   ];
 }
 
-const builders: Record<VignetteName, () => Layer[]> = { saved, visits, listings, door, posted };
-const cache = new Map<VignetteName, Scene>();
+const builders: Record<AccountVignetteName, () => Layer[]> = { saved, visits, listings, door, posted };
+const cache = new Map<AccountVignetteName, Scene>();
 
-export function vignette(name: VignetteName): Scene {
+export function vignette(name: AccountVignetteName): Scene {
   let s = cache.get(name);
   if (!s) {
     s = { w: W, h: H, layers: builders[name]() };

@@ -11,8 +11,8 @@
  * No relative imports without an extension: scripts/*.mjs load this file with Node's type stripping.
  */
 import { APPS } from '../apps.ts';
-import { authors } from './legacy/authors.js';
-import { realEstateStructuredData as old } from './legacy/structuredData.js';
+import { authors } from './authors.ts';
+import { realEstateStructuredData as old } from './structuredData.ts';
 
 const SITE = 'https://360ghar.com';
 export const ORGANIZATION_ID = `${SITE}/#organization`;

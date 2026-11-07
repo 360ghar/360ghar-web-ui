@@ -6,6 +6,7 @@ import type { BlogPost } from '@/lib/api/types';
 import { formatDate as dateIn, imageUrl, srcSet } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizePath } from '@/lib/i18n/locale';
+import { artUrl } from '@/lib/paper/art-url';
 import { coverScene, hasRealCover } from './art/cover';
 import { SceneArt } from './art/SceneArt';
 import { paperArt, type SceneName } from './art/scenes';
@@ -49,7 +50,7 @@ export function BlogCardView({ post, locale, eager = false, heading: H = 'h3', s
           <SceneArt art={paperArt(art, post.slug)} />
         ) : (
           // Below the first screen the scene is a cached file (src/pages/art), not inline SVG.
-          <img className="scene-img" src={`/art/scene/${art}.svg`} data-scene={art} alt="" width={640} height={400} loading="lazy" decoding="async" />
+          <img className="scene-img" src={artUrl.scene(art)} data-scene={art} alt="" width={640} height={400} loading="lazy" decoding="async" />
         )}
       </div>
       <div className="grid gap-1.5">

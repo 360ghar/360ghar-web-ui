@@ -6,4 +6,4 @@ type Props = { name: SceneName; class?: string };
 const { name, class: className } = Astro.props;
 ---
 
-<PaperArt layers={sceneLayers(name)} width={SCENE_W} height={SCENE_H} bg="var(--color-kesar-50)" cutEdge={`scene-${name}`} class:list={['paper-scene', className]} />
+<PaperArt layers={sceneLayers(name)} width={SCENE_W} height={SCENE_H} bg="var(--color-kesar-50)" cutEdge={`scene-${name}`} class:list={[className]} />

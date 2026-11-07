@@ -7,16 +7,10 @@ import { api, call } from '@/lib/api/client';
 import { collectPages } from '@/lib/api/pages';
 import type { Property } from '@/lib/api/types';
 import { memo } from '@/lib/memo';
+import { allProperties } from '@/lib/listings/homes';
 import { CITIES, INTENTS, TYPE_SEGMENTS, budgetsFor, isIndexable, landingFilters, parseLanding, type Facet, type Landing } from '@/features/landing/model';
 import { INTENT_TYPES, LISTED_LOCALITIES, localitySlug, type Locality } from '@/features/localities/data';
 import type { SitemapEntry } from './xml';
-
-// The list cursor is keyset on (sort value, id), so a page never repeats or skips a home. The id dedupe stays as a guard.
-export const allProperties = () =>
-  memo('feed-properties', 30 * 60_000, async () => {
-    const homes = await collectPages((cursor) => call(api.GET('/api/v1/properties', { params: { query: { limit: 100, ...(cursor ? { cursor } : {}) } } })));
-    return [...new Map(homes.map((p) => [p.id, p])).values()];
-  });
 
 export const allPosts = () =>
   memo('feed-posts', 30 * 60_000, () => collectPages((cursor) => call(api.GET('/api/v1/blog/posts', { params: { query: { limit: 100, ...(cursor ? { cursor } : {}) } } }))));

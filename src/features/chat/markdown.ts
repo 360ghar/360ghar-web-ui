@@ -3,7 +3,7 @@
  * then adds a few inline and block formats. Links must be http(s) or site paths.
  * Enough for model replies; not a general Markdown engine.
  */
-import { esc } from '@/features/content/shared/esc';
+import { escapeHtml } from '@/lib/escape';
 
 function inline(s: string): string {
   return s
@@ -18,7 +18,7 @@ function inline(s: string): string {
 
 /** `headings`: emit real h1 to h4 elements (blog posts); chat replies keep a bold line. */
 export function renderMarkdown(md: string, headings = false): string {
-  const lines = esc(md.replace(/\r\n/g, '\n')).split('\n');
+  const lines = escapeHtml(md.replace(/\r\n/g, '\n')).split('\n');
   const out: string[] = [];
   let list: 'ul' | 'ol' | null = null;
   let para: string[] = [];

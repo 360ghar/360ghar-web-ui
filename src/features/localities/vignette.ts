@@ -12,7 +12,7 @@
  * the middle (x 440 to 1160), which is the part a phone shows.
  */
 import { rng } from '@/lib/paper/cut';
-import { makeTools, type Layer, type Pt } from '@/lib/paper/shapes';
+import { groundPts, makeTools, type Layer, type Pt } from '@/lib/paper/shapes';
 
 export const VW = 1600;
 export const VH = 400;
@@ -40,17 +40,19 @@ export type PlaceKind =
   | 'mall'
   | 'directory';
 
-/** Entity type (localities.json) to vignette kind. */
+/** Entity type (localities.json, lower case) to vignette kind. Unlisted types draw as a locality. */
+export const ENTITY_KIND: Record<string, PlaceKind> = { sector: 'sector', society: 'society', project: 'project', township: 'township', road: 'road', village: 'village', phase: 'locality', locality: 'locality' };
+
 export function kindForEntity(entityType: string): PlaceKind {
-  const map: Record<string, PlaceKind> = { sector: 'sector', society: 'society', project: 'project', township: 'township', road: 'road', village: 'village', phase: 'locality', locality: 'locality' };
-  return map[entityType] ?? 'locality';
+  return ENTITY_KIND[entityType] ?? 'locality';
 }
 
-/** Office landmark type (office-landmarks.json) to vignette kind. */
-export function kindForLandmark(type: string, slug: string): PlaceKind {
-  if (slug === 'hero-honda-chowk') return 'road';
-  const map: Record<string, PlaceKind> = { it_hub: 'office', corporate: 'office', industrial: 'industrial', transit: 'metro', hospital: 'hospital', commercial: 'mall' };
-  return map[type] ?? 'city';
+/** Office landmark type (office-landmarks.json) to vignette kind. Unlisted types draw as a city. */
+export const LANDMARK_KIND: Record<string, PlaceKind> = { it_hub: 'office', corporate: 'office', industrial: 'industrial', transit: 'metro', hospital: 'hospital', commercial: 'mall' };
+
+/** A landmark's own `kind` (set in office-landmarks.json) wins over its type. */
+export function kindForLandmark(lm: { type: string; kind?: PlaceKind }): PlaceKind {
+  return lm.kind ?? LANDMARK_KIND[lm.type] ?? 'city';
 }
 
 type Tools = ReturnType<typeof makeTools>;
@@ -94,7 +96,6 @@ function hole(t: Tools, x: number, y: number, w: number, h: number): string {
   return `M${nx} ${ny}h${W}v${Math.round(h)}h${-W}z`;
 }
 
-/** Window holes centred in a box. */
 function windows(t: Tools, x: number, w: number, y0: number, y1: number, cw: number, ch: number, gx: number, gy: number, skip: number) {
   const cols = Math.max(1, Math.floor((w - 16 + gx) / (cw + gx)));
   const rows = Math.max(1, Math.floor((y1 - y0 + gy) / (ch + gy)));
@@ -145,13 +146,11 @@ function slab(t: Tools, x: number, w: number, top: number, tanks = 1): string {
   return d;
 }
 
-/** Builder floor: stilt parking, three or four floors, balconies, a tank. */
 function builderFloor(t: Tools, x: number, w: number, floors: number): string {
   const fh = 30;
   const stilt = 24;
   const top = G - stilt - floors * fh;
   let d = t.rect(x, top, w, B - top);
-  // Stilt bays, open to the street.
   const bay = (w - 12) / 3;
   for (let i = 0; i < 3; i += 1) d += t.rect(x + 6 + i * bay + 4, G - stilt + 4, bay - 8, stilt);
   for (let f = 0; f < floors; f += 1) {
@@ -159,7 +158,6 @@ function builderFloor(t: Tools, x: number, w: number, floors: number): string {
     d += hole(t, x + 10, y + 7, 14, 13) + hole(t, x + w * 0.45, y + 7, 14, 13) + hole(t, x + w - 24, y + 7, 14, 13);
     d += hole(t, x + 8, y + fh - 7, w * 0.6, 3);
   }
-  // Stair head and a water tank on the roof.
   d += t.rect(x + 8, top - 14, 26, 15);
   const tx = x + w - 38;
   d += t.path([[tx, top - 18], [tx + 24, top - 18], [tx + 24, top - 6], [tx + 20, top - 6], [tx + 20, top + 1], [tx + 4, top + 1], [tx + 4, top - 6], [tx, top - 6]]);
@@ -176,7 +174,6 @@ function house(t: Tools, x: number, w: number, h: number): string {
   return d;
 }
 
-/** Two-storey villa with one pitched wing. */
 function villa(t: Tools, x: number, w: number): string {
   const top = G - 66;
   let d = t.path([[x, B], [x, top], [x + w * 0.42, top], [x + w * 0.42, top - 22], [x + w * 0.71, top - 44], [x + w, top - 22], [x + w, B]]);
@@ -222,12 +219,8 @@ function shops(t: Tools, x: number, n: number, w = 92): string {
   return d;
 }
 
-/** Ground sheet with a rough top edge. */
 function groundSheet(t: Tools, y: number, step: number, bump: number): string {
-  const pts: Pt[] = [[-20, y]];
-  for (let x = step / 2; x < VW; x += step) pts.push([x, y - bump / 2 + t.rand() * bump]);
-  pts.push([VW + 20, y], [VW + 20, B], [-20, B]);
-  return t.path(pts);
+  return t.path(groundPts(t, { y, bump, from: step / 2, to: VW, step, left: -20, right: VW + 20, bottom: B }));
 }
 
 /** A zebu cow facing right, the home diorama's cow at scale `s`. */
@@ -300,7 +293,6 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
   const P = Object.fromEntries(LAYERS.map((l): [LayerId, Part] => [l.id, { cut: [], solid: [] }])) as Record<LayerId, Part>;
   const scene: Scene = { layers: [] };
 
-  /* Sky: a sun on one side, two cloud strips. */
   const sunLeft = r() < 0.35;
   const sx = sunLeft ? between(180, 420) : between(1180, 1420);
   const sun: Pt[] = [];
@@ -311,7 +303,6 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
   P.sky.cut.push(T.sky.path(sun));
   P.clouds.cut.push(T.clouds.cloud(between(560, 760), between(52, 78), 190), T.clouds.cloud(between(1000, 1200), between(150, 180), 150), T.clouds.cloud(between(40, 200), between(170, 200), 170));
 
-  /* Far layer: a low, seeded skyline across the whole width. */
   const farTops = kind === 'village' || kind === 'delhi' || kind === 'faridabad' ? [230, 290] : kind === 'city' || kind === 'office' || kind === 'noida' ? [70, 170] : [140, 240];
   // Faridabad draws the Aravalli ridge in this layer instead.
   for (let x = -10; x < VW && kind !== 'faridabad'; ) {
@@ -320,7 +311,6 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
     x += w + between(6, 44);
   }
 
-  /* Street and kerb sheets. */
   P.street.cut.push(groundSheet(T.street, G, 80, 4));
   let kerb = groundSheet(T.kerb, K, 120, 5);
   for (let x = between(10, 60); x < VW; x += 170) kerb += hole(T.kerb, x, K + 16, 64, 4);
@@ -330,7 +320,6 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
 
   switch (kind) {
     case 'sector': {
-      // Sector blocks in rows, a sector signboard at the kerb, a lamp and gulmohar trees.
       for (let x = -20; x < VW; ) {
         const w = between(130, 200);
         P.mid.cut.push(slab(T.mid, x, w, between(170, 226), 1 + Math.floor(r() * 2)));
@@ -349,7 +338,6 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
       break;
     }
     case 'society': {
-      // Three or four twin towers behind a boundary wall with a gate and a guard booth.
       const n = r() < 0.5 ? 3 : 4;
       const tw = between(96, 118);
       const gap = between(46, 70);
@@ -358,7 +346,6 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
       const top = between(66, 96);
       for (let i = 0; i < n; i += 1) P.mid.cut.push(tower(T.mid, 800 - span / 2 + i * (tw + gap), tw, top + (i % 2) * 8, crown, 0.2));
       trees([640, 960]);
-      // Boundary wall with pillar caps, broken by the gate in the middle.
       const wallTop = G - 46;
       let wall = '';
       for (const [a, b] of [[-20, 730], [870, VW + 20]] as const) {
@@ -366,11 +353,9 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
         for (let x = a + 30; x < b - 10; x += 64) wall += T.near.rect(x, wallTop - 8, 14, 9);
       }
       P.near.cut.push(wall);
-      // Gate: two pillars, a beam with a slit, and a boom barrier.
       P.near.cut.push(T.near.rect(716, wallTop - 58, 20, 104 + 12) + T.near.rect(864, wallTop - 58, 20, 104 + 12));
       P.near.cut.push(T.near.rect(708, wallTop - 76, 184, 20) + T.near.rect(724, wallTop - 70, 152, 4));
       P.near.solid.push(T.near.rect(736, G - 30, 104, 5));
-      // Guard booth with a window.
       P.near.cut.push(T.near.path([[900, G - 68], [960, G - 68], [964, G - 60], [956, G - 60], [956, G + 8], [904, G + 8], [904, G - 60], [896, G - 60]]) + T.near.rect(914, G - 50, 30, 18));
       lamp(T.street, P.street, 300);
       lamp(T.street, P.street, 1300);
@@ -687,7 +672,7 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
   }
 
   // Every layer is kept, even when empty, so the renderer's groups keep a fixed
-  // order: the clouds are the 2nd group and the crane jib the 6th (Vignette.astro animates them).
+  // order: the clouds are the 2nd group and the crane jib the 6th (PlaceVignette.astro animates them).
   // Whole units are plenty: one unit is under a pixel at every size the scene is shown.
   const lean = (ds: string[]) => mergeDisjoint(ds).map((d) => d.replace(/-?\d+\.\d+/g, (n) => String(Math.round(Number(n)))));
   scene.layers = LAYERS.map((l) => ({ id: l.id, fill: l.fill, depth: 0, shadow: l.shadow, cut: lean(P[l.id].cut), solid: lean(P[l.id].solid) }));

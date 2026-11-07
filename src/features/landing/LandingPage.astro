@@ -24,7 +24,7 @@ import Faq from '@/ui/Faq.astro';
 import Icon from '@/ui/icons/Icon.astro';
 import LandingPrices from './LandingPrices.astro';
 import SectionOpener from '@/ui/SectionOpener.astro';
-import { VIGNETTE_THEMES, type VignetteTheme } from '@/lib/paper/vignettes';
+import { DEFAULT_THEME, VIGNETTE_THEMES, type VignetteTheme } from '@/lib/paper/vignettes';
 import PaperVignette from '@/ui/paper/PaperVignette.astro';
 import { askPrice } from '@/lib/format';
 import { budgetLabel, budgetsFor, CITIES, landingStats, segmentFor, type Facet, type Landing } from './model';
@@ -113,7 +113,7 @@ const empty =
 // The kind of building, for the paper vignette at the start of the price section.
 // The kind of building, drawn as a paper vignette. Themes the kit does not have yet fall back.
 const THEME: Record<string, string[]> = { apartment: ['tower'], builder_floor: ['home'], house: ['home'], villa: ['villa', 'home'], pg: ['pg', 'society'], office: ['office'], shop: ['shop', 'office'], warehouse: ['warehouse', 'office'], plot: ['plot', 'map'] };
-const theme = ((THEME[l.type] ?? []).find((x) => (VIGNETTE_THEMES as readonly string[]).includes(x)) ?? 'society') as VignetteTheme;
+const theme = ((THEME[l.type] ?? []).find((x) => (VIGNETTE_THEMES as readonly string[]).includes(x)) ?? DEFAULT_THEME) as VignetteTheme;
 
 const notes = ctx
   ? [

@@ -7,7 +7,8 @@
  * far skyline), so two vignettes of one theme on a page need not be twins.
  * The same theme and seed always give the same drawing.
  */
-import { makeTools, type Layer, type Pt } from './shapes';
+import { groundPts, layer, makeTools, type Layer, type Pt } from './shapes';
+import { FAR, LEAF, MAIN, MID, NEAR, SHEET } from './tones';
 
 export const VIGNETTE_THEMES = [
   'home',
@@ -31,6 +32,8 @@ export const VIGNETTE_THEMES = [
   'park',
 ] as const;
 export type VignetteTheme = (typeof VIGNETTE_THEMES)[number];
+/** The drawing used when a place has no theme of its own. */
+export const DEFAULT_THEME: VignetteTheme = 'society';
 
 export const VIGNETTE_W = 160;
 export const VIGNETTE_H = 100;
@@ -41,16 +44,6 @@ const H = VIGNETTE_H;
 const G = 82;
 
 type Tools = ReturnType<typeof makeTools>;
-type Tone = { fill: string; shadow: string };
-
-const FAR: Tone = { fill: 'var(--color-kesar-200)', shadow: 'rgb(226 91 0 / 0.3)' };
-const MID: Tone = { fill: 'var(--color-kesar-300)', shadow: 'rgb(181 70 0 / 0.35)' };
-const MAIN: Tone = { fill: 'var(--color-kesar-500)', shadow: 'rgb(138 51 0 / 0.4)' };
-const NEAR: Tone = { fill: 'var(--color-kesar-800)', shadow: 'rgb(47 15 2 / 0.45)' };
-const SHEET: Tone = { fill: 'var(--color-paper)', shadow: 'rgb(138 51 0 / 0.3)' };
-const LEAF: Tone = { fill: 'var(--color-kesar-700)', shadow: 'rgb(94 33 0 / 0.4)' };
-
-const layer = (id: string, tone: Tone, cut: string[], solid: string[] = []): Layer => ({ id, depth: 0, ...tone, cut, solid });
 
 /** Far towers with a few window holes. */
 function far(t: Tools, base = 70): string {
@@ -68,10 +61,7 @@ function far(t: Tools, base = 70): string {
 
 /** A ground sheet with a rough top edge. */
 function ground(t: Tools, y = G, bump = 2): string {
-  const pts: Pt[] = [[-4, y]];
-  for (let x = 12; x < W; x += 16) pts.push([x, y - bump / 2 + t.rand() * bump]);
-  pts.push([W + 4, y], [W + 4, H + 4], [-4, H + 4]);
-  return t.path(pts);
+  return t.path(groundPts(t, { y, bump, from: 12, to: W, step: 16, left: -4, right: W + 4, bottom: H + 4 }));
 }
 
 /** A gulmohar: trunk plus a wide, rough canopy. Solid paths. */

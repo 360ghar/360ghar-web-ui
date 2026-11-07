@@ -2,7 +2,7 @@
  * Facts and costs for the property page, from backend fields only.
  * Missing fields drop out; nothing is guessed.
  */
-import { isPlaceholderPrice, PRICE_ON_REQUEST } from '@/features/search/prices';
+import { isPlaceholderPrice, PRICE_ON_REQUEST } from '@/lib/listings/prices';
 import type { Property } from '@/lib/api/types';
 import { areaSqft, formatNum, listingPrice } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/locale';

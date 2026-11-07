@@ -5,6 +5,9 @@
  * 2026-09-28): at 1,500 sq ft that is over ₹60,000 per sq ft, far above any
  * home here. They stay in the list with their price, but summaries leave them
  * out, so one stand-in does not become "from ₹10 Cr".
+ *
+ * Temporary: the API has no flag for stand-ins, so this rule is the only signal.
+ * Delete it, and the compare-map test that pins it, once docs/backend-gaps.md D8 is closed.
  */
 type Priced = { purpose: string; base_price: number; area_sqft?: number | null };
 

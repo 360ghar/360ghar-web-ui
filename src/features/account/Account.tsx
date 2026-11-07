@@ -37,7 +37,8 @@ import { Sheet } from '@/ui/react/Sheet';
 import { Tabs } from '@/ui/react/Tabs';
 import { toast, Toaster } from '@/ui/react/Toaster';
 import { StateBlock } from '@/ui/states/StateBlock';
-import { AcctState, NoPhoto, Vignette } from './AccountArt';
+import { AcctState } from './AcctState';
+import { AccountVignette, NoPhoto } from '@/ui/paper/AccountArt';
 import { Notifications, Preferences, SavedAlerts } from './Settings';
 import { visitIcs } from './ics';
 
@@ -946,6 +947,7 @@ function Listings({ locale, t }: { locale: Locale; t: Strings }) {
  * and the card falls back to that one line if they do not load.
  */
 function AssignedAgent({ t }: { t: Strings }) {
+  // No retries: a failed call shows the one-line fallback at once, instead of after the retry delays.
   const q = useQuery({ queryKey: ['assigned-agent'], queryFn: () => call(api.GET('/api/v1/agents/assigned')), retry: false });
   const a = q.data;
   const langs = (a?.languages ?? []).map((l) => l.charAt(0).toUpperCase() + l.slice(1)).join(', ');
@@ -1227,7 +1229,7 @@ function EmptyCard({ name, title, body, href, label }: { name: 'saved' | 'visits
   return (
     <div className="acct-empty">
       <div className="acct-empty-art">
-        <Vignette name={name} />
+        <AccountVignette name={name} />
       </div>
       <div className="grid content-center justify-items-start gap-1">
         <p className="font-bold">{title}</p>

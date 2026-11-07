@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Property } from '@/lib/api/types';
 
-vi.mock('@/features/feeds/data', () => ({ allProperties: async () => [] }));
+vi.mock('@/lib/listings/homes', () => ({ allProperties: async () => [] }));
 
 const { ALL_LOCALITIES, isThinLocality, landmarksFor, resolveLocality } = await import('./data');
 const { bestPhoto, homesIn, listedPlaces, localityTitle, summarize } = await import('./live');

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { decode, esc, sanitize, slugger, stripTags } from './cms';
+import { decode, sanitize, slugger, stripTags } from './cms';
+import { escapeHtml } from '@/lib/escape';
 
 describe('sanitize', () => {
   it('removes script and style elements with their content', () => {
@@ -35,7 +36,7 @@ describe('sanitize', () => {
 
 describe('text helpers', () => {
   it('escapes and decodes', () => {
-    expect(esc('a & "b" <c>')).toBe('a &amp; &quot;b&quot; &lt;c&gt;');
+    expect(escapeHtml('a & "b" <c>')).toBe('a &amp; &quot;b&quot; &lt;c&gt;');
     expect(decode('&amp;lt; &#39;x&#39;')).toBe("&lt; 'x'");
     expect(stripTags('<b>Rent &amp; deposit</b> ')).toBe('Rent & deposit');
   });

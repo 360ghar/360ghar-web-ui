@@ -17,6 +17,7 @@ import { localizePath, localizer, stripLocale } from '@/lib/i18n/locale';
 import Icon from '@/ui/icons/Icon.astro';
 import IconSprite from '@/ui/icons/IconSprite.astro';
 import type { IconName } from '@/ui/icons/paths';
+import { artUrl } from '@/lib/paper/art-url';
 import { compactPath } from '@/ui/paper/compact';
 import PaperVignette from '@/ui/paper/PaperVignette.astro';
 import { DATA_HUB, PRIMARY, TOOLS, type NavGroup, type NavLink } from './nav';
@@ -181,7 +182,7 @@ const spriteIcons: IconName[] = ['chevron-down', ...[...PRIMARY, ...groups.flatM
         </div>
       </div>
     </nav>
-    <img class="mobile-art" src="/art/skyline/menu.svg" alt="" width="600" height="90" loading="lazy" decoding="async" />
+    <img class="mobile-art" src={artUrl.skyline('menu')} alt="" width="600" height="90" loading="lazy" decoding="async" />
   </dialog>
 </header>
 

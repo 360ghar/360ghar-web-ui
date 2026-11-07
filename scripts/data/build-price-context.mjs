@@ -12,7 +12,7 @@
  * /api/v1/properties (cursor pages of 100, at most `--max-pages` per city and
  * intent). A range is where most prices sit (25th to 75th percentile) and only
  * replaces the curated one when at least `--min-samples` priced listings exist
- * for that type. The stand-in price of exactly 10 Cr (see src/features/search/prices.ts)
+ * for that type. The stand-in price of exactly 10 Cr (see src/lib/listings/prices.ts)
  * is left out. Rents are written with "/month" and short stays are never used.
  * Writes priceContext-generated.json and price-context-report.json (samples per
  * cell and every changed range) to the out dir.
@@ -30,7 +30,7 @@ const TYPES = ['apartment', 'villa', 'builder_floor', 'house', 'plot', 'penthous
 const PLACEHOLDER_PRICE = 1e8;
 const PLACEHOLDER_RATE = 40_000;
 
-/** Percentile with linear interpolation (same as src/features/search/prices.ts). */
+/** Percentile with linear interpolation (same as src/lib/listings/prices.ts). */
 export function percentile(xs, q) {
   if (!xs.length) return null;
   const s = [...xs].sort((a, b) => a - b);

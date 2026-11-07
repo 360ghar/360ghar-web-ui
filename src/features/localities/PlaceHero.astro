@@ -5,7 +5,7 @@
  * lower edge, as the home search sheet crosses the diorama.
  */
 import type { Locale } from '@/lib/i18n/locale';
-import Vignette from './Vignette.astro';
+import PlaceVignette from './PlaceVignette.astro';
 import type { PlaceKind } from './vignette';
 
 type Props = {
@@ -33,7 +33,7 @@ const aside = Astro.slots.has('aside');
         </div>
       </div>
     ) : (
-      <Vignette kind={kind} seed={seed} locale={locale} sign={sign} />
+      <PlaceVignette kind={kind} seed={seed} locale={locale} sign={sign} />
     )
   }
   <div class:list={['ph-sheet sheet', size, aside && 'has-aside']}>

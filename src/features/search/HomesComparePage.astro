@@ -13,7 +13,7 @@ import Icon from '@/ui/icons/Icon.astro';
 import { headlinePrice, perSqft as factsPerSqft } from '@/features/property/facts';
 import { cardPlace } from '@/features/property/PropertyCardView';
 import { COMPARE_STORE_VERSION, compareHref } from '@/features/search/compare';
-import { isPlaceholderPrice } from '@/features/search/prices';
+import { isPlaceholderPrice } from '@/lib/listings/prices';
 import StateBlock from '@/ui/states/StateBlock.astro';
 
 type Props = { ids: number[]; homes: Property[]; failed: boolean; locale: Locale };

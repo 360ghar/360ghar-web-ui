@@ -1,6 +1,6 @@
 /** JSON-LD for a property page, from backend fields only. */
 import type { Property } from '@/lib/api/types';
-import { isPlaceholderPrice } from '@/features/search/prices';
+import { isPlaceholderPrice } from '@/lib/listings/prices';
 import { askPrice, homeKind } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/locale';
 import { canonicalFor } from '@/lib/seo/site';

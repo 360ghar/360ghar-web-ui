@@ -66,7 +66,7 @@ Removed: "The iPhone app is coming soon." (en and hi). Only source was v1 `AppDo
 | Enquiry sent: "We have received your request." | true statement. The promise "we will write to you" was removed |
 | Review lead: "Tell us how it went." | "Our team reads every review" removed (a promise nobody can check) |
 | Review note: goes to the team by email, not posted here, public reviews are on Google | true by construction of the form (Formspree) |
-| Facts: Gurugram site and app; N homes listed; 3,215 locality pages; free listing; relationship manager; data hub and calculators; MCP with N tools; founded 2025; Sector 50 office, email, phone | sourced: live API total; `data/localities.json` length; `structuredFaq`; `nav.ts`; `mcp.ts`; `lib/seo/legacy/structuredData.js` (foundingDate, address); `lib/company.ts` |
+| Facts: Gurugram site and app; N homes listed; 3,215 locality pages; free listing; relationship manager; data hub and calculators; MCP with N tools; founded 2025; Sector 50 office, email, phone | sourced: live API total; `data/localities.json` length; `structuredFaq`; `nav.ts`; `mcp.ts`; `lib/seo/structuredData.ts` (foundingDate, address); `lib/company.ts` |
 | Facts and steps: "Our team visits each home before it goes live and checks the owner's papers"; "Our team verifies each one" | sourced: v1 `home:structuredFaq.a3`, existing v2 step copy (`copy.ts`). Not checkable from code: owner should confirm |
 | Owners body: "We photograph it, verify it and list it free" | sourced: v2 `site:home.ownersBody` with "in 360°" removed |
 | Tools: counts | live API (`total`), hidden when the call fails |
