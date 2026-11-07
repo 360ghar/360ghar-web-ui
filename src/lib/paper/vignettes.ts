@@ -8,6 +8,7 @@
  * The same theme and seed always give the same drawing.
  */
 import { groundPts, layer, makeTools, type Layer, type Pt } from './shapes';
+import { FAR, LEAF, MAIN, MID, NEAR, SHEET } from './tones';
 
 export const VIGNETTE_THEMES = [
   'home',
@@ -43,14 +44,6 @@ const H = VIGNETTE_H;
 const G = 82;
 
 type Tools = ReturnType<typeof makeTools>;
-type Tone = { fill: string; shadow: string };
-
-const FAR: Tone = { fill: 'var(--color-kesar-200)', shadow: 'rgb(226 91 0 / 0.3)' };
-const MID: Tone = { fill: 'var(--color-kesar-300)', shadow: 'rgb(181 70 0 / 0.35)' };
-const MAIN: Tone = { fill: 'var(--color-kesar-500)', shadow: 'rgb(138 51 0 / 0.4)' };
-const NEAR: Tone = { fill: 'var(--color-kesar-800)', shadow: 'rgb(47 15 2 / 0.45)' };
-const SHEET: Tone = { fill: 'var(--color-paper)', shadow: 'rgb(138 51 0 / 0.3)' };
-const LEAF: Tone = { fill: 'var(--color-kesar-700)', shadow: 'rgb(94 33 0 / 0.4)' };
 
 /** Far towers with a few window holes. */
 function far(t: Tools, base = 70): string {

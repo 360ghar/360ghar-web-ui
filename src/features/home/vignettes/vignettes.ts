@@ -5,6 +5,7 @@
  * 480 x 300 and has no background, because it sits on an orange sheet. The app is 360 wide and 392 tall, starting at y = 28 (see TOP).
  */
 import { makeTools, type Layer, type Pt } from '@/lib/paper/shapes';
+import * as tones from '@/lib/paper/tones';
 
 export type VignetteName = 'tour' | 'review' | 'visit' | 'owners' | 'app';
 
@@ -27,9 +28,10 @@ type Tools = ReturnType<typeof makeTools>;
 
 const L = (id: string, fill: string, shadow: string, cut: string[], solid: string[] = []): Layer => ({ id, fill, depth: 0, shadow, cut, solid });
 
-const FAR = 'var(--color-kesar-200)';
-const MID = 'var(--color-kesar-300)';
-const NEAR = 'var(--color-kesar-700)';
+// Fills come from lib/paper/tones. The shadows below stay here: each one matches a shared pc-m* filter.
+const FAR = tones.FAR.fill;
+const MID = tones.MID.fill;
+const NEAR = tones.LEAF.fill;
 const S_FAR = 'rgb(226 91 0 / 0.28)';
 const S_MID = 'rgb(181 70 0 / 0.32)';
 const S_NEAR = 'rgb(94 33 0 / 0.4)';

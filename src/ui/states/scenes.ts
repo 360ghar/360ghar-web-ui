@@ -7,6 +7,7 @@
  * blocks and ground, the subject of the scene, and the near kerb.
  */
 import { groundPts, layer, makeTools, type CloudProfile, type Layer, type Pt } from '@/lib/paper/shapes';
+import { FAR, MAIN, MID, NEAR } from '@/lib/paper/tones';
 
 export type SceneName = 'empty' | 'error' | 'notFound' | 'offline';
 
@@ -16,10 +17,6 @@ const H = 200;
 type Tools = ReturnType<typeof makeTools>;
 
 const SKY = { fill: 'var(--color-kesar-100)', shadow: 'transparent' };
-const FAR = { fill: 'var(--color-kesar-200)', shadow: 'rgb(226 91 0 / 0.28)' };
-const MID = { fill: 'var(--color-kesar-300)', shadow: 'rgb(181 70 0 / 0.34)' };
-const MAIN = { fill: 'var(--color-kesar-600)', shadow: 'rgb(138 51 0 / 0.4)' };
-const NEAR = { fill: 'var(--color-kesar-800)', shadow: 'rgb(47 15 2 / 0.45)' };
 
 const CLOUD: CloudProfile = [[0, 7], [0.2, 2], [0.38, 4], [0.55, -3], [0.76, 1], [1, 7]];
 

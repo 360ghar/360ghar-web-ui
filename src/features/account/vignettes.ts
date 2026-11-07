@@ -7,6 +7,7 @@
  * built one layer per wizard step.
  */
 import { groundPts, makeTools, type Layer, type Pt } from '@/lib/paper/shapes';
+import * as tones from '@/lib/paper/tones';
 
 export type AccountVignetteName = 'saved' | 'visits' | 'listings' | 'door' | 'posted';
 export type Scene = { w: number; h: number; layers: Layer[] };
@@ -14,8 +15,8 @@ export type Scene = { w: number; h: number; layers: Layer[] };
 const W = 320;
 const H = 200;
 const SKY = 'rgb(226 91 0 / 0.3)';
-const MID = 'rgb(181 70 0 / 0.35)';
-const NEAR = 'rgb(94 33 0 / 0.4)';
+const MID = tones.MID.shadow;
+const NEAR = tones.LEAF.shadow;
 
 const SKYLINE = { heights: [30, 52, 40, 66, 46, 34, 60, 42, 28, 50, 38], slant: false, drop: 80, inset: 8 };
 const skyline = (seed: string, base: number) => makeTools(seed, 0.6).skyline(base, SKYLINE);
