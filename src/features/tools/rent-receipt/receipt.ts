@@ -34,7 +34,8 @@ export function fyMonths(start: number): { y: number; m: number }[] {
 }
 
 /** Formats a date from its parts, so local dates do not shift across time zones. */
-export function formatDate(iso: string, locale: Locale = 'en'): string {
+/** A receipt date from `YYYY-MM-DD`, shown in local calendar terms (not IST), so it never shifts a day. */
+export function formatReceiptDate(iso: string, locale: Locale = 'en'): string {
   const parts = iso.split('-').map(Number);
   if (parts.length !== 3 || parts.some((n) => !Number.isFinite(n))) return '';
   const [y, m, d] = parts as [number, number, number];

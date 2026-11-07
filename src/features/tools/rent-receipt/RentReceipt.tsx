@@ -8,7 +8,7 @@ import { useIsClient } from '@/ui/react/useClient';
 import { fyLabel } from '../capital-gains/math';
 import { inr, ScrollArea, ToolShell } from '../ui';
 import { RR_UI } from './content';
-import { batch, formatDate, fyStart, monthPeriod, MODES, PAN_RE, receiptBase, rupeesInWords, todayIso, type Mode } from './receipt';
+import { batch, formatReceiptDate, fyStart, monthPeriod, MODES, PAN_RE, receiptBase, rupeesInWords, todayIso, type Mode } from './receipt';
 import './rent-receipt.css';
 
 type Form = { landlord: string; pan: string; tenant: string; address: string; rent: string; from: string; to: string; mode: Mode; ref: string; date: string };
@@ -47,21 +47,21 @@ function PaperView({ r, locale }: { r: Receipt; locale: Locale }) {
             {t.receiptNoLabel} <strong>{r.number || '…'}</strong>
           </span>
           <span>
-            {t.dateLabel} <strong>{formatDate(r.date, locale) || BLANK}</strong>
+            {t.dateLabel} <strong>{formatReceiptDate(r.date, locale) || BLANK}</strong>
           </span>
         </p>
       </header>
       {locale === 'hi' ? (
         <p className="rr-body">
           {t.received} <strong>{r.rent > 0 ? inr(r.rent, locale) : '₹______'}</strong>। {t.fromLabel}: <strong>{r.tenant || BLANK}</strong>। {t.propertyLabel}: <strong>{r.address || BLANK}</strong>। {t.periodLabel}:{' '}
-          <strong>{formatDate(r.from, locale) || BLANK}</strong> {t.periodFrom} <strong>{formatDate(r.to, locale) || BLANK}</strong> {t.periodTo}।
+          <strong>{formatReceiptDate(r.from, locale) || BLANK}</strong> {t.periodFrom} <strong>{formatReceiptDate(r.to, locale) || BLANK}</strong> {t.periodTo}।
         </p>
       ) : (
         <p className="rr-body">
           {t.received} <strong>{r.rent > 0 ? inr(r.rent, locale) : '₹______'}</strong>
           {words ? ` (${words})` : ''} {t.fromLabel} <strong>{r.tenant || BLANK}</strong> {t.propertyLabel}{' '}
-          <strong>{r.address || BLANK}</strong> {t.periodLabel} {t.periodFrom} <strong>{formatDate(r.from, locale) || BLANK}</strong> {t.periodTo}{' '}
-          <strong>{formatDate(r.to, locale) || BLANK}</strong>.
+          <strong>{r.address || BLANK}</strong> {t.periodLabel} {t.periodFrom} <strong>{formatReceiptDate(r.from, locale) || BLANK}</strong> {t.periodTo}{' '}
+          <strong>{formatReceiptDate(r.to, locale) || BLANK}</strong>.
         </p>
       )}
       <dl className="rr-lines">

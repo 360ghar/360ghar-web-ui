@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import * as receipt from './receipt';
-import { batch, batchNumber, formatDate, fyMonths, fyStart, monthPeriod, numberToWords, PAN_RE, receiptBase, rupeesInWords, todayIso } from './receipt';
+import { batch, batchNumber, formatReceiptDate, fyMonths, fyStart, monthPeriod, numberToWords, PAN_RE, receiptBase, rupeesInWords, todayIso } from './receipt';
 
 // The old bug showed in India (UTC+5:30): run these tests in that time zone.
 const tz = process.env.TZ;
@@ -37,10 +37,10 @@ describe('dates', () => {
   });
 
   it('formats a date without a time zone shift', () => {
-    expect(formatDate('2026-04-01')).toBe('01 April 2026');
-    expect(formatDate('2027-03-31')).toBe('31 March 2027');
-    expect(formatDate('2026-04-01', 'hi')).toContain('अप्रैल');
-    expect(formatDate('')).toBe('');
+    expect(formatReceiptDate('2026-04-01')).toBe('01 April 2026');
+    expect(formatReceiptDate('2027-03-31')).toBe('31 March 2027');
+    expect(formatReceiptDate('2026-04-01', 'hi')).toContain('अप्रैल');
+    expect(formatReceiptDate('')).toBe('');
   });
 });
 
