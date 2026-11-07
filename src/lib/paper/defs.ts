@@ -60,3 +60,12 @@ export function sharedShadowId(color: string, shadow: Shadow): string | null {
   });
   return best < 0 ? null : `pc-${size}${best + 1}`;
 }
+
+/**
+ * The filter a layer's shadow points at: the shared filter when one matches (unless `ownFilters`), else an own filter
+ * named `${uid}-${layer.id}`. Null for a layer with no shadow. PaperArt.astro and PaperArt.tsx both use it.
+ */
+export function layerFilterId(layer: { id: string; shadow: string }, shadow: Shadow, uid: string, ownFilters: boolean): string | null {
+  if (layer.shadow === 'transparent') return null;
+  return (ownFilters ? null : sharedShadowId(layer.shadow, shadow)) ?? `${uid}-${layer.id}`;
+}

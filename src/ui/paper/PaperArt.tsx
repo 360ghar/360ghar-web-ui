@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import { sharedShadowId } from '@/lib/paper/defs';
+import { layerFilterId } from '@/lib/paper/defs';
 import { makeTools, type Layer } from '@/lib/paper/shapes';
 import { compactPath } from './compact';
 
@@ -25,7 +25,7 @@ export function PaperArt({ layers, width, height, bg = 'var(--color-kesar-100)',
   const uid = useId().replace(/:/g, '');
   const [dx, dy, blur] = shadow;
   const edge = cutEdge ? compactPath(makeTools(`edge-${cutEdge}`, 0.9).rect(1.2, 1.2, width - 2.4, height - 2.4)) : null;
-  const filterOf = (l: Layer) => (l.shadow === 'transparent' ? null : ((ownFilters ? null : sharedShadowId(l.shadow, shadow)) ?? `${uid}-${l.id}`));
+  const filterOf = (l: Layer) => layerFilterId(l, shadow, uid, ownFilters);
   const own = layers.filter((l) => filterOf(l) === `${uid}-${l.id}`);
   return (
     <svg

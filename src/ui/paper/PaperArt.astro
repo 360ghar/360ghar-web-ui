@@ -8,7 +8,7 @@
  * the tint and size match the kit; any other shadow gets its own filter with
  * an id unique to this instance. `ownFilters` forces own filters for all.
  */
-import { sharedShadowId } from '@/lib/paper/defs';
+import { layerFilterId } from '@/lib/paper/defs';
 import { makeTools, type Layer } from '@/lib/paper/shapes';
 import { compactPath } from './compact';
 import { paperUid } from '@/lib/paper/uid';
@@ -36,10 +36,7 @@ const { layers, width, height, bg = 'var(--color-kesar-100)', cutEdge, shadow = 
 const uid = paperUid();
 const [dx, dy, blur] = shadow;
 const edge = cutEdge ? compactPath(makeTools(`edge-${cutEdge}`, 0.9).rect(1.2, 1.2, width - 2.4, height - 2.4)) : null;
-const filterOf = (l: Layer) => {
-  if (l.shadow === 'transparent') return null;
-  return (ownFilters ? null : sharedShadowId(l.shadow, shadow)) ?? `${uid}-${l.id}`;
-};
+const filterOf = (l: Layer) => layerFilterId(l, shadow, uid, ownFilters);
 const own = layers.filter((l) => filterOf(l) === `${uid}-${l.id}`);
 ---
 
