@@ -1,4 +1,4 @@
-/* Copied from 360ghar-web-ui/src (SEO parity). Keep in sync; do not edit by hand without a reason. */
+/** Site identity and organisation data for JSON-LD, llms.txt, the contact page and the default meta tags. */
 export const siteMetadata = {
   siteUrl: 'https://360ghar.com',
   siteName: '360Ghar',
@@ -47,11 +47,11 @@ export const siteMetadata = {
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d224356.8202113498!2d76.9302921759173!3d28.423957136112284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d19d582e38859%3A0x2cf5fe8e5c64b1e!2sGurugram%2C%20Haryana!5e0!3m2!1sen!2sin!4v1653544138149!5m2!1sen!2sin',
 };
 
-export const absoluteUrl = (urlOrPath) => {
+/** An absolute URL for a path. Absolute input is returned as it is. */
+export const absoluteUrl = (urlOrPath?: string | null): string => {
   if (!urlOrPath) return siteMetadata.siteUrl;
   try {
     // If already absolute
-
     new URL(urlOrPath);
     return urlOrPath;
   } catch {

@@ -1,13 +1,13 @@
 ---
 /**
- * /about-us. The team section shows only the founder, from lib/seo/legacy/authors.js,
+ * /about-us. The team section shows only the founder, from lib/seo/authors.ts,
  * and the Person JSON-LD uses the same record. The old page showed three
  * template team members that did not match its own schema.
  */
 import { getT } from '@/i18n';
 import Page from '@/layouts/Page.astro';
 import { localizer, byLocale } from '@/lib/i18n/locale';
-import { authors } from '@/lib/seo/legacy/authors.js';
+import { authors } from '@/lib/seo/authors';
 import { SITE_URL } from '@/lib/seo/site';
 import { SceneArt } from '@/features/blog/art/SceneArt';
 import { paperArt, type SceneName } from '@/features/blog/art/scenes';

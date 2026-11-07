@@ -7,7 +7,7 @@
  * pure functions (data comes in as arguments, no JSON import, no clock).
  * No `@/` imports: Node's type stripping loads this file from the script.
  */
-import { siteMetadata } from './legacy/siteMetadata.js';
+import { siteMetadata } from './siteMetadata.ts';
 
 type Page = { title: string; url: string; category?: string };
 

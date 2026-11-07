@@ -9,9 +9,9 @@ const FILES = [
   'src/i18n/locales/hi/home.json',
   'src/i18n/locales/en/seo.json',
   'src/i18n/locales/hi/seo.json',
-  'src/lib/seo/legacy/siteMetadata.js',
-  'src/lib/seo/legacy/authors.js',
-  'src/lib/seo/legacy/structuredData.js',
+  'src/lib/seo/siteMetadata.ts',
+  'src/lib/seo/authors.ts',
+  'src/lib/seo/structuredData.ts',
 ];
 const UNSUPPORTED_BRAND_CLAIMS =
   /(?:India['’]s first AI|India['’]s AI \+ VR|AI \+ VR real estate platform|भारत का पहला AI|भारत का AI \+ VR|AI \+ VR रियल एस्टेट|VR-First|VR-फर्स्ट)/i;

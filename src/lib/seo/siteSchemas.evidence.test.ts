@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { siteBlocks } from './siteSchemas';
-import { realEstateStructuredData } from './legacy/structuredData.js';
-import { generateToolSchema, toolSchemas } from './legacy/toolSchemas.js';
+import { realEstateStructuredData } from './structuredData.ts';
+import { generateToolSchema, toolSchemas } from './toolSchemas.ts';
 
 describe('shared structured data claims', () => {
   it('omits unsupported universal verification, tour, first-in-India and superiority claims', () => {
