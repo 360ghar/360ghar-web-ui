@@ -161,7 +161,7 @@ test('property: contact panel, callback dialog, actions and the phone dock', asy
 
   const side = page.getByRole('complementary', { name: 'Contact and visits' });
   await ready(page, '#prop-book');
-  // The owner's own number is never shown: the agent's, or the company's, answers.
+  // The owner's own number is never shown: a guest reaches the company number.
   await expect(side.getByRole('link', { name: 'WhatsApp' })).toHaveAttribute('href', /^https:\/\/wa\.me\/91\d{10}\?text=/);
   await expect(side.getByRole('link', { name: /^Call \+91/ })).toHaveAttribute('href', /^tel:\+91\d{10}$/);
   await expect(side.getByRole('button', { name: 'Show phone number' })).toHaveCount(0);
@@ -364,6 +364,26 @@ test('property: book a visit with the day buttons (POST mocked)', async ({ page 
   expect(body.property_id).toBe(182);
   // Parsed in the page, so the zone is the browser's (Asia/Kolkata), not Node's.
   expect(new Date(body.scheduled_date!).getTime()).toBe(await page.evaluate((d) => new Date(`${d}T17:30`).getTime(), iso));
+  await w.check();
+});
+
+test('property: a signed-in user reaches their own relationship manager (detail mocked)', async ({ page }) => {
+  const w = watch(page);
+  await signedIn(page);
+  // The cached page is anonymous. The signed-in detail carries the user's own manager.
+  const rm = { id: 6, name: 'Ravi Kumar', contact_number: '+919812345678', avatar_url: null };
+  await page.route(/\/api\/v1\/properties\/182(\?.*)?$/, (route) => route.fulfill({ json: { id: 182, agent: rm, user_next_visit_date: null } }));
+  await page.goto(SALE);
+  await hydrated(page);
+  await ready(page, '#prop-book');
+  const side = page.locator('#prop-book');
+  await expect(side.getByText('Ravi Kumar')).toBeVisible();
+  await expect(side.getByRole('link', { name: 'Call +91 98123 45678' })).toHaveAttribute('href', 'tel:+919812345678');
+  // Every other call and WhatsApp link on the page follows: the Home Card's two and the phone dock's WhatsApp.
+  await expect(page.locator('a[data-contact="tel"]')).toHaveCount(1);
+  await expect(page.locator('a[data-contact="wa"]')).toHaveCount(2);
+  for (const a of await page.locator('a[data-contact="tel"]').all()) await expect(a).toHaveAttribute('href', 'tel:+919812345678');
+  for (const a of await page.locator('a[data-contact="wa"]').all()) await expect(a).toHaveAttribute('href', /^https:\/\/wa\.me\/919812345678\?text=/);
   await w.check();
 });
 

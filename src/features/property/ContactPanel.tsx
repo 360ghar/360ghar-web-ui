@@ -1,7 +1,7 @@
 /**
- * Talk to the listing's agent and book a visit. WhatsApp and call are plain
- * links (the owner's number is never shown: the agent, or the 360 Ghar team,
- * answers). A callback request goes to POST /api/v1/leads and needs no sign-in.
+ * Talk to 360 Ghar and book a visit. WhatsApp and call are plain links. The
+ * owner's number is never shown: a signed-in user reaches their own relationship
+ * manager, a guest (or a user with no manager) reaches the 360 Ghar team. A callback request goes to POST /api/v1/leads and needs no sign-in.
  * Booking a visit needs a signed-in user (POST /api/v1/visits). From 64rem the
  * visit form sits in the side rail; on phones it opens in a bottom sheet.
  */
@@ -27,7 +27,7 @@ import { SelectField, TextAreaField, TextField } from '@/ui/react/Field';
 import { IslandBoundary } from '@/ui/react/IslandBoundary';
 import { useIsClient } from '@/ui/react/useClient';
 import { Sheet } from '@/ui/react/Sheet';
-import { type Contact, phoneLabel, waLink } from './contact';
+import { type Contact, listingContact, phoneLabel, waLink } from './contact';
 import { SLOTS, isoDay, slotLabel, slotOpen } from './slots';
 import { VISIT_WINDOW_DAYS, visitDayFromParam } from './visitDay';
 
@@ -340,6 +340,15 @@ function Panel({ locale, property, contact, available }: Props) {
     staleTime: 60_000,
   });
   const next = mine.data?.user_next_visit_date;
+  // The cached page is anonymous, so it shows the company number. The signed-in detail
+  // carries the user's own relationship manager; it replaces the number here and in the
+  // page's other WhatsApp and call links (data-contact).
+  const shown = mine.data ? listingContact(mine.data) : contact;
+  useEffect(() => {
+    if (!mine.data) return;
+    for (const a of document.querySelectorAll<HTMLAnchorElement>('a[data-contact]'))
+      a.href = a.dataset.contact === 'tel' ? `tel:${shown.phone}` : waLink(shown.phone, property.title, pageUrl, locale);
+  }, [mine.data, shown.phone, property.title, pageUrl, locale]);
 
   if (!available)
     return (
@@ -359,18 +368,18 @@ function Panel({ locale, property, contact, available }: Props) {
         <Icon name="user" size={20} />
         <span>
           <span className="contact-owner-label">{t.contactLabel}</span>
-          <strong>{contact.name ?? t.team}</strong>
+          <strong>{shown.name ?? t.team}</strong>
         </span>
       </p>
 
       <div className="grid gap-2">
-        <a className="btn btn-ink btn-block" href={waLink(contact.phone, property.title, pageUrl, locale)} target="_blank" rel="noopener">
+        <a className="btn btn-ink btn-block" href={waLink(shown.phone, property.title, pageUrl, locale)} target="_blank" rel="noopener">
           <Icon name="brand:whatsapp" size={18} />
           {t.whatsapp}
         </a>
-        <a className="btn btn-block tabular" href={`tel:${contact.phone}`}>
+        <a className="btn btn-block tabular" href={`tel:${shown.phone}`}>
           <Icon name="phone" size={18} />
-          {t.call} {phoneLabel(contact.phone)}
+          {t.call} {phoneLabel(shown.phone)}
         </a>
         <button type="button" className="btn btn-quiet btn-block" onClick={() => setCb(true)}>
           {t.callback}

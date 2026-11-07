@@ -405,7 +405,7 @@ const emiHref = L(`/emi-calculator${p.purpose === 'buy' && !price.onRequest && p
   p.is_available && (
     <div class="prop-dock" data-dock>
       <p class:list={['prop-dock-price tabular', price.onRequest && 'is-ask']}>{price.amount}<small>{price.period}</small></p>
-      <a class="btn btn-ink btn-icon" href={wa} target="_blank" rel="noopener" aria-label={hi ? 'WhatsApp पर बात करें' : 'Chat on WhatsApp'}>
+      <a class="btn btn-ink btn-icon" href={wa} target="_blank" rel="noopener" data-contact="wa" aria-label={hi ? 'WhatsApp पर बात करें' : 'Chat on WhatsApp'}>
         <Icon name="brand:whatsapp" size={20} />
       </a>
       <a class="btn btn-primary" href="#prop-book" data-open-visit>{hi ? 'विज़िट बुक करें' : 'Book a visit'}</a>
