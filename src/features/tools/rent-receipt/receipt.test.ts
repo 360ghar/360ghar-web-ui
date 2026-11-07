@@ -42,6 +42,12 @@ describe('dates', () => {
     expect(formatReceiptDate('2026-04-01', 'hi')).toContain('अप्रैल');
     expect(formatReceiptDate('')).toBe('');
   });
+
+  it('keeps the entered day when a local time zone skips it, and years below 100', () => {
+    // Pacific/Apia skipped 30 Dec 2011 in local time; run the suite with TZ=Pacific/Apia to exercise it.
+    expect(formatReceiptDate('2011-12-30')).toBe('30 December 2011');
+    expect(formatReceiptDate('0099-04-01')).toBe('01 April 99');
+  });
 });
 
 describe('numbers', () => {

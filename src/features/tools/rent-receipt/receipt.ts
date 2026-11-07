@@ -33,13 +33,17 @@ export function fyMonths(start: number): { y: number; m: number }[] {
   });
 }
 
-/** Formats a date from its parts, so local dates do not shift across time zones. */
-/** A receipt date from `YYYY-MM-DD`, shown in local calendar terms (not IST), so it never shifts a day. */
+/**
+ * A receipt date from `YYYY-MM-DD`, in UTC terms (not IST), so it never shifts a day. UTC has no skipped days, and
+ * `setUTCFullYear` keeps years below 100 (the `Date` constructor would move them to 1900s).
+ */
 export function formatReceiptDate(iso: string, locale: Locale = 'en'): string {
   const parts = iso.split('-').map(Number);
   if (parts.length !== 3 || parts.some((n) => !Number.isFinite(n))) return '';
   const [y, m, d] = parts as [number, number, number];
-  return new Intl.DateTimeFormat(locale === 'hi' ? 'hi-IN' : 'en-IN', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(y, m - 1, d));
+  const date = new Date(0);
+  date.setUTCFullYear(y, m - 1, d);
+  return new Intl.DateTimeFormat(locale === 'hi' ? 'hi-IN' : 'en-IN', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
 }
 
 /** A short receipt number, "RR-" plus 5 characters. */

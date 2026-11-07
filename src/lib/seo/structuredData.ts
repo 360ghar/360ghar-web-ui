@@ -397,7 +397,7 @@ export const generateLocalityStructuredData = ({
     addressRegion: state,
     addressCountry: 'IN',
   },
-  ...(lat && lng
+  ...(lat != null && lng != null
     ? {
         geo: {
           '@type': 'GeoCoordinates',
