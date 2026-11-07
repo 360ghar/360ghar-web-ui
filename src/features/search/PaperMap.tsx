@@ -18,7 +18,7 @@ import type { Locale } from '@/lib/i18n/locale';
 import { makeTools } from '@/lib/paper/shapes';
 import { Icon } from '@/ui/icons/Icon';
 import { toApiQuery, toSearchParams, type Filters } from './filters';
-import { isPlaceholderPrice, PRICE_ON_REQUEST } from './prices';
+import { isPlaceholderPrice, PRICE_ON_REQUEST } from '@/lib/listings/prices';
 import { estimateTagWidth, groupHomes, layoutMap, niceScale, TAG_H, type MapGroup } from './mapLayout';
 
 const T = {

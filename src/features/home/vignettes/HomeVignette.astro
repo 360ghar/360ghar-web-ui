@@ -5,6 +5,7 @@
  * its own filters) instead of inline SVG. Decorative: the text next to it says
  * the same.
  */
+import { artUrl } from '@/lib/paper/art-url';
 import { SIZE, type VignetteName } from './vignettes';
 
 type Props = { name: VignetteName; class?: string; bare?: boolean };
@@ -12,7 +13,7 @@ const { name, class: className, bare = false } = Astro.props;
 const [w, h] = SIZE[name];
 ---
 
-<img class:list={['home-vignette', className]} src={`/art/home/${name}${bare ? '-bare' : ''}.svg`} alt="" width={w} height={h} loading="lazy" decoding="async" />
+<img class:list={['home-vignette', className]} src={artUrl.home(name, bare)} alt="" width={w} height={h} loading="lazy" decoding="async" />
 
 <style>
   .home-vignette {

@@ -12,7 +12,7 @@ import Icon from '@/ui/icons/Icon.astro';
 import StoreBadges from '@/ui/StoreBadges.astro';
 import { MORE } from '../more';
 import { PLAY_QR } from '../qr';
-import Vignette from '../vignettes/Vignette.astro';
+import HomeVignette from '../vignettes/HomeVignette.astro';
 
 type Props = { locale: Locale; class?: string };
 const { locale, class: className } = Astro.props;
@@ -52,7 +52,7 @@ const pad = 2;
       </div>
     </div>
     <div class="app-art">
-      <Vignette name="app" bare class="app-phone" />
+      <HomeVignette name="app" bare class="app-phone" />
     </div>
   </div>
 </section>

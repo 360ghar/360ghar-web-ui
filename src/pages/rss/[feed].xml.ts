@@ -2,7 +2,8 @@
 import type { APIRoute } from 'astro';
 import { SITE_URL } from '@/lib/seo/site';
 import { FEED_DEFS } from '@/features/feeds/defs';
-import { allPosts, allProperties } from '@/features/feeds/data';
+import { allPosts } from '@/features/feeds/data';
+import { allProperties } from '@/lib/listings/homes';
 import { LISTED_LOCALITIES, displayName, localitySlug } from '@/features/localities/data';
 import { rss, xmlResponse, type Channel, type RssItem } from '@/features/feeds/xml';
 import { placeLine, typeLabel } from '@/lib/format';

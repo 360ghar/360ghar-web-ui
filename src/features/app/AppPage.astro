@@ -10,7 +10,7 @@ import { byLocale } from '@/lib/i18n/locale';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import StoreBadges from '@/ui/StoreBadges.astro';
 import { trail, webPage } from '@/features/content/shared/schema';
-import Vignette from '@/features/home/vignettes/Vignette.astro';
+import HomeVignette from '@/features/home/vignettes/HomeVignette.astro';
 import { APP_PAGE_QR, APP_PAGE_QR_HI } from '@/features/home/qr';
 import { flatmatesApplicationBlock } from '@/lib/seo/siteSchemas';
 import AppDownload from './AppDownload';
@@ -80,7 +80,7 @@ const jsonLd = [webPage({ name: H.title, description: H.description, path: PATH,
       </div>
 
       <aside class="app-side">
-        <Vignette name="app" bare class="app-phone" />
+        <HomeVignette name="app" bare class="app-phone" />
         <AppDownload client:load notice={{ android: H.android, ios: H.ios }} qr={locale === 'hi' ? APP_PAGE_QR_HI : APP_PAGE_QR} qrLabel={H.qr} />
       </aside>
     </div>

@@ -5,8 +5,8 @@
  * place pages match names exactly here instead.
  */
 import type { Property, PropertyImage } from '@/lib/api/types';
-import { allProperties } from '@/features/feeds/data';
-import { isPlaceholderPrice, percentile } from '@/features/search/prices';
+import { allProperties } from '@/lib/listings/homes';
+import { isPlaceholderPrice, percentile } from '@/lib/listings/prices';
 import { LISTED_LOCALITIES, citySlug, type Locality } from './data';
 
 /** Every live home, or null when the backend is down. Never throws. */

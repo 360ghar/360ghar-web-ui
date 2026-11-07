@@ -1,13 +1,6 @@
 /** XML builders for sitemaps and RSS feeds. */
+import { escapeXml } from '@/lib/escape';
 import { SITE_URL } from '@/lib/seo/site';
-
-export const esc = (s: unknown) =>
-  String(s ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
 
 /** `enOnly`: the page has no Hindi version (the /hi URL canonicalises to English), so list the English URL alone. */
 export type SitemapEntry = { path: string; lastmod?: string | null; changefreq?: 'daily' | 'weekly' | 'monthly'; priority?: string; enOnly?: boolean };
@@ -27,14 +20,14 @@ const CLOSE = '\n</urlset>\n';
 function entryXml(e: SitemapEntry): string[] {
   const lastmod = day(e.lastmod);
   const meta = `${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}${e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>\n` : ''}${e.priority ? `    <priority>${e.priority}</priority>\n` : ''}`;
-  if (e.enOnly) return [`  <url>\n    <loc>${esc(SITE_URL + e.path)}</loc>\n${meta}  </url>`];
+  if (e.enOnly) return [`  <url>\n    <loc>${escapeXml(SITE_URL + e.path)}</loc>\n${meta}  </url>`];
   const alts = [
-    `    <xhtml:link rel="alternate" hreflang="en" href="${esc(SITE_URL + e.path)}"/>`,
-    `    <xhtml:link rel="alternate" hreflang="hi" href="${esc(SITE_URL + hiPath(e.path))}"/>`,
-    `    <xhtml:link rel="alternate" hreflang="x-default" href="${esc(SITE_URL + e.path)}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(SITE_URL + e.path)}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="hi" href="${escapeXml(SITE_URL + hiPath(e.path))}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(SITE_URL + e.path)}"/>`,
   ].join('\n');
   const inner = `${meta}${alts}`;
-  return [e.path, hiPath(e.path)].map((p) => `  <url>\n    <loc>${esc(SITE_URL + p)}</loc>\n${inner}\n  </url>`);
+  return [e.path, hiPath(e.path)].map((p) => `  <url>\n    <loc>${escapeXml(SITE_URL + p)}</loc>\n${inner}\n  </url>`);
 }
 
 /** One urlset with the English and the Hindi URL of every path. */
@@ -77,18 +70,18 @@ export function rss(ch: Channel, items: RssItem[]): string {
   const body = items
     .map((i) => {
       const date = rfc822(i.date);
-      return `    <item>\n      <title>${esc(i.title)}</title>\n      <link>${esc(i.link)}</link>\n      <description>${esc(i.description)}</description>\n${date ? `      <pubDate>${date}</pubDate>\n` : ''}      <guid isPermaLink="true">${esc(i.link)}</guid>\n    </item>`;
+      return `    <item>\n      <title>${escapeXml(i.title)}</title>\n      <link>${escapeXml(i.link)}</link>\n      <description>${escapeXml(i.description)}</description>\n${date ? `      <pubDate>${date}</pubDate>\n` : ''}      <guid isPermaLink="true">${escapeXml(i.link)}</guid>\n    </item>`;
     })
     .join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${esc(ch.title)}</title>
-    <link>${esc(ch.link ?? SITE_URL)}</link>
-    <description>${esc(ch.description)}</description>
+    <title>${escapeXml(ch.title)}</title>
+    <link>${escapeXml(ch.link ?? SITE_URL)}</link>
+    <description>${escapeXml(ch.description)}</description>
     <language>${ch.language}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-    <atom:link href="${esc(SITE_URL + ch.self)}" rel="self" type="application/rss+xml"/>
+    <atom:link href="${escapeXml(SITE_URL + ch.self)}" rel="self" type="application/rss+xml"/>
 ${body}
   </channel>
 </rss>

@@ -5,14 +5,15 @@
  * ids; the first heading is dropped when it repeats the page title (the H1).
  */
 import { renderMarkdown } from '@/features/chat/markdown';
-import { esc, sanitize, slugger, stripTags } from '@/features/content/shared/cms';
+import { escapeHtml } from '@/lib/escape';
+import { sanitize, slugger, stripTags } from '@/features/content/shared/cms';
 
 type TocItem = { id: string; text: string };
 export type Rendered = { html: string; toc: TocItem[] };
 
 const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
 /** Heading text: escaped, with bold and code only (block rules would turn "1. Title" into a list). */
-const inlineMd = (s: string) => esc(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>');
+const inlineMd = (s: string) => escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>');
 
 /** Plain e-mail addresses in text become mailto links (the chat renderer only links http and site paths). */
 const linkEmails = (html: string) =>
@@ -68,13 +69,13 @@ function renderHtmlPage(html: string, title: string): Rendered {
     const existing = attrs.match(/\sid="([^"]*)"/)?.[1];
     const id = existing ?? slug(text);
     if (tag === 'h2') toc.push({ id, text });
-    return existing ? m : `<${tag}${attrs} id="${esc(id)}">${inner}</${tag}>`;
+    return existing ? m : `<${tag}${attrs} id="${escapeHtml(id)}">${inner}</${tag}>`;
   });
   return { html: clean, toc };
 }
 
 export function renderPolicy(page: { content: string; format: string; title: string }): Rendered {
   if (page.format === 'html') return renderHtmlPage(page.content, page.title);
-  if (page.format === 'json') return { html: `<pre>${esc(page.content)}</pre>`, toc: [] };
+  if (page.format === 'json') return { html: `<pre>${escapeHtml(page.content)}</pre>`, toc: [] };
   return renderMarkdownPage(page.content, page.title);
 }

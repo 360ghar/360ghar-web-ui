@@ -7,7 +7,8 @@
  * shows it, the phone view crops it). Objects stand on y = 134. `ground` is
  * kept apart, so a vignette can stand on the tool desk without it.
  */
-import { makeTools, type Pt } from '@/lib/paper/shapes';
+import { groundPts, makeTools, type Pt } from '@/lib/paper/shapes';
+import * as tones from '@/lib/paper/tones';
 import type { ToolKey } from '@/features/tools/registry';
 
 export const VW = 240;
@@ -19,11 +20,12 @@ const G = 134;
 type VLayer = { id: string; fill: string; shadow: string; cut: string[]; solid: string[] };
 export type Vignette = { layers: VLayer[]; ground: string };
 
-const FAR = { fill: 'var(--color-kesar-200)', shadow: 'rgb(226 91 0 / 0.3)' };
-const MID = { fill: 'var(--color-kesar-400)', shadow: 'rgb(181 70 0 / 0.35)' };
-const HOT = { fill: 'var(--color-kesar-500)', shadow: 'rgb(138 51 0 / 0.4)' };
-const NEAR = { fill: 'var(--color-kesar-700)', shadow: 'rgb(94 33 0 / 0.4)' };
-const DEEP = { fill: 'var(--color-kesar-800)', shadow: 'rgb(47 15 2 / 0.4)' };
+// Tones come from lib/paper/tones. This file's role names map onto them: HOT is MAIN, NEAR is LEAF, DEEP is NEAR.
+const FAR = tones.FAR;
+const MID = tones.MID;
+const HOT = tones.MAIN;
+const NEAR = tones.LEAF;
+const DEEP = tones.NEAR;
 
 type T = ReturnType<typeof makeTools>;
 
@@ -77,10 +79,8 @@ const seal = (t: T, cx: number, cy: number, r: number) => {
 /** Pavement with a rough top edge. */
 function ground(seed: string): string {
   const t = makeTools(`${seed}-g`, 0.5);
-  const pts: Pt[] = [[-VPAD - 4, G]];
-  for (let x = -VPAD + 16; x < VW + VPAD; x += 28) pts.push([x, G - 1 + t.rand() * 2.5]);
-  pts.push([VW + VPAD + 4, G], [VW + VPAD + 4, VH + 4], [-VPAD - 4, VH + 4]);
-  return t.path(pts);
+  // The top edge runs from G - 1 to G + 1.5; the corners sit on G.
+  return t.path(groundPts(t, { y: G + 0.25, bump: 2.5, edgeY: G, from: -VPAD + 16, to: VW + VPAD, step: 28, left: -VPAD - 4, right: VW + VPAD + 4, bottom: VH + 4 }));
 }
 
 /** A small gabled house: body, roof, door and window holes. */

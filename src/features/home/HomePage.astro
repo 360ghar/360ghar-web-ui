@@ -22,7 +22,7 @@ import Icon from '@/ui/icons/Icon.astro';
 import StateBlock from '@/ui/states/StateBlock.astro';
 import { galleryPhotos } from '@/features/property/photos';
 import { areaSqft, homeKind, imageUrl, listingPrice, srcSet } from '@/lib/format';
-import Vignette from './vignettes/Vignette.astro';
+import HomeVignette from './vignettes/HomeVignette.astro';
 import PaperVignette from '@/ui/paper/PaperVignette.astro';
 import { COPY } from './copy';
 import AppSection from './sections/AppSection.astro';
@@ -187,7 +187,7 @@ const pmFeatures = c.owner;
         c.steps.map((s, i) => (
           <li>
             <Paper seed={`step-${i}`} tone="paper" depth={2} class:list={['home-step', `home-step-${i}`]} innerClass="home-step-inner">
-              <Vignette name={s.art} class="home-step-art" />
+              <HomeVignette name={s.art} class="home-step-art" />
               <h3 class="home-step-title">{s.title}</h3>
               <p class="home-step-body">{s.body}</p>
             </Paper>
@@ -277,7 +277,7 @@ const pmFeatures = c.owner;
         </a>
       </div>
     </div>
-    <Vignette name="owners" bare class="home-owners-art" />
+    <HomeVignette name="owners" bare class="home-owners-art" />
     <ul class="home-pm" role="list">
       {
         pmFeatures.map((f) => (

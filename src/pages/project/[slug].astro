@@ -2,7 +2,7 @@
 /**
  * /project/[slug]: a RERA project page.
  *
- * The legacy project catalog in `features/projects/catalog.ts` owns eight slugs
+ * The legacy project catalog in `lib/listings/projects.ts` owns eight slugs
  * that this route would otherwise take over (both `[slug].astro` and the older
  * `[title].astro` match one segment, and Astro picks `[slug]` first). Those
  * slugs keep their existing hold page, unchanged.
@@ -10,7 +10,7 @@
 import { getT } from '@/i18n';
 import { cachePage } from '@/lib/cache';
 import { safe, project } from '@/features/projects/api';
-import { projectBySlug } from '@/features/projects/catalog';
+import { projectBySlug } from '@/lib/listings/projects';
 import ProjectDetail from '@/features/projects/ProjectDetail.astro';
 import ProjectHold from '@/features/projects/ProjectHold.astro';
 import DetailState from '@/features/data-hub/DetailState.astro';

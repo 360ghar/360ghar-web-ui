@@ -9,7 +9,7 @@ import { CHECKLIST_FAQ, CHECKLIST_HOWTO, CHECKLIST_PAGE, CHECKLIST_UI } from './
 import { EMI_FAQ, EMI_HOWTO, EMI_PAGE, EMI_UI } from './emi/content';
 import { LOAN_FAQ, LOAN_PAGE, LOAN_UI } from './loan/content';
 import { VASTU_PAGE, VASTU_UI } from './vastu/content';
-import { toolSchemas } from '@/lib/seo/legacy/toolSchemas.js';
+import { toolSchemas } from '@/lib/seo/toolSchemas';
 import { COPY as homeCopy } from '@/features/home/copy';
 
 const indexPage = readFileSync('src/features/tools/ToolsIndex.astro', 'utf8');

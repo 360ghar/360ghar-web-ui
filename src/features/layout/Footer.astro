@@ -7,6 +7,7 @@
  */
 import { getT } from '@/i18n';
 import { COMPANY_EMAIL, COMPANY_PHONE, COMPANY_PHONE_DISPLAY } from '@/lib/company';
+import { artUrl } from '@/lib/paper/art-url';
 import { localizer } from '@/lib/i18n/locale';
 import Icon from '@/ui/icons/Icon.astro';
 import { FOOTER, LEGAL, SOCIAL } from './nav';
@@ -20,7 +21,7 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer">
   {/* The skyline (skylineLayers in skyline.ts) is a cached file: src/pages/art, skyline/footer. */}
-  <img class="footer-skyline" src="/art/skyline/footer.svg" alt="" width="1600" height="120" loading="lazy" decoding="async" />
+  <img class="footer-skyline" src={artUrl.skyline('footer')} alt="" width="1600" height="120" loading="lazy" decoding="async" />
   <div class="footer-floor grain">
     <div class="container-page footer-grid">
       <section class="footer-brand" aria-label="360Ghar">

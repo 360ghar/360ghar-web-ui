@@ -3,7 +3,7 @@
  * for sale in the same locality on 360Ghar. Real listings only; nothing when
  * fewer than three can be compared.
  */
-import { isPlaceholderPrice, percentile } from '@/features/search/prices';
+import { isPlaceholderPrice, percentile } from '@/lib/listings/prices';
 import type { Property } from '@/lib/api/types';
 
 type Priced = Pick<Property, 'id' | 'purpose' | 'property_type' | 'locality' | 'base_price' | 'area_sqft' | 'price_per_sqft'>;

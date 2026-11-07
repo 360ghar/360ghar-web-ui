@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import * as receipt from './receipt';
-import { batch, batchNumber, formatDate, fyMonths, fyStart, monthPeriod, numberToWords, PAN_RE, receiptBase, rupeesInWords, todayIso } from './receipt';
+import { batch, batchNumber, formatReceiptDate, fyMonths, fyStart, monthPeriod, numberToWords, PAN_RE, receiptBase, rupeesInWords, todayIso } from './receipt';
 
 // The old bug showed in India (UTC+5:30): run these tests in that time zone.
 const tz = process.env.TZ;
@@ -37,10 +37,22 @@ describe('dates', () => {
   });
 
   it('formats a date without a time zone shift', () => {
-    expect(formatDate('2026-04-01')).toBe('01 April 2026');
-    expect(formatDate('2027-03-31')).toBe('31 March 2027');
-    expect(formatDate('2026-04-01', 'hi')).toContain('अप्रैल');
-    expect(formatDate('')).toBe('');
+    expect(formatReceiptDate('2026-04-01')).toBe('01 April 2026');
+    expect(formatReceiptDate('2027-03-31')).toBe('31 March 2027');
+    expect(formatReceiptDate('2026-04-01', 'hi')).toContain('अप्रैल');
+    expect(formatReceiptDate('')).toBe('');
+  });
+
+  it('keeps the entered day when a local time zone skips it, and years below 100', () => {
+    // Pacific/Apia skipped 30 Dec 2011 in local time. Node reads a changed TZ at once, and the suite's setup sets its own, so switch here.
+    const zone = process.env.TZ;
+    process.env.TZ = 'Pacific/Apia';
+    try {
+      expect(formatReceiptDate('2011-12-30')).toBe('30 December 2011');
+    } finally {
+      process.env.TZ = zone;
+    }
+    expect(formatReceiptDate('0099-04-01')).toBe('01 April 99');
   });
 });
 

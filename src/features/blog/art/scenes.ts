@@ -12,7 +12,7 @@
  * The same scene name and seed give the same drawing on server and client.
  */
 import { hash, rng } from '@/lib/paper/cut';
-import { cloudPts, makeTools, trunkPts, type Layer, type Pt } from '@/lib/paper/shapes';
+import { cloudPts, groundPts, makeTools, trunkPts, type Layer, type Pt } from '@/lib/paper/shapes';
 
 export const ART_W = 640;
 export const ART_H = 400;
@@ -215,10 +215,7 @@ function blocks(k: Kit, x0: number, x1: number, base: number, minTop: number, ma
 
 /** Ground sheet with a rough top edge. */
 function ground(k: Kit, e: Env, y: number, bump = 3) {
-  const pts: Pt[] = [[e.x0 - 12, y]];
-  for (let x = e.x0 + 30; x < e.x1; x += 48) pts.push([x, y - bump / 2 + k.rand() * bump]);
-  pts.push([e.x1 + 12, y], [e.x1 + 12, ART_H + 12], [e.x0 - 12, ART_H + 12]);
-  return k.P(pts);
+  return k.P(groundPts(k, { y, bump, from: e.x0 + 30, to: e.x1, step: 48, left: e.x0 - 12, right: e.x1 + 12, bottom: ART_H + 12 }));
 }
 
 /** The near kerb with lane dashes cut out. */

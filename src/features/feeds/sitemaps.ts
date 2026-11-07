@@ -3,7 +3,8 @@
  * A sitemap that outgrows one file (45,000 URLs or 45 MB) continues in sitemap-<name>-2.xml, -3, and so on; the index lists every page.
  */
 import { datahubEntries } from '@/features/data-hub/sitemap';
-import { allPosts, allProperties, landingEntries, localityEntries, projectEntries, staticEntries } from './data';
+import { allProperties } from '@/lib/listings/homes';
+import { allPosts, landingEntries, localityEntries, projectEntries, staticEntries } from './data';
 import { urlsetPages, type SitemapEntry } from './xml';
 
 export const SITEMAPS: Record<string, () => Promise<SitemapEntry[]> | SitemapEntry[]> = {

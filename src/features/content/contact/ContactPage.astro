@@ -2,13 +2,13 @@
 /**
  * /contact. The form posts to Formspree mwpqglyb (user_name, user_email,
  * user_subject, message); ?subject= prefills the subject. The office details
- * are the organisation data from lib/seo/legacy/siteMetadata.js.
+ * are the organisation data from lib/seo/siteMetadata.ts.
  */
 import { getT } from '@/i18n';
 import Page from '@/layouts/Page.astro';
 import { COMPANY_PHONE, COMPANY_PHONE_DISPLAY } from '@/lib/company';
 import { localizer, byLocale } from '@/lib/i18n/locale';
-import { siteMetadata } from '@/lib/seo/legacy/siteMetadata.js';
+import { siteMetadata } from '@/lib/seo/siteMetadata';
 import { canonicalFor, SITE_URL } from '@/lib/seo/site';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import CutBand from '@/ui/CutBand.astro';
