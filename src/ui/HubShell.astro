@@ -12,7 +12,7 @@ import { localizePath } from '@/lib/i18n/locale';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import Faq from '@/ui/Faq.astro';
 import Icon from '@/ui/icons/Icon.astro';
-import Vignette from '@/ui/paper/Vignette.astro';
+import ToolVignette from '@/ui/paper/ToolVignette.astro';
 import type { VignetteKey } from '@/ui/paper/vignettes';
 
 type Props = Pick<ComponentProps<typeof Page>, 'title' | 'description' | 'keywords' | 'path' | 'noindex' | 'image' | 'type' | 'article' | 'jsonLd'> & {
@@ -49,7 +49,7 @@ const locale = Astro.locals.locale;
       {
         art && (
           <span class={`${p}-head-art`} aria-hidden="true">
-            <Vignette tool={art.key} mode={art.mode} />
+            <ToolVignette tool={art.key} mode={art.mode} />
           </span>
         )
       }

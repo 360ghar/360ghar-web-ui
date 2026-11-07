@@ -9,7 +9,7 @@ import { breadcrumbs, SITE_URL } from '@/lib/seo/site';
 import Breadcrumbs from '@/ui/Breadcrumbs.astro';
 import Icon from '@/ui/icons/Icon.astro';
 import { GROUPS, TOOLS } from './registry';
-import Vignette from '@/ui/paper/Vignette.astro';
+import ToolVignette from '@/ui/paper/ToolVignette.astro';
 import { homeCrumb, toolsCrumb } from './seo';
 import './tools.css';
 
@@ -89,7 +89,7 @@ const search = (t: (typeof TOOLS)[number]) => [t.name.en, t.name.hi, t.desc.en, 
                 <li data-tool data-search={search(t)}>
                   <a class="tools-card" href={localizePath(t.route, locale)}>
                     <span class="tools-card-art">
-                      <Vignette tool={t.key} />
+                      <ToolVignette tool={t.key} />
                     </span>
                     <span class="tools-card-name">
                       {head(t.name[locale])}

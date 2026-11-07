@@ -672,7 +672,7 @@ export function placeScene(kind: PlaceKind, seed: string, signText?: string): Sc
   }
 
   // Every layer is kept, even when empty, so the renderer's groups keep a fixed
-  // order: the clouds are the 2nd group and the crane jib the 6th (Vignette.astro animates them).
+  // order: the clouds are the 2nd group and the crane jib the 6th (PlaceVignette.astro animates them).
   // Whole units are plenty: one unit is under a pixel at every size the scene is shown.
   const lean = (ds: string[]) => mergeDisjoint(ds).map((d) => d.replace(/-?\d+\.\d+/g, (n) => String(Math.round(Number(n)))));
   scene.layers = LAYERS.map((l) => ({ id: l.id, fill: l.fill, depth: 0, shadow: l.shadow, cut: lean(P[l.id].cut), solid: lean(P[l.id].solid) }));

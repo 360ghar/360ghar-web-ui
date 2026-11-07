@@ -37,7 +37,7 @@ import { Sheet } from '@/ui/react/Sheet';
 import { Tabs } from '@/ui/react/Tabs';
 import { toast, Toaster } from '@/ui/react/Toaster';
 import { StateBlock } from '@/ui/states/StateBlock';
-import { AcctState, NoPhoto, Vignette } from './AccountArt';
+import { AcctState, NoPhoto, AccountVignette } from './AccountArt';
 import { Notifications, Preferences, SavedAlerts } from './Settings';
 import { visitIcs } from './ics';
 
@@ -1228,7 +1228,7 @@ function EmptyCard({ name, title, body, href, label }: { name: 'saved' | 'visits
   return (
     <div className="acct-empty">
       <div className="acct-empty-art">
-        <Vignette name={name} />
+        <AccountVignette name={name} />
       </div>
       <div className="grid content-center justify-items-start gap-1">
         <p className="font-bold">{title}</p>

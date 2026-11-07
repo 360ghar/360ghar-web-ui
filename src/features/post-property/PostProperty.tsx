@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState, type DragEvent, type ReactNode } from 'react';
 import { useForm, useWatch, type FieldPath } from 'react-hook-form';
-import { HouseProgress, noPhotoUrl, Vignette } from '@/features/account/AccountArt';
+import { HouseProgress, noPhotoUrl, AccountVignette } from '@/features/account/AccountArt';
 import { Segmented } from '@/ui/react/Segmented';
 import { initAuth, useAuthStore } from '@/features/auth/store';
 import { useAuth } from '@/features/auth/useAuth';
@@ -759,7 +759,7 @@ function Wizard({ locale }: { locale: Locale }) {
     return sheet(
       <div className="post-done" role="status">
         <div className="post-done-art">
-          <Vignette name="posted" />
+          <AccountVignette name="posted" />
         </div>
         <div className="grid content-start justify-items-start gap-4">
           <h2 className="font-display text-3xl">{editId ? t.savedTitle : t.doneTitle}</h2>

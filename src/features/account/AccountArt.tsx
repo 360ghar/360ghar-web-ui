@@ -7,7 +7,7 @@ import { PaperVignette } from '@/ui/paper/PaperVignette';
 import { HOUSE_H, HOUSE_W, houseLayers, vignette, type AccountVignetteName } from './vignettes';
 
 /** An account scene (320 x 200) with a hand-cut edge. */
-export function Vignette({ name, className }: { name: AccountVignetteName; className?: string }) {
+export function AccountVignette({ name, className }: { name: AccountVignetteName; className?: string }) {
   const s = vignette(name);
   return <PaperArt layers={s.layers} width={s.w} height={s.h} bg="var(--color-kesar-50)" cutEdge={`acct-${name}`} className={className} />;
 }
@@ -91,7 +91,7 @@ export function AcctState({ name, title, body, action, secondary, children }: { 
   return (
     <section className="mx-auto grid max-w-[34rem] justify-items-center gap-4 px-4 py-6 text-center">
       <div className="w-[min(100%,15rem)]">
-        <Vignette name={name} />
+        <AccountVignette name={name} />
       </div>
       <div>
         <h2 className="font-display text-[1.375rem] md:text-[1.625rem]">{title}</h2>
