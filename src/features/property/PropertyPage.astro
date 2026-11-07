@@ -91,7 +91,8 @@ const hubs = nearestHubs(p.latitude, p.longitude, 5);
 const landmarks = localityLandmarks(p.locality, p.city);
 const localityHref = localityPath(p.locality, p.city);
 const contact = listingContact(p);
-const wa = waLink(contact.phone, p.title, canonicalFor(`/property/${p.id}`, locale), locale);
+const shareUrl = canonicalFor(`/property/${p.id}`, locale);
+const wa = waLink(contact.phone, p.title, shareUrl, locale);
 
 const HUB: Record<string, [string, string]> = {
   it_hub: ['Offices', 'ऑफ़िस'],
@@ -367,7 +368,7 @@ const emiHref = L(`/emi-calculator${p.purpose === 'buy' && !price.onRequest && p
         <p class="prop-side-sub tabular">
           {sqft ? `${rupees(sqft, locale)} ${hi ? 'प्रति वर्ग फ़ुट' : 'per sq ft'} · ` : ''}{hi ? 'लिस्टिंग' : 'Listing'} #{p.id}
         </p>
-        <ContactPanel client:idle locale={locale} property={{ id: p.id, title: p.title }} contact={contact} available={p.is_available} />
+        <ContactPanel client:idle locale={locale} property={{ id: p.id, title: p.title }} contact={contact} shareUrl={shareUrl} available={p.is_available} />
       </div>
       {p.is_available && <p class="prop-side-note"><Icon name="check" size={16} /> {hi ? 'विज़िट से पहले फ़ोटो और फ़्लोर प्लान देखें।' : 'See the photos and floor plan before you visit.'}</p>}
     </aside>

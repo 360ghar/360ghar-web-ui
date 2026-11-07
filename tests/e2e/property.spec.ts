@@ -379,6 +379,7 @@ test('property: a signed-in user reaches their own relationship manager (detail 
   const side = page.locator('#prop-book');
   await expect(side.getByText('Ravi Kumar')).toBeVisible();
   await expect(side.getByRole('link', { name: 'Call +91 98123 45678' })).toHaveAttribute('href', 'tel:+919812345678');
+  await expect(side.getByRole('link', { name: 'WhatsApp' })).toHaveAttribute('href', /^https:\/\/wa\.me\/919812345678\?text=/);
   // Every other call and WhatsApp link on the page follows: the Home Card's two and the phone dock's WhatsApp.
   await expect(page.locator('a[data-contact="tel"]')).toHaveCount(1);
   await expect(page.locator('a[data-contact="wa"]')).toHaveCount(2);

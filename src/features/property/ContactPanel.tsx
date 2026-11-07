@@ -35,6 +35,8 @@ type Props = {
   locale: Locale;
   property: Pick<Property, 'id' | 'title'>;
   contact: Contact;
+  /** The canonical page URL, the same one the server-rendered WhatsApp links carry. */
+  shareUrl: string;
   available: boolean;
 };
 
@@ -309,16 +311,13 @@ function CallbackForm({ locale, propertyId }: { locale: Locale; propertyId: numb
   );
 }
 
-function Panel({ locale, property, contact, available }: Props) {
+function Panel({ locale, property, contact, shareUrl, available }: Props) {
   const t = T[locale];
   const status = useAuth((s) => s.status);
+  const uid = useAuth((s) => s.session?.user.id);
   const desktop = useDesktop();
   const [cb, setCb] = useState(false);
   const [book, setBook] = useState(false);
-  // Browser-only values are read after hydration, so the first render matches the server HTML.
-  const isClient = useIsClient();
-  const pageUrl = isClient ? window.location.href.split('?')[0] ?? '' : '';
-
 
   // On phones, any "Book a visit" link on the page opens the sheet instead of jumping to the rail.
   useEffect(() => {
@@ -333,22 +332,25 @@ function Panel({ locale, property, contact, available }: Props) {
   }, [desktop]);
 
   // Signed-in users see their existing visit (the SSR page is anonymous and cached).
+  // Keyed by user, so an account switch never shows the previous user's data.
   const mine = useQuery({
-    queryKey: ['property-me', property.id],
+    queryKey: ['property-me', property.id, uid],
     queryFn: () => call(api.GET('/api/v1/properties/{property_id}', { params: { path: { property_id: property.id } } })),
     enabled: status === 'authed' && available,
     staleTime: 60_000,
   });
-  const next = mine.data?.user_next_visit_date;
+  // A disabled query keeps its data, so read it only while the session lasts.
+  const me = status === 'authed' ? mine.data : undefined;
+  const next = me?.user_next_visit_date;
   // The cached page is anonymous, so it shows the company number. The signed-in detail
   // carries the user's own relationship manager; it replaces the number here and in the
-  // page's other WhatsApp and call links (data-contact).
-  const shown = mine.data ? listingContact(mine.data) : contact;
+  // page's other WhatsApp and call links (data-contact), and the company number comes
+  // back when the session ends.
+  const shown = me ? listingContact(me) : contact;
   useEffect(() => {
-    if (!mine.data) return;
     for (const a of document.querySelectorAll<HTMLAnchorElement>('a[data-contact]'))
-      a.href = a.dataset.contact === 'tel' ? `tel:${shown.phone}` : waLink(shown.phone, property.title, pageUrl, locale);
-  }, [mine.data, shown.phone, property.title, pageUrl, locale]);
+      a.href = a.dataset.contact === 'tel' ? `tel:${shown.phone}` : waLink(shown.phone, property.title, shareUrl, locale);
+  }, [shown.phone, property.title, shareUrl, locale]);
 
   if (!available)
     return (
@@ -373,7 +375,7 @@ function Panel({ locale, property, contact, available }: Props) {
       </p>
 
       <div className="grid gap-2">
-        <a className="btn btn-ink btn-block" href={waLink(shown.phone, property.title, pageUrl, locale)} target="_blank" rel="noopener">
+        <a className="btn btn-ink btn-block" href={waLink(shown.phone, property.title, shareUrl, locale)} target="_blank" rel="noopener">
           <Icon name="brand:whatsapp" size={18} />
           {t.whatsapp}
         </a>

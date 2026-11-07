@@ -1,7 +1,8 @@
 /**
  * Who a visitor talks to about a listing. The owner's own number is never shown.
- * The backend sets `agent` per viewer: a signed-in user gets their own relationship
- * manager, a guest gets null, so the 360 Ghar team (company number) answers.
+ * The backend (360ghar-backend#58) sets `agent` per viewer: a signed-in user gets
+ * their own relationship manager, a guest gets null, so the 360 Ghar team (company
+ * number) answers.
  * `agent` is on the detail response only. (`owner_contact` carries the same number
  * for a visitor and the owner's own number for the owner, so it is not read here.)
  */
