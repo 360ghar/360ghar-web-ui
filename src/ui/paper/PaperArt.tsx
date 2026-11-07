@@ -1,6 +1,6 @@
 import { useId } from 'react';
-import { layerFilterId } from '@/lib/paper/defs';
-import { makeTools, type Layer } from '@/lib/paper/shapes';
+import { paperArtModel } from '@/lib/paper/artModel';
+import type { Layer } from '@/lib/paper/shapes';
 import { compactPath } from './compact';
 
 type Props = {
@@ -21,12 +21,10 @@ type Props = {
 };
 
 /** React twin of PaperArt.astro: paper layers as one static SVG, with the shared shadow filters by default. */
-export function PaperArt({ layers, width, height, bg = 'var(--color-kesar-100)', cutEdge, shadow = [2, 3, 1.1], ownFilters = false, fit = 'meet', label, className }: Props) {
+export function PaperArt({ layers, width, height, bg, cutEdge, shadow, ownFilters = false, fit = 'meet', label, className }: Props) {
   const uid = useId().replace(/:/g, '');
-  const [dx, dy, blur] = shadow;
-  const edge = cutEdge ? compactPath(makeTools(`edge-${cutEdge}`, 0.9).rect(1.2, 1.2, width - 2.4, height - 2.4)) : null;
-  const filterOf = (l: Layer) => layerFilterId(l, shadow, uid, ownFilters);
-  const own = layers.filter((l) => filterOf(l) === `${uid}-${l.id}`);
+  const art = paperArtModel({ layers, width, height, bg, cutEdge, shadow, ownFilters, uid });
+  const edge = art.edge && compactPath(art.edge);
   return (
     <svg
       className={className}
@@ -38,35 +36,32 @@ export function PaperArt({ layers, width, height, bg = 'var(--color-kesar-100)',
       aria-hidden={label ? undefined : true}
       focusable="false"
     >
-      {own.length > 0 || edge ? (
+      {art.filters.length > 0 || edge ? (
         <defs>
-          {own.map((l) => (
-            <filter key={l.id} id={`${uid}-${l.id}`} x="-5%" y="-10%" width="115%" height="130%">
-              <feDropShadow dx={dx} dy={dy} stdDeviation={blur} floodColor={l.shadow} />
+          {art.filters.map((f) => (
+            <filter key={f.id} id={f.id} x="-5%" y="-10%" width="115%" height="130%">
+              <feDropShadow dx={f.dx} dy={f.dy} stdDeviation={f.blur} floodColor={f.color} />
             </filter>
           ))}
           {edge ? (
-            <clipPath id={`${uid}-edge`}>
+            <clipPath id={art.edgeId}>
               <path d={edge} />
             </clipPath>
           ) : null}
         </defs>
       ) : null}
-      <g clipPath={edge ? `url(#${uid}-edge)` : undefined}>
-        {bg ? edge ? <path d={edge} fill={bg} /> : <rect width={width} height={height} fill={bg} /> : null}
-        {layers.map((l) => {
-          const f = filterOf(l);
-          return (
-            <g key={l.id} fill={l.fill} filter={f ? `url(#${f})` : undefined}>
-              {l.cut.map((d, i) => (
-                <path key={`c${i}`} fillRule="evenodd" d={compactPath(d)} />
-              ))}
-              {l.solid.map((d, i) => (
-                <path key={`s${i}`} d={compactPath(d)} />
-              ))}
-            </g>
-          );
-        })}
+      <g clipPath={edge ? `url(#${art.edgeId})` : undefined}>
+        {art.bg ? edge ? <path d={edge} fill={art.bg} /> : <rect width={width} height={height} fill={art.bg} /> : null}
+        {art.groups.map((g) => (
+          <g key={g.id} fill={g.fill} filter={g.filter ? `url(#${g.filter})` : undefined}>
+            {g.cut.map((d, i) => (
+              <path key={`c${i}`} fillRule="evenodd" d={compactPath(d)} />
+            ))}
+            {g.solid.map((d, i) => (
+              <path key={`s${i}`} d={compactPath(d)} />
+            ))}
+          </g>
+        ))}
       </g>
     </svg>
   );
