@@ -44,11 +44,11 @@ const showBuilding = p.floor_number != null && (p.total_floors ?? 0) > 0;
     {
       p.is_available ? (
         <div class="hc-cta" data-hc-cta>
-          <a class="btn btn-ink" href={wa} target="_blank" rel="noopener">
+          <a class="btn btn-ink" href={wa} target="_blank" rel="noopener" data-contact="wa">
             <Icon name="brand:whatsapp" size={18} />
             WhatsApp
           </a>
-          <a class="btn" href={`tel:${phone}`}>
+          <a class="btn" href={`tel:${phone}`} data-contact="tel">
             <Icon name="phone" size={18} />
             {hi ? 'कॉल करें' : 'Call'}
           </a>
